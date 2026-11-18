@@ -757,7 +757,7 @@ function Storefront() {
                   <div className="hero-art__frame">
                     <div className="hero-art__image">
                       {cardOfTheWeek ? (
-                        <ProductImage product={cardOfTheWeek} />
+                        <Link to={`/product/${encodeURIComponent(cardOfTheWeek.id)}`} aria-label={`View ${cardOfTheWeek.name}`}><ProductImage product={cardOfTheWeek} /></Link>
                       ) : (
                         <div className="hero-art__placeholder"><Anchor size={68} strokeWidth={0.8} /></div>
                       )}
