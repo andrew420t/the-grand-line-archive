@@ -134,6 +134,8 @@ function ProductDetailPage({ products, onAdd }) {
   const details = [
     ['Card number', raw.card_number],
     ['Set', product.setName || raw.set_code || product.setCode],
+    ['Set code', raw.set_code || product.setCode],
+    ['Category', product.category],
     ['Rarity', product.rarity],
     ['Variant', raw.variant_label],
     ['Colour', raw.color],
@@ -142,6 +144,7 @@ function ProductDetailPage({ products, onAdd }) {
     ['Type', raw.card_type || raw.classification],
     ['Language', raw.language],
     ['Condition', raw.condition],
+    ['Availability', product.stock > 0 ? 'In stock' : 'Sold out'],
   ].filter(([, value]) => value !== null && value !== undefined && String(value).trim() !== '')
 
   return (
