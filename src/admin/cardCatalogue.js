@@ -285,3 +285,16 @@ export function clearCatalogueCache() {
   cataloguePromise = null
   loadedAt = 0
 }
+
+
+/**
+ * Opens Collectr's product search for a specific printing.
+ * Collectr resolves the search on its own site; we deliberately do not
+ * guess an internal card-detail URL that may change.
+ */
+export function collectrSearchUrl(match) {
+  const terms = [match?.cardNumber, match?.name, match?.setCode, match?.variant]
+    .filter(Boolean)
+    .join(' ')
+  return `https://app.getcollectr.com/?query=${encodeURIComponent(terms)}`
+}
