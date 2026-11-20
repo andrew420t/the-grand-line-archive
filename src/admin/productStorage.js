@@ -116,3 +116,49 @@ export async function uploadProductPhotos({ productId, userId, photos }) {
 export async function removeLocalPhotos(photos) {
   photos.forEach((photo) => URL.revokeObjectURL(photo.previewUrl))
 }
+
+export async function listLibraryPhotos(userId) {
+  if (!supabase) throw new Error('Supabase is not configured.')
+  const folder = `${userId}/library`
+  const result = await supabase.storage.from(CARD_IMAGE_BUCKET).list(folder, {
+    limit: 100,
+    sortBy: { column: 'created_at', order: 'desc' },
+  })
+  if (result.error) throw new Error(`Could not load the image library: ${result.error.message}`)
+  const storage = supabase.storage.from(CARD_IMAGE_BUCKET)
+  return (result.data || []).filter((file) => file.name && !file.name.startsWith('.')).map((file) => {
+    const path = `${folder}/${file.name}`
+    const { data } = storage.getPublicUrl(path)
+    return { ...file, path, url: data.publicUrl }
+  })
+}
+
+export async function uploadLibraryPhotos({ userId, files }) {
+  if (!supabase) throw new Error('Supabase is not configured.')
+  const storage = supabase.storage.from(CARD_IMAGE_BUCKET)
+  const uploaded = []
+  try {
+    for (const sourceFile of files) {
+      const compressed = await prepareCardImage(sourceFile)
+      const file = makePhotoFile(compressed, sourceFile.name)
+      const path = `${userId}/library/${crypto.randomUUID()}.jpg`
+      const result = await storage.upload(path, file, { contentType: 'image/jpeg', upsert: false, cacheControl: '3600' })
+      if (result.error) throw new Error(`Could not upload ${sourceFile.name}: ${result.error.message}`)
+      const { data } = storage.getPublicUrl(path)
+      uploaded.push({ path, url: data.publicUrl, name: sourceFile.name })
+    }
+    return uploaded
+  } catch (error) {
+    if (uploaded.length) {
+      const cleanup = await storage.remove(uploaded.map((photo) => photo.path))
+      if (cleanup.error) throw new Error(`${error.message} (Some uploaded images could not be rolled back: ${cleanup.error.message})`)
+    }
+    throw error
+  }
+}
+
+export async function deleteLibraryPhoto(path) {
+  if (!supabase) throw new Error('Supabase is not configured.')
+  const result = await supabase.storage.from(CARD_IMAGE_BUCKET).remove([path])
+  if (result.error) throw new Error(`Could not delete image: ${result.error.message}`)
+}
