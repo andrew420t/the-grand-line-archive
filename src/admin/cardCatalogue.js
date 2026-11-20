@@ -145,7 +145,7 @@ export async function findCatalogueMatches(cardNumber) {
   if (supabase) {
     const saved = await supabase
       .from('card_catalogue_overrides')
-      .select('id,card_number,language,set_code,variant_label,details,source')
+      .select('id,card_number,language,set_code,variant_label,printing_key,details,source')
       .eq('card_number', requestedNumber)
 
     if (!saved.error) {
@@ -153,7 +153,8 @@ export async function findCatalogueMatches(cardNumber) {
         const identity = (match) =>
           match.language === override.language &&
           String(match.setCode || '') === String(override.set_code || '') &&
-          String(match.variantLabel || '') === String(override.variant_label || '')
+          String(match.variantLabel || '') === String(override.variant_label || '') &&
+          (override.printing_key ? match.printingKey === override.printing_key : !match.printingKey)
         const existing = results.find((match) => identity(match))
         const details = override.details || {}
         if (existing) {
@@ -226,6 +227,7 @@ export function catalogueMatchToForm(match) {
     trigger_text: match.trigger || '',
     attributes: match.attributes || '',
     reference_image_url: match.imageUrl || '',
+    reference_printing_key: match.printingKey || '',
   }
 }
  
@@ -255,13 +257,14 @@ export async function saveCatalogueOverride({ form, userId }) {
     language: form.language || 'English',
     set_code: String(form.set_code || '').toUpperCase(),
     variant_label: String(form.variant_label || ''),
+    printing_key: String(form.reference_printing_key || ''),
     details,
     updated_by: userId || null,
     updated_at: new Date().toISOString(),
   }
   const { error } = await supabase
     .from('card_catalogue_overrides')
-    .upsert(payload, { onConflict: 'card_number,language,set_code,variant_label' })
+    .upsert(payload, { onConflict: 'card_number,language,set_code,variant_label,printing_key' })
   if (error) {
     if (error.code === '42P01' || error.code === 'PGRST205') {
       throw new Error('The shared card library table is not set up yet. Apply supabase/review-only/card-catalogue-overrides.sql in Supabase SQL Editor first.')
