@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { AlertCircle, ArrowRight, Check, LoaderCircle, ScanLine } from 'lucide-react'
 import { CARD_FIELDS, parseCardDetails } from './cardParser'
-import { findCatalogueMatches } from './cardCatalogue'
+import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 
 const confidenceLabel = (field) => {
   if (!field.value) return 'Not detected'
@@ -112,25 +112,30 @@ export default function CardScanner({
   }
 
   const applyCatalogueMatch = (match) => {
-    const setCode = match.cardNumber.match(/^((?:OP|EB|ST|PRB)\d{1,2}|P)-/i)?.[1] || ''
-    const values = {
-      name: match.name,
-      card_number: fields.card_number?.value || match.cardNumber,
-      set_code: setCode,
-      color: match.colors,
-      cost: match.cost,
-      power: match.power,
-      card_type: match.category,
-      classification: match.category,
-    }
+    const values = catalogueMatchToForm(match)
     setFields((current) => ({
       ...current,
-      ...Object.fromEntries(Object.entries(values).map(([key, value]) => [
-        key, { value: value || '', confidence: value ? 90 : 0, needsReview: true },
+      ...Object.fromEntries(Object.entries({
+        name: values.name,
+        card_number: values.card_number,
+        set_code: values.set_code,
+        rarity: values.rarity,
+        color: values.color,
+        cost: values.cost,
+        power: values.power,
+        card_type: values.card_type,
+        classification: values.classification,
+        language: values.language,
+        effect_text: values.effect_text,
+        variant_label: values.variant_label,
+      }).map(([key, value]) => [
+        key,
+        { value: value || '', confidence: value ? 95 : 0, needsReview: true },
       ])),
     }))
     setStatus('Catalogue details filled in. Check each value against the physical card before saving.')
   }
+
   const reparseText = () => {
     setFields(parseCardDetails(rawText))
     setStatus('Fields extracted from the edited OCR text. Verify them before continuing.')
@@ -202,11 +207,14 @@ export default function CardScanner({
             </button>
             {catalogueError && <p className="form-error" role="status">{catalogueError}</p>}
             {catalogueMatches.map((match) => (
+
               <div className="scanner-catalogue__match" key={match.id}>
+                {match.imageUrl && <img className="scanner-catalogue__reference" src={match.imageUrl} alt={match.name + ' reference only'} loading="lazy" />}
                 <div>
                   <strong>{match.name || 'Unnamed card'}</strong>
-                  <span>{match.cardNumber} · {match.category || 'Card'} · {match.colors || 'Colour not listed'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost ? match.cost + ' cost' : 'No cost'}</span>
-                  {match.id !== match.cardNumber && <small>Catalogue variant: {match.id}</small>}
+                  <span>{match.cardNumber} · {match.language} · {match.setCode || 'Promo'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
+                  <small>{match.category || 'Card'} · {match.colors || 'Colour not listed'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
+                  {match.setName && <small>{match.setName}</small>}
                 </div>
                 <button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use details</button>
               </div>
