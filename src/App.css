@@ -4436,3 +4436,26 @@ h2 em {
     width: 72px;
   }
 }
+
+
+.catalogue-match-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+}
+.catalogue-match-card__actions .button {
+  white-space: nowrap;
+}
+@media (max-width: 600px) {
+  .catalogue-match-card__actions {
+    align-items: stretch;
+    flex-direction: column;
+    width: 100%;
+  }
+  .catalogue-match-card__actions .button {
+    justify-content: center;
+    width: 100%;
+  }
+}
