@@ -329,7 +329,7 @@ export default function QuickAddPanel({
             <button className="button button--outline" type="button" disabled={!form.card_number.trim() || catalogueLoading} onClick={lookupCard}>
               <Search size={14} /> {catalogueLoading ? 'Searching English and Japanese cards…' : 'Look up card details'}
             </button>
-            <small>Reference images are for identification only. Your uploaded stock photographs are not changed.</small>
+            <small>Reference images are for identification only; your uploaded stock photographs are never changed. Reference data: Koala Kollect (CC BY 4.0). Card artwork remains Bandai's.</small>
             {form.card_number.trim() && form.name.trim() && (
               <button className="text-button" type="button" disabled={librarySaving} onClick={saveCurrentCardToLibrary}>
                 {librarySaving ? 'Saving to shared library…' : 'Save these details to the shared card library'}
