@@ -461,7 +461,7 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
             <div className="catalogue-product-lookup__matches">
               {lookupMatches.map((match) => (
                 <article className="catalogue-match-card" key={match.id}>
-                  {match.imageUrl ? <img src={match.imageUrl} alt={match.name + ' reference image'} loading="lazy" referrerPolicy="no-referrer" onError={(event) => { event.currentTarget.style.display = 'none' }} /> : <div className="catalogue-match-card__no-image">No reference image</div>}
+                  {match.imageUrl ? <img src={match.imageUrl} data-fallback-src={match.fallbackImageUrl || ''} alt={match.name + ' reference image'} loading="lazy" onError={(event) => { const fallback = event.currentTarget.dataset.fallbackSrc; if (fallback && event.currentTarget.src !== fallback) { event.currentTarget.dataset.fallbackSrc = ''; event.currentTarget.src = fallback } else { event.currentTarget.style.display = 'none' } }} /> : <div className="catalogue-match-card__no-image">No reference image</div>}
                   <div className="catalogue-match-card__details">
                     <strong>{match.name || 'Card name unavailable'}</strong>
                     <span>{match.language} · {match.setCode || 'Promo / set not listed'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
