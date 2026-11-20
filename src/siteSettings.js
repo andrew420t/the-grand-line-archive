@@ -1,18 +1,22 @@
 export const DEFAULT_SITE_SETTINGS = {
   announcement_headline: 'THE ARCHIVE IS OPEN',
-  announcement_text: 'Insured UK shipping on every order',
+  announcement_text: 'Local pickup available in Gibraltar',
   homepage_heading: 'Cards worth a bounty.',
   homepage_description:
-    'Every card in the archive is inspected by hand, photographed as found, and stored in a light-safe vault. Leaders, secret rares and the odd legend — priced honestly, shipped insured.',
+    'Every card in the archive is inspected by hand, photographed as found, and stored in a light-safe vault. Leaders, secret rares and the odd legend — priced honestly and available for local pickup in Gibraltar.',
   featured_product_ids: [],
   card_of_the_week_product_id: '',
   homepage_sections: ['trust', 'featured', 'browse', 'values', 'shipping'],
-  shipping_information: 'Insured UK shipping is arranged after your order.',
+  shipping_information: 'Local pickup in Gibraltar only. Collection is arranged after ordering.',
   contact_information: '',
 }
 
 export function normalizeSiteSettings(value) {
   const settings = { ...DEFAULT_SITE_SETTINGS, ...(value || {}) }
+  const legacyShippingText = /\b(uk|united kingdom|worldwide|ship(?:ping|ped)?|deliver(?:y|ies|ed)?)\b/i
+  if (legacyShippingText.test(settings.announcement_text || '')) settings.announcement_text = DEFAULT_SITE_SETTINGS.announcement_text
+  if (legacyShippingText.test(settings.homepage_description || '')) settings.homepage_description = DEFAULT_SITE_SETTINGS.homepage_description
+  if (legacyShippingText.test(settings.shipping_information || '')) settings.shipping_information = DEFAULT_SITE_SETTINGS.shipping_information
   settings.featured_product_ids = Array.isArray(settings.featured_product_ids)
     ? settings.featured_product_ids.map(String)
     : []

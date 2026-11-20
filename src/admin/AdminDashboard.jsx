@@ -761,7 +761,7 @@ function OrdersSection({ orders, orderItems, products, loading, error, action, o
       <div className="overview-metrics overview-metrics--compact">
         <Metric icon={ClipboardList} label="All orders" value={orders.length} />
         <Metric icon={AlertCircle} label="Needs attention" value={pendingCount} />
-        <Metric icon={Check} label="Completed / shipped" value={orders.filter((order) => ['completed', 'shipped'].includes(String(order.status).toLowerCase())).length} />
+        <Metric icon={Check} label="Completed / picked up" value={orders.filter((order) => ['completed', 'shipped'].includes(String(order.status).toLowerCase())).length} />
       </div>
       {error && <div className="error-notice"><ShieldAlert size={15} /><span>{error}</span></div>}
       {loading ? <div className="loading-state"><span className="loader" />Loading order book…</div> : orders.length ? (
@@ -770,7 +770,7 @@ function OrdersSection({ orders, orderItems, products, loading, error, action, o
             const items = orderItems.filter((item) => String(item.order_id) === String(order.id))
             return (
               <article className="admin-order" key={order.id}>
-                <div className="admin-order__top"><div><span className="eyebrow">ORDER #{String(order.id).slice(-8).toUpperCase()}</span><strong>{formatMoney(order.total_amount ?? order.total ?? order.amount)}</strong></div><label className="select-field status-select"><span className="sr-only">Update order status</span><select value={order.status || 'pending'} disabled={action === order.id} onChange={(event) => onUpdateStatus(order.id, event.target.value)}><option value="pending">Pending</option><option value="processing">Processing</option><option value="shipped">Shipped</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><ChevronDown size={15} /></label></div>
+                <div className="admin-order__top"><div><span className="eyebrow">ORDER #{String(order.id).slice(-8).toUpperCase()}</span><strong>{formatMoney(order.total_amount ?? order.total ?? order.amount)}</strong></div><label className="select-field status-select"><span className="sr-only">Update order status</span><select value={order.status || 'pending'} disabled={action === order.id} onChange={(event) => onUpdateStatus(order.id, event.target.value)}><option value="pending">Pending</option><option value="processing">Processing</option><option value="shipped">Ready for pickup</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><ChevronDown size={15} /></label></div>
                 <div className="admin-order__meta"><span>{order.created_at ? new Date(order.created_at).toLocaleString('en-GB') : 'Date not recorded'}</span><span>Customer: {order.user_id || order.customer_id || 'Not recorded'}</span><span>{items.length} line items</span></div>
                 <div className="order-lines">{items.length ? items.map((item) => {
                   const product = products.find((entry) => String(entry.id) === String(item.product_id))
@@ -805,7 +805,7 @@ function CustomisationSection({ products, settings, settingsError, onSave }) {
     ['featured', 'Featured cards'],
     ['browse', 'Shop callout'],
     ['values', 'Archive values'],
-    ['shipping', 'Shipping information'],
+    ['shipping', 'Pickup information'],
   ]
 
   const update = (key, value) => {
@@ -892,7 +892,7 @@ function CustomisationSection({ products, settings, settingsError, onSave }) {
         </div>
         <div className="customisation-group">
           <p className="eyebrow">STORE INFORMATION</p>
-          <label className="form-field"><span>Shipping information</span><textarea rows="3" value={draft.shipping_information || ''} onChange={(event) => update('shipping_information', event.target.value)} /></label>
+          <label className="form-field"><span>Pickup information</span><textarea rows="3" value={draft.shipping_information || ''} onChange={(event) => update('shipping_information', event.target.value)} /></label>
           <label className="form-field"><span>Contact information</span><input value={draft.contact_information || ''} onChange={(event) => update('contact_information', event.target.value)} placeholder="Email address or contact details" /></label>
         </div>
         <div className="customisation-form__footer">
