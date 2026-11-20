@@ -28,7 +28,7 @@ function parseCsv(text) {
     else cell += char
   }
   row.push(cell.replace(/\r$/, ''))
-  if (row.some((value) => value.trim()) && rows.length === 0) rows.push(row)
+  if (row.some((value) => value.trim())) rows.push(row)
   if (rows.length < 2) throw new Error('CSV must contain a header row and at least one card row.')
   const headers = rows[0].map((value) => value.trim().toLowerCase())
   return rows.slice(1).map((cells, index) => {
