@@ -26,6 +26,10 @@ export default function CardScanner({
   const [catalogueMatches, setCatalogueMatches] = useState([])
   const [catalogueLoading, setCatalogueLoading] = useState(false)
   const [catalogueError, setCatalogueError] = useState('')
+  const [manualCardNumber, setManualCardNumber] = useState('')
+  const [manualMatches, setManualMatches] = useState([])
+  const [manualLoading, setManualLoading] = useState(false)
+  const [manualError, setManualError] = useState('')
 
   const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
   const hasReview =
@@ -111,6 +115,27 @@ export default function CardScanner({
     }
   }
 
+  const searchByCardNumber = async (event) => {
+    event.preventDefault()
+    const cardNumber = manualCardNumber.trim()
+    if (!cardNumber) {
+      setManualError('Enter a card number, for example OP01-001.')
+      return
+    }
+    setManualLoading(true)
+    setManualError('')
+    setManualMatches([])
+    try {
+      const matches = await findCatalogueMatches(cardNumber)
+      setManualMatches(matches)
+      if (!matches.length) setManualError('No catalogue match found. Check the card number or enter the details manually.')
+    } catch (lookupError) {
+      setManualError('Card-number search failed: ' + lookupError.message)
+    } finally {
+      setManualLoading(false)
+    }
+  }
+
   const applyCatalogueMatch = (match) => {
     const values = catalogueMatchToForm(match)
     setFields((current) => ({
@@ -186,6 +211,36 @@ export default function CardScanner({
           <span>Capture or upload front, back, and detail photographs. Choose a photograph side before capturing.</span>
         </div>
       </div>
+
+      <section className="scanner-manual-lookup" aria-labelledby="scanner-manual-lookup-title">
+        <div>
+          <p className="eyebrow">CARD DATABASE SEARCH</p>
+          <h3 id="scanner-manual-lookup-title">Search by card number</h3>
+          <p>Look up an English or Japanese One Piece card directly. You do not need to scan a photograph first.</p>
+        </div>
+        <form className="scanner-manual-lookup__form" onSubmit={searchByCardNumber}>
+          <label className="form-field">
+            <span>Card number</span>
+            <input value={manualCardNumber} onChange={(event) => setManualCardNumber(event.target.value)} placeholder="e.g. OP01-001 or OP17-119" />
+          </label>
+          <button className="button button--gold" type="submit" disabled={manualLoading || !manualCardNumber.trim()}>
+            {manualLoading ? 'Searching…' : 'Search card number'}
+          </button>
+        </form>
+        {manualError && <p className="form-error" role="status">{manualError}</p>}
+        {manualMatches.map((match) => (
+          <article className="scanner-catalogue__match" key={match.id}>
+            {match.imageUrl && <img className="scanner-catalogue__reference" src={match.imageUrl} alt={match.name + ' reference only'} loading="lazy" />}
+            <div>
+              <strong>{match.name || 'Unnamed card'}</strong>
+              <span>{match.cardNumber} · {match.language} · {match.setCode || 'Promo'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
+              <small>{match.category || 'Card'} · {match.colors || 'Colour not listed'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
+              {match.setName && <small>{match.setName}</small>}
+            </div>
+            <button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use details</button>
+          </article>
+        ))}
+      </section>
 
       {hasReview && (
         <div className="scan-review">
