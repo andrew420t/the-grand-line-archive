@@ -29,8 +29,9 @@ async function readJsonLines(path) {
 }
 
 async function loadCatalogue() {
-  const [cards, ...languageData] = await Promise.all([
+  const [cards, tcgcsvPrintings, ...languageData] = await Promise.all([
     readJsonLines('cards.jsonl'),
+    readJsonLines('printings/tcgcsv.jsonl'),
     ...LANGUAGES.flatMap((language) => [
       readJsonLines(`card_observations/${language}.jsonl`),
       readJsonLines(`printings/${language}.jsonl`),
@@ -51,6 +52,7 @@ async function loadCatalogue() {
       printingProducts: languageData[offset + 4],
     }
   })
+  languages.en.printings = [...languages.en.printings, ...tcgcsvPrintings]
   return { cards, languages }
 }
 
@@ -86,7 +88,7 @@ export async function findCatalogueMatches(cardNumber) {
   for (const card of matchingCards) {
     for (const language of LANGUAGES) {
       const data = catalogue.languages[language]
-      const observations = data.observations.filter((item) => item.card_key === card.key)
+      const observations = data.observations.filter((item) => item.card_key === card.key && !item.superseded_at)
       const observation = observations.sort((a, b) =>
         String(b.first_seen_at || '').localeCompare(String(a.first_seen_at || '')),
       )[0]
@@ -107,8 +109,8 @@ export async function findCatalogueMatches(cardNumber) {
             printingKey: printing.key,
             cardNumber: card.number || '',
             name: observation?.name || '',
-            language: language === 'jp' ? 'Japanese' : 'English',
-            languageCode: language,
+            language: printing.site === 'tcgcsv' ? 'English (promo/stamped)' : language === 'jp' ? 'Japanese' : 'English',
+            languageCode: printing.site === 'tcgcsv' ? 'tcgcsv' : language,
             category: observation?.category || card.category || '',
             colors: (observation?.colors || card.colors || []).join(' / '),
             cost: value(observation, 'cost') === '' ? value(card, 'cost') : value(observation, 'cost'),
@@ -130,7 +132,7 @@ export async function findCatalogueMatches(cardNumber) {
             releaseDate: value(product, 'release_date'),
             sourceUrl: value(product, 'product_url'),
             blockIcon: value(printing, 'block_icon'),
-            source: language === 'jp' ? 'Official Japanese card list' : 'Official English card list',
+            source: printing.site === 'tcgcsv' ? 'TCGplayer catalogue reference' : language === 'jp' ? 'Official Japanese card list' : 'Official English card list',
           })
         }
       }
