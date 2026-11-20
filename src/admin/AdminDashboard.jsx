@@ -8,6 +8,7 @@ import {
   Check,
   ChevronDown,
   ClipboardList,
+  FileSpreadsheet,
   Image,
   Layers,
   LayoutDashboard,
@@ -31,6 +32,7 @@ import CardScanner from './CardScanner'
 import PhotoStudio from './PhotoStudio'
 import QuickAddPanel from './QuickAddPanel'
 import StockPhotographyPanel from './StockPhotographyPanel'
+import BulkImportPanel from './BulkImportPanel'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -44,6 +46,7 @@ const adminSections = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
   { id: 'products', label: 'Products', icon: Package },
   { id: 'add-stock', label: 'Add New Stock', icon: PackagePlus },
+  { id: 'bulk-import', label: 'Bulk Import', icon: FileSpreadsheet },
   { id: 'scan-card', label: 'Scan Card', icon: ScanLine },
   { id: 'photography', label: 'Stock Photography', icon: Camera },
   { id: 'collections', label: 'Collections and Sets', icon: Layers },
@@ -196,6 +199,10 @@ export default function AdminDashboard({
             setRawText('')
           }}
         />
+      </div>
+
+      <div className="admin-hidden-panel" hidden={activeSection !== 'bulk-import'}>
+        <BulkImportPanel products={products} categories={categories} sets={sets} user={user} onSaved={onRefreshProducts} />
       </div>
 
       <div className="admin-hidden-panel" hidden={activeSection !== 'scan-card'}>
