@@ -7,6 +7,7 @@ import {
 } from './productStorage'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS } from './productSchema'
 import { supabase } from '../lib/supabase'
+import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 
 const initialProduct = () => ({
   name: '',
@@ -74,11 +75,45 @@ export default function QuickAddPanel({
   const [duplicateMatches, setDuplicateMatches] = useState([])
   const [allowVariant, setAllowVariant] = useState(false)
   const [partialProductId, setPartialProductId] = useState('')
+  const [catalogueMatches, setCatalogueMatches] = useState([])
+  const [catalogueLoading, setCatalogueLoading] = useState(false)
+  const [catalogueError, setCatalogueError] = useState('')
   const setField = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }))
     setError('')
     setSuccess('')
   }
+
+  const lookupCard = async () => {
+    if (!form.card_number.trim()) return
+    setCatalogueLoading(true)
+    setCatalogueError('')
+    setCatalogueMatches([])
+    try {
+      const matches = await findCatalogueMatches(form.card_number)
+      setCatalogueMatches(matches)
+      if (!matches.length) setCatalogueError('No matching card was found. You can still enter the details manually.')
+    } catch (lookupError) {
+      setCatalogueError(lookupError.message)
+    } finally {
+      setCatalogueLoading(false)
+    }
+  }
+
+  const applyCatalogueMatch = (match) => {
+    const details = catalogueMatchToForm(match)
+    const matchingSet = sets.find((set) => String(set.code || '').replace(/-/g, '').toUpperCase() === String(match.setCode || '').replace(/-/g, '').toUpperCase())
+    const matchingCategory = categories.find((category) => String(category.name || '').toLowerCase() === String(match.category || '').toLowerCase())
+    setForm((current) => ({
+      ...current,
+      ...details,
+      set_id: matchingSet?.id || current.set_id,
+      category_id: matchingCategory?.id || current.category_id,
+    }))
+    setCatalogueMatches([])
+    setSuccess('Reference details filled in. Check the information against your physical card.')
+  }
+
   const inferredSetId =
     form.set_id ||
     sets.find((set) => String(set.code || '').toUpperCase() === String(form.set_code || '').trim().toUpperCase())?.id ||
@@ -273,6 +308,25 @@ export default function QuickAddPanel({
         <div className="form-grid">
           <label className="form-field form-field--wide"><span>Card name / character *</span><input required value={form.name} onChange={(event) => setField('name', event.target.value)} placeholder="e.g. Monkey D. Luffy" /></label>
           <label className="form-field"><span>Card number</span><input value={form.card_number} onChange={(event) => setField('card_number', event.target.value)} placeholder="OP05-119" /></label>
+          <div className="form-field form-field--wide catalogue-lookup-control">
+            <button className="button button--outline" type="button" disabled={!form.card_number.trim() || catalogueLoading} onClick={lookupCard}>
+              <Search size={14} /> {catalogueLoading ? 'Searching English and Japanese cards…' : 'Look up card details'}
+            </button>
+            <small>Reference images are for identification only. Your uploaded stock photographs are not changed.</small>
+            {catalogueError && <span className="form-error">{catalogueError}</span>}
+            {catalogueMatches.map((match) => (
+              <article className="catalogue-match-card" key={match.id}>
+                {match.imageUrl ? <img src={match.imageUrl} alt={match.name + ' reference image'} loading="lazy" /> : <div className="catalogue-match-card__no-image">No reference image</div>}
+                <div className="catalogue-match-card__details">
+                  <strong>{match.name || 'Card name unavailable'}</strong>
+                  <span>{match.language} · {match.setCode || 'Promo / set not listed'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
+                  <small>{match.colors || 'Colour not listed'} · {match.category || 'Card'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
+                  {match.setName && <small>{match.setName}</small>}
+                  <button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use this printing</button>
+                </div>
+              </article>
+            ))}
+          </div>
           <label className="form-field"><span>Set code</span><input value={form.set_code} onChange={(event) => setField('set_code', event.target.value)} placeholder="OP05" /><small>Matched to the existing sets.code value.</small></label>
           <label className="form-field"><span>Rarity</span><select value={form.rarity} onChange={(event) => setField('rarity', event.target.value)}><option value="">Choose rarity</option>{[...new Set([...rarityOptions, ...products.map((product) => product.rarity).filter(Boolean)])].map((rarity) => <option key={rarity}>{rarity}</option>)}</select></label>
           <label className="form-field"><span>Colour</span><input value={form.color} onChange={(event) => setField('color', event.target.value)} placeholder="Red" /></label>
