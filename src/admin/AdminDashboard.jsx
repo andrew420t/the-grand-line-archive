@@ -805,7 +805,7 @@ function CustomisationSection({ products, settings, settingsError, onSave }) {
     ['featured', 'Featured cards'],
     ['browse', 'Shop callout'],
     ['values', 'Archive values'],
-    ['shipping', 'Shipping information'],
+    ['shipping', 'Pickup information'],
   ]
 
   const update = (key, value) => {
@@ -892,7 +892,7 @@ function CustomisationSection({ products, settings, settingsError, onSave }) {
         </div>
         <div className="customisation-group">
           <p className="eyebrow">STORE INFORMATION</p>
-          <label className="form-field"><span>Shipping information</span><textarea rows="3" value={draft.shipping_information || ''} onChange={(event) => update('shipping_information', event.target.value)} /></label>
+          <label className="form-field"><span>Pickup information</span><textarea rows="3" value={draft.shipping_information || ''} onChange={(event) => update('shipping_information', event.target.value)} /></label>
           <label className="form-field"><span>Contact information</span><input value={draft.contact_information || ''} onChange={(event) => update('contact_information', event.target.value)} placeholder="Email address or contact details" /></label>
         </div>
         <div className="customisation-form__footer">
