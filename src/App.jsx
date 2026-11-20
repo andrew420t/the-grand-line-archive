@@ -779,7 +779,7 @@ function Storefront() {
                 <i />
                 <div><Box size={18} /><span>Sleeved & top-loaded</span></div>
                 <i />
-                <div><MapPin size={18} /><span>{siteSettings.shipping_information || 'Local pickup in Gibraltar only. No delivery or shipping.'}</span></div>
+                <div><MapPin size={18} /><span>{siteSettings.shipping_information || 'Local pickup in Gibraltar only. Collection is arranged after ordering.'}</span></div>
               </section>}
 
               {homepageSections.has('featured') && <section className="content-section page-width" id="featured">
@@ -985,7 +985,7 @@ function Storefront() {
                     </div>
                   ))}
                 </div>
-                <div className="cart-summary"><div><span>Subtotal</span><strong>{money(cartTotal)}</strong></div><p>Pickup in Gibraltar is arranged after your order. No delivery or shipping is offered.</p><button className="button button--gold button--wide" type="button" disabled={orderAction === 'placing'} onClick={placeOrder}>{orderAction === 'placing' ? 'Placing order…' : user ? 'Place order' : 'Sign in to place order'} <ArrowRight size={16} /></button>{ordersError && <p className="form-error">{ordersError}</p>}</div>
+                <div className="cart-summary"><div><span>Subtotal</span><strong>{money(cartTotal)}</strong></div><p>Arrange your local pickup in Gibraltar after placing your order.</p><button className="button button--gold button--wide" type="button" disabled={orderAction === 'placing'} onClick={placeOrder}>{orderAction === 'placing' ? 'Placing order…' : user ? 'Place order' : 'Sign in to place order'} <ArrowRight size={16} /></button>{ordersError && <p className="form-error">{ordersError}</p>}</div>
               </>
             ) : (
               <div className="empty-cart"><ShoppingBag size={30} /><h3>Your basket is waiting.</h3><p>Find a card for the collection.</p><Link className="button button--outline" to="/shop" onClick={() => setCartOpen(false)}>Explore the archive</Link></div>
