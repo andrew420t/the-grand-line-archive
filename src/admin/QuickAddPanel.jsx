@@ -7,7 +7,7 @@ import {
 } from './productStorage'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS } from './productSchema'
 import { supabase } from '../lib/supabase'
-import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
+import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride } from './cardCatalogue'
 
 const initialProduct = () => ({
   name: '',
@@ -79,6 +79,7 @@ export default function QuickAddPanel({
   const [catalogueMatches, setCatalogueMatches] = useState([])
   const [catalogueLoading, setCatalogueLoading] = useState(false)
   const [catalogueError, setCatalogueError] = useState('')
+  const [librarySaving, setLibrarySaving] = useState(false)
   const setField = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }))
     setError('')
@@ -113,6 +114,21 @@ export default function QuickAddPanel({
     }))
     setCatalogueMatches([])
     setSuccess('Reference details filled in. Check the information against your physical card.')
+  }
+
+
+  const saveCurrentCardToLibrary = async () => {
+    setLibrarySaving(true)
+    setError('')
+    setSuccess('')
+    try {
+      await saveCatalogueOverride({ form, userId: user?.id })
+      setSuccess('Card details saved to the shared catalogue. They will be reused in future lookups and imports.')
+    } catch (saveError) {
+      setError(saveError.message)
+    } finally {
+      setLibrarySaving(false)
+    }
   }
 
   const inferredSetId =
@@ -314,6 +330,11 @@ export default function QuickAddPanel({
               <Search size={14} /> {catalogueLoading ? 'Searching English and Japanese cards…' : 'Look up card details'}
             </button>
             <small>Reference images are for identification only. Your uploaded stock photographs are not changed.</small>
+            {form.card_number.trim() && form.name.trim() && (
+              <button className="text-button" type="button" disabled={librarySaving} onClick={saveCurrentCardToLibrary}>
+                {librarySaving ? 'Saving to shared library…' : 'Save these details to the shared card library'}
+              </button>
+            )}
             {catalogueError && <span className="form-error">{catalogueError}</span>}
             {catalogueMatches.map((match) => (
               <article className="catalogue-match-card" key={match.id}>
