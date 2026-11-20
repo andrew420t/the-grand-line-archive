@@ -7,7 +7,7 @@ import {
 } from './productStorage'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS } from './productSchema'
 import { supabase } from '../lib/supabase'
-import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride } from './cardCatalogue'
+import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride, collectrSearchUrl } from './cardCatalogue'
 
 const initialProduct = () => ({
   name: '',
@@ -344,7 +344,10 @@ export default function QuickAddPanel({
                   <span>{match.language} · {match.setCode || 'Promo / set not listed'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
                   <small>{match.colors || 'Colour not listed'} · {match.category || 'Card'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
                   {match.setName && <small>{match.setName}</small>}
-                  <button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use this printing</button>
+                  <div className="catalogue-match-card__actions">
+                    <button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), '_blank', 'noopener,noreferrer')}>Open on Collectr ↗</button>
+                    <button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use this printing</button>
+                  </div>
                 </div>
               </article>
             ))}
