@@ -97,6 +97,12 @@ export async function findCatalogueMatches(cardNumber) {
       const printings = data.printings.filter((item) => item.card_key === card.key)
 
       for (const printing of printings) {
+        const locator = data.locators.find((item) => item.printing_key === printing.key && item.site === printing.site)
+        const officialImageFallback = locator?.site === 'en'
+          ? `https://en.onepiece-cardgame.com/images/cardlist/card/${encodeURIComponent(locator.image_id)}.png`
+          : locator?.site === 'jp'
+            ? `https://www.onepiece-cardgame.com/images/cardlist/card/${encodeURIComponent(locator.image_id)}.png`
+            : ''
         const productLinks = data.printingProducts.filter((item) => item.printing_key === printing.key)
         const linkedProducts = productLinks
           .map((link) => data.products.find((product) => product.key === link.product_key))
@@ -126,7 +132,8 @@ export async function findCatalogueMatches(cardNumber) {
             rarity: value(printing, 'rarity'),
             variant: value(printing, 'variant'),
             variantLabel: value(printing, 'variant'),
-            imageUrl: value(printing, 'image_url'),
+            imageUrl: value(printing, 'image_url') || officialImageFallback,
+            fallbackImageUrl: officialImageFallback && officialImageFallback !== value(printing, 'image_url') ? officialImageFallback : '',
             sourceText: value(printing, 'source_text'),
             setCode,
             setName: value(product, 'name'),
