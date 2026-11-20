@@ -78,7 +78,9 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
     return { ...row, matchingSet, matchingCategory, duplicate, issues }
   }), [rows, products, sets, categories])
 
-  const readyRows = prepared.filter((row) => !row.issues.some((issue) => issue !== 'Possible duplicate already in stock') && (includeDuplicates || !row.duplicate))
+  // Unknown set codes are warnings, not blockers: cards can still be imported
+  // without a linked set, and their card_number is retained.
+  const readyRows = prepared.filter((row) => !row.issues.some((issue) => ['Card name missing', 'Invalid price', 'Invalid quantity'].includes(issue)) && (includeDuplicates || !row.duplicate))
 
   const loadFile = async (file) => {
     setError(''); setReport(null)
