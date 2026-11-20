@@ -1,13 +1,13 @@
 export const DEFAULT_SITE_SETTINGS = {
   announcement_headline: 'THE ARCHIVE IS OPEN',
-  announcement_text: 'Local pickup in Gibraltar · No delivery or shipping',
+  announcement_text: 'Local pickup available in Gibraltar',
   homepage_heading: 'Cards worth a bounty.',
   homepage_description:
     'Every card in the archive is inspected by hand, photographed as found, and stored in a light-safe vault. Leaders, secret rares and the odd legend — priced honestly and available for local pickup in Gibraltar.',
   featured_product_ids: [],
   card_of_the_week_product_id: '',
   homepage_sections: ['trust', 'featured', 'browse', 'values', 'shipping'],
-  shipping_information: 'Local pickup in Gibraltar only. We do not offer delivery or shipping.',
+  shipping_information: 'Local pickup in Gibraltar only. Collection is arranged after ordering.',
   contact_information: '',
 }
 
