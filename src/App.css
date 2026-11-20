@@ -4324,3 +4324,115 @@ h2 em {
     padding-top: 0;
   }
 }
+
+
+/* Card catalogue lookup: external images are reference-only and never enter stock photography. */
+.catalogue-lookup-control {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+}
+.catalogue-lookup-control > small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.catalogue-match-card {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  gap: 14px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.025);
+}
+.catalogue-match-card > img,
+.catalogue-match-card__no-image {
+  width: 92px;
+  aspect-ratio: 2.5 / 3.5;
+  object-fit: contain;
+  background: #080808;
+}
+.catalogue-match-card__no-image {
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  color: var(--muted);
+  font-size: 10px;
+  text-align: center;
+}
+.catalogue-match-card__details {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+}
+.catalogue-match-card__details strong {
+  color: var(--cream);
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 400;
+}
+.catalogue-match-card__details span,
+.catalogue-match-card__details small {
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.scanner-catalogue__match {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+.scanner-catalogue__reference {
+  width: 72px;
+  aspect-ratio: 2.5 / 3.5;
+  object-fit: contain;
+  background: #080808;
+}
+.scanner-catalogue__match > div {
+  min-width: 0;
+}
+.scanner-catalogue__match small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.bulk-catalogue-tools {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+  min-width: 180px;
+}
+.bulk-catalogue-tools select {
+  max-width: 260px;
+  padding: 7px;
+  color: var(--cream);
+  border: 1px solid var(--line);
+  background: #171612;
+  font-size: 10px;
+}
+@media (max-width: 600px) {
+  .scanner-catalogue__match {
+    grid-template-columns: 56px minmax(0, 1fr);
+  }
+  .scanner-catalogue__reference {
+    width: 56px;
+  }
+  .scanner-catalogue__match .button {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .catalogue-match-card {
+    grid-template-columns: 72px minmax(0, 1fr);
+  }
+  .catalogue-match-card > img,
+  .catalogue-match-card__no-image {
+    width: 72px;
+  }
+}
