@@ -33,7 +33,7 @@ import PhotoStudio from './PhotoStudio'
 import QuickAddPanel from './QuickAddPanel'
 import StockPhotographyPanel from './StockPhotographyPanel'
 import BulkImportPanel from './BulkImportPanel'
-import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
+import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -467,7 +467,10 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
                     <span>{match.language} · {match.setCode || 'Promo / set not listed'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
                     <small>{match.colors || 'Colour not listed'} · {match.category || 'Card'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
                     {match.setName && <small>{match.setName}</small>}
-                    <button className="button button--gold" type="button" disabled={lookupSaving} onClick={() => applyProductCatalogueMatch(match)}>{lookupSaving ? 'Filling missing details…' : 'Fill missing details'}</button>
+                    <div className="catalogue-match-card__actions">
+                      <button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), '_blank', 'noopener,noreferrer')}>Open on Collectr ↗</button>
+                      <button className="button button--gold" type="button" disabled={lookupSaving} onClick={() => applyProductCatalogueMatch(match)}>{lookupSaving ? 'Filling missing details…' : 'Fill missing details'}</button>
+                    </div>
                   </div>
                 </article>
               ))}
