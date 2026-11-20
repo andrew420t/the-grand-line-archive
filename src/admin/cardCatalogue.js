@@ -1,3 +1,5 @@
+import { supabase } from '../lib/supabase'
+
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const LANGUAGES = ['en', 'jp']
 const CACHE_TTL = 6 * 60 * 60 * 1000
@@ -139,6 +141,64 @@ export async function findCatalogueMatches(cardNumber) {
     }
   }
 
+  // Admin-entered corrections and custom cards are layered over the public reference data.
+  if (supabase) {
+    const saved = await supabase
+      .from('card_catalogue_overrides')
+      .select('id,card_number,language,set_code,variant_label,details,source')
+      .eq('card_number', requestedNumber)
+
+    if (!saved.error) {
+      for (const override of saved.data || []) {
+        const identity = (match) =>
+          match.language === override.language &&
+          String(match.setCode || '') === String(override.set_code || '') &&
+          String(match.variantLabel || '') === String(override.variant_label || '')
+        const existing = results.find((match) => identity(match))
+        const details = override.details || {}
+        if (existing) {
+          Object.assign(existing, details, {
+            id: existing.id,
+            cardNumber: requestedNumber,
+            source: 'Grand Line Archive saved correction',
+          })
+        } else {
+          results.push({
+            id: 'custom-' + override.id,
+            cardKey: '',
+            printingKey: '',
+            cardNumber: requestedNumber,
+            language: override.language,
+            languageCode: override.language === 'Japanese' ? 'jp' : 'en',
+            category: details.card_type || 'character',
+            colors: details.color || '',
+            cost: details.cost ?? '',
+            life: details.life ?? '',
+            power: details.power ?? '',
+            counter: details.counter ?? '',
+            attributes: details.attributes || '',
+            traits: details.classification || '',
+            effect: details.effect_text || '',
+            trigger: details.trigger_text || '',
+            rarity: details.rarity || '',
+            variant: details.variant_label || 'custom',
+            variantLabel: details.variant_label || '',
+            imageUrl: details.reference_image_url || '',
+            sourceText: 'Saved by Grand Line Archive admin',
+            setCode: override.set_code || '',
+            setName: details.set_name || '',
+            productKind: 'custom',
+            releaseDate: '',
+            sourceUrl: '',
+            blockIcon: '',
+            source: override.source || 'Grand Line Archive saved card',
+            ...details,
+          })
+        }
+      }
+    }
+  }
+
   return results.sort((a, b) =>
     a.language.localeCompare(b.language) ||
     a.setCode.localeCompare(b.setCode) ||
@@ -167,6 +227,48 @@ export function catalogueMatchToForm(match) {
     attributes: match.attributes || '',
     reference_image_url: match.imageUrl || '',
   }
+}
+ 
+export async function saveCatalogueOverride({ form, userId }) {
+  if (!supabase) throw new Error('Supabase is not configured.')
+  if (!form?.card_number?.trim() || !form?.name?.trim()) {
+    throw new Error('Enter both a card number and card name before saving to the library.')
+  }
+  const details = {
+    name: form.name.trim(),
+    rarity: form.rarity || '',
+    color: form.color || '',
+    power: form.power === '' ? '' : Number(form.power),
+    cost: form.cost === '' ? '' : Number(form.cost),
+    counter: form.counter === '' ? '' : Number(form.counter),
+    card_type: form.card_type || '',
+    classification: form.classification || '',
+    language: form.language || 'English',
+    effect_text: form.effect_text || '',
+    trigger_text: form.trigger_text || '',
+    attributes: form.attributes || '',
+    variant_label: form.variant_label || '',
+    reference_image_url: form.reference_image_url || '',
+  }
+  const payload = {
+    card_number: normalizeCardNumber(form.card_number),
+    language: form.language || 'English',
+    set_code: String(form.set_code || '').toUpperCase(),
+    variant_label: String(form.variant_label || ''),
+    details,
+    updated_by: userId || null,
+    updated_at: new Date().toISOString(),
+  }
+  const { error } = await supabase
+    .from('card_catalogue_overrides')
+    .upsert(payload, { onConflict: 'card_number,language,set_code,variant_label' })
+  if (error) {
+    if (error.code === '42P01' || error.code === 'PGRST205') {
+      throw new Error('The shared card library table is not set up yet. Apply supabase/review-only/card-catalogue-overrides.sql in Supabase SQL Editor first.')
+    }
+    throw new Error('Could not save the card library correction: ' + error.message)
+  }
+  return true
 }
 
 export function clearCatalogueCache() {
