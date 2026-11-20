@@ -17,8 +17,8 @@ export default function ImageLibraryPanel({ user }) {
     try { setImages(await listLibraryPhotos(user.id)) }
     catch (loadError) { setError(loadError.message) }
     finally { setLoading(false) }
-  }
-  useEffect(() => { loadImages() }, [user.id])
+  }, [user.id])
+  useEffect(() => { loadImages() }, [loadImages])
 
   const chooseFiles = (fileList) => {
     const selected = [...fileList].filter((file) => file.type.startsWith('image/'))
