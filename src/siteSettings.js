@@ -13,7 +13,11 @@ export const DEFAULT_SITE_SETTINGS = {
 
 export function normalizeSiteSettings(value) {
   const settings = { ...DEFAULT_SITE_SETTINGS, ...(value || {}) }
-  const legacyShippingText = /\\b(uk|united kingdom|worldwide|ship(?:ping|ped)?|deliver(?:y|ies|ed)?)\\b/i\n  if (legacyShippingText.test(settings.announcement_text || '')) settings.announcement_text = DEFAULT_SITE_SETTINGS.announcement_text\n  if (legacyShippingText.test(settings.homepage_description || '')) settings.homepage_description = DEFAULT_SITE_SETTINGS.homepage_description\n  if (legacyShippingText.test(settings.shipping_information || '')) settings.shipping_information = DEFAULT_SITE_SETTINGS.shipping_information\n  settings.featured_product_ids = Array.isArray(settings.featured_product_ids)
+  const legacyShippingText = /\b(uk|united kingdom|worldwide|ship(?:ping|ped)?|deliver(?:y|ies|ed)?)\b/i
+  if (legacyShippingText.test(settings.announcement_text || '')) settings.announcement_text = DEFAULT_SITE_SETTINGS.announcement_text
+  if (legacyShippingText.test(settings.homepage_description || '')) settings.homepage_description = DEFAULT_SITE_SETTINGS.homepage_description
+  if (legacyShippingText.test(settings.shipping_information || '')) settings.shipping_information = DEFAULT_SITE_SETTINGS.shipping_information
+  settings.featured_product_ids = Array.isArray(settings.featured_product_ids)
     ? settings.featured_product_ids.map(String)
     : []
   settings.homepage_sections = Array.isArray(settings.homepage_sections)
