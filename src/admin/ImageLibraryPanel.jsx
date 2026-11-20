@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ImagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './productStorage'
 
@@ -12,7 +12,7 @@ export default function ImageLibraryPanel({ user }) {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
 
-  const loadImages = async () => {
+  const loadImages = useCallback(async () => {
     setLoading(true); setError('')
     try { setImages(await listLibraryPhotos(user.id)) }
     catch (loadError) { setError(loadError.message) }
