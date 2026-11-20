@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { AlertCircle, Check, FileSpreadsheet, Upload, Download } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS } from './productSchema'
+import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 
 const TEMPLATE_HEADERS = ['name','card_number','set_code','rarity','variant_label','color','power','cost','card_type','classification','language','condition','price_gbp','stock_quantity','category_name','description','effect_text']
 const aliases = {
@@ -60,6 +61,8 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
   const [error, setError] = useState('')
   const [includeDuplicates, setIncludeDuplicates] = useState(false)
   const [schemaReady, setSchemaReady] = useState(false)
+  const [catalogueMatches, setCatalogueMatches] = useState({})
+  const [catalogueLoadingRow, setCatalogueLoadingRow] = useState(null)
 
   const prepared = useMemo(() => rows.map((row) => {
     const matchingSet = sets.find((set) => String(set.code || '').toUpperCase() === String(row.set_code || '').toUpperCase())
@@ -81,6 +84,46 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
   // Unknown set codes are warnings, not blockers: cards can still be imported
   // without a linked set, and their card_number is retained.
   const readyRows = prepared.filter((row) => !row.issues.some((issue) => ['Card name missing', 'Invalid price', 'Invalid quantity'].includes(issue)) && (includeDuplicates || !row.duplicate))
+
+
+  const lookupRow = async (row) => {
+    if (!row.card_number) return
+    setCatalogueLoadingRow(row._row)
+    setError('')
+    try {
+      const matches = await findCatalogueMatches(row.card_number)
+      setCatalogueMatches((current) => ({ ...current, [row._row]: matches }))
+      if (!matches.length) setError(`No catalogue match found for CSV row ${row._row} (${row.card_number}).`)
+    } catch (lookupError) {
+      setError(`Catalogue lookup failed for row ${row._row}: ${lookupError.message}`)
+    } finally {
+      setCatalogueLoadingRow(null)
+    }
+  }
+
+  const applyRowMatch = (row, match) => {
+    const details = catalogueMatchToForm(match)
+    const index = rows.findIndex((item) => item._row === row._row)
+    if (index < 0) return
+    const matchingCategory = categories.find((category) => String(category.name || '').toLowerCase() === String(match.category || '').toLowerCase())
+    setRows((current) => current.map((item) => item._row !== row._row ? item : ({
+      ...item,
+      name: details.name || item.name,
+      card_number: details.card_number || item.card_number,
+      set_code: details.set_code || item.set_code,
+      rarity: details.rarity || item.rarity,
+      variant_label: details.variant_label || item.variant_label,
+      color: details.color || item.color,
+      power: details.power || item.power,
+      cost: details.cost || item.cost,
+      card_type: details.card_type || item.card_type,
+      classification: details.classification || item.classification,
+      language: details.language || item.language,
+      effect_text: details.effect_text || item.effect_text,
+      category_name: matchingCategory?.name || item.category_name,
+    })))
+    setCatalogueMatches((current) => ({ ...current, [row._row]: [] }))
+  }
 
   const loadFile = async (file) => {
     setError(''); setReport(null)
@@ -137,7 +180,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
       {prepared.length > 0 && <>
         <div className="bulk-import-summary"><strong>{readyRows.length} ready</strong><span>{prepared.filter((row) => row.issues.length).length} flagged for review · {prepared.filter((row) => row.duplicate).length} possible duplicates</span></div>
         <label className="check-field"><input type="checkbox" checked={includeDuplicates} onChange={(event) => setIncludeDuplicates(event.target.checked)}/><span>Allow importing flagged duplicates (use only for different variants)</span></label>
-        <div className="bulk-import-table-wrap"><table className="bulk-import-table"><thead><tr><th>Row</th><th>Card</th><th>Number</th><th>Set</th><th>Rarity</th><th>Qty</th><th>Price</th><th>Review</th></tr></thead><tbody>{prepared.map((row) => <tr key={row._row}><td>{row._row}</td><td>{row.name || '—'}</td><td>{row.card_number || '—'}</td><td>{row.matchingSet?.name || row.set_code || '—'}</td><td>{row.rarity || '—'}</td><td>{row.stock_quantity || '1'}</td><td>{row.price_gbp || '£0 inactive'}</td><td>{row.issues.length ? row.issues.join('; ') : 'Ready'}</td></tr>)}</tbody></table></div>
+        <div className="bulk-import-table-wrap"><table className="bulk-import-table"><thead><tr><th>Row</th><th>Card</th><th>Number</th><th>Set</th><th>Rarity</th><th>Qty</th><th>Price</th><th>Review</th></tr></thead><tbody>{prepared.map((row) => <tr key={row._row}><td>{row._row}</td><td>{row.name || '—'}</td><td>{row.card_number || '—'}</td><td>{row.matchingSet?.name || row.set_code || '—'}</td><td>{row.rarity || '—'}</td><td>{row.stock_quantity || '1'}</td><td>{row.price_gbp || '£0 inactive'}</td><td>{row.issues.length ? row.issues.join('; ') : 'Ready'}{row.card_number && <div className="bulk-catalogue-tools"><button className="text-button" type="button" disabled={catalogueLoadingRow === row._row} onClick={() => lookupRow(row)}>{catalogueLoadingRow === row._row ? 'Looking up…' : 'Find card details'}</button>{catalogueMatches[row._row]?.length > 0 && <select aria-label={`Choose catalogue printing for row ${row._row}`} defaultValue="" onChange={(event) => { const match = catalogueMatches[row._row].find((item) => item.id === event.target.value); if (match) applyRowMatch(row, match) }}><option value="">Choose printing to fill row…</option>{catalogueMatches[row._row].map((match) => <option key={match.id} value={match.id}>{match.language} · {match.setCode || 'Promo'} · {match.rarity} · {match.variant} · {match.name}</option>)}</select>}</div>}</td></tr>)}</tbody></table></div>
         <button className="button button--gold" type="button" disabled={busy || !readyRows.length} onClick={importRows}>{busy ? 'Importing…' : 'Import ' + readyRows.length + ' reviewed card(s)'}</button>
       </>}
       {report && <div className="success-notice"><Check size={15}/><span>Import complete: {report.imported} imported, {report.skipped} skipped.{report.failures.length ? ' ' + report.failures.length + ' failed.' : ''}</span></div>}
