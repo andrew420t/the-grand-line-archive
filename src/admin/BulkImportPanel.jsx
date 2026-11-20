@@ -113,7 +113,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
           category_id: row.matchingCategory?.id || '', variant_label: row.variant_label, featured: false,
         }
         const payload = buildNewProductPayload(form, row.matchingSet?.id || '', usesExtended)
-        if (Number(payload.price) === 0) payload.status = 'draft'
+        if (Number(payload.price) === 0) payload.status = 'inactive'
         const insert = await supabase.from('products').insert(payload)
         if (insert.error) result.failures.push({ row: row._row, name: row.name, error: insert.error.message })
         else result.imported += 1
@@ -127,7 +127,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
   return (
     <section className="admin-view bulk-import-view">
       <div className="admin-view-heading"><div><p className="eyebrow">BULK INVENTORY IMPORT</p><h2>Bring cards into the archive.</h2></div></div>
-      <p className="admin-muted">Upload a CSV exported from Excel. This import creates product records and quantities; card images can be added later in Stock Photography. Rows with missing prices are saved as drafts at £0 so they are not published accidentally.</p>
+      <p className="admin-muted">Upload a CSV exported from Excel. This import creates product records and quantities; card images can be added later in Stock Photography. Rows with missing prices are saved as inactive at £0 so they are not published accidentally.</p>
       <div className="bulk-import-actions">
         <button className="button button--outline" type="button" onClick={downloadTemplate}><Download size={15}/> Download CSV template</button>
         <label className="button button--gold bulk-import-file"><Upload size={15}/> Choose CSV file<input type="file" accept=".csv,text/csv" onChange={(event) => loadFile(event.target.files?.[0])}/></label>
@@ -137,7 +137,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
       {prepared.length > 0 && <>
         <div className="bulk-import-summary"><strong>{readyRows.length} ready</strong><span>{prepared.filter((row) => row.issues.length).length} flagged for review · {prepared.filter((row) => row.duplicate).length} possible duplicates</span></div>
         <label className="check-field"><input type="checkbox" checked={includeDuplicates} onChange={(event) => setIncludeDuplicates(event.target.checked)}/><span>Allow importing flagged duplicates (use only for different variants)</span></label>
-        <div className="bulk-import-table-wrap"><table className="bulk-import-table"><thead><tr><th>Row</th><th>Card</th><th>Number</th><th>Set</th><th>Rarity</th><th>Qty</th><th>Price</th><th>Review</th></tr></thead><tbody>{prepared.map((row) => <tr key={row._row}><td>{row._row}</td><td>{row.name || '—'}</td><td>{row.card_number || '—'}</td><td>{row.matchingSet?.name || row.set_code || '—'}</td><td>{row.rarity || '—'}</td><td>{row.stock_quantity || '1'}</td><td>{row.price_gbp || '£0 draft'}</td><td>{row.issues.length ? row.issues.join('; ') : 'Ready'}</td></tr>)}</tbody></table></div>
+        <div className="bulk-import-table-wrap"><table className="bulk-import-table"><thead><tr><th>Row</th><th>Card</th><th>Number</th><th>Set</th><th>Rarity</th><th>Qty</th><th>Price</th><th>Review</th></tr></thead><tbody>{prepared.map((row) => <tr key={row._row}><td>{row._row}</td><td>{row.name || '—'}</td><td>{row.card_number || '—'}</td><td>{row.matchingSet?.name || row.set_code || '—'}</td><td>{row.rarity || '—'}</td><td>{row.stock_quantity || '1'}</td><td>{row.price_gbp || '£0 inactive'}</td><td>{row.issues.length ? row.issues.join('; ') : 'Ready'}</td></tr>)}</tbody></table></div>
         <button className="button button--gold" type="button" disabled={busy || !readyRows.length} onClick={importRows}>{busy ? 'Importing…' : 'Import ' + readyRows.length + ' reviewed card(s)'}</button>
       </>}
       {report && <div className="success-notice"><Check size={15}/><span>Import complete: {report.imported} imported, {report.skipped} skipped.{report.failures.length ? ' ' + report.failures.length + ' failed.' : ''}</span></div>}
