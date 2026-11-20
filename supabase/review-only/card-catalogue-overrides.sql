@@ -22,13 +22,14 @@ CREATE TABLE public.card_catalogue_overrides (
   language text NOT NULL CHECK (language IN ('English', 'Japanese')),
   set_code text NOT NULL DEFAULT '',
   variant_label text NOT NULL DEFAULT '',
+  printing_key text NOT NULL DEFAULT '',
   details jsonb NOT NULL DEFAULT '{}'::jsonb,
   source text NOT NULL DEFAULT 'Grand Line Archive admin correction',
   updated_by uuid REFERENCES auth.users(id) ON DELETE SET NULL,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   CONSTRAINT card_catalogue_overrides_identity
-    UNIQUE (card_number, language, set_code, variant_label)
+    UNIQUE (card_number, language, set_code, variant_label, printing_key)
 );
 
 CREATE INDEX card_catalogue_overrides_card_number_idx
