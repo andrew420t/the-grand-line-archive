@@ -28,6 +28,7 @@ import {
   Routes,
   useLocation,
   useNavigate,
+  useParams,
 } from 'react-router-dom'
 import AdminDashboard from './admin/AdminDashboard'
 import AdminAccess from './admin/AdminAccess'
@@ -86,8 +87,10 @@ function ProductCard({ product, onAdd }) {
   return (
     <article className="product-card">
       <div className="product-card__photo">
-        <ProductImage product={product} />
-        <span className="product-card__rarity">{product.rarity || 'Trading card'}</span>
+        <Link className="product-card__image-link" to={`/product/${encodeURIComponent(product.id)}`} aria-label={`View ${product.name} details`}>
+          <ProductImage product={product} />
+          <span className="product-card__rarity">{product.rarity || 'Trading card'}</span>
+        </Link>
         <button
           className="quick-add"
           type="button"
@@ -98,7 +101,7 @@ function ProductCard({ product, onAdd }) {
           <Plus size={18} />
         </button>
       </div>
-      <div className="product-card__body">
+      <Link className="product-card__body product-card__body-link" to={`/product/${encodeURIComponent(product.id)}`}>
         <p className="eyebrow product-card__set">{product.setName || product.category}</p>
         <h3>{product.name}</h3>
         <div className="product-card__meta">
@@ -109,8 +112,72 @@ function ProductCard({ product, onAdd }) {
               : 'Sold out'}
           </span>
         </div>
-      </div>
+        <span className="product-card__view">View card details <ArrowRight size={12} /></span>
+      </Link>
     </article>
+  )
+}
+
+function ProductDetailPage({ products, onAdd }) {
+  const { productId } = useParams()
+  const product = products.find((item) => String(item.id) === String(productId))
+  if (!product) {
+    return (
+      <main className="product-detail page-width">
+        <Link className="text-link" to="/shop">← Back to the archive</Link>
+        <div className="empty-catalogue"><h2>Card not found.</h2><p>This card may no longer be listed in the shop.</p><Link className="button button--gold" to="/shop">Browse cards</Link></div>
+      </main>
+    )
+  }
+
+  const raw = product.raw || {}
+  const details = [
+    ['Card number', raw.card_number],
+    ['Set', product.setName || raw.set_code || product.setCode],
+    ['Set code', raw.set_code || product.setCode],
+    ['Category', product.category],
+    ['Rarity', product.rarity],
+    ['Variant', raw.variant_label],
+    ['Colour', raw.color],
+    ['Power', raw.power],
+    ['Cost', raw.cost],
+    ['Type', raw.card_type || raw.classification],
+    ['Language', raw.language],
+    ['Condition', raw.condition],
+    ['Availability', product.stock > 0 ? 'In stock' : 'Sold out'],
+  ].filter(([, value]) => value !== null && value !== undefined && String(value).trim() !== '')
+
+  return (
+    <main className="product-detail page-width">
+      <Link className="product-detail__back" to="/shop">← Back to all cards</Link>
+      <div className="product-detail__layout">
+        <div className="product-detail__image-wrap">
+          <ProductImage product={product} className="product-detail__image" />
+        </div>
+        <section className="product-detail__info">
+          <p className="eyebrow">{product.setName || product.category || 'ONE PIECE CARD'}</p>
+          <h1>{product.name}</h1>
+          {raw.card_number && <p className="product-detail__number">{raw.card_number}</p>}
+          <div className="product-detail__purchase">
+            <strong>{money(product.price)}</strong>
+            <span className={product.stock > 0 ? 'stock' : 'stock stock--empty'}>
+              {product.stock > 0 ? `${product.stock} available` : 'Sold out'}
+            </span>
+            <button className="button button--gold" type="button" disabled={product.stock < 1} onClick={() => onAdd(product)}>
+              <Plus size={16} /> Add to basket
+            </button>
+          </div>
+          {raw.description && <div className="product-detail__description"><h2>About this card</h2><p>{raw.description}</p></div>}
+          {details.length > 0 && (
+            <div className="product-detail__specs">
+              <h2>Card information</h2>
+              <dl>{details.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{String(value)}</dd></div>)}</dl>
+            </div>
+          )}
+          {raw.effect_text && <div className="product-detail__description"><h2>Card effect</h2><p>{raw.effect_text}</p></div>}
+        </section>
+      </div>
+    </main>
   )
 }
 
@@ -187,6 +254,7 @@ function Storefront() {
         price: Number(row.price || 0),
         stock: Math.max(0, Number(row.stock_quantity || 0)),
         image: row.image_url || '',
+        description: row.description || '',
         category: categoriesById.get(String(row.category_id)) || 'Uncategorised',
         setName: set?.name || '',
         setCode: set?.code || '',
@@ -689,7 +757,7 @@ function Storefront() {
                   <div className="hero-art__frame">
                     <div className="hero-art__image">
                       {cardOfTheWeek ? (
-                        <ProductImage product={cardOfTheWeek} />
+                        <Link to={`/product/${encodeURIComponent(cardOfTheWeek.id)}`} aria-label={`View ${cardOfTheWeek.name}`}><ProductImage product={cardOfTheWeek} /></Link>
                       ) : (
                         <div className="hero-art__placeholder"><Anchor size={68} strokeWidth={0.8} /></div>
                       )}
@@ -839,6 +907,10 @@ function Storefront() {
               )}
             </main>
           }
+        />
+        <Route
+          path="/product/:productId"
+          element={<ProductDetailPage products={storefrontProducts} onAdd={addToCart} />}
         />
         <Route
           path="/account/orders"

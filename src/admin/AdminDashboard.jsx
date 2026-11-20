@@ -8,6 +8,7 @@ import {
   Check,
   ChevronDown,
   ClipboardList,
+  FileSpreadsheet,
   Image,
   Layers,
   LayoutDashboard,
@@ -31,6 +32,8 @@ import CardScanner from './CardScanner'
 import PhotoStudio from './PhotoStudio'
 import QuickAddPanel from './QuickAddPanel'
 import StockPhotographyPanel from './StockPhotographyPanel'
+import BulkImportPanel from './BulkImportPanel'
+import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -44,6 +47,7 @@ const adminSections = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
   { id: 'products', label: 'Products', icon: Package },
   { id: 'add-stock', label: 'Add New Stock', icon: PackagePlus },
+  { id: 'bulk-import', label: 'Bulk Import', icon: FileSpreadsheet },
   { id: 'scan-card', label: 'Scan Card', icon: ScanLine },
   { id: 'photography', label: 'Stock Photography', icon: Camera },
   { id: 'collections', label: 'Collections and Sets', icon: Layers },
@@ -198,6 +202,10 @@ export default function AdminDashboard({
         />
       </div>
 
+      <div className="admin-hidden-panel" hidden={activeSection !== 'bulk-import'}>
+        <BulkImportPanel products={products} categories={categories} sets={sets} user={user} onSaved={onRefreshProducts} />
+      </div>
+
       <div className="admin-hidden-panel" hidden={activeSection !== 'scan-card'}>
         <CardScanner
           photos={photos}
@@ -275,6 +283,11 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [editingProduct, setEditingProduct] = useState(null)
+  const [lookupProduct, setLookupProduct] = useState(null)
+  const [lookupMatches, setLookupMatches] = useState([])
+  const [lookupBusy, setLookupBusy] = useState(false)
+  const [lookupSaving, setLookupSaving] = useState(false)
+  const [lookupError, setLookupError] = useState('')
   const visibleProducts = products.filter((product) =>
     [product.name, product.setName, product.category, product.rarity, product.raw?.card_number]
       .filter(Boolean)
@@ -283,6 +296,74 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
 
   const valueFor = (product, field) =>
     changes[product.id]?.[field] ?? String(product.raw?.[field] ?? '')
+
+  const lookupProductCard = async (product) => {
+    const cardNumber = product.raw?.card_number
+    if (!cardNumber) {
+      setError('This product has no card number. Edit the card and add its card number first.')
+      return
+    }
+    setLookupProduct(product)
+    setLookupMatches([])
+    setLookupError('')
+    setLookupBusy(true)
+    try {
+      const matches = await findCatalogueMatches(cardNumber)
+      setLookupMatches(matches)
+      if (!matches.length) setLookupError('No matching catalogue records were found for this card number.')
+    } catch (lookupFailure) {
+      setLookupError(lookupFailure.message || 'Card lookup failed.')
+    } finally {
+      setLookupBusy(false)
+    }
+  }
+
+  const applyProductCatalogueMatch = async (match) => {
+    if (!lookupProduct || !supabase) return
+    const raw = lookupProduct.raw || {}
+    const details = catalogueMatchToForm(match)
+    const payload = {}
+    const mappings = {
+      name: details.name, card_number: details.card_number, rarity: details.rarity,
+      color: details.color, power: details.power, cost: details.cost,
+      card_type: details.card_type, effect_text: details.effect_text,
+      language: details.language, classification: details.classification,
+      variant_label: details.variant_label, counter: details.counter,
+      trigger_text: details.trigger_text, attributes: details.attributes,
+    }
+    Object.entries(mappings).forEach(([column, value]) => {
+      const current = raw[column]
+      const isEmpty = current === null || current === undefined || String(current).trim() === ''
+      if (column in raw && isEmpty && value !== '' && value !== null && value !== undefined) {
+        payload[column] = ['power', 'cost', 'counter'].includes(column) ? Number(value) : value
+      }
+    })
+    const matchingSet = sets.find((set) =>
+      String(set.code || '').replace(/-/g, '').toUpperCase() === String(match.setCode || '').replace(/-/g, '').toUpperCase()
+    )
+    if ('set_id' in raw && (raw.set_id === null || raw.set_id === '') && matchingSet) payload.set_id = matchingSet.id
+    const matchingCategory = categories.find((category) =>
+      String(category.name || '').toLowerCase() === String(match.category || '').toLowerCase()
+    )
+    if ('category_id' in raw && (raw.category_id === null || raw.category_id === '') && matchingCategory) payload.category_id = matchingCategory.id
+    if ('updated_at' in raw) payload.updated_at = new Date().toISOString()
+    if (!Object.keys(payload).length) {
+      setLookupError('No missing catalogue fields could be added. Existing details and stock information were left unchanged.')
+      return
+    }
+    setLookupSaving(true)
+    setLookupError('')
+    const result = await supabase.from('products').update(payload).eq('id', lookupProduct.id)
+    setLookupSaving(false)
+    if (result.error) {
+      setLookupError('Product details were not updated: ' + result.error.message)
+      return
+    }
+    setNotice('Missing card details filled from the catalogue. Your stock, price and uploaded photos were left unchanged.')
+    setLookupProduct(null)
+    setLookupMatches([])
+    onRefresh()
+  }
 
   const saveInventory = async (product) => {
     if (!supabase) {
@@ -359,6 +440,7 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
                 <button className="button button--outline inventory-save" type="button" disabled={busyId === String(product.id)} onClick={() => saveInventory(product)}>{busyId === String(product.id) ? 'Saving…' : 'Update stock'}</button>
                 <div className="inventory-item__actions">
                   <button className="button button--outline" type="button" onClick={() => setEditingProduct(product)}><Pencil size={14} /> Edit card</button>
+                  <button className="button button--outline" type="button" disabled={busyId === String(product.id) || !raw.card_number} onClick={() => lookupProductCard(product)}><Search size={14} /> Look up card</button>
                   <button className="button button--danger" type="button" disabled={busyId === String(product.id)} onClick={() => deleteProduct(product)}><Trash2 size={14} /> Delete</button>
                 </div>
               </article>
@@ -366,6 +448,36 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
           })}
         </div>
       ) : <EmptyAdminState icon={Package} heading="No products found." text={query ? 'Try another search.' : 'The products table currently has no visible rows. Add a card to start the inventory.'} />}
+      {lookupProduct && (
+        <div className="modal-backdrop product-edit-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget && !lookupSaving && !lookupBusy) setLookupProduct(null) }}>
+          <section className="product-edit-modal catalogue-product-lookup" role="dialog" aria-modal="true" aria-labelledby="catalogue-product-lookup-title">
+            <div className="product-edit-modal__heading">
+              <div><p className="eyebrow">CARD CATALOGUE</p><h2 id="catalogue-product-lookup-title">Find missing details.</h2><p className="admin-muted">{lookupProduct.name} · {lookupProduct.raw?.card_number}</p></div>
+              <button className="icon-button" type="button" aria-label="Close lookup" disabled={lookupSaving || lookupBusy} onClick={() => setLookupProduct(null)}><X size={18} /></button>
+            </div>
+            <p className="admin-muted">Choose the correct language, set and printing. Only blank card-detail fields will be filled. Price, quantity, condition, status and your uploaded product photos will not be changed.</p>
+            {lookupBusy && <p className="admin-muted">Searching English and Japanese catalogue records…</p>}
+            {lookupError && <p className="form-error" role="alert">{lookupError}</p>}
+            <div className="catalogue-product-lookup__matches">
+              {lookupMatches.map((match) => (
+                <article className="catalogue-match-card" key={match.id}>
+                  {match.imageUrl ? <img src={match.imageUrl} data-fallback-src={match.fallbackImageUrl || ''} alt={match.name + ' reference image'} loading="lazy" onError={(event) => { const fallback = event.currentTarget.dataset.fallbackSrc; if (fallback && event.currentTarget.src !== fallback) { event.currentTarget.dataset.fallbackSrc = ''; event.currentTarget.src = fallback } else { event.currentTarget.style.display = 'none' } }} /> : <div className="catalogue-match-card__no-image">No reference image</div>}
+                  <div className="catalogue-match-card__details">
+                    <strong>{match.name || 'Card name unavailable'}</strong>
+                    <span>{match.language} · {match.setCode || 'Promo / set not listed'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
+                    <small>{match.colors || 'Colour not listed'} · {match.category || 'Card'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
+                    {match.setName && <small>{match.setName}</small>}
+                    <div className="catalogue-match-card__actions">
+                      <button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), '_blank', 'noopener,noreferrer')}>Open on Collectr ↗</button>
+                      <button className="button button--gold" type="button" disabled={lookupSaving} onClick={() => applyProductCatalogueMatch(match)}>{lookupSaving ? 'Filling missing details…' : 'Fill missing details'}</button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
+      )}
       {editingProduct && (
         <ProductEditModal
           product={editingProduct}

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AlertCircle, ArrowRight, Check, LoaderCircle, ScanLine } from 'lucide-react'
 import { CARD_FIELDS, parseCardDetails } from './cardParser'
+import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 
 const confidenceLabel = (field) => {
   if (!field.value) return 'Not detected'
@@ -22,6 +23,9 @@ export default function CardScanner({
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState('')
   const [error, setError] = useState('')
+  const [catalogueMatches, setCatalogueMatches] = useState([])
+  const [catalogueLoading, setCatalogueLoading] = useState(false)
+  const [catalogueError, setCatalogueError] = useState('')
 
   const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
   const hasReview =
@@ -90,6 +94,48 @@ export default function CardScanner({
     }
   }
 
+  const lookupCatalogue = async () => {
+    const cardNumber = fields.card_number?.value
+    if (!cardNumber) return
+    setCatalogueLoading(true)
+    setCatalogueError('')
+    setCatalogueMatches([])
+    try {
+      const matches = await findCatalogueMatches(cardNumber)
+      setCatalogueMatches(matches)
+      if (!matches.length) setCatalogueError('No catalogue match found for this card number. You can still enter the details manually.')
+    } catch (lookupError) {
+      setCatalogueError('Catalogue lookup failed: ' + lookupError.message)
+    } finally {
+      setCatalogueLoading(false)
+    }
+  }
+
+  const applyCatalogueMatch = (match) => {
+    const values = catalogueMatchToForm(match)
+    setFields((current) => ({
+      ...current,
+      ...Object.fromEntries(Object.entries({
+        name: values.name,
+        card_number: values.card_number,
+        set_code: values.set_code,
+        rarity: values.rarity,
+        color: values.color,
+        cost: values.cost,
+        power: values.power,
+        card_type: values.card_type,
+        classification: values.classification,
+        language: values.language,
+        effect_text: values.effect_text,
+        variant_label: values.variant_label,
+      }).map(([key, value]) => [
+        key,
+        { value: value || '', confidence: value ? 95 : 0, needsReview: true },
+      ])),
+    }))
+    setStatus('Catalogue details filled in. Check each value against the physical card before saving.')
+  }
+
   const reparseText = () => {
     setFields(parseCardDetails(rawText))
     setStatus('Fields extracted from the edited OCR text. Verify them before continuing.')
@@ -151,6 +197,29 @@ export default function CardScanner({
             <span>Recognised text · editable</span>
             <textarea rows="7" value={rawText} onChange={(event) => setRawText(event.target.value)} />
           </label>
+          <div className="scanner-catalogue">
+            <div>
+              <p className="eyebrow">03 · CARD CATALOGUE MATCH</p>
+              <p>Look up known One Piece card details using the detected card number. This is a free catalogue lookup, not AI image recognition.</p>
+            </div>
+            <button className="button button--outline" type="button" disabled={!fields.card_number?.value || catalogueLoading} onClick={lookupCatalogue}>
+              {catalogueLoading ? 'Looking up…' : 'Find card details'}
+            </button>
+            {catalogueError && <p className="form-error" role="status">{catalogueError}</p>}
+            {catalogueMatches.map((match) => (
+
+              <div className="scanner-catalogue__match" key={match.id}>
+                {match.imageUrl && <img className="scanner-catalogue__reference" src={match.imageUrl} alt={match.name + ' reference only'} loading="lazy" />}
+                <div>
+                  <strong>{match.name || 'Unnamed card'}</strong>
+                  <span>{match.cardNumber} · {match.language} · {match.setCode || 'Promo'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
+                  <small>{match.category || 'Card'} · {match.colors || 'Colour not listed'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
+                  {match.setName && <small>{match.setName}</small>}
+                </div>
+                <button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use details</button>
+              </div>
+            ))}
+          </div>
           <button className="text-button" type="button" onClick={reparseText}>Re-extract fields from edited text</button>
           <div className="scan-fields">
             {CARD_FIELDS.map(([key, label]) => {
