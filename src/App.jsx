@@ -17,7 +17,7 @@ import {
   ShieldCheck,
   ShoppingBag,
   Sparkles,
-  Truck,
+  MapPin,
   X,
 } from 'lucide-react'
 import {
@@ -750,7 +750,7 @@ function Storefront() {
                   <div className="hero-stats">
                     <div><strong>{catalogLoading ? '—' : storefrontProducts.length}</strong><span>Cards in stock</span></div>
                     <div><strong>{catalogLoading ? '—' : setCount}</strong><span>Sets covered</span></div>
-                    <div><strong>UK</strong><span>Insured shipping</span></div>
+                    <div><strong>GIBRALTAR</strong><span>Local pickup</span></div>
                   </div>
                 </div>
                 <div className="hero-art">
@@ -769,7 +769,7 @@ function Storefront() {
                       <span>{cardOfTheWeek ? money(cardOfTheWeek.price) : 'Curated for collectors'}</span>
                     </div>
                   </div>
-                  <div className="hero-coordinate">N 22° 18&apos; · E 114° 10&apos;</div>
+                  <div className="hero-coordinate">N 36° 08&apos; · W 5° 21&apos;</div>
                 </div>
                 <div className="hero-watermark">G</div>
               </section>
@@ -779,7 +779,7 @@ function Storefront() {
                 <i />
                 <div><Box size={18} /><span>Sleeved & top-loaded</span></div>
                 <i />
-                <div><Truck size={18} /><span>{siteSettings.shipping_information || 'Insured UK delivery'}</span></div>
+                <div><MapPin size={18} /><span>{siteSettings.shipping_information || 'Local pickup in Gibraltar only. No delivery or shipping.'}</span></div>
               </section>}
 
               {homepageSections.has('featured') && <section className="content-section page-width" id="featured">
@@ -840,7 +840,7 @@ function Storefront() {
 
               {homepageSections.has('shipping') && (
                 <section className="shipping-information page-width">
-                  <Truck size={18} />
+                  <MapPin size={18} />
                   <p>{siteSettings.shipping_information}</p>
                 </section>
               )}
@@ -854,7 +854,7 @@ function Storefront() {
               <div className="shop-intro">
                 <p className="eyebrow">THE ARCHIVE <span className="live-dot" /> LIVE STOCK</p>
                 <h1>Every card<br /><em>in the vault.</em></h1>
-                <p>{storefrontProducts.length} cards · photographed as found · insured UK shipping</p>
+                <p>{storefrontProducts.length} cards · photographed as found · local pickup in Gibraltar</p>
               </div>
               <div className="shop-toolbar">
                 <label className="search-field">
@@ -965,7 +965,7 @@ function Storefront() {
             <span className="brand__name"><strong>GRAND LINE</strong><small>ARCHIVE · TCG</small></span>
           </Link>
           <p>Thoughtfully collected. Carefully sent.<br />A small archive for the long voyage.</p>
-          <div className="footer-links"><Link to="/shop">Browse cards</Link><button type="button" onClick={openAccount}>Your orders</button>{siteSettings.contact_information && <span>{siteSettings.contact_information}</span>}<span>Made for collectors · UK</span></div>
+          <div className="footer-links"><Link to="/shop">Browse cards</Link><button type="button" onClick={openAccount}>Your orders</button>{siteSettings.contact_information && <span>{siteSettings.contact_information}</span>}<span>Made for collectors · Gibraltar</span></div>
         </div>
         <div className="footer-bottom page-width"><span>© {currentYear} Grand Line Archive</span><span>ONE PIECE CARD GAME · COLLECTOR INVENTORY</span></div>
       </footer>
@@ -985,7 +985,7 @@ function Storefront() {
                     </div>
                   ))}
                 </div>
-                <div className="cart-summary"><div><span>Subtotal</span><strong>{money(cartTotal)}</strong></div><p>Insured UK shipping is arranged after your order.</p><button className="button button--gold button--wide" type="button" disabled={orderAction === 'placing'} onClick={placeOrder}>{orderAction === 'placing' ? 'Placing order…' : user ? 'Place order' : 'Sign in to place order'} <ArrowRight size={16} /></button>{ordersError && <p className="form-error">{ordersError}</p>}</div>
+                <div className="cart-summary"><div><span>Subtotal</span><strong>{money(cartTotal)}</strong></div><p>Pickup in Gibraltar is arranged after your order. No delivery or shipping is offered.</p><button className="button button--gold button--wide" type="button" disabled={orderAction === 'placing'} onClick={placeOrder}>{orderAction === 'placing' ? 'Placing order…' : user ? 'Place order' : 'Sign in to place order'} <ArrowRight size={16} /></button>{ordersError && <p className="form-error">{ordersError}</p>}</div>
               </>
             ) : (
               <div className="empty-cart"><ShoppingBag size={30} /><h3>Your basket is waiting.</h3><p>Find a card for the collection.</p><Link className="button button--outline" to="/shop" onClick={() => setCartOpen(false)}>Explore the archive</Link></div>
