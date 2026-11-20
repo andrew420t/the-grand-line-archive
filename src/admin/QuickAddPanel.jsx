@@ -46,6 +46,7 @@ const rarityOptions = [
   'Special',
   'Treasure Rare',
   'Promo',
+  'C', 'UC', 'R', 'SR', 'SEC', 'L', 'P', 'SP', 'TR', 'DON',
 ]
 const languageOptions = ['English', 'Japanese', 'Chinese', 'Korean']
 export default function QuickAddPanel({
