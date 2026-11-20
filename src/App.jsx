@@ -633,7 +633,7 @@ function Storefront() {
         <span>{siteSettings.announcement_headline}</span>
         <i />
         <span>{siteSettings.announcement_text}</span>
-        <Truck size={14} />
+        <MapPin size={14} />
       </div>
 
       <header className="site-header">
