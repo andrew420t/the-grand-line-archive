@@ -10,6 +10,7 @@ import {
   ClipboardList,
   FileSpreadsheet,
   Image,
+  ImagePlus,
   Layers,
   LayoutDashboard,
   Package,
@@ -32,6 +33,7 @@ import CardScanner from './CardScanner'
 import PhotoStudio from './PhotoStudio'
 import QuickAddPanel from './QuickAddPanel'
 import StockPhotographyPanel from './StockPhotographyPanel'
+import ImageLibraryPanel from './ImageLibraryPanel'
 import BulkImportPanel from './BulkImportPanel'
 import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
 
@@ -50,6 +52,7 @@ const adminSections = [
   { id: 'bulk-import', label: 'Bulk Import', icon: FileSpreadsheet },
   { id: 'scan-card', label: 'Scan Card', icon: ScanLine },
   { id: 'photography', label: 'Stock Photography', icon: Camera },
+  { id: 'image-library', label: 'Image Library', icon: ImagePlus },
   { id: 'collections', label: 'Collections and Sets', icon: Layers },
   { id: 'orders', label: 'Orders', icon: ClipboardList },
   { id: 'customers', label: 'Customers', icon: Users },
@@ -232,6 +235,10 @@ export default function AdminDashboard({
           user={user}
           onSaved={onRefreshProducts}
         />
+      </div>
+
+      <div className="admin-hidden-panel" hidden={activeSection !== 'image-library'}>
+        <ImageLibraryPanel user={user} />
       </div>
 
       {activeSection === 'collections' && (
