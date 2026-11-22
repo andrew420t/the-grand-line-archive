@@ -74,3 +74,12 @@ test('normalizes common OCR zero-versus-letter errors in set codes', () => {
     assert.equal(fields.set_code.value, expected.slice(0, expected.indexOf('-')))
   }
 })
+
+test('uses selected OCR language when English or Japanese is not explicitly detectable', () => {
+  assert.equal(parseCardDetails('OP01-001 Roronoa Zoro', [], 'eng').language.value, 'English')
+  assert.equal(parseCardDetails('OP01-001 ゾロ', [], 'jpn').language.value, 'Japanese')
+})
+
+test('Japanese script takes precedence over English OCR language selection', () => {
+  assert.equal(parseCardDetails('OP01-001 ゾロ', [], 'eng').language.value, 'Japanese')
+})

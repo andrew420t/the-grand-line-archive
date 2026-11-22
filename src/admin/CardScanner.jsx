@@ -83,7 +83,7 @@ export default function CardScanner({
           (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
         )
       setRawText(data.text || '')
-      const parsed = parseCardDetails(data.text || '', lines)
+      const parsed = parseCardDetails(data.text || '', lines, recognitionLanguage)
       setFields(parsed)
       setAutoMatches([])
       setRankedAutoMatches([])
@@ -221,7 +221,7 @@ export default function CardScanner({
   }
 
   const reparseText = () => {
-    setFields(parseCardDetails(rawText))
+    setFields(parseCardDetails(rawText, [], recognitionLanguage))
     setStatus('Fields extracted from the edited OCR text. Verify them before continuing.')
   }
 
