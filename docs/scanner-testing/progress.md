@@ -7,7 +7,7 @@ Requested 100 sample cases: 25 set/product targets × 2 English + 2 Japanese = 1
 
 ## Current findings
 - **Synthetic OCR using local Tesseract 5.5.0:** 100 text-crop fixtures. Raw OCR was exact for **57/100**. After the merged set-code correction from PR #20 and the OP-prefix correction from PR #21, normalized card numbers were exact **100/100**. Fixtures used OP/EB/PRB/ST-style codes with mild rotations, blur and JPEG compression. This is synthetic printed-number OCR only, not card-photo OCR.
-- **Parser fixes merged:** PR #20 commit ec4f2b244731dacaedcbe18b57ef25e3b7877a10 (O/0 confusion in set-code digits); PR #21 commit f2c865320bb1583aa687a927f34b81ca6f2d6eb1 (extra O in OP prefix such as OPO09). Both merged; regression tests added. Project test/build/lint CI not independently confirmed.
+- **Parser fixes merged:** PR #20 commit ec4f2b244731dacaedcbe18b57ef25e3b7877a10 (O/0 confusion in set-code digits); PR #21 commit f2c865320bb1583aa687a927f34b81ca6f2d6eb1 (extra O in OP prefix such as OPO09). Both merged; regression tests added. **CI verified:** GitHub Actions runs #87 (PR #20), #88 (PR #21), and #89 (PR #22) each passed all steps: dependency install, `npm test`, lint, and production build. Run #86 and #84 were failed attempts before fixes; subsequent corrected runs passed.
 - **Reference data locators:** 92/100 requested sample slots in the current Koala Kollect product-linked locator data, 8 slots unmatched by the exact product-code query. The combined English OP14-EB04 and OP15-EB04 product-code mappings were included in this refreshed extraction. This does **not** mean cards are missing from official lists: English OP-14 and OP-15 products use combined product codes OP14-EB04 / OP15-EB04; EB-04 is not a separate English booster product. OP-18 and EB-05 official card lists are now published, but the current downloaded locator dataset appears not to have incorporated those recent releases.
 - **Official image visual check:** 4 images opened successfully and visually checked for card number/name: English OP01-001 Roronoa Zoro, Japanese OP01-001 Zoro, English OP01-002 Trafalgar Law, Japanese OP01-002 Law. This confirms those URLs load; it does not constitute OCR engine testing of those image files.
 - **Real card-photo OCR:** 0/100. Network/DNS in the execution environment blocks downloading source images to local disk for Tesseract. The web image viewer can display images but cannot provide a file to the local OCR process.
@@ -135,9 +135,16 @@ Sampling method: first two unique card numbers (sorted) with product-linked imag
 
 ## Still needed for completion
 1. Download/load 100 source images, run Tesseract against the real card photos, and record OCR text/number/name/language accuracy. (Image-file transfer/network restriction.)
-2. Complete the 14 unmatched source locator cases using current official lists and resolve English combined OP14-EB04/OP15-EB04 product-code associations.
+2. Complete the 8 unmatched source locator cases (OP18 and EB05, both languages) using current official lists; dataset refresh is still needed.
 3. Run repository npm test/lint/build with dependencies available.
 4. Browser-test the popup, alternate candidate selection, remembered match, manual fallback, and auto-match on production.
 5. Verify deployment of PR #20 and PR #21 merges on the live Worker.
 
 **Verdict: partial test. The scanner is not yet fully tested.**
+
+
+## Continuation update — 22 November 2026 (late check)
+- GitHub Actions verified successful end-to-end workflow runs: #87 for the OCR set-code normalization change (PR #20), #88 for the OP-prefix normalization change (PR #21), and #89 for this reference-matrix report (PR #22). Each passed dependency installation, `npm test`, lint, and `vite build`. Two earlier OCR-fix attempts (#84/#86) failed, then corrected runs #85/#87 passed.
+- Re-attempted production Worker open: browser fetch returned DisabledError; production remains **unverifiable** in this environment. A local shallow Git clone also failed because DNS cannot resolve github.com. GitHub repository connector access remains available.
+- Code review identified an additional language-ranking weakness: the scanner's OCR-selected language was not passed to the parser. Without a language label in OCR, English cards can leave the language field blank, weakening candidate ranking. PR #23 adds a selected-language fallback and regression tests; its CI is pending at time of writing.
+- Source/image and real card-photo OCR blocker persists: external image hosts cannot be reached/downloaded from the runtime. No real-card OCR results are claimed.
