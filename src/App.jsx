@@ -206,6 +206,7 @@ function Storefront() {
   const [search, setSearch] = useState('')
   const [categoryFilter, setCategoryFilter] = useState('All categories')
   const [rarityFilter, setRarityFilter] = useState('All rarities')
+  const [setFilter, setSetFilter] = useState('All sets')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
   const [orders, setOrders] = useState([])
@@ -379,16 +380,21 @@ function Storefront() {
         [product.name, product.category, product.setName, product.rarity]
           .filter(Boolean)
           .some((value) => value.toLowerCase().includes(needle))
+      const matchesSet = setFilter === 'All sets' || `${product.setCode} — ${product.setName}` === setFilter
       const matchesCategory =
         categoryFilter === 'All categories' || product.category === categoryFilter
       const matchesRarity =
         rarityFilter === 'All rarities' || product.rarity === rarityFilter
       const matchesMin = minPrice === '' || product.price >= Number(minPrice)
       const matchesMax = maxPrice === '' || product.price <= Number(maxPrice)
-      return matchesSearch && matchesCategory && matchesRarity && matchesMin && matchesMax
+      return matchesSearch && matchesSet && matchesCategory && matchesRarity && matchesMin && matchesMax
     })
-  }, [storefrontProducts, search, categoryFilter, rarityFilter, minPrice, maxPrice])
+  }, [storefrontProducts, search, setFilter, categoryFilter, rarityFilter, minPrice, maxPrice])
 
+  const setOptions = useMemo(
+    () => [...new Set(storefrontProducts.map((product) => `${product.setCode} — ${product.setName}`.trim()).filter((value) => value !== '—'))].sort((a, b) => a.localeCompare(b)),
+    [storefrontProducts],
+  )
   const rarities = useMemo(
     () => [...new Set(products.map((product) => product.rarity).filter(Boolean))].sort(),
     [products],
@@ -626,6 +632,7 @@ function Storefront() {
   const resetFilters = () => {
     setSearch('')
     setCategoryFilter('All categories')
+    setSetFilter('All sets')
     setRarityFilter('All rarities')
     setMinPrice('')
     setMaxPrice('')
@@ -886,6 +893,14 @@ function Storefront() {
                   />
                 </label>
                 <label className="select-field">
+                  <span className="sr-only">Set</span>
+                  <select value={setFilter} onChange={(event) => setSetFilter(event.target.value)}>
+                    <option>All sets</option>
+                    {setOptions.map((name) => <option key={name}>{name}</option>)}
+                  </select>
+                  <ChevronDown size={15} />
+                </label>
+                <label className="select-field">
                   <span className="sr-only">Category</span>
                   <select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}>
                     <option>All categories</option>
@@ -909,7 +924,7 @@ function Storefront() {
               </div>
               <div className="results-row">
                 <span>Showing <strong>{filteredProducts.length}</strong> of {storefrontProducts.length} cards</span>
-                {(search || categoryFilter !== 'All categories' || rarityFilter !== 'All rarities' || minPrice || maxPrice) && (
+                {(search || setFilter !== 'All sets' || categoryFilter !== 'All categories' || rarityFilter !== 'All rarities' || minPrice || maxPrice) && (
                   <button className="clear-filters" type="button" onClick={resetFilters}>Clear filters <X size={13} /></button>
                 )}
               </div>
