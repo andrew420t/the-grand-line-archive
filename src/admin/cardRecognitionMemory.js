@@ -1,3 +1,6 @@
+import { supabase } from '../lib/supabase'
+
+const SHARED_BUCKET = 'card-recognition-references'
 const DB_NAME = 'grand-line-archive-recognition';
 const STORE_NAME = 'verified-card-images';
 const DB_VERSION = 1;
@@ -66,6 +69,32 @@ function runTransaction(db, mode, action) {
   });
 }
 
+async function saveSharedExample(file, match, hash) {
+  if (!supabase || !match?.id) return { saved: false, reason: 'Supabase is not configured.' }
+  const safeHash = hash
+  const path = `${safeHash.slice(0, 2)}/${safeHash}.jpg`
+  const storage = supabase.storage.from(SHARED_BUCKET)
+  const upload = await storage.upload(path, file, {
+    contentType: file.type || 'image/jpeg',
+    upsert: true,
+    cacheControl: '31536000',
+  })
+  if (upload.error) throw new Error(upload.error.message)
+  const { error } = await supabase.from('card_recognition_examples').upsert({
+    printing_id: match.id,
+    card_number: match.cardNumber,
+    card_name: match.name || '',
+    language: match.language || 'English',
+    set_code: match.setCode || '',
+    rarity: match.rarity || '',
+    variant: match.variant || '',
+    image_hash: safeHash,
+    storage_path: path,
+  }, { onConflict: 'printing_id,image_hash' })
+  if (error) throw new Error(error.message)
+  return { saved: true }
+}
+
 export async function rememberVerifiedCardImage(file, match) {
   if (!file || !match?.id || !match?.cardNumber) throw new Error('A photograph and confirmed catalogue printing are required.');
   const hash = await imageHash(file);
@@ -84,7 +113,7 @@ export async function rememberVerifiedCardImage(file, match) {
       existing.savedAt = Date.now();
       existing.image = file.slice(0, file.size, file.type || 'image/jpeg');
       await runTransaction(db, 'readwrite', (store) => store.put(existing));
-      return { saved: true, duplicate: true };
+      return { saved: true, duplicate: true, shared };
     }
     const record = {
       id: match.id + ':' + hash,
@@ -103,7 +132,7 @@ export async function rememberVerifiedCardImage(file, match) {
       store.put(record);
       samePrinting.slice(MAX_EXAMPLES_PER_PRINTING - 1).forEach((old) => store.delete(old.id));
     });
-    return { saved: true, duplicate: false };
+    return { saved: true, duplicate: false, shared };
   } finally {
     db.close();
   }
@@ -127,6 +156,36 @@ export async function findRememberedCardImage(file) {
     return { ...best.record, similarity: Math.round((64 - best.distance) / 64 * 100) };
   } finally {
     db.close();
+  }
+}
+
+
+export async function findSharedRememberedCardImage(file) {
+  if (!supabase || !file) return null
+  const hash = await imageHash(file)
+  const { data, error } = await supabase
+    .from('card_recognition_examples')
+    .select('printing_id,card_number,card_name,language,set_code,rarity,variant,image_hash,storage_path,confirmed_at')
+    .limit(500)
+  if (error) {
+    if (error.code === '42P01' || error.code === 'PGRST205') return null
+    throw new Error(error.message)
+  }
+  const ranked = (data || [])
+    .map((record) => ({ record, distance: distance(hash, record.image_hash) }))
+    .sort((a, b) => a.distance - b.distance)
+  const best = ranked[0]
+  if (!best || best.distance > MAX_DISTANCE) return null
+  return {
+    printingId: best.record.printing_id,
+    cardNumber: best.record.card_number,
+    name: best.record.card_name,
+    language: best.record.language,
+    setCode: best.record.set_code,
+    rarity: best.record.rarity,
+    variant: best.record.variant,
+    similarity: Math.round((64 - best.distance) / 64 * 100),
+    shared: true,
   }
 }
 
