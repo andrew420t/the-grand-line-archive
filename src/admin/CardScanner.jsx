@@ -83,7 +83,7 @@ export default function CardScanner({
           (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
         )
       setRawText(data.text || '')
-      const parsed = parseCardDetails(data.text || '', lines)
+      const parsed = parseCardDetails(data.text || '', lines, recognitionLanguage)
       setFields(parsed)
       setAutoMatches([])
       setRankedAutoMatches([])
