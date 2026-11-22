@@ -5,6 +5,7 @@ import { rankCatalogueMatches } from './cardMatchRanking'
 import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
 import CatalogueReferenceImage from './CatalogueReferenceImage'
 import { findRememberedCardImage, findSharedRememberedCardImage, rememberVerifiedCardImage } from './cardRecognitionMemory'
+import { prepareCardNumberRegion } from './cardNumberRegion'
 
 const confidenceLabel = (field) => {
   if (!field.value) return 'Not detected'
@@ -89,14 +90,25 @@ export default function CardScanner({
           if (message.status) setStatus(message.status)
         },
       })
+      setStatus('Reading the card number and rarity from the bottom-right corner…')
+      const numberRegion = await prepareCardNumberRegion(frontPhoto.file)
+      const numberResult = await worker.recognize(numberRegion, {}, { blocks: true })
+      setStatus('Card number region read. Checking the full card for name, rarity and language…')
       const { data } = await worker.recognize(frontPhoto.file, {}, { blocks: true })
       const lines =
         data.lines ||
         (data.blocks || []).flatMap((block) =>
           (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
         )
-      setRawText(data.text || '')
-      const parsed = parseCardDetails(data.text || '', lines, recognitionLanguage)
+      const numberLines =
+        numberResult.data.lines ||
+        (numberResult.data.blocks || []).flatMap((block) =>
+          (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
+        )
+      const combinedText = [numberResult.data.text || '', data.text || ''].filter(Boolean).join('\\n')
+      const combinedLines = [...numberLines, ...lines]
+      setRawText(combinedText)
+      const parsed = parseCardDetails(combinedText, combinedLines, recognitionLanguage)
       setFields(parsed)
       setAutoMatches([])
       setRankedAutoMatches([])
@@ -105,7 +117,7 @@ export default function CardScanner({
       setAutoMatchStatus('')
       const detectedNumber = parsed.card_number?.value || sharedRememberedImage?.cardNumber || rememberedImage?.cardNumber
       if (detectedNumber) {
-        setStatus('OCR finished. Checking detected card number against the catalogue…')
+        setStatus('Card number detected from the lower-right crop. Looking up the exact catalogue printing and checking rarity…')
         try {
           const matches = await findCatalogueMatches(detectedNumber)
           setAutoMatches(matches)
@@ -333,7 +345,7 @@ export default function CardScanner({
             <button className="scanner-match-confirmation__close" type="button" onClick={() => setMatchConfirmationOpen(false)} aria-label="Close card confirmation">×</button>
             <p className="eyebrow">CARD RECOGNITION · PLEASE CONFIRM</p>
             <h3 id="scanner-match-confirmation-title">Is this the card I found?</h3>
-            <p className="scanner-match-confirmation__intro">Check the picture, language and set. If it is wrong or uncertain, choose the correct card below. Your choice fills the form but does not save stock.</p>
+            <p className="scanner-match-confirmation__intro">The number crop finds the candidate. Compare the official catalogue image, rarity, language and set with the physical card. A number match alone is not proof. Your choice fills the form but does not save stock.</p>
             {selectedAutoMatch && (
               <div className="scanner-match-confirmation__featured">
                 <CatalogueReferenceImage match={selectedAutoMatch} className="scanner-match-confirmation__image" />
@@ -435,7 +447,7 @@ export default function CardScanner({
             })}
           </div>
           <div className="scan-review__footer">
-            <p><AlertCircle size={14} /> OCR is a draft only. Check spelling, number, language, and every effect before adding stock.</p>
+            <p><AlertCircle size={14} /> The bottom-right number crop drives catalogue lookup; full-card OCR reads supporting details. Compare the catalogue image and verify rarity, number, language and every effect before adding stock.</p>
             <button className="button button--gold" type="button" onClick={onContinue}>Continue to product form <ArrowRight size={15} /></button>
           </div>
         </div>
