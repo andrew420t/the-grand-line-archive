@@ -98,12 +98,6 @@ export default function CardScanner({
           setAutoMatches(matches)
           if (matches.length) {
             const detectedName = String(parsed.name?.value || '').trim().toLowerCase()
-            const ranked = matches.map((match) => {
-              const nameMatch = detectedName && String(match.name || '').trim().toLowerCase() === detectedName
-              const languageMatch = parsed.language?.value
-                ? String(match.language || '').toLowerCase().includes(parsed.language.value.toLowerCase())
-                : false
-              return { match, nameMatch, languageMatch }
             let rememberedId = ''
             try { rememberedId = window.localStorage.getItem('glaScannerCardMatch:' + detectedNumber) || '' } catch { /* storage may be unavailable */ }
             const ranked = matches.map((match) => {
