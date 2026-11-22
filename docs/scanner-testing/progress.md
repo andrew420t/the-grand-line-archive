@@ -161,3 +161,18 @@ Sampling method: first two unique card numbers (sorted) with product-linked imag
 
 - **PR #24 merged:** extracted candidate-ranking priority into pure `rankCatalogueMatches` helper and added four unit tests covering remembered choice, OCR-name priority, language priority, and empty results. CI run #92 passed `npm test`, lint, and production build. This gives automated coverage for the ranking logic but still does not exercise the live Supabase catalogue dataset or UI popup.
 - Current automated parser/ranking test suite: **12 tests passing** (CI run #92).
+
+
+## User-provided scanner comparison evidence — 23 November 2026
+The user supplied screenshots from a separate card-scanning app showing two real-card examples and its manual confirmation workflow. These are **user-provided screenshots of another app**, not images run through our own OCR engine; they do not count toward real-card OCR testing.
+
+1. **Japanese Trafalgar Law, EB04-005:** The app identifies Trafalgar Law, EB04-005, and displays a price (£1.91). A scan-details panel compares the user's photo against the catalogue match, displays the matched-result card, and shows the full card/set (Egghead Crisis) with owned quantity. This is evidence that image-side comparison + card result + price display can make a useful scan flow.
+2. **Kaido, OP17-062:** A blurry card scan first surfaced “Kaido (Parallel)” / OP17-062 with £7.50. The match details displayed several candidate thumbnails. The user then selected the ordinary Kaido / The World's Strongest Warriors / OP17-062 candidate priced £2.45. This demonstrates a real ambiguity where the first match is the wrong printing/variant and manual candidate selection is important. The screenshots show both parallel and ordinary printings with the same card number and different prices.
+
+### Design implications for Grand Line Archive scanner
+- Show the scan photo and chosen catalogue image side-by-side for visual verification.
+- Show several candidate cards as image thumbnails with clearly distinguishable set, language, rarity, and variant labels; do not treat OCR card number as sufficient to auto-confirm.
+- Keep the current “choose candidate / confirm / manual fallback” path. The screenshots validate the need for it, especially with blurry images and same-number variants.
+- Provide a manual price input or editable price override on the chosen card, so a user can enter their own valuation rather than being forced to accept a market/catalogue value. Keep source/market price and user-entered value distinct if both exist; avoid silently replacing the user's override.
+- Add regression/manual test scenarios: (a) clear Japanese EB04-005 Law photo; (b) blurry OP17-062 Kaido where Parallel is incorrectly top-ranked; (c) select regular printing from candidate list; (d) verify variant-specific price values remain attached to the selected printing; (e) manually enter/edit price; (f) close/choose “not sure” and manual search.
+- No price override implementation has been made yet. These screenshots are evidence to guide implementation and testing only.
