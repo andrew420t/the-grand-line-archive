@@ -4,6 +4,7 @@ import { CARD_FIELDS, parseCardDetails } from './cardParser'
 import { rankCatalogueMatches } from './cardMatchRanking'
 import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
 import CatalogueReferenceImage from './CatalogueReferenceImage'
+import { findRememberedCardImage, findSharedRememberedCardImage, rememberVerifiedCardImage } from './cardRecognitionMemory'
 
 const confidenceLabel = (field) => {
   if (!field.value) return 'Not detected'
@@ -62,12 +63,23 @@ export default function CardScanner({
     }
 
     let worker
+    let rememberedImage = null
+    let sharedRememberedImage = null
     setScanning(true)
     setError('')
     setStatus('Loading the free browser OCR engine…')
     setProgress(0)
 
     try {
+      try {
+        [rememberedImage, sharedRememberedImage] = await Promise.all([
+          findRememberedCardImage(frontPhoto.file),
+          findSharedRememberedCardImage(frontPhoto.file),
+        ])
+        if (rememberedImage || sharedRememberedImage) setStatus('Found a similar previously confirmed card image. Checking it against OCR…')
+      } catch (memoryError) {
+        // Recognition memory is an optional enhancement; OCR must still work if local storage is unavailable.
+      }
       const { createWorker } = await import('tesseract.js')
       worker = await createWorker(recognitionLanguage, 1, {
         logger: (message) => {
@@ -91,7 +103,7 @@ export default function CardScanner({
       setSelectedAutoMatchId('')
       setMatchConfirmationOpen(false)
       setAutoMatchStatus('')
-      const detectedNumber = parsed.card_number?.value
+      const detectedNumber = parsed.card_number?.value || sharedRememberedImage?.cardNumber || rememberedImage?.cardNumber
       if (detectedNumber) {
         setStatus('OCR finished. Checking detected card number against the catalogue…')
         try {
@@ -100,12 +112,16 @@ export default function CardScanner({
           if (matches.length) {
             let rememberedId = ''
             try { rememberedId = window.localStorage.getItem('glaScannerCardMatch:' + detectedNumber) || '' } catch { /* storage may be unavailable */ }
+            if (rememberedImage?.cardNumber === detectedNumber) rememberedId = rememberedImage.printingId
+            if (sharedRememberedImage?.cardNumber === detectedNumber) rememberedId = sharedRememberedImage.printingId
             const ranked = rankCatalogueMatches(matches, parsed.name?.value, parsed.language?.value, rememberedId)
             const best = ranked[0]
             setRankedAutoMatches(ranked)
             setSelectedAutoMatchId(best.match.id)
             setMatchConfirmationOpen(true)
-            setAutoMatchStatus(best.nameMatch && best.languageMatch
+            setAutoMatchStatus((rememberedImage?.printingId === best.match.id || sharedRememberedImage?.printingId === best.match.id)
+              ? (sharedRememberedImage?.printingId === best.match.id ? 'Shared recognition library match' : 'Previously confirmed local image') + ' (' + (sharedRememberedImage?.printingId === best.match.id ? sharedRememberedImage.similarity : rememberedImage.similarity) + '% visual similarity). Please confirm the card and variant.'
+              : best.nameMatch && best.languageMatch
               ? 'Strong match: card number, name, and language agree.'
               : best.nameMatch
                 ? 'Possible match: card number and name agree. Confirm language and set.'
@@ -203,14 +219,29 @@ export default function CardScanner({
 
   const selectedAutoMatch = rankedAutoMatches.find((item) => item.match.id === selectedAutoMatchId)?.match
 
-  const confirmAutoMatch = () => {
+  const confirmAutoMatch = async () => {
     if (selectedAutoMatch) {
       applyCatalogueMatch(selectedAutoMatch)
       if (rememberMatch && fields.card_number?.value) {
         try { window.localStorage.setItem('glaScannerCardMatch:' + fields.card_number.value, selectedAutoMatch.id) } catch { /* storage may be unavailable */ }
       }
       setMatchConfirmationOpen(false)
-      setStatus('Confirmed card match. Catalogue details filled in—review them before saving.')
+      let memoryMessage = ''
+      if (frontPhoto?.file) {
+        try {
+          const result = await rememberVerifiedCardImage(frontPhoto.file, selectedAutoMatch)
+          memoryMessage = result.shared?.saved
+            ? ' Reference saved to the shared recognition library.' + (result.localError ? ' Browser-local copy unavailable: ' + result.localError : ' Also saved on this browser.')
+            : result.shared?.error
+              ? (result.localError ? ' Reference could not be saved: ' + result.localError : ' Saved on this browser; shared library upload failed: ' + result.shared.error)
+              : result.shared?.reason
+                ? (result.localError ? ' Recognition memory unavailable: ' + result.localError : ' Saved on this browser only. ' + result.shared.reason)
+                : result.duplicate ? ' Existing reference refreshed.' : ' Reference image added to this browser’s recognition library.'
+        } catch (memoryError) {
+          memoryMessage = ' The card was confirmed, but its reference image could not be saved on this browser.'
+        }
+      }
+      setStatus('Confirmed card match. Catalogue details filled in—review them before saving.' + memoryMessage)
     }
   }
 
