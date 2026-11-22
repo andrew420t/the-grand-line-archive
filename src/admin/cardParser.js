@@ -36,13 +36,13 @@ const capture = (text, expression) => {
 const cleanLabel = (value) => value.replace(/^[\s:：-]+|[\s:：-]+$/g, '').trim()
 
 const normalizeOcrCardNumberText = (source) => String(source || '').replace(
-  /\b(OP|EB|ST|PRB)\s*[- ]?([O0-9]{1,3})\s*[-–]\s*(\d{3})\b/gi,
+  /\b(O?P|EB|ST|PRB)\s*[- ]?([O0-9]{1,3})\s*[-–]\s*(\d{3})\b/gi,
   (_, prefix, rawSetNumber, cardNumber) => {
     let setNumber = rawSetNumber.toUpperCase().replace(/O/g, '0')
     // OCR sometimes reads a leading zero as an extra character (OP O02, EB0O1, PRB O1).
     if (setNumber.length === 3 && setNumber.startsWith('0')) setNumber = setNumber.slice(1)
     if (!/^\d{1,2}$/.test(setNumber)) return _
-    return prefix.toUpperCase() + setNumber.padStart(2, '0') + '-' + cardNumber
+    return prefix.toUpperCase().replace(/^O?P$/, 'OP') + setNumber.padStart(2, '0') + '-' + cardNumber
   },
 )
 
