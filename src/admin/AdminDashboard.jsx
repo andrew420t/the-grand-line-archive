@@ -36,6 +36,8 @@ import StockPhotographyPanel from './StockPhotographyPanel'
 import ImageLibraryPanel from './ImageLibraryPanel'
 import BulkImportPanel from './BulkImportPanel'
 import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
+import CatalogueMatchCard from './CatalogueMatchCard'
+import CatalogueLanguageButtons from './CatalogueLanguageButtons'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -495,19 +497,7 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
             {lookupError && <p className="form-error" role="alert">{lookupError}</p>}
             <div className="catalogue-product-lookup__matches">
               {lookupMatches.map((match) => (
-                <article className="catalogue-match-card" key={match.id}>
-                  {match.imageUrl ? <img src={match.imageUrl} data-fallback-src={match.fallbackImageUrl || ''} alt={match.name + ' reference image'} loading="lazy" onError={(event) => { const fallback = event.currentTarget.dataset.fallbackSrc; if (fallback && event.currentTarget.src !== fallback) { event.currentTarget.dataset.fallbackSrc = ''; event.currentTarget.src = fallback } else { event.currentTarget.style.display = 'none' } }} /> : <div className="catalogue-match-card__no-image">No reference image</div>}
-                  <div className="catalogue-match-card__details">
-                    <strong>{match.name || 'Card name unavailable'}</strong>
-                    <span>{match.language} · {match.setCode || 'Promo / set not listed'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
-                    <small>{match.colors || 'Colour not listed'} · {match.category || 'Card'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
-                    {match.setName && <small>{match.setName}</small>}
-                    <div className="catalogue-match-card__actions">
-                      <button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), '_blank', 'noopener,noreferrer')}>Open on Collectr ↗</button>
-                      <button className="button button--gold" type="button" disabled={lookupSaving} onClick={() => applyProductCatalogueMatch(match)}>{lookupSaving ? 'Filling missing details…' : 'Fill missing details'}</button>
-                    </div>
-                  </div>
-                </article>
+                <CatalogueMatchCard key={match.id} match={match} onUseDetails={() => applyProductCatalogueMatch(match)} useLabel={lookupSaving ? 'Filling missing details…' : 'Fill missing details'} disabled={lookupSaving} />
               ))}
             </div>
           </section>
@@ -662,14 +652,19 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
       )
     }
     return (
-      <label className={`form-field ${field.multiline ? 'form-field--wide' : ''}`} key={field.key}>
-        <span>{field.label}</span>
-        {field.multiline ? (
-          <textarea rows="4" value={value ?? ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
-        ) : (
-          <input required={field.required} type={field.numeric ? 'number' : 'text'} min={field.numeric ? '0' : undefined} step={field.key === 'price' ? '0.01' : field.numeric ? '1' : undefined} value={value ?? ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
+      <div className={`form-field ${field.multiline ? 'form-field--wide' : ''}`} key={field.key}>
+        <label>
+          <span>{field.label}</span>
+          {field.multiline ? (
+            <textarea rows="4" value={value ?? ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
+          ) : (
+            <input required={field.required} type={field.numeric ? 'number' : 'text'} min={field.numeric ? '0' : undefined} step={field.key === 'price' ? '0.01' : field.numeric ? '1' : undefined} value={value ?? ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
+          )}
+        </label>
+        {['name', 'effect_text', 'classification'].includes(field.key) && (
+          <CatalogueLanguageButtons cardNumber={values.card_number || raw.card_number} fieldKey={field.key} onApply={(nextValue, language) => setValues((current) => ({ ...current, [field.key]: nextValue, language }))} />
         )}
-      </label>
+      </div>
     )
   }
 
