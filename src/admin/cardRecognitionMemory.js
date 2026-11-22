@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase'
+import { makePhotoFile, prepareCardImage } from './imageTools'
 
 const SHARED_BUCKET = 'card-recognition-references'
 const DB_NAME = 'grand-line-archive-recognition';
@@ -75,14 +76,15 @@ async function saveSharedExample(file, match, hash) {
   if (authError || !authData?.user) return { saved: false, reason: 'Sign in as an administrator to contribute shared examples.' }
   const path = `${encodeURIComponent(match.id)}/${hash}.jpg`
   const storage = supabase.storage.from(SHARED_BUCKET)
-  const upload = await storage.upload(path, file, {
-    contentType: file.type || 'image/jpeg',
+  const compressed = await prepareCardImage(file)
+  const referenceFile = makePhotoFile(compressed, file.name || 'verified-card.jpg')
+  const upload = await storage.upload(path, referenceFile, {
+    contentType: 'image/jpeg',
     upsert: false,
     cacheControl: '31536000',
   })
-  if (upload.error && upload.error.statusCode !== '409' && upload.error.statusCode !== 409) {
-    throw new Error(upload.error.message)
-  }
+  const alreadyUploaded = upload.error && (upload.error.statusCode === '409' || upload.error.statusCode === 409)
+  if (upload.error && !alreadyUploaded) throw new Error(upload.error.message)
   const { error } = await supabase.from('card_recognition_examples').insert({
     printing_id: match.id,
     card_number: match.cardNumber,
@@ -95,8 +97,11 @@ async function saveSharedExample(file, match, hash) {
     storage_path: path,
     confirmed_by: authData.user.id,
   })
-  if (error && error.code !== '23505') throw new Error(error.message)
-  return { saved: true, duplicate: error?.code === '23505' }
+  if (error && error.code !== '23505') {
+    if (!alreadyUploaded) await storage.remove([path])
+    throw new Error(error.message)
+  }
+  return { saved: true, duplicate: Boolean(alreadyUploaded || error?.code === '23505') }
 }
 
 export async function rememberVerifiedCardImage(file, match) {
