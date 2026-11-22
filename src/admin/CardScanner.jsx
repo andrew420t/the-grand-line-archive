@@ -231,10 +231,12 @@ export default function CardScanner({
         try {
           const result = await rememberVerifiedCardImage(frontPhoto.file, selectedAutoMatch)
           memoryMessage = result.shared?.saved
-            ? ' Reference saved to the shared recognition library and this browser.'
+            ? ' Reference saved to the shared recognition library.' + (result.localError ? ' Browser-local copy unavailable: ' + result.localError : ' Also saved on this browser.')
             : result.shared?.error
-              ? ' Saved on this browser; shared library upload failed: ' + result.shared.error
-              : result.duplicate ? ' Existing local reference refreshed.' : ' Reference image added to this browser’s recognition library.'
+              ? (result.localError ? ' Reference could not be saved: ' + result.localError : ' Saved on this browser; shared library upload failed: ' + result.shared.error)
+              : result.shared?.reason
+                ? (result.localError ? ' Recognition memory unavailable: ' + result.localError : ' Saved on this browser only. ' + result.shared.reason)
+                : result.duplicate ? ' Existing reference refreshed.' : ' Reference image added to this browser’s recognition library.'
         } catch (memoryError) {
           memoryMessage = ' The card was confirmed, but its reference image could not be saved on this browser.'
         }
