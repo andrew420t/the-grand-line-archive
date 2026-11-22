@@ -854,110 +854,79 @@ function CustomisationSection({ products, settings, settingsError, onSave }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
-  const sections = [
-    ['trust', 'Trust strip'],
-    ['featured', 'Featured cards'],
-    ['browse', 'Shop callout'],
-    ['values', 'Archive values'],
-    ['shipping', 'Pickup information'],
-  ]
-
-  const update = (key, value) => {
-    setDraft((current) => ({ ...current, [key]: value }))
-    setError('')
-    setNotice('')
-  }
-
-  const toggleFeaturedProduct = (productId) => {
-    const id = String(productId)
+  const [panel, setPanel] = useState('homepage')
+  const sections = [['trust','Trust strip'],['featured','Featured cards'],['browse','Shop callout'],['values','Archive values'],['shipping','Pickup information']]
+  const update = (key, value) => { setDraft((current) => ({ ...current, [key]: value })); setError(''); setNotice('') }
+  const toggleFeaturedProduct = (id) => {
     const current = draft.featured_product_ids || []
-    update(
-      'featured_product_ids',
-      current.includes(id) ? current.filter((item) => item !== id) : [...current, id],
-    )
+    update('featured_product_ids', current.includes(String(id)) ? current.filter((item) => item !== String(id)) : [...current, String(id)])
   }
-
-  const toggleSection = (section) => {
+  const toggleSection = (key) => {
     const current = draft.homepage_sections || []
-    update(
-      'homepage_sections',
-      current.includes(section)
-        ? current.filter((item) => item !== section)
-        : [...current, section],
-    )
+    update('homepage_sections', current.includes(key) ? current.filter((item) => item !== key) : [...current, key])
   }
-
   const save = async (event) => {
-    event.preventDefault()
-    setBusy(true)
-    setError('')
-    setNotice('')
-    try {
-      await onSave(draft)
-      setNotice('Website customisation saved and published.')
-    } catch (saveError) {
-      setError(saveError.message)
-    } finally {
-      setBusy(false)
-    }
+    event.preventDefault(); setBusy(true); setError(''); setNotice('')
+    try { await onSave(draft); setNotice('Your storefront changes have been saved and published.') }
+    catch (failure) { setError(failure.message) }
+    finally { setBusy(false) }
   }
-
+  const resetAppearance = () => {
+    setDraft((current) => ({ ...current, theme_preset:'original', site_background:'#11110f', site_text:'#e7e1d3', site_heading:'#e7e1d3', site_accent:'#c9a866', site_divider:'#c9a866', site_button_text:'#18150e', site_font_scale:'100', card_image_filter:'original', card_image_fit:'cover', storefront_background_image:'', homepage_background_image:'', homepage_background_position:'center center', announcement_enabled:true }))
+    setNotice('Appearance controls reset to the original look. Save to publish this reset.')
+  }
+  const field = (label, key, type='text', placeholder='') => <label className="form-field" key={key}><span>{label}</span><input type={type} value={draft[key] ?? ''} placeholder={placeholder} onChange={(event) => update(key,event.target.value)} /></label>
   return (
     <section className="admin-view customisation-view">
-      <div className="admin-view-heading"><div><p className="eyebrow">WEBSITE CUSTOMISATION</p><h2>Keep the storefront on course.</h2></div></div>
-      {settingsError && <div className="error-notice"><ShieldAlert size={15} /><span>Website settings are not ready in Supabase: {settingsError}. Review and approve the proposed site_settings migration before saving.</span></div>}
-      {error && <div className="error-notice"><ShieldAlert size={15} /><span>{error}</span></div>}
-      {notice && <div className="success-notice"><Check size={15} /><span>{notice}</span></div>}
+      <div className="admin-view-heading"><div><p className="eyebrow">WEBSITE CUSTOMISATION</p><h2>Make the archive feel new.</h2><p className="admin-muted">Refresh the customer-facing storefront without changing inventory or admin controls.</p></div></div>
+      {settingsError && <div className="error-notice"><ShieldAlert size={15}/><span>Website settings are not ready in Supabase: {settingsError}</span></div>}
+      {error && <div className="error-notice"><ShieldAlert size={15}/><span>{error}</span></div>}
+      {notice && <div className="success-notice"><Check size={15}/><span>{notice}</span></div>}
       <form className="customisation-form" onSubmit={save}>
-        <div className="customisation-group">
-          <p className="eyebrow">HOMEPAGE</p>
-          <label className="form-field"><span>Homepage heading</span><input value={draft.homepage_heading || ''} onChange={(event) => update('homepage_heading', event.target.value)} required /></label>
-          <label className="form-field"><span>Homepage description</span><textarea rows="4" value={draft.homepage_description || ''} onChange={(event) => update('homepage_description', event.target.value)} /></label>
+        <div className="customisation-console">
+          <label className="form-field"><span>Choose a website area</span><select value={panel} onChange={(event)=>setPanel(event.target.value)}>
+            <option value="homepage">Homepage Customisation</option><option value="archive">Archive / Shop Customisation</option><option value="colours">Colours & Typography</option><option value="images">Images & Visual Effects</option>
+          </select></label>
+          <p className="admin-muted">Choose a section to reveal its controls. Your admin panel is not affected.</p>
         </div>
-        <div className="customisation-group">
-          <p className="eyebrow">ANNOUNCEMENT BANNER</p>
-          <label className="form-field"><span>Banner heading</span><input value={draft.announcement_headline || ''} onChange={(event) => update('announcement_headline', event.target.value)} /></label>
-          <label className="form-field"><span>Banner message</span><input value={draft.announcement_text || ''} onChange={(event) => update('announcement_text', event.target.value)} /></label>
-        </div>
-        <div className="customisation-group">
-          <p className="eyebrow">FEATURED CARDS</p>
-          <label className="form-field"><span>Card of the Week</span><select value={draft.card_of_the_week_product_id || ''} onChange={(event) => update('card_of_the_week_product_id', event.target.value)}><option value="">Use the first featured card</option>{products.map((product) => <option value={product.id} key={product.id}>{product.name} · {product.id}</option>)}</select></label>
-          {products.length ? (
-            <div className="customisation-product-list">
-              {products.map((product) => (
-                <label className="check-field" key={product.id}>
-                  <input type="checkbox" checked={(draft.featured_product_ids || []).includes(String(product.id))} onChange={() => toggleFeaturedProduct(product.id)} />
-                  <span>{product.name}</span>
-                </label>
-              ))}
-            </div>
-          ) : <p className="admin-muted">Add products before selecting homepage features.</p>}
-        </div>
-        <div className="customisation-group">
-          <p className="eyebrow">HOMEPAGE SECTIONS</p>
-          <div className="customisation-section-list">
-            {sections.map(([key, label]) => (
-              <label className="check-field" key={key}>
-                <input type="checkbox" checked={(draft.homepage_sections || []).includes(key)} onChange={() => toggleSection(key)} />
-                <span>{label}</span>
-              </label>
-            ))}
+        {panel === 'homepage' && <>
+          <div className="customisation-group"><p className="eyebrow">HOMEPAGE CONTENT & ANNOUNCEMENTS</p>
+            {field('Homepage heading','homepage_heading')}
+            <label className="form-field"><span>Homepage description</span><textarea rows="4" value={draft.homepage_description || ''} onChange={(event)=>update('homepage_description',event.target.value)}/></label>
+            {field('Homepage background image URL (optional)','homepage_background_image','url','https://…')}
+            {field('Announcement headline','announcement_headline')}
+            {field('Announcement message','announcement_text')}
+            <label className="check-field"><input type="checkbox" checked={draft.announcement_enabled !== false} onChange={(event)=>update('announcement_enabled',event.target.checked)}/><span>Show announcement bar</span></label>
           </div>
-        </div>
-        <div className="customisation-group">
-          <p className="eyebrow">STORE INFORMATION</p>
-          <label className="form-field"><span>Pickup information</span><textarea rows="3" value={draft.shipping_information || ''} onChange={(event) => update('shipping_information', event.target.value)} /></label>
-          <label className="form-field"><span>Contact information</span><input value={draft.contact_information || ''} onChange={(event) => update('contact_information', event.target.value)} placeholder="Email address or contact details" /></label>
-        </div>
-        <div className="customisation-form__footer">
-          <p>Saving publishes these settings to the public homepage. Supabase RLS must allow public reads and restrict changes to administrators.</p>
-          <button className="button button--gold" type="submit" disabled={busy || Boolean(settingsError)}>{busy ? 'Publishing…' : 'Save website settings'} <ArrowRight size={15} /></button>
-        </div>
+          <div className="customisation-group"><p className="eyebrow">FEATURED CARDS & CARD OF THE WEEK</p>
+            <label className="form-field"><span>Card of the Week</span><select value={draft.card_of_the_week_product_id || ''} onChange={(event)=>update('card_of_the_week_product_id',event.target.value)}><option value="">Use the first featured card</option>{products.map((p)=><option value={p.id} key={p.id}>{p.name}</option>)}</select></label>
+            <div className="customisation-product-list">{products.map((p)=><label className="check-field" key={p.id}><input type="checkbox" checked={(draft.featured_product_ids || []).includes(String(p.id))} onChange={()=>toggleFeaturedProduct(p.id)}/><span>{p.name}</span></label>)}</div>
+          </div>
+          <div className="customisation-group"><p className="eyebrow">SHOW OR HIDE HOMEPAGE SECTIONS</p><div className="customisation-section-list">{sections.map(([key,label])=><label className="check-field" key={key}><input type="checkbox" checked={(draft.homepage_sections || []).includes(key)} onChange={()=>toggleSection(key)}/><span>{label}</span></label>)}</div></div>
+        </>}
+        {panel === 'archive' && <div className="customisation-group"><p className="eyebrow">ARCHIVE PAGE CONTENT & CARD LAYOUT</p>
+          {field('Archive heading','archive_heading')}
+          <label className="form-field"><span>Archive introduction</span><textarea rows="3" value={draft.archive_description || ''} onChange={(event)=>update('archive_description',event.target.value)}/></label>
+          <label className="form-field"><span>Card image fit</span><select value={draft.card_image_fit || 'cover'} onChange={(event)=>update('card_image_fit',event.target.value)}><option value="cover">Fill card area</option><option value="contain">Show full image</option></select></label>
+          <label className="form-field"><span>Archive card image effect</span><select value={draft.card_image_filter || 'original'} onChange={(event)=>update('card_image_filter',event.target.value)}><option value="original">Original colour</option><option value="grayscale">Black & white</option><option value="sepia">Vintage sepia</option><option value="contrast">High contrast</option><option value="soft">Soft / muted</option></select></label>
+          <p className="admin-muted">Effects change the display only; original uploaded card photographs remain untouched.</p>
+        </div>}
+        {panel === 'colours' && <div className="customisation-group"><p className="eyebrow">COLOURS & TYPOGRAPHY</p>
+          <label className="form-field"><span>Theme preset</span><select value={draft.theme_preset || 'original'} onChange={(event)=>{const v=event.target.value; update('theme_preset',v); const themes={original:['#11110f','#e7e1d3','#e7e1d3','#c9a866','#c9a866','#18150e'],ocean:['#0d1b22','#e5f0ef','#f0f5ee','#55b9c2','#55b9c2','#071619'],parchment:['#e8dfc9','#28251e','#242018','#9a6b32','#9a6b32','#fff8e9']}; if(themes[v]) {const t=themes[v]; update('theme_preset',v); update('site_background',t[0]); update('site_text',t[1]); update('site_heading',t[2]); update('site_accent',t[3]); update('site_divider',t[4]); update('site_button_text',t[5]);}}}><option value="original">Original Grand Line</option><option value="ocean">Deep Ocean</option><option value="parchment">Antique Parchment</option><option value="custom">Custom colours</option></select></label>
+          {field('Website background','site_background','color')}{field('Main text','site_text','color')}{field('Headings','site_heading','color')}{field('Highlights & buttons','site_accent','color')}{field('Divider lines & borders','site_divider','color')}{field('Button text','site_button_text','color')}
+          <label className="form-field"><span>Overall font size: {draft.site_font_scale || '100'}%</span><input type="range" min="85" max="120" value={Number(draft.site_font_scale || 100)} onChange={(event)=>update('site_font_scale',event.target.value)}/></label>
+        </div>}
+        {panel === 'images' && <div className="customisation-group"><p className="eyebrow">IMAGES, BACKGROUNDS & EFFECTS</p>
+          {field('Storefront background image URL (optional)','storefront_background_image','url','https://…')}
+          <label className="form-field"><span>Background image position</span><select value={draft.homepage_background_position || 'center center'} onChange={(event)=>update('homepage_background_position',event.target.value)}><option value="center center">Centre</option><option value="center top">Top</option><option value="center bottom">Bottom</option><option value="left center">Left</option><option value="right center">Right</option></select></label>
+          <label className="form-field"><span>Card of the Week image effect</span><select value={draft.card_image_filter || 'original'} onChange={(event)=>update('card_image_filter',event.target.value)}><option value="original">Original colour</option><option value="grayscale">Black & white</option><option value="sepia">Vintage sepia</option><option value="contrast">High contrast</option><option value="soft">Soft / muted</option></select></label>
+          <p className="admin-muted">Use direct HTTPS image URLs. Background images never replace your stored card photos.</p>
+        </div>}
+        <div className="customisation-form__footer"><div><p>Saving publishes these settings to the customer-facing website only.</p><button className="button button--outline" type="button" onClick={resetAppearance}>Reset appearance to original</button></div><button className="button button--gold" type="submit" disabled={busy || Boolean(settingsError)}>{busy?'Publishing…':'Save website settings'} <ArrowRight size={15}/></button></div>
       </form>
     </section>
   )
 }
-
 function SettingsSection({ user }) {
   return (
     <section className="admin-view">

@@ -631,14 +631,29 @@ function Storefront() {
     setMaxPrice('')
   }
 
+  const imageFilter = { original:'none', grayscale:'grayscale(1)', sepia:'sepia(.78)', contrast:'contrast(1.3) saturate(.85)', soft:'saturate(.68) brightness(1.08)' }[siteSettings.card_image_filter] || 'none'
+  const storefrontPage = !['/admin', '/admin/access'].includes(location.pathname)
+  const storefrontStyle = storefrontPage ? {
+    '--ink': siteSettings.site_background || '#11110f',
+    '--cream': siteSettings.site_text || '#e7e1d3',
+    '--gold': siteSettings.site_accent || '#c9a866',
+    '--gold-light': siteSettings.site_accent || '#d7bd7f',
+    '--line': siteSettings.site_divider || '#c9a866',
+    '--site-heading': siteSettings.site_heading || '#e7e1d3',
+    '--site-font-scale': String(Number(siteSettings.site_font_scale || 100) / 100),
+    '--card-image-filter': imageFilter,
+    '--card-image-fit': siteSettings.card_image_fit || 'cover',
+  } : undefined
+  const bg = location.pathname === '/' ? siteSettings.homepage_background_image : siteSettings.storefront_background_image
+  const safeBg = typeof bg === 'string' && /^https:\/\//i.test(bg) ? bg : ''
   return (
-    <div className="site-shell">
-      <div className="announcement">
+    <div className="site-shell" style={storefrontPage ? { ...storefrontStyle, backgroundImage: safeBg ? 'linear-gradient(rgba(17,17,15,.88), rgba(17,17,15,.92)), url("' + safeBg + '")' : undefined, backgroundSize: 'cover', backgroundAttachment: 'fixed' } : undefined}>
+      {siteSettings.announcement_enabled !== false && <div className="announcement">
         <span>{siteSettings.announcement_headline}</span>
         <i />
         <span>{siteSettings.announcement_text}</span>
         <MapPin size={14} />
-      </div>
+      </div>}
 
       <header className="site-header">
         <Link className="brand" to="/" aria-label="Grand Line Archive home">
@@ -761,7 +776,7 @@ function Storefront() {
                   <div className="hero-art__frame">
                     <div className="hero-art__image">
                       {cardOfTheWeek ? (
-                        <Link to={`/product/${encodeURIComponent(cardOfTheWeek.id)}`} aria-label={`View ${cardOfTheWeek.name}`}><ProductImage product={cardOfTheWeek} /></Link>
+                        <Link to={`/product/${encodeURIComponent(cardOfTheWeek.id)}`} aria-label={`View ${cardOfTheWeek.name}`}><ProductImage product={cardOfTheWeek} className="card-of-week-image" /></Link>
                       ) : (
                         <div className="hero-art__placeholder"><Anchor size={68} strokeWidth={0.8} /></div>
                       )}
@@ -857,8 +872,8 @@ function Storefront() {
             <main className="shop-page page-width">
               <div className="shop-intro">
                 <p className="eyebrow">THE ARCHIVE <span className="live-dot" /> LIVE STOCK</p>
-                <h1>Every card<br /><em>in the vault.</em></h1>
-                <p>{storefrontProducts.length} cards · photographed as found · local pickup in Gibraltar</p>
+                <h1>{siteSettings.archive_heading || 'Every card in the vault.'}</h1>
+                <p>{storefrontProducts.length} cards · {siteSettings.archive_description || 'photographed as found · local pickup in Gibraltar'}</p>
               </div>
               <div className="shop-toolbar">
                 <label className="search-field">
