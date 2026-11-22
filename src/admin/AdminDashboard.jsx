@@ -35,7 +35,7 @@ import QuickAddPanel from './QuickAddPanel'
 import StockPhotographyPanel from './StockPhotographyPanel'
 import ImageLibraryPanel from './ImageLibraryPanel'
 import BulkImportPanel from './BulkImportPanel'
-import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
+import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
 
@@ -653,14 +653,12 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
     }
     return (
       <div className={`form-field ${field.multiline ? 'form-field--wide' : ''}`} key={field.key}>
-        <label>
-          <span>{field.label}</span>
-          {field.multiline ? (
-            <textarea rows="4" value={value ?? ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
-          ) : (
-            <input required={field.required} type={field.numeric ? 'number' : 'text'} min={field.numeric ? '0' : undefined} step={field.key === 'price' ? '0.01' : field.numeric ? '1' : undefined} value={value ?? ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
-          )}
-        </label>
+        <span>{field.label}</span>
+        {field.multiline ? (
+          <textarea aria-label={field.label} rows="4" value={value ?? ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
+        ) : (
+          <input aria-label={field.label} required={field.required} type={field.numeric ? 'number' : 'text'} min={field.numeric ? '0' : undefined} step={field.key === 'price' ? '0.01' : field.numeric ? '1' : undefined} value={value ?? ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
+        )}
         {['name', 'effect_text', 'classification'].includes(field.key) && (
           <CatalogueLanguageButtons cardNumber={values.card_number || raw.card_number} fieldKey={field.key} onApply={(nextValue, language) => setValues((current) => ({ ...current, [field.key]: nextValue, language }))} />
         )}
