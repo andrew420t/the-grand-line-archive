@@ -363,7 +363,12 @@ function Storefront() {
   }, [user])
 
   const storefrontProducts = useMemo(
-    () => products.filter((product) => product.raw?.status === 'active'),
+    () => products.filter((product) => {
+      // Older/legacy stock rows may not have a status value. Treat those as
+      // publishable so adding inventory doesn't silently hide it from the archive.
+      const status = String(product.raw?.status || '').trim().toLowerCase()
+      return status === 'active' || status === ''
+    }),
     [products],
   )
 
