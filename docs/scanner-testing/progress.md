@@ -176,3 +176,18 @@ The user supplied screenshots from a separate card-scanning app showing two real
 - Provide a manual price input or editable price override on the chosen card, so a user can enter their own valuation rather than being forced to accept a market/catalogue value. Keep source/market price and user-entered value distinct if both exist; avoid silently replacing the user's override.
 - Add regression/manual test scenarios: (a) clear Japanese EB04-005 Law photo; (b) blurry OP17-062 Kaido where Parallel is incorrectly top-ranked; (c) select regular printing from candidate list; (d) verify variant-specific price values remain attached to the selected printing; (e) manually enter/edit price; (f) close/choose “not sure” and manual search.
 - No price override implementation has been made yet. These screenshots are evidence to guide implementation and testing only.
+
+
+## Real card-photo OCR test — user supplied Saint Shamrock (23 Nov 2026)
+**Sample 1 of real-card OCR tests.** Original user photo file (JPEG, 1152 × 2048) is accessible and was run through local Tesseract 5.5.0. The physical card appears to be English Saint Shamrock, OP18-119, cost 8, power 9000, foil/parallel-style art, inside a transparent holder. Online card-reference search independently confirmed Saint Shamrock OP18-119, The Dominance of God, English, Secret Rare, cost 8, power 9000, Holy Knights of God. Source: https://onepiecedb.io/card/saint-shamrock-op18-119 and https://www.optcg.gg/products/cards/OP18-119_p2. This external reference corroborates the card identification, not scanner catalogue matching.
+
+### Image and OCR observations
+- Image loaded locally: **PASS** (1152 × 2048 original JPEG; one actual physical card photograph).
+- Card/name/number visual and reference identification: **Saint Shamrock, OP18-119, English**. Name is visible on the photo; number is confirmed from the online reference, but the collector number is too tiny/blurred in this photo to read reliably from pixels.
+- OCR run on whole-card crop: text OCR is noisy and partial; title and card code were not reliably extracted.
+- OCR on enlarged rules-text region captured fragments and some correct words/phrases, but not a reliable complete transcription. Example output included fragments like “You may trash … card from your hand … Play this Character card from your trash” and parts of “Holy Knights of God”, with multiple substitutions/omissions. **Rules-text OCR: partial / low accuracy.**
+- OCR title crop: **FAIL** to produce reliable “Saint Shamrock”.
+- OCR card-number crop: **FAIL / unreadable**, no reliable OP18-119 output.
+- OCR language: card is visibly English, but the OCR result itself does not reliably classify language.
+- Catalogue matching/ranking: **not tested against the live app/catalogue**; web reference was manually used to confirm identity.
+- Real photo test status: **FAIL for automatic ID OCR in this photo; partial rules OCR**. Image is oblique, has reflective glare/holder, small code/name print, and low contrast near the bottom. This is a valuable real-photo failure sample for preprocessing/ROI/camera quality handling, not a synthetic test.
