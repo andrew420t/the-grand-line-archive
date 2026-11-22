@@ -294,5 +294,7 @@ export function clearCatalogueCache() {
  */
 export function collectrSearchUrl(match) {
   const cardNumber = String(match?.cardNumber || '').trim()
-  return `https://app.getcollectr.com/?query=${encodeURIComponent(cardNumber)}`
+  if (!cardNumber) return 'https://app.getcollectr.com/'
+  const query = match?.languageCode === 'jp' || match?.language === 'Japanese' ? cardNumber + ' JP' : cardNumber
+  return `https://app.getcollectr.com/?query=${encodeURIComponent(query)}`
 }

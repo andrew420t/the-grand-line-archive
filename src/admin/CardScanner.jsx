@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { AlertCircle, ArrowRight, Check, LoaderCircle, ScanLine } from 'lucide-react'
 import { CARD_FIELDS, parseCardDetails } from './cardParser'
-import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
+import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
+import CatalogueReferenceImage from './CatalogueReferenceImage'
 
 const confidenceLabel = (field) => {
   if (!field.value) return 'Not detected'
@@ -230,14 +231,14 @@ export default function CardScanner({
         {manualError && <p className="form-error" role="status">{manualError}</p>}
         {manualMatches.map((match) => (
           <article className="scanner-catalogue__match" key={match.id}>
-            {match.imageUrl && <img className="scanner-catalogue__reference" src={match.imageUrl} alt={match.name + ' reference only'} loading="lazy" />}
+            <CatalogueReferenceImage match={match} className="scanner-catalogue__reference" />
             <div>
               <strong>{match.name || 'Unnamed card'}</strong>
               <span>{match.cardNumber} · {match.language} · {match.setCode || 'Promo'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
               <small>{match.category || 'Card'} · {match.colors || 'Colour not listed'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
               {match.setName && <small>{match.setName}</small>}
             </div>
-            <button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use details</button>
+            <div className="scanner-catalogue__actions"><button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), "_blank", "noopener,noreferrer")}>Search on Collectr ↗</button><div className="scanner-catalogue__actions"><button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), "_blank", "noopener,noreferrer")}>Search on Collectr ↗</button><button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use details</button></div></div>
           </article>
         ))}
       </section>
@@ -264,7 +265,7 @@ export default function CardScanner({
             {catalogueMatches.map((match) => (
 
               <div className="scanner-catalogue__match" key={match.id}>
-                {match.imageUrl && <img className="scanner-catalogue__reference" src={match.imageUrl} alt={match.name + ' reference only'} loading="lazy" />}
+                <CatalogueReferenceImage match={match} className="scanner-catalogue__reference" />
                 <div>
                   <strong>{match.name || 'Unnamed card'}</strong>
                   <span>{match.cardNumber} · {match.language} · {match.setCode || 'Promo'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
