@@ -29,7 +29,7 @@ test('builds inserts from confirmed products columns and links the existing set 
   assert.equal(payload.stock_quantity, 2)
   assert.equal(payload.set_id, 'set-uuid')
   assert.equal(payload.featured, true)
-  assert.equal(payload.status, 'active')
+  assert.equal(payload.status, 'draft')
   assert.equal('price_gbp' in payload, false)
   assert.equal('set_code' in payload, false)
   assert.equal('color' in payload, false)
