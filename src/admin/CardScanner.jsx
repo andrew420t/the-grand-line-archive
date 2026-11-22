@@ -27,6 +27,10 @@ export default function CardScanner({
   const [catalogueMatches, setCatalogueMatches] = useState([])
   const [autoMatches, setAutoMatches] = useState([])
   const [autoMatchStatus, setAutoMatchStatus] = useState('')
+  const [matchConfirmationOpen, setMatchConfirmationOpen] = useState(false)
+  const [selectedAutoMatchId, setSelectedAutoMatchId] = useState('')
+  const [rankedAutoMatches, setRankedAutoMatches] = useState([])
+  const [rememberMatch, setRememberMatch] = useState(true)
   const [catalogueLoading, setCatalogueLoading] = useState(false)
   const [catalogueError, setCatalogueError] = useState('')
   const [manualCardNumber, setManualCardNumber] = useState('')
@@ -82,6 +86,9 @@ export default function CardScanner({
       const parsed = parseCardDetails(data.text || '', lines)
       setFields(parsed)
       setAutoMatches([])
+      setRankedAutoMatches([])
+      setSelectedAutoMatchId('')
+      setMatchConfirmationOpen(false)
       setAutoMatchStatus('')
       const detectedNumber = parsed.card_number?.value
       if (detectedNumber) {
@@ -91,14 +98,19 @@ export default function CardScanner({
           setAutoMatches(matches)
           if (matches.length) {
             const detectedName = String(parsed.name?.value || '').trim().toLowerCase()
+            let rememberedId = ''
+            try { rememberedId = window.localStorage.getItem('glaScannerCardMatch:' + detectedNumber) || '' } catch { /* storage may be unavailable */ }
             const ranked = matches.map((match) => {
               const nameMatch = detectedName && String(match.name || '').trim().toLowerCase() === detectedName
               const languageMatch = parsed.language?.value
                 ? String(match.language || '').toLowerCase().includes(parsed.language.value.toLowerCase())
                 : false
-              return { match, nameMatch, languageMatch }
-            }).sort((a, b) => Number(b.nameMatch) - Number(a.nameMatch) || Number(b.languageMatch) - Number(a.languageMatch))
+              return { match, nameMatch, languageMatch, remembered: match.id === rememberedId }
+            }).sort((a, b) => Number(b.remembered) - Number(a.remembered) || Number(b.nameMatch) - Number(a.nameMatch) || Number(b.languageMatch) - Number(a.languageMatch))
             const best = ranked[0]
+            setRankedAutoMatches(ranked)
+            setSelectedAutoMatchId(best.match.id)
+            setMatchConfirmationOpen(true)
             setAutoMatchStatus(best.nameMatch && best.languageMatch
               ? 'Strong match: card number, name, and language agree.'
               : best.nameMatch
@@ -195,6 +207,19 @@ export default function CardScanner({
     setStatus('Catalogue details filled in. Check each value against the physical card before saving.')
   }
 
+  const selectedAutoMatch = rankedAutoMatches.find((item) => item.match.id === selectedAutoMatchId)?.match
+
+  const confirmAutoMatch = () => {
+    if (selectedAutoMatch) {
+      applyCatalogueMatch(selectedAutoMatch)
+      if (rememberMatch && fields.card_number?.value) {
+        try { window.localStorage.setItem('glaScannerCardMatch:' + fields.card_number.value, selectedAutoMatch.id) } catch { /* storage may be unavailable */ }
+      }
+      setMatchConfirmationOpen(false)
+      setStatus('Confirmed card match. Catalogue details filled in—review them before saving.')
+    }
+  }
+
   const reparseText = () => {
     setFields(parseCardDetails(rawText))
     setStatus('Fields extracted from the edited OCR text. Verify them before continuing.')
@@ -275,6 +300,47 @@ export default function CardScanner({
           </article>
         ))}
       </section>
+
+
+      {matchConfirmationOpen && rankedAutoMatches.length > 0 && (
+        <div className="scanner-match-confirmation__backdrop" role="presentation" onClick={() => setMatchConfirmationOpen(false)}>
+          <section className="scanner-match-confirmation" role="dialog" aria-modal="true" aria-labelledby="scanner-match-confirmation-title" onClick={(event) => event.stopPropagation()}>
+            <button className="scanner-match-confirmation__close" type="button" onClick={() => setMatchConfirmationOpen(false)} aria-label="Close card confirmation">×</button>
+            <p className="eyebrow">CARD RECOGNITION · PLEASE CONFIRM</p>
+            <h3 id="scanner-match-confirmation-title">Is this the card I found?</h3>
+            <p className="scanner-match-confirmation__intro">Check the picture, language and set. If it is wrong or uncertain, choose the correct card below. Your choice fills the form but does not save stock.</p>
+            {selectedAutoMatch && (
+              <div className="scanner-match-confirmation__featured">
+                <CatalogueReferenceImage match={selectedAutoMatch} className="scanner-match-confirmation__image" />
+                <div>
+                  <strong>{selectedAutoMatch.name || 'Name unavailable'}</strong>
+                  <span>{selectedAutoMatch.cardNumber} · {selectedAutoMatch.language} · {selectedAutoMatch.setCode || 'Set not listed'}</span>
+                  <span>{selectedAutoMatch.rarity || 'Rarity unknown'} · {selectedAutoMatch.variant || 'Base version'}</span>
+                  <small>{rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.nameMatch ? 'Name agrees with OCR' : 'Name differs from OCR'} · {rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.languageMatch ? 'Language agrees' : 'Language needs checking'}</small>
+                </div>
+              </div>
+            )}
+            {rankedAutoMatches.length > 1 && (
+              <div className="scanner-match-confirmation__options">
+                <strong>Select the card you believe is correct</strong>
+                <div className="scanner-match-confirmation__list">
+                  {rankedAutoMatches.map(({ match, nameMatch, languageMatch }) => (
+                    <button className={selectedAutoMatchId === match.id ? 'scanner-match-confirmation__option scanner-match-confirmation__option--selected' : 'scanner-match-confirmation__option'} type="button" key={match.id} onClick={() => setSelectedAutoMatchId(match.id)}>
+                      <CatalogueReferenceImage match={match} className="scanner-match-confirmation__thumb" />
+                      <span><b>{match.name || 'Unknown card'}</b><small>{match.cardNumber} · {match.language} · {match.setCode || 'Promo'}</small><small>{nameMatch ? 'Name match' : 'Name differs'} · {languageMatch ? 'Language match' : 'Language differs'}</small></span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            <label className="scanner-match-confirmation__remember"><input type="checkbox" checked={rememberMatch} onChange={(event) => setRememberMatch(event.target.checked)} /> Remember my selection on this browser for future scans of this card number</label>
+            <div className="scanner-match-confirmation__actions">
+              <button className="button button--outline" type="button" onClick={() => setMatchConfirmationOpen(false)}>Not sure / enter manually</button>
+              <button className="button button--gold" type="button" onClick={confirmAutoMatch} disabled={!selectedAutoMatch}>Yes, use this card</button>
+            </div>
+          </section>
+        </div>
+      )}
 
       {autoMatchStatus && (
         <section className="scanner-catalogue scanner-auto-match" aria-live="polite">
