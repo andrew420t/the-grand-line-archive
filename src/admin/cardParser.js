@@ -46,7 +46,7 @@ const normalizeOcrCardNumberText = (source) => String(source || '').replace(
   },
 )
 
-export function parseCardDetails(text, recognizedLines = []) {
+export function parseCardDetails(text, recognizedLines = [], recognitionLanguage = 'eng') {
   const source = String(text || '')
   const cardNumberSource = normalizeOcrCardNumberText(source)
   const lines = recognizedLines
@@ -181,6 +181,10 @@ export function parseCardDetails(text, recognizedLines = []) {
     )
   } else if (/[ぁ-ゖァ-ヺ]/u.test(source)) {
     fields.language = makeField('Japanese', matchConfidence(source.match(/[ぁ-ゖァ-ヺ]/u)[0], availableLines))
+  } else if (recognitionLanguage === 'eng') {
+    fields.language = makeField('English', 90)
+  } else if (recognitionLanguage === 'jpn') {
+    fields.language = makeField('Japanese', 90)
   } else if (/[가-힣]/u.test(source)) {
     fields.language = makeField('Korean', matchConfidence(source.match(/[가-힣]/u)[0], availableLines))
   }
