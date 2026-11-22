@@ -56,3 +56,19 @@ test('flags low-confidence OCR for manual verification', () => {
   assert.equal(fields.name.confidence, 51)
   assert.equal(fields.name.needsReview, true)
 })
+
+test('normalizes common OCR zero-versus-letter errors in set codes', () => {
+  const cases = [
+    ['OPO02-009', 'OP02-009'],
+    ['OPO7-057', 'OP07-057'],
+    ['EBOO1-008', 'EB01-008'],
+    ['EBO2-015', 'EB02-015'],
+    ['PRBO1-001', 'PRB01-001'],
+    ['PRBO2-050', 'PRB02-050'],
+  ]
+  for (const [ocr, expected] of cases) {
+    const fields = parseCardDetails(ocr)
+    assert.equal(fields.card_number.value, expected, `expected ${ocr} to normalize to ${expected}`)
+    assert.equal(fields.set_code.value, expected.slice(0, expected.indexOf('-')))
+  }
+})
