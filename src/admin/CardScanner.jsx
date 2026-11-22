@@ -221,7 +221,7 @@ export default function CardScanner({
   }
 
   const reparseText = () => {
-    setFields(parseCardDetails(rawText))
+    setFields(parseCardDetails(rawText, [], recognitionLanguage))
     setStatus('Fields extracted from the edited OCR text. Verify them before continuing.')
   }
 
