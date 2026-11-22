@@ -9,6 +9,12 @@ export const DEFAULT_SITE_SETTINGS = {
   homepage_sections: ['trust', 'featured', 'browse', 'values', 'shipping'],
   shipping_information: 'Local pickup in Gibraltar only. Collection is arranged after ordering.',
   contact_information: '',
+  archive_heading: 'Every card in the vault.',
+  archive_description: 'Cards photographed as found · local pickup in Gibraltar',
+  theme_preset: 'original', site_background: '#11110f', site_text: '#e7e1d3', site_heading: '#e7e1d3',
+  site_accent: '#c9a866', site_divider: '#c9a866', site_button_text: '#18150e', site_font_scale: '100',
+  card_image_filter: 'original', card_image_fit: 'cover', storefront_background_image: '',
+  homepage_background_image: '', homepage_background_position: 'center center', announcement_enabled: true,
 }
 
 export function normalizeSiteSettings(value) {
