@@ -9,10 +9,24 @@ export const EXTENDED_CARD_COLUMNS = [
   'variant_label',
 ]
 
+const slugify = (value) =>
+  String(value || '')
+    .normalize('NFKD')
+    .replace(/[\\u0300-\\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+
 export function buildNewProductPayload(form, setId, includeCardDetails) {
   const timestamp = new Date().toISOString()
+  const id = globalThis.crypto.randomUUID()
+  const slugBase = [form.name, form.card_number, form.variant_label]
+    .map(slugify)
+    .filter(Boolean)
+    .join('-')
   const payload = {
-    id: globalThis.crypto.randomUUID(),
+    id,
+    slug: `${slugBase || 'product'}-${id.slice(0, 8)}`,
     name: form.name.trim(),
     description: form.description.trim() || null,
     card_number: form.card_number.trim() || null,
