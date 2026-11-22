@@ -71,16 +71,19 @@ function runTransaction(db, mode, action) {
 
 async function saveSharedExample(file, match, hash) {
   if (!supabase || !match?.id) return { saved: false, reason: 'Supabase is not configured.' }
-  const safeHash = hash
-  const path = `${safeHash.slice(0, 2)}/${safeHash}.jpg`
+  const { data: authData, error: authError } = await supabase.auth.getUser()
+  if (authError || !authData?.user) return { saved: false, reason: 'Sign in as an administrator to contribute shared examples.' }
+  const path = `${encodeURIComponent(match.id)}/${hash}.jpg`
   const storage = supabase.storage.from(SHARED_BUCKET)
   const upload = await storage.upload(path, file, {
     contentType: file.type || 'image/jpeg',
-    upsert: true,
+    upsert: false,
     cacheControl: '31536000',
   })
-  if (upload.error) throw new Error(upload.error.message)
-  const { error } = await supabase.from('card_recognition_examples').upsert({
+  if (upload.error && upload.error.statusCode !== '409' && upload.error.statusCode !== 409) {
+    throw new Error(upload.error.message)
+  }
+  const { error } = await supabase.from('card_recognition_examples').insert({
     printing_id: match.id,
     card_number: match.cardNumber,
     card_name: match.name || '',
@@ -88,17 +91,23 @@ async function saveSharedExample(file, match, hash) {
     set_code: match.setCode || '',
     rarity: match.rarity || '',
     variant: match.variant || '',
-    image_hash: safeHash,
+    image_hash: hash,
     storage_path: path,
-  }, { onConflict: 'printing_id,image_hash' })
-  if (error) throw new Error(error.message)
-  return { saved: true }
+    confirmed_by: authData.user.id,
+  })
+  if (error && error.code !== '23505') throw new Error(error.message)
+  return { saved: true, duplicate: error?.code === '23505' }
 }
 
 export async function rememberVerifiedCardImage(file, match) {
   if (!file || !match?.id || !match?.cardNumber) throw new Error('A photograph and confirmed catalogue printing are required.');
   const hash = await imageHash(file);
-  const db = await openDatabase();
+  let shared = { saved: false }
+  try { shared = await saveSharedExample(file, match, hash) } catch (error) { shared = { saved: false, error: error.message } }
+  let db
+  try { db = await openDatabase() } catch (error) {
+    return { saved: Boolean(shared.saved), duplicate: Boolean(shared.duplicate), shared, localError: error.message }
+  }
   try {
     const records = await new Promise((resolve, reject) => {
       const request = db.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME).getAll();
@@ -166,7 +175,7 @@ export async function findSharedRememberedCardImage(file) {
   const { data, error } = await supabase
     .from('card_recognition_examples')
     .select('printing_id,card_number,card_name,language,set_code,rarity,variant,image_hash,storage_path,confirmed_at')
-    .limit(500)
+    .limit(5000)
   if (error) {
     if (error.code === '42P01' || error.code === 'PGRST205') return null
     throw new Error(error.message)
