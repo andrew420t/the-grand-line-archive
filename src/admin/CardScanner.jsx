@@ -25,6 +25,8 @@ export default function CardScanner({
   const [status, setStatus] = useState('')
   const [error, setError] = useState('')
   const [catalogueMatches, setCatalogueMatches] = useState([])
+  const [autoMatches, setAutoMatches] = useState([])
+  const [autoMatchStatus, setAutoMatchStatus] = useState('')
   const [catalogueLoading, setCatalogueLoading] = useState(false)
   const [catalogueError, setCatalogueError] = useState('')
   const [manualCardNumber, setManualCardNumber] = useState('')
@@ -77,7 +79,38 @@ export default function CardScanner({
           (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
         )
       setRawText(data.text || '')
-      setFields(parseCardDetails(data.text || '', lines))
+      const parsed = parseCardDetails(data.text || '', lines)
+      setFields(parsed)
+      setAutoMatches([])
+      setAutoMatchStatus('')
+      const detectedNumber = parsed.card_number?.value
+      if (detectedNumber) {
+        setStatus('OCR finished. Checking detected card number against the catalogue…')
+        try {
+          const matches = await findCatalogueMatches(detectedNumber)
+          setAutoMatches(matches)
+          if (matches.length) {
+            const detectedName = String(parsed.name?.value || '').trim().toLowerCase()
+            const ranked = matches.map((match) => {
+              const nameMatch = detectedName && String(match.name || '').trim().toLowerCase() === detectedName
+              const languageMatch = parsed.language?.value
+                ? String(match.language || '').toLowerCase().includes(parsed.language.value.toLowerCase())
+                : false
+              return { match, nameMatch, languageMatch }
+            }).sort((a, b) => Number(b.nameMatch) - Number(a.nameMatch) || Number(b.languageMatch) - Number(a.languageMatch))
+            const best = ranked[0]
+            setAutoMatchStatus(best.nameMatch && best.languageMatch
+              ? 'Strong match: card number, name, and language agree.'
+              : best.nameMatch
+                ? 'Possible match: card number and name agree. Confirm language and set.'
+                : 'Possible match found by card number. Compare the name, language, and set manually.')
+          } else {
+            setAutoMatchStatus('No catalogue entry matched the detected card number. Check the OCR number.')
+          }
+        } catch (lookupError) {
+          setAutoMatchStatus('Catalogue verification was unavailable: ' + lookupError.message)
+        }
+      }
       setStatus(data.text?.trim() ? 'Scan complete. Check every field before saving.' : 'No readable text found. Enter details manually or rescan.')
       setProgress(100)
     } catch (scanError) {
@@ -242,6 +275,19 @@ export default function CardScanner({
           </article>
         ))}
       </section>
+
+      {autoMatchStatus && (
+        <section className="scanner-catalogue scanner-auto-match" aria-live="polite">
+          <div><p className="eyebrow">AUTOMATIC CATALOGUE VERIFICATION</p><strong>{autoMatchStatus}</strong></div>
+          {autoMatches.map((match) => (
+            <article className="scanner-catalogue__match" key={match.id}>
+              <CatalogueReferenceImage match={match} className="scanner-catalogue__reference" />
+              <div><strong>{match.name || 'Unnamed card'}</strong><span>{match.cardNumber} · {match.language} · {match.setCode || 'Promo'} · {match.rarity || 'Rarity not listed'}</span>{match.setName && <small>{match.setName}</small>}</div>
+              <div className="scanner-catalogue__actions"><button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), '_blank', 'noopener,noreferrer')}>Search on Collectr ↗</button><button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use details</button></div>
+            </article>
+          ))}
+        </section>
+      )}
 
       {hasReview && (
         <div className="scan-review">
