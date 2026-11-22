@@ -402,6 +402,33 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     setBusyId('')
   }
 
+  const toggleArchivePublication = async (product) => {
+    if (!supabase) {
+      setError('Supabase is not configured.')
+      return
+    }
+    const currentStatus = String(product.raw?.status || '').trim().toLowerCase()
+    const willPublish = currentStatus !== 'active'
+    const nextStatus = willPublish ? 'active' : 'draft'
+    const actionLabel = willPublish ? 'post to the public Archive' : 'remove from the public Archive'
+    if (!window.confirm(`Are you sure you want to ${actionLabel}: "${product.name}"?`)) return
+
+    setBusyId(String(product.id))
+    setError('')
+    setNotice('')
+    const result = await supabase
+      .from('products')
+      .update({ status: nextStatus, updated_at: new Date().toISOString() })
+      .eq('id', product.id)
+    if (result.error) {
+      setError(`Product publication was not updated: ${result.error.message}`)
+    } else {
+      setNotice(willPublish ? `${product.name} is now posted to the public Archive.` : `${product.name} is now private in the Inventory Book.`)
+      onRefresh()
+    }
+    setBusyId('')
+  }
+
   const deleteProduct = async (product) => {
     if (!window.confirm(`Permanently delete "${product.name}" from the archive?`)) return
     setBusyId(String(product.id))
@@ -441,11 +468,12 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
             return (
               <article className="inventory-item" key={product.id}>
                 <div className="inventory-item__photo">{product.image ? <img src={product.image} alt={product.name} /> : <Image size={22} />}</div>
-                <div className="inventory-item__details"><p className="eyebrow">{product.setName || product.category || 'CARD'}</p><h3>{product.name}</h3><span>{raw.card_number || 'Card number not recorded'} · {product.rarity || 'Rarity not recorded'}</span></div>
+                <div className="inventory-item__details"><p className="eyebrow">{product.setName || product.category || 'CARD'}</p><h3>{product.name}</h3><span>{raw.card_number || 'Card number not recorded'} · {product.rarity || 'Rarity not recorded'}</span><span className={String(raw.status || '').toLowerCase() === 'active' ? 'inventory-publication-status is-published' : 'inventory-publication-status'}>{String(raw.status || '').toLowerCase() === 'active' ? 'Published in Archive' : 'Private · Inventory only'}</span></div>
                 <label className="form-field inventory-input"><span>GBP price</span><input type="number" min="0" step="0.01" value={valueFor(product, 'price') || raw.price || ''} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], price: event.target.value } }))} /></label>
                 <label className="form-field inventory-input"><span>Quantity</span><input type="number" min="0" step="1" value={valueFor(product, 'stock') || raw.stock_quantity || 0} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], stock: event.target.value } }))} /></label>
                 <button className="button button--outline inventory-save" type="button" disabled={busyId === String(product.id)} onClick={() => saveInventory(product)}>{busyId === String(product.id) ? 'Saving…' : 'Update stock'}</button>
                 <div className="inventory-item__actions">
+                  <button className={String(raw.status || '').toLowerCase() === 'active' ? 'button button--outline' : 'button button--gold'} type="button" disabled={busyId === String(product.id)} onClick={() => toggleArchivePublication(product)}>{busyId === String(product.id) ? 'Saving…' : String(raw.status || '').toLowerCase() === 'active' ? 'Remove from Archive' : 'Post to Archive'}</button>
                   <button className="button button--outline" type="button" onClick={() => setEditingProduct(product)}><Pencil size={14} /> Edit card</button>
                   <button className="button button--outline" type="button" disabled={busyId === String(product.id) || !raw.card_number} onClick={() => lookupProductCard(product)}><Search size={14} /> Look up card</button>
                   <button className="button button--danger" type="button" disabled={busyId === String(product.id)} onClick={() => deleteProduct(product)}><Trash2 size={14} /> Delete</button>
