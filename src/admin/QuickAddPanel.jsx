@@ -8,6 +8,7 @@ import {
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS } from './productSchema'
 import { supabase } from '../lib/supabase'
 import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride, collectrSearchUrl } from './cardCatalogue'
+import CatalogueReferenceImage from './CatalogueReferenceImage'
 
 const initialProduct = () => ({
   name: '',
@@ -338,7 +339,7 @@ export default function QuickAddPanel({
             {catalogueError && <span className="form-error">{catalogueError}</span>}
             {catalogueMatches.map((match) => (
               <article className="catalogue-match-card" key={match.id}>
-                {match.imageUrl ? <img src={match.imageUrl} data-fallback-src={match.fallbackImageUrl || ''} alt={match.name + ' reference image'} loading="lazy" onError={(event) => { const fallback = event.currentTarget.dataset.fallbackSrc; if (fallback && event.currentTarget.src !== fallback) { event.currentTarget.dataset.fallbackSrc = ''; event.currentTarget.src = fallback } else { event.currentTarget.style.display = 'none' } }} /> : <div className="catalogue-match-card__no-image">No reference image</div>}
+                <CatalogueReferenceImage match={match} className="catalogue-match-card__image" />
                 <div className="catalogue-match-card__details">
                   <strong>{match.name || 'Card name unavailable'}</strong>
                   <span>{match.language} · {match.setCode || 'Promo / set not listed'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
