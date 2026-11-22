@@ -35,8 +35,20 @@ const capture = (text, expression) => {
 
 const cleanLabel = (value) => value.replace(/^[\s:：-]+|[\s:：-]+$/g, '').trim()
 
+const normalizeOcrCardNumberText = (source) => String(source || '').replace(
+  /\b(OP|EB|ST|PRB)\s*[- ]?([O0-9]{1,3})\s*[-–]\s*(\d{3})\b/gi,
+  (_, prefix, rawSetNumber, cardNumber) => {
+    let setNumber = rawSetNumber.toUpperCase().replace(/O/g, '0')
+    // OCR sometimes reads a leading zero as an extra character (OP O02, EB0O1, PRB O1).
+    if (setNumber.length === 3 && setNumber.startsWith('0')) setNumber = setNumber.slice(1)
+    if (!/^\d{1,2}$/.test(setNumber)) return _
+    return prefix.toUpperCase() + setNumber.padStart(2, '0') + '-' + cardNumber
+  },
+)
+
 export function parseCardDetails(text, recognizedLines = []) {
   const source = String(text || '')
+  const cardNumberSource = normalizeOcrCardNumberText(source)
   const lines = recognizedLines
     .map((line) => ({
       text: String(line.text || '').trim(),
@@ -51,11 +63,11 @@ export function parseCardDetails(text, recognizedLines = []) {
   const fields = Object.fromEntries(CARD_FIELDS.map(([key]) => [key, emptyField()]))
 
   const cardNumber = capture(
-    source.toUpperCase(),
+    cardNumberSource.toUpperCase(),
     /\b((?:OP|EB|ST|PRB)\s*-?\s*\d{1,2}|P)\s*-\s*(\d{3})\b/i,
   )
   const fullCardNumber = cardNumber
-    ? source.match(/\b((?:OP|EB|ST|PRB)\s*-?\s*\d{1,2}|P)\s*-\s*(\d{3})\b/i)?.[0]
+    ? cardNumberSource.match(/\b((?:OP|EB|ST|PRB)\s*-?\s*\d{1,2}|P)\s*-\s*(\d{3})\b/i)?.[0]
     : ''
   if (fullCardNumber) {
     const normalized = fullCardNumber.toUpperCase().replace(/\s+/g, '').replace(/-/g, '-')
