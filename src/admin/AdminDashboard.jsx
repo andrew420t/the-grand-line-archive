@@ -711,6 +711,8 @@ const ONE_PIECE_OP_EB_SETS = [
   { code: 'EB-03', name: 'One Piece Heroines Edition' },
   { code: 'EB-04', name: 'Egghead Crisis' },
   { code: 'EB-05', name: 'One Piece Heroines Edition vol.2' },
+  { code: 'PRB-01', name: 'Premium Booster -The Best-' },
+  { code: 'PRB-02', name: 'Premium Booster -The Best- Vol. 2' },
 ]
 function CollectionsSection({ categories, sets, onRefresh }) {
   const [categoryName, setCategoryName] = useState('')
@@ -739,7 +741,7 @@ function CollectionsSection({ categories, sets, onRefresh }) {
         !knownCodes.has(item.code.replace(/-/g, '').toUpperCase()) && !knownNames.has(item.name.toLowerCase())
       )
       if (!missing.length) {
-        setNotice('All 23 OP and EB sets are already in Card Sets. Nothing needed adding.')
+        setNotice('All 25 OP, EB and PRB sets are already in Card Sets. Nothing needed adding.')
         return
       }
       const result = await supabase.from('sets').insert(missing.map((item) => ({
@@ -750,10 +752,10 @@ function CollectionsSection({ categories, sets, onRefresh }) {
         created_at: new Date().toISOString(),
       })))
       if (result.error) throw new Error('Could not add the card sets: ' + result.error.message)
-      setNotice('Added ' + missing.length + ' missing OP and EB sets. ' + (ONE_PIECE_OP_EB_SETS.length - missing.length) + ' were already present.')
+      setNotice('Added ' + missing.length + ' missing OP, EB and PRB sets. ' + (ONE_PIECE_OP_EB_SETS.length - missing.length) + ' were already present.')
       onRefresh()
     } catch (importError) {
-      setError(importError.message || 'Could not import the official OP and EB sets.')
+      setError(importError.message || 'Could not import the official OP, EB and PRB sets.')
     } finally {
       setImportingSets(false)
     }
@@ -848,8 +850,8 @@ function CollectionsSection({ categories, sets, onRefresh }) {
           </form>
         </div>
         <div>
-          <div className="collection-heading-row"><h3>Card sets <span>{sets.length}</span></h3><button className="button button--outline" type="button" onClick={importOfficialSets} disabled={importingSets}>{importingSets ? 'Adding sets…' : 'Add all OP & EB sets'}</button></div>
-          <p className="admin-muted">Imports the English OP-01 to OP-18 and EB-01 to EB-05 set list. Existing sets are kept and duplicates are skipped.</p>
+          <div className="collection-heading-row"><h3>Card sets <span>{sets.length}</span></h3><button className="button button--outline" type="button" onClick={importOfficialSets} disabled={importingSets}>{importingSets ? 'Adding sets…' : 'Add all OP, EB & PRB sets'}</button></div>
+          <p className="admin-muted">Imports the English OP-01 to OP-18, EB-01 to EB-05 and PRB-01 to PRB-02 set list. Existing sets are kept and duplicates are skipped.</p>
           {sets.length ? sets.map((item) => <p className="collection-row" key={item.id}><Box size={15} />{item.name}{item.code ? ` · ${item.code}` : ''}</p>) : <p className="admin-muted">No sets are visible yet.</p>}
           <form className="collection-add-form" onSubmit={addSet}>
             <label className="form-field"><span>Set name</span><input required value={setName} onChange={(event) => setSetName(event.target.value)} /></label>
