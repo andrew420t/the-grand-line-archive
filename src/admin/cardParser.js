@@ -36,7 +36,7 @@ const capture = (text, expression) => {
 const cleanLabel = (value) => value.replace(/^[\s:：-]+|[\s:：-]+$/g, '').trim()
 
 const normalizeOcrCardNumberText = (source) => String(source || '').replace(
-  /\b(OP|EB|PRB)\s*[- ]?([O0-9]{1,3})\s*[-–]\s*(\d{3})\b/gi,
+  /\b(OP|EB|ST|PRB)\s*[- ]?([O0-9]{1,3})\s*[-–]\s*(\d{3})\b/gi,
   (_, prefix, rawSetNumber, cardNumber) => {
     let setNumber = rawSetNumber.toUpperCase().replace(/O/g, '0')
     // OCR sometimes reads a leading zero as an extra character (OP O02, EB0O1, PRB O1).
