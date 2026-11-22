@@ -191,3 +191,11 @@ The user supplied screenshots from a separate card-scanning app showing two real
 - OCR language: card is visibly English, but the OCR result itself does not reliably classify language.
 - Catalogue matching/ranking: **not tested against the live app/catalogue**; web reference was manually used to confirm identity.
 - Real photo test status: **FAIL for automatic ID OCR in this photo; partial rules OCR**. Image is oblique, has reflective glare/holder, small code/name print, and low contrast near the bottom. This is a valuable real-photo failure sample for preprocessing/ROI/camera quality handling, not a synthetic test.
+
+
+### Additional preprocessing attempt on Test #1
+Applied manual card-face perspective rectification (approximate 4-corner homography), 3× upscaling, grayscale and CLAHE contrast enhancement, and Tesseract PSM variants (6, 7, 11, 13) to the title, rules and card-number edge regions. This is offline preprocessing experimentation, not an app implementation.
+- Rectified card title: still failed exact OCR. OCR variants produced noisy approximations such as `Bainigsinamrock` and `Saihimsmamrock`, not reliable enough to accept.
+- Rules region: slightly more legible fragments after rectification/upscale, but remains incomplete and substituted; no full correct transcription.
+- Collector-number region: no reliable code output; tiny vertical/edge print and glare made OCR unsuccessful.
+- Best result: image crop/rectification improved visibility for human review and partial rules-text extraction, but did not achieve reliable automatic card identification. This photo remains an automatic OCR failure. The next implementation direction is automatic card-border detection/rectification, region-specific OCR, and confidence-based candidate search rather than title/number hard-fail.
