@@ -575,6 +575,7 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
       if (field.numeric) payload[field.column] = value === '' ? null : Number(value)
       else if (field.checkbox) payload[field.column] = Boolean(value)
       else if (field.select && value === '') payload[field.column] = null
+      else if (field.options && value === '') payload[field.column] = null
       else payload[field.column] = value
     })
     if ('updated_at' in raw) payload.updated_at = new Date().toISOString()
@@ -627,6 +628,7 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
         <label className="form-field" key={field.key}>
           <span>{field.label}</span>
           <select value={value || ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))}>
+            <option value="">— Clear field —</option>
             {options.map((option) => <option value={option} key={option}>{option}</option>)}
           </select>
         </label>
@@ -637,6 +639,7 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
         <label className="form-field" key={field.key}>
           <span>{field.label}</span>
           <select value={value || ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))}>
+            <option value="">— Clear field —</option>
             {['Near Mint', 'Lightly Played', 'Moderately Played', 'Heavily Played', 'Damaged'].map((condition) => <option key={condition}>{condition}</option>)}
           </select>
         </label>
