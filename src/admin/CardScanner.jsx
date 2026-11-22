@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { AlertCircle, ArrowRight, Check, LoaderCircle, ScanLine } from 'lucide-react'
 import { CARD_FIELDS, parseCardDetails } from './cardParser'
+import { rankCatalogueMatches } from './cardMatchRanking'
 import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
 import CatalogueReferenceImage from './CatalogueReferenceImage'
 
@@ -97,16 +98,9 @@ export default function CardScanner({
           const matches = await findCatalogueMatches(detectedNumber)
           setAutoMatches(matches)
           if (matches.length) {
-            const detectedName = String(parsed.name?.value || '').trim().toLowerCase()
             let rememberedId = ''
             try { rememberedId = window.localStorage.getItem('glaScannerCardMatch:' + detectedNumber) || '' } catch { /* storage may be unavailable */ }
-            const ranked = matches.map((match) => {
-              const nameMatch = detectedName && String(match.name || '').trim().toLowerCase() === detectedName
-              const languageMatch = parsed.language?.value
-                ? String(match.language || '').toLowerCase().includes(parsed.language.value.toLowerCase())
-                : false
-              return { match, nameMatch, languageMatch, remembered: match.id === rememberedId }
-            }).sort((a, b) => Number(b.remembered) - Number(a.remembered) || Number(b.nameMatch) - Number(a.nameMatch) || Number(b.languageMatch) - Number(a.languageMatch))
+            const ranked = rankCatalogueMatches(matches, parsed.name?.value, parsed.language?.value, rememberedId)
             const best = ranked[0]
             setRankedAutoMatches(ranked)
             setSelectedAutoMatchId(best.match.id)
