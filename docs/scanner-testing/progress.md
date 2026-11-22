@@ -158,3 +158,6 @@ Sampling method: first two unique card numbers (sorted) with product-linked imag
 - PR #23 language-fallback fix first CI run #90 exposed a regression: parser calls without a selected-language argument now defaulted to English. The fix preserves a blank parser default and passes the selected OCR language from the scanner both on initial scan and re-extract. CI run #91 passed all tests, lint, and build; PR #23 was squash-merged to master as 0af959d87852956fbc65937ad24bfb01adda3cc1.
 
 - **PR #23 merged and verified:** scanner now uses selected `eng`/`jpn` as language fallback; Japanese/Korean script and explicit language labels take precedence. Regression coverage was added. CI #91 passed tests, lint and production build. The first CI run #90 failed, correctly catching that parser default had unintentionally changed; the fix was made before merge.
+
+- **PR #24 merged:** extracted candidate-ranking priority into pure `rankCatalogueMatches` helper and added four unit tests covering remembered choice, OCR-name priority, language priority, and empty results. CI run #92 passed `npm test`, lint, and production build. This gives automated coverage for the ranking logic but still does not exercise the live Supabase catalogue dataset or UI popup.
+- Current automated parser/ranking test suite: **12 tests passing** (CI run #92).
