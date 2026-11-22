@@ -104,11 +104,15 @@ export default function CardScanner({
                 ? String(match.language || '').toLowerCase().includes(parsed.language.value.toLowerCase())
                 : false
               return { match, nameMatch, languageMatch }
-            }).sort((a, b) => {
-              let rememberedId = ''
-              try { rememberedId = window.localStorage.getItem('glaScannerCardMatch:' + detectedNumber) || '' } catch { /* storage may be unavailable */ }
-              return Number(b.match.id === rememberedId) - Number(a.match.id === rememberedId) || Number(b.nameMatch) - Number(a.nameMatch) || Number(b.languageMatch) - Number(a.languageMatch)
-            })
+            let rememberedId = ''
+            try { rememberedId = window.localStorage.getItem('glaScannerCardMatch:' + detectedNumber) || '' } catch { /* storage may be unavailable */ }
+            const ranked = matches.map((match) => {
+              const nameMatch = detectedName && String(match.name || '').trim().toLowerCase() === detectedName
+              const languageMatch = parsed.language?.value
+                ? String(match.language || '').toLowerCase().includes(parsed.language.value.toLowerCase())
+                : false
+              return { match, nameMatch, languageMatch, remembered: match.id === rememberedId }
+            }).sort((a, b) => Number(b.remembered) - Number(a.remembered) || Number(b.nameMatch) - Number(a.nameMatch) || Number(b.languageMatch) - Number(a.languageMatch))
             const best = ranked[0]
             setRankedAutoMatches(ranked)
             setSelectedAutoMatchId(best.match.id)
@@ -324,7 +328,7 @@ export default function CardScanner({
             )}
             {rankedAutoMatches.length > 1 && (
               <div className="scanner-match-confirmation__options">
-                <strong>Other possible matches</strong>
+                <strong>Select the card you believe is correct</strong>
                 <div className="scanner-match-confirmation__list">
                   {rankedAutoMatches.map(({ match, nameMatch, languageMatch }) => (
                     <button className={selectedAutoMatchId === match.id ? 'scanner-match-confirmation__option scanner-match-confirmation__option--selected' : 'scanner-match-confirmation__option'} type="button" key={match.id} onClick={() => setSelectedAutoMatchId(match.id)}>
