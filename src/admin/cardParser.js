@@ -46,7 +46,7 @@ const normalizeOcrCardNumberText = (source) => String(source || '').replace(
   },
 )
 
-export function parseCardDetails(text, recognizedLines = [], recognitionLanguage = 'eng') {
+export function parseCardDetails(text, recognizedLines = [], recognitionLanguage = '') {
   const source = String(text || '')
   const cardNumberSource = normalizeOcrCardNumberText(source)
   const lines = recognizedLines
