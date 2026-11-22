@@ -631,6 +631,7 @@ function Storefront() {
     setMaxPrice('')
   }
 
+  const imageFilter = { original:'none', grayscale:'grayscale(1)', sepia:'sepia(.78)', contrast:'contrast(1.3) saturate(.85)', soft:'saturate(.68) brightness(1.08)' }[siteSettings.card_image_filter] || 'none'
   const storefrontPage = !['/admin', '/admin/access'].includes(location.pathname)
   const storefrontStyle = storefrontPage ? {
     '--ink': siteSettings.site_background || '#11110f',
@@ -645,7 +646,6 @@ function Storefront() {
   } : undefined
   const bg = location.pathname === '/' ? siteSettings.homepage_background_image : siteSettings.storefront_background_image
   const safeBg = typeof bg === 'string' && /^https:\/\//i.test(bg) ? bg : ''
-  const imageFilter = { original:'none', grayscale:'grayscale(1)', sepia:'sepia(.78)', contrast:'contrast(1.3) saturate(.85)', soft:'saturate(.68) brightness(1.08)' }[siteSettings.card_image_filter] || 'none'
   return (
     <div className="site-shell" style={storefrontPage ? { ...storefrontStyle, backgroundImage: safeBg ? 'linear-gradient(rgba(17,17,15,.88), rgba(17,17,15,.92)), url("' + safeBg + '")' : undefined, backgroundSize: 'cover', backgroundAttachment: 'fixed' } : undefined}>
       {siteSettings.announcement_enabled !== false && <div className="announcement">
