@@ -64,7 +64,7 @@ test('normalizes common OCR zero-versus-letter errors in set codes', () => {
     ['EBOO1-008', 'EB01-008'],
     ['EBO2-015', 'EB02-015'],
     ['PRBO1-001', 'PRB01-001'],
-    ['PRBO2-050', 'PRB02-050'],
+    ['PRBO2-050', 'PRB02-050'],\n    ['STO1-004', 'ST01-004'],
   ]
   for (const [ocr, expected] of cases) {
     const fields = parseCardDetails(ocr)
