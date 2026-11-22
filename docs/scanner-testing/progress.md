@@ -199,3 +199,7 @@ Applied manual card-face perspective rectification (approximate 4-corner homogra
 - Rules region: slightly more legible fragments after rectification/upscale, but remains incomplete and substituted; no full correct transcription.
 - Collector-number region: no reliable code output; tiny vertical/edge print and glare made OCR unsuccessful.
 - Best result: image crop/rectification improved visibility for human review and partial rules-text extraction, but did not achieve reliable automatic card identification. This photo remains an automatic OCR failure. The next implementation direction is automatic card-border detection/rectification, region-specific OCR, and confidence-based candidate search rather than title/number hard-fail.
+
+
+### Follow-up OCR variants on Test #1 (23 Nov)
+Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAHE, and sharpening, all upscaled 4×. OCR still did not recover the card title or card code. The best partial rules-text variants recognized fragments including “On K.O.”, “You may trash 1 card from your hand”, and “Character card from your trash”, but still missed/garbled other text. **No auto-identification pass**. This confirms ROI processing helps recover some key text but title/code remain the hardest, likely because of foil reflections, tiny vertical code print, and perspective/holder obstruction.
