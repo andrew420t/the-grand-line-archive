@@ -47,7 +47,8 @@ const normalizeOcrCardNumberText = (source) => String(source || '').replace(
 )
 
 export function parseCardDetails(text, recognizedLines = []) {
-  const source = String(text || '')\n  const cardNumberSource = normalizeOcrCardNumberText(source)
+  const source = String(text || '')
+  const cardNumberSource = normalizeOcrCardNumberText(source)
   const lines = recognizedLines
     .map((line) => ({
       text: String(line.text || '').trim(),
