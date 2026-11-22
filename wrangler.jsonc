@@ -2,8 +2,7 @@
   "name": "the-grand-line-archive",
   "compatibility_date": "2026-11-20",
   "assets": {
-    "directory": "./dist",
-    "binding": "ASSETS"
+    "directory": "./dist"
   },
   "previews": {}
 }
