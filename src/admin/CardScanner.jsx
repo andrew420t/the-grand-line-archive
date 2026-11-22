@@ -105,7 +105,7 @@ export default function CardScanner({
         (numberResult.data.blocks || []).flatMap((block) =>
           (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
         )
-      const combinedText = [numberResult.data.text || '', data.text || ''].filter(Boolean).join('\\n')
+      const combinedText = [numberResult.data.text || '', data.text || ''].filter(Boolean).join('\n')
       const combinedLines = [...numberLines, ...lines]
       setRawText(combinedText)
       const parsed = parseCardDetails(combinedText, combinedLines, recognitionLanguage)
