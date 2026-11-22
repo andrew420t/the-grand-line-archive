@@ -88,10 +88,10 @@ Sampling method: first two unique card numbers (sorted) with product-linked imag
 | OP17 | English | 2 | EB04-061 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB04-061_p2.png |
 | OP17 | Japanese | 1 | EB04-007 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB04-007_p2.png |
 | OP17 | Japanese | 2 | EB04-061 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB04-061_p3.png |
-| OP18 | English | 1 | MISSING | — | — |
-| OP18 | English | 2 | MISSING | — | — |
-| OP18 | Japanese | 1 | MISSING | — | — |
-| OP18 | Japanese | 2 | MISSING | — | — |
+| OP18 | English | 1 | OP18-001 | Karoo | https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png (candidate; not load-verified) |
+| OP18 | English | 2 | OP18-002 | Igaram | https://en.onepiece-cardgame.com/images/cardlist/card/OP18-002.png (candidate; not load-verified) |
+| OP18 | Japanese | 1 | OP18-001 | カルー (Karoo) | https://www.onepiece-cardgame.com/images/cardlist/card/OP18-001.png (candidate; not load-verified) |
+| OP18 | Japanese | 2 | OP18-002 | イガラム (Igaram) | https://www.onepiece-cardgame.com/images/cardlist/card/OP18-002.png (candidate; not load-verified) |
 | EB01 | English | 1 | EB01-001 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-001.png |
 | EB01 | English | 2 | EB01-002 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-002.png |
 | EB01 | Japanese | 1 | EB01-001 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-001.png |
@@ -108,10 +108,10 @@ Sampling method: first two unique card numbers (sorted) with product-linked imag
 | EB04 | English | 2 | EB01-023 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-023_p1.png |
 | EB04 | Japanese | 1 | EB01-023 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-023_p2.png |
 | EB04 | Japanese | 2 | EB04-001 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB04-001.png |
-| EB05 | English | 1 | MISSING | — | — |
-| EB05 | English | 2 | MISSING | — | — |
-| EB05 | Japanese | 1 | MISSING | — | — |
-| EB05 | Japanese | 2 | MISSING | — | — |
+| EB05 | English | 1 | EB05-001 | Jewelry Bonney | https://en.onepiece-cardgame.com/images/cardlist/card/EB05-001.png (candidate; not load-verified) |
+| EB05 | English | 2 | EB05-002 | Doll | https://en.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (candidate; not load-verified) |
+| EB05 | Japanese | 1 | EB05-001 | ジュエリー・ボニー (Jewelry Bonney) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-001.png (candidate; not load-verified) |
+| EB05 | Japanese | 2 | EB05-002 | ドール (Doll) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (candidate; not load-verified) |
 | PRB01 | English | 1 | EB01-006 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png |
 | PRB01 | English | 2 | OP01-006 | — | https://en.onepiece-cardgame.com/images/cardlist/card/OP01-006_p3.png |
 | PRB01 | Japanese | 1 | EB01-006 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png |
@@ -148,3 +148,11 @@ Sampling method: first two unique card numbers (sorted) with product-linked imag
 - Re-attempted production Worker open: browser fetch returned DisabledError; production remains **unverifiable** in this environment. A local shallow Git clone also failed because DNS cannot resolve github.com. GitHub repository connector access remains available.
 - Code review identified an additional language-ranking weakness: the scanner's OCR-selected language was not passed to the parser. Without a language label in OCR, English cards can leave the language field blank, weakening candidate ranking. PR #23 adds a selected-language fallback and regression tests; its CI is pending at time of writing.
 - Source/image and real card-photo OCR blocker persists: external image hosts cannot be reached/downloaded from the runtime. No real-card OCR results are claimed.
+
+
+## OP18 / EB05 reference supplement — 22 November 2026
+- Replaced the 8 `MISSING` placeholders with named card-number samples and official-image URL candidates. These 8 references were checked against the current set lists: OP18-001 Karoo / カルー; OP18-002 Igaram / イガラム; EB05-001 Jewelry Bonney / ジュエリー・ボニー; EB05-002 Doll / ドール.
+- Secondary card-list verification: OP18 list references <https://www.shonentcg.com/blog/op-18-revealed-cards-tracker> and <https://opchase.gg/sets/op18/>; EB05 references <https://portaltcg.co.uk/blogs/news/one-piece-heroines-edition-vol-2-release-date-card-list> and <https://opchase.gg/guides/eb05-card-list-pitfalls/>.
+- Attempted all 8 official image candidates directly through the browser tool (EN and JP URLs for OP18-001/002 and EB05-001/002). All returned inaccessible via the tool. Therefore: **source names/numbers verified; image load failed/unverifiable; no OCR output; catalogue matches/ranking not exercised.** The candidate URLs remain unverified and are not counted as loaded.
+- Dataset inspection through GitHub connector: the current Koala Kollect data files contain 99 English and 92 Japanese product entries, but OP18/EB05 codes are not yet in those product lists; `cards.jsonl` also has zero OP18/EB05 rows. Large printing/observation files were not fetchable through the connector. Thus catalogue freshness gap is confirmed at source-dataset level.
+- PR #23 language-fallback fix first CI run #90 failed at an existing test that expected no language when the parser had no selected-language argument. The fix was adjusted so the parser default remains blank and scanner explicitly passes the selected language both on initial scan and re-extract. New CI run #91 is queued; this change is not yet approved/merged.
