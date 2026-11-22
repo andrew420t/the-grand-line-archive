@@ -7,8 +7,9 @@ import {
 } from './productStorage'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS } from './productSchema'
 import { supabase } from '../lib/supabase'
-import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride, collectrSearchUrl } from './cardCatalogue'
-import CatalogueReferenceImage from './CatalogueReferenceImage'
+import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride } from './cardCatalogue'
+import CatalogueMatchCard from './CatalogueMatchCard'
+import CatalogueLanguageButtons from './CatalogueLanguageButtons'
 
 const initialProduct = () => ({
   name: '',
@@ -324,7 +325,7 @@ export default function QuickAddPanel({
 
       <form className="quick-add-form" onSubmit={submit}>
         <div className="form-grid">
-          <label className="form-field form-field--wide"><span>Card name / character *</span><input required value={form.name} onChange={(event) => setField('name', event.target.value)} placeholder="e.g. Monkey D. Luffy" /></label>
+          <div className="form-field form-field--wide"><span>Card name / character *</span><input required value={form.name} onChange={(event) => setField('name', event.target.value)} placeholder="e.g. Monkey D. Luffy" /><CatalogueLanguageButtons cardNumber={form.card_number} fieldKey="name" onApply={(value, language) => setForm((current) => ({ ...current, name: value, language }))} /></div>
           <label className="form-field"><span>Card number</span><input value={form.card_number} onChange={(event) => setField('card_number', event.target.value)} placeholder="OP05-119" /></label>
           <div className="form-field form-field--wide catalogue-lookup-control">
             <button className="button button--outline" type="button" disabled={!form.card_number.trim() || catalogueLoading} onClick={lookupCard}>
@@ -338,19 +339,7 @@ export default function QuickAddPanel({
             )}
             {catalogueError && <span className="form-error">{catalogueError}</span>}
             {catalogueMatches.map((match) => (
-              <article className="catalogue-match-card" key={match.id}>
-                <CatalogueReferenceImage match={match} className="catalogue-match-card__image" />
-                <div className="catalogue-match-card__details">
-                  <strong>{match.name || 'Card name unavailable'}</strong>
-                  <span>{match.language} · {match.setCode || 'Promo / set not listed'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
-                  <small>{match.colors || 'Colour not listed'} · {match.category || 'Card'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
-                  {match.setName && <small>{match.setName}</small>}
-                  <div className="catalogue-match-card__actions">
-                    <button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), '_blank', 'noopener,noreferrer')}>Open on Collectr ↗</button>
-                    <button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use this printing</button>
-                  </div>
-                </div>
-              </article>
+              <CatalogueMatchCard key={match.id} match={match} onUseDetails={() => applyCatalogueMatch(match)} useLabel="Use this printing" />
             ))}
           </div>
           <label className="form-field"><span>Set code</span><input value={form.set_code} onChange={(event) => setField('set_code', event.target.value)} placeholder="OP05" /><small>Matched to the existing sets.code value.</small></label>
@@ -359,7 +348,7 @@ export default function QuickAddPanel({
           <label className="form-field"><span>Power</span><input inputMode="numeric" value={form.power} onChange={(event) => setField('power', event.target.value.replace(/[^\d]/g, ''))} placeholder="5000" /></label>
           <label className="form-field"><span>Cost</span><input inputMode="numeric" value={form.cost} onChange={(event) => setField('cost', event.target.value.replace(/[^\d]/g, ''))} placeholder="5" /></label>
           <label className="form-field"><span>Card type</span><input value={form.card_type} onChange={(event) => setField('card_type', event.target.value)} placeholder="Character" /></label>
-          <label className="form-field"><span>Classification</span><input value={form.classification} onChange={(event) => setField('classification', event.target.value)} placeholder="Character / Leader" /></label>
+          <div className="form-field"><span>Classification</span><input value={form.classification} onChange={(event) => setField('classification', event.target.value)} placeholder="Character / Leader" /><CatalogueLanguageButtons cardNumber={form.card_number} fieldKey="classification" onApply={(value, language) => setForm((current) => ({ ...current, classification: value, language }))} /></div>
           <label className="form-field"><span>Language</span><select value={form.language} onChange={(event) => setField('language', event.target.value)}><option value="">Choose language</option>{languageOptions.map((language) => <option key={language}>{language}</option>)}</select></label>
           <label className="form-field"><span>Condition</span><select value={form.condition} onChange={(event) => setField('condition', event.target.value)}><option>Near Mint</option><option>Lightly Played</option><option>Moderately Played</option><option>Heavily Played</option><option>Damaged</option></select></label>
           <label className="form-field"><span>Category</span><select value={form.category_id} onChange={(event) => setField('category_id', event.target.value)}><option value="">Choose category</option>{categories.map((category) => <option value={category.id} key={category.id}>{category.name}</option>)}</select></label>
@@ -367,7 +356,7 @@ export default function QuickAddPanel({
           <label className="form-field"><span>Variant label</span><input value={form.variant_label} onChange={(event) => setField('variant_label', event.target.value)} placeholder="Parallel / alternate art, if applicable" /></label>
           <label className="check-field"><input type="checkbox" checked={form.featured} onChange={(event) => setField('featured', event.target.checked)} /><span>Feature this product on the homepage</span></label>
           <label className="form-field form-field--wide"><span>Product description</span><textarea rows="3" value={form.description} onChange={(event) => setField('description', event.target.value)} /></label>
-          <label className="form-field form-field--wide"><span>Card effect / text</span><textarea rows="4" value={form.effect_text} onChange={(event) => setField('effect_text', event.target.value)} placeholder="Enter only text verified from the card." /></label>
+          <div className="form-field form-field--wide"><span>Card effect / text</span><textarea rows="4" value={form.effect_text} onChange={(event) => setField('effect_text', event.target.value)} placeholder="Enter only text verified from the card." /><CatalogueLanguageButtons cardNumber={form.card_number} fieldKey="effect_text" onApply={(value, language) => setForm((current) => ({ ...current, effect_text: value, language }))} /></div>
           <label className="form-field"><span>Selling price · GBP *</span><div className="price-input"><span>£</span><input required type="number" min="0" step="0.01" value={form.price_gbp} onChange={(event) => setField('price_gbp', event.target.value)} placeholder="0.00" /></div></label>
           <label className="form-field"><span>Quantity *</span><input required type="number" min="0" step="1" value={form.stock_quantity} onChange={(event) => setField('stock_quantity', event.target.value)} /></label>
         </div>
