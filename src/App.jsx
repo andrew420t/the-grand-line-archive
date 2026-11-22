@@ -640,12 +640,14 @@ function Storefront() {
     '--line': siteSettings.site_divider || '#c9a866',
     '--site-heading': siteSettings.site_heading || '#e7e1d3',
     '--site-font-scale': String(Number(siteSettings.site_font_scale || 100) / 100),
+    '--card-image-filter': imageFilter,
+    '--card-image-fit': siteSettings.card_image_fit || 'cover',
   } : undefined
   const bg = location.pathname === '/' ? siteSettings.homepage_background_image : siteSettings.storefront_background_image
   const safeBg = typeof bg === 'string' && /^https:\/\//i.test(bg) ? bg : ''
   const imageFilter = { original:'none', grayscale:'grayscale(1)', sepia:'sepia(.78)', contrast:'contrast(1.3) saturate(.85)', soft:'saturate(.68) brightness(1.08)' }[siteSettings.card_image_filter] || 'none'
   return (
-    <div className="site-shell" style={storefrontStyle}>
+    <div className="site-shell" style={storefrontPage ? { ...storefrontStyle, backgroundImage: safeBg ? 'linear-gradient(rgba(17,17,15,.88), rgba(17,17,15,.92)), url("' + safeBg + '")' : undefined, backgroundSize: 'cover', backgroundAttachment: 'fixed' } : undefined}>
       {siteSettings.announcement_enabled !== false && <div className="announcement">
         <span>{siteSettings.announcement_headline}</span>
         <i />
@@ -772,7 +774,7 @@ function Storefront() {
                 </div>
                 <div className="hero-art">
                   <div className="hero-art__frame">
-                    <div className="hero-art__image" style={{ backgroundImage: safeBg ? 'linear-gradient(#1119,#1119), url("' + safeBg + '")' : undefined, backgroundPosition: siteSettings.homepage_background_position || 'center center' }}>
+                    <div className="hero-art__image">
                       {cardOfTheWeek ? (
                         <Link to={`/product/${encodeURIComponent(cardOfTheWeek.id)}`} aria-label={`View ${cardOfTheWeek.name}`}><ProductImage product={cardOfTheWeek} className="card-of-week-image" /></Link>
                       ) : (
