@@ -572,15 +572,31 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
     const payload = {}
     fields.forEach((field) => {
       const value = values[field.key]
-      if (field.numeric) payload[field.column] = value === '' ? null : Number(value)
-      else if (field.checkbox) payload[field.column] = Boolean(value)
-      else if (field.select && value === '') payload[field.column] = null
-      else if (field.options && value === '') payload[field.column] = null
-      else payload[field.column] = value
+      if (field.numeric) {
+        // Power and cost are optional card details; price and stock are required
+        // inventory values and must not be cleared accidentally.
+        payload[field.column] = value === '' ? null : Number(value)
+      } else if (field.checkbox) {
+        payload[field.column] = Boolean(value)
+      } else if (field.select && value === '') {
+        payload[field.column] = null
+      } else if (field.options && value === '') {
+        payload[field.column] = null
+      } else if (typeof value === 'string' && value.trim() === '' && !field.required) {
+        // Store cleared optional text fields as NULL, not an empty string.
+        payload[field.column] = null
+      } else {
+        payload[field.column] = value
+      }
     })
     if ('updated_at' in raw) payload.updated_at = new Date().toISOString()
     if (fields.some((field) => field.key === 'name') && !String(values.name || '').trim()) {
       setError('Card name is required.')
+      return
+    }
+    if (fields.some((field) => field.key === 'price' || field.key === 'stock') &&
+        fields.some((field) => ['price', 'stock'].includes(field.key) && values[field.key] === '')) {
+      setError('Price and stock quantity are required. Optional card details can be cleared.')
       return
     }
     if (Object.values(payload).some((value) => typeof value === 'number' && !Number.isFinite(value))) {
