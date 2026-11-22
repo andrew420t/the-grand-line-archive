@@ -687,6 +687,31 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
   )
 }
 
+const ONE_PIECE_OP_EB_SETS = [
+  { code: 'OP-01', name: 'Romance Dawn' },
+  { code: 'OP-02', name: 'Paramount War' },
+  { code: 'OP-03', name: 'Pillars of Strength' },
+  { code: 'OP-04', name: 'Kingdoms of Intrigue' },
+  { code: 'OP-05', name: 'Awakening of the New Era' },
+  { code: 'OP-06', name: 'Wings of the Captain' },
+  { code: 'OP-07', name: '500 Years in the Future' },
+  { code: 'OP-08', name: 'Two Legends' },
+  { code: 'OP-09', name: 'Emperors in the New World' },
+  { code: 'OP-10', name: 'Royal Blood' },
+  { code: 'OP-11', name: 'A Fist of Divine Speed' },
+  { code: 'OP-12', name: 'Legacy of the Master' },
+  { code: 'OP-13', name: 'Carrying On His Will' },
+  { code: 'OP14-EB04', name: "The Azure Sea's Seven" },
+  { code: 'OP15-EB04', name: "Adventure on Kami's Island" },
+  { code: 'OP-16', name: 'The Time of Battle' },
+  { code: 'OP-17', name: "The World's Strongest Warriors" },
+  { code: 'OP-18', name: 'The Dominance of God' },
+  { code: 'EB-01', name: 'Memorial Collection' },
+  { code: 'EB-02', name: 'Anime 25th Collection' },
+  { code: 'EB-03', name: 'One Piece Heroines Edition' },
+  { code: 'EB-04', name: 'Egghead Crisis' },
+  { code: 'EB-05', name: 'One Piece Heroines Edition vol.2' },
+]
 function CollectionsSection({ categories, sets, onRefresh }) {
   const [categoryName, setCategoryName] = useState('')
   const [setName, setSetName] = useState('')
@@ -695,6 +720,44 @@ function CollectionsSection({ categories, sets, onRefresh }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
+  const [importingSets, setImportingSets] = useState(false)
+
+  const importOfficialSets = async () => {
+    if (!supabase) {
+      setError('Supabase is not configured.')
+      return
+    }
+    setImportingSets(true)
+    setError('')
+    setNotice('')
+    try {
+      const existing = await supabase.from('sets').select('id,name,code')
+      if (existing.error) throw new Error('Could not read existing card sets: ' + existing.error.message)
+      const knownCodes = new Set((existing.data || []).map((item) => String(item.code || '').replace(/-/g, '').toUpperCase()).filter(Boolean))
+      const knownNames = new Set((existing.data || []).map((item) => String(item.name || '').trim().toLowerCase()).filter(Boolean))
+      const missing = ONE_PIECE_OP_EB_SETS.filter((item) =>
+        !knownCodes.has(item.code.replace(/-/g, '').toUpperCase()) && !knownNames.has(item.name.toLowerCase())
+      )
+      if (!missing.length) {
+        setNotice('All 23 OP and EB sets are already in Card Sets. Nothing needed adding.')
+        return
+      }
+      const result = await supabase.from('sets').insert(missing.map((item) => ({
+        id: globalThis.crypto.randomUUID(),
+        name: item.name,
+        code: item.code,
+        description: 'One Piece Card Game ' + item.code + ' set',
+        created_at: new Date().toISOString(),
+      })))
+      if (result.error) throw new Error('Could not add the card sets: ' + result.error.message)
+      setNotice('Added ' + missing.length + ' missing OP and EB sets. ' + (ONE_PIECE_OP_EB_SETS.length - missing.length) + ' were already present.')
+      onRefresh()
+    } catch (importError) {
+      setError(importError.message || 'Could not import the official OP and EB sets.')
+    } finally {
+      setImportingSets(false)
+    }
+  }
 
   const addCategory = async (event) => {
     event.preventDefault()
@@ -785,7 +848,8 @@ function CollectionsSection({ categories, sets, onRefresh }) {
           </form>
         </div>
         <div>
-          <h3>Card sets <span>{sets.length}</span></h3>
+          <div className="collection-heading-row"><h3>Card sets <span>{sets.length}</span></h3><button className="button button--outline" type="button" onClick={importOfficialSets} disabled={importingSets}>{importingSets ? 'Adding sets…' : 'Add all OP & EB sets'}</button></div>
+          <p className="admin-muted">Imports the English OP-01 to OP-18 and EB-01 to EB-05 set list. Existing sets are kept and duplicates are skipped.</p>
           {sets.length ? sets.map((item) => <p className="collection-row" key={item.id}><Box size={15} />{item.name}{item.code ? ` · ${item.code}` : ''}</p>) : <p className="admin-muted">No sets are visible yet.</p>}
           <form className="collection-add-form" onSubmit={addSet}>
             <label className="form-field"><span>Set name</span><input required value={setName} onChange={(event) => setSetName(event.target.value)} /></label>
