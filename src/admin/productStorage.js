@@ -112,28 +112,40 @@ export async function uploadProductPhotos({ productId, userId, photos }) {
   } catch (error) {
     const cleanupMessages = []
     if (productImageUpdateAttempted) {
-      const restoreResult = await supabase
-        .from('products')
-        .update({
-          image_url: previousProductImageUrl,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', productId)
-        // Restore only if this upload still owns the front-image value. A
-        // concurrent admin edit must not be overwritten by rollback.
-        .eq('image_url', imageRecords.find((image) => image.role === 'front')?.image_url)
-      if (restoreResult.error) cleanupMessages.push(`product image rollback failed: ${restoreResult.error.message}`)
+      try {
+        const restoreResult = await supabase
+          .from('products')
+          .update({
+            image_url: previousProductImageUrl,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', productId)
+          // Restore only if this upload still owns the front-image value. A
+          // concurrent admin edit must not be overwritten by rollback.
+          .eq('image_url', imageRecords.find((image) => image.role === 'front')?.image_url)
+        if (restoreResult.error) cleanupMessages.push(`product image rollback failed: ${restoreResult.error.message}`)
+      } catch (restoreError) {
+        cleanupMessages.push(`product image rollback failed: ${restoreError.message || String(restoreError)}`)
+      }
     }
     if (metadataInserted) {
-      const deleteResult = await supabase
-        .from('product_images')
-        .delete()
-        .in('storage_path', uploadedPaths)
-      if (deleteResult.error) cleanupMessages.push(`image metadata cleanup failed: ${deleteResult.error.message}`)
+      try {
+        const deleteResult = await supabase
+          .from('product_images')
+          .delete()
+          .in('storage_path', uploadedPaths)
+        if (deleteResult.error) cleanupMessages.push(`image metadata cleanup failed: ${deleteResult.error.message}`)
+      } catch (deleteError) {
+        cleanupMessages.push(`image metadata cleanup failed: ${deleteError.message || String(deleteError)}`)
+      }
     }
     if (uploadedPaths.length) {
-      const removeResult = await storage.remove(uploadedPaths)
-      if (removeResult.error) cleanupMessages.push(`Storage cleanup failed: ${removeResult.error.message}`)
+      try {
+        const removeResult = await storage.remove(uploadedPaths)
+        if (removeResult.error) cleanupMessages.push(`Storage cleanup failed: ${removeResult.error.message}`)
+      } catch (removeError) {
+        cleanupMessages.push(`Storage cleanup failed: ${removeError.message || String(removeError)}`)
+      }
     }
     const cleanup = cleanupMessages.length ? ` (${cleanupMessages.join('; ')})` : ''
     throw new Error(`${error.message}${cleanup}`)
