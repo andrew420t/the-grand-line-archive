@@ -171,3 +171,14 @@ test('normalizes set-code punctuation and resolves the matching set ID', async (
   assert.equal(resolveSetIdForCode(sets, 'EB04'), 'eb04-id')
   assert.equal(resolveSetIdForCode(sets, 'OP99'), '')
 })
+
+
+test('catalogue identity fields are cleared when core printing identity is edited', async () => {
+  const { CATALOGUE_IDENTITY_FIELDS } = await import('../src/admin/productSchema.js')
+  assert.deepEqual(CATALOGUE_IDENTITY_FIELDS, [
+    'catalogue_match_id', 'catalogue_printing_key',
+    'catalogue_reference_image_url', 'catalogue_reference_image_source',
+    'reference_image_url', 'reference_printing_key', 'reference_match_id',
+    'reference_image_source',
+  ])
+})
