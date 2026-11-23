@@ -173,12 +173,30 @@ test('normalizes set-code punctuation and resolves the matching set ID', async (
 })
 
 
-test('catalogue identity fields are cleared when core printing identity is edited', async () => {
-  const { CATALOGUE_IDENTITY_FIELDS } = await import('../src/admin/productSchema.js')
-  assert.deepEqual(CATALOGUE_IDENTITY_FIELDS, [
-    'catalogue_match_id', 'catalogue_printing_key',
-    'catalogue_reference_image_url', 'catalogue_reference_image_source',
-    'reference_image_url', 'reference_printing_key', 'reference_match_id',
-    'reference_image_source',
-  ])
+test('editing card number, set, language or variant clears stale catalogue identity', async () => {
+  const { buildQuickAddFieldUpdate } = await import('../src/admin/productSchema.js')
+  const current = {
+    card_number: 'OP17-062', set_code: 'OP17', set_id: 'op17-id',
+    language: 'English', variant_label: 'Normal',
+    catalogue_match_id: 'old-match', catalogue_printing_key: 'old-printing',
+    catalogue_reference_image_url: 'https://example.test/old.png',
+    catalogue_reference_image_source: 'Bandai',
+    reference_image_url: 'https://example.test/old.png',
+    reference_printing_key: 'old-printing', reference_match_id: 'old-match',
+    reference_image_source: 'Bandai',
+  }
+  for (const [field, value] of [
+    ['card_number', 'OP17-063'], ['set_code', 'EB04'],
+    ['language', 'Japanese'], ['variant_label', 'Parallel'],
+  ]) {
+    const updated = buildQuickAddFieldUpdate(current, field, value, [
+      { id: 'op17-id', code: 'OP17' }, { id: 'eb04-id', code: 'EB-04' },
+    ])
+    assert.equal(updated[field], value)
+    for (const key of ['catalogue_match_id', 'catalogue_printing_key', 'catalogue_reference_image_url', 'catalogue_reference_image_source', 'reference_image_url', 'reference_printing_key', 'reference_match_id', 'reference_image_source']) {
+      assert.equal(updated[key], '')
+    }
+    if (field === 'set_code') assert.equal(updated.set_id, 'eb04-id')
+  }
 })
+
