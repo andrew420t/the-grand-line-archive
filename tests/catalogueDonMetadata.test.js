@@ -11,7 +11,9 @@ test('detects DON!! printings from rarity and source text', () => {
 test('recognizes DON category labels with punctuation and spacing', () => {
   assert.equal(isDonCatalogueEntry({ card: { category: 'DON!!' } }), true)
   assert.equal(isDonCatalogueEntry({ observation: { category: 'D O N !!' } }), true)
-  assert.equal(isDonCatalogueEntry({ card: { category: 'don card' } }), false)
+  assert.equal(isDonCatalogueEntry({ card: { category: 'don card' } }), true)
+  assert.equal(isDonCatalogueEntry({ observation: { category: 'DON cards' } }), true)
+  assert.equal(isDonCatalogueEntry({ card: { category: 'donquixote' } }), false)
 })
 
 test('does not misclassify ordinary cards as DON!!', () => {
