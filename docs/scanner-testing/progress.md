@@ -568,3 +568,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Centralized the form update in a pure helper and added regression coverage for all four identity dimensions, including normalized set resolution after a set-code change. CI verification pending. No live inventory/database changes.
 
 - The Collection / set dropdown uses the same identity-aware update path as manual set-code edits, so changing the set through either control cannot retain an obsolete catalogue printing identity.
+
+
+## Admin product deletion confirmation — 23 November 2026
+- Found that the product delete action treated a successful Supabase response with zero affected rows as a completed deletion. Under row-level security or a stale product list, the UI could report success even though no product row was deleted.
+- The delete now requests the deleted row ID and confirms that a row was actually returned before refreshing the inventory or removing its Storage photographs. Added regression tests for confirmed deletion, zero-row/no-error responses, and database/RLS errors.
+- No product rows, Storage objects, or live database policies were changed. CI verification pending.
