@@ -1,3 +1,28 @@
+export function calculateAdaptiveContrastBounds(histogram, totalPixels) {
+  if (!histogram?.length || !totalPixels) return null
+  const percentileCount = Math.max(1, Math.round(totalPixels * 0.04))
+  let low = 0
+  let high = histogram.length - 1
+  let accumulated = 0
+  for (let value = 0; value < histogram.length; value += 1) {
+    accumulated += histogram[value] || 0
+    if (accumulated >= percentileCount) { low = value; break }
+  }
+  accumulated = 0
+  for (let value = histogram.length - 1; value >= 0; value -= 1) {
+    accumulated += histogram[value] || 0
+    if (accumulated >= percentileCount) { high = value; break }
+  }
+  return high - low >= 48 ? { low, high } : null
+}
+
+export function enhanceGrayValue(gray, bounds) {
+  if (bounds && bounds.high > bounds.low) {
+    return Math.max(8, Math.min(247, Math.round((gray - bounds.low) * 239 / (bounds.high - bounds.low) + 8)))
+  }
+  return Math.max(0, Math.min(255, Math.round((gray - 112) * 1.8 + 128)))
+}
+
 const CROP_ZONES = [
   { label: 'Bottom-left number area', x: 0, y: 0.72, width: 0.72, height: 0.28 },
   { label: 'Bottom-right number area', x: 0.28, y: 0.72, width: 0.72, height: 0.28 },
@@ -37,11 +62,18 @@ async function createEnhancedCrop(image, zone, filename) {
   context.imageSmoothingQuality = 'high'
   context.drawImage(image, cropX, cropY, cropWidth, cropHeight, 0, 0, canvas.width, canvas.height)
 
-  // Greyscale + contrast enhancement to preserve small number print.
+  // Adaptive grayscale contrast tolerates darker, brighter, and foil photos.
   const pixels = context.getImageData(0, 0, canvas.width, canvas.height)
-  for (let i = 0; i < pixels.data.length; i += 4) {
+  const histogram = new Uint32Array(256)
+  const grays = new Uint8Array(pixels.data.length / 4)
+  for (let i = 0, pixel = 0; i < pixels.data.length; i += 4, pixel += 1) {
     const gray = Math.round(pixels.data[i] * 0.299 + pixels.data[i + 1] * 0.587 + pixels.data[i + 2] * 0.114)
-    const enhanced = Math.max(0, Math.min(255, (gray - 112) * 1.8 + 128))
+    grays[pixel] = gray
+    histogram[gray] += 1
+  }
+  const bounds = calculateAdaptiveContrastBounds(histogram, grays.length)
+  for (let i = 0, pixel = 0; i < pixels.data.length; i += 4, pixel += 1) {
+    const enhanced = enhanceGrayValue(grays[pixel], bounds)
     pixels.data[i] = enhanced
     pixels.data[i + 1] = enhanced
     pixels.data[i + 2] = enhanced
