@@ -159,7 +159,7 @@ export default function QuickAddPanel({
     if (!form.card_number.trim()) return []
     let query = supabase
       .from('products')
-       .select(`id,name,card_number,set_id${includeVariantMetadata ? ',variant_label,language,catalogue_match_id,catalogue_printing_key' : ''}`)
+      .select(`id,name,card_number,set_id${includeVariantMetadata ? ',variant_label,language,catalogue_match_id,catalogue_printing_key' : ''}`)
       .eq('card_number', form.card_number.trim())
     query = setId ? query.eq('set_id', setId) : query.is('set_id', null)
     const { data, error: queryError } = await query.limit(50)
