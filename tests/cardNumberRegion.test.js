@@ -50,6 +50,13 @@ test('unsharp mask leaves low-contrast noise below its threshold unchanged', () 
 })
 
 
+test('manual crop rounding never extends source bounds by a pixel', () => {
+  const crop = validateManualCardCrop({ x: 0.25, y: 0.25, width: 0.75, height: 0.75 }, 10, 10)
+  assert.deepEqual(crop, { x: 3, y: 3, width: 7, height: 7 })
+  assert.ok(crop.x + crop.width <= 10)
+  assert.ok(crop.y + crop.height <= 10)
+})
+
 test('manual crop validation maps normalized coordinates to pixels', () => {
   assert.deepEqual(validateManualCardCrop({ x: 0.1, y: 0.2, width: 0.6, height: 0.5 }, 1000, 2000), {
     x: 100, y: 400, width: 600, height: 1000,
