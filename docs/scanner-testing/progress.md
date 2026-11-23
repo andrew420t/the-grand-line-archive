@@ -273,3 +273,11 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - A contrast threshold leaves low-detail pixels unchanged so mild foil grain and sensor noise are less likely to be amplified. Sharpening is bounded and does not alter the original uploaded photograph.
 - Added pure-function regression tests for edge strengthening and low-contrast noise preservation.
 - This is a preprocessing enhancement, not a measured OCR-accuracy claim. It still needs browser/physical-card evaluation, especially on foil, glare, and already-sharp images; perspective correction remains outstanding.
+
+
+## Scanner variant-choice clarity — 23 November 2026
+- Reviewed the existing scanner confirmation flow before changing it. It already retained distinct catalogue printing IDs, showed the uploaded photo beside the selected catalogue reference, offered candidate thumbnails, and required an explicit confirmation; it did not auto-save stock.
+- Improved the candidate picker so each option now exposes set name, rarity, and printing variant as well as card number, language, and set code. The selected candidate summary also shows the set name.
+- When multiple catalogue printings share a card number, the confirmation dialog explicitly warns that OCR cannot determine the finish by itself and asks the user to compare the artwork and variant.
+- Added focused regression fixtures for the OP17-062 Kaido normal/parallel pair and Japanese EB04-005 Trafalgar Law. These test candidate retention and identity metadata, not live catalogue completeness or OCR accuracy.
+- Variant selection still requires human confirmation. Price editing/overrides are not implemented in this increment, and no prices are sourced or changed by this UI.
