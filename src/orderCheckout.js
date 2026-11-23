@@ -22,7 +22,7 @@ export function buildCheckoutSnapshot(cart = [], productRows = []) {
     const stock = Number(product.stock_quantity)
     const price = Number(product.price)
     const requestedQuantity = requestedByProduct.get(String(product.id)) || quantity
-    if ((!Number.isInteger(quantity) || quantity < 1 || !Number.isFinite(stock) || stock < requestedQuantity) && !stockIssuesAdded.has(String(product.id))) {
+    if ((!Number.isSafeInteger(quantity) || quantity < 1 || !Number.isSafeInteger(requestedQuantity) || requestedQuantity < 1 || !Number.isFinite(stock) || stock < requestedQuantity) && !stockIssuesAdded.has(String(product.id))) {
       issues.push({ productId: product.id, name: product.name || item.product?.name || 'Card', reason: 'insufficient-stock', stock: Number.isFinite(stock) ? Math.max(0, stock) : 0, requested: requestedQuantity })
       stockIssuesAdded.add(String(product.id))
     }
@@ -60,12 +60,14 @@ export function buildAtomicCheckoutItems(items = []) {
     const productId = String(item?.product?.id ?? '').trim()
     const quantity = Number(item?.quantity)
     const expectedUnitPrice = Number(item?.product?.price)
-    if (!productId || !Number.isInteger(quantity) || quantity < 1 ||
+    if (!productId || !Number.isSafeInteger(quantity) || quantity < 1 ||
         !Number.isFinite(expectedUnitPrice) || expectedUnitPrice < 0) return null
     const previous = combined.get(productId)
     if (previous && previous.expected_unit_price !== expectedUnitPrice) return null
+    const combinedQuantity = (previous?.quantity || 0) + quantity
+    if (!Number.isSafeInteger(combinedQuantity)) return null
     combined.set(productId, {
-      quantity: (previous?.quantity || 0) + quantity,
+      quantity: combinedQuantity,
       expected_unit_price: expectedUnitPrice,
     })
   }
