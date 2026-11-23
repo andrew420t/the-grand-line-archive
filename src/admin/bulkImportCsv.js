@@ -10,6 +10,10 @@ const aliases = {
 
 
 const normalizeImportIdentity = (value) => String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '')
+const normalizeImportVariant = (value) => {
+  const variant = normalizeImportIdentity(value)
+  return ['','normal','base','regular'].includes(variant) ? 'normal' : variant
+}
 const normalizeImportLanguage = (value) => {
   const language = String(value || '').trim().toLowerCase()
   if (['en', 'eng', 'english'].includes(language)) return 'en'
@@ -22,10 +26,10 @@ const normalizeImportLanguage = (value) => {
 export function isBulkImportDuplicate(existing, candidate) {
   const cardNumber = normalizeImportIdentity(existing?.card_number)
   const setCode = normalizeImportIdentity(existing?.set_code)
-  const variant = normalizeImportIdentity(existing?.variant_label)
+  const variant = normalizeImportVariant(existing?.variant_label)
   if (!cardNumber || cardNumber !== normalizeImportIdentity(candidate?.card_number)) return false
   if (setCode !== normalizeImportIdentity(candidate?.set_code)) return false
-  if (variant !== normalizeImportIdentity(candidate?.variant_label)) return false
+  if (variant !== normalizeImportVariant(candidate?.variant_label)) return false
   const existingLanguage = normalizeImportLanguage(existing?.language)
   const candidateLanguage = normalizeImportLanguage(candidate?.language)
   return !existingLanguage || !candidateLanguage || existingLanguage === candidateLanguage
