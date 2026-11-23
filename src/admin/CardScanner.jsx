@@ -366,7 +366,7 @@ export default function CardScanner({
               : result.shared?.reason
                 ? (result.localError ? ' Recognition memory unavailable: ' + result.localError : ' Saved on this browser only. ' + result.shared.reason)
                 : result.duplicate ? ' Existing reference refreshed.' : ' Reference image added to this browser’s recognition library.'
-        } catch (memoryError) {
+        } catch {
           memoryMessage = ' The card was confirmed, but its reference image could not be saved on this browser.'
         }
       }
