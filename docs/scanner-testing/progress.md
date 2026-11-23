@@ -1038,3 +1038,8 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Extended `product-visibility-rls-audit.sql` to report RLS enabled/forced state for product images, site settings, catalogue overrides, and DON!! overrides; existing policies and grants across these feature tables; and Storage object policies plus the `product-card-images` bucket configuration.
 - This is still read-only and is intended to expose existing permissive-policy conflicts before any proposal is applied. No live database changes were made.
 - The same read-only audit now includes `orders`, `order_items`, and `profiles` RLS state, existing policies, and direct grants so account and checkout permissions can be reviewed before staging tests.
+
+## Storefront reference-image identity safeguard (CI pending)
+- Review found that catalogue fallback images were selected by card number/language only, which could display a different set or variant for a product lacking a seller photograph.
+- Storefront fallback now prefers an exact catalogue match ID or printing key; when set/variant identity is available it filters to that identity and returns no fallback if none matches. Only legacy products without printing identity use generic number/language fallback.
+- Added unit tests for exact match IDs, printing-key/language, set+variant filtering, normal/base aliases, and no cross-variant fallback. CI must verify this exact head.
