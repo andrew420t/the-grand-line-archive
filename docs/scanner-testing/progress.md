@@ -241,3 +241,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - English EB04-numbered cards route by printed card number: **EB04-011–041 → OP14-EB04 / 569114**; **EB04-001–010 and EB04-042–061 → OP15-EB04 / 569115**. This keeps the same EB04 prefix from linking to the wrong official list.
 - Scanner matches and Image Library rows now pass the card number to the official-list resolver. Combined product codes also link directly to their Bandai series pages.
 - Added regression tests for both combined product pages, Japanese EB04, English EB04 range boundaries and invalid numbers. No card data or artwork is copied; this change adds verified source links only.
+
+## Rotation-aware card-number OCR — 23 November 2026
+- Scanner number preprocessing retains the four focused upright lower-edge crops and adds three lower-footer crops after rotating the full photograph 90°, 180° and 270°.
+- This covers cards photographed sideways and upside-down without multiplying the focused crop OCR calls by four. All seven number-area reads feed the existing candidate deduplication, catalogue lookup and human confirmation flow.
+- Scanner status now explains that it is checking multiple orientations. A regression test confirms the supported rotation set.
+- This is an OCR robustness improvement, not a verified photo benchmark; physical card testing across orientations is still needed.
