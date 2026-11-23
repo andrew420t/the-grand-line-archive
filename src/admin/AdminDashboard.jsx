@@ -370,16 +370,21 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     }
     setLookupSaving(true)
     setLookupError('')
-    const result = await supabase.from('products').update(payload).eq('id', lookupProduct.id)
-    setLookupSaving(false)
-    if (result.error) {
-      setLookupError('Product details were not updated: ' + result.error.message)
-      return
+    try {
+      const result = await supabase.from('products').update(payload).eq('id', lookupProduct.id)
+      if (result.error) {
+        setLookupError('Product details were not updated: ' + result.error.message)
+        return
+      }
+      setNotice('Missing card details filled from the catalogue. Your stock, price and uploaded photos were left unchanged.')
+      setLookupProduct(null)
+      setLookupMatches([])
+      onRefresh()
+    } catch (lookupSaveError) {
+      setLookupError('Product details were not updated: ' + (lookupSaveError.message || 'Unexpected error.'))
+    } finally {
+      setLookupSaving(false)
     }
-    setNotice('Missing card details filled from the catalogue. Your stock, price and uploaded photos were left unchanged.')
-    setLookupProduct(null)
-    setLookupMatches([])
-    onRefresh()
   }
 
   const saveInventory = async (product) => {
@@ -596,14 +601,18 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
 
     setBusy(true)
     setError('')
-    const result = await supabase.from('products').update(payload).eq('id', product.id)
-    if (result.error) {
-      setError(`Product was not updated: ${result.error.message}`)
+    try {
+      const result = await supabase.from('products').update(payload).eq('id', product.id)
+      if (result.error) {
+        setError(`Product was not updated: ${result.error.message}`)
+        return
+      }
+      onSaved()
+    } catch (saveError) {
+      setError(`Product was not updated: ${saveError.message || 'Unexpected error.'}`)
+    } finally {
       setBusy(false)
-      return
     }
-    setBusy(false)
-    onSaved()
   }
 
   const renderField = (field) => {
