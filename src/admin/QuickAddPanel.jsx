@@ -166,18 +166,20 @@ export default function QuickAddPanel({
 
   const checkDuplicates = async (setId, includeVariantMetadata) => {
     if (!form.card_number.trim()) return []
-    let query = supabase
-      .from('products')
-      .select(`id,name,card_number,set_id${includeVariantMetadata ? ',variant_label,language,catalogue_match_id,catalogue_printing_key' : ''}`)
-      .eq('card_number', form.card_number.trim())
-    query = setId ? query.eq('set_id', setId) : query.is('set_id', null)
+    const buildQuery = () => {
+      let query = supabase
+        .from('products')
+        .select(`id,name,card_number,set_id${includeVariantMetadata ? ',variant_label,language,catalogue_match_id,catalogue_printing_key' : ''}`)
+        .eq('card_number', form.card_number.trim())
+      return setId ? query.eq('set_id', setId) : query.is('set_id', null)
+    }
     // Paginate rather than silently inspecting only the first 50 rows. A large
     // inventory must not hide an exact duplicate later in the result set.
     const pageSize = 1000
     let offset = 0
     const data = []
     while (true) {
-      const { data: page, error: queryError } = await query.range(offset, offset + pageSize - 1)
+      const { data: page, error: queryError } = await buildQuery().range(offset, offset + pageSize - 1)
       if (queryError) {
         throw new Error(
           `Could not check the card number and set code for duplicates: ${queryError.message}`,
