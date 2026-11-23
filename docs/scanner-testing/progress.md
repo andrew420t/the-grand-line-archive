@@ -1027,3 +1027,9 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Review found that aggregated OCR candidate matches were annotated with printed-number evidence but sorted primarily by supporting name/language OCR. This could let a name match outrank a repeated, higher-confidence card-number reading.
 - Ranking now prioritizes whether number evidence exists, then occurrence count and confidence, with name/language and remembered-image signals used as supporting tie-breakers. Added regression tests for contradictory name/language signals and evidence-strength ordering.
 - The code change and tests are committed; automated CI must complete on the exact new head before considering this correction verified.
+
+## Bulk-import safety review and verified head
+- Bulk import now refreshes the live products table at import time (paginated) before inserting, rather than relying only on the catalogue snapshot loaded earlier in the admin UI. Newly found duplicates are skipped and their CSV row numbers are reported. Successfully inserted rows are added to the in-memory duplicate set for the remainder of that batch.
+- Duplicate-override copy now explicitly warns that it creates separate records and should only be used intentionally; it no longer suggests the override is for different variants, which are normally already distinguished.
+- Scanner crop-toggle wording clarified to `Enable manual crop selection`.
+- Exact PR head `a55eb159927aa800bf99572cde72cc6a81709cd6` CI run **45220180779** passed tests, lint, and production build. PR #26 remains open and mergeable at this check. This still does not prove live staging RLS, browser/device OCR, or atomic checkout stock reservation.
