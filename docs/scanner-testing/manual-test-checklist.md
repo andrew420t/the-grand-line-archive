@@ -36,6 +36,7 @@ Test several physical cards, not only screenshots:
 - [ ] DON!! card with a catalogue sample image; confirm it is grouped under its source set and does not display as an unassigned product.
 - [ ] A parallel/alternate-art printing that shares a card number with another version.
 - [ ] A deliberately blurred, angled, or partially obscured card.
+- [ ] A full-scene phone photo with tabletop/background margins and a card in a rigid holder (Saint Shamrock OP18-119 sample); verify the footer-region crops still include the card number or the scanner clearly requests a crop.
 
 Expected behaviour:
 - [ ] Scanner prioritises the lower-right card-number region and uses the full card as supporting evidence.
