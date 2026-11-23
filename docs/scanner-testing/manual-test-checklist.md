@@ -35,6 +35,7 @@ Test several physical cards, not only screenshots:
 - [ ] OP, EB, and promotional card layouts where available.
 - [ ] DON!! card with a catalogue sample image; confirm it is attributed to its source set where available, and does not show a pseudo card-number suffix or an unassigned-product label.
 - [ ] Enable the scanner manual crop; drag-select the card area, adjust the percentage fields, and reset to the full photo. Confirm the selected region is clear, the surrounding area is dimmed, and the original image is unchanged.
+- [ ] Confirm the selected crop is used for both card-number OCR and supporting full-card text OCR, while the original photo remains the one saved to recognition memory.
 - [ ] Try a crop that is too small or extends beyond the photo; confirm validation rejects it and no scan runs on a silently altered crop.
 - [ ] A parallel/alternate-art printing that shares a card number with another version.
 - [ ] A deliberately blurred, angled, or partially obscured card.
