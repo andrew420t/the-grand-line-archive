@@ -8,6 +8,29 @@ const aliases = {
   counter: ['counter'], trigger_text: ['trigger_text','trigger text','trigger'], attributes: ['attributes','attribute'],
 }
 
+
+const normalizeImportIdentity = (value) => String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '')
+const normalizeImportLanguage = (value) => {
+  const language = String(value || '').trim().toLowerCase()
+  if (['en', 'eng', 'english'].includes(language)) return 'en'
+  if (['jp', 'ja', 'jpn', 'japanese'].includes(language)) return 'jp'
+  if (['kr', 'ko', 'korean'].includes(language)) return 'kr'
+  if (['zh', 'cn', 'chinese'].includes(language)) return 'zh'
+  return language
+}
+
+export function isBulkImportDuplicate(existing, candidate) {
+  const cardNumber = normalizeImportIdentity(existing?.card_number)
+  const setCode = normalizeImportIdentity(existing?.set_code)
+  const variant = normalizeImportIdentity(existing?.variant_label)
+  if (!cardNumber || cardNumber !== normalizeImportIdentity(candidate?.card_number)) return false
+  if (setCode !== normalizeImportIdentity(candidate?.set_code)) return false
+  if (variant !== normalizeImportIdentity(candidate?.variant_label)) return false
+  const existingLanguage = normalizeImportLanguage(existing?.language)
+  const candidateLanguage = normalizeImportLanguage(candidate?.language)
+  return !existingLanguage || !candidateLanguage || existingLanguage === candidateLanguage
+}
+
 export function parseCsv(text) {
   const rows = []
   let row = [], cell = '', quoted = false
