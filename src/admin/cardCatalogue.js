@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabase'
 import { resolveCatalogueImage } from './catalogueImageReference.js'
+import { isDonCatalogueEntry } from './catalogueDonMetadata.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
@@ -506,7 +507,9 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
       const observation = observations.reduce((latest, item) => !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
       const product = links.map((link) => safeMapGet(index.productsByKey, link.product_key)).find(Boolean)
-      entries.push({ id: printing.key + ':' + language, cardNumber: card?.number || '', name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode: formatSetCode(product?.code || ''), imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
+      const isDon = isDonCatalogueEntry({ printing, card, observation })
+      const setCode = formatSetCode(product?.code || '')
+      entries.push({ id: printing.key + ':' + language, cardNumber: card?.number || (isDon ? 'DON!!' : ''), name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode: setCode || (isDon ? 'DON!!' : ''), setName: product?.name || '', sourceText: printing.source_text || '', isDon, imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
     }
   }
   entries.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.language.localeCompare(b.language) || a.id.localeCompare(b.id))
@@ -517,6 +520,8 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
     return normalizeSearchText(entry.cardNumber).includes(normalizedQuery)
       || normalizeSearchText(entry.name).includes(normalizedQuery)
       || normalizeSearchText(entry.setCode).includes(normalizedQuery)
+      || normalizeSearchText(entry.setName).includes(normalizedQuery)
+      || normalizeSearchText(entry.sourceText).includes(normalizedQuery)
   })
   const start = Math.max(0, Number(offset) || 0)
   const pageSize = Math.min(120, Math.max(1, Number(limit) || 60))
