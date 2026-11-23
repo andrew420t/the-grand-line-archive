@@ -128,3 +128,40 @@ ORDER BY policyname;
 SELECT id, name, public, file_size_limit, allowed_mime_types
 FROM storage.buckets
 WHERE id = 'product-card-images';
+
+-- 10. Read-only order/profile access audit for checkout and account tests.
+SELECT
+  n.nspname AS schema_name,
+  c.relname AS table_name,
+  c.relrowsecurity AS rls_enabled,
+  c.relforcerowsecurity AS rls_forced
+FROM pg_class AS c
+JOIN pg_namespace AS n ON n.oid = c.relnamespace
+WHERE n.nspname = 'public'
+  AND c.relname IN ('orders', 'order_items', 'profiles')
+ORDER BY c.relname;
+
+SELECT
+  schemaname,
+  tablename,
+  policyname,
+  permissive,
+  roles,
+  cmd,
+  qual,
+  with_check
+FROM pg_policies
+WHERE schemaname = 'public'
+  AND tablename IN ('orders', 'order_items', 'profiles')
+ORDER BY tablename, policyname;
+
+SELECT grantee, table_name, privilege_type, is_grantable
+FROM information_schema.role_table_grants
+WHERE table_schema = 'public'
+  AND table_name IN ('orders', 'order_items', 'profiles')
+  AND grantee IN ('anon', 'authenticated', 'PUBLIC')
+ORDER BY table_name, grantee, privilege_type;
+
+-- Review customer ownership checks, admin exceptions, and whether customers
+-- can insert order_items for arbitrary orders/products. These query results are
+-- audit-only and do not establish that checkout stock is reserved atomically.
