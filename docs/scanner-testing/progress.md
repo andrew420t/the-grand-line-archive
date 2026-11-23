@@ -1,6 +1,6 @@
 # Grand Line Archive scanner test — progress and reference matrix
 
-Updated: 22 November 2026
+Updated: 23 November 2026
 
 ## Scope
 Requested 100 sample cases: 25 set/product targets × 2 English + 2 Japanese = 100. Sets: OP-01–OP-18, EB-01–EB-05, PRB-01/02.
@@ -9,11 +9,11 @@ Requested 100 sample cases: 25 set/product targets × 2 English + 2 Japanese = 1
 - **Synthetic OCR using local Tesseract 5.5.0:** 100 text-crop fixtures. Raw OCR was exact for **57/100**. After the merged set-code correction from PR #20 and the OP-prefix correction from PR #21, normalized card numbers were exact **100/100**. Fixtures used OP/EB/PRB/ST-style codes with mild rotations, blur and JPEG compression. This is synthetic printed-number OCR only, not card-photo OCR.
 - **Parser fixes merged:** PR #20 commit ec4f2b244731dacaedcbe18b57ef25e3b7877a10 (O/0 confusion in set-code digits); PR #21 commit f2c865320bb1583aa687a927f34b81ca6f2d6eb1 (extra O in OP prefix such as OPO09). Both merged; regression tests added. **CI verified:** GitHub Actions runs #87 (PR #20), #88 (PR #21), and #89 (PR #22) each passed all steps: dependency install, `npm test`, lint, and production build. Run #86 and #84 were failed attempts before fixes; subsequent corrected runs passed.
 - **Reference data locators:** 92/100 requested sample slots in the current Koala Kollect product-linked locator data, 8 slots unmatched by the exact product-code query. The combined English OP14-EB04 and OP15-EB04 product-code mappings were included in this refreshed extraction. This does **not** mean cards are missing from official lists: English OP-14 and OP-15 products use combined product codes OP14-EB04 / OP15-EB04; EB-04 is not a separate English booster product. OP-18 and EB-05 official card lists are now published, but the current downloaded locator dataset appears not to have incorporated those recent releases.
-- **Official image visual check:** 4 images opened successfully and visually checked for card number/name: English OP01-001 Roronoa Zoro, Japanese OP01-001 Zoro, English OP01-002 Trafalgar Law, Japanese OP01-002 Law. This confirms those URLs load; it does not constitute OCR engine testing of those image files.
-- **Real card-photo OCR:** 0/100. Network/DNS in the execution environment blocks downloading source images to local disk for Tesseract. The web image viewer can display images but cannot provide a file to the local OCR process.
+- **Official image visual check:** 94/100 sample image slots opened and visually checked via official Bandai card-list pages. OP01–OP16: 64/64; OP18: 4/4; EB01: 3/4; EB02: 3/4; EB03: 4/4; EB04: 4/4; EB05: 4/4; PRB01: 4/4; PRB02: 4/4. OP17: 0/4 unverified; two Japanese EB01/EB02 image retrievals failed. The original four OP01 English/Japanese Zoro/Law images were among the first checks. Browser-rendered images are visual-load checks, not OCR engine tests.
+- **Real card-photo OCR:** 1/100. The user's physical English Saint Shamrock OP18-119 photo was run through local Tesseract 5.5.0 and multiple crops/preprocessing variants. Automatic name/number identification failed; rules text was partial. This is a real-photo failure sample, not a synthetic test. The other 99 requested real-photo slots have no physical photos supplied.
 - **Production/live UI:** not tested. Production URL open attempt failed through web browser tool; container DNS/network cannot reach the Worker. So scanner popup, candidate choice, remembered choice, manual fallback, and deployment status remain code-review-only/unverified in live UI.
 - **Code review:** candidate ranking order is remembered choice → exact OCR name → language. Popup displays image/name/number/language/set/rarity, lets the user select a candidate, has a remember checkbox using local browser storage keyed by detected card number, and “not sure/manual” closes without applying. Confirmation fills the form only; it does not save inventory.
-- **8 unmatched locator rows:** OP18 EN/JP (4) and EB05 EN/JP (4). The current locator dataset is lagging; both sets have card lists now. The English EB-04 set is not a separate product—its cards are associated with combined OP14-EB04 and OP15-EB04 products.
+- **Current catalogue locator gap:** the Koala Kollect product-linked locator dataset itself still has 92/100 rows and omits the eight OP18/EB05 sample slots. Those eight were supplemented from official Bandai card-list pages and all eight official images were subsequently visually loaded. The English EB-04 set is not a separate product—its cards are associated with combined OP14-EB04 and OP15-EB04 products.
 
 ## Reference matrix
 Sampling method: first two unique card numbers (sorted) with product-linked image locators for each exact set/product code and language. For OP14/OP15, combined English product codes were not reliably linked in the source data during this extraction; EB04 is included in Japanese product associations. Some samples are reprints and retain their original card number. URLs are official card-image path candidates; only the four OP01 URLs above were image-loaded/visually verified.
@@ -88,10 +88,10 @@ Sampling method: first two unique card numbers (sorted) with product-linked imag
 | OP17 | English | 2 | EB04-061 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB04-061_p2.png |
 | OP17 | Japanese | 1 | EB04-007 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB04-007_p2.png |
 | OP17 | Japanese | 2 | EB04-061 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB04-061_p3.png |
-| OP18 | English | 1 | OP18-001 | Karoo | https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png (candidate; not load-verified) |
-| OP18 | English | 2 | OP18-002 | Igaram | https://en.onepiece-cardgame.com/images/cardlist/card/OP18-002.png (candidate; not load-verified) |
-| OP18 | Japanese | 1 | OP18-001 | カルー (Karoo) | https://www.onepiece-cardgame.com/images/cardlist/card/OP18-001.png (candidate; not load-verified) |
-| OP18 | Japanese | 2 | OP18-002 | イガラム (Igaram) | https://www.onepiece-cardgame.com/images/cardlist/card/OP18-002.png (candidate; not load-verified) |
+| OP18 | English | 1 | OP18-001 | Karoo | https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| OP18 | English | 2 | OP18-002 | Igaram | https://en.onepiece-cardgame.com/images/cardlist/card/OP18-002.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| OP18 | Japanese | 1 | OP18-001 | カルー (Karoo) | https://www.onepiece-cardgame.com/images/cardlist/card/OP18-001.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| OP18 | Japanese | 2 | OP18-002 | イガラム (Igaram) | https://www.onepiece-cardgame.com/images/cardlist/card/OP18-002.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
 | EB01 | English | 1 | EB01-001 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-001.png |
 | EB01 | English | 2 | EB01-002 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-002.png |
 | EB01 | Japanese | 1 | EB01-001 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-001.png |
@@ -108,10 +108,10 @@ Sampling method: first two unique card numbers (sorted) with product-linked imag
 | EB04 | English | 2 | EB01-023 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-023_p1.png |
 | EB04 | Japanese | 1 | EB01-023 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-023_p2.png |
 | EB04 | Japanese | 2 | EB04-001 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB04-001.png |
-| EB05 | English | 1 | EB05-001 | Jewelry Bonney | https://en.onepiece-cardgame.com/images/cardlist/card/EB05-001.png (candidate; not load-verified) |
-| EB05 | English | 2 | EB05-002 | Doll | https://en.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (candidate; not load-verified) |
-| EB05 | Japanese | 1 | EB05-001 | ジュエリー・ボニー (Jewelry Bonney) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-001.png (candidate; not load-verified) |
-| EB05 | Japanese | 2 | EB05-002 | ドール (Doll) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (candidate; not load-verified) |
+| EB05 | English | 1 | EB05-001 | Jewelry Bonney | https://en.onepiece-cardgame.com/images/cardlist/card/EB05-001.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| EB05 | English | 2 | EB05-002 | Doll | https://en.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| EB05 | Japanese | 1 | EB05-001 | ジュエリー・ボニー (Jewelry Bonney) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-001.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| EB05 | Japanese | 2 | EB05-002 | ドール (Doll) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
 | PRB01 | English | 1 | EB01-006 | Tony Tony.Chopper | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png?261016= |
 | PRB01 | English | 2 | OP01-006 | Otama | https://en.onepiece-cardgame.com/images/cardlist/card/OP01-006_r1.png?261016= |
 | PRB01 | Japanese | 1 | EB01-006 | トニートニー・チョッパー | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png?261113= |
