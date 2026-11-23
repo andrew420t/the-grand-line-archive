@@ -163,7 +163,7 @@ export default function CardScanner({
           findSharedRememberedCardImage(frontPhoto.file),
         ])
         if (rememberedImage || sharedRememberedImage) setStatus('Found a similar previously confirmed card image. Checking it against OCR…')
-      } catch (memoryError) {
+      } catch {
         // Recognition memory is an optional enhancement; OCR must still work if local storage is unavailable.
       }
       const { createWorker } = await import('tesseract.js')
