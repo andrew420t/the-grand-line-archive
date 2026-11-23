@@ -254,6 +254,7 @@ function Storefront() {
   const [authMessage, setAuthMessage] = useState('')
   const [orderAction, setOrderAction] = useState('')
   const checkoutLock = useRef(false)
+  const orderStatusLocks = useRef(new Set())
   const [adminAccessGranted, setAdminAccessGranted] = useState(false)
 
   const isAdmin = String(profile?.role || '').toLowerCase() === 'admin'
@@ -682,18 +683,27 @@ function Storefront() {
       setOrdersError('Invalid order status. Choose a valid status from the order controls.')
       return
     }
+    const lockKey = String(orderId)
+    if (orderStatusLocks.current.has(lockKey)) return
+    orderStatusLocks.current.add(lockKey)
     setOrderAction(orderId)
-    const result = await supabase
-      .from('orders')
-      .update({ status })
-      .eq('id', orderId)
-    if (result.error) {
-      setOrdersError(`Could not update order status: ${result.error.message}`)
-    } else {
-      await loadOrders(true)
-      notify('Order status updated.')
+    try {
+      const result = await supabase
+        .from('orders')
+        .update({ status })
+        .eq('id', orderId)
+      if (result.error) {
+        setOrdersError(`Could not update order status: ${result.error.message}`)
+      } else {
+        await loadOrders(true)
+        notify('Order status updated.')
+      }
+    } catch (error) {
+      setOrdersError(`Order status update failed unexpectedly: ${error?.message || 'Please try again.'}`)
+    } finally {
+      orderStatusLocks.current.delete(lockKey)
+      setOrderAction('')
     }
-    setOrderAction('')
   }
 
   const signOut = async () => {
