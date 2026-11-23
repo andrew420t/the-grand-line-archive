@@ -453,3 +453,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Admin product publication error recovery — 23 November 2026
 - Publishing/unpublishing an inventory product now catches unexpected Supabase/network exceptions, reports a clear error, and always releases the row's busy state via `finally`. Previously a thrown request could leave the action stuck.
 - Existing confirmation and returned-error handling retained. CI pending.
+
+
+## Admin inventory save error recovery — 23 November 2026
+- Inventory stock/price save now catches thrown Supabase/network errors and always clears its busy state. Previously a thrown request could leave the row's save action stuck; returned database errors remain surfaced as before.
+- Validation still requires a non-negative integer stock count and valid non-negative price. CI pending.
