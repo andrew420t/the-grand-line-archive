@@ -15,6 +15,7 @@ const DON_SET_OPTIONS = [
 export default function ImageLibraryPanel({ user }) {
   const inputRef = useRef(null)
   const uploadLock = useRef(false)
+  const imageListRequestId = useRef(0)
   const referenceRequestId = useRef(0)
   const [files, setFiles] = useState([])
   const [images, setImages] = useState([])
@@ -46,12 +47,21 @@ export default function ImageLibraryPanel({ user }) {
   const [donSetNotice, setDonSetNotice] = useState('')
 
   const loadImages = useCallback(async () => {
+    const requestId = ++imageListRequestId.current
     setLoading(true); setError('')
-    try { setImages(await listLibraryPhotos(user.id)) }
-    catch (loadError) { setError(loadError.message) }
-    finally { setLoading(false) }
+    try {
+      const loadedImages = await listLibraryPhotos(user.id)
+      if (requestId === imageListRequestId.current) setImages(loadedImages)
+    } catch (loadError) {
+      if (requestId === imageListRequestId.current) setError(loadError.message)
+    } finally {
+      if (requestId === imageListRequestId.current) setLoading(false)
+    }
   }, [user.id])
-  useEffect(() => { loadImages() }, [loadImages])
+  useEffect(() => {
+    loadImages()
+    return () => { imageListRequestId.current += 1 }
+  }, [loadImages])
   useEffect(() => {
     let active = true
     getCatalogueCoverageReport()
