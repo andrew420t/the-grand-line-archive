@@ -333,3 +333,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Catalogue match selection no longer carries a stale previous set ID when the new match has a different or unrecognised set code. The set must resolve from the selected match's code or remain unset for verification.
 - Duplicate checks now paginate matching inventory rows rather than stopping at 50, and sort by product ID for stable pagination. This prevents large inventories from hiding an existing duplicate.
 - These are defensive application changes on the PR branch. They do not change production or live database records. CI for the latest commit is pending.
+
+
+## Stale scanner results cleared on rescan — 23 November 2026
+- Starting a new OCR scan now immediately clears prior catalogue/manual match panels, selection, confirmation state, previous OCR readings/candidates, and lookup errors. This prevents a previous card's candidate from remaining visible if the new photograph fails OCR or lookup.
+- Change is on PR #26 branch only; awaiting CI.
