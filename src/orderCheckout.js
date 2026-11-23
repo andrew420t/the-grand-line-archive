@@ -18,10 +18,11 @@ export function buildCheckoutSnapshot(cart = [], productRows = []) {
     if (!Number.isInteger(quantity) || quantity < 1 || !Number.isFinite(stock) || stock < quantity) {
       issues.push({ productId: product.id, name: product.name || item.product?.name || 'Card', reason: 'insufficient-stock', stock: Number.isFinite(stock) ? Math.max(0, stock) : 0 })
     }
-    if (!Number.isFinite(price) || price < 0) {
+    const validPrice = Number.isFinite(price) && price >= 0
+    if (!validPrice) {
       issues.push({ productId: product.id, name: product.name || item.product?.name || 'Card', reason: 'invalid-price' })
     }
-    if (Number.isFinite(price) && price !== Number(item.product?.price)) {
+    if (validPrice && price !== Number(item.product?.price)) {
       issues.push({ productId: product.id, name: product.name || item.product?.name || 'Card', reason: 'price-changed', price })
     }
     return {
@@ -29,7 +30,7 @@ export function buildCheckoutSnapshot(cart = [], productRows = []) {
       product: {
         ...item.product,
         name: product.name || item.product?.name,
-        price: Number.isFinite(price) ? price : item.product?.price,
+        price: validPrice ? price : item.product?.price,
         stock: Number.isFinite(stock) ? Math.max(0, stock) : 0,
         raw: { ...item.product?.raw, status: product.status },
       },
