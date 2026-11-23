@@ -40,7 +40,7 @@ import { hasSupabaseConfig, supabase } from './lib/supabase'
 import { DEFAULT_SITE_SETTINGS, normalizeSiteSettings } from './siteSettings'
 import { buildCheckoutSnapshot } from './orderCheckout'
 import { getPublicStorefrontProducts } from './publicProducts'
-import { isValidOrderStatus, orderStatusUpdateFailure } from './orderStatus'
+import { isValidOrderStatus, orderStatusUpdateFailure, orderDeleteFailure } from './orderStatus'
 import './App.css'
 
 const CART_KEY = 'grand-line-archive-cart'
@@ -667,9 +667,10 @@ function Storefront() {
     }))
     const itemsResult = await supabase.from('order_items').insert(rows)
     if (itemsResult.error) {
-      const cleanupResult = await supabase.from('orders').delete().eq('id', orderResult.data.id)
-      const cleanupMessage = cleanupResult.error
-        ? ` The pending order could not be removed: ${cleanupResult.error.message}`
+      const cleanupResult = await supabase.from('orders').delete().eq('id', orderResult.data.id).select('id').maybeSingle()
+      const cleanupFailure = orderDeleteFailure(cleanupResult)
+      const cleanupMessage = cleanupFailure
+        ? ` The pending order could not be confirmed as removed: ${cleanupFailure}`
         : ' The empty pending order was removed.'
       setOrdersError(
         `Order items could not be saved: ${itemsResult.error.message}.${cleanupMessage}`,
@@ -678,6 +679,7 @@ function Storefront() {
       return
     }
 
+    itemsSaved = true
     setCart([])
     setCartOpen(false)
     setOrderAction('')
@@ -687,8 +689,9 @@ function Storefront() {
       let cleanupMessage = ''
       if (createdOrderId && !itemsSaved) {
         try {
-          const cleanup = await supabase.from('orders').delete().eq('id', createdOrderId)
-          if (cleanup.error) cleanupMessage = ` The pending order could not be removed: ${cleanup.error.message}`
+          const cleanup = await supabase.from('orders').delete().eq('id', createdOrderId).select('id').maybeSingle()
+          const cleanupFailure = orderDeleteFailure(cleanup)
+          if (cleanupFailure) cleanupMessage = ` The pending order could not be confirmed as removed: ${cleanupFailure}`
         } catch (cleanupError) {
           cleanupMessage = ` The pending order cleanup failed: ${cleanupError?.message || 'unknown error'}`
         }
