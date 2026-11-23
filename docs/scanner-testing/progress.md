@@ -500,3 +500,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Photo queue limit feedback — 23 November 2026
 - Photo Studio now explicitly reports when selected images exceed the 12-photo batch limit, in addition to reporting non-image files skipped. A cancelled file picker no longer displays a misleading queue-limit message.
 - Accepted files remain queued and capped as before; this is feedback only and does not alter uploads. CI pending.
+
+
+## Stock-photo preview cleanup after successful upload — 23 November 2026
+- Stock Photography now revokes queued preview object URLs after a successful upload and removes the matching uploaded queue entries. This closes a lifecycle gap where uploaded previews were removed from state without releasing their browser object URLs.
+- Failed uploads still retain the queue and previews for retry. No storage/database/production changes. CI pending.
