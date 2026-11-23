@@ -46,6 +46,10 @@ export default function StockPhotographyPanel({
       await removeLocalPhotos(photos)
       const uploadedPhotoIds = new Set(photos.map((photo) => photo.id))
       onPhotosChange((current) => current.filter((photo) => !uploadedPhotoIds.has(photo.id)))
+      // These queued preview URLs are no longer referenced after a successful upload.
+      photos.forEach((photo) => {
+        if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl)
+      })
       setNotice(`${saved.length} photograph${saved.length === 1 ? '' : 's'} linked to ${selectedProduct.name}.`)
       onSaved()
     } catch (uploadError) {
