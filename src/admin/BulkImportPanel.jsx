@@ -121,9 +121,42 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
         if (check.error) throw new Error('Card-detail columns are unavailable. No rows were imported. Review the approved schema migration first: ' + check.error.message)
         setSchemaReady(true)
       }
-      const result = { imported: 0, skipped: 0, failures: [] }
+      // Re-check inventory at import time, not only against the component's
+      // possibly stale catalogue snapshot. Paginate so large inventories don't
+      // hide duplicates past the API's first page.
+      const duplicateColumns = usesExtended
+        ? 'id,card_number,set_id,variant_label,language,catalogue_match_id,catalogue_printing_key'
+        : 'id,card_number,set_id'
+      const existingRows = []
+      let existingOffset = 0
+      const existingPageSize = 1000
+      while (true) {
+        const existingResult = await supabase
+          .from('products')
+          .select(duplicateColumns)
+          .order('id', { ascending: true })
+          .range(existingOffset, existingOffset + existingPageSize - 1)
+        if (existingResult.error) throw new Error('Could not refresh inventory duplicate checks before import: ' + existingResult.error.message)
+        existingRows.push(...(existingResult.data || []))
+        if (!existingResult.data || existingResult.data.length < existingPageSize) break
+        existingOffset += existingPageSize
+      }
+      const existingForDuplicateCheck = existingRows.map((product) => ({
+        card_number: product.card_number,
+        set_code: sets.find((set) => String(set.id) === String(product.set_id))?.code || '',
+        variant_label: product.variant_label || '',
+        language: product.language || '',
+        catalogue_match_id: product.catalogue_match_id || '',
+        catalogue_printing_key: product.catalogue_printing_key || '',
+      }))
+      const result = { imported: 0, skipped: 0, failures: [], freshDuplicateRows: [] }
       for (const row of readyRows) {
-        if ((row.duplicate || row.duplicateInFile) && !includeDuplicates) { result.skipped += 1; continue }
+        const freshDuplicate = existingForDuplicateCheck.some((product) => isBulkImportDuplicate(product, row))
+        if (((row.duplicate || row.duplicateInFile) || freshDuplicate) && !includeDuplicates) {
+          result.skipped += 1
+          if (freshDuplicate && !row.duplicate && !row.duplicateInFile) result.freshDuplicateRows.push(row._row)
+          continue
+        }
         const form = {
           name: row.name, description: row.description, card_number: row.card_number, rarity: row.rarity,
           color: row.color, power: row.power === '-' ? '' : row.power, cost: row.cost === '-' ? '' : row.cost, card_type: row.card_type, effect_text: row.effect_text,
@@ -138,7 +171,17 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
         else payload.status = 'draft'
         const insert = await supabase.from('products').insert(payload)
         if (insert.error) result.failures.push({ row: row._row, name: row.name, error: insert.error.message })
-        else result.imported += 1
+        else {
+          result.imported += 1
+          existingForDuplicateCheck.push({
+            card_number: row.card_number,
+            set_code: row.matchingSet?.code || row.set_code,
+            variant_label: row.variant_label || '',
+            language: row.language || '',
+            catalogue_match_id: row.catalogue_match_id || '',
+            catalogue_printing_key: row.catalogue_printing_key || '',
+          })
+        }
       }
       setReport(result)
       if (result.imported) onSaved()
@@ -162,7 +205,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
         <div className="bulk-import-table-wrap"><table className="bulk-import-table"><thead><tr><th>Row</th><th>Card</th><th>Number</th><th>Set</th><th>Rarity</th><th>Qty</th><th>Price</th><th>Review</th></tr></thead><tbody>{prepared.map((row) => <tr key={row._row}><td>{row._row}</td><td>{row.name || '—'}</td><td>{row.card_number || '—'}</td><td>{row.matchingSet?.name || row.set_code || '—'}</td><td>{row.rarity || '—'}</td><td>{row.stock_quantity || '1'}</td><td>{row.price_gbp || '£0 inactive'}</td><td>{row.issues.length ? row.issues.join('; ') : 'Ready'}{row.card_number && <div className="bulk-catalogue-tools"><button className="text-button" type="button" disabled={catalogueLoadingRow === row._row} onClick={() => lookupRow(row)}>{catalogueLoadingRow === row._row ? 'Looking up…' : 'Find card details'}</button>{catalogueMatches[row._row]?.length > 0 && <div className="bulk-catalogue-match-list">{catalogueMatches[row._row].map((match) => <CatalogueMatchCard key={match.id} match={match} onUseDetails={() => applyRowMatch(row, match)} useLabel="Use details" compact />)}</div>}</div>}</td></tr>)}</tbody></table></div>
         <button className="button button--gold" type="button" disabled={busy || !readyRows.length} onClick={importRows}>{busy ? 'Importing…' : 'Import ' + readyRows.length + ' reviewed card(s)'}</button>
       </>}
-      {report && <div className="success-notice"><Check size={15}/><span>Import complete: {report.imported} imported, {report.skipped} skipped.{report.failures.length ? ' ' + report.failures.length + ' failed.' : ''}</span></div>}
+      {report && <div className="success-notice"><Check size={15}/><span>Import complete: {report.imported} imported, {report.skipped} skipped.{report.freshDuplicateRows?.length ? ' Newly detected duplicates skipped on rows ' + report.freshDuplicateRows.join(', ') + '.' : ''}{report.failures.length ? ' ' + report.failures.length + ' failed.' : ''}</span></div>}
       {report?.failures?.length > 0 && <div className="error-notice"><AlertCircle size={15}/><span>{report.failures.map((failure) => 'Row ' + failure.row + ' (' + failure.name + '): ' + failure.error).join(' · ')}</span></div>}
     </section>
   )
