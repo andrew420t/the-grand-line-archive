@@ -587,3 +587,5 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Selecting a catalogue match in Bulk Import now carries its catalogue match ID, stable printing key, reference image URL, and source through to the imported product payload.
 - The extended-schema preflight includes those identity columns, so imports fail safely before inserting any rows if the approved columns are not present.
 - Regression coverage verifies that Japanese/parallel catalogue identity survives product payload construction. CI verification pending.
+
+- Follow-up: Bulk Import duplicate detection now prefers the stable catalogue printing key when both records have one. Distinct printing keys are not treated as duplicates even when card number, set, language, and display variant label match; legacy rows retain the conservative fallback. Regression tests cover distinct and identical printing keys.
