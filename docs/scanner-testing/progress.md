@@ -990,3 +990,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Reviewed product-photo upload rollback. Supabase normally reports cleanup failures as result errors, but thrown network/runtime exceptions during rollback could previously mask the original upload error and skip subsequent cleanup steps. Added independent try/catch guards for image URL rollback, metadata cleanup, and Storage cleanup so each failure is surfaced in the final error and later cleanup attempts continue.
 - New commits on the scanner branch: image boundary tests `2cce7df38da03461f6409569f91c633c694911ea`; rollback cleanup exception handling `2c33ba11b56a94cacc3f82d95f770888128dead0`. Exact-head CI is pending; do not mark these as verified until CI completes.
 - No deployment, merge, or production-data changes.
+
+
+### Verification of additional boundary/rollback work — 23 November 2026
+
+- GitHub Actions run #482 (ID `45216437678`) passed on exact PR head `748f48b0b83c7d290060035ec8180c7fba2ba2e7`: dependency installation, tests, lint, and production build succeeded. This includes the image-boundary tests and thrown-cleanup-exception handling.
+- Re-reviewed Quick Add duplicate protection: duplicate lookup paginates rather than inspecting only the first page; exact catalogue printing duplicates are blocked, legacy uncertain matches require explicit review and a variant label, and catalogue identity fields are cleared when card number/set/language/variant changes. Set-code resolution rejects normalized ambiguity instead of silently choosing a set.
+- Re-reviewed review-only SQL proposals. They have not been applied. Live policies/grants must be audited because permissive RLS policies combine with OR and can undermine a newly added policy; production schema and bucket settings remain unverified.
+- PR #26 remains open. No merge, deployment, or production changes.
