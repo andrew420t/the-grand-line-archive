@@ -285,6 +285,8 @@ export function catalogueMatchToForm(match) {
     attributes: match.attributes || '',
     reference_image_url: match.imageUrl || '',
     reference_printing_key: match.printingKey || '',
+    reference_match_id: match.id || '',
+    reference_image_source: match.source || match.imageSource || '',
   }
 }
  
