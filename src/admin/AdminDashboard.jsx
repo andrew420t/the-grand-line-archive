@@ -38,6 +38,7 @@ import BulkImportPanel from './BulkImportPanel'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
+import { buildProductEditPayload } from './productEditPayload'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -560,27 +561,7 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
       setError('Supabase is not configured.')
       return
     }
-    const payload = {}
-    fields.forEach((field) => {
-      const value = values[field.key]
-      if (field.numeric) {
-        // Power and cost are optional card details; price and stock are required
-        // inventory values and must not be cleared accidentally.
-        payload[field.column] = value === '' ? null : Number(value)
-      } else if (field.checkbox) {
-        payload[field.column] = Boolean(value)
-      } else if (field.select && value === '') {
-        payload[field.column] = null
-      } else if (field.options && value === '') {
-        payload[field.column] = null
-      } else if (typeof value === 'string' && value.trim() === '' && !field.required) {
-        // Store cleared optional text fields as NULL, not an empty string.
-        payload[field.column] = null
-      } else {
-        payload[field.column] = value
-      }
-    })
-    if ('updated_at' in raw) payload.updated_at = new Date().toISOString()
+    const payload = buildProductEditPayload(fields, values, raw)
     if (fields.some((field) => field.key === 'name') && !String(values.name || '').trim()) {
       setError('Card name is required.')
       return
