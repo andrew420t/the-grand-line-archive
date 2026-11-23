@@ -8,6 +8,7 @@ Use this checklist only against a dedicated staging/test deployment and test Sup
 - [ ] Confirm its environment variables point to the staging Supabase project, not production.
 - [ ] Confirm a staging administrator account and a normal customer account are available.
 - [ ] Review the proposed SQL in `supabase/review-only/` against the staging schema before applying anything. These scripts are proposals; this checklist does not authorize applying them.
+- [ ] For atomic checkout/status RPCs, run the read-only trigger/schema preflight first; confirm existing triggers do not already reserve/restock stock, and verify `public.is_admin()` returns false (not NULL) for non-admins.
 - [ ] Confirm the staging project has the required product columns, `product_images`, `site_settings`, catalogue override tables, DON!! override table, Storage bucket, and RLS policies before testing the corresponding features.
 - [ ] Seed clearly labelled test products/cards and record their IDs so they can be removed after testing.
 - [ ] Keep a copy of the test data and expected results.
