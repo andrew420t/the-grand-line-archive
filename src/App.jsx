@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Anchor,
   ArrowRight,
@@ -252,6 +252,7 @@ function Storefront() {
   const [ordersError, setOrdersError] = useState('')
   const [authMessage, setAuthMessage] = useState('')
   const [orderAction, setOrderAction] = useState('')
+  const checkoutLock = useRef(false)
   const [adminAccessGranted, setAdminAccessGranted] = useState(false)
 
   const isAdmin = String(profile?.role || '').toLowerCase() === 'admin'
@@ -578,14 +579,17 @@ function Storefront() {
   }, [location.pathname, user, isAdmin, loadOrders])
 
   const placeOrder = async () => {
+    if (checkoutLock.current) return
     if (!user) {
       setAuthOpen(true)
       setAuthMessage('Sign in to place your order.')
       return
     }
     if (!cart.length || !supabase) return
+    checkoutLock.current = true
     setOrderAction('placing')
     setOrdersError('')
+    try {
 
     const latestProductsResult = await supabase
       .from('products')
@@ -651,6 +655,12 @@ function Storefront() {
     setOrderAction('')
     notify('Your order has been placed.')
     navigate('/account/orders')
+    } catch (error) {
+      setOrdersError(`Checkout failed unexpectedly: ${error?.message || 'Please try again.'}`)
+    } finally {
+      checkoutLock.current = false
+      setOrderAction('')
+    }
   }
 
   const updateOrderStatus = async (orderId, status) => {
