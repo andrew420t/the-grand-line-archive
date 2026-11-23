@@ -253,3 +253,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Number-area crops now calculate a grayscale histogram and stretch the central 4th–96th percentile range when the crop has enough tonal spread. This adapts to darker/brightly lit photos and suppresses a small number of glare/shadow outliers.
 - Flat/low-spread crops retain the conservative previous contrast curve instead of amplifying noise.
 - Added pure-function regression tests for outlier handling, range stretching, monotonicity, and fallback. This is preprocessing only; it does not remove glare or detect card boundaries, and it has not yet been validated on a real-photo benchmark.
+
+## Background-aware card photo crop — 23 November 2026
+- When an administrator chooses **Crop to card**, photo preparation now attempts to detect a foreground card against a consistent background using corner-color consistency and foreground bounds. It centers the crop around the detected object (not the photo center) and adds padding.
+- The crop only activates when detection confidence and aspect checks pass. Busy/uneven backgrounds, uncertain results, or crops that cannot fit safely fall back to the previous centered aspect crop.
+- Added tests for offset-card detection, inconsistent-background rejection, aspect framing, and safe fallback. This is a simple background heuristic, not full perspective correction; physical photo testing remains needed.
