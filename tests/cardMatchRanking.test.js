@@ -8,8 +8,16 @@ const candidates = [
   { id: 'other', name: 'Monkey D. Luffy', language: 'English', setCode: 'OP05' },
 ]
 
-test('verified visual-memory match outranks OCR name and language signals', () => {
+test('OCR name and language signals outrank remembered image when they disagree', () => {
   const ranked = rankCatalogueMatches(candidates, 'Roronoa Zoro', 'English', 'jp')
+  assert.equal(ranked[0].match.id, 'en')
+  assert.equal(ranked[0].remembered, false)
+  assert.equal(ranked[1].match.id, 'jp')
+  assert.equal(ranked[1].remembered, true)
+})
+
+test('remembered image is only a tie-breaker when OCR signals agree', () => {
+  const ranked = rankCatalogueMatches(candidates, 'Roronoa Zoro', 'Unknown', 'jp')
   assert.equal(ranked[0].match.id, 'jp')
   assert.equal(ranked[0].remembered, true)
 })
