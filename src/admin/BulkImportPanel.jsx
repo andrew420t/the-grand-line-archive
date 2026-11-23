@@ -4,11 +4,11 @@ import { supabase } from '../lib/supabase'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS, resolveSetIdForCode } from './productSchema'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
-import { parseCsv, isBulkImportDuplicate, validateBulkImportNumericFields } from './bulkImportCsv'
+import { parseCsv, isBulkImportDuplicate, validateBulkImportNumericFields, preferCatalogueValue } from './bulkImportCsv'
 
 const TEMPLATE_HEADERS = ['name','card_number','set_code','rarity','variant_label','color','power','cost','card_type','classification','language','condition','price_gbp','stock_quantity','category_name','description','effect_text','counter','trigger_text','attributes']
 function downloadTemplate() {
-  const url = URL.createObjectURL(new Blob([TEMPLATE_HEADERS.join(',') + '\n'], { type: 'text/csv;charset=utf-8' }))
+  const url = URL.createObjectURL(new Blob([TEMPLATE_HEADERS.join(',') + '      name: preferCatalogueValue(details.name, item.name),n'], { type: 'text/csv;charset=utf-8' }))
   const link = document.createElement('a')
   link.href = url
   link.download = 'grand-line-archive-import-template.csv'
@@ -76,26 +76,26 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
     const matchingCategory = categories.find((category) => String(category.name || '').toLowerCase() === String(match.category || '').toLowerCase())
     setRows((current) => current.map((item) => item._row !== row._row ? item : ({
       ...item,
-      name: details.name || item.name,
-      card_number: details.card_number || item.card_number,
-      set_code: details.set_code || item.set_code,
-      rarity: details.rarity || item.rarity,
-      variant_label: details.variant_label || item.variant_label,
-      color: details.color || item.color,
-      power: details.power || item.power,
-      cost: details.cost || item.cost,
-      card_type: details.card_type || item.card_type,
-      classification: details.classification || item.classification,
-      language: details.language || item.language,
-      effect_text: details.effect_text || item.effect_text,
-      counter: details.counter || item.counter,
-      trigger_text: details.trigger_text || item.trigger_text,
-      attributes: details.attributes || item.attributes,
-      catalogue_match_id: details.catalogue_match_id || item.catalogue_match_id,
-      catalogue_printing_key: details.catalogue_printing_key || item.catalogue_printing_key,
-      catalogue_reference_image_url: details.catalogue_reference_image_url || item.catalogue_reference_image_url,
-      catalogue_reference_image_source: details.catalogue_reference_image_source || item.catalogue_reference_image_source,
-      category_name: matchingCategory?.name || item.category_name,
+      name: details.name ||      name: preferCatalogueValue(details.name, item.name),
+      card_number: details.card_number ||      card_number: preferCatalogueValue(details.card_number, item.card_number),
+      set_code: details.set_code ||      set_code: preferCatalogueValue(details.set_code, item.set_code),
+      rarity: details.rarity ||      rarity: preferCatalogueValue(details.rarity, item.rarity),
+      variant_label: details.variant_label ||      variant_label: preferCatalogueValue(details.variant_label, item.variant_label),
+      color: details.color ||      color: preferCatalogueValue(details.color, item.color),
+      power: details.power ||      power: preferCatalogueValue(details.power, item.power),
+      cost: details.cost ||      cost: preferCatalogueValue(details.cost, item.cost),
+      card_type: details.card_type ||      card_type: preferCatalogueValue(details.card_type, item.card_type),
+      classification: details.classification ||      classification: preferCatalogueValue(details.classification, item.classification),
+      language: details.language ||      language: preferCatalogueValue(details.language, item.language),
+      effect_text: details.effect_text ||      effect_text: preferCatalogueValue(details.effect_text, item.effect_text),
+      counter: details.counter ||      counter: preferCatalogueValue(details.counter, item.counter),
+      trigger_text: details.trigger_text ||      trigger_text: preferCatalogueValue(details.trigger_text, item.trigger_text),
+      attributes: details.attributes ||      attributes: preferCatalogueValue(details.attributes, item.attributes),
+      catalogue_match_id: details.catalogue_match_id ||      catalogue_match_id: preferCatalogueValue(details.catalogue_match_id, item.catalogue_match_id),
+      catalogue_printing_key: details.catalogue_printing_key ||      catalogue_printing_key: preferCatalogueValue(details.catalogue_printing_key, item.catalogue_printing_key),
+      catalogue_reference_image_url: details.catalogue_reference_image_url ||      catalogue_reference_image_url: preferCatalogueValue(details.catalogue_reference_image_url, item.catalogue_reference_image_url),
+      catalogue_reference_image_source: details.catalogue_reference_image_source ||      catalogue_reference_image_source: preferCatalogueValue(details.catalogue_reference_image_source, item.catalogue_reference_image_source),
+      category_name: preferCatalogueValue(matchingCategory?.name, item.category_name),
     })))
     setCatalogueMatches((current) => ({ ...current, [row._row]: [] }))
   }
