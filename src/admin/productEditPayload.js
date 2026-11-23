@@ -19,3 +19,13 @@ export function buildProductEditPayload(fields, values, raw = {}, updatedAt = ne
   if ('updated_at' in raw) payload.updated_at = updatedAt
   return payload
 }
+
+export function parseInventoryStockUpdate(values = {}, raw = {}) {
+  const quantityValue = values.stock ?? raw.stock_quantity
+  const priceValue = values.price ?? raw.price
+  if (quantityValue === '' || priceValue === '') return null
+  const quantity = Number(quantityValue)
+  const price = Number(priceValue)
+  if (!Number.isInteger(quantity) || quantity < 0 || !Number.isFinite(price) || price < 0) return null
+  return { stock_quantity: quantity, price }
+}
