@@ -468,3 +468,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Bulk-import duplicate-submit guard — 23 November 2026
 - Added a synchronous ref lock to bulk CSV import so rapid repeated clicks cannot start concurrent imports before React updates the busy state. Lock is always released in `finally`, including failures.
 - Unexpected bulk-import errors now use a safe fallback message if the thrown value has no message. Partial row failures continue to be reported individually. CI pending.
+
+
+## Quick-add duplicate-submit guard — 23 November 2026
+- Quick Add now has a synchronous submission lock, preventing rapid double taps/clicks from creating duplicate product records while the asynchronous save or photo-link workflow is in progress. The lock resets in `finally` on all outcomes.
+- The existing photo-upload partial-save recovery remains in place, directing the user to retry photos on the saved product rather than re-create it. CI pending.
