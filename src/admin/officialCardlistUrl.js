@@ -13,9 +13,9 @@ export function getOfficialCardlistUrl(setCode, language = 'en', isDon = false, 
 
   // EB-04 has a standalone Japanese series, but English EB04-numbered cards
   // are split across the official OP14 and OP15 combined-product lists.
-  if (/^EB04-\\d{3}/.test(number)) {
+  if (/^EB04-\d{3}/.test(number)) {
     if (lang === 'jp') return 'https://' + host + '/cardlist/?series=550204'
-    const cardIndex = Number(number.match(/^EB04-(\\d{3})/)?.[1] || 0)
+    const cardIndex = Number(number.match(/^EB04-(\d{3})/)?.[1] || 0)
     const series = (cardIndex >= 11 && cardIndex <= 41) ? '569114' : '569115'
     if (cardIndex < 1 || cardIndex > 61) return ''
     return 'https://' + host + '/cardlist/?series=' + series
@@ -24,10 +24,10 @@ export function getOfficialCardlistUrl(setCode, language = 'en', isDon = false, 
   let series = ''
   if (normalized === 'OP14EB04') series = prefix + '114'
   else if (normalized === 'OP15EB04') series = prefix + '115'
-  else if (/^OP\\d{2}$/.test(normalized)) series = prefix + '1' + normalized.slice(2)
-  else if (/^EB\\d{2}$/.test(normalized)) series = prefix + '2' + normalized.slice(2)
-  else if (/^PRB\\d{2}$/.test(normalized)) series = prefix + '3' + normalized.slice(3)
-  else if (/^ST\\d{2}$/.test(normalized)) series = prefix + '0' + normalized.slice(2)
+  else if (/^OP\d{2}$/.test(normalized)) series = prefix + '1' + normalized.slice(2)
+  else if (/^EB\d{2}$/.test(normalized)) series = prefix + '2' + normalized.slice(2)
+  else if (/^PRB\d{2}$/.test(normalized)) series = prefix + '3' + normalized.slice(3)
+  else if (/^ST\d{2}$/.test(normalized)) series = prefix + '0' + normalized.slice(2)
   else if (normalized === 'P' || normalized === 'PROMO') series = prefix + '901'
   if (!series) return ''
   return 'https://' + host + '/cardlist/?series=' + series
