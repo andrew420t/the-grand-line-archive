@@ -425,17 +425,22 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     setBusyId(String(product.id))
     setError('')
     setNotice('')
-    const result = await supabase
-      .from('products')
-      .update({ status: nextStatus, updated_at: new Date().toISOString() })
-      .eq('id', product.id)
-    if (result.error) {
-      setError(`Product publication was not updated: ${result.error.message}`)
-    } else {
-      setNotice(willPublish ? `${product.name} is now posted to the public Archive.` : `${product.name} is now private in the Inventory Book.`)
-      onRefresh()
+    try {
+      const result = await supabase
+        .from('products')
+        .update({ status: nextStatus, updated_at: new Date().toISOString() })
+        .eq('id', product.id)
+      if (result.error) {
+        setError(`Product publication was not updated: ${result.error.message}`)
+      } else {
+        setNotice(willPublish ? `${product.name} is now posted to the public Archive.` : `${product.name} is now private in the Inventory Book.`)
+        onRefresh()
+      }
+    } catch (publicationError) {
+      setError(`Product publication was not updated: ${publicationError.message || 'Unexpected error.'}`)
+    } finally {
+      setBusyId('')
     }
-    setBusyId('')
   }
 
   const deleteProduct = async (product) => {
