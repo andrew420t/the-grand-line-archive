@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { AlertCircle, Check, FileSpreadsheet, Upload, Download } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS } from './productSchema'
@@ -20,6 +20,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
   const [rows, setRows] = useState([])
   const [fileName, setFileName] = useState('')
   const [busy, setBusy] = useState(false)
+  const importLock = useRef(false)
   const [report, setReport] = useState(null)
   const [error, setError] = useState('')
   const [includeDuplicates, setIncludeDuplicates] = useState(false)
@@ -105,6 +106,8 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
   const importRows = async () => {
     if (!supabase || !user) { setError('Administrator sign-in is required.'); return }
     if (!readyRows.length) { setError('There are no valid rows ready to import.'); return }
+    if (importLock.current) return
+    importLock.current = true
     setBusy(true); setError(''); setReport(null)
     try {
       const usesExtended = readyRows.some((row) => [row.color,row.power,row.cost,row.card_type,row.effect_text,row.language,row.classification,row.variant_label,row.counter,row.trigger_text,row.attributes].some((v) => String(v || '').trim()))
@@ -132,8 +135,8 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
       }
       setReport(result)
       if (result.imported) onSaved()
-    } catch (e) { setError(e.message) }
-    finally { setBusy(false) }
+    } catch (e) { setError(e.message || 'Bulk import failed unexpectedly.') }
+    finally { importLock.current = false; setBusy(false) }
   }
 
   return (
