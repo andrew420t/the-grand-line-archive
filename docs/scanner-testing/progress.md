@@ -1019,3 +1019,6 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Image Library rollback guard commit `36e53ca9ea1e0567f5c1c3002a62f99094407048` passed GitHub Actions run `45218158238` (tests, lint, build).
 - Audited the shared recognition-memory upload path and found a third cleanup path where a thrown Storage removal could obscure the original database insertion error. Added guarded cleanup and a combined error message. Code commit `dd79953bd7cd630aa5fa11270b033d9a61462c5b`; exact-head CI pending.
 - These changes only improve error reporting and cleanup resilience. They do not modify storage policies, delete production data, or deploy anything.
+
+## Latest PR-head automated verification
+- PR #26 head `6f859959c9b4c64b6e3e984797de54e1bb12d86c` verified by GitHub Actions run **45218303830** (`build-and-test`): dependency install, test suite, lint, and production build all completed successfully. This is code CI only; no live Supabase or physical-card/browser testing was performed.
