@@ -132,7 +132,10 @@ export default function QuickAddPanel({
     setForm((current) => ({
       ...current,
       ...details,
-      set_id: matchingSet?.id || current.set_id,
+      // Never carry the previous set selection onto a catalogue match for a
+      // different/unrecognised set code. That could silently assign the card
+      // to the wrong set when saving.
+      set_id: matchingSet?.id || (match.setCode ? '' : current.set_id),
       category_id: matchingCategory?.id || current.category_id,
     }))
     setAllowVariant(false)
