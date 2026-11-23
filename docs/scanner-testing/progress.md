@@ -555,3 +555,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Quick Add now reports the exact photo IDs included in the successful save (including the retry path for a product whose photo upload previously failed).
 - The admin parent revokes preview URLs and removes only those uploaded IDs from the current queue. Photos added while the asynchronous save is running remain queued instead of being cleared by a stale render snapshot.
 - This mirrors the snapshot-based queue preservation already used by the stock photography and image-library upload flows.
+
+
+## Quick Add set-code reassignment safety — 23 November 2026
+- Found that changing the Set code after applying a catalogue match could leave the previous `set_id` selected in form state. Saving could therefore associate the card with the old set even though the visible set code had changed.
+- Added shared punctuation-insensitive set-code normalization/resolution. Initial scanner values, catalogue matches, manual set-code edits, and final save resolution now use the same lookup; editing the set code clears or replaces the selected set ID instead of retaining a stale association.
+- Added regression coverage for OP/EB codes with and without hyphens and unknown set codes. CI verification pending. No live inventory/database changes.
