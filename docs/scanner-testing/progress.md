@@ -510,3 +510,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Image Library gallery request ordering — 23 November 2026
 - Added a request sequence guard to the catalogue-reference image gallery. If searches, language filters, or pagination overlap, only the latest request can update gallery state; earlier results/errors/loading completions are ignored.
 - The request sequence is invalidated when the gallery effect is cleaned up, so responses from an obsolete filter or unmounted panel cannot overwrite the current view. No catalogue data or DB changes. CI pending.
+
+
+## Image Library saved-image refresh ordering — 23 November 2026
+- Added a request sequence guard to the saved-image listing. Rapid refreshes or refreshes overlapping with upload/delete operations cannot let an older response overwrite the newest image list or error/loading state.
+- The current request is invalidated on panel cleanup. No storage/database changes. CI pending.
