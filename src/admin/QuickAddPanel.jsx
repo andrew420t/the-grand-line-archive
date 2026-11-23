@@ -35,6 +35,8 @@ const initialProduct = () => ({
   catalogue_printing_key: '',
   catalogue_reference_image_url: '',
   catalogue_reference_image_source: '',
+  reference_image_url: '',
+  reference_printing_key: '',
   featured: false,
 })
 
@@ -47,6 +49,8 @@ const scannedValues = (fields) =>
       ['catalogue_printing_key', fields?.catalogue_printing_key?.value || ''],
       ['catalogue_reference_image_url', fields?.catalogue_reference_image_url?.value || ''],
       ['catalogue_reference_image_source', fields?.catalogue_reference_image_source?.value || ''],
+      ['reference_image_url', fields?.reference_image_url?.value || ''],
+      ['reference_printing_key', fields?.reference_printing_key?.value || ''],
     ],
   )
 
