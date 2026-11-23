@@ -248,3 +248,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Scanner status now explains that it is checking multiple orientations. A regression test confirms the supported rotation set.
 - OCR crop enlargement is bounded to avoid creating oversized canvases from high-resolution phone photos; smaller focused crops can still be enlarged for readability.
 - This is an OCR robustness improvement, not a verified photo benchmark; physical card testing across orientations is still needed.
+
+## Adaptive contrast for card-number OCR — 23 November 2026
+- Number-area crops now calculate a grayscale histogram and stretch the central 4th–96th percentile range when the crop has enough tonal spread. This adapts to darker/brightly lit photos and suppresses a small number of glare/shadow outliers.
+- Flat/low-spread crops retain the conservative previous contrast curve instead of amplifying noise.
+- Added pure-function regression tests for outlier handling, range stretching, monotonicity, and fallback. This is preprocessing only; it does not remove glare or detect card boundaries, and it has not yet been validated on a real-photo benchmark.
