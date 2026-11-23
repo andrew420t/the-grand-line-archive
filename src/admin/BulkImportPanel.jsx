@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS } from './productSchema'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
-import { parseCsv, isBulkImportDuplicate } from './bulkImportCsv'
+import { parseCsv, isBulkImportDuplicate, validateBulkImportNumericFields } from './bulkImportCsv'
 
 const TEMPLATE_HEADERS = ['name','card_number','set_code','rarity','variant_label','color','power','cost','card_type','classification','language','condition','price_gbp','stock_quantity','category_name','description','effect_text','counter','trigger_text','attributes']
 function downloadTemplate() {
@@ -40,8 +40,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
     const issues = []
     if (!row.name.trim()) issues.push('Card name missing')
     if (row.set_code && !matchingSet) issues.push('Set code not found in site sets')
-    if (row.price_gbp !== '' && (!Number.isFinite(Number(row.price_gbp)) || Number(row.price_gbp) < 0)) issues.push('Invalid price')
-    if (row.stock_quantity !== '' && (!Number.isInteger(Number(row.stock_quantity)) || Number(row.stock_quantity) < 0)) issues.push('Invalid quantity')
+    issues.push(...validateBulkImportNumericFields(row))
     if (duplicate) issues.push('Possible duplicate already in stock')
     if (duplicateInFile) issues.push('Duplicate row earlier in this CSV')
     return { ...row, matchingSet, matchingCategory, duplicate, duplicateInFile, issues }
@@ -119,8 +118,8 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
         if ((row.duplicate || row.duplicateInFile) && !includeDuplicates) { result.skipped += 1; continue }
         const form = {
           name: row.name, description: row.description, card_number: row.card_number, rarity: row.rarity,
-          color: row.color, power: row.power, cost: row.cost, card_type: row.card_type, effect_text: row.effect_text,
-          language: row.language, classification: row.classification, counter: row.counter, trigger_text: row.trigger_text, attributes: row.attributes, condition: row.condition || 'Near Mint',
+          color: row.color, power: row.power === '-' ? '' : row.power, cost: row.cost === '-' ? '' : row.cost, card_type: row.card_type, effect_text: row.effect_text,
+          language: row.language, classification: row.classification, counter: row.counter === '-' ? '' : row.counter, trigger_text: row.trigger_text, attributes: row.attributes, condition: row.condition || 'Near Mint',
           price_gbp: row.price_gbp === '' ? '0' : row.price_gbp, stock_quantity: row.stock_quantity === '' ? '1' : row.stock_quantity,
           category_id: row.matchingCategory?.id || '', variant_label: row.variant_label, featured: false,
         }
