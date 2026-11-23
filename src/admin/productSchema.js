@@ -16,7 +16,10 @@ export function normalizeSetCode(value) {
 export function resolveSetIdForCode(sets, code) {
   const normalized = normalizeSetCode(code)
   if (!normalized) return ''
-  return sets.find((set) => normalizeSetCode(set.code) === normalized)?.id || ''
+  const matches = sets.filter((set) => normalizeSetCode(set.code) === normalized)
+  // Do not silently attach a product to an arbitrary set when legacy data
+  // contains multiple rows whose codes normalize to the same value.
+  return matches.length === 1 ? matches[0].id || '' : ''
 }
 
 export function buildQuickAddFieldUpdate(current, field, value, sets = []) {
