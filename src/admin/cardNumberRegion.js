@@ -126,10 +126,10 @@ function createRotatedImageCanvas(image, rotation) {
 }
 
 async function createEnhancedCrop(image, zone, filename) {
-  const cropX = Math.round(image.width * zone.x)
-  const cropY = Math.round(image.height * zone.y)
-  const cropWidth = Math.max(1, Math.round(image.width * zone.width))
-  const cropHeight = Math.max(1, Math.round(image.height * zone.height))
+  const cropX = Math.min(image.width - 1, Math.max(0, Math.round(image.width * zone.x)))
+  const cropY = Math.min(image.height - 1, Math.max(0, Math.round(image.height * zone.y)))
+  const cropWidth = Math.max(1, Math.min(Math.round(image.width * zone.width), image.width - cropX))
+  const cropHeight = Math.max(1, Math.min(Math.round(image.height * zone.height), image.height - cropY))
   // Enlarge the number area to make small printed text easier for OCR.
   const scale = Math.max(1, Math.min(6, 2200 / Math.max(cropWidth, cropHeight)))
   const canvas = document.createElement('canvas')
