@@ -17,9 +17,13 @@ Nami,OP01-016,OP01,1000,If trigger is met,Slash
 test('handles quoted commas, doubled quotes, and multiline cells', () => {
   const rows = parseCsv(`name,description
 "Monkey D. Luffy","Says ""I'm going to be King"", loudly"
+Card,"First line
+Second line"
 `)
   assert.equal(rows[0].name, 'Monkey D. Luffy')
   assert.equal(rows[0].description, `Says "I'm going to be King", loudly`)
+  assert.equal(rows[1].description, `First line
+Second line`)
 })
 
 test('accepts CRLF rows and ignores empty trailing rows', () => {
@@ -28,9 +32,10 @@ test('accepts CRLF rows and ignores empty trailing rows', () => {
   assert.equal(rows[0].card_number, 'OP01-001')
 })
 
-test('rejects unmatched quotes and duplicate headers', () => {
+test('rejects unmatched quotes, duplicate headers, and trailing text after quotes', () => {
   assert.throws(() => parseCsv('name,description\nLuffy,"unfinished'), /unmatched quote/i)
   assert.throws(() => parseCsv('name,name\nLuffy,Monkey'), /duplicate column headers/i)
+  assert.throws(() => parseCsv('name,description\nLuffy,"quoted"trailing'), /text after a closing quote/i)
 })
 
 test('requires a header and at least one data row', () => {
