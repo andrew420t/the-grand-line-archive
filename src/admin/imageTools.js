@@ -131,9 +131,7 @@ export async function prepareCardImage(file, rotation = 0, cropToCard = false) {
 
   context.drawImage(
     rotatedCanvas,
-    (rotatedWidth - cropWidth) / 2,
-    (rotatedHeight - cropHeight) / 2,
-    cropWidth,
+    cropX,\n    cropY,\n    cropWidth,
     cropHeight,
     0,
     0,
