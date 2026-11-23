@@ -1,56 +1,49 @@
 /**
- * Resolve a catalogue image for a printing.
+ * Resolve a catalogue image for a printing and safe alternate official artwork.
  *
- * A TCGCSV-only stamped/foil record may not have its own image. In that case
- * reuse the official base-card artwork for the same card key and language,
- * but label it as a fallback so the UI never implies it depicts the special
- * printing itself.
+ * A TCGCSV stamped/foil record may not have its own image. We may reuse
+ * official base-card artwork for identification, but label it as a fallback
+ * because it may not depict the special finish.
  */
 export function resolveCatalogueImage({ printing, index = {}, printings = [], language = 'en' } = {}) {
   if (!printing) return { imageUrl: '', fallbackImageUrl: '', source: 'No image reference', usesBaseImageFallback: false }
 
-  const locator = index.locatorsByPrinting instanceof Map
-    ? index.locatorsByPrinting.get(printing.key + ':' + printing.site)
+  const locatorFor = (candidate) => index.locatorsByPrinting instanceof Map
+    ? index.locatorsByPrinting.get(candidate.key + ':' + candidate.site)
     : undefined
-  const site = printing.site
-  const host = site === 'jp'
-    ? 'https://www.onepiece-cardgame.com'
-    : site === 'en'
-      ? 'https://en.onepiece-cardgame.com'
-      : ''
-  const officialUrl = locator?.image_id && host
-    ? host + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
-    : ''
+  const officialUrlFor = (candidate, locator) => {
+    if (!locator?.image_id || !['en', 'jp'].includes(candidate.site)) return ''
+    const host = candidate.site === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com'
+    return host + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
+  }
+  const locator = locatorFor(printing)
+  const officialUrl = officialUrlFor(printing, locator)
   const directUrl = officialUrl || String(printing.image_url || '')
+  const alternateOfficialUrls = [...new Set((printings || [])
+    .filter((candidate) => candidate.card_key === printing.card_key && candidate.site === language && candidate.key !== printing.key)
+    .map((candidate) => officialUrlFor(candidate, locatorFor(candidate)))
+    .filter((url) => url && url !== directUrl))]
+  const fallbackImageUrl = alternateOfficialUrls[0] || ''
+
   if (directUrl) {
     return {
       imageUrl: directUrl,
-      fallbackImageUrl: '',
-      source: officialUrl ? (site === 'jp' ? 'Bandai official Japanese image' : 'Bandai official English image') : 'Catalogue source image',
+      fallbackImageUrl,
+      source: officialUrl
+        ? (printing.site === 'jp' ? 'Bandai official Japanese image' : 'Bandai official English image')
+        : 'Catalogue source image',
       usesBaseImageFallback: false,
     }
   }
 
-  if (site === 'tcgcsv') {
-    const basePrinting = printings.find((candidate) => {
-      if (candidate.card_key !== printing.card_key || candidate.site !== language) return false
-      const candidateLocator = index.locatorsByPrinting instanceof Map
-        ? index.locatorsByPrinting.get(candidate.key + ':' + candidate.site)
-        : undefined
-      return Boolean(candidateLocator?.image_id)
-    })
-    if (basePrinting) {
-      const baseLocator = index.locatorsByPrinting.get(basePrinting.key + ':' + basePrinting.site)
-      const baseHost = language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com'
-      const fallbackImageUrl = baseHost + '/images/cardlist/card/' + encodeURIComponent(baseLocator.image_id) + '.png'
-      return {
-        imageUrl: fallbackImageUrl,
-        fallbackImageUrl,
-        source: language === 'jp'
-          ? 'Bandai official Japanese base-card fallback (stamped artwork may differ)'
-          : 'Bandai official English base-card fallback (stamped artwork may differ)',
-        usesBaseImageFallback: true,
-      }
+  if (printing.site === 'tcgcsv' && fallbackImageUrl) {
+    return {
+      imageUrl: fallbackImageUrl,
+      fallbackImageUrl,
+      source: language === 'jp'
+        ? 'Bandai official Japanese base-card fallback (stamped artwork may differ)'
+        : 'Bandai official English base-card fallback (stamped artwork may differ)',
+      usesBaseImageFallback: true,
     }
   }
 
