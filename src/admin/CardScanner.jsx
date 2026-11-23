@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AlertCircle, ArrowRight, Check, LoaderCircle, ScanLine } from 'lucide-react'
 import { CARD_FIELDS, parseCardDetails } from './cardParser'
 import { rankCatalogueMatches } from './cardMatchRanking'
@@ -44,6 +44,7 @@ export default function CardScanner({
   const [numberReadings, setNumberReadings] = useState([])
   const [numberCandidates, setNumberCandidates] = useState([])
   const [manualCropEnabled, setManualCropEnabled] = useState(false)
+  const [manualCropConfirmed, setManualCropConfirmed] = useState(false)
   const [manualCropPercent, setManualCropPercent] = useState({ x: 0, y: 0, width: 100, height: 100 })
   const cropPreviewRef = useRef(null)
   const cropDragRef = useRef(null)
@@ -51,7 +52,7 @@ export default function CardScanner({
   const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
   const hasReview =
     Object.values(fields).some((field) => field.value) || Boolean(rawText.trim())
-  const manualCropIsValid = !manualCropEnabled || (
+  const manualCropGeometryIsValid = (
     Number(manualCropPercent.x) >= 0 &&
     Number(manualCropPercent.y) >= 0 &&
     Number(manualCropPercent.width) >= 12 &&
@@ -59,6 +60,13 @@ export default function CardScanner({
     Number(manualCropPercent.x) + Number(manualCropPercent.width) <= 100 &&
     Number(manualCropPercent.y) + Number(manualCropPercent.height) <= 100
   )
+  const manualCropIsValid = manualCropEnabled && manualCropGeometryIsValid
+  const manualCropReady = manualCropIsValid && manualCropConfirmed
+
+  useEffect(() => {
+    setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 })
+    setManualCropConfirmed(false)
+  }, [frontPhoto?.file])
 
   const updateField = (key, value) => {
     setFields((current) => ({
@@ -85,6 +93,7 @@ export default function CardScanner({
     const width = Math.abs(current.x - start.x)
     const height = Math.abs(current.y - start.y)
     setManualCropPercent({ x: x * 100, y: y * 100, width: width * 100, height: height * 100 })
+    setManualCropConfirmed(false)
     if (finish) cropDragRef.current = null
   }
 
@@ -98,12 +107,18 @@ export default function CardScanner({
       x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
       y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)),
     }
+    setManualCropConfirmed(false)
     setManualCropPercent({ x: cropDragRef.current.x * 100, y: cropDragRef.current.y * 100, width: 0, height: 0 })
   }
 
   const scanCard = async () => {
     if (!frontPhoto) {
       setError('Add a card-front photograph in the photo panel before scanning.')
+      return
+    }
+    if (!manualCropReady) {
+      setError('Enable the card crop, select the full card inside the photo, and confirm that the crop is correct before scanning.')
+      setStatus('')
       return
     }
 
@@ -148,8 +163,8 @@ export default function CardScanner({
         },
       })
       setStatus('Finding the card number: checking bottom edges in upright, sideways and rotated orientations…')
-      const manualCrop = manualCropEnabled ? Object.fromEntries(Object.entries(manualCropPercent).map(([key, value]) => [key, Number(value) / 100])) : null
-      const numberRegions = await prepareCardNumberRegions(frontPhoto.file, manualCrop)
+      const manualCrop = Object.fromEntries(Object.entries(manualCropPercent).map(([key, value]) => [key, Number(value) / 100]))
+      const numberRegions = await prepareCardNumberRegions(frontPhoto.file, manualCrop, manualCropConfirmed)
       const numberResults = await Promise.all(numberRegions.map(async (region) => {
         const { data: regionData } = await worker.recognize(region.file, { tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-' }, { blocks: true })
         const lineConfidence = (regionData.lines || [])
@@ -167,7 +182,7 @@ export default function CardScanner({
       const candidates = extractCardNumberCandidates(numberResults)
       setNumberCandidates(candidates)
       setStatus('Number-area scans complete. Checking the card photo for supporting details…')
-      const fullCardScanFile = manualCrop ? await prepareManualCardCropFile(frontPhoto.file, manualCrop) : frontPhoto.file
+      const fullCardScanFile = await prepareManualCardCropFile(frontPhoto.file, manualCrop, manualCropConfirmed)
       const { data } = await worker.recognize(fullCardScanFile, {}, { blocks: true })
       const lines =
         data.lines ||
@@ -381,7 +396,7 @@ export default function CardScanner({
           <p className="eyebrow">01 · SOURCE PHOTOGRAPH</p>
           <h3>Use the clearest front image.</h3>
           <p>Keep the card square to the camera, in focus, and evenly lit. Front/back and detail images remain linked for the stock record.</p>
-          <button className="button button--gold" type="button" disabled={!frontPhoto || scanning || !manualCropIsValid} onClick={scanCard}>
+          <button className="button button--gold" type="button" disabled={!frontPhoto || scanning || !manualCropReady} onClick={scanCard}>
             {scanning ? <LoaderCircle className="spin-icon" size={16} /> : <ScanLine size={16} />}
             {scanning ? `Scanning… ${progress}%` : hasReview ? 'Rescan card' : 'Scan card'}
           </button>
@@ -393,13 +408,13 @@ export default function CardScanner({
       <section className="scanner-manual-crop" aria-labelledby="scanner-manual-crop-title">
         <div className="scanner-manual-crop__heading">
           <div>
-            <p className="eyebrow">OCR RECOVERY · OPTIONAL</p>
-            <h3 id="scanner-manual-crop-title">Crop the photo before scanning</h3>
-            <p>Use this when the card is small in the frame or a hand/background interferes. Values are percentages from the photo's top-left; keep the full card inside the crop. The original photo is not changed.</p>
+            <p className="eyebrow">OCR SAFETY · REQUIRED</p>
+            <h3 id="scanner-manual-crop-title">Select and confirm the card crop</h3>
+            <p>Number-area and supporting text OCR run only inside this crop. Include every card edge and avoid unrelated background. Values are percentages from the photo's top-left; the original photo is not changed.</p>
           </div>
           <label className="scanner-manual-crop__toggle">
-            <input type="checkbox" checked={manualCropEnabled} disabled={scanning || !frontPhoto} onChange={(event) => setManualCropEnabled(event.target.checked)} />
-            <span>Use manual crop</span>
+            <input type="checkbox" checked={manualCropEnabled} disabled={scanning || !frontPhoto} onChange={(event) => { setManualCropEnabled(event.target.checked); setManualCropConfirmed(false) }} />
+            <span>Require manual card crop</span>
           </label>
         </div>
         {manualCropEnabled && frontPhoto?.previewUrl && (
@@ -447,14 +462,18 @@ export default function CardScanner({
                   if (key === 'y') next.height = Math.min(Number(current.height) || 0, 100 - value)
                   if (key === 'width') next.width = Math.min(value, 100 - (Number(current.x) || 0))
                   if (key === 'height') next.height = Math.min(value, 100 - (Number(current.y) || 0))
+                  setManualCropConfirmed(false)
                   return next
                 })} />
               </label>
             ))}
-            <button className="button button--quiet" type="button" disabled={scanning} onClick={() => setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 })}>Reset full photo</button>
-            <p className="scanner-manual-crop__note">{manualCropIsValid ? 'Crop looks valid. The full card must fit inside the selected area.' : 'Select a larger area: width and height must each be at least 12%, and the crop must stay within the photo.'}</p>
+            <button className="button button--quiet" type="button" disabled={scanning} onClick={() => { setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 }); setManualCropConfirmed(false) }}>Reset full photo</button>
+            <p className="scanner-manual-crop__note">{manualCropGeometryIsValid ? 'Crop dimensions are valid. Visually verify that all card edges are inside this area.' : 'Select a larger area: width and height must each be at least 12%, and the crop must stay within the photo.'}</p>
+            <label className="scanner-manual-crop__confirm"><input type="checkbox" checked={manualCropConfirmed} disabled={scanning || !manualCropGeometryIsValid} onChange={(event) => setManualCropConfirmed(event.target.checked)} /><span>I confirm the crop contains the entire card and avoids unrelated background.</span></label>
           </div>
         )}
+        {!manualCropEnabled && <p className="scanner-manual-crop__required-note">Scanning is locked until you enable the crop, select the card area, and confirm it.</p>}
+        {manualCropEnabled && !manualCropConfirmed && <p className="scanner-manual-crop__required-note">After selecting the crop, tick the confirmation above to unlock scanning.</p>}
       </section>
 
       {numberReadings.length > 0 && (
@@ -585,7 +604,7 @@ export default function CardScanner({
         <div className="scan-review">
           <div className="scan-review__heading">
             <div><p className="eyebrow">02 · SCAN REVIEW</p><h3>Review extracted details</h3></div>
-            <button className="button button--outline" type="button" disabled={!frontPhoto || scanning || !manualCropIsValid} onClick={scanCard}><ScanLine size={15} /> Rescan</button>
+            <button className="button button--outline" type="button" disabled={!frontPhoto || scanning || !manualCropReady} onClick={scanCard}><ScanLine size={15} /> Rescan</button>
           </div>
           <label className="form-field extracted-text">
             <span>Recognised text · editable</span>
