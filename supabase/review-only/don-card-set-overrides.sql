@@ -15,8 +15,9 @@ END
 $preflight$;
 
 CREATE TABLE public.don_card_set_overrides (
-  printing_key text PRIMARY KEY,
+  printing_key text NOT NULL,
   language text NOT NULL CHECK (language IN ('en', 'jp')),
+  PRIMARY KEY (printing_key, language),
   set_code text NOT NULL,
   source_note text NOT NULL DEFAULT 'Manually verified from source product/list',
   updated_by uuid REFERENCES auth.users(id) ON DELETE SET NULL,
