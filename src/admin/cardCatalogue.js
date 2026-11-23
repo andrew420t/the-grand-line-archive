@@ -393,7 +393,7 @@ export async function getCatalogueCoverageReport() {
     missingImageByLanguage: {},
     languages: {},
     sets: {},
-    unassigned: { printings: 0, withImage: 0, withoutImage: 0, withoutImageBySite: {} },
+    unassigned: { printings: 0, withImage: 0, withFallbackImage: 0, withoutImage: 0, withoutImageBySite: {} },
     missingImageSamples: [],
     sources: ['Bandai official image URLs where a Bandai locator exists', 'Koala Kollect structured catalogue metadata'],
     checkedAt: new Date().toISOString(),
@@ -461,7 +461,8 @@ export async function getCatalogueCoverageReport() {
       if (!setCodes.length) {
         report.unassigned.printings += 1
         if (hasImage) report.unassigned.withImage += 1
-        else {
+        if (hasFallbackImage) report.unassigned.withFallbackImage += 1
+        if (!hasImage) {
           report.unassigned.withoutImage += 1
           const site = printing.site || 'unknown'
           report.unassigned.withoutImageBySite[site] = (report.unassigned.withoutImageBySite[site] || 0) + 1
@@ -469,10 +470,11 @@ export async function getCatalogueCoverageReport() {
       }
 
       for (const setCode of setLabels) {
-        const entry = report.sets[setCode] || { printings: 0, withImage: 0, withoutImage: 0 }
+        const entry = report.sets[setCode] || { printings: 0, withImage: 0, withFallbackImage: 0, withoutImage: 0 }
         entry.printings += 1
         if (hasImage) entry.withImage += 1
-        else entry.withoutImage += 1
+        if (hasFallbackImage) entry.withFallbackImage += 1
+        if (!hasImage) entry.withoutImage += 1
         report.sets[setCode] = entry
       }
     }
