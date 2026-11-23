@@ -43,6 +43,8 @@ export default function CardScanner({
   const [manualError, setManualError] = useState('')
   const [numberReadings, setNumberReadings] = useState([])
   const [numberCandidates, setNumberCandidates] = useState([])
+  const [manualCropEnabled, setManualCropEnabled] = useState(false)
+  const [manualCropPercent, setManualCropPercent] = useState({ x: 0, y: 0, width: 100, height: 100 })
 
   const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
   const hasReview =
@@ -107,7 +109,8 @@ export default function CardScanner({
         },
       })
       setStatus('Finding the card number: checking bottom edges in upright, sideways and rotated orientations…')
-      const numberRegions = await prepareCardNumberRegions(frontPhoto.file)
+      const manualCrop = manualCropEnabled ? Object.fromEntries(Object.entries(manualCropPercent).map(([key, value]) => [key, Number(value) / 100])) : null
+      const numberRegions = await prepareCardNumberRegions(frontPhoto.file, manualCrop)
       const numberResults = await Promise.all(numberRegions.map(async (region) => {
         const { data: regionData } = await worker.recognize(region.file, { tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-' }, { blocks: true })
         const lineConfidence = (regionData.lines || [])
@@ -346,6 +349,37 @@ export default function CardScanner({
           {error && <span className="form-error scanner-error" role="alert">{error}</span>}
         </div>
       </div>
+
+      <section className="scanner-manual-crop" aria-labelledby="scanner-manual-crop-title">
+        <div className="scanner-manual-crop__heading">
+          <div>
+            <p className="eyebrow">OCR RECOVERY · OPTIONAL</p>
+            <h3 id="scanner-manual-crop-title">Crop the photo before scanning</h3>
+            <p>Use this when the card is small in the frame or a hand/background interferes. Values are percentages from the photo's top-left; keep the full card inside the crop. The original photo is not changed.</p>
+          </div>
+          <label className="scanner-manual-crop__toggle">
+            <input type="checkbox" checked={manualCropEnabled} disabled={scanning || !frontPhoto} onChange={(event) => setManualCropEnabled(event.target.checked)} />
+            <span>Use manual crop</span>
+          </label>
+        </div>
+        {manualCropEnabled && (
+          <div className="scanner-manual-crop__fields">
+            {[
+              ['x', 'Left edge'],
+              ['y', 'Top edge'],
+              ['width', 'Crop width'],
+              ['height', 'Crop height'],
+            ].map(([key, label]) => (
+              <label className="form-field" key={key}>
+                <span>{label} (%)</span>
+                <input type="number" min="0" max="100" step="1" value={manualCropPercent[key]} disabled={scanning} onChange={(event) => setManualCropPercent((current) => ({ ...current, [key]: event.target.value }))} />
+              </label>
+            ))}
+            <button className="button button--quiet" type="button" disabled={scanning} onClick={() => setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 })}>Reset full photo</button>
+            <p className="scanner-manual-crop__note">Crop validity is checked when scanning. Invalid or too-small crops are rejected with an error instead of silently adjusted.</p>
+          </div>
+        )}
+      </section>
 
       {numberReadings.length > 0 && (
         <section className="scanner-number-readings" aria-live="polite">
