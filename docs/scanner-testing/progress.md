@@ -266,3 +266,10 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - The existing safe-fallback behavior is unchanged: inconsistent corner colors, unsuitable card geometry, or low confidence still use the centered aspect crop.
 - Added a regression test with isolated foreground specks outside the card, verifying the detected bounds remain centered on the card component.
 - This reduces sensitivity to disconnected noise; it does not solve cards on busy backgrounds or detect perspective corners.
+
+
+## Noise-aware edge sharpening for card-number OCR — 23 November 2026
+- Number-area crops now apply a mild 3×3 unsharp mask after grayscale contrast normalization. This is intended to recover small printed character edges softened by camera focus and enlargement.
+- A contrast threshold leaves low-detail pixels unchanged so mild foil grain and sensor noise are less likely to be amplified. Sharpening is bounded and does not alter the original uploaded photograph.
+- Added pure-function regression tests for edge strengthening and low-contrast noise preservation.
+- This is a preprocessing enhancement, not a measured OCR-accuracy claim. It still needs browser/physical-card evaluation, especially on foil, glare, and already-sharp images; perspective correction remains outstanding.
