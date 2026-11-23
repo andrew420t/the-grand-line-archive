@@ -19,6 +19,7 @@ export default function PhotoStudio({ photos, onPhotosChange }) {
   const [isCapturing, setIsCapturing] = useState(false)
   const videoRef = useRef(null)
   const inputRef = useRef(null)
+  const captureLock = useRef(false)
 
   useEffect(() => {
     if (!cameraActive) return undefined
@@ -48,6 +49,8 @@ export default function PhotoStudio({ photos, onPhotosChange }) {
           await videoElement.play()
         }
       } catch (error) {
+        stream?.getTracks().forEach((track) => track.stop())
+        if (videoElement) videoElement.srcObject = null
         if (!active) return
         const message =
           error.name === 'NotAllowedError'
@@ -101,10 +104,12 @@ export default function PhotoStudio({ photos, onPhotosChange }) {
 
   const capturePhoto = async () => {
     const video = videoRef.current
+    if (captureLock.current) return
     if (!video?.videoWidth || !video.videoHeight) {
       setCameraError('The camera preview is not ready yet.')
       return
     }
+    captureLock.current = true
     setIsCapturing(true)
     setCameraError('')
     try {
@@ -130,6 +135,7 @@ export default function PhotoStudio({ photos, onPhotosChange }) {
     } catch (error) {
       setCameraError(error.message)
     } finally {
+      captureLock.current = false
       setIsCapturing(false)
     }
   }
