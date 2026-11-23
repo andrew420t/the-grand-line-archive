@@ -3,6 +3,8 @@
  * This is a client-side safeguard only; atomic stock reservation must be enforced
  * server-side to protect against concurrent checkout requests.
  */
+
+const MAX_DATABASE_INTEGER = 2147483647
 export function buildCheckoutSnapshot(cart = [], productRows = []) {
   const productsById = new Map((productRows || []).map((row) => [String(row.id), row]))
   const issues = []
@@ -60,12 +62,12 @@ export function buildAtomicCheckoutItems(items = []) {
     const productId = String(item?.product?.id ?? '').trim()
     const quantity = Number(item?.quantity)
     const expectedUnitPrice = Number(item?.product?.price)
-    if (!productId || !Number.isSafeInteger(quantity) || quantity < 1 ||
+    if (!productId || !Number.isSafeInteger(quantity) || quantity < 1 || quantity > MAX_DATABASE_INTEGER ||
         !Number.isFinite(expectedUnitPrice) || expectedUnitPrice < 0) return null
     const previous = combined.get(productId)
     if (previous && previous.expected_unit_price !== expectedUnitPrice) return null
     const combinedQuantity = (previous?.quantity || 0) + quantity
-    if (!Number.isSafeInteger(combinedQuantity)) return null
+    if (!Number.isSafeInteger(combinedQuantity) || combinedQuantity > MAX_DATABASE_INTEGER) return null
     combined.set(productId, {
       quantity: combinedQuantity,
       expected_unit_price: expectedUnitPrice,
