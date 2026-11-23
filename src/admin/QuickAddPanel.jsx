@@ -248,7 +248,7 @@ export default function QuickAddPanel({
         await savePhotosForProduct(partialProductId)
         setSuccess(`Photographs linked to the saved product ${partialProductId}.`)
         setPartialProductId('')
-        onSaved()
+        onSaved({ uploadedPhotoIds: photos.map((photo) => photo.id) })
         return
       }
 
@@ -350,7 +350,7 @@ export default function QuickAddPanel({
       setDuplicateMatches([])
       setAllowVariant(false)
       setSuccess('Product and stock saved.')
-      onSaved()
+      onSaved({ uploadedPhotoIds: photos.map((photo) => photo.id) })
     } catch (saveError) {
       setError(saveError.message)
     } finally {
