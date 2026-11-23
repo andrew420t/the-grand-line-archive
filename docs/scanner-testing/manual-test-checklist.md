@@ -101,6 +101,7 @@ Expected behaviour:
 - [ ] Confirm only explicitly active products appear in the public shop.
 - [ ] Confirm draft, archived, blank-status, and unknown-status products are not public.
 - [ ] Check product details, images, card number, set, rarity, language, condition, variant, and stock display.
+- [ ] For a product without a seller photograph, confirm the catalogue reference image matches its printing ID/key or set+variant; if no exact match exists, show the placeholder instead of a different printing.
 - [ ] Test search, set/category/rarity/language/condition/variant/stock filters, sorting, and pagination.
 
 ## 8. Basket, checkout, and orders
