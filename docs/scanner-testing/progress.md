@@ -361,3 +361,10 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Added a regression test for Japanese EB04-005 Parallel printing handoff and verifies missing fields safely default to blank. The review remains code/test-only; live admin UI and database insert are not verified.
 
 - Follow-up discovered those three fields were not part of the inventory product schema/payload, so merely mapping them into scanner state would not persist them. Added Counter, Trigger, and Attributes to QuickAdd, product insert payload, product edit fields, and the review-only migration (`counter integer`, `trigger_text text`, `attributes text`). Regression assertions now verify all three survive payload construction. Migration remains unexecuted; database persistence is not live-verified.
+
+
+## Inventory inline-edit safety audit — 23 November 2026
+- Reviewed inline stock/price updates and product-edit payload mapping. Existing edit payload remains restricted to editable fields and does not write catalogue printing identity/reference metadata.
+- Found inline price and quantity inputs used `||` fallbacks, making blank values revert visually to stored values and obscuring validation; switched to nullish fallbacks so explicit zero and blank edits are represented correctly.
+- Extracted `parseInventoryStockUpdate` to validate the stock/price pair consistently: whole-number non-negative stock, finite non-negative price, and no blank values. Explicit zero is supported.
+- Added tests for zero price/quantity and invalid/blank input. No live database writes performed.
