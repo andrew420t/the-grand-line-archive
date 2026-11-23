@@ -622,9 +622,10 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
     setBusy(true)
     setError('')
     try {
-      const result = await supabase.from('products').update(payload).eq('id', product.id)
-      if (result.error) {
-        setError(`Product was not updated: ${result.error.message}`)
+      const result = await supabase.from('products').update(payload).eq('id', product.id).select('id').maybeSingle()
+      const updateFailure = productUpdateFailure(result)
+      if (updateFailure) {
+        setError(`Product was not updated: ${updateFailure}`)
         return
       }
       onSaved()
