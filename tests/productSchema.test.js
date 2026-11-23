@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { buildNewProductPayload, classifyPrintingDuplicate } from '../src/admin/productSchema.js'
+import { buildCatalogueScannerFields, buildNewProductPayload, classifyPrintingDuplicate } from '../src/admin/productSchema.js'
 
 const form = {
   name: 'Monkey D. Luffy',
@@ -135,4 +135,23 @@ test('uses stable printing key when catalogue match IDs differ', () => {
     { catalogue_match_id: 'source-a:en:op17', catalogue_printing_key: 'kaido-normal', language: 'English' },
     { catalogue_match_id: 'source-b:en:op17', catalogue_printing_key: 'kaido-normal', language: 'English' },
   ), 'exact')
+})
+
+test('catalogue scanner handoff copies all printing identity and card-detail fields', () => {
+  const values = {
+    name: 'Trafalgar Law', card_number: 'EB04-005', set_code: 'EB-04',
+    rarity: 'Rare', language: 'Japanese', variant_label: 'Parallel',
+    counter: '1000', trigger_text: 'Draw 1 card.', attributes: 'Slash',
+    catalogue_match_id: 'printing-jp:jp:product-eb04',
+    catalogue_printing_key: 'printing-jp',
+    catalogue_reference_image_url: 'https://example.test/jp-card.png',
+    catalogue_reference_image_source: 'Official catalogue',
+    reference_image_url: 'https://example.test/jp-card.png',
+    reference_printing_key: 'printing-jp',
+    reference_match_id: 'printing-jp:jp:product-eb04',
+    reference_image_source: 'Official catalogue',
+  }
+  const scannerFields = buildCatalogueScannerFields(values)
+  for (const [key, value] of Object.entries(values)) assert.equal(scannerFields[key], value)
+  assert.equal(scannerFields.effect_text, '')
 })
