@@ -162,7 +162,7 @@ export default function ImageLibraryPanel({ user }) {
             {matrixReport && <details className="catalogue-health-missing">
               <summary>View image test results ({matrixResults.length + matrixReport.missingSlots.length} rows)</summary>
               <div className="catalogue-health-table">
-                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}</strong><span>{item.language.toUpperCase()} · sample {item.sampleSlot}</span><span>{item.name || 'Name not supplied'}</span><span>{item.status === 'loaded' ? 'Image loaded' : 'Image failed'}</span></div>)}
+                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}</strong><span>{item.language.toUpperCase()} · sample {item.sampleSlot}</span><span>{item.name || 'Name not supplied'}</span><span>{item.status === 'loaded' ? 'Image loaded' : 'Image failed'} · {item.source}</span></div>)}
                 {matrixReport.missingSlots.map((item) => <div className="catalogue-health-row" key={item.targetSet + item.language + item.sampleSlot}><strong>{item.targetSet}</strong><span>{item.language.toUpperCase()} · sample {item.sampleSlot}</span><span>No source record</span><span>Missing from feed</span></div>)}
               </div>
             </details>}

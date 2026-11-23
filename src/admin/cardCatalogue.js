@@ -535,6 +535,28 @@ export async function getCatalogueReferenceTestMatrix() {
     'PRB01', 'PRB02',
   ]
   const bySlot = new Map()
+  const officialFallbackSamples = {
+    OP18: {
+      en: [
+        { cardNumber: 'OP18-001', name: 'Karoo', rarity: 'L', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png?261016=' },
+        { cardNumber: 'OP18-002', name: 'Igaram', rarity: 'UC', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-002.png?261016=' },
+      ],
+      jp: [
+        { cardNumber: 'OP18-001', name: 'カルー', rarity: 'L', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/OP18-001.png?261113=' },
+        { cardNumber: 'OP18-002', name: 'イガラム', rarity: 'UC', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/OP18-002.png?261113=' },
+      ],
+    },
+    EB05: {
+      en: [
+        { cardNumber: 'EB05-001', name: 'Jewelry Bonney', rarity: 'SR', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB05-001.png?261016=' },
+        { cardNumber: 'EB05-002', name: 'Doll', rarity: 'R', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB05-002.png?261016=' },
+      ],
+      jp: [
+        { cardNumber: 'EB05-001', name: 'ジュエリー・ボニー', rarity: 'SR', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB05-001.png?261113=' },
+        { cardNumber: 'EB05-002', name: 'ドール', rarity: 'R', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB05-002.png?261113=' },
+      ],
+    },
+  }
   const targetSetForProduct = (productCode, cardNumber) => {
     const code = String(productCode || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
     const prefix = baseCardNumber(cardNumber).split('-')[0]
@@ -594,8 +616,22 @@ export async function getCatalogueReferenceTestMatrix() {
     for (const language of LANGUAGES) {
       const candidates = (bySlot.get(language + ':' + set) || [])
         .sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.id.localeCompare(b.id))
+      const selected = [...candidates]
+      for (const sample of officialFallbackSamples[set]?.[language] || []) {
+        if (selected.length >= 2) break
+        if (selected.some((item) => item.cardNumber === sample.cardNumber)) continue
+        selected.push({
+          id: 'bandai-fallback:' + language + ':' + set + ':' + sample.cardNumber,
+          ...sample,
+          language,
+          setCode: formatSetCode(set),
+          setName: 'Official Bandai card list',
+          variant: 'Base',
+          source: 'Bandai official card-list fallback (not yet in primary feed)',
+        })
+      }
       for (let slot = 0; slot < 2; slot += 1) {
-        if (candidates[slot]) items.push({ ...candidates[slot], targetSet: formatSetCode(set), sampleSlot: slot + 1 })
+        if (selected[slot]) items.push({ ...selected[slot], targetSet: formatSetCode(set), sampleSlot: slot + 1 })
         else missingSlots.push({ targetSet: formatSetCode(set), language, sampleSlot: slot + 1 })
       }
     }
