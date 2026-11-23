@@ -40,7 +40,7 @@ import { hasSupabaseConfig, supabase } from './lib/supabase'
 import { DEFAULT_SITE_SETTINGS, normalizeSiteSettings } from './siteSettings'
 import { buildCheckoutSnapshot } from './orderCheckout'
 import { getPublicStorefrontProducts } from './publicProducts'
-import { isValidOrderStatus } from './orderStatus'
+import { isValidOrderStatus, orderStatusUpdateFailure } from './orderStatus'
 import './App.css'
 
 const CART_KEY = 'grand-line-archive-cart'
