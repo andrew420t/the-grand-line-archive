@@ -44,7 +44,7 @@ BEGIN
 
   IF EXISTS (
     SELECT 1
-    FROM jsonb_to_recordset(p_items) AS input(product_id uuid, quantity integer)
+    FROM jsonb_to_recordset(p_items) AS input(product_id uuid, quantity integer, expected_unit_price numeric)
     WHERE product_id IS NULL OR quantity IS NULL OR quantity < 1
        OR expected_unit_price IS NULL OR expected_unit_price < 0
   ) THEN
