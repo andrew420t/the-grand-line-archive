@@ -584,7 +584,7 @@ export default function CardScanner({
         <div className="scan-review">
           <div className="scan-review__heading">
             <div><p className="eyebrow">02 · SCAN REVIEW</p><h3>Review extracted details</h3></div>
-            <button className="button button--outline" type="button" disabled={!frontPhoto || scanning} onClick={scanCard}><ScanLine size={15} /> Rescan</button>
+            <button className="button button--outline" type="button" disabled={!frontPhoto || scanning || !manualCropIsValid} onClick={scanCard}><ScanLine size={15} /> Rescan</button>
           </div>
           <label className="form-field extracted-text">
             <span>Recognised text · editable</span>
