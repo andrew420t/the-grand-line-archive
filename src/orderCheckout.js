@@ -51,7 +51,7 @@ export function buildCheckoutSnapshot(cart = [], productRows = []) {
 /**
  * Build the minimal request for the atomic database checkout RPC.
  * The server must re-check price, active status and stock under row locks;
- * values from this client payload are only product IDs and quantities.
+ * payload includes IDs, quantities and expected prices to reject stale price changes.
  */
 export function buildAtomicCheckoutItems(items = []) {
   if (!Array.isArray(items) || items.length === 0) return null
