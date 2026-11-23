@@ -15,6 +15,7 @@ const DON_SET_OPTIONS = [
 export default function ImageLibraryPanel({ user }) {
   const inputRef = useRef(null)
   const uploadLock = useRef(false)
+  const referenceRequestId = useRef(0)
   const [files, setFiles] = useState([])
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(true)
@@ -60,17 +61,25 @@ export default function ImageLibraryPanel({ user }) {
   }, [])
 
   const loadReferenceImages = useCallback(async (offset = 0) => {
+    const requestId = ++referenceRequestId.current
     setReferenceLoading(true); setReferenceError('')
     try {
       const page = await getCatalogueImageGallery({ offset, limit: 60, query: referenceQuery, language: referenceLanguage })
+      if (requestId !== referenceRequestId.current) return
       setReferenceImages((current) => offset === 0 ? page.items : [...current, ...page.items])
       if (offset === 0) { setFailedReferenceIds([]); setLoadedReferenceIds([]); setFallbackReferenceIds([]) }
       setReferenceTotal(page.total)
       setReferenceNextOffset(page.nextOffset)
-    } catch (loadError) { setReferenceError(loadError.message) }
-    finally { setReferenceLoading(false) }
+    } catch (loadError) {
+      if (requestId === referenceRequestId.current) setReferenceError(loadError.message)
+    } finally {
+      if (requestId === referenceRequestId.current) setReferenceLoading(false)
+    }
   }, [referenceQuery, referenceLanguage])
-  useEffect(() => { loadReferenceImages(0) }, [loadReferenceImages])
+  useEffect(() => {
+    loadReferenceImages(0)
+    return () => { referenceRequestId.current += 1 }
+  }, [loadReferenceImages])
 
   const runReferenceMatrixCheck = async () => {
     setMatrixRunning(true); setMatrixError(''); setMatrixReport(null); setMatrixResults([])
