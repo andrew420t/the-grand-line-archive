@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { CARD_NUMBER_SCAN_ROTATIONS, calculateAdaptiveContrastBounds, enhanceGrayValue, sharpenGrayPixels } from '../src/admin/cardNumberRegion.js'
+import { CARD_NUMBER_SCAN_ROTATIONS, calculateAdaptiveContrastBounds, enhanceGrayValue, sharpenGrayPixels, validateManualCardCrop } from '../src/admin/cardNumberRegion.js'
 
 test('rotation-aware number scans include sideways and upside-down orientations', () => {
   assert.deepEqual(CARD_NUMBER_SCAN_ROTATIONS, [90, 180, 270])
@@ -47,4 +47,18 @@ test('mild unsharp mask strengthens a printed edge without changing flat areas',
 test('unsharp mask leaves low-contrast noise below its threshold unchanged', () => {
   const pixels = new Uint8Array([100, 102, 100, 102, 100, 102, 100, 102, 100])
   assert.deepEqual([...sharpenGrayPixels(pixels, 3, 3)], [...pixels])
+})
+
+
+test('manual crop validation maps normalized coordinates to pixels', () => {
+  assert.deepEqual(validateManualCardCrop({ x: 0.1, y: 0.2, width: 0.6, height: 0.5 }, 1000, 2000), {
+    x: 100, y: 400, width: 600, height: 1000,
+  })
+})
+
+test('manual crop validation rejects out-of-frame, tiny, and invalid selections', () => {
+  assert.equal(validateManualCardCrop({ x: -0.1, y: 0, width: 0.5, height: 0.5 }, 100, 100), null)
+  assert.equal(validateManualCardCrop({ x: 0.8, y: 0.8, width: 0.3, height: 0.3 }, 100, 100), null)
+  assert.equal(validateManualCardCrop({ x: 0, y: 0, width: 0.05, height: 0.5 }, 100, 100), null)
+  assert.equal(validateManualCardCrop({ x: 0, y: 0, width: NaN, height: 0.5 }, 100, 100), null)
 })
