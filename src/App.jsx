@@ -623,8 +623,6 @@ function Storefront() {
     checkoutLock.current = true
     setOrderAction('placing')
     setOrdersError('')
-    let createdOrderId = null
-    let itemsSaved = false
     try {
 
     const latestProductsResult = await supabase
@@ -651,61 +649,33 @@ function Storefront() {
       return
     }
 
-    const orderResult = await supabase
-      .from('orders')
-      .insert({
-        user_id: user.id,
-        status: 'pending',
-        total_amount: checkout.total,
-      })
-      .select('*')
-      .single()
+    const atomicItems = buildAtomicCheckoutItems(checkout.items)
+    if (!atomicItems) {
+      setOrdersError('Your basket contains invalid item quantities. Please review it and try again.')
+      setOrderAction('')
+      return
+    }
 
+    // Order, item rows, and stock reservation must be one database transaction.
+    // Client-side price/stock refresh above is for a friendly review message;
+    // the RPC re-validates and locks rows so concurrent buyers cannot oversell.
+    const orderResult = await supabase.rpc('create_order_atomic', { p_items: atomicItems })
     if (orderResult.error) {
-      setOrdersError(`Could not create the order: ${orderResult.error.message}`)
+      const rpcMissing = orderResult.error.code === '42883' || orderResult.error.code === 'PGRST202' ||
+        String(orderResult.error.message || '').includes('create_order_atomic')
+      setOrdersError(rpcMissing
+        ? 'Atomic checkout is not installed in this database yet. No order was placed. The review-only SQL proposal must be checked and applied to staging first.'
+        : `Could not place the order: ${orderResult.error.message}`)
       setOrderAction('')
       return
     }
-
-    createdOrderId = orderResult.data.id
-    const rows = checkout.items.map((item) => ({
-      order_id: orderResult.data.id,
-      product_id: item.product.id,
-      quantity: item.quantity,
-      unit_price: item.product.price,
-    }))
-    const itemsResult = await supabase.from('order_items').insert(rows)
-    if (itemsResult.error) {
-      const cleanupResult = await supabase.from('orders').delete().eq('id', orderResult.data.id).select('id').maybeSingle()
-      const cleanupFailure = orderDeleteFailure(cleanupResult)
-      const cleanupMessage = cleanupFailure
-        ? ` The pending order could not be confirmed as removed: ${cleanupFailure}`
-        : ' The empty pending order was removed.'
-      setOrdersError(
-        `Order items could not be saved: ${itemsResult.error.message}.${cleanupMessage}`,
-      )
-      setOrderAction('')
-      return
-    }
-
-    itemsSaved = true
     setCart([])
     setCartOpen(false)
     setOrderAction('')
     notify('Your order has been placed.')
     navigate('/account/orders')
     } catch (error) {
-      let cleanupMessage = ''
-      if (createdOrderId && !itemsSaved) {
-        try {
-          const cleanup = await supabase.from('orders').delete().eq('id', createdOrderId).select('id').maybeSingle()
-          const cleanupFailure = orderDeleteFailure(cleanup)
-          if (cleanupFailure) cleanupMessage = ` The pending order could not be confirmed as removed: ${cleanupFailure}`
-        } catch (cleanupError) {
-          cleanupMessage = ` The pending order cleanup failed: ${cleanupError?.message || 'unknown error'}`
-        }
-      }
-      setOrdersError(`Checkout failed unexpectedly: ${error?.message || 'Please try again.'}${cleanupMessage}`)
+      setOrdersError(`Checkout failed unexpectedly: ${error?.message || 'Please try again.'}`)
     } finally {
       checkoutLock.current = false
       setOrderAction('')
