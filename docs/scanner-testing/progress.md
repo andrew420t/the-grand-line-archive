@@ -886,3 +886,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 
 - Added live crop validity feedback and disabled Scan/Rescan while a manual crop is too small or exceeds the photo bounds. The message explains the minimum 12% width/height and full-image-bound requirements; invalid state styling is differentiated.
 - Commits: `6752b46` (live validation and scan guard), `37ac9fd` (invalid state style). Exact-head CI is pending.
+
+
+### Manual-crop boundary regression test — 23 November 2026
+
+- Added a unit test for the 12% minimum crop dimension: exactly 12% is accepted, while 11.9% width or height is rejected.
+- Run #448 passed on `dfc321123cc79cc5744b58e1713db34fcd3de125`, covering live validation feedback and Scan button guard. Run #449 was running for the subsequent Rescan-button guard when checked.
+- Added the minimum-size regression test in commit `7f7fe3e`; exact-head CI pending.
