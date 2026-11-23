@@ -71,7 +71,7 @@ function ProductImage({ product, className = '' }) {
 
   useEffect(() => {
     let active = true
-    if (product.image || !product.raw?.card_number) {
+    if (!product.raw?.card_number) {
       setReferenceImage('')
       return () => { active = false }
     }
