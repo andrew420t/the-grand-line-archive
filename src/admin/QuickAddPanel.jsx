@@ -243,8 +243,11 @@ export default function QuickAddPanel({
     try {
       if (partialProductId) {
         await savePhotosForProduct(partialProductId)
-        setSuccess(`Photographs linked to the saved product ${partialProductId}.`)
+        setSuccess(`Photographs linked to the saved product ${partialProductId}. The form is reset to prevent creating a duplicate product.`)
         setPartialProductId('')
+        setForm(initialProduct())
+        setDuplicateMatches([])
+        setAllowVariant(false)
         onSaved({ uploadedPhotoIds: photos.map((photo) => photo.id) })
         return
       }
