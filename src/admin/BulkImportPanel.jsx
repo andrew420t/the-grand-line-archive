@@ -96,7 +96,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
       catalogue_reference_image_url: preferCatalogueValue(details.catalogue_reference_image_url, item.catalogue_reference_image_url),
       catalogue_reference_image_source: preferCatalogueValue(details.catalogue_reference_image_source, item.catalogue_reference_image_source),
       category_name: preferCatalogueValue(matchingCategory?.name, item.category_name),
-    }))))
+    })))
     setCatalogueMatches((current) => ({ ...current, [row._row]: [] }))
   }
 
