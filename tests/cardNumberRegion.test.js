@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { CARD_NUMBER_SCAN_ROTATIONS, calculateAdaptiveContrastBounds, enhanceGrayValue, sharpenGrayPixels, validateManualCardCrop } from '../src/admin/cardNumberRegion.js'
+import { CARD_NUMBER_SCAN_ROTATIONS, calculateAdaptiveContrastBounds, enhanceGrayValue, sharpenGrayPixels, validateManualCardCrop, requireConfirmedManualCardCrop } from '../src/admin/cardNumberRegion.js'
 
 test('rotation-aware number scans include sideways and upside-down orientations', () => {
   assert.deepEqual(CARD_NUMBER_SCAN_ROTATIONS, [90, 180, 270])
@@ -55,8 +55,10 @@ test('manual crop rounding never extends source bounds by a pixel', () => {
   assert.deepEqual(crop, { x: 3, y: 3, width: 7, height: 7 })
   assert.ok(crop.x + crop.width <= 10)
   assert.ok(crop.y + crop.height <= 10)
-  const tiny = validateManualCardCrop({ x: 0.88, y: 0.88, width: 0.12, height: 0.12 }, 1, 1)
-  assert.deepEqual(tiny, { x: 0, y: 0, width: 1, height: 1 })
+  const tiny = validateManualCardCrop({ x: 0, y: 0, width: 1, height: 1 }, 1, 1)
+  assert.equal(tiny, null)
+  assert.equal(validateManualCardCrop({ x: 0, y: 0, width: 1, height: 1 }, 63, 80), null)
+  assert.ok(validateManualCardCrop({ x: 0, y: 0, width: 1, height: 1 }, 64, 64))
 })
 
 test('manual crop validation maps normalized coordinates to pixels', () => {
@@ -78,4 +80,14 @@ test('manual crop accepts the minimum 12 percent dimensions and rejects smaller 
   })
   assert.equal(validateManualCardCrop({ x: 0, y: 0, width: 0.119, height: 0.12 }, 100, 100), null)
   assert.equal(validateManualCardCrop({ x: 0, y: 0, width: 0.12, height: 0.119 }, 100, 100), null)
+})
+
+
+test('confirmed crop guard rejects unconfirmed and invalid crop geometry', () => {
+  const crop = { x: 0.1, y: 0.1, width: 0.8, height: 0.8 }
+  assert.throws(() => requireConfirmedManualCardCrop(crop, 1000, 1000, false), /Confirm/)
+  assert.throws(() => requireConfirmedManualCardCrop({ x: 0, y: 0, width: 0.05, height: 0.5 }, 1000, 1000, true), /invalid or too small/)
+  assert.deepEqual(requireConfirmedManualCardCrop(crop, 1000, 1000, true), {
+    x: 100, y: 100, width: 800, height: 800,
+  })
 })
