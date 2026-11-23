@@ -29,3 +29,7 @@ test('normal/base variants normalize and legacy products use language-preferred 
   assert.equal(selectPrimaryCatalogueMatch(matches, { setCode: 'OP17', variantLabel: 'base', language: 'English' })?.id, 'normal-en')
   assert.equal(selectPrimaryCatalogueMatch(matches, { language: 'Japanese' })?.id, 'normal-jp')
 })
+
+test('set-only identity defaults to normal/base printing rather than parallel', () => {
+  assert.equal(selectPrimaryCatalogueMatch(matches, { setCode: 'OP17', language: 'English' })?.id, 'normal-en')
+})
