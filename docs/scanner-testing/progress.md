@@ -1113,3 +1113,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Changes are committed on `feature/scanner-number-first-verification`; GitHub Actions passed both workflow runs for this commit, including dependency installation, the complete Node test suite (including the new pagination tests), lint, and production build. This is a code-level fix only; no live Storage objects or database records were changed.
 
 - Extended the same pagination protection to product-linked image metadata: deleting a product now retrieves every linked Storage path in stable ID order (1,000 rows per page) before the database row is deleted, rather than relying on PostgREST's default response cap. Missing optional image-metadata tables retain the existing safe empty-list behavior; other query failures still stop deletion before it begins.
+
+
+## Checkout quantity boundary audit — 24 November 2026
+- Review found the checkout client accepted any JavaScript integer quantity, while the proposed atomic RPC parses quantities as PostgreSQL `integer` values. A quantity or duplicate-line total above 2,147,483,647 could therefore fail at the RPC boundary instead of being rejected cleanly in the client.
+- Added safe-integer validation for checkout snapshot quantities and bounded atomic RPC payload quantities and combined duplicate-line totals to the PostgreSQL signed-integer maximum.
+- Added regression tests for an over-limit single line, duplicate-line aggregate overflow, and unsafe JavaScript integer values.
+- Automated CI for the resulting PR head is pending; do not treat this change as verified until the exact-head workflow completes.
+- No database, inventory, order, production deployment, or live setting was changed.
