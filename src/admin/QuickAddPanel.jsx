@@ -5,7 +5,7 @@ import {
   ensurePhotoStorageReady,
   uploadProductPhotos,
 } from './productStorage'
-import { buildNewProductPayload, classifyPrintingDuplicate, CATALOGUE_IDENTITY_FIELDS, EXTENDED_CARD_COLUMNS, normalizeSetCode, resolveSetIdForCode } from './productSchema'
+import { buildNewProductPayload, buildQuickAddFieldUpdate, classifyPrintingDuplicate, EXTENDED_CARD_COLUMNS, resolveSetIdForCode } from './productSchema'
 import { supabase } from '../lib/supabase'
 import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
@@ -107,16 +107,7 @@ export default function QuickAddPanel({
   const [catalogueError, setCatalogueError] = useState('')
   const [librarySaving, setLibrarySaving] = useState(false)
   const setField = (field, value) => {
-    setForm((current) => {
-      const identityChanged = ['card_number', 'set_code', 'language', 'variant_label'].includes(field)
-        && String(current[field] || '').trim().toLocaleLowerCase() !== String(value || '').trim().toLocaleLowerCase()
-      return {
-        ...current,
-        [field]: value,
-        ...(field === 'set_code' ? { set_id: resolveSetIdForCode(sets, value) } : {}),
-        ...(identityChanged ? Object.fromEntries(CATALOGUE_IDENTITY_FIELDS.map((key) => [key, ''])) : {}),
-      }
-    })
+    setForm((current) => buildQuickAddFieldUpdate(current, field, value, sets))
     // Any change to the candidate card invalidates a prior manual duplicate
     // confirmation. Require the administrator to review the new match again.
     setAllowVariant(false)
