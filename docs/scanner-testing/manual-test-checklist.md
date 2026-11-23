@@ -118,6 +118,8 @@ Expected behaviour:
 - [ ] Confirm admin order status changes accept only supported states and verify the affected order row.
 - [ ] Review and apply the atomic checkout RPC proposal in staging only after verifying schema, existing stock triggers, RLS, grants, and order lifecycle.
 - [ ] With the RPC enabled and client integrated in staging, test two concurrent checkouts for the same low-stock product; only one may succeed.
+- [ ] Change the product price between the client's fresh price check and RPC call; the RPC must reject the stale expected price and ask the customer to review, not silently charge the new price.
+- [ ] Send duplicate lines for one product with conflicting expected prices; reject before creating an order.
 - [ ] Confirm successful checkout decrements/reserves stock exactly once and order + items + stock remain consistent if any insertion fails.
 - [ ] Verify direct order/order-item insertion cannot bypass the approved stock reservation path, without breaking admin/order workflows.
 - [ ] Do not run these concurrency/destructive tests against production.
