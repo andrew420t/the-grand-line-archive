@@ -7,11 +7,15 @@ export function validateManualCardCrop(crop, imageWidth, imageHeight) {
   // Reject tiny selections: they are unlikely to contain the whole card and
   // can amplify background/noise into misleading OCR.
   if (width < 0.12 || height < 0.12) return null
+  const pixelX = Math.round(x * imageWidth)
+  const pixelY = Math.round(y * imageHeight)
   return {
-    x: Math.round(x * imageWidth),
-    y: Math.round(y * imageHeight),
-    width: Math.max(1, Math.round(width * imageWidth)),
-    height: Math.max(1, Math.round(height * imageHeight)),
+    x: pixelX,
+    y: pixelY,
+    // Rounding the origin and size independently can exceed the image by one
+    // pixel at an exact edge. Clamp the size to the remaining source bounds.
+    width: Math.max(1, Math.min(Math.round(width * imageWidth), imageWidth - pixelX)),
+    height: Math.max(1, Math.min(Math.round(height * imageHeight), imageHeight - pixelY)),
   }
 }
 
