@@ -38,7 +38,7 @@ import BulkImportPanel from './BulkImportPanel'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
-import { buildProductEditPayload, parseInventoryStockUpdate, productDeleteFailure } from './productEditPayload'
+import { buildProductEditPayload, parseInventoryStockUpdate, productDeleteFailure, productUpdateFailure } from './productEditPayload'
 import { findSetCodeMatches } from './productSchema'
 
 const blankScanFields = () =>
@@ -383,9 +383,10 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     setLookupSaving(true)
     setLookupError('')
     try {
-      const result = await supabase.from('products').update(payload).eq('id', lookupProduct.id)
-      if (result.error) {
-        setLookupError('Product details were not updated: ' + result.error.message)
+      const result = await supabase.from('products').update(payload).eq('id', lookupProduct.id).select('id').maybeSingle()
+      const updateFailure = productUpdateFailure(result)
+      if (updateFailure) {
+        setLookupError('Product details were not updated: ' + updateFailure)
         return
       }
       setNotice('Missing card details filled from the catalogue. Your stock, price and uploaded photos were left unchanged.')
@@ -420,8 +421,11 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
         .from('products')
         .update({ ...stockUpdate, updated_at: new Date().toISOString() })
         .eq('id', product.id)
-      if (result.error) {
-        setError(`Stock was not updated: ${result.error.message}`)
+        .select('id')
+        .maybeSingle()
+      const updateFailure = productUpdateFailure(result)
+      if (updateFailure) {
+        setError(`Stock was not updated: ${updateFailure}`)
       } else {
         setNotice(`${product.name} inventory updated.`)
         onRefresh()
@@ -452,8 +456,11 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
         .from('products')
         .update({ status: nextStatus, updated_at: new Date().toISOString() })
         .eq('id', product.id)
-      if (result.error) {
-        setError(`Product publication was not updated: ${result.error.message}`)
+        .select('id')
+        .maybeSingle()
+      const updateFailure = productUpdateFailure(result)
+      if (updateFailure) {
+        setError(`Product publication was not updated: ${updateFailure}`)
       } else {
         setNotice(willPublish ? `${product.name} is now posted to the public Archive.` : `${product.name} is now private in the Inventory Book.`)
         onRefresh()
