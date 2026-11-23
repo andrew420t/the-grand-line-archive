@@ -31,6 +31,18 @@ export function isBulkImportDuplicate(existing, candidate) {
   return !existingLanguage || !candidateLanguage || existingLanguage === candidateLanguage
 }
 
+
+export function validateBulkImportNumericFields(row = {}) {
+  const issues = []
+  if (row.price_gbp !== '' && (!Number.isFinite(Number(row.price_gbp)) || Number(row.price_gbp) < 0)) issues.push('Invalid price')
+  if (row.stock_quantity !== '' && (!Number.isInteger(Number(row.stock_quantity)) || Number(row.stock_quantity) < 0)) issues.push('Invalid quantity')
+  for (const [field, label] of [['power', 'power'], ['cost', 'cost'], ['counter', 'counter']]) {
+    const value = String(row[field] ?? '').trim()
+    if (value && value !== '-' && (!Number.isFinite(Number(value)) || Number(value) < 0 || !Number.isInteger(Number(value)))) issues.push('Invalid ' + label)
+  }
+  return issues
+}
+
 export function parseCsv(text) {
   const rows = []
   let row = [], cell = '', quoted = false
