@@ -3,7 +3,7 @@ import { AlertCircle, ArrowRight, Check, LoaderCircle, ScanLine } from 'lucide-r
 import { CARD_FIELDS, parseCardDetails } from './cardParser'
 import { rankCatalogueMatches } from './cardMatchRanking'
 import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
-import { buildCatalogueScannerFields } from './productSchema'
+import { mergeCatalogueScannerFields } from './productSchema'
 import CatalogueReferenceImage from './CatalogueReferenceImage'
 import { findRememberedCardImage, findSharedRememberedCardImage, rememberVerifiedCardImage } from './cardRecognitionMemory'
 import { prepareCardNumberRegions, prepareManualCardCropFile } from './cardNumberRegion'
@@ -340,10 +340,7 @@ export default function CardScanner({
     const values = catalogueMatchToForm(match)
     setFields((current) => ({
       ...current,
-      ...Object.fromEntries(Object.entries(buildCatalogueScannerFields(values)).map(([key, value]) => [
-        key,
-        { value: value || '', confidence: value ? 95 : 0, needsReview: true },
-      ])),
+      ...mergeCatalogueScannerFields(current, values),
     }))
     setStatus('Catalogue details filled in. Check each value against the physical card before saving.')
   }
