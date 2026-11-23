@@ -40,4 +40,5 @@ test('rejects invalid quantities and prices', () => {
   const snapshot = buildCheckoutSnapshot(cart, [{ id: 'x', status: 'active', price: -1, stock_quantity: 4 }])
   assert.equal(snapshot.ok, false)
   assert.deepEqual(snapshot.issues.map((issue) => issue.reason), ['insufficient-stock', 'invalid-price'])
+  assert.equal(snapshot.items[0].product.price, 1)
 })
