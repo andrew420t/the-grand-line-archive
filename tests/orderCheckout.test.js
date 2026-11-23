@@ -81,3 +81,31 @@ test('atomic checkout payload rejects empty, missing IDs and invalid quantities'
     { product: { id: 'x', price: 2.5 }, quantity: 1 },
   ]), null)
 })
+
+
+test('rejects quantities outside the database integer range', () => {
+  const tooLarge = 2147483648
+  const cart = [{ product: { id: 'x', price: 1 }, quantity: tooLarge }]
+  const snapshot = buildCheckoutSnapshot(cart, [
+    { id: 'x', status: 'active', price: 1, stock_quantity: 2147483647 },
+  ])
+  assert.equal(snapshot.ok, false)
+  assert.equal(snapshot.issues[0].reason, 'insufficient-stock')
+
+  assert.equal(buildAtomicCheckoutItems([
+    { product: { id: 'x', price: 1 }, quantity: tooLarge },
+  ]), null)
+})
+
+test('rejects duplicate checkout lines whose combined quantity exceeds the database integer range', () => {
+  assert.equal(buildAtomicCheckoutItems([
+    { product: { id: 'x', price: 1 }, quantity: 2147483647 },
+    { product: { id: 'x', price: 1 }, quantity: 1 },
+  ]), null)
+})
+
+test('rejects unsafe integer quantities before constructing an RPC payload', () => {
+  assert.equal(buildAtomicCheckoutItems([
+    { product: { id: 'x', price: 1 }, quantity: Number.MAX_SAFE_INTEGER + 1 },
+  ]), null)
+})
