@@ -530,3 +530,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Image Library delete lock — 23 November 2026
 - Added a synchronous delete lock and disabled all image delete buttons while one deletion is in progress, preventing rapid duplicate deletion requests or overlapping delete operations.
 - Lock releases in `finally` after success/failure; confirmation remains required. No storage/database changes beyond the existing user-requested deletion action. CI pending.
+
+
+## DON!! source-set save concurrency audit — 23 November 2026
+- Found that DON!! source-set assignment buttons only disabled the row currently saving. Two rapid clicks, or saves on different DON!! rows, could start overlapping writes while the single saving-state value was overwritten.
+- Added a synchronous save lock and disabled all assignment save buttons while a save is active. The lock releases in `finally`; unexpected errors now receive a safe fallback message.
+- Code-level safeguard only. No live catalogue/database records were changed; CI verification is pending.
