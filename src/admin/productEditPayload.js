@@ -36,3 +36,9 @@ export function productDeleteFailure(result) {
   if (!result?.data?.id) return 'Product was not found or deletion was not permitted.'
   return ''
 }
+
+export function productUpdateFailure(result) {
+  if (result?.error) return result.error.message || 'The database rejected the product update.'
+  if (!result?.data?.id) return 'Product was not found or the update was not permitted.'
+  return ''
+}
