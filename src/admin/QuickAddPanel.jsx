@@ -23,6 +23,9 @@ const initialProduct = () => ({
   cost: '',
   card_type: '',
   effect_text: '',
+  counter: '',
+  trigger_text: '',
+  attributes: '',
   language: '',
   classification: '',
   condition: 'Near Mint',
@@ -44,6 +47,9 @@ const scannedValues = (fields) =>
   Object.fromEntries(
     [
       ...CARD_FIELDS.map(([key]) => [key, fields?.[key]?.value || '']),
+      ['counter', fields?.counter?.value || ''],
+      ['trigger_text', fields?.trigger_text?.value || ''],
+      ['attributes', fields?.attributes?.value || ''],
       ['variant_label', fields?.variant_label?.value || ''],
       ['catalogue_match_id', fields?.catalogue_match_id?.value || ''],
       ['catalogue_printing_key', fields?.catalogue_printing_key?.value || ''],
@@ -258,6 +264,9 @@ export default function QuickAddPanel({
         cost: form.cost === '' ? null : Number(form.cost),
         card_type: form.card_type.trim() || null,
         effect_text: form.effect_text.trim() || null,
+        counter: form.counter === '' ? null : Number(form.counter),
+        trigger_text: form.trigger_text.trim() || null,
+        attributes: form.attributes.trim() || null,
         language: form.language.trim() || null,
         classification: form.classification.trim() || null,
         variant_label: form.variant_label.trim() || null,
@@ -416,6 +425,9 @@ export default function QuickAddPanel({
           <label className="check-field"><input type="checkbox" checked={form.featured} onChange={(event) => setField('featured', event.target.checked)} /><span>Feature this product on the homepage</span></label>
           <label className="form-field form-field--wide"><span>Product description</span><textarea rows="3" value={form.description} onChange={(event) => setField('description', event.target.value)} /></label>
           <div className="form-field form-field--wide"><span>Card effect / text</span><textarea rows="4" value={form.effect_text} onChange={(event) => setField('effect_text', event.target.value)} placeholder="Enter only text verified from the card." /><CatalogueLanguageButtons cardNumber={form.card_number} fieldKey="effect_text" onApply={(value) => setForm((current) => ({ ...current, effect_text: value }))} /></div>
+          <label className="form-field"><span>Counter</span><input inputMode="numeric" value={form.counter} onChange={(event) => setField('counter', event.target.value.replace(/[^\d]/g, ''))} placeholder="1000" /></label>
+          <label className="form-field"><span>Attributes</span><input value={form.attributes} onChange={(event) => setField('attributes', event.target.value)} placeholder="Slash / ..." /></label>
+          <label className="form-field form-field--wide"><span>Trigger</span><textarea rows="2" value={form.trigger_text} onChange={(event) => setField('trigger_text', event.target.value)} placeholder="Trigger text, if any." /></label>
           <label className="form-field"><span>Selling price · GBP *</span><div className="price-input"><span>£</span><input required type="number" min="0" step="0.01" value={form.price_gbp} onChange={(event) => setField('price_gbp', event.target.value)} placeholder="0.00" /></div></label>
           <label className="form-field"><span>Quantity *</span><input required type="number" min="0" step="1" value={form.stock_quantity} onChange={(event) => setField('stock_quantity', event.target.value)} /></label>
         </div>
