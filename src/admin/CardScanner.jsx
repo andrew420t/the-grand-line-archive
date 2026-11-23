@@ -6,7 +6,7 @@ import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from '.
 import { buildCatalogueScannerFields } from './productSchema'
 import CatalogueReferenceImage from './CatalogueReferenceImage'
 import { findRememberedCardImage, findSharedRememberedCardImage, rememberVerifiedCardImage } from './cardRecognitionMemory'
-import { prepareCardNumberRegions } from './cardNumberRegion'
+import { prepareCardNumberRegions, prepareManualCardCropFile } from './cardNumberRegion'
 import { extractCardNumberCandidates } from './cardNumberCandidates'
 
 const confidenceLabel = (field) => {
@@ -166,8 +166,9 @@ export default function CardScanner({
       setNumberReadings(numberResults)
       const candidates = extractCardNumberCandidates(numberResults)
       setNumberCandidates(candidates)
-      setStatus('Number-area scans complete. Checking the full card for supporting details…')
-      const { data } = await worker.recognize(frontPhoto.file, {}, { blocks: true })
+      setStatus('Number-area scans complete. Checking the card photo for supporting details…')
+      const fullCardScanFile = manualCrop ? await prepareManualCardCropFile(frontPhoto.file, manualCrop) : frontPhoto.file
+      const { data } = await worker.recognize(fullCardScanFile, {}, { blocks: true })
       const lines =
         data.lines ||
         (data.blocks || []).flatMap((block) =>
