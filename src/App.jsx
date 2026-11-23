@@ -10,6 +10,9 @@ import {
   Grid2X2,
   List,
   SlidersHorizontal,
+  Grid2X2,
+  List,
+  SlidersHorizontal,
   ClipboardList,
   LockKeyhole,
   Mail,
@@ -393,7 +396,7 @@ function Storefront() {
         !needle ||
         [product.name, product.category, product.setName, product.setCode, product.rarity, product.raw?.card_number, product.raw?.variant_label]
           .filter(Boolean)
-          .some((value) => value.toLowerCase().includes(needle))
+          .some((value) => String(value).toLowerCase().includes(needle))
       const matchesSet = setFilter === 'All sets' || `${product.setCode} — ${product.setName}` === setFilter
       const matchesCategory =
         categoryFilter === 'All categories' || product.category === categoryFilter
@@ -433,7 +436,7 @@ function Storefront() {
     [storefrontProducts],
   )
   const conditions = useMemo(() => [...new Set(storefrontProducts.map((product) => String(product.raw?.condition || '').trim()).filter(Boolean))].sort(), [storefrontProducts])
-  const variants = useMemo(() => [...new Set(storefrontProducts.map((product) => String(product.raw?.variant_label || '').trim()).filter(Boolean)).sort(), [storefrontProducts])
+  const variants = useMemo(() => [...new Set(storefrontProducts.map((product) => String(product.raw?.variant_label || '').trim()).filter(Boolean))].sort(), [storefrontProducts])
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0)
   const cartTotal = cart.reduce(
     (total, item) => total + item.product.price * item.quantity,
