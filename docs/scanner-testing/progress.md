@@ -423,7 +423,7 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 
 ## Order-status validation audit — 23 November 2026
 - Admin order status changes now validate against the supported lifecycle values (pending, processing, shipped, completed, cancelled) before issuing an update. UI dropdown values were already restricted; this adds a guard at the action boundary.
-- Added regression tests for accepted values, normalization, and invalid/empty inputs. Database constraints and live RLS remain unverified. CI pending.
+- Added regression tests for accepted values, normalization, and invalid/empty inputs. Database constraints and live RLS remain unverified. CI passed on commit `30f3a5c3` (tests, lint, build).
 
 - Admin order-status updates also use per-order in-flight guards, try/catch/finally error recovery, and reliably release busy state. This prevents rapid repeated status-change requests and stuck UI after unexpected errors. CI pending.
 
