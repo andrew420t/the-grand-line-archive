@@ -263,6 +263,7 @@ function Storefront() {
     if (!hasSupabaseConfig || !supabase) return
     setCatalogLoading(true)
     setCatalogError('')
+    try {
     const [productsResult, categoriesResult, setsResult] = await Promise.all([
       supabase.from('products').select('*'),
       supabase.from('categories').select('*'),
@@ -275,7 +276,10 @@ function Storefront() {
     if (failedResult) {
       setCatalogError(failedResult.error.message)
       setProducts([])
-      setCatalogLoading(false)
+      setCategories([])
+      setSets([])
+      setCategoryNames([])
+      setSetCount(0)
       return
     }
 
@@ -312,7 +316,16 @@ function Storefront() {
       ),
     )
     setSetCount(setRows.length)
-    setCatalogLoading(false)
+    } catch (error) {
+      setCatalogError(`Could not load catalogue: ${error?.message || 'Unexpected error.'}`)
+      setProducts([])
+      setCategories([])
+      setSets([])
+      setCategoryNames([])
+      setSetCount(0)
+    } finally {
+      setCatalogLoading(false)
+    }
   }, [])
 
   const loadSiteSettings = useCallback(async () => {
