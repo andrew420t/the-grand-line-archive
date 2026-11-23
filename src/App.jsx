@@ -715,8 +715,11 @@ function Storefront() {
         .from('orders')
         .update({ status })
         .eq('id', orderId)
-      if (result.error) {
-        setOrdersError(`Could not update order status: ${result.error.message}`)
+        .select('id')
+        .maybeSingle()
+      const updateFailure = orderStatusUpdateFailure(result)
+      if (updateFailure) {
+        setOrdersError(`Could not update order status: ${updateFailure}`)
       } else {
         await loadOrders(true)
         notify('Order status updated.')
