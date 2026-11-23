@@ -69,6 +69,10 @@ BEGIN
 END
 $atomic_checkout_preflight$;
 
+-- Explicit reservation marker keeps legacy orders (created before this RPC) from being restocked on cancellation.
+ALTER TABLE public.orders
+  ADD COLUMN IF NOT EXISTS stock_reserved boolean NOT NULL DEFAULT false;
+
 CREATE OR REPLACE FUNCTION public.create_order_atomic(p_items jsonb)
 RETURNS uuid
 LANGUAGE plpgsql
@@ -138,8 +142,8 @@ BEGIN
     v_total := v_total + (v_product.price * v_item.quantity);
   END LOOP;
 
-  INSERT INTO public.orders (user_id, status, total_amount)
-  VALUES (v_user_id, 'pending', round(v_total, 2))
+  INSERT INTO public.orders (user_id, status, total_amount, stock_reserved)
+  VALUES (v_user_id, 'pending', round(v_total, 2), true)
   RETURNING id INTO v_order_id;
 
   FOR v_item IN
@@ -194,6 +198,7 @@ SET search_path = public, auth
 AS $function$
 DECLARE
   v_current_status text;
+  v_stock_reserved boolean;
   v_item record;
 BEGIN
   IF auth.uid() IS NULL OR NOT coalesce(public.is_admin(), false) THEN
@@ -204,7 +209,7 @@ BEGIN
     RAISE EXCEPTION 'Invalid order status.';
   END IF;
 
-  SELECT status INTO v_current_status
+  SELECT status, stock_reserved INTO v_current_status, v_stock_reserved
   FROM public.orders
   WHERE id = p_order_id
   FOR UPDATE;
@@ -230,22 +235,26 @@ BEGIN
 
   IF lower(trim(p_new_status)) = 'cancelled' THEN
 
-    UPDATE public.orders SET status = 'cancelled' WHERE id = p_order_id;
+    IF coalesce(v_stock_reserved, false) THEN
+      FOR v_item IN
+        SELECT product_id, SUM(quantity)::integer AS quantity
+        FROM public.order_items
+        WHERE order_id = p_order_id
+        GROUP BY product_id
+        ORDER BY product_id
+      LOOP
+        UPDATE public.products
+        SET stock_quantity = stock_quantity + v_item.quantity
+        WHERE id = v_item.product_id;
+        IF NOT FOUND THEN
+          RAISE EXCEPTION 'Could not restore stock for product %. Cancellation rolled back.', v_item.product_id;
+        END IF;
+      END LOOP;
+    END IF;
 
-    FOR v_item IN
-      SELECT product_id, SUM(quantity)::integer AS quantity
-      FROM public.order_items
-      WHERE order_id = p_order_id
-      GROUP BY product_id
-      ORDER BY product_id
-    LOOP
-      UPDATE public.products
-      SET stock_quantity = stock_quantity + v_item.quantity
-      WHERE id = v_item.product_id;
-      IF NOT FOUND THEN
-        RAISE EXCEPTION 'Could not restore stock for product %. Cancellation rolled back.', v_item.product_id;
-      END IF;
-    END LOOP;
+    UPDATE public.orders
+    SET status = 'cancelled', stock_reserved = false
+    WHERE id = p_order_id;
 
     RETURN p_order_id;
   END IF;
