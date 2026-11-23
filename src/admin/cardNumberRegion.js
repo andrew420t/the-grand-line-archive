@@ -15,6 +15,30 @@ export function validateManualCardCrop(crop, imageWidth, imageHeight) {
   }
 }
 
+export async function prepareManualCardCropFile(file, crop) {
+  if (!file?.type?.startsWith('image/')) throw new Error('Choose a supported card photograph.')
+  const sourceUrl = URL.createObjectURL(file)
+  try {
+    const image = await new Promise((resolve, reject) => {
+      const element = new Image()
+      element.onload = () => resolve(element)
+      element.onerror = () => reject(new Error('The card photograph could not be opened.'))
+      element.src = sourceUrl
+    })
+    const canvas = createManualCropCanvas(image, crop)
+    const output = await new Promise((resolve, reject) => canvas.toBlob(
+      (blob) => blob
+        ? resolve(new File([blob], 'manual-card-crop.jpg', { type: 'image/jpeg' }))
+        : reject(new Error('Could not prepare the full-card crop for OCR.')),
+      'image/jpeg',
+      0.96,
+    ))
+    return output
+  } finally {
+    URL.revokeObjectURL(sourceUrl)
+  }
+}
+
 function createManualCropCanvas(image, crop) {
   const bounds = validateManualCardCrop(crop, image.width, image.height)
   if (!bounds) throw new Error('The manual card crop is invalid. Select a larger rectangle fully inside the photograph.')
