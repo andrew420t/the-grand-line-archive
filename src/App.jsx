@@ -568,7 +568,13 @@ function Storefront() {
     } else {
       setOrderItems([])
     }
-    setOrdersLoading(false)
+    } catch (error) {
+      setOrdersError(`Could not load orders: ${error?.message || 'Unexpected error.'}`)
+      setOrders([])
+      setOrderItems([])
+    } finally {
+      setOrdersLoading(false)
+    }
   }, [user])
 
   useEffect(() => {
