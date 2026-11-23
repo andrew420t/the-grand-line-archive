@@ -107,3 +107,10 @@ test('flags legacy entries without enough identity as possible duplicates', () =
     { catalogue_match_id: 'kaido-parallel:en:op17', catalogue_printing_key: 'kaido-parallel', variant_label: 'Parallel', language: 'English' },
   ), 'possible')
 })
+
+test('uses stable printing key when catalogue match IDs differ', () => {
+  assert.equal(classifyPrintingDuplicate(
+    { catalogue_match_id: 'source-a:en:op17', catalogue_printing_key: 'kaido-normal', language: 'English' },
+    { catalogue_match_id: 'source-b:en:op17', catalogue_printing_key: 'kaido-normal', language: 'English' },
+  ), 'exact')
+})
