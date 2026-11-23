@@ -21,7 +21,7 @@ test('printing key selects exact printing and prefers requested language', () =>
 
 test('set and variant identity filter reference images without generic fallback', () => {
   assert.equal(selectPrimaryCatalogueMatch(matches, { setCode: 'OP-17', variantLabel: 'Parallel', language: 'en' })?.id, 'parallel-en')
-  assert.equal(selectPrimaryCatalogueMatch(matches, { setCode: 'OP17', variantLabel: 'Promo' })?.id, 'other-set-en')
+  assert.equal(selectPrimaryCatalogueMatch(matches, { setCode: 'P', variantLabel: 'Promo' })?.id, 'other-set-en')
   assert.equal(selectPrimaryCatalogueMatch(matches, { setCode: 'OP17', variantLabel: 'Alternate Art' }), null)
 })
 
