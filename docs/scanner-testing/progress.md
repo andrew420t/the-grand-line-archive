@@ -384,3 +384,11 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Found a detection edge case: category labels such as `DON card` and `DON cards` were normalized to `doncard`/`doncards` but did not count as DON!! printings. They could therefore bypass DON set attribution and show an incorrect `Unassigned` label.
 - Expanded exact category recognition for DON, DON card, and DON cards while deliberately not matching unrelated names such as `Donquixote`.
 - Added regression coverage for spaced/punctuated DON labels and a non-DON category false-positive guard. CI verification is pending; no live catalogue/database change was made.
+
+
+## Bulk import safety and card-detail preservation audit — 23 November 2026
+- Found that the CSV bulk-import template and field mapping omitted Counter, Trigger Text and Attributes. These values could be lost when importing catalogue-reviewed card details, and the extended-schema preflight did not consider them.
+- Added the three columns to the template, parser aliases, catalogue-match application, insert form payload and extended-column preflight, so the fields are checked before any import attempts to write them.
+- Extracted CSV parsing into a testable module, added unmatched-quote and duplicate-header errors, and made blank rows safe to ignore.
+- Added duplicate detection within the uploaded CSV as well as existing inventory. Identity matching normalizes set-code formatting and treats known different languages or variants as distinct; ambiguous missing-language records remain flagged for review.
+- Regression tests cover field mapping, quoted commas/quotes, multiline cells, CRLF and blank rows, malformed CSV, and duplicate identity. Import was not executed; no live inventory was changed. CI verification pending.
