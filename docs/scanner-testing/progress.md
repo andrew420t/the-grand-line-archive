@@ -281,3 +281,10 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - When multiple catalogue printings share a card number, the confirmation dialog explicitly warns that OCR cannot determine the finish by itself and asks the user to compare the artwork and variant.
 - Added focused regression fixtures for the OP17-062 Kaido normal/parallel pair and Japanese EB04-005 Trafalgar Law. These test candidate retention and identity metadata, not live catalogue completeness or OCR accuracy.
 - Variant selection still requires human confirmation. Price editing/overrides are not implemented in this increment, and no prices are sourced or changed by this UI.
+
+
+## Prevent stale card-number-only variant memory — 23 November 2026
+- Found a subtle variant-selection risk during review: a browser preference keyed only by card number could promote a previously chosen Parallel printing when the next physical card with that same number was the Normal version (or vice versa).
+- Removed that card-number-only preference from scanner ranking and removed its misleading checkbox. A prior choice can influence ranking only when the current uploaded photograph produces a match in the local/shared image-recognition memory; that remains a suggestion and still requires the user to confirm the candidate.
+- Added/retained regression coverage for the ranking signal: verified image-memory matches can help ranking, but OCR name and language signals remain available when no image-memory match exists.
+- This avoids treating a card number as a unique printing identity. It does not claim that image similarity can always distinguish foil/parallel finishes; human comparison and confirmation remain required.
