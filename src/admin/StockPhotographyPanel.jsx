@@ -44,7 +44,8 @@ export default function StockPhotographyPanel({
         photos,
       })
       await removeLocalPhotos(photos)
-      onPhotosChange([])
+      const uploadedPhotoIds = new Set(photos.map((photo) => photo.id))
+      onPhotosChange((current) => current.filter((photo) => !uploadedPhotoIds.has(photo.id)))
       setNotice(`${saved.length} photograph${saved.length === 1 ? '' : 's'} linked to ${selectedProduct.name}.`)
       onSaved()
     } catch (uploadError) {
