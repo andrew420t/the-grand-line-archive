@@ -375,5 +375,6 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Verified the current source file contains **165 DON!! records and 308 unique printing keys**, with no conflicting duplicate printing-key assignments. The source manifest timestamp is **22 October 2026**; freshness is separately tracked in the catalogue coverage report.
 - Added source slug normalization (OP/EB/ST/PRB, combined OP14-EB04/OP15-EB04, Double Pack DP-xx, and Promo) and loaded the DON!! set mapping into the catalogue cache.
 - Gallery and coverage now prioritize a manually saved admin assignment, then the source DON!! set attribution, then linked product data. Gallery entries identify source-data attribution instead of implying a manually assigned set.
+- Follow-up UI audit found the manual DON!! assignment dropdown omitted Double Pack sets even though the source data includes DP-02 through DP-12. Added DP-01–DP-12 options and standardized the Promo option value to `PROMO`, matching the normalized source-set code.
 - DON!! entries continue linking to Bandai's DON!! PDF regardless of their mapped source set. Regression tests added for slug mapping, key attribution, and official DON!! link routing.
 - This is source-data/code-level verification, not a live catalogue UI or database test. No live DB changes, production deployment, or migration execution.
