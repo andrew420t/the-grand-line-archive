@@ -1074,3 +1074,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Extended admin-feature migration preflight to reject missing `products.status` and incompatible existing `site_settings` column shapes (text ID/jsonb settings) instead of allowing `CREATE TABLE IF NOT EXISTS` to mask an incompatible table. SQL remains review-only.
 - Expanded the read-only grant audit again to include column-level grants for product_images, site_settings, catalogue override tables, and DON!! overrides, complementing the order/order_items audit.
 - Atomic checkout proposal now verifies `orders.stock_reserved` is boolean NOT NULL after adding it (default false), and stops if an existing incompatible column is found rather than silently using a wrong schema.
+
+
+## Initial full-testing audit — 23 November 2026
+- Exact PR #26 head checked: `0a4c5a277812c7d7bc11542be0f92b4924238ace`.
+- GitHub Actions run **45225534821** passed the automated pipeline: `npm ci`, `npm test` (**115 tests; 115 pass, 0 fail**), `npm run lint` (**12 warnings, 0 errors**), and `npm run build`.
+- CI warning review started. Warnings include unused declarations/imports, React ref/effect lint warnings, and action-runtime Node.js deprecation. They are not CI failures, but require triage before readiness.
+- Still unverified: live Cloudflare environment/branch/deployment; safe staging Supabase schema/RLS/grants and proposed RPC setup; browser auth, customer/admin permissions, scanner camera and physical-card cases; image-library uploads/cleanup; bulk import; storefront filtering/details; cart/checkout/order lifecycle; mobile layout; and end-to-end regression.
+- No production/staging data was modified. No merge or deployment was performed.
