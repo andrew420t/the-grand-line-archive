@@ -549,3 +549,4 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - The front-image update verifies that the target product row was actually returned, rather than treating a zero-row update as success.
 - If the front-image update fails or its response is ambiguous, the upload recovery path attempts to restore the previous image URL before removing the new image metadata and uploaded storage files. Any rollback failure is included in the surfaced error.
 - This remains best-effort recovery across separate Supabase Storage and database operations, not a single atomic transaction. No live database changes or migrations were performed.
+- Follow-up concurrency safeguard: rollback now restores the previous product image only when the row still contains the exact front-image URL written by this upload. This avoids overwriting a newer image selected by another administrator during recovery.
