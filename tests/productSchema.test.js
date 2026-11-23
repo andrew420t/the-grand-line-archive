@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { buildNewProductPayload } from '../src/admin/productSchema.js'
+import { buildNewProductPayload, classifyPrintingDuplicate } from '../src/admin/productSchema.js'
 
 const form = {
   name: 'Monkey D. Luffy',
@@ -79,8 +79,6 @@ test('keeps normal and parallel catalogue printings distinct through inventory p
   assert.equal(parallel.variant_label, 'Parallel')
 })
 
-
-import { classifyPrintingDuplicate } from '../src/admin/productSchema.js'
 
 test('blocks the same exact catalogue printing', () => {
   assert.equal(classifyPrintingDuplicate(
