@@ -148,11 +148,16 @@ export default function ImageLibraryPanel({ user }) {
 
   const chooseFiles = (fileList) => {
     if (uploadLock.current) { setError('Wait for the current upload to finish before adding more files.'); return }
-    const selected = [...fileList].filter((file) => file.type.startsWith('image/'))
+    const allSelected = [...fileList]
+    const selected = allSelected.filter((file) => file.type.startsWith('image/'))
+    const rejectedCount = allSelected.length - selected.length
     const remaining = Math.max(0, 30 - files.length)
     const accepted = selected.slice(0, remaining)
     setFiles((current) => [...current, ...accepted])
-    setError(selected.length > remaining ? 'The image library accepts up to 30 files per upload batch.' : '')
+    const messages = []
+    if (rejectedCount) messages.push(`${rejectedCount} non-image file${rejectedCount === 1 ? ' was' : 's were'} skipped.`)
+    if (selected.length > remaining) messages.push('The image library accepts up to 30 files per upload batch; extra images were skipped.')
+    setError(messages.join(' '))
     setNotice(accepted.length ? `${accepted.length} image${accepted.length === 1 ? '' : 's'} ready to upload.` : '')
   }
   const upload = async () => {
