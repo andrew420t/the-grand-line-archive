@@ -1,7 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ImagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './productStorage'
-import { getCatalogueCoverageReport, getCatalogueImageGallery, getCatalogueReferenceTestMatrix } from './cardCatalogue'
+import { getCatalogueCoverageReport, getCatalogueImageGallery, getCatalogueReferenceTestMatrix, saveDonCardSetOverride } from './cardCatalogue'
+
+const DON_SET_OPTIONS = [
+  ...Array.from({ length: 18 }, (_, index) => 'OP-' + String(index + 1).padStart(2, '0')),
+  ...Array.from({ length: 5 }, (_, index) => 'EB-' + String(index + 1).padStart(2, '0')),
+  'PRB-01', 'PRB-02', 'OP14-EB04', 'OP15-EB04',
+  ...Array.from({ length: 36 }, (_, index) => 'ST-' + String(index + 1).padStart(2, '0')),
+  'Promo', 'Other Product',
+]
 
 export default function ImageLibraryPanel({ user }) {
   const inputRef = useRef(null)
@@ -29,6 +37,10 @@ export default function ImageLibraryPanel({ user }) {
   const [matrixReport, setMatrixReport] = useState(null)
   const [matrixResults, setMatrixResults] = useState([])
   const [matrixError, setMatrixError] = useState('')
+  const [donSetSelections, setDonSetSelections] = useState({})
+  const [donSetSaving, setDonSetSaving] = useState('')
+  const [donSetError, setDonSetError] = useState('')
+  const [donSetNotice, setDonSetNotice] = useState('')
 
   const loadImages = useCallback(async () => {
     setLoading(true); setError('')
@@ -89,6 +101,24 @@ export default function ImageLibraryPanel({ user }) {
     } finally {
       setMatrixRunning(false)
     }
+  }
+
+  const saveDonSet = async (item) => {
+    const setCode = donSetSelections[item.id] || (item.setCode && item.setCode !== 'DON!!' ? item.setCode : '')
+    if (!setCode) { setDonSetError('Choose the source set for this DON!! printing first.'); return }
+    setDonSetSaving(item.id); setDonSetError(''); setDonSetNotice('')
+    try {
+      await saveDonCardSetOverride({
+        printingKey: item.printingKey,
+        language: item.language,
+        setCode,
+        userId: user?.id,
+        sourceNote: 'Manually assigned after checking Bandai DON!! reference list',
+      })
+      setDonSetNotice(`Saved ${item.cardNumber} as ${setCode}.`)
+      await loadReferenceImages(0)
+    } catch (saveError) { setDonSetError(saveError.message) }
+    finally { setDonSetSaving('') }
   }
 
   const chooseFiles = (fileList) => {
@@ -216,6 +246,8 @@ export default function ImageLibraryPanel({ user }) {
           <label className="form-field"><span>Search card number, name or set</span><input type="search" value={referenceQuery} onChange={(event) => setReferenceQuery(event.target.value)} placeholder="OP01-001 or Monkey D. Luffy" /></label>
           <label className="form-field"><span>Language</span><select value={referenceLanguage} onChange={(event) => setReferenceLanguage(event.target.value)}><option value="all">All languages</option><option value="en">English</option><option value="jp">Japanese</option></select></label>
         </div>
+        {donSetError && <div className="error-notice"><ShieldAlert size={15} /><span>{donSetError}</span></div>}
+        {donSetNotice && <div className="success-notice"><Check size={15} /><span>{donSetNotice}</span></div>}
         {referenceError && <div className="error-notice"><ShieldAlert size={15} /><span>{referenceError}</span></div>}
         {referenceImages.length > 0 && <div className="photo-grid image-library-grid">{referenceImages.map((item) => <article className="photo-card" key={item.id}>
           <div className="photo-card__preview">{failedReferenceIds.includes(item.id) ? <div className="empty-catalogue"><ImagePlus size={20}/><span>Reference image unavailable</span></div> : <img key={`${item.id}:${imageRetryVersion}`} src={fallbackReferenceIds.includes(item.id) ? item.fallbackImageUrl : item.imageUrl} alt={item.name ? item.name + ' ' + item.cardNumber : 'One Piece card ' + item.cardNumber} loading="lazy" onLoad={() => setLoadedReferenceIds((current) => current.includes(item.id) ? current : [...current, item.id])} onError={() => {
@@ -226,7 +258,7 @@ export default function ImageLibraryPanel({ user }) {
             }
             setFailedReferenceIds((current) => current.includes(item.id) ? current : [...current, item.id])
           }} />}</div>
-          <div className="photo-card__body"><span className="photo-card__name" title={item.name}>{item.isDon ? (item.sourceText || item.name || 'DON!! Card') : (item.name || item.cardNumber)} · {item.cardNumber}</span><span className="muted-copy">{item.language.toUpperCase()} · {item.setCode || (item.isDon ? 'DON!! · set not identified' : 'Unassigned')} · {item.rarity} {item.variant}</span>{item.officialListUrl && <a className="muted-copy" href={item.officialListUrl} target="_blank" rel="noopener noreferrer">Official Bandai list / DON!! source ↗</a>}<span className="muted-copy">{failedReferenceIds.includes(item.id) ? 'Image failed to load' : fallbackReferenceIds.includes(item.id) ? 'Alternate official image loaded' : item.source || 'Reference artwork · not a personal upload'}{item.usesBaseImageFallback || fallbackReferenceIds.includes(item.id) ? ' · base/alternate artwork; special finish may differ' : ''}</span></div>
+          <div className="photo-card__body"><span className="photo-card__name" title={item.name}>{item.isDon ? (item.sourceText || item.name || 'DON!! Card') : (item.name || item.cardNumber)} · {item.cardNumber}</span><span className="muted-copy">{item.language.toUpperCase()} · {item.setCode || (item.isDon ? 'DON!! · set not identified' : 'Unassigned')} · {item.rarity} {item.variant}</span>{item.officialListUrl && <a className="muted-copy" href={item.officialListUrl} target="_blank" rel="noopener noreferrer">Official Bandai list / DON!! source ↗</a>}<span className="muted-copy">{failedReferenceIds.includes(item.id) ? 'Image failed to load' : fallbackReferenceIds.includes(item.id) ? 'Alternate official image loaded' : item.source || 'Reference artwork · not a personal upload'}{item.usesBaseImageFallback || fallbackReferenceIds.includes(item.id) ? ' · base/alternate artwork; special finish may differ' : ''}</span>{item.isDon && <div className="catalogue-don-set-assignment"><label className="form-field"><span>DON!! source set</span><select value={donSetSelections[item.id] ?? (item.setCode !== 'DON!!' ? item.setCode : '')} onChange={(event) => setDonSetSelections((current) => ({ ...current, [item.id]: event.target.value }))}><option value="">Choose source set…</option>{DON_SET_OPTIONS.map((code) => <option key={code} value={code}>{code}</option>)}</select></label><button className="button button--outline" type="button" disabled={donSetSaving === item.id} onClick={() => saveDonSet(item)}>{donSetSaving === item.id ? 'Saving set…' : 'Save source set'}</button>{item.setAssignmentSource && <span className="muted-copy">Set source: {item.setAssignmentSource}</span>}</div>}</div>
         </article>)}</div>}
         {referenceNextOffset !== null && <button className="button button--outline" type="button" disabled={referenceLoading} onClick={() => loadReferenceImages(referenceNextOffset)}>{referenceLoading ? 'Loading catalogue images…' : 'Load more reference images'}</button>}
         {referenceLoading && referenceImages.length === 0 && <div className="loading-state">Loading catalogue reference images…</div>}{!referenceLoading && referenceImages.length === 0 && !referenceError && <p className="muted-copy">No reference images match this search. Try another card number or select all languages.</p>}
