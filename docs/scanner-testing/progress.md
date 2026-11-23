@@ -520,3 +520,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Image reference matrix duplicate-run lock — 23 November 2026
 - Added a synchronous lock around the catalogue image reference matrix check so rapid clicks cannot launch overlapping 100-reference checks before the disabled state renders.
 - Lock is released in `finally` on completion or failure. This avoids duplicate browser image-check traffic; it does not change the test set or catalogue data. CI pending.
+
+
+## Image Library selection feedback — 23 November 2026
+- Image Library selection now reports non-image files rejected and images skipped when the 30-file batch limit is reached, instead of silently filtering/truncating those selections.
+- Accepted files stay queued; upload locking and queue preservation remain unchanged. CI pending.
