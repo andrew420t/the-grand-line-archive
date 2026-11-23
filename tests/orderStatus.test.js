@@ -24,3 +24,9 @@ test('checkout cleanup requires a confirmed deleted order', () => {
   assert.equal(orderDeleteFailure({ data: null, error: null }), 'The pending order was not found or deletion was not permitted.')
   assert.equal(orderDeleteFailure({ data: null, error: { message: 'RLS denied' } }), 'RLS denied')
 })
+
+test('atomic status RPC must return the expected order ID', () => {
+  assert.equal(orderStatusUpdateFailure({ data: 'order-1', error: null }, 'order-1'), '')
+  assert.equal(orderStatusUpdateFailure({ data: 'another-order', error: null }, 'order-1'), 'Order was not found or the status update was not permitted.')
+  assert.equal(orderStatusUpdateFailure({ data: null, error: null }, 'order-1'), 'Order was not found or the status update was not permitted.')
+})
