@@ -118,6 +118,37 @@ export function buildCatalogueScannerFields(values) {
   return Object.fromEntries(fieldNames.map((key) => [key, values?.[key] ?? '']))
 }
 
+const CATALOGUE_SCANNER_IDENTITY_FIELDS = new Set([
+  'catalogue_match_id',
+  'catalogue_printing_key',
+  'catalogue_reference_image_url',
+  'catalogue_reference_image_source',
+  'reference_image_url',
+  'reference_printing_key',
+  'reference_match_id',
+  'reference_image_source',
+])
+
+// Prefer verified catalogue values, but do not discard useful OCR text when a
+// catalogue observation is blank. Identity fields are always replaced so a
+// previous printing can never remain attached to a newly selected card.
+export function mergeCatalogueScannerFields(currentFields, values) {
+  const catalogueValues = buildCatalogueScannerFields(values)
+  return Object.fromEntries(Object.entries(catalogueValues).map(([key, catalogueValue]) => {
+    const current = currentFields?.[key] || {}
+    const hasCatalogueValue = catalogueValue !== '' && catalogueValue !== null && catalogueValue !== undefined
+    const value = CATALOGUE_SCANNER_IDENTITY_FIELDS.has(key)
+      ? (catalogueValue ?? '')
+      : hasCatalogueValue ? catalogueValue : (current.value ?? '')
+    return [key, {
+      ...current,
+      value,
+      confidence: hasCatalogueValue ? 95 : (current.confidence || 0),
+      needsReview: true,
+    }]
+  }))
+}
+
 export function buildNewProductPayload(form, setId, includeCardDetails) {
   const timestamp = new Date().toISOString()
   const id = globalThis.crypto.randomUUID()
