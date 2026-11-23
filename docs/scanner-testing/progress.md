@@ -941,3 +941,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Japanese EB01-002 rendered successfully; Japanese EB01-001 still returned an Internal Error. Japanese EB02 sample paths EB01-001_p2 and EB01-021_p2 both remained inaccessible. English EB01-001 rendered successfully. These retries corroborate the earlier 94/100 image-load count; they do not raise the count because the already-successful paths were previously recorded.
 - Image-load status remains 94/100 PASS, 2/100 retrieval errors (Japanese EB01-001 and EB02's Japanese EB01-001_p2), 4/100 unverified (OP17). Official cardlist/image routes remain partially blocked by the browser tool. No images were sent to OCR.
 - Re-attempted the Wrangler-name-derived Worker root and `/shop`; both were inaccessible through the browser tool. Treat production/live UI as unverified, not a deployment failure.
+
+
+### Crop-boundary correction and exact-head CI — 23 November 2026
+
+- Corrected the crop-boundary regression assertion after the earlier test failure; the failure was a stale expected bound, not a crop implementation defect.
+- Follow-up review also clamped the automatic OCR footer-zone crop geometry to source image dimensions, preventing rounded coordinates from exceeding the image on tiny/odd-sized inputs.
+- GitHub Actions run #474 (ID `45211676697`) passed on PR head `a840ae544de57a031e352d3872bdf64f4a4c6f13`: install, tests, lint, and production build all succeeded. This exact-head CI is now verified.
+- Remaining validation is still physical-card OCR and browser/mobile interaction, especially iOS Safari, crop selection, camera flow, and staging integration. No production deployment, merge, or production-data change.
