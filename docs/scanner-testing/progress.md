@@ -1005,3 +1005,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - GitHub Actions run for the progress-doc commit `0305184778a65d9ecf665dc8b8f1a34afbbb6143` completed successfully (`Verify application`).
 - A further rollback correctness gap was found during review: product-image rollback used a conditional update to protect concurrent admin edits, but it did not verify whether that condition matched a row. It could silently report no cleanup issue even if rollback was skipped. The rollback now requests the affected row and reports when it was not applied (e.g. the product was removed or the image changed concurrently). Commit `a088ad37d873dbc162eaa58b3b420258b11a825e`; exact-head CI is pending.
 - PR mergeability was refreshed and currently reports `false` for this latest commit; this may be GitHub's transient recalculation or a conflict and needs another check. No merge or deployment has been attempted.
+
+
+### Image Library upload rollback exception audit — 23 November 2026
+
+- Reviewed the separate Image Library batch upload rollback path and found it still awaited Storage removal without guarding thrown exceptions. A cleanup runtime/network exception could replace the original upload failure and obscure which uploads were completed.
+- Added an independent cleanup exception guard so the original upload failure is preserved and any rollback failure is appended to the error message. Commit `36e53ca9ea1e0567f5c1c3002a62f99094407048`; exact-head CI pending.
+- Exact-head CI for preceding code commit `a088ad37d873dbc162eaa58b3b420258b11a825e` passed; CI for progress-doc commit `120bfdeaa604f027afb19ec61bcde7fc1e60e2d8` also passed. This new change is not yet verified.
