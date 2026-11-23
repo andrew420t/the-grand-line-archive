@@ -161,3 +161,13 @@ test('catalogue scanner handoff copies all printing identity and card-detail fie
   for (const [key, value] of Object.entries(values)) assert.equal(scannerFields[key], value)
   assert.equal(scannerFields.effect_text, '')
 })
+
+
+test('normalizes set-code punctuation and resolves the matching set ID', async () => {
+  const { normalizeSetCode, resolveSetIdForCode } = await import('../src/admin/productSchema.js')
+  const sets = [{ id: 'op17-id', code: 'OP17' }, { id: 'eb04-id', code: 'EB-04' }]
+  assert.equal(normalizeSetCode(' op-17 '), 'OP17')
+  assert.equal(resolveSetIdForCode(sets, 'OP-17'), 'op17-id')
+  assert.equal(resolveSetIdForCode(sets, 'EB04'), 'eb04-id')
+  assert.equal(resolveSetIdForCode(sets, 'OP99'), '')
+})
