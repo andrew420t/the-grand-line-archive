@@ -824,3 +824,13 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - `prepareCardNumberRegions(file, manualCrop)` now supports an optional crop rectangle; when supplied, the four number zones and rotated-footer zones are generated from the cropped image instead of the full scene. Existing no-crop behaviour remains unchanged.
 - Added unit coverage for normalized-to-pixel mapping and invalid/tiny/out-of-bounds rectangles. **This is only the crop-processing foundation; no manual crop-selection UI is implemented yet and it is not integrated into CardScanner.** Do not claim this fixes the Saint Shamrock photo until a user-selectable crop flow and physical-photo OCR test are completed.
 - Commits: `3cbea63` crop API/helper, `1ae3027` tests. CI for these changes is pending.
+
+
+### Optional manual crop controls integrated — 23 November 2026
+
+- Integrated the manual crop-processing helper into the CardScanner flow: users can enable a crop and enter left/top/width/height as percentages, then scan the cropped photo; a reset returns to the full image.
+- The crop is optional and off by default. The original uploaded photo remains unchanged. Invalid or too-small rectangles are rejected by the crop validator.
+- Added responsive controls styling for desktop and narrow screens.
+- **Important UX limitation:** this first control is percentage-based rather than a drag-to-select overlay, so users must estimate coordinates. It is a usable recovery control but needs a visual crop-selection/preview improvement and a real photo test before calling it complete.
+- Code commits: scanner controls `74e6eda`; CSS `19eff00`. CI has not yet reported for the exact latest head at the time of this note.
+- PR #26 remains open/unmerged; no production deployment or production data changes.
