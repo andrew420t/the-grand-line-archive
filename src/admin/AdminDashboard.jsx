@@ -398,17 +398,22 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     setBusyId(String(product.id))
     setError('')
     setNotice('')
-    const result = await supabase
-      .from('products')
-      .update({ ...stockUpdate, updated_at: new Date().toISOString() })
-      .eq('id', product.id)
-    if (result.error) {
-      setError(`Stock was not updated: ${result.error.message}`)
-    } else {
-      setNotice(`${product.name} inventory updated.`)
-      onRefresh()
+    try {
+      const result = await supabase
+        .from('products')
+        .update({ ...stockUpdate, updated_at: new Date().toISOString() })
+        .eq('id', product.id)
+      if (result.error) {
+        setError(`Stock was not updated: ${result.error.message}`)
+      } else {
+        setNotice(`${product.name} inventory updated.`)
+        onRefresh()
+      }
+    } catch (stockError) {
+      setError(`Stock was not updated: ${stockError.message || 'Unexpected error.'}`)
+    } finally {
+      setBusyId('')
     }
-    setBusyId('')
   }
 
   const toggleArchivePublication = async (product) => {
