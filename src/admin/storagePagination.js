@@ -1,5 +1,5 @@
-/** Fetch every page from a paginated Supabase Storage list operation. */
-export async function fetchAllStorageFiles(listPage, pageSize = 100) {
+/** Fetch every page from a paginated async data-list operation. */
+export async function fetchAllPages(listPage, pageSize = 100) {
   if (typeof listPage !== 'function') throw new TypeError('A storage page loader is required.')
   if (!Number.isInteger(pageSize) || pageSize < 1) throw new RangeError('Page size must be a positive integer.')
 
