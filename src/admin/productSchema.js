@@ -61,6 +61,21 @@ const slugify = (value) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
 
+
+// Keep the catalogue selection fields aligned with the scanner → QuickAdd handoff.
+// Values are copied as reviewed form values, not silently treated as verified facts.
+export function buildCatalogueScannerFields(values) {
+  const fieldNames = [
+    'name', 'card_number', 'set_code', 'rarity', 'color', 'cost', 'power',
+    'card_type', 'classification', 'language', 'effect_text', 'variant_label',
+    'counter', 'trigger_text', 'attributes', 'catalogue_match_id',
+    'catalogue_printing_key', 'catalogue_reference_image_url',
+    'catalogue_reference_image_source', 'reference_image_url',
+    'reference_printing_key', 'reference_match_id', 'reference_image_source',
+  ]
+  return Object.fromEntries(fieldNames.map((key) => [key, values?.[key] ?? '']))
+}
+
 export function buildNewProductPayload(form, setId, includeCardDetails) {
   const timestamp = new Date().toISOString()
   const id = globalThis.crypto.randomUUID()
