@@ -38,7 +38,7 @@ import BulkImportPanel from './BulkImportPanel'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
-import { buildProductEditPayload, parseInventoryStockUpdate } from './productEditPayload'
+import { buildProductEditPayload, parseInventoryStockUpdate, productDeleteFailure } from './productEditPayload'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -471,9 +471,10 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     setNotice('')
     try {
       const imagePaths = await getProductImagePaths(product.id)
-      const result = await supabase.from('products').delete().eq('id', product.id)
-      if (result.error) {
-        setError(`Product was not deleted: ${result.error.message}`)
+      const result = await supabase.from('products').delete().eq('id', product.id).select('id').maybeSingle()
+      const deleteFailure = productDeleteFailure(result)
+      if (deleteFailure) {
+        setError(`Product was not deleted: ${deleteFailure}`)
         return
       }
       onRefresh()
