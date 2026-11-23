@@ -463,3 +463,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Admin catalogue fill and product edit recovery — 23 November 2026
 - Catalogue-fill updates and product-edit saves now catch unexpected request exceptions, show an actionable error, and release their saving state in `finally`. Returned Supabase errors remain handled. This prevents stuck save buttons during network failures.
 - Catalogue-fill still only applies missing catalogue details and leaves inventory, price, and uploaded photos untouched. CI pending.
+
+
+## Bulk-import duplicate-submit guard — 23 November 2026
+- Added a synchronous ref lock to bulk CSV import so rapid repeated clicks cannot start concurrent imports before React updates the busy state. Lock is always released in `finally`, including failures.
+- Unexpected bulk-import errors now use a safe fallback message if the thrown value has no message. Partial row failures continue to be reported individually. CI pending.
