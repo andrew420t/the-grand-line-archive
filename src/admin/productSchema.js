@@ -1,3 +1,14 @@
+export const CATALOGUE_IDENTITY_FIELDS = [
+  'catalogue_match_id',
+  'catalogue_printing_key',
+  'catalogue_reference_image_url',
+  'catalogue_reference_image_source',
+  'reference_image_url',
+  'reference_printing_key',
+  'reference_match_id',
+  'reference_image_source',
+]
+
 export function normalizeSetCode(value) {
   return String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
 }
