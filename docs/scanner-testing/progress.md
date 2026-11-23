@@ -949,3 +949,8 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Follow-up review also clamped the automatic OCR footer-zone crop geometry to source image dimensions, preventing rounded coordinates from exceeding the image on tiny/odd-sized inputs.
 - GitHub Actions run #474 (ID `45211676697`) passed on PR head `a840ae544de57a031e352d3872bdf64f4a4c6f13`: install, tests, lint, and production build all succeeded. This exact-head CI is now verified.
 - Remaining validation is still physical-card OCR and browser/mobile interaction, especially iOS Safari, crop selection, camera flow, and staging integration. No production deployment, merge, or production-data change.
+
+
+### Follow-up exact-head verification — 23 November 2026
+
+- PR head advanced to `5d641f76945c9424a801c49f2fbdc3398a2d8b53`; GitHub Actions run #477 (ID `45211850487`) passed install, tests, lint, and production build. This is the latest exact-head verification checked during this pass.
