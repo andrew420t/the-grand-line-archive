@@ -177,15 +177,24 @@ export async function findRememberedCardImage(file) {
 export async function findSharedRememberedCardImage(file) {
   if (!supabase || !file) return null
   const hash = await imageHash(file)
-  const { data, error } = await supabase
-    .from('card_recognition_examples')
-    .select('printing_id,card_number,card_name,language,set_code,rarity,variant,image_hash,storage_path,confirmed_at')
-    .limit(5000)
-  if (error) {
-    if (error.code === '42P01' || error.code === 'PGRST205') return null
-    throw new Error(error.message)
+  const pageSize = 1000
+  let offset = 0
+  const data = []
+  while (true) {
+    const { data: page, error } = await supabase
+      .from('card_recognition_examples')
+      .select('printing_id,card_number,card_name,language,set_code,rarity,variant,image_hash,storage_path,confirmed_at')
+      .order('id', { ascending: true })
+      .range(offset, offset + pageSize - 1)
+    if (error) {
+      if (error.code === '42P01' || error.code === 'PGRST205') return null
+      throw new Error(error.message)
+    }
+    data.push(...(page || []))
+    if (!page || page.length < pageSize) break
+    offset += pageSize
   }
-  const ranked = (data || [])
+  const ranked = data
     .map((record) => ({ record, distance: distance(hash, record.image_hash) }))
     .sort((a, b) => a.distance - b.distance)
   const best = ranked[0]
