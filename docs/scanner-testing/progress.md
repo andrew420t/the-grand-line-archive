@@ -246,4 +246,5 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Scanner number preprocessing retains the four focused upright lower-edge crops and adds three lower-footer crops after rotating the full photograph 90°, 180° and 270°.
 - This covers cards photographed sideways and upside-down without multiplying the focused crop OCR calls by four. All seven number-area reads feed the existing candidate deduplication, catalogue lookup and human confirmation flow.
 - Scanner status now explains that it is checking multiple orientations. A regression test confirms the supported rotation set.
+- OCR crop enlargement is bounded to avoid creating oversized canvases from high-resolution phone photos; smaller focused crops can still be enlarged for readability.
 - This is an OCR robustness improvement, not a verified photo benchmark; physical card testing across orientations is still needed.
