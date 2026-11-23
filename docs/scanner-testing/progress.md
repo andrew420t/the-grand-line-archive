@@ -442,3 +442,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 
 ## Homepage settings load recovery audit — 23 November 2026
 - Website settings loading now catches unexpected Supabase/network exceptions and exposes a recoverable error instead of allowing the async callback to reject silently. CI pending.
+
+
+## Admin sign-in security cleanup — 23 November 2026
+- Removed the hardcoded four-digit frontend access code from the administrator sign-in screen. It was shipped in the client bundle and therefore offered no real security, while adding an unnecessary gate for legitimate admins.
+- Admin sign-in continues to require Supabase authentication and a verified `profiles.role = admin`; an already authenticated admin can proceed directly. UI role checks are not a substitute for database RLS policies, which remain a separate review requirement.
+- No database, account, or production changes made. CI pending.
