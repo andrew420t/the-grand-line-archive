@@ -589,6 +589,8 @@ function Storefront() {
     checkoutLock.current = true
     setOrderAction('placing')
     setOrdersError('')
+    let createdOrderId = null
+    let itemsSaved = false
     try {
 
     const latestProductsResult = await supabase
@@ -631,6 +633,7 @@ function Storefront() {
       return
     }
 
+    createdOrderId = orderResult.data.id
     const rows = checkout.items.map((item) => ({
       order_id: orderResult.data.id,
       product_id: item.product.id,
@@ -656,7 +659,12 @@ function Storefront() {
     notify('Your order has been placed.')
     navigate('/account/orders')
     } catch (error) {
-      setOrdersError(`Checkout failed unexpectedly: ${error?.message || 'Please try again.'}`)
+      let cleanupMessage = ''
+      if (createdOrderId && !itemsSaved) {
+        const cleanup = await supabase.from('orders').delete().eq('id', createdOrderId)
+        if (cleanup.error) cleanupMessage = ` The pending order could not be removed: ${cleanup.error.message}`
+      }
+      setOrdersError(`Checkout failed unexpectedly: ${error?.message || 'Please try again.'}${cleanupMessage}`)
     } finally {
       checkoutLock.current = false
       setOrderAction('')
