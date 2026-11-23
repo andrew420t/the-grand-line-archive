@@ -901,3 +901,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Added `prepareManualCardCropFile` and now use the selected crop for both focused number-region OCR and supporting full-card OCR. The original photo remains used for recognition-memory matching and saving the verified reference image.
 - Added a staging checklist item to verify this behavior.
 - Commits: `9581237` (crop file preparation), `0a981be` (scanner integration), `57aa39c` (manual checklist). Exact-head CI pending.
+
+
+### Exact-head CI verification — manual-crop full OCR integration
+
+- GitHub Actions run #455 (ID `45204683070`) **passed** for commit `db159bbebc4eabf4b366a5f3a04a395fe05469e0`.
+- All workflow steps passed: dependency installation, test suite, lint, and production build.
+- This verifies the selected crop-file preparation and its scanner integration compile and pass automated tests. It does **not** prove real-photo OCR improvement; the Saint Shamrock photo is not available in the current file set and the browser/staging UI remains untested.
