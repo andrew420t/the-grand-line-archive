@@ -74,6 +74,10 @@ function ProductImage({ product, className = '' }) {
 
   useEffect(() => {
     let active = true
+    // Reset image error state when the displayed product/identity changes;
+    // otherwise a prior failed image can suppress the next product's image.
+    setFailed(false)
+    setReferenceFailed(false)
     if (!product.raw?.card_number) {
       setReferenceImage('')
       return () => { active = false }
