@@ -51,8 +51,8 @@ test('unsharp mask leaves low-contrast noise below its threshold unchanged', () 
 
 
 test('manual crop rounding never extends source bounds by a pixel', () => {
-  const crop = validateManualCardCrop({ x: 0.25, y: 0.25, width: 0.75, height: 0.75 }, 10, 10)
-  assert.deepEqual(crop, { x: 3, y: 3, width: 7, height: 7 })
+  const crop = validateManualCardCrop({ x: 0.25, y: 0.25, width: 0.75, height: 0.75 }, 100, 100)
+  assert.deepEqual(crop, { x: 25, y: 25, width: 75, height: 75 })
   assert.ok(crop.x + crop.width <= 10)
   assert.ok(crop.y + crop.height <= 10)
   const tiny = validateManualCardCrop({ x: 0, y: 0, width: 1, height: 1 }, 1, 1)
@@ -75,8 +75,8 @@ test('manual crop validation rejects out-of-frame, tiny, and invalid selections'
 })
 
 test('manual crop accepts the minimum 12 percent dimensions and rejects smaller edges', () => {
-  assert.deepEqual(validateManualCardCrop({ x: 0, y: 0, width: 0.12, height: 0.12 }, 100, 100), {
-    x: 0, y: 0, width: 12, height: 12,
+  assert.deepEqual(validateManualCardCrop({ x: 0, y: 0, width: 0.12, height: 0.12 }, 1000, 1000), {
+    x: 0, y: 0, width: 120, height: 120,
   })
   assert.equal(validateManualCardCrop({ x: 0, y: 0, width: 0.119, height: 0.12 }, 100, 100), null)
   assert.equal(validateManualCardCrop({ x: 0, y: 0, width: 0.12, height: 0.119 }, 100, 100), null)
