@@ -171,14 +171,23 @@ export default function QuickAddPanel({
       .select(`id,name,card_number,set_id${includeVariantMetadata ? ',variant_label,language,catalogue_match_id,catalogue_printing_key' : ''}`)
       .eq('card_number', form.card_number.trim())
     query = setId ? query.eq('set_id', setId) : query.is('set_id', null)
-    const { data, error: queryError } = await query.limit(50)
-
-    if (queryError) {
-      throw new Error(
-        `Could not check the card number and set code for duplicates: ${queryError.message}`,
-      )
+    // Paginate rather than silently inspecting only the first 50 rows. A large
+    // inventory must not hide an exact duplicate later in the result set.
+    const pageSize = 1000
+    let offset = 0
+    const data = []
+    while (true) {
+      const { data: page, error: queryError } = await query.range(offset, offset + pageSize - 1)
+      if (queryError) {
+        throw new Error(
+          `Could not check the card number and set code for duplicates: ${queryError.message}`,
+        )
+      }
+      data.push(...(page || []))
+      if (!page || page.length < pageSize) break
+      offset += pageSize
     }
-    return (data || []).map((row) => ({
+    return data.map((row) => ({
       id: row.id,
       name: row.name || '',
       card_number: row.card_number,
