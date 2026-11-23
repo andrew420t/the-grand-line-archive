@@ -35,6 +35,7 @@ import {
 } from 'react-router-dom'
 import AdminDashboard from './admin/AdminDashboard'
 import AdminAccess from './admin/AdminAccess'
+import { findPrimaryCatalogueMatch } from './admin/cardCatalogue'
 import { hasSupabaseConfig, supabase } from './lib/supabase'
 import { DEFAULT_SITE_SETTINGS, normalizeSiteSettings } from './siteSettings'
 import './App.css'
@@ -65,8 +66,24 @@ const readCart = () => {
 
 function ProductImage({ product, className = '' }) {
   const [failed, setFailed] = useState(false)
+  const [referenceImage, setReferenceImage] = useState('')
+  const [referenceFailed, setReferenceFailed] = useState(false)
 
-  if (!product.image || failed) {
+  useEffect(() => {
+    let active = true
+    if (product.image || !product.raw?.card_number) {
+      setReferenceImage('')
+      return () => { active = false }
+    }
+    findPrimaryCatalogueMatch(product.raw.card_number, product.raw.language)
+      .then((match) => { if (active) setReferenceImage(match?.imageUrl || '') })
+      .catch(() => { if (active) setReferenceImage('') })
+    return () => { active = false }
+  }, [product.image, product.raw?.card_number, product.raw?.language])
+
+  const displayImage = product.image && !failed ? product.image
+    : referenceImage && !referenceFailed ? referenceImage : ''
+  if (!displayImage) {
     return (
       <div className={`product-image product-image--empty ${className}`}>
         <Anchor size={27} strokeWidth={1.2} />
@@ -78,10 +95,14 @@ function ProductImage({ product, className = '' }) {
   return (
     <img
       className={`product-image ${className}`}
-      src={product.image}
-      alt={product.name}
+      src={displayImage}
+      alt={product.name + (displayImage === referenceImage ? ' · catalogue reference image' : '')}
       loading="lazy"
-      onError={() => setFailed(true)}
+      referrerPolicy="no-referrer"
+      onError={() => {
+        if (displayImage === product.image) setFailed(true)
+        else setReferenceFailed(true)
+      }}
     />
   )
 }

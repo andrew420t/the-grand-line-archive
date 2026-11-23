@@ -55,7 +55,48 @@ async function loadCatalogue() {
     }
   })
   languages.en.printings = [...languages.en.printings, ...tcgcsvPrintings]
-  return { cards, languages }
+
+  // Build reusable indexes once. Scanner lookups previously re-filtered every
+  // catalogue table for every card number, which became increasingly expensive.
+  const cardsByNumber = new Map()
+  for (const card of cards) {
+    const number = baseCardNumber(card.number)
+    if (!number) continue
+    const entries = cardsByNumber.get(number) || []
+    entries.push(card)
+    cardsByNumber.set(number, entries)
+  }
+  const indexes = {}
+  for (const language of LANGUAGES) {
+    const data = languages[language]
+    const observationsByCard = new Map()
+    for (const item of data.observations) {
+      if (item.superseded_at) continue
+      const entries = observationsByCard.get(item.card_key) || []
+      entries.push(item)
+      observationsByCard.set(item.card_key, entries)
+    }
+    const printingsByCard = new Map()
+    for (const item of data.printings) {
+      const entries = printingsByCard.get(item.card_key) || []
+      entries.push(item)
+      printingsByCard.set(item.card_key, entries)
+    }
+    const locatorsByPrinting = new Map()
+    for (const item of data.locators) {
+      const key = item.printing_key + ':' + item.site
+      if (!locatorsByPrinting.has(key)) locatorsByPrinting.set(key, item)
+    }
+    const printingProductsByPrinting = new Map()
+    for (const item of data.printingProducts) {
+      const entries = printingProductsByPrinting.get(item.printing_key) || []
+      entries.push(item)
+      printingProductsByPrinting.set(item.printing_key, entries)
+    }
+    const productsByKey = new Map(data.products.map((item) => [item.key, item]))
+    indexes[language] = { observationsByCard, printingsByCard, locatorsByPrinting, printingProductsByPrinting, productsByKey }
+  }
+  return { cards, languages, cardsByNumber, indexes }
 }
 
 async function getCatalogue() {
@@ -84,28 +125,28 @@ export async function findCatalogueMatches(cardNumber) {
   if (!requestedNumber) return []
 
   const catalogue = await getCatalogue()
-  const matchingCards = catalogue.cards.filter((card) => baseCardNumber(card.number) === requestedNumber)
+  const matchingCards = catalogue.cardsByNumber.get(requestedNumber) || []
   const results = []
 
   for (const card of matchingCards) {
     for (const language of LANGUAGES) {
       const data = catalogue.languages[language]
-      const observations = data.observations.filter((item) => item.card_key === card.key && !item.superseded_at)
+      const index = catalogue.indexes[language]\n      const observations = index.observationsByCard.get(card.key) || []
       const observation = observations.sort((a, b) =>
         String(b.first_seen_at || '').localeCompare(String(a.first_seen_at || '')),
       )[0]
-      const printings = data.printings.filter((item) => item.card_key === card.key)
+      const printings = index.printingsByCard.get(card.key) || []
 
       for (const printing of printings) {
-        const locator = data.locators.find((item) => item.printing_key === printing.key && item.site === printing.site)
+        const locator = index.locatorsByPrinting.get(printing.key + ':' + printing.site)
         const officialImageFallback = locator?.site === 'en'
           ? `https://en.onepiece-cardgame.com/images/cardlist/card/${encodeURIComponent(locator.image_id)}.png`
           : locator?.site === 'jp'
             ? `https://www.onepiece-cardgame.com/images/cardlist/card/${encodeURIComponent(locator.image_id)}.png`
             : ''
-        const productLinks = data.printingProducts.filter((item) => item.printing_key === printing.key)
+        const productLinks = index.printingProductsByPrinting.get(printing.key) || []
         const linkedProducts = productLinks
-          .map((link) => data.products.find((product) => product.key === link.product_key))
+          .map((link) => index.productsByKey.get(link.product_key))
           .filter(Boolean)
         const products = linkedProducts.length ? linkedProducts : [null]
 
@@ -132,7 +173,7 @@ export async function findCatalogueMatches(cardNumber) {
             rarity: value(printing, 'rarity'),
             variant: value(printing, 'variant'),
             variantLabel: value(printing, 'variant'),
-            imageUrl: value(printing, 'image_url') || officialImageFallback,
+            imageUrl: officialImageFallback || value(printing, 'image_url'),
             fallbackImageUrl: officialImageFallback && officialImageFallback !== value(printing, 'image_url') ? officialImageFallback : '',
             sourceText: value(printing, 'source_text'),
             setCode,
@@ -141,7 +182,7 @@ export async function findCatalogueMatches(cardNumber) {
             releaseDate: value(product, 'release_date'),
             sourceUrl: value(product, 'product_url'),
             blockIcon: value(printing, 'block_icon'),
-            source: printing.site === 'tcgcsv' ? 'TCGplayer catalogue reference' : language === 'jp' ? 'Official Japanese card list' : 'Official English card list',
+            source: officialImageFallback ? (language === 'jp' ? 'Bandai official Japanese image' : 'Bandai official English image') : printing.site === 'tcgcsv' ? 'TCGplayer catalogue reference' : 'Koala Kollect catalogue reference',
           })
         }
       }
@@ -297,4 +338,68 @@ export function collectrSearchUrl(match) {
   if (!cardNumber) return 'https://app.getcollectr.com/'
   const query = match?.languageCode === 'jp' || match?.language === 'Japanese' ? cardNumber + ' JP' : cardNumber
   return `https://app.getcollectr.com/?query=${encodeURIComponent(query)}`
+}
+
+
+/**
+ * Resolve one safe display reference for public archive tiles. Seller-uploaded
+ * product photographs remain the primary image and are never overwritten.
+ */
+export async function findPrimaryCatalogueMatch(cardNumber, language = '') {
+  const matches = await findCatalogueMatches(cardNumber)
+  if (!matches.length) return null
+  const requested = String(language || '').toLowerCase()
+  const preferredCode = requested.startsWith('jp') || requested.includes('japanese') ? 'jp'
+    : requested.startsWith('en') || requested.includes('english') ? 'en' : ''
+  return matches.find((match) => preferredCode && match.languageCode === preferredCode && match.imageUrl)
+    || matches.find((match) => match.languageCode === 'en' && match.imageUrl)
+    || matches.find((match) => match.imageUrl)
+    || null
+}
+
+/**
+ * Read-only catalogue health summary for administrators. It reports what the
+ * current source feed actually contains; it does not imply every Bandai set
+ * has been imported or that an image URL has been live-checked.
+ */
+export async function getCatalogueCoverageReport() {
+  const catalogue = await getCatalogue()
+  const report = {
+    cards: catalogue.cards.length,
+    printings: 0,
+    withOfficialImage: 0,
+    withoutImageLocator: 0,
+    languages: {},
+    sets: {},
+    sources: ['Bandai official image URLs where a Bandai locator exists', 'Koala Kollect structured catalogue metadata'],
+    checkedAt: new Date().toISOString(),
+  }
+  for (const language of LANGUAGES) {
+    const data = catalogue.languages[language]
+    report.languages[language] = { printings: data.printings.length, withImage: 0, withoutImage: 0 }
+    for (const printing of data.printings) {
+      report.printings += 1
+      const locator = catalogue.indexes[language].locatorsByPrinting.get(printing.key + ':' + printing.site)
+      const official = locator?.image_id && (printing.site === 'en' || printing.site === 'jp')
+      const image = official || printing.image_url
+      const products = catalogue.indexes[language].printingProductsByPrinting.get(printing.key) || []
+      const setCodes = products.map((link) => catalogue.indexes[language].productsByKey.get(link.product_key)?.code).filter(Boolean)
+      if (image) {
+        report.withOfficialImage += official ? 1 : 0
+        report.languages[language].withImage += 1
+      } else {
+        report.withoutImageLocator += 1
+        report.languages[language].withoutImage += 1
+      }
+      for (const code of setCodes.length ? setCodes : ['Unassigned']) {
+        const setCode = formatSetCode(code)
+        const entry = report.sets[setCode] || { printings: 0, withImage: 0, withoutImage: 0 }
+        entry.printings += 1
+        if (image) entry.withImage += 1
+        else entry.withoutImage += 1
+        report.sets[setCode] = entry
+      }
+    }
+  }
+  return report
 }
