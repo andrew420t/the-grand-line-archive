@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { parseCsv } from '../src/admin/bulkImportCsv.js'
+import { parseCsv, isBulkImportDuplicate } from '../src/admin/bulkImportCsv.js'
 
 test('maps standard and extended card columns from the import CSV', () => {
   const rows = parseCsv('Card Name,Card Number,Set Code,Counter,Trigger Text,Attributes\nNami,OP01-016,OP01,1000,If trigger is met,Slash\n')
@@ -31,4 +31,17 @@ test('rejects unmatched quotes and duplicate headers', () => {
 
 test('requires a header and at least one data row', () => {
   assert.throws(() => parseCsv('name,card_number\n'), /header row and at least one card row/i)
+})
+
+test('duplicate identity normalizes set codes and detects same-language printing', () => {
+  assert.equal(isBulkImportDuplicate(
+    { card_number: 'OP01-016', set_code: 'OP01', variant_label: 'Normal', language: 'English' },
+    { card_number: 'OP01-016', set_code: 'OP-01', variant_label: 'normal', language: 'EN' },
+  ), true)
+})
+
+test('different languages and variants are not exact bulk-import duplicates', () => {
+  const existing = { card_number: 'EB04-005', set_code: 'EB04', variant_label: 'Parallel', language: 'Japanese' }
+  assert.equal(isBulkImportDuplicate(existing, { ...existing, language: 'English' }), false)
+  assert.equal(isBulkImportDuplicate(existing, { ...existing, variant_label: 'Normal' }), false)
 })
