@@ -436,3 +436,5 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Catalogue loading recovery audit — 23 November 2026
 - Product/category/set catalogue loading handled Supabase returned errors but unexpected exceptions could leave the loading indicator stuck.
 - Wrapped the loader in catch/finally, reports the failure and clears stale catalogue/category/set state, and guarantees loading state resets. CI pending.
+
+- Order-status controls now serialize updates globally and disable all status dropdowns while one update is in flight, keeping the shared busy indicator accurate. CI pending.
