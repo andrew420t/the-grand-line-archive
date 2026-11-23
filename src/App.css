@@ -4856,3 +4856,42 @@ h2 em {
   .scanner-manual-crop__heading { flex-direction: column; }
   .scanner-manual-crop__fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+.scanner-manual-crop__preview-instructions {
+  margin: 12px 0 8px;
+  color: #c5b991;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.scanner-manual-crop__preview {
+  position: relative;
+  display: block;
+  width: min(100%, 620px);
+  margin: 0 auto 14px;
+  overflow: hidden;
+  border: 1px solid rgba(201, 168, 102, 0.45);
+  background: #080807;
+  cursor: crosshair;
+  touch-action: none;
+  user-select: none;
+}
+.scanner-manual-crop__preview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+.scanner-manual-crop__shade {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+}
+.scanner-manual-crop__selection {
+  position: absolute;
+  border: 2px solid #e4c47e;
+  box-shadow: 0 0 0 1px rgba(15, 14, 11, 0.7), 0 0 16px rgba(228, 196, 126, 0.18);
+  background: transparent;
+  pointer-events: none;
+}
