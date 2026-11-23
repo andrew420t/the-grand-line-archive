@@ -7,6 +7,11 @@ export function validateManualCardCrop(crop, imageWidth, imageHeight) {
   // Reject tiny selections: they are unlikely to contain the whole card and
   // can amplify background/noise into misleading OCR.
   if (width < 0.12 || height < 0.12) return null
+  const pixelWidth = Math.round(width * imageWidth)
+  const pixelHeight = Math.round(height * imageHeight)
+  // A normalized crop can still be only a few pixels when the source is tiny.
+  // Enforce a modest absolute floor before enlarging it for OCR.
+  if (pixelWidth < 64 || pixelHeight < 64) return null
   const pixelX = Math.min(imageWidth - 1, Math.round(x * imageWidth))
   const pixelY = Math.min(imageHeight - 1, Math.round(y * imageHeight))
   return {
@@ -14,12 +19,19 @@ export function validateManualCardCrop(crop, imageWidth, imageHeight) {
     y: pixelY,
     // Rounding the origin and size independently can exceed the image by one
     // pixel at an exact edge. Clamp the origin and size to source bounds.
-    width: Math.max(1, Math.min(Math.round(width * imageWidth), imageWidth - pixelX)),
-    height: Math.max(1, Math.min(Math.round(height * imageHeight), imageHeight - pixelY)),
+    width: Math.max(1, Math.min(pixelWidth, imageWidth - pixelX)),
+    height: Math.max(1, Math.min(pixelHeight, imageHeight - pixelY)),
   }
 }
 
-export async function prepareManualCardCropFile(file, crop) {
+export function requireConfirmedManualCardCrop(crop, imageWidth, imageHeight, confirmed) {
+  if (!confirmed) throw new Error('Confirm that the crop contains the entire card before scanning.')
+  const bounds = validateManualCardCrop(crop, imageWidth, imageHeight)
+  if (!bounds) throw new Error('The manual card crop is invalid or too small for OCR.')
+  return bounds
+}
+
+export async function prepareManualCardCropFile(file, crop, confirmed = false) {
   if (!file?.type?.startsWith('image/')) throw new Error('Choose a supported card photograph.')
   const sourceUrl = URL.createObjectURL(file)
   try {
@@ -29,7 +41,7 @@ export async function prepareManualCardCropFile(file, crop) {
       element.onerror = () => reject(new Error('The card photograph could not be opened.'))
       element.src = sourceUrl
     })
-    const canvas = createManualCropCanvas(image, crop)
+    const canvas = createManualCropCanvas(image, crop, confirmed)
     const output = await new Promise((resolve, reject) => canvas.toBlob(
       (blob) => blob
         ? resolve(new File([blob], 'manual-card-crop.jpg', { type: 'image/jpeg' }))
@@ -43,9 +55,8 @@ export async function prepareManualCardCropFile(file, crop) {
   }
 }
 
-function createManualCropCanvas(image, crop) {
-  const bounds = validateManualCardCrop(crop, image.width, image.height)
-  if (!bounds) throw new Error('The manual card crop is invalid. Select a larger rectangle fully inside the photograph.')
+function createManualCropCanvas(image, crop, confirmed = false) {
+  const bounds = requireConfirmedManualCardCrop(crop, image.width, image.height, confirmed)
   const canvas = document.createElement('canvas')
   canvas.width = bounds.width
   canvas.height = bounds.height
@@ -170,7 +181,7 @@ async function createEnhancedCrop(image, zone, filename) {
   return output
 }
 
-export async function prepareCardNumberRegions(file, manualCrop = null) {
+export async function prepareCardNumberRegions(file, manualCrop = null, confirmed = false) {
   if (!file?.type?.startsWith('image/')) throw new Error('Choose a supported card photograph.')
   const sourceUrl = URL.createObjectURL(file)
   try {
@@ -181,7 +192,7 @@ export async function prepareCardNumberRegions(file, manualCrop = null) {
       element.src = sourceUrl
     })
 
-    const scanImage = manualCrop ? createManualCropCanvas(image, manualCrop) : image
+    const scanImage = createManualCropCanvas(image, manualCrop, confirmed)
     const regions = await Promise.all(CROP_ZONES.map(async (zone, index) => ({
       label: zone.label,
       file: await createEnhancedCrop(scanImage, zone, `card-number-region-${index + 1}.jpg`),
