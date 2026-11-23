@@ -173,6 +173,8 @@ export default function ImageLibraryPanel({ user }) {
           <div className="overview-metrics">
             <article className="overview-metric"><strong>{coverage.cards.toLocaleString()}</strong><span>Card records</span></article>
             <article className="overview-metric"><strong>{coverage.printings.toLocaleString()}</strong><span>Printings / variants</span></article>
+            <article className="overview-metric"><strong>{coverage.donPrintings?.toLocaleString() || 0}</strong><span>DON!! printings</span></article>
+            <article className="overview-metric"><strong>{coverage.donWithoutSetLink?.toLocaleString() || 0}</strong><span>DON!! without source-set link</span></article>
             <article className="overview-metric"><strong>{coverage.withOfficialImage.toLocaleString()}</strong><span>Printing-specific official images</span></article>
             <article className="overview-metric"><strong>{coverage.withFallbackImage?.toLocaleString() || 0}</strong><span>Official base-image fallbacks</span></article>
             <article className="overview-metric"><strong>{coverage.withoutImageLocator.toLocaleString()}</strong><span>Printings without any image reference</span></article>
@@ -183,7 +185,7 @@ export default function ImageLibraryPanel({ user }) {
           {coverage.missingExpectedSets?.length > 0 && <div className="catalogue-health-unassigned"><strong>Known set coverage gaps: {coverage.missingExpectedSets.join(', ')}</strong><p className="muted-copy">These sets are not represented in the current primary source feed. We are checking the current official Bandai lists and alternate reference feeds rather than treating them as empty sets.</p></div>}
           <div className="catalogue-health-table">
             {Object.entries(coverage.sets).sort(([a], [b]) => a.localeCompare(b)).map(([code, stats]) => (
-              <div className="catalogue-health-row" key={code}><strong>{code}</strong><span>{stats.printings} printings</span><span>{stats.withImage} images{stats.withFallbackImage ? ` (${stats.withFallbackImage} fallback)` : ''}</span><span>{stats.withoutImage} missing</span></div>
+              <div className="catalogue-health-row" key={code}><strong>{code}</strong><span>{stats.printings} printings</span><span>{stats.withImage} images{stats.withFallbackImage ? ` (${stats.withFallbackImage} fallback)` : ''}</span><span>{stats.withoutImage} missing</span><span>{stats.donPrintings || 0} DON!!</span></div>
             ))}
           </div>
           <div className="catalogue-health-unassigned">
