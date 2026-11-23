@@ -843,3 +843,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Selection uses normalized coordinates relative to the displayed photo and passes through the existing validation before OCR. This is a UI implementation review only; it has not yet been exercised in a real browser or on the Saint Shamrock test photo.
 - Commits: `760edd6` (drag selection), `b1c8fc9` (preview styling), `dddaecd` (selected-area highlighting).
 - CI is awaiting exact-head verification. PR #26 remains open/unmerged; no deployment or production changes.
+
+
+### DON!! Image Library label correction — 23 November 2026
+
+- Removed the standard card-number suffix from DON!! gallery cards. Their display title now uses the DON!! source text/name without appending the pseudo-number `DON!!`; non-DON cards retain their normal number label.
+- Updated image alt text so DON!! entries do not announce a card number that does not exist.
+- Existing DON!! source-set attribution remains in the set line; source dataset and admin-verified override are used, with the manual set assignment control retained for entries that cannot be attributed safely.
+- Commit: `6a25130`. Automated CI for this latest change is pending. No production database/migration/deployment changes.
