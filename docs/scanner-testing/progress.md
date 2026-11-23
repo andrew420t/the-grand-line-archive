@@ -411,3 +411,5 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - The public shop and product detail pages already use a strict active-status filter, but it was inline in the application and lacked isolated regression coverage.
 - Extracted a shared helper that permits only explicitly active products (case/whitespace normalized); draft, archived, blank and unknown statuses remain private. Added tests for status edge cases and null inputs.
 - This client-side visibility filter is supplementary; the actual public database access must be restricted by RLS policies. Existing RLS is not verified against the live database, and no policy or database changes were made. CI pending.
+
+- Added a read-only product visibility/RLS audit SQL file for the authorised live-schema review: reports RLS flags, existing product policies and expressions, API-role grants, effective privileges, and status counts. It contains SELECT statements only. Crucial caveat: permissive RLS policies combine with OR, so an existing broad public policy must be reviewed/revised rather than assuming a new active-only policy would restrict it. No live DB access or changes.
