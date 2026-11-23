@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { AlertCircle, Check, PackagePlus, RotateCcw, Save, Search } from 'lucide-react'
 import { CARD_FIELDS } from './cardParser'
 import {
@@ -96,6 +96,7 @@ export default function QuickAddPanel({
     }
   })
   const [busy, setBusy] = useState(false)
+  const submitLock = useRef(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [duplicateMatches, setDuplicateMatches] = useState([])
@@ -237,6 +238,8 @@ export default function QuickAddPanel({
       return
     }
 
+    if (submitLock.current) return
+    submitLock.current = true
     setBusy(true)
     setError('')
     setSuccess('')
@@ -351,6 +354,7 @@ export default function QuickAddPanel({
     } catch (saveError) {
       setError(saveError.message)
     } finally {
+      submitLock.current = false
       setBusy(false)
     }
   }
