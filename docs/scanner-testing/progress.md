@@ -348,3 +348,7 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Shared recognition-memory coverage — 23 November 2026
 - The shared-photo lookup previously capped reads at the first 5,000 examples without a deterministic order, meaning later confirmed examples could be ignored. It now reads ordered pages of 1,000 records until the final page, then compares the query hash against the complete returned set.
 - This removes the silent 5,000-example coverage ceiling. Query volume/performance with a very large shared library still needs real database benchmarking; the migration remains review-only and has not been applied.
+
+
+### Recognition-memory ranking safety
+- Adjusted catalogue ranking so OCR name agreement and detected language agreement take precedence over a remembered image. Recognition memory now breaks ties only after these textual signals; it can no longer force a conflicting language/identity to the top of the list. Added tests for conflicting OCR signals and tie-break behavior. This remains a suggested ranking and requires user confirmation.
