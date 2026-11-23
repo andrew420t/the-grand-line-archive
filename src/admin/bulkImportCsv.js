@@ -98,3 +98,8 @@ export function parseCsv(text) {
     return record
   })
 }
+
+
+export function preferCatalogueValue(value, fallback) {
+  return value === undefined || value === null || value === '' ? fallback : value
+}
