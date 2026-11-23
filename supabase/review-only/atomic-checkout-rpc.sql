@@ -196,7 +196,7 @@ DECLARE
   v_current_status text;
   v_item record;
 BEGIN
-  IF auth.uid() IS NULL OR NOT public.is_admin() THEN
+  IF auth.uid() IS NULL OR NOT coalesce(public.is_admin(), false) THEN
     RAISE EXCEPTION 'Administrator permission is required to update order status.';
   END IF;
 
