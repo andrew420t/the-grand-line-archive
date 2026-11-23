@@ -101,6 +101,10 @@ export default function QuickAddPanel({
   const [librarySaving, setLibrarySaving] = useState(false)
   const setField = (field, value) => {
     setForm((current) => ({ ...current, [field]: value }))
+    // Any change to the candidate card invalidates a prior manual duplicate
+    // confirmation. Require the administrator to review the new match again.
+    setAllowVariant(false)
+    setDuplicateMatches([])
     setError('')
     setSuccess('')
   }
