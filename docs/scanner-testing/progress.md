@@ -613,3 +613,5 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Confirmed admin product-update results — 23 November 2026
 - Inventory stock/price saves, publication toggles, and catalogue-fill updates now request the affected product ID and treat a zero-row/no-error response as a failure. This matches the existing confirmed-delete safeguard and avoids reporting success when a stale product row or RLS policy prevented the update.
 - Added unit coverage for successful, zero-row, and database-error update responses. No live inventory, product, or database records were changed.
+
+- Follow-up audit also applied the confirmed-row check to the full product-edit form save, so every product update path in the admin inventory now distinguishes a successful affected-row update from a zero-row/RLS-denied response. CI verification pending.
