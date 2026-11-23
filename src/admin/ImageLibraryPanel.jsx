@@ -15,6 +15,7 @@ const DON_SET_OPTIONS = [
 export default function ImageLibraryPanel({ user }) {
   const inputRef = useRef(null)
   const uploadLock = useRef(false)
+  const deleteLock = useRef(false)
   const imageListRequestId = useRef(0)
   const referenceRequestId = useRef(0)
   const matrixCheckLock = useRef(false)
@@ -173,14 +174,16 @@ export default function ImageLibraryPanel({ user }) {
     finally { uploadLock.current = false; setBusy(false) }
   }
   const removeImage = async (image) => {
+    if (deleteLock.current) return
     if (!window.confirm('Delete this image from the library?')) return
+    deleteLock.current = true
     setDeletingPath(image.path); setError(''); setNotice('')
     try {
       await deleteLibraryPhoto(image.path)
       setImages((current) => current.filter((entry) => entry.path !== image.path))
       setNotice('Image deleted from the library.')
     } catch (deleteError) { setError(deleteError.message) }
-    finally { setDeletingPath('') }
+    finally { deleteLock.current = false; setDeletingPath('') }
   }
 
   return (
@@ -300,7 +303,7 @@ export default function ImageLibraryPanel({ user }) {
         <div className="photo-grid image-library-grid">{images.map((image) => <article className="photo-card" key={image.path}>
           <div className="photo-card__preview"><img src={image.url} alt="Saved card photograph" loading="lazy" /></div>
           <div className="photo-card__body"><span className="photo-card__name" title={image.name}>{image.name}</span>
-            <button className="button button--danger" type="button" disabled={deletingPath === image.path} onClick={() => removeImage(image)}><Trash2 size={14} /> {deletingPath === image.path ? 'Deleting…' : 'Delete image'}</button></div>
+            <button className="button button--danger" type="button" disabled={Boolean(deletingPath)} onClick={() => removeImage(image)}><Trash2 size={14} /> {deletingPath === image.path ? 'Deleting…' : 'Delete image'}</button></div>
         </article>)}</div>
       ) : <div className="empty-catalogue"><ImagePlus size={24} /><h3>Your image library is empty.</h3><p>Upload card photographs above and they will be kept here for future card entries.</p></div>}
     </section>
