@@ -59,10 +59,17 @@ export function buildAtomicCheckoutItems(items = []) {
   for (const item of items) {
     const productId = String(item?.product?.id ?? '').trim()
     const quantity = Number(item?.quantity)
-    if (!productId || !Number.isInteger(quantity) || quantity < 1) return null
-    combined.set(productId, (combined.get(productId) || 0) + quantity)
+    const expectedUnitPrice = Number(item?.product?.price)
+    if (!productId || !Number.isInteger(quantity) || quantity < 1 ||
+        !Number.isFinite(expectedUnitPrice) || expectedUnitPrice < 0) return null
+    const previous = combined.get(productId)
+    if (previous && previous.expected_unit_price !== expectedUnitPrice) return null
+    combined.set(productId, {
+      quantity: (previous?.quantity || 0) + quantity,
+      expected_unit_price: expectedUnitPrice,
+    })
   }
   return [...combined.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([product_id, quantity]) => ({ product_id, quantity }))
+    .map(([product_id, item]) => ({ product_id, ...item }))
 }
