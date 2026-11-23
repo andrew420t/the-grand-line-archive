@@ -46,3 +46,34 @@ test('partial OCR names are normalized before ranking', () => {
   assert.equal(ranked[0].match.id, 'en')
   assert.equal(ranked[0].nameMatch, true)
 })
+
+
+test('same-number normal and parallel printings remain separate selectable candidates', () => {
+  const printings = [
+    { id: 'op17-062-normal', cardNumber: 'OP17-062', name: 'Kaido', language: 'English', languageCode: 'en', setCode: 'OP17', rarity: 'SR', variant: 'Normal', variantLabel: 'Normal' },
+    { id: 'op17-062-parallel', cardNumber: 'OP17-062', name: 'Kaido', language: 'English', languageCode: 'en', setCode: 'OP17', rarity: 'SR', variant: 'Parallel', variantLabel: 'Parallel' },
+  ]
+  const ranked = rankCatalogueMatches(printings, 'Kaido', 'English')
+  assert.equal(ranked.length, 2)
+  assert.deepEqual(new Set(ranked.map(({ match }) => match.id)), new Set(['op17-062-normal', 'op17-062-parallel']))
+  assert.deepEqual(new Set(ranked.map(({ match }) => match.variantLabel)), new Set(['Normal', 'Parallel']))
+})
+
+test('Japanese EB04-005 candidate keeps its language and printing identity', () => {
+  const law = {
+    id: 'eb04-005-jp-regular',
+    cardNumber: 'EB04-005',
+    name: 'トラファルガー・ロー',
+    language: 'Japanese',
+    languageCode: 'jp',
+    setCode: 'EB04',
+    setName: 'Egghead Crisis',
+    rarity: 'SR',
+    variantLabel: 'Normal',
+  }
+  const ranked = rankCatalogueMatches([law], 'Unknown', 'jpn')
+  assert.equal(ranked[0].match.id, law.id)
+  assert.equal(ranked[0].match.cardNumber, 'EB04-005')
+  assert.equal(ranked[0].match.languageCode, 'jp')
+  assert.equal(ranked[0].match.setName, 'Egghead Crisis')
+})
