@@ -624,3 +624,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - If saving order items fails, the compensating order deletion now requests the deleted order ID and verifies an affected row before claiming the empty pending order was removed. The exception-recovery cleanup uses the same confirmation check.
 - Added regression coverage for confirmed deletion, zero-row/no-error responses, and database/RLS errors. This is still best-effort client-side compensation, not an atomic checkout transaction or stock reservation. Concurrent checkout stock protection remains a server-side requirement.
 - No live orders, stock, database policies, or migrations were changed.
+
+
+## Bulk Import template download correction — 23 November 2026
+- A review of the actual download path found that the generated CSV template appended an unrelated code fragment to the header row instead of a newline. This would make the downloaded template's final header invalid.
+- Moved the supported template header list and CSV generation into a pure helper and added regression coverage for the exact header row and newline. The downloadable template now matches the parser's supported columns.
+- No CSV was imported and no live inventory or database records were changed.
