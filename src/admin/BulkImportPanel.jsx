@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS, resolveSetIdForCode } from './productSchema'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
-import { parseCsv, isBulkImportDuplicate, validateBulkImportNumericFields, preferCatalogueValue } from './bulkImportCsv'
+import { parseCsv, isBulkImportDuplicate, validateBulkImportNumericFields, preferCatalogueValue, hasExtendedCardValues } from './bulkImportCsv'
 
 const TEMPLATE_HEADERS = ['name','card_number','set_code','rarity','variant_label','color','power','cost','card_type','classification','language','condition','price_gbp','stock_quantity','category_name','description','effect_text','counter','trigger_text','attributes']
 function downloadTemplate() {
@@ -116,7 +116,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
     importLock.current = true
     setBusy(true); setError(''); setReport(null)
     try {
-      const usesExtended = readyRows.some((row) => [row.color,row.power,row.cost,row.card_type,row.effect_text,row.language,row.classification,row.variant_label,row.counter,row.trigger_text,row.attributes,row.catalogue_match_id,row.catalogue_printing_key,row.catalogue_reference_image_url,row.catalogue_reference_image_source].some((v) => String(v || '').trim()))
+      const usesExtended = readyRows.some((row) => [row.color,row.power,row.cost,row.card_type,row.effect_text,row.language,row.classification,row.variant_label,row.counter,row.trigger_text,row.attributes,row.catalogue_match_id,row.catalogue_printing_key,row.catalogue_reference_image_url,row.catalogue_reference_image_source].some((v) => v !== undefined && v !== null && String(v).trim() !== ''))
       if (usesExtended && !schemaReady) {
         const check = await supabase.from('products').select(EXTENDED_CARD_COLUMNS.join(',')).limit(0)
         if (check.error) throw new Error('Card-detail columns are unavailable. No rows were imported. Review the approved schema migration first: ' + check.error.message)
