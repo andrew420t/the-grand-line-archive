@@ -405,3 +405,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Checkout validation previously checked each basket line against stock independently. A malformed/restored basket containing repeated product IDs could request more total copies than stock while each individual line passed.
 - Added aggregate requested quantities per product and one consolidated insufficient-stock issue per product. Regression test covers duplicate lines whose combined quantity exceeds stock.
 - CI verification pending. This is still not atomic stock reservation; concurrent customers can race, so a server-side transaction/RPC remains required before live sales.
+
+
+## Storefront publication visibility audit — 23 November 2026
+- The public shop and product detail pages already use a strict active-status filter, but it was inline in the application and lacked isolated regression coverage.
+- Extracted a shared helper that permits only explicitly active products (case/whitespace normalized); draft, archived, blank and unknown statuses remain private. Added tests for status edge cases and null inputs.
+- This client-side visibility filter is supplementary; the actual public database access must be restricted by RLS policies. Existing RLS is not verified against the live database, and no policy or database changes were made. CI pending.
