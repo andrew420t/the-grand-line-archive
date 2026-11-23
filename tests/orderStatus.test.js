@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { ORDER_STATUSES, isValidOrderStatus, orderStatusUpdateFailure } from '../src/orderStatus.js'
+import { ORDER_STATUSES, isValidOrderStatus, orderStatusUpdateFailure, orderDeleteFailure } from '../src/orderStatus.js'
 
 test('accepts the supported order lifecycle states', () => {
   for (const status of ORDER_STATUSES) assert.equal(isValidOrderStatus(status), true)
