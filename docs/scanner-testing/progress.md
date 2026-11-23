@@ -505,3 +505,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Stock-photo preview cleanup after successful upload — 23 November 2026
 - Stock Photography now revokes queued preview object URLs after a successful upload and removes the matching uploaded queue entries. This closes a lifecycle gap where uploaded previews were removed from state without releasing their browser object URLs.
 - Failed uploads still retain the queue and previews for retry. No storage/database/production changes. CI pending.
+
+
+## Image Library gallery request ordering — 23 November 2026
+- Added a request sequence guard to the catalogue-reference image gallery. If searches, language filters, or pagination overlap, only the latest request can update gallery state; earlier results/errors/loading completions are ignored.
+- The request sequence is invalidated when the gallery effect is cleaned up, so responses from an obsolete filter or unmounted panel cannot overwrite the current view. No catalogue data or DB changes. CI pending.
