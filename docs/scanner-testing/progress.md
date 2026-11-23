@@ -834,3 +834,12 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - **Important UX limitation:** this first control is percentage-based rather than a drag-to-select overlay, so users must estimate coordinates. It is a usable recovery control but needs a visual crop-selection/preview improvement and a real photo test before calling it complete.
 - Code commits: scanner controls `74e6eda`; CSS `19eff00`. CI has not yet reported for the exact latest head at the time of this note.
 - PR #26 remains open/unmerged; no production deployment or production data changes.
+
+
+### Visual drag-to-select crop added — 23 November 2026
+
+- Replaced the percentage-only crop workflow's main interaction with a visual preview: when enabled, users can drag a rectangle directly over the uploaded card photograph to define the OCR crop.
+- The selected region is outlined and remains visually bright while the surrounding area is dimmed. Percentage fields remain available for precise adjustment, and the full-photo reset remains available.
+- Selection uses normalized coordinates relative to the displayed photo and passes through the existing validation before OCR. This is a UI implementation review only; it has not yet been exercised in a real browser or on the Saint Shamrock test photo.
+- Commits: `760edd6` (drag selection), `b1c8fc9` (preview styling), `dddaecd` (selected-area highlighting).
+- CI is awaiting exact-head verification. PR #26 remains open/unmerged; no deployment or production changes.
