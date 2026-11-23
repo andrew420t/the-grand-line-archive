@@ -419,3 +419,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Added a synchronous ref guard so rapid repeated checkout clicks cannot launch multiple order-creation attempts before React state updates.
 - Wrapped checkout in try/catch/finally so unexpected exceptions report an error and always release the busy state. If an order was created but item insertion did not finish, it attempts to clean up the pending order and reports cleanup failures.
 - The safeguard is client-side only and cannot replace server-side idempotency/transaction protection. CI pending.
+
+
+## Order-status validation audit — 23 November 2026
+- Admin order status changes now validate against the supported lifecycle values (pending, processing, shipped, completed, cancelled) before issuing an update. UI dropdown values were already restricted; this adds a guard at the action boundary.
+- Added regression tests for accepted values, normalization, and invalid/empty inputs. Database constraints and live RLS remain unverified. CI pending.
