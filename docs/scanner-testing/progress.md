@@ -112,14 +112,14 @@ Sampling method: first two unique card numbers (sorted) with product-linked imag
 | EB05 | English | 2 | EB05-002 | Doll | https://en.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (candidate; not load-verified) |
 | EB05 | Japanese | 1 | EB05-001 | ジュエリー・ボニー (Jewelry Bonney) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-001.png (candidate; not load-verified) |
 | EB05 | Japanese | 2 | EB05-002 | ドール (Doll) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (candidate; not load-verified) |
-| PRB01 | English | 1 | EB01-006 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png |
-| PRB01 | English | 2 | OP01-006 | — | https://en.onepiece-cardgame.com/images/cardlist/card/OP01-006_p3.png |
-| PRB01 | Japanese | 1 | EB01-006 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png |
-| PRB01 | Japanese | 2 | OP01-006 | — | https://www.onepiece-cardgame.com/images/cardlist/card/OP01-006_p1.png |
-| PRB02 | English | 1 | EB01-009 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-009_p1.png |
-| PRB02 | English | 2 | EB01-012 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-012_r1.png |
-| PRB02 | Japanese | 1 | EB01-009 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-009_p1.png |
-| PRB02 | Japanese | 2 | EB01-012 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-012_r1.png |
+| PRB01 | English | 1 | EB01-006 | Tony Tony.Chopper | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png?261016= |
+| PRB01 | English | 2 | OP01-006 | Otama | https://en.onepiece-cardgame.com/images/cardlist/card/OP01-006_r1.png?261016= |
+| PRB01 | Japanese | 1 | EB01-006 | トニートニー・チョッパー | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png?261113= |
+| PRB01 | Japanese | 2 | OP01-006 | お玉 | https://www.onepiece-cardgame.com/images/cardlist/card/OP01-006_p1.png?261113= |
+| PRB02 | English | 1 | EB01-009 | Just Shut Up and Come with Us!!!! | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-009_r1.png?261016= |
+| PRB02 | English | 2 | EB01-012 | Cavendish | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-012_r1.png?261016= |
+| PRB02 | Japanese | 1 | EB01-009 | うるせェ!!!いこう!!!! | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-009_p1.png?261113= |
+| PRB02 | Japanese | 2 | EB01-012 | キャベンディッシュ | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-012_r1.png?261113= |
 
 ## Sources
 - Project scanner: https://github.com/andrew420t/the-grand-line-archive/blob/master/src/admin/CardScanner.jsx
@@ -672,3 +672,31 @@ Correction to the earlier direct-path attempt: the four EB05 base-image URLs ini
 - Japanese EB05-002 ドール (Doll) — PASS.
 
 Together with the four OP18 images above, all **8/8 previously unmatched OP18/EB05 sample image slots are now visually load-verified**. Official Bandai page associations confirm the card numbers, names, set and language. No local OCR was run on these browser-rendered images, and no real-photo OCR count changes. For future reference, use the official card-list links (including their generated query parameters) rather than testing only the bare image path.
+
+
+## Official Bandai image-load run — 23 November 2026
+
+A manual browser-rendering check was completed for the 100-row language/set sample matrix. Each successful result below came from following the image link on the official Bandai card-list page and visually seeing the card image render. These are **image-load checks only**; none of these browser images was passed to local OCR.
+
+| Target set | Official image loads | Status |
+|---|---:|---|
+| OP01–OP16 (each) | 4/4 each | PASS — 64/64 |
+| OP17 | 0/4 | Unverified — official series pages 569117/550117 inaccessible through browser tool |
+| OP18 | 4/4 | PASS |
+| EB01 | 3/4 | 1 Japanese image retrieval failed |
+| EB02 | 3/4 | 1 Japanese image retrieval failed |
+| EB03 | 4/4 | PASS |
+| EB04 | 4/4 | PASS; English samples loaded from combined OP14/OP15-EB04 pages, Japanese samples from standalone EB04 page |
+| EB05 | 4/4 | PASS |
+| PRB01 | 4/4 | PASS |
+| PRB02 | 4/4 | PASS |
+
+**Total: 94/100 image-load PASS, 2/100 official image retrieval errors, 4/100 unverified.** The two retrieval errors are Japanese EB01-001 (EB01 sample) and Japanese EB01-001_p2 (EB02 sample). The official Bandai page itself lists both cards, but clicking the corresponding image links and retrying their direct image URLs returned Internal Error; do not treat this as proof the source files are absent. The four unverified cases are OP17 English/Japanese sample 1 and sample 2; both official OP17 series page requests (569117 and 550117) returned inaccessible errors. Third-party references corroborate the OP17 sample identities (EB04-007 Roronoa Zoro and EB04-061 Monkey.D.Luffy), but those are not counted as official image loads.
+
+### Exact official page series checked
+- OP01–OP18 English: 569101–569118; Japanese: 550101–550118 (OP17 page inaccessible; OP18 passed).
+- EB01–EB05 English: 569201–569205; Japanese: 550201–550205 (EB04 English uses the combined OP14/OP15-EB04 product pages; standalone English 569204 was inaccessible).
+- PRB01/02 English: 569301/569302; Japanese: 550301/550302.
+
+### Sample URL corrections discovered
+The official Bandai PRB pages showed the English PRB01 OP01-006 sample as OP01-006_r1.png (not the earlier guessed _p3 filename), and the English PRB02 EB01-009 sample as EB01-009_r1.png (not the earlier guessed _p1 filename). The matrix URLs above have been corrected to the exact image-link destinations returned by Bandai. Japanese PRB01/02 image paths matched the selected variants.
