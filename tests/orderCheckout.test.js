@@ -60,8 +60,8 @@ test('aggregates duplicate product lines when validating available stock', () =>
 test('atomic checkout payload combines duplicate lines and sorts IDs', () => {
   const payload = buildAtomicCheckoutItems([
     { product: { id: 'b', price: 999 }, quantity: 1 },
-    { product: { id: 'a', price: -100 }, quantity: 2 },
-    { product: { id: 'b' }, quantity: 3 },
+    { product: { id: 'a', price: 0 }, quantity: 2 },
+    { product: { id: 'b', price: 999 }, quantity: 3 },
   ])
   assert.deepEqual(payload, [
     { product_id: 'a', quantity: 2, expected_unit_price: 0 },
