@@ -353,7 +353,7 @@ async function readDonCardSetOverrides() {
     if (error.code === '42P01' || error.code === 'PGRST205') return {}
     throw error
   }
-  return Object.fromEntries((data || []).map((row) => [row.printing_key, row]))
+  return Object.fromEntries((data || []).map((row) => [`${row.printing_key}:${row.language}`, row]))
 }
 
 export async function saveDonCardSetOverride({ printingKey, language, setCode, userId, sourceNote = '' }) {
@@ -369,7 +369,7 @@ export async function saveDonCardSetOverride({ printingKey, language, setCode, u
     updated_by: userId || null,
     updated_at: new Date().toISOString(),
   }
-  const { error } = await supabase.from('don_card_set_overrides').upsert(payload, { onConflict: 'printing_key' })
+  const { error } = await supabase.from('don_card_set_overrides').upsert(payload, { onConflict: 'printing_key,language' })
   if (error) {
     if (error.code === '42P01' || error.code === 'PGRST205') {
       throw new Error('DON!! set assignments are not enabled yet. Review and apply supabase/review-only/don-card-set-overrides.sql in Supabase first.')
@@ -473,7 +473,7 @@ export async function getCatalogueCoverageReport() {
       const observation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       const isDon = isDonCatalogueEntry({ printing, card, observation })
-      const donOverride = isDon ? donOverrides[printing.key] : null
+      const donOverride = isDon ? donOverrides[printing.key + ':' + language] : null
       const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
       const setCodes = donOverride?.set_code ? [donOverride.set_code] : donSourceSet?.set_code ? [donSourceSet.set_code] : [...new Set(linkedProducts.map((product) => product.code).filter(Boolean))]
       const setLabels = setCodes.length ? setCodes.map(formatSetCode) : ['Unassigned']
@@ -565,7 +565,7 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
       const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
       const product = links.map((link) => safeMapGet(index.productsByKey, link.product_key)).find(Boolean)
       const isDon = isDonCatalogueEntry({ printing, card, observation })
-      const setOverride = isDon ? donOverrides[printing.key] : null
+      const setOverride = isDon ? donOverrides[printing.key + ':' + language] : null
       const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
       const setCode = formatSetCode(setOverride?.set_code || donSourceSet?.set_code || product?.code || '')
       const setName = setOverride ? 'Manually assigned set' : donSourceSet ? setCode + ' (DON!! source data)' : product?.name || ''
