@@ -1,6 +1,6 @@
 /** Fetch every page from a paginated async data-list operation. */
 export async function fetchAllPages(listPage, pageSize = 100) {
-  if (typeof listPage !== 'function') throw new TypeError('A storage page loader is required.')
+  if (typeof listPage !== 'function') throw new TypeError('A page loader is required.')
   if (!Number.isInteger(pageSize) || pageSize < 1) throw new RangeError('Page size must be a positive integer.')
 
   const files = []
