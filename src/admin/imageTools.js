@@ -17,19 +17,47 @@ export function detectForegroundCardBounds(imageData, options = {}) {
   const background = corners.reduce((avg, c) => avg.map((v, i) => v + c[i] / corners.length), [0, 0, 0])
   const cornerSpread = Math.max(...corners.map(c => Math.sqrt(c.reduce((sum, v, i) => sum + (v - background[i]) ** 2, 0))))
   if (cornerSpread > 42) return null
-  let minX = width, minY = height, maxX = -1, maxY = -1, foreground = 0
+
+  // Work on a coarse mask, then keep only the largest connected foreground
+  // component. Isolated shadows, dust and unrelated background objects won't
+  // expand the crop bounds as easily as the previous global min/max approach.
   const step = Math.max(1, Math.floor(Math.min(width, height) / 900))
-  for (let y = 0; y < height; y += step) for (let x = 0; x < width; x += step) {
-    const i = (y * width + x) * 4
+  const gridWidth = Math.ceil(width / step), gridHeight = Math.ceil(height / step)
+  const mask = new Uint8Array(gridWidth * gridHeight)
+  let foreground = 0
+  for (let gy = 0; gy < gridHeight; gy += 1) for (let gx = 0; gx < gridWidth; gx += 1) {
+    const x = gx * step, y = gy * step, i = (y * width + x) * 4
     const distance = Math.sqrt((data[i] - background[0]) ** 2 + (data[i + 1] - background[1]) ** 2 + (data[i + 2] - background[2]) ** 2)
-    if (distance < threshold) continue
-    foreground += 1
-    minX = Math.min(minX, x); minY = Math.min(minY, y); maxX = Math.max(maxX, x); maxY = Math.max(maxY, y)
+    if (distance >= threshold) { mask[gy * gridWidth + gx] = 1; foreground += 1 }
   }
-  if (maxX <= minX || maxY <= minY) return null
+  if (!foreground) return null
+  const visited = new Uint8Array(mask.length)
+  const queue = new Int32Array(mask.length)
+  let best = null
+  for (let start = 0; start < mask.length; start += 1) {
+    if (!mask[start] || visited[start]) continue
+    let head = 0, tail = 0
+    queue[tail++] = start; visited[start] = 1
+    let minGX = gridWidth, minGY = gridHeight, maxGX = -1, maxGY = -1
+    while (head < tail) {
+      const index = queue[head++], gx = index % gridWidth, gy = Math.floor(index / gridWidth)
+      minGX = Math.min(minGX, gx); minGY = Math.min(minGY, gy)
+      maxGX = Math.max(maxGX, gx); maxGY = Math.max(maxGY, gy)
+      for (let ny = Math.max(0, gy - 1); ny <= Math.min(gridHeight - 1, gy + 1); ny += 1) {
+        for (let nx = Math.max(0, gx - 1); nx <= Math.min(gridWidth - 1, gx + 1); nx += 1) {
+          const neighbor = ny * gridWidth + nx
+          if (mask[neighbor] && !visited[neighbor]) { visited[neighbor] = 1; queue[tail++] = neighbor }
+        }
+      }
+    }
+    if (!best || tail > best.area) best = { area: tail, minGX, minGY, maxGX, maxGY }
+  }
+  if (!best || best.area < foreground * 0.45) return null
+  const minX = best.minGX * step, minY = best.minGY * step
+  const maxX = Math.min(width - 1, best.maxGX * step), maxY = Math.min(height - 1, best.maxGY * step)
   const boxWidth = maxX - minX + 1, boxHeight = maxY - minY + 1
   const ratio = boxWidth / boxHeight
-  const coverage = foreground / Math.ceil(width / step) / Math.ceil(height / step)
+  const coverage = best.area / (gridWidth * gridHeight)
   if (ratio < 0.48 || ratio > 0.96 || coverage < 0.08 || coverage > 0.88) return null
   const padX = Math.round(boxWidth * 0.035), padY = Math.round(boxHeight * 0.035)
   return {
