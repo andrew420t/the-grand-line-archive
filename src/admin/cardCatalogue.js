@@ -466,7 +466,7 @@ export async function getCatalogueCoverageReport() {
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       const isDon = isDonCatalogueEntry({ printing, card, observation })
       const donOverride = isDon ? donOverrides[printing.key] : null
-      const setCodes = [...new Set([donOverride?.set_code, ...linkedProducts.map((product) => product.code)].filter(Boolean))]
+      const setCodes = donOverride?.set_code ? [donOverride.set_code] : [...new Set(linkedProducts.map((product) => product.code).filter(Boolean))]
       const setLabels = setCodes.length ? setCodes.map(formatSetCode) : ['Unassigned']
       if (isDon) {
         report.donPrintings += 1
