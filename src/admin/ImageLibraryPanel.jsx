@@ -102,6 +102,23 @@ export default function ImageLibraryPanel({ user }) {
               <div className="catalogue-health-row" key={code}><strong>{code}</strong><span>{stats.printings} printings</span><span>{stats.withImage} images</span><span>{stats.withoutImage} missing</span></div>
             ))}
           </div>
+          <div className="catalogue-health-unassigned">
+            <h4>Unassigned printing diagnostics</h4>
+            <p className="muted-copy">{coverage.unassigned?.printings?.toLocaleString() || 0} printings have no linked product/set record. Of these, {coverage.unassigned?.withoutImage?.toLocaleString() || 0} also have no image reference. Missing-image source breakdown: {Object.entries(coverage.unassigned?.withoutImageBySite || {}).map(([site, count]) => `${site}: ${count}`).join(' · ') || 'none'}.</p>
+            {coverage.missingImageSamples?.length > 0 ? (
+              <div className="catalogue-health-table catalogue-health-missing">
+                <div className="catalogue-health-row catalogue-health-row--heading"><strong>Card number</strong><span>Language / source</span><span>Rarity / variant</span><span>Set hint / link</span></div>
+                {coverage.missingImageSamples.map((item) => (
+                  <div className="catalogue-health-row" key={item.printingKey}>
+                    <strong>{item.cardNumber || 'No card number'}</strong>
+                    <span>{item.language.toUpperCase()} · {item.sourceSite}</span>
+                    <span>{[item.rarity, item.variant].filter(Boolean).join(' / ') || 'Not supplied'}</span>
+                    <span>{item.numberPrefixHint || 'No prefix'} · {item.hasProductLink ? 'Product link exists' : 'No product link'}</span>
+                  </div>
+                ))}
+              </div>
+            ) : <p className="muted-copy">No unassigned printings without image references were found.</p>}
+          </div>
           <p className="muted-copy">Image source priority: Bandai official card-image URLs when an official image ID is present; structured card metadata is currently supplied by the Koala Kollect reference dataset. Seller-uploaded product photographs remain separate and take priority in the public archive.</p>
         </>}
       </section>

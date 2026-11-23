@@ -66,6 +66,7 @@ async function loadCatalogue() {
     entries.push(card)
     cardsByNumber.set(number, entries)
   }
+  const cardsByKey = new Map(cards.map((card) => [card.key, card]))
   const indexes = {}
   for (const language of LANGUAGES) {
     const data = languages[language]
@@ -133,9 +134,9 @@ export async function findCatalogueMatches(cardNumber) {
       const data = catalogue.languages[language]
       const index = catalogue.indexes[language]
       const observations = index.observationsByCard.get(card.key) || []
-      const observation = observations.sort((a, b) =>
-        String(b.first_seen_at || '').localeCompare(String(a.first_seen_at || '')),
-      )[0]
+      const observation = observations.reduce((latest, item) =>
+        !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest,
+      null)
       const printings = index.printingsByCard.get(card.key) || []
 
       for (const printing of printings) {
@@ -372,19 +373,27 @@ export async function getCatalogueCoverageReport() {
     withoutImageLocator: 0,
     languages: {},
     sets: {},
+    unassigned: { printings: 0, withImage: 0, withoutImage: 0, withoutImageBySite: {} },
+    missingImageSamples: [],
     sources: ['Bandai official image URLs where a Bandai locator exists', 'Koala Kollect structured catalogue metadata'],
     checkedAt: new Date().toISOString(),
   }
   for (const language of LANGUAGES) {
     const data = catalogue.languages[language]
+    const index = catalogue.indexes[language]
     report.languages[language] = { printings: data.printings.length, withImage: 0, withoutImage: 0 }
     for (const printing of data.printings) {
       report.printings += 1
-      const locator = catalogue.indexes[language].locatorsByPrinting.get(printing.key + ':' + printing.site)
+      const locator = index.locatorsByPrinting.get(printing.key + ':' + printing.site)
       const official = locator?.image_id && (printing.site === 'en' || printing.site === 'jp')
       const image = official || printing.image_url
-      const products = catalogue.indexes[language].printingProductsByPrinting.get(printing.key) || []
-      const setCodes = products.map((link) => catalogue.indexes[language].productsByKey.get(link.product_key)?.code).filter(Boolean)
+      const products = index.printingProductsByPrinting.get(printing.key) || []
+      const linkedProducts = products
+        .map((link) => index.productsByKey.get(link.product_key))
+        .filter(Boolean)
+      const setCodes = [...new Set(linkedProducts.map((product) => product.code).filter(Boolean))]
+      const card = catalogue.cardsByKey.get(printing.card_key)
+      const cardNumber = card?.number || ''
       if (image) {
         report.withOfficialImage += official ? 1 : 0
         report.languages[language].withImage += 1
@@ -392,6 +401,31 @@ export async function getCatalogueCoverageReport() {
         report.withoutImageLocator += 1
         report.languages[language].withoutImage += 1
       }
+
+      if (!setCodes.length) {
+        report.unassigned.printings += 1
+        if (image) report.unassigned.withImage += 1
+        else {
+          report.unassigned.withoutImage += 1
+          const site = printing.site || 'unknown'
+          report.unassigned.withoutImageBySite[site] = (report.unassigned.withoutImageBySite[site] || 0) + 1
+          report.missingImageSamples.push({
+            cardNumber,
+            name: '',
+            language,
+            printingKey: printing.key || '',
+            sourceSite: site,
+            rarity: printing.rarity || '',
+            variant: printing.variant || '',
+            hasProductLink: products.length > 0,
+            linkedProductCodes: setCodes,
+            hasOfficialLocator: Boolean(locator?.image_id),
+            imageUrl: printing.image_url || '',
+            numberPrefixHint: cardNumber.match(/^(OP\d{2}|EB\d{2}|ST\d{2}|PRB\d{2}|P)-/)?.[1] || '',
+          })
+        }
+      }
+
       for (const code of setCodes.length ? setCodes : ['Unassigned']) {
         const setCode = formatSetCode(code)
         const entry = report.sets[setCode] || { printings: 0, withImage: 0, withoutImage: 0 }
@@ -402,5 +436,10 @@ export async function getCatalogueCoverageReport() {
       }
     }
   }
+  report.missingImageSamples.sort((a, b) =>
+    a.sourceSite.localeCompare(b.sourceSite) ||
+    a.cardNumber.localeCompare(b.cardNumber) ||
+    a.printingKey.localeCompare(b.printingKey),
+  )
   return report
 }
