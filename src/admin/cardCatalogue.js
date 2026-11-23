@@ -522,6 +522,87 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
   return { items: filtered.slice(start, start + pageSize), total: filtered.length, nextOffset: start + pageSize < filtered.length ? start + pageSize : null }
 }
 
+/**
+ * Build the requested 100-image smoke-test matrix: two unique card numbers
+ * per set and language for OP01–OP18, EB01–EB05 and PRB01/02.
+ * This checks source coverage and image URLs; it does not run OCR.
+ */
+export async function getCatalogueReferenceTestMatrix() {
+  const catalogue = await getCatalogue()
+  const expectedSets = [
+    ...Array.from({ length: 18 }, (_, index) => 'OP' + String(index + 1).padStart(2, '0')),
+    ...Array.from({ length: 5 }, (_, index) => 'EB' + String(index + 1).padStart(2, '0')),
+    'PRB01', 'PRB02',
+  ]
+  const bySlot = new Map()
+  const targetSetForProduct = (productCode, cardNumber) => {
+    const code = String(productCode || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
+    const prefix = baseCardNumber(cardNumber).split('-')[0]
+    if (code === 'OP14EB04' || code === 'OP15EB04') {
+      if (prefix === 'EB04') return 'EB04'
+      return code.startsWith('OP14') ? 'OP14' : 'OP15'
+    }
+    const match = code.match(/^(OP\\d{2}|EB\\d{2}|PRB\\d{2})/)
+    return match?.[1] || ''
+  }
+
+  for (const language of LANGUAGES) {
+    const data = catalogue.languages?.[language] || { printings: [] }
+    const index = catalogue.indexes?.[language] || {}
+    for (const printing of data.printings) {
+      if (printing.site !== language) continue
+      const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
+      const cardNumber = card?.number || ''
+      if (!cardNumber) continue
+      const locator = safeMapGet(index.locatorsByPrinting, printing.key + ':' + printing.site)
+      const officialUrl = locator?.image_id
+        ? (language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
+        : ''
+      const imageUrl = officialUrl || printing.image_url || ''
+      if (!imageUrl) continue
+      const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
+      const products = links.map((link) => safeMapGet(index.productsByKey, link.product_key)).filter(Boolean)
+      const observations = safeMapGet(index.observationsByCard, printing.card_key) || []
+      const observation = observations.reduce((latest, item) =>
+        !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
+      for (const product of products) {
+        const set = targetSetForProduct(product.code, cardNumber)
+        if (!expectedSets.includes(set)) continue
+        const key = language + ':' + set
+        const items = bySlot.get(key) || []
+        if (items.some((item) => item.cardNumber === cardNumber)) continue
+        items.push({
+          id: printing.key + ':' + language + ':' + set,
+          cardNumber,
+          name: observation?.name || '',
+          language,
+          setCode: formatSetCode(set),
+          setName: product.name || '',
+          rarity: printing.rarity || '',
+          variant: printing.variant || '',
+          imageUrl,
+          source: officialUrl ? 'Bandai official image reference' : 'Koala Kollect image reference',
+        })
+        bySlot.set(key, items)
+      }
+    }
+  }
+
+  const items = []
+  const missingSlots = []
+  for (const set of expectedSets) {
+    for (const language of LANGUAGES) {
+      const candidates = (bySlot.get(language + ':' + set) || [])
+        .sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.id.localeCompare(b.id))
+      for (let slot = 0; slot < 2; slot += 1) {
+        if (candidates[slot]) items.push({ ...candidates[slot], targetSet: formatSetCode(set), sampleSlot: slot + 1 })
+        else missingSlots.push({ targetSet: formatSetCode(set), language, sampleSlot: slot + 1 })
+      }
+    }
+  }
+  return { expectedTotal: expectedSets.length * LANGUAGES.length * 2, items, missingSlots, checkedAt: new Date().toISOString() }
+}
+
 /** Card-number-first reference lookup shared by search, Quick Add and scanner. */
 export async function getCatalogueImagesForCard(cardNumber, language = 'all') {
   const matches = await findCatalogueMatches(cardNumber)

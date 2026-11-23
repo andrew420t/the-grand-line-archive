@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ImagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './productStorage'
-import { getCatalogueCoverageReport, getCatalogueImageGallery } from './cardCatalogue'
+import { getCatalogueCoverageReport, getCatalogueImageGallery, getCatalogueReferenceTestMatrix } from './cardCatalogue'
 
 export default function ImageLibraryPanel({ user }) {
   const inputRef = useRef(null)
@@ -24,6 +24,10 @@ export default function ImageLibraryPanel({ user }) {
   const [failedReferenceIds, setFailedReferenceIds] = useState([])
   const [loadedReferenceIds, setLoadedReferenceIds] = useState([])
   const [imageRetryVersion, setImageRetryVersion] = useState(0)
+  const [matrixRunning, setMatrixRunning] = useState(false)
+  const [matrixReport, setMatrixReport] = useState(null)
+  const [matrixResults, setMatrixResults] = useState([])
+  const [matrixError, setMatrixError] = useState('')
 
   const loadImages = useCallback(async () => {
     setLoading(true); setError('')
@@ -52,6 +56,32 @@ export default function ImageLibraryPanel({ user }) {
     finally { setReferenceLoading(false) }
   }, [referenceQuery, referenceLanguage])
   useEffect(() => { loadReferenceImages(0) }, [loadReferenceImages])
+
+  const runReferenceMatrixCheck = async () => {
+    setMatrixRunning(true); setMatrixError(''); setMatrixReport(null); setMatrixResults([])
+    try {
+      const matrix = await getCatalogueReferenceTestMatrix()
+      setMatrixReport(matrix)
+      const results = []
+      // Check ten official image references at a time to avoid flooding image hosts.
+      for (let offset = 0; offset < matrix.items.length; offset += 10) {
+        const batch = matrix.items.slice(offset, offset + 10)
+        const checked = await Promise.all(batch.map((item) => new Promise((resolve) => {
+          const image = new window.Image()
+          image.onload = () => resolve({ ...item, status: 'loaded' })
+          image.onerror = () => resolve({ ...item, status: 'failed' })
+          image.referrerPolicy = 'no-referrer'
+          image.src = item.imageUrl
+        })))
+        results.push(...checked)
+        setMatrixResults([...results])
+      }
+    } catch (checkError) {
+      setMatrixError(checkError.message || 'Could not build the 100-image reference test.')
+    } finally {
+      setMatrixRunning(false)
+    }
+  }
 
   const chooseFiles = (fileList) => {
     const selected = [...fileList].filter((file) => file.type.startsWith('image/'))
@@ -123,6 +153,20 @@ export default function ImageLibraryPanel({ user }) {
           {coverage.sourceGeneratedAt && <p className="muted-copy">Primary reference dataset last generated: {new Date(coverage.sourceGeneratedAt).toLocaleString()} · {coverage.sourceAgeDays} day{coverage.sourceAgeDays === 1 ? '' : 's'} old.</p>}
           {coverage.sourceIsStale && <div className="catalogue-health-unassigned"><strong>Reference data is out of date.</strong><p className="muted-copy">The upstream Koala Kollect manifest is more than 7 days old. Newer official sets may exist on Bandai's card list but not yet be present in this feed.</p></div>}
           {coverage.missingExpectedSets?.length > 0 && <div className="catalogue-health-unassigned"><strong>Known set coverage gaps: {coverage.missingExpectedSets.join(', ')}</strong><p className="muted-copy">These sets are not represented in the current primary source feed. We are checking the current official Bandai lists and alternate reference feeds rather than treating them as empty sets.</p></div>}
+          <div className="catalogue-health-unassigned">
+            <h4>100-image reference smoke test</h4>
+            <p className="muted-copy">Checks two unique English and two Japanese image references for each of OP-01–OP-18, EB-01–EB-05 and PRB-01/02. It verifies that image URLs load in this browser; it does not run card OCR.</p>
+            <button className="button button--outline" type="button" disabled={matrixRunning} onClick={runReferenceMatrixCheck}>{matrixRunning ? 'Checking image references…' : 'Run 100-image reference test'}</button>
+            {matrixError && <p className="form-error">{matrixError}</p>}
+            {matrixReport && <p className="muted-copy">Image checks: {matrixResults.filter((item) => item.status === 'loaded').length} loaded · {matrixResults.filter((item) => item.status === 'failed').length} failed · {matrixReport.missingSlots.length} missing from source · {matrixReport.expectedTotal} expected.</p>}
+            {matrixReport && <details className="catalogue-health-missing">
+              <summary>View image test results ({matrixResults.length + matrixReport.missingSlots.length} rows)</summary>
+              <div className="catalogue-health-table">
+                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}</strong><span>{item.language.toUpperCase()} · sample {item.sampleSlot}</span><span>{item.name || 'Name not supplied'}</span><span>{item.status === 'loaded' ? 'Image loaded' : 'Image failed'}</span></div>)}
+                {matrixReport.missingSlots.map((item) => <div className="catalogue-health-row" key={item.targetSet + item.language + item.sampleSlot}><strong>{item.targetSet}</strong><span>{item.language.toUpperCase()} · sample {item.sampleSlot}</span><span>No source record</span><span>Missing from feed</span></div>)}
+              </div>
+            </details>}
+          </div>
           <div className="catalogue-health-table">
             {Object.entries(coverage.sets).sort(([a], [b]) => a.localeCompare(b)).map(([code, stats]) => (
               <div className="catalogue-health-row" key={code}><strong>{code}</strong><span>{stats.printings} printings</span><span>{stats.withImage} images</span><span>{stats.withoutImage} missing</span></div>
