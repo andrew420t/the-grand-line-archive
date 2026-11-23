@@ -1033,3 +1033,7 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Duplicate-override copy now explicitly warns that it creates separate records and should only be used intentionally; it no longer suggests the override is for different variants, which are normally already distinguished.
 - Scanner crop-toggle wording clarified to `Enable manual crop selection`.
 - Exact PR head `a55eb159927aa800bf99572cde72cc6a81709cd6` CI run **45220180779** passed tests, lint, and production build. PR #26 remains open and mergeable at this check. This still does not prove live staging RLS, browser/device OCR, or atomic checkout stock reservation.
+
+## Expanded read-only security audit
+- Extended `product-visibility-rls-audit.sql` to report RLS enabled/forced state for product images, site settings, catalogue overrides, and DON!! overrides; existing policies and grants across these feature tables; and Storage object policies plus the `product-card-images` bucket configuration.
+- This is still read-only and is intended to expose existing permissive-policy conflicts before any proposal is applied. No live database changes were made.
