@@ -414,15 +414,26 @@ export default function CardScanner({
             <h3 id="scanner-match-confirmation-title">Is this the card I found?</h3>
             <p className="scanner-match-confirmation__intro">The number crop finds the candidate. Compare the official catalogue image, rarity, language and set with the physical card. A number match alone is not proof. Your choice fills the form but does not save stock.</p>
             {selectedAutoMatch && (
-              <div className="scanner-match-confirmation__featured">
-                <CatalogueReferenceImage match={selectedAutoMatch} className="scanner-match-confirmation__image" />
-                <div>
-                  <strong>{selectedAutoMatch.name || 'Name unavailable'}</strong>
-                  <span>{selectedAutoMatch.cardNumber} · {selectedAutoMatch.language} · {selectedAutoMatch.setCode || 'Set not listed'}</span>
-                  <span>{selectedAutoMatch.rarity || 'Rarity unknown'} · {selectedAutoMatch.variant || 'Base version'}</span>
-                  <small>{rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.nameMatch ? 'Name agrees with OCR' : 'Name differs from OCR'} · {rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.languageMatch ? 'Language agrees' : 'Language needs checking'}</small>
+              <>
+                <div className="scanner-match-confirmation__comparison">
+                  <div className="scanner-match-confirmation__compare-item">
+                    <span>YOUR CARD PHOTO</span>
+                    {frontPhoto?.previewUrl ? <img src={frontPhoto.previewUrl} alt="Your photographed card for comparison" /> : <div className="scanner-match-confirmation__compare-empty">No card photo</div>}
+                  </div>
+                  <div className="scanner-match-confirmation__compare-item">
+                    <span>CATALOGUE REFERENCE</span>
+                    <CatalogueReferenceImage match={selectedAutoMatch} className="scanner-match-confirmation__compare-image" />
+                  </div>
                 </div>
-              </div>
+                <div className="scanner-match-confirmation__featured">
+                  <div>
+                    <strong>{selectedAutoMatch.name || 'Name unavailable'}</strong>
+                    <span>{selectedAutoMatch.cardNumber} · {selectedAutoMatch.language} · {selectedAutoMatch.setCode || 'Set not listed'}</span>
+                    <span>{selectedAutoMatch.rarity || 'Rarity unknown'} · {selectedAutoMatch.variant || 'Base version'}</span>
+                    <small>{rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.nameMatch ? 'Name agrees with OCR' : 'Name differs from OCR'} · {rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.languageMatch ? 'Language agrees' : 'Language needs checking'}</small>
+                  </div>
+                </div>
+              </>
             )}
             {rankedAutoMatches.length > 1 && (
               <div className="scanner-match-confirmation__options">
