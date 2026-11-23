@@ -258,3 +258,11 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - When an administrator chooses **Crop to card**, photo preparation now attempts to detect a foreground card against a consistent background using corner-color consistency and foreground bounds. It centers the crop around the detected object (not the photo center) and adds padding.
 - The crop only activates when detection confidence and aspect checks pass. Busy/uneven backgrounds, uncertain results, or crops that cannot fit safely fall back to the previous centered aspect crop.
 - Added tests for offset-card detection, inconsistent-background rejection, aspect framing, and safe fallback. This is a simple background heuristic, not full perspective correction; physical photo testing remains needed.
+
+
+## Foreground crop noise rejection — 23 November 2026
+- Improved background-aware crop detection to use a coarse foreground mask and retain the largest 8-connected foreground component, instead of letting every thresholded pixel contribute to the crop's global bounds.
+- This is intended to reject isolated dust, background specks, and disconnected shadows that previously could widen the auto-crop.
+- The existing safe-fallback behavior is unchanged: inconsistent corner colors, unsuitable card geometry, or low confidence still use the centered aspect crop.
+- Added a regression test with isolated foreground specks outside the card, verifying the detected bounds remain centered on the card component.
+- This reduces sensitivity to disconnected noise; it does not solve cards on busy backgrounds or detect perspective corners.
