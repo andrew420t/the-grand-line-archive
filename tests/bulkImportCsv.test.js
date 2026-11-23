@@ -103,3 +103,12 @@ test('recognizes zero-valued card details as extended schema fields', async () =
   assert.equal(hasExtendedCardValues(['0']), true)
   assert.equal(hasExtendedCardValues(['', null, undefined]), false)
 })
+
+test('builds a clean CSV template with the supported import headers', async () => {
+  const { BULK_IMPORT_TEMPLATE_HEADERS, buildBulkImportTemplateCsv } = await import('../src/admin/bulkImportCsv.js')
+  const template = buildBulkImportTemplateCsv()
+  assert.equal(template, `${BULK_IMPORT_TEMPLATE_HEADERS.join(',')}\n`)
+  assert.equal(template.includes('preferCatalogueValue'), false)
+  assert.equal(BULK_IMPORT_TEMPLATE_HEADERS.includes('catalogue_printing_key'), false)
+  assert.equal(BULK_IMPORT_TEMPLATE_HEADERS.at(-1), 'attributes')
+})
