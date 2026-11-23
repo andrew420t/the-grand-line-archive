@@ -602,3 +602,7 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Category and set creation now catch unexpected request failures and always release the shared busy state in finally. Duplicate-name/code checks and existing success feedback remain intact. CI verification pending.
 
 - Set creation now checks a fresh read of existing set IDs, names, and codes rather than relying only on the admin screen's potentially stale set list. The name check is case-insensitive; the normalized code check still rejects punctuation-equivalent collisions. CI verification pending.
+
+
+### Bulk Import zero-value preservation — 23 November 2026
+- Applying a catalogue match now preserves legitimate numeric zero values for power, cost, and counter fields instead of falling back to the original CSV values. Empty/null catalogue fields still retain the CSV value. Regression tests cover zero, string-zero, and blank fallback cases. CI verification pending.
