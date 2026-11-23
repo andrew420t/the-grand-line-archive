@@ -18,14 +18,27 @@ export function buildDonSetIndex(rows = []) {
     const setCode = donSetSlugToCode(row?.set_slug)
     if (!setCode) continue
     for (const printingKey of row?.printing_keys || []) {
-      if (!printingKey || index[printingKey]) continue
-      index[printingKey] = {
-        set_code: setCode,
-        set_slug: row.set_slug || '',
-        don_design: row.don_design || '',
-        source: row.source || '',
+      if (!printingKey) continue
+      const existing = index[printingKey] || {
+        set_code: '',
+        set_codes: [],
+        set_slugs: [],
+        don_designs: [],
+        sources: [],
         source_note: 'Koala Kollect DON!! source-set data',
       }
+      if (!existing.set_codes.includes(setCode)) existing.set_codes.push(setCode)
+      if (row.set_slug && !existing.set_slugs.includes(row.set_slug)) existing.set_slugs.push(row.set_slug)
+      if (row.don_design && !existing.don_designs.includes(row.don_design)) existing.don_designs.push(row.don_design)
+      if (row.source && !existing.sources.includes(row.source)) existing.sources.push(row.source)
+      // A single set is safe to present as the primary attribution. If the
+      // source links one printing to multiple products, keep all links and
+      // leave set_code blank rather than silently choosing the first one.
+      existing.set_code = existing.set_codes.length === 1 ? existing.set_codes[0] : ''
+      existing.set_slug = existing.set_slugs.length === 1 ? existing.set_slugs[0] : ''
+      existing.don_design = existing.don_designs.length === 1 ? existing.don_designs[0] : ''
+      existing.source = existing.sources.length === 1 ? existing.sources[0] : ''
+      index[printingKey] = existing
     }
   }
   return index
