@@ -688,6 +688,11 @@ function Storefront() {
       setOrdersError('Invalid order status. Choose a valid status from the order controls.')
       return
     }
+    const currentOrder = orders.find((order) => String(order.id) === String(orderId))
+    if (currentOrder && !isAllowedOrderStatusTransition(currentOrder.status, status)) {
+      setOrdersError(`Order cannot move from ${currentOrder.status} to ${status}.`)
+      return
+    }
     const lockKey = String(orderId)
     if (orderStatusLocks.current.size > 0) return
     orderStatusLocks.current.add(lockKey)
