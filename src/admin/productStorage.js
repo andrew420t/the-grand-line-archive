@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase'
 import { makePhotoFile, prepareCardImage } from './imageTools'
-import { fetchAllStorageFiles } from './storagePagination'
+import { fetchAllPages } from './storagePagination'
 
 export const CARD_IMAGE_BUCKET = 'product-card-images'
 
@@ -20,15 +20,18 @@ export async function ensurePhotoStorageReady() {
 
 export async function getProductImagePaths(productId) {
   if (!supabase) throw new Error('Supabase is not configured.')
-  const result = await supabase
-    .from('product_images')
-    .select('storage_path')
-    .eq('product_id', productId)
-  if (result.error) {
-    if (result.error.code === 'PGRST205' || result.error.code === '42P01') return []
-    throw new Error(`Could not inspect linked product images: ${result.error.message}`)
+  try {
+    const images = await fetchAllPages(({ limit, offset }) => supabase
+      .from('product_images')
+      .select('storage_path')
+      .eq('product_id', productId)
+      .order('id', { ascending: true })
+      .range(offset, offset + limit - 1), 1000)
+    return images.map((image) => image.storage_path).filter(Boolean)
+  } catch (error) {
+    if (error.code === 'PGRST205' || error.code === '42P01') return []
+    throw new Error(`Could not inspect linked product images: ${error.message || String(error)}`)
   }
-  return (result.data || []).map((image) => image.storage_path).filter(Boolean)
 }
 
 export async function removeStoredPhotos(paths) {
@@ -166,7 +169,7 @@ export async function listLibraryPhotos(userId) {
   const storage = supabase.storage.from(CARD_IMAGE_BUCKET)
   let files
   try {
-    files = await fetchAllStorageFiles(({ limit, offset }) => storage.list(folder, {
+    files = await fetchAllPages(({ limit, offset }) => storage.list(folder, {
       limit,
       offset,
       sortBy: { column: 'created_at', order: 'desc' },
