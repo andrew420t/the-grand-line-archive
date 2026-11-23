@@ -68,6 +68,7 @@ Expected behaviour:
 - [ ] Confirm a concurrent newer front-image choice is not overwritten by an older upload's rollback.
 - [ ] Add files to a queue while an upload is running and confirm they are not silently discarded.
 - [ ] Search, filter, paginate, and change language in the Image Library quickly; confirm stale requests do not replace the latest results.
+- [ ] In staging only, assign a DON!! card's source set, save, reload, and confirm the attribution/source note persists; verify a non-admin cannot read or write the override.
 - [ ] Delete a saved library image and confirm the UI reports errors accurately.
 - [ ] Delete a staging product and confirm the product row is deleted before Storage cleanup is attempted.
 - [ ] If Storage cleanup fails, confirm the product deletion and remaining Storage cleanup warning are reported separately.
