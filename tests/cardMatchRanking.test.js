@@ -34,3 +34,15 @@ test('language match ranks above a candidate with neither signal', () => {
 test('returns an empty ranking for no candidates', () => {
   assert.deepEqual(rankCatalogueMatches([]), [])
 })
+
+test('recognition language aliases rank the matching language correctly', () => {
+  assert.equal(rankCatalogueMatches(candidates, '', 'eng')[0].match.id, 'en')
+  assert.equal(rankCatalogueMatches(candidates, '', 'jpn')[0].match.id, 'jp')
+  assert.equal(rankCatalogueMatches(candidates, '', 'JP')[0].match.id, 'jp')
+})
+
+test('partial OCR names are normalized before ranking', () => {
+  const ranked = rankCatalogueMatches(candidates, 'Roronoa-Zoro', 'eng')
+  assert.equal(ranked[0].match.id, 'en')
+  assert.equal(ranked[0].nameMatch, true)
+})
