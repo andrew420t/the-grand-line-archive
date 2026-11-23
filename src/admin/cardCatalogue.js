@@ -470,7 +470,7 @@ export async function getCatalogueCoverageReport() {
       const isDon = isDonCatalogueEntry({ printing, card, observation })
       const donOverride = isDon ? donOverrides[printing.key + ':' + language] : null
       const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
-      const setCodes = donOverride?.set_code ? [donOverride.set_code] : donSourceSet?.set_code ? [donSourceSet.set_code] : [...new Set(linkedProducts.map((product) => product.code).filter(Boolean))]
+      const setCodes = donOverride?.set_code ? [donOverride.set_code] : donSourceSet?.set_codes?.length ? donSourceSet.set_codes : donSourceSet?.set_code ? [donSourceSet.set_code] : [...new Set(linkedProducts.map((product) => product.code).filter(Boolean))]
       const setLabels = setCodes.length ? setCodes.map(formatSetCode) : ['Unassigned']
       if (isDon) {
         report.donPrintings += 1
@@ -562,10 +562,19 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
       const isDon = isDonCatalogueEntry({ printing, card, observation })
       const setOverride = isDon ? donOverrides[printing.key + ':' + language] : null
       const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
-      const setCode = formatSetCode(setOverride?.set_code || donSourceSet?.set_code || product?.code || '')
-      const setName = setOverride ? 'Manually assigned set' : donSourceSet ? setCode + ' (DON!! source data)' : product?.name || ''
+      const sourceSetCodes = donSourceSet?.set_codes?.length ? donSourceSet.set_codes : donSourceSet?.set_code ? [donSourceSet.set_code] : []
+      const setCode = formatSetCode(setOverride?.set_code || (sourceSetCodes.length === 1 ? sourceSetCodes[0] : '') || product?.code || '')
+      const displaySetCodes = setOverride?.set_code ? [setOverride.set_code] : sourceSetCodes.length ? sourceSetCodes : product?.code ? [product.code] : []
+      const formattedSetCodes = displaySetCodes.map(formatSetCode)
+      const setName = setOverride
+        ? 'Manually assigned set'
+        : sourceSetCodes.length > 1
+          ? 'Multiple source sets (DON!! source data)'
+          : donSourceSet
+            ? setCode + ' (DON!! source data)'
+            : product?.name || ''
       const setAssignmentSource = setOverride?.source_note || (donSourceSet ? donSourceSet.source_note : product ? 'Catalogue product link' : '')
-      entries.push({ id: printing.key + ':' + language, printingKey: printing.key, cardNumber: card?.number || (isDon ? 'DON!!' : ''), name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode, setName, setAssignmentSource, sourceText: printing.source_text || '', isDon, officialListUrl: getOfficialCardlistUrl(setCode, language, isDon, card?.number || ''), imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
+      entries.push({ id: printing.key + ':' + language, printingKey: printing.key, cardNumber: card?.number || (isDon ? 'DON!!' : ''), name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode, setCodes: formattedSetCodes, setName, setAssignmentSource, sourceText: printing.source_text || '', isDon, officialListUrl: setCode ? getOfficialCardlistUrl(setCode, language, isDon, card?.number || '') : '', imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
     }
   }
   entries.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.language.localeCompare(b.language) || a.id.localeCompare(b.id))
@@ -577,6 +586,7 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
       || normalizeSearchText(entry.name).includes(normalizedQuery)
       || normalizeSearchText(entry.setCode).includes(normalizedQuery)
       || normalizeSearchText(entry.setName).includes(normalizedQuery)
+      || (entry.setCodes || []).some((code) => normalizeSearchText(code).includes(normalizedQuery))
       || normalizeSearchText(entry.sourceText).includes(normalizedQuery)
   })
   const start = Math.max(0, Number(offset) || 0)
