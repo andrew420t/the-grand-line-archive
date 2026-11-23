@@ -693,15 +693,17 @@ function Storefront() {
     orderStatusLocks.current.add(lockKey)
     setOrderAction(orderId)
     try {
-      const result = await supabase
-        .from('orders')
-        .update({ status })
-        .eq('id', orderId)
-        .select('id')
-        .maybeSingle()
-      const updateFailure = orderStatusUpdateFailure(result)
+      const result = await supabase.rpc('update_order_status_atomic', {
+        p_order_id: orderId,
+        p_new_status: status,
+      })
+      const updateFailure = orderStatusUpdateFailure(result, orderId)
       if (updateFailure) {
-        setOrdersError(`Could not update order status: ${updateFailure}`)
+        const rpcMissing = result.error?.code === '42883' || result.error?.code === 'PGRST202' ||
+          String(result.error?.message || '').includes('update_order_status_atomic')
+        setOrdersError(rpcMissing
+          ? 'Atomic order-status handling is not installed in this database. No status was changed; review and apply the staging SQL proposal first.'
+          : `Could not update order status: ${updateFailure}`)
       } else {
         await loadOrders(true)
         notify('Order status updated.')
