@@ -62,3 +62,8 @@ test('blank, base, and Normal variant labels normalize to the same identity', ()
     { card_number: 'OP01-016', set_code: 'OP01', variant_label: 'Normal', language: 'English' },
   ), true)
 })
+
+test('ignores leading blank lines before CSV header', () => {
+  const rows = parseCsv('\n\nname,card_number\nLuffy,OP01-001\n')
+  assert.equal(rows[0].name, 'Luffy')
+})
