@@ -117,7 +117,7 @@ export default function ImageLibraryPanel({ user }) {
             <article className="overview-metric"><strong>{coverage.cards.toLocaleString()}</strong><span>Card records</span></article>
             <article className="overview-metric"><strong>{coverage.printings.toLocaleString()}</strong><span>Printings / variants</span></article>
             <article className="overview-metric"><strong>{coverage.withOfficialImage.toLocaleString()}</strong><span>Official Bandai image references</span></article>
-            <article className="overview-metric"><strong>{coverage.withoutImageLocator.toLocaleString()}</strong><span>Printings without image locator</span></article>
+            <article className="overview-metric"><strong>{coverage.withoutImageLocator.toLocaleString()}</strong><span>Printings without image reference</span></article>
           </div>
           <p className="muted-copy">English: {coverage.languages.en?.withImage || 0}/{coverage.languages.en?.printings || 0} with image references · Japanese: {coverage.languages.jp?.withImage || 0}/{coverage.languages.jp?.printings || 0}. This is source-feed coverage, not a live HTTP check of every image.</p>
           {coverage.sourceGeneratedAt && <p className="muted-copy">Primary reference dataset last generated: {new Date(coverage.sourceGeneratedAt).toLocaleString()} · {coverage.sourceAgeDays} day{coverage.sourceAgeDays === 1 ? '' : 's'} old.</p>}
@@ -130,7 +130,7 @@ export default function ImageLibraryPanel({ user }) {
           </div>
           <div className="catalogue-health-unassigned">
             <h4>Missing-image diagnostics</h4>
-            <p className="muted-copy">{coverage.missingImageTotal?.toLocaleString() || 0} printings have no image reference in the current source feed. The table below samples up to 250 missing entries across assigned and unassigned sets. {coverage.unassigned?.printings?.toLocaleString() || 0} printings also have no linked product/set record; {coverage.unassigned?.withoutImage?.toLocaleString() || 0} of those are missing images. Source breakdown for unassigned missing images: {Object.entries(coverage.unassigned?.withoutImageBySite || {}).map(([site, count]) => `${site}: ${count}`).join(' · ') || 'none'}.</p>
+            <p className="muted-copy">{coverage.missingImageTotal?.toLocaleString() || 0} printings have no image reference in the current source feed. The table below samples up to 250 missing entries across assigned and unassigned sets. {coverage.unassigned?.printings?.toLocaleString() || 0} printings also have no linked product/set record; {coverage.unassigned?.withoutImage?.toLocaleString() || 0} of those are missing images. Missing by language: {Object.entries(coverage.missingImageByLanguage || {}).map(([language, count]) => `${language.toUpperCase()}: ${count}`).join(' · ') || 'none'}. Missing by set: {Object.entries(coverage.missingImageBySet || {}).map(([set, count]) => `${set}: ${count}`).join(' · ') || 'none'}. Source breakdown for unassigned missing images: {Object.entries(coverage.unassigned?.withoutImageBySite || {}).map(([site, count]) => `${site}: ${count}`).join(' · ') || 'none'}.</p>
             {coverage.missingImageSamples?.length > 0 ? (
               <div className="catalogue-health-table catalogue-health-missing">
                 <div className="catalogue-health-row catalogue-health-row--heading"><strong>Card number</strong><span>Language / source</span><span>Rarity / variant</span><span>Set / link</span></div>
