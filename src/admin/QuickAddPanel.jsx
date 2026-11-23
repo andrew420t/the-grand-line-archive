@@ -31,12 +31,23 @@ const initialProduct = () => ({
   category_id: '',
   set_id: '',
   variant_label: '',
+  catalogue_match_id: '',
+  catalogue_printing_key: '',
+  catalogue_reference_image_url: '',
+  catalogue_reference_image_source: '',
   featured: false,
 })
 
 const scannedValues = (fields) =>
   Object.fromEntries(
-    CARD_FIELDS.map(([key]) => [key, fields?.[key]?.value || '']),
+    [
+      ...CARD_FIELDS.map(([key]) => [key, fields?.[key]?.value || '']),
+      ['variant_label', fields?.variant_label?.value || ''],
+      ['catalogue_match_id', fields?.catalogue_match_id?.value || ''],
+      ['catalogue_printing_key', fields?.catalogue_printing_key?.value || ''],
+      ['catalogue_reference_image_url', fields?.catalogue_reference_image_url?.value || ''],
+      ['catalogue_reference_image_source', fields?.catalogue_reference_image_source?.value || ''],
+    ],
   )
 
 const rarityOptions = [
@@ -222,6 +233,10 @@ export default function QuickAddPanel({
         language: form.language.trim() || null,
         classification: form.classification.trim() || null,
         variant_label: form.variant_label.trim() || null,
+        catalogue_match_id: form.catalogue_match_id.trim() || null,
+        catalogue_printing_key: form.catalogue_printing_key.trim() || null,
+        catalogue_reference_image_url: form.catalogue_reference_image_url.trim() || null,
+        catalogue_reference_image_source: form.catalogue_reference_image_source.trim() || null,
       }
       const hasExtendedValues = Object.values(optionalValues).some((value) => value !== null)
       let extendedColumnsReady = false
