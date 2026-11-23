@@ -166,10 +166,7 @@ export default function QuickAddPanel({
     }
   }
 
-  const inferredSetId =
-    form.set_id ||
-    sets.find((set) => String(set.code || '').toUpperCase() === String(form.set_code || '').trim().toUpperCase())?.id ||
-    ''
+  const inferredSetId = form.set_id || resolveSetIdForCode(sets, form.set_code)
 
   const checkDuplicates = async (setId, includeVariantMetadata) => {
     if (!form.card_number.trim()) return []
