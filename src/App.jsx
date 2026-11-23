@@ -38,6 +38,7 @@ import AdminAccess from './admin/AdminAccess'
 import { findPrimaryCatalogueMatch } from './admin/cardCatalogue'
 import { hasSupabaseConfig, supabase } from './lib/supabase'
 import { DEFAULT_SITE_SETTINGS, normalizeSiteSettings } from './siteSettings'
+import { buildCheckoutSnapshot } from './orderCheckout'
 import './App.css'
 
 const CART_KEY = 'grand-line-archive-cart'
@@ -589,12 +590,36 @@ function Storefront() {
     setOrderAction('placing')
     setOrdersError('')
 
+    const latestProductsResult = await supabase
+      .from('products')
+      .select('id,name,price,stock_quantity,status')
+      .in('id', cart.map((item) => item.product.id))
+    if (latestProductsResult.error) {
+      setOrdersError(`Could not verify current stock and prices: ${latestProductsResult.error.message}`)
+      setOrderAction('')
+      return
+    }
+    const checkout = buildCheckoutSnapshot(cart, latestProductsResult.data || [])
+    if (!checkout.ok) {
+      setCart(checkout.items)
+      const priceChanged = checkout.issues.some((issue) => issue.reason === 'price-changed')
+      const issueText = checkout.issues.map((issue) => {
+        if (issue.reason === 'unavailable') return `${issue.name} is no longer available`
+        if (issue.reason === 'insufficient-stock') return `${issue.name} only has ${issue.stock} in stock`
+        if (issue.reason === 'price-changed') return `${issue.name} price has changed`
+        return `${issue.name} has an invalid price`
+      }).join('; ')
+      setOrdersError(`Please review your basket before continuing. ${issueText}${priceChanged ? ' Updated prices have been applied to your basket.' : ''}`)
+      setOrderAction('')
+      return
+    }
+
     const orderResult = await supabase
       .from('orders')
       .insert({
         user_id: user.id,
         status: 'pending',
-        total_amount: Number(cartTotal.toFixed(2)),
+        total_amount: checkout.total,
       })
       .select('*')
       .single()
@@ -605,7 +630,7 @@ function Storefront() {
       return
     }
 
-    const rows = cart.map((item) => ({
+    const rows = checkout.items.map((item) => ({
       order_id: orderResult.data.id,
       product_id: item.product.id,
       quantity: item.quantity,
@@ -613,8 +638,12 @@ function Storefront() {
     }))
     const itemsResult = await supabase.from('order_items').insert(rows)
     if (itemsResult.error) {
+      const cleanupResult = await supabase.from('orders').delete().eq('id', orderResult.data.id)
+      const cleanupMessage = cleanupResult.error
+        ? ` The pending order could not be removed: ${cleanupResult.error.message}`
+        : ' The empty pending order was removed.'
       setOrdersError(
-        `Order ${orderResult.data.id} was created, but its items could not be saved: ${itemsResult.error.message}`,
+        `Order items could not be saved: ${itemsResult.error.message}.${cleanupMessage}`,
       )
       setOrderAction('')
       return
