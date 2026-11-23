@@ -39,6 +39,7 @@ import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
 import { buildProductEditPayload, parseInventoryStockUpdate, productDeleteFailure } from './productEditPayload'
+import { findSetCodeMatches } from './productSchema'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -834,6 +835,12 @@ function CollectionsSection({ categories, sets, onRefresh }) {
     }
     if (duplicate.data?.length) {
       setError('A set with that name already exists.')
+      setBusy(false)
+      return
+    }
+    const codeMatches = setCode.trim() ? findSetCodeMatches(sets, setCode) : []
+    if (codeMatches.length) {
+      setError('A set with that code already exists, or another set uses an equivalent code format. Choose a unique set code.')
       setBusy(false)
       return
     }
