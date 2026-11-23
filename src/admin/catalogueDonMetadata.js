@@ -32,8 +32,8 @@ export function buildDonSetIndex(rows = []) {
 }
 /**
  * Identify DON!! catalogue entries even though the official card list does not
- * assign them standard card numbers. Set attribution is kept separate and is
- * only shown when a product link exists; never guess a DON!! source set.
+ * assign them standard card numbers. Attribution comes from the source DON!!
+ * dataset or an explicit admin correction; otherwise it remains unassigned.
  */
 export function isDonCatalogueEntry({ printing, card, observation } = {}) {
   const rarity = String(printing?.rarity || '').toUpperCase()
