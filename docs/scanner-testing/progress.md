@@ -859,3 +859,9 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Slugs include OP/EB/ST/PRB sets, OP14-EB04 / OP15-EB04 crossover sets, Double Pack DP-02 through DP-12, and the generic Promo group.
 - The upstream source has 53 rows labelled `promo`; those remain generically attributed to PROMO rather than guessing a more specific product/set. Some printing-level cross-check files returned empty through the GitHub file connector, so printing-key coverage against the full EN/JP printing tables is not verified by this audit.
 - This is a source-data audit only; no external source was edited and no production data was changed.
+
+
+### DON!! slug-normalization regression tests — 23 November 2026
+
+- Added a regression test covering all 35 slug formats observed in the upstream DON!! set-source file, including Double Pack, OP/EB crossover, PRB, promo, ST and OP formats.
+- The test asserts the exact normalized code expected for every observed slug. Automated CI is pending for this test commit.
