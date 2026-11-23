@@ -608,3 +608,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Applying a catalogue match now preserves legitimate numeric zero values for power, cost, and counter fields instead of falling back to the original CSV values. Empty/null catalogue fields still retain the CSV value. Regression tests cover zero, string-zero, and blank fallback cases. CI tests, lint, and production build passed in run 45154091787.
 
 - The bulk-import extended-schema preflight now treats numeric zero as a populated card detail, ensuring zero-only power/cost/counter data still triggers the required column check. Regression tests cover numeric and string zero values. CI tests, lint, and production build passed in run 45154282261.
+
+
+## Confirmed admin product-update results — 23 November 2026
+- Inventory stock/price saves, publication toggles, and catalogue-fill updates now request the affected product ID and treat a zero-row/no-error response as a failure. This matches the existing confirmed-delete safeguard and avoids reporting success when a stale product row or RLS policy prevented the update.
+- Added unit coverage for successful, zero-row, and database-error update responses. No live inventory, product, or database records were changed.
