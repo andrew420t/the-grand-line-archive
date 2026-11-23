@@ -119,6 +119,9 @@ export async function uploadProductPhotos({ productId, userId, photos }) {
           updated_at: new Date().toISOString(),
         })
         .eq('id', productId)
+        // Restore only if this upload still owns the front-image value. A
+        // concurrent admin edit must not be overwritten by rollback.
+        .eq('image_url', imageRecords.find((image) => image.role === 'front')?.image_url)
       if (restoreResult.error) cleanupMessages.push(`product image rollback failed: ${restoreResult.error.message}`)
     }
     if (metadataInserted) {
