@@ -25,13 +25,25 @@ const normalizeImportLanguage = (value) => {
 
 export function isBulkImportDuplicate(existing, candidate) {
   const cardNumber = normalizeImportIdentity(existing?.card_number)
-  const setCode = normalizeImportIdentity(existing?.set_code)
-  const variant = normalizeImportVariant(existing?.variant_label)
-  if (!cardNumber || cardNumber !== normalizeImportIdentity(candidate?.card_number)) return false
-  if (setCode !== normalizeImportIdentity(candidate?.set_code)) return false
-  if (variant !== normalizeImportVariant(candidate?.variant_label)) return false
+  const candidateNumber = normalizeImportIdentity(candidate?.card_number)
+  if (!cardNumber || cardNumber !== candidateNumber) return false
+
+  const existingPrintingKey = normalizeImportIdentity(existing?.catalogue_printing_key)
+  const candidatePrintingKey = normalizeImportIdentity(candidate?.catalogue_printing_key)
   const existingLanguage = normalizeImportLanguage(existing?.language)
   const candidateLanguage = normalizeImportLanguage(candidate?.language)
+
+  // Stable catalogue printing identity takes precedence over broad card/set
+  // matching, so two distinct printings with the same display variant remain importable.
+  if (existingPrintingKey && candidatePrintingKey) {
+    if (existingPrintingKey !== candidatePrintingKey) return false
+    return !existingLanguage || !candidateLanguage || existingLanguage === candidateLanguage
+  }
+
+  const setCode = normalizeImportIdentity(existing?.set_code)
+  const variant = normalizeImportVariant(existing?.variant_label)
+  if (setCode !== normalizeImportIdentity(candidate?.set_code)) return false
+  if (variant !== normalizeImportVariant(candidate?.variant_label)) return false
   return !existingLanguage || !candidateLanguage || existingLanguage === candidateLanguage
 }
 
