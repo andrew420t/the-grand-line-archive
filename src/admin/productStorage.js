@@ -192,8 +192,12 @@ export async function uploadLibraryPhotos({ userId, files }) {
     return uploaded
   } catch (error) {
     if (uploaded.length) {
-      const cleanup = await storage.remove(uploaded.map((photo) => photo.path))
-      if (cleanup.error) throw new Error(`${error.message} (Some uploaded images could not be rolled back: ${cleanup.error.message})`)
+      try {
+        const cleanup = await storage.remove(uploaded.map((photo) => photo.path))
+        if (cleanup.error) throw new Error(cleanup.error.message)
+      } catch (cleanupError) {
+        throw new Error(`${error.message} (Some uploaded images could not be rolled back: ${cleanupError.message || String(cleanupError)})`)
+      }
     }
     throw error
   }
