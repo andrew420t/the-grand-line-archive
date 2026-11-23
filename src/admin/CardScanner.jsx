@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { AlertCircle, ArrowRight, Check, LoaderCircle, ScanLine } from 'lucide-react'
 import { CARD_FIELDS, parseCardDetails } from './cardParser'
 import { rankCatalogueMatches } from './cardMatchRanking'
@@ -45,6 +45,8 @@ export default function CardScanner({
   const [numberCandidates, setNumberCandidates] = useState([])
   const [manualCropEnabled, setManualCropEnabled] = useState(false)
   const [manualCropPercent, setManualCropPercent] = useState({ x: 0, y: 0, width: 100, height: 100 })
+  const cropPreviewRef = useRef(null)
+  const cropDragRef = useRef(null)
 
   const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
   const hasReview =
@@ -60,6 +62,35 @@ export default function CardScanner({
         confidence: current[key]?.confidence || 0,
       },
     }))
+  }
+
+  const updateCropFromPointer = (event, finish = false) => {
+    const bounds = cropPreviewRef.current?.getBoundingClientRect()
+    const start = cropDragRef.current
+    if (!bounds || !start) return
+    const current = {
+      x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
+      y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)),
+    }
+    const x = Math.min(start.x, current.x)
+    const y = Math.min(start.y, current.y)
+    const width = Math.abs(current.x - start.x)
+    const height = Math.abs(current.y - start.y)
+    setManualCropPercent({ x: x * 100, y: y * 100, width: width * 100, height: height * 100 })
+    if (finish) cropDragRef.current = null
+  }
+
+  const startCropSelection = (event) => {
+    if (scanning || !manualCropEnabled) return
+    event.preventDefault()
+    event.currentTarget.setPointerCapture?.(event.pointerId)
+    const bounds = cropPreviewRef.current?.getBoundingClientRect()
+    if (!bounds) return
+    cropDragRef.current = {
+      x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
+      y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)),
+    }
+    setManualCropPercent({ x: cropDragRef.current.x * 100, y: cropDragRef.current.y * 100, width: 0, height: 0 })
   }
 
   const scanCard = async () => {
@@ -362,6 +393,32 @@ export default function CardScanner({
             <span>Use manual crop</span>
           </label>
         </div>
+        {manualCropEnabled && frontPhoto?.previewUrl && (
+          <div className="scanner-manual-crop__preview-instructions">
+            Drag across the photo to select the card area. The crop should include all four card edges and leave a little margin.
+          </div>
+        )}
+        {manualCropEnabled && frontPhoto?.previewUrl && (
+          <div
+            className="scanner-manual-crop__preview"
+            ref={cropPreviewRef}
+            onPointerDown={startCropSelection}
+            onPointerMove={(event) => updateCropFromPointer(event)}
+            onPointerUp={(event) => updateCropFromPointer(event, true)}
+            onPointerCancel={() => { cropDragRef.current = null }}
+            role="group"
+            aria-label="Drag to select the crop area on the card photograph"
+          >
+            <img src={frontPhoto.previewUrl} alt="Photo to crop for OCR" draggable="false" />
+            <div className="scanner-manual-crop__shade" />
+            <div className="scanner-manual-crop__selection" style={{
+              left: manualCropPercent.x + '%',
+              top: manualCropPercent.y + '%',
+              width: manualCropPercent.width + '%',
+              height: manualCropPercent.height + '%',
+            }} />
+          </div>
+        )}
         {manualCropEnabled && (
           <div className="scanner-manual-crop__fields">
             {[
