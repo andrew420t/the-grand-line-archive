@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [master]
   push:
-    branches: [feature/card-identification]
+    branches: [feature/card-identification, feature/scanner-number-first-verification]
 
 jobs:
   build-and-test:
