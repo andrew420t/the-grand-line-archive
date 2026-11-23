@@ -343,3 +343,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Progress-log correction — 23 November 2026
 - An earlier inventory-safety entry described duplicate lookup as checking up to 50 rows. That was superseded by the pagination work: duplicate lookup now retrieves matching rows in pages of 1,000 with stable ID ordering and continues until the final page. The earlier note is historical, not the current limit.
 - The rescan reset improvement passed CI on commit `db679d6bfdc4b420b6e7fcfd710ff5bb72e0d4c8` (tests, lint, build).
+
+
+## Shared recognition-memory coverage — 23 November 2026
+- The shared-photo lookup previously capped reads at the first 5,000 examples without a deterministic order, meaning later confirmed examples could be ignored. It now reads ordered pages of 1,000 records until the final page, then compares the query hash against the complete returned set.
+- This removes the silent 5,000-example coverage ceiling. Query volume/performance with a very large shared library still needs real database benchmarking; the migration remains review-only and has not been applied.
