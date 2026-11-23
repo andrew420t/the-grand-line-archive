@@ -922,3 +922,5 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 
 - Code review found a rounding edge case: rounding normalized crop origin and size independently could extend the source rectangle one pixel past an image edge. The crop helper now clamps rounded origins and dimensions to the source image bounds, including tiny image dimensions.
 - Added regression tests for the 10×10 edge crop that previously rounded to an 11-pixel extent and for a 1×1 source image. These tests have been committed; exact-head CI is pending.
+
+- Follow-up review extended the same rounding protection to OCR's built-in footer/number-zone crops: crop origins and dimensions are clamped against the source image, preventing region scans from reading outside bounds on small or odd-sized photos. Exact-head CI for this follow-up is pending.
