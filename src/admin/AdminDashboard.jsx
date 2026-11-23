@@ -792,30 +792,24 @@ function CollectionsSection({ categories, sets, onRefresh }) {
     setBusy(true)
     setError('')
     setNotice('')
-    const duplicate = await supabase.from('categories').select('id').eq('name', categoryName.trim()).limit(1)
-    if (duplicate.error) {
-      setError(`Could not check the category name: ${duplicate.error.message}`)
-      setBusy(false)
-      return
-    }
-    if (duplicate.data?.length) {
-      setError('A category with that name already exists.')
-      setBusy(false)
-      return
-    }
-    const result = await supabase.from('categories').insert({
-      id: globalThis.crypto.randomUUID(),
-      name: categoryName.trim(),
-      created_at: new Date().toISOString(),
-    })
-    if (result.error) {
-      setError(`Category was not saved: ${result.error.message}`)
-    } else {
+    try {
+      const duplicate = await supabase.from('categories').select('id').eq('name', categoryName.trim()).limit(1)
+      if (duplicate.error) throw new Error(`Could not check the category name: ${duplicate.error.message}`)
+      if (duplicate.data?.length) throw new Error('A category with that name already exists.')
+      const result = await supabase.from('categories').insert({
+        id: globalThis.crypto.randomUUID(),
+        name: categoryName.trim(),
+        created_at: new Date().toISOString(),
+      })
+      if (result.error) throw new Error(`Category was not saved: ${result.error.message}`)
       setCategoryName('')
       setNotice('Category added.')
       onRefresh()
+    } catch (categoryError) {
+      setError(categoryError.message || 'Category was not saved. Please try again.')
+    } finally {
+      setBusy(false)
     }
-    setBusy(false)
   }
 
   const addSet = async (event) => {
@@ -827,40 +821,30 @@ function CollectionsSection({ categories, sets, onRefresh }) {
     setBusy(true)
     setError('')
     setNotice('')
-    const duplicate = await supabase.from('sets').select('id').eq('name', setName.trim()).limit(1)
-    if (duplicate.error) {
-      setError(`Could not check the set name: ${duplicate.error.message}`)
-      setBusy(false)
-      return
-    }
-    if (duplicate.data?.length) {
-      setError('A set with that name already exists.')
-      setBusy(false)
-      return
-    }
-    const codeMatches = setCode.trim() ? findSetCodeMatches(sets, setCode) : []
-    if (codeMatches.length) {
-      setError('A set with that code already exists, or another set uses an equivalent code format. Choose a unique set code.')
-      setBusy(false)
-      return
-    }
-    const result = await supabase.from('sets').insert({
-      id: globalThis.crypto.randomUUID(),
-      name: setName.trim(),
-      code: setCode.trim() || null,
-      description: setDescription.trim() || null,
-      created_at: new Date().toISOString(),
-    })
-    if (result.error) {
-      setError(`Set was not saved: ${result.error.message}`)
-    } else {
+    try {
+      const duplicate = await supabase.from('sets').select('id').eq('name', setName.trim()).limit(1)
+      if (duplicate.error) throw new Error(`Could not check the set name: ${duplicate.error.message}`)
+      if (duplicate.data?.length) throw new Error('A set with that name already exists.')
+      const codeMatches = setCode.trim() ? findSetCodeMatches(sets, setCode) : []
+      if (codeMatches.length) throw new Error('A set with that code already exists, or another set uses an equivalent code format. Choose a unique set code.')
+      const result = await supabase.from('sets').insert({
+        id: globalThis.crypto.randomUUID(),
+        name: setName.trim(),
+        code: setCode.trim() || null,
+        description: setDescription.trim() || null,
+        created_at: new Date().toISOString(),
+      })
+      if (result.error) throw new Error(`Set was not saved: ${result.error.message}`)
       setSetName('')
       setSetCode('')
       setSetDescription('')
       setNotice('Set added.')
       onRefresh()
+    } catch (setError) {
+      setError(setError.message || 'Set was not saved. Please try again.')
+    } finally {
+      setBusy(false)
     }
-    setBusy(false)
   }
 
   return (
