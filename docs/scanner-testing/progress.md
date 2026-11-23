@@ -234,3 +234,10 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Live official page checks (browser inspection): OP18 English `series=569118` returned 159 results; EB05 English `series=569205` returned 96; PRB01 English `series=569301` returned 319; ST10 English `series=569010` returned 19; the English promo list `series=569901` returned 375. Official card-list pages may include reprints/other product-linked printings and the page's displayed results are not a guaranteed unique-card count.
 - The official pages expose card number, rarity, card name, card attributes/effect, set association and card images. This is the primary verification source; the archive links to the official source rather than bulk-hosting Bandai artwork.
 - Tests now cover English and Japanese URLs, promo links, DON!! separate source, and deliberately unmapped combined products.
+
+
+## Combined OP14/OP15 and EB-04 official source routing — 23 November 2026
+- Verified Bandai's English official series **569114** (OP14-EB04, 199 results) and **569115** (OP15-EB04, 196 results), plus Japanese series **550114**, **550115**, and standalone **550204** (Japanese EB04).
+- English EB04-numbered cards route by printed card number: **EB04-011–041 → OP14-EB04 / 569114**; **EB04-001–010 and EB04-042–061 → OP15-EB04 / 569115**. This keeps the same EB04 prefix from linking to the wrong official list.
+- Scanner matches and Image Library rows now pass the card number to the official-list resolver. Combined product codes also link directly to their Bandai series pages.
+- Added regression tests for both combined product pages, Japanese EB04, English EB04 range boundaries and invalid numbers. No card data or artwork is copied; this change adds verified source links only.
