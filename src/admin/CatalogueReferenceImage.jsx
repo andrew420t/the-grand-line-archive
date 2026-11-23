@@ -7,11 +7,13 @@ export default function CatalogueReferenceImage({ match, className = '' }) {
   const [useMemory, setUseMemory] = useState(candidates.length === 0)
   const [failed, setFailed] = useState(false)
   const [rememberedUrl, setRememberedUrl] = useState('')
+  const [memoryChecked, setMemoryChecked] = useState(false)
 
   useEffect(() => {
     let cancelled = false
     let objectUrl = ''
     setRememberedUrl('')
+    setMemoryChecked(false)
     setImageIndex(0)
     setFailed(false)
     setUseMemory(candidates.length === 0)
@@ -19,12 +21,16 @@ export default function CatalogueReferenceImage({ match, className = '' }) {
     if (!match?.id) return undefined
     getRememberedCardImageForPrinting(match.id)
       .then((blob) => {
-        if (!blob || cancelled) return
-        objectUrl = URL.createObjectURL(blob)
-        setRememberedUrl(objectUrl)
+        if (cancelled) return
+        if (blob) {
+          objectUrl = URL.createObjectURL(blob)
+          setRememberedUrl(objectUrl)
+        }
+        setMemoryChecked(true)
       })
       .catch(() => {
         // A missing local database must never prevent catalogue lookup.
+        if (!cancelled) setMemoryChecked(true)
       })
 
     return () => {
@@ -55,7 +61,7 @@ export default function CatalogueReferenceImage({ match, className = '' }) {
     )
   }
 
-  if (useMemory && !rememberedUrl && !failed) {
+  if (useMemory && !rememberedUrl && !memoryChecked && !failed) {
     return <div className={'catalogue-reference-empty ' + className} role="img" aria-label={'Loading saved reference image for ' + (match?.cardNumber || 'this card')}><span>Checking saved card images…</span><small>{match?.language || 'Card reference'}</small></div>
   }
 
