@@ -29,3 +29,10 @@ export function parseInventoryStockUpdate(values = {}, raw = {}) {
   if (!Number.isInteger(quantity) || quantity < 0 || !Number.isFinite(price) || price < 0) return null
   return { stock_quantity: quantity, price }
 }
+
+
+export function productDeleteFailure(result) {
+  if (result?.error) return result.error.message || 'The database rejected the product deletion.'
+  if (!result?.data?.id) return 'Product was not found or deletion was not permitted.'
+  return ''
+}
