@@ -137,31 +137,55 @@ export default function CardScanner({
       setSelectedAutoMatchId('')
       setMatchConfirmationOpen(false)
       setAutoMatchStatus('')
-      const detectedNumber = candidates[0]?.number || parsed.card_number?.value || sharedRememberedImage?.cardNumber || rememberedImage?.cardNumber
-      if (detectedNumber) {
-        setStatus('Card number detected from the lower-right crop. Looking up the exact catalogue printing and checking rarity…')
+      const detectedNumbers = [...new Set([
+        ...candidates.map((candidate) => candidate.number),
+        parsed.card_number?.value,
+        sharedRememberedImage?.cardNumber,
+        rememberedImage?.cardNumber,
+      ].filter(Boolean))].slice(0, 6)
+      if (detectedNumbers.length) {
+        setStatus('Checking the strongest OCR number readings against the English and Japanese catalogue…')
         try {
-          const matches = await findCatalogueMatches(detectedNumber)
-          setAutoMatches(matches)
-          if (matches.length) {
+          const lookups = await Promise.all(detectedNumbers.map(async (cardNumber) => {
+            try {
+              return { cardNumber, matches: await findCatalogueMatches(cardNumber) }
+            } catch (lookupError) {
+              return { cardNumber, matches: [], error: lookupError.message }
+            }
+          }))
+          const successfulLookups = lookups.filter((lookup) => lookup.matches.length)
+          const allMatches = [...new Map(successfulLookups.flatMap((lookup) => lookup.matches).map((match) => [match.id, match])).values()]
+          setAutoMatches(allMatches)
+          if (allMatches.length) {
+            const candidateByNumber = new Map(candidates.map((candidate) => [candidate.number, candidate]))
+            const topResolvedNumber = successfulLookups[0].cardNumber
             let rememberedId = ''
-            try { rememberedId = window.localStorage.getItem('glaScannerCardMatch:' + detectedNumber) || '' } catch { /* storage may be unavailable */ }
-            if (rememberedImage?.cardNumber === detectedNumber) rememberedId = rememberedImage.printingId
-            if (sharedRememberedImage?.cardNumber === detectedNumber) rememberedId = sharedRememberedImage.printingId
-            const ranked = rankCatalogueMatches(matches, parsed.name?.value, parsed.language?.value, rememberedId)
+            try { rememberedId = window.localStorage.getItem('glaScannerCardMatch:' + topResolvedNumber) || '' } catch { /* storage may be unavailable */ }
+            if (rememberedImage?.cardNumber === topResolvedNumber) rememberedId = rememberedImage.printingId
+            if (sharedRememberedImage?.cardNumber === topResolvedNumber) rememberedId = sharedRememberedImage.printingId
+            const ranked = rankCatalogueMatches(allMatches, parsed.name?.value, parsed.language?.value || recognitionLanguage, rememberedId)
             const best = ranked[0]
             setRankedAutoMatches(ranked)
             setSelectedAutoMatchId(best.match.id)
             setMatchConfirmationOpen(true)
+            const winningReading = candidateByNumber.get(best.match.cardNumber)
+            const recoveredAlternate = candidates[0]?.number !== best.match.cardNumber
             setAutoMatchStatus((rememberedImage?.printingId === best.match.id || sharedRememberedImage?.printingId === best.match.id)
               ? (sharedRememberedImage?.printingId === best.match.id ? 'Shared recognition library match' : 'Previously confirmed local image') + ' (' + (sharedRememberedImage?.printingId === best.match.id ? sharedRememberedImage.similarity : rememberedImage.similarity) + '% visual similarity). Please confirm the card and variant.'
-              : best.nameMatch && best.languageMatch
-              ? 'Strong match: card number, name, and language agree.'
-              : best.nameMatch
-                ? 'Possible match: card number and name agree. Confirm language and set.'
-                : 'Possible match found by card number. Compare the name, language, and set manually.')
+              : recoveredAlternate
+                ? 'The first OCR number did not resolve, so the scanner recovered a catalogue match from another number reading. Compare the card number, name, language, set and variant before confirming.'
+                : winningReading?.occurrences > 1
+                  ? 'The card number was read repeatedly and matched the catalogue. Confirm the language, set and printing variant.'
+                  : best.nameMatch && best.languageMatch
+                    ? 'Strong match: card number, name and language agree.'
+                    : best.nameMatch
+                      ? 'Possible match: card number and name agree. Confirm language and set.'
+                      : 'Possible match found by card number. Compare the name, language, set and variant manually.')
           } else {
-            setAutoMatchStatus('No catalogue entry matched the detected card number. Check the OCR number.')
+            const failures = lookups.filter((lookup) => lookup.error)
+            setAutoMatchStatus(failures.length === lookups.length
+              ? 'Catalogue verification was unavailable: ' + failures[0]?.error
+              : 'None of the OCR number readings matched the catalogue. Check the enlarged readings or search by card number manually.')
           }
         } catch (lookupError) {
           setAutoMatchStatus('Catalogue verification was unavailable: ' + lookupError.message)
@@ -256,8 +280,8 @@ export default function CardScanner({
   const confirmAutoMatch = async () => {
     if (selectedAutoMatch) {
       applyCatalogueMatch(selectedAutoMatch)
-      if (rememberMatch && fields.card_number?.value) {
-        try { window.localStorage.setItem('glaScannerCardMatch:' + fields.card_number.value, selectedAutoMatch.id) } catch { /* storage may be unavailable */ }
+      if (rememberMatch && selectedAutoMatch.cardNumber) {
+        try { window.localStorage.setItem('glaScannerCardMatch:' + selectedAutoMatch.cardNumber, selectedAutoMatch.id) } catch { /* storage may be unavailable */ }
       }
       setMatchConfirmationOpen(false)
       let memoryMessage = ''
