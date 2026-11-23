@@ -1049,3 +1049,4 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 ## Quick Add photo-retry duplicate safeguard (CI pending)
 - Review found that after a product was saved but its photograph upload failed, the retry path could link the photos successfully yet leave the original card form populated after clearing the partial-save state. A second submit could then create a duplicate.
 - The successful photo-retry path now resets the product form and duplicate-review state after linking the photos, and its success message explains why. Verify exact latest-head CI before marking this fix complete.
+- Exact PR head `f80d53e0ee249750339742ef598455c4ce344029` CI run **45221407333** passed all **111 tests**, lint, and production build. This verifies the Quick Add photo-retry reset and the preceding storefront, bulk-import, scanner, and cleanup code changes at that head.
