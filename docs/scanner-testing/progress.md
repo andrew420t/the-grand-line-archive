@@ -576,3 +576,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - No product rows, Storage objects, or live database policies were changed. CI verification pending.
 
 - The set dropdown also retains the exact selected set row ID (rather than re-resolving a potentially duplicated set code), while still invalidating stale catalogue identity fields.
+
+
+## Bulk-import set-code normalization — 23 November 2026
+- Aligned CSV bulk-import set matching with Quick Add by using the shared punctuation-insensitive set-code resolver. Equivalent values such as `OP17` and `OP-17`, or `EB04` and `EB-04`, now resolve to the existing set row rather than producing a false unmatched-set warning and importing without a set link.
+- The bulk import still uses the exact resolved set row ID for the product payload. No CSV was imported and no live inventory/database records were changed. CI verification pending.
