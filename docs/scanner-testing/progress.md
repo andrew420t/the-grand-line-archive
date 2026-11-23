@@ -392,3 +392,10 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Extracted CSV parsing into a testable module, added unmatched-quote and duplicate-header errors, and made blank rows safe to ignore while rejecting text after closing quotes and accepting multiline quoted cells.
 - Added duplicate detection within the uploaded CSV as well as existing inventory. Identity matching normalizes set-code formatting and treats known different languages or variants as distinct; blank/Normal/Base variant labels are treated consistently, while ambiguous missing-language records remain flagged for review.
 - Numeric preflight also validates non-negative integer Power/Cost/Counter, non-negative price, and whole-number stock; a dash is treated as a blank numeric value rather than producing NaN. Regression tests cover field mapping, quoted commas/quotes, multiline cells, CRLF and blank rows, malformed CSV, duplicate identity, and numeric edge cases. Import was not executed; no live inventory was changed. CI passed on commit `76e72efd` (tests, lint, build).
+
+
+## Checkout stock/price revalidation audit — 23 November 2026
+- Found that checkout previously trusted the basket's cached price and stock values without a fresh product query immediately before order creation.
+- Added a pre-check against current product records: only active products, valid prices, and sufficient stock are accepted. Changed prices or availability stop checkout and refresh basket values so the customer can review them. Order totals and order-item unit prices are derived from the refreshed product rows.
+- If order-item insertion fails, checkout now attempts to delete the empty pending order and reports if cleanup is denied/failed.
+- Added unit tests for fresh totals, unavailable/draft items, stock shortage, price changes, and invalid values. This is still a client-side check and does not prevent simultaneous checkouts from overselling; server-side atomic stock reservation and database policies remain necessary for production order safety. No orders, stock, or live database data were changed. CI pending.
