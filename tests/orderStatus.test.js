@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { ORDER_STATUSES, isValidOrderStatus, orderStatusUpdateFailure, orderDeleteFailure } from '../src/orderStatus.js'
+import { ORDER_STATUSES, isValidOrderStatus, isAllowedOrderStatusTransition, orderStatusUpdateFailure, orderDeleteFailure } from '../src/orderStatus.js'
 
 test('accepts the supported order lifecycle states', () => {
   for (const status of ORDER_STATUSES) assert.equal(isValidOrderStatus(status), true)
@@ -29,4 +29,17 @@ test('atomic status RPC must return the expected order ID', () => {
   assert.equal(orderStatusUpdateFailure({ data: 'order-1', error: null }, 'order-1'), '')
   assert.equal(orderStatusUpdateFailure({ data: 'another-order', error: null }, 'order-1'), 'Order was not found or the status update was not permitted.')
   assert.equal(orderStatusUpdateFailure({ data: null, error: null }, 'order-1'), 'Order was not found or the status update was not permitted.')
+})
+
+test('allows only forward order lifecycle transitions and safe cancellations', () => {
+  assert.equal(isAllowedOrderStatusTransition('pending', 'processing'), true)
+  assert.equal(isAllowedOrderStatusTransition('pending', 'cancelled'), true)
+  assert.equal(isAllowedOrderStatusTransition('processing', 'shipped'), true)
+  assert.equal(isAllowedOrderStatusTransition('processing', 'cancelled'), true)
+  assert.equal(isAllowedOrderStatusTransition('shipped', 'completed'), true)
+  assert.equal(isAllowedOrderStatusTransition('pending', 'pending'), true)
+  assert.equal(isAllowedOrderStatusTransition('processing', 'pending'), false)
+  assert.equal(isAllowedOrderStatusTransition('shipped', 'cancelled'), false)
+  assert.equal(isAllowedOrderStatusTransition('completed', 'cancelled'), false)
+  assert.equal(isAllowedOrderStatusTransition('cancelled', 'processing'), false)
 })
