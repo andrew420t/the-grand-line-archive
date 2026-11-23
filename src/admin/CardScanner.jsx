@@ -271,6 +271,8 @@ export default function CardScanner({
         catalogue_printing_key: values.catalogue_printing_key,
         catalogue_reference_image_url: values.catalogue_reference_image_url,
         catalogue_reference_image_source: values.catalogue_reference_image_source,
+        reference_image_url: values.reference_image_url,
+        reference_printing_key: values.reference_printing_key,
       }).map(([key, value]) => [
         key,
         { value: value || '', confidence: value ? 95 : 0, needsReview: true },
