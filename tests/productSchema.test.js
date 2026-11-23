@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { buildCatalogueScannerFields, buildNewProductPayload, classifyPrintingDuplicate } from '../src/admin/productSchema.js'
+import { buildCatalogueScannerFields, buildNewProductPayload, classifyPrintingDuplicate, mergeCatalogueScannerFields } from '../src/admin/productSchema.js'
 
 const form = {
   name: 'Monkey D. Luffy',
@@ -233,4 +233,48 @@ test('finds normalized set-code collisions before a new set is created', async (
   assert.deepEqual(findSetCodeMatches(sets, 'OP-17').map((set) => set.id), ['op17'])
   assert.deepEqual(findSetCodeMatches(sets, 'EB04').map((set) => set.id), ['eb04'])
   assert.deepEqual(findSetCodeMatches(sets, 'OP99'), [])
+})
+
+
+test('catalogue confirmation preserves OCR text when the catalogue field is blank', () => {
+  const current = {
+    name: { value: 'Trafalgar Law OCR', confidence: 72, needsReview: true },
+    effect_text: { value: 'On Your Opponent Turn: ...', confidence: 68, needsReview: true },
+    rarity: { value: 'C', confidence: 55, needsReview: true },
+    catalogue_match_id: { value: 'old-match', confidence: 95, needsReview: true },
+    catalogue_printing_key: { value: 'old-printing', confidence: 95, needsReview: true },
+    catalogue_reference_image_url: { value: 'https://example.test/old.png', confidence: 95, needsReview: true },
+  }
+  const merged = mergeCatalogueScannerFields(current, {
+    name: 'Trafalgar Law',
+    effect_text: '',
+    rarity: 'Rare',
+    catalogue_match_id: 'law-jp:jp:eb04',
+    catalogue_printing_key: 'law-jp',
+    catalogue_reference_image_url: 'https://example.test/law-jp.png',
+  })
+
+  assert.equal(merged.name.value, 'Trafalgar Law')
+  assert.equal(merged.name.confidence, 95)
+  assert.equal(merged.effect_text.value, 'On Your Opponent Turn: ...')
+  assert.equal(merged.effect_text.confidence, 68)
+  assert.equal(merged.rarity.value, 'Rare')
+  assert.equal(merged.catalogue_match_id.value, 'law-jp:jp:eb04')
+  assert.equal(merged.catalogue_printing_key.value, 'law-jp')
+  assert.equal(merged.catalogue_reference_image_url.value, 'https://example.test/law-jp.png')
+})
+
+test('catalogue confirmation clears stale identity when the selected match has no reference identity', () => {
+  const current = {
+    catalogue_match_id: { value: 'old-match', confidence: 95 },
+    catalogue_printing_key: { value: 'old-printing', confidence: 95 },
+    catalogue_reference_image_url: { value: 'https://example.test/old.png', confidence: 95 },
+    effect_text: { value: 'OCR effect', confidence: 60 },
+  }
+  const merged = mergeCatalogueScannerFields(current, { name: 'Custom card', effect_text: '' })
+
+  assert.equal(merged.catalogue_match_id.value, '')
+  assert.equal(merged.catalogue_printing_key.value, '')
+  assert.equal(merged.catalogue_reference_image_url.value, '')
+  assert.equal(merged.effect_text.value, 'OCR effect')
 })
