@@ -16,9 +16,12 @@ export function selectPrimaryCatalogueMatch(matches = [], { language = '', print
       const normalized = String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '')
       return ['', 'normal', 'base', 'regular'].includes(normalized) ? 'normal' : normalized
     }
+    // A set-only product defaults to the normal/base printing rather than
+    // accidentally showing a parallel/alternate variant from the same set.
+    const requestedVariant = variantLabel || (setCode ? 'normal' : '')
     const exactIdentity = withImages.filter((match) =>
       (!setCode || normalizeSet(match.setCode) === normalizeSet(setCode)) &&
-      (!variantLabel || normalizeVariant(match.variantLabel || match.variant) === normalizeVariant(variantLabel))
+      (!requestedVariant || normalizeVariant(match.variantLabel || match.variant) === normalizeVariant(requestedVariant))
     )
     return exactIdentity.find((match) => preferredCode && match.languageCode === preferredCode)
       || exactIdentity[0]
