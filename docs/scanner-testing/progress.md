@@ -700,3 +700,10 @@ A manual browser-rendering check was completed for the 100-row language/set samp
 
 ### Sample URL corrections discovered
 The official Bandai PRB pages showed the English PRB01 OP01-006 sample as OP01-006_r1.png (not the earlier guessed _p3 filename), and the English PRB02 EB01-009 sample as EB01-009_r1.png (not the earlier guessed _p1 filename). The matrix URLs above have been corrected to the exact image-link destinations returned by Bandai. Japanese PRB01/02 image paths matched the selected variants.
+
+
+### Latest CI and production access check — 23 November 2026
+- After the 94/100 official image-load report update, PR #26 head `6394868e73055e29d23ecbb6747ffb970756f12d` passed GitHub Actions run #414. The `build-and-test` job completed dependency installation, `npm test`, lint, and production build successfully.
+- PR #26 remains open and unmerged. This run did not merge or deploy it.
+- Rechecked the production Worker root and `/shop`; both remain inaccessible through the browser tool, with `/shop` returning DisabledError. Live UI behaviour and deployed code version remain unverified.
+- Tried downloading an official Bandai card image directly into the local OCR runtime; download failed. Therefore official browser-rendered images remain visual-load checks only, not OCR test inputs.
