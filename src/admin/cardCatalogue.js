@@ -179,8 +179,8 @@ export async function findCatalogueMatches(cardNumber) {
             rarity: value(printing, 'rarity'),
             variant: value(printing, 'variant'),
             variantLabel: value(printing, 'variant'),
-            imageUrl: officialImageFallback || value(printing, 'image_url'),
-            fallbackImageUrl: officialImageFallback && officialImageFallback !== value(printing, 'image_url') ? officialImageFallback : '',
+            imageUrl: imageReference.imageUrl,
+            fallbackImageUrl: imageReference.fallbackImageUrl,
             sourceText: value(printing, 'source_text'),
             setCode,
             setName: value(product, 'name'),
@@ -654,6 +654,7 @@ export async function getCatalogueImagesForCard(cardNumber, language = 'all') {
       rarity: match.rarity,
       variant: match.variant,
       imageUrl: match.imageUrl,
-      source: match.imageSource || (match.imageUrl.includes('onepiece-cardgame.com') ? 'Bandai' : 'Catalogue source'),
+      fallbackImageUrl: match.fallbackImageUrl || '',
+      source: match.source || match.imageSource || (match.imageUrl.includes('onepiece-cardgame.com') ? 'Bandai' : 'Catalogue source'),
     }))
 }
