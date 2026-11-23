@@ -24,6 +24,7 @@ test('normalizes DON!! source set slugs to display codes', () => {
   assert.equal(donSetSlugToCode('prb-02'), 'PRB02')
   assert.equal(donSetSlugToCode('op14-eb04'), 'OP14-EB04')
   assert.equal(donSetSlugToCode('op15-eb04'), 'OP15-EB04')
+  assert.equal(donSetSlugToCode('dp-02'), 'DP-02')
   assert.equal(donSetSlugToCode('dp-09'), 'DP-09')
   assert.equal(donSetSlugToCode('promo'), 'PROMO')
 })
