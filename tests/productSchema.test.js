@@ -78,3 +78,34 @@ test('keeps normal and parallel catalogue printings distinct through inventory p
   assert.equal(normal.variant_label, 'Normal')
   assert.equal(parallel.variant_label, 'Parallel')
 })
+
+
+import { classifyPrintingDuplicate } from '../src/admin/productSchema.js'
+
+test('blocks the same exact catalogue printing', () => {
+  assert.equal(classifyPrintingDuplicate(
+    { catalogue_match_id: 'kaido:en:op17', catalogue_printing_key: 'kaido', language: 'English' },
+    { catalogue_match_id: 'kaido:en:op17', catalogue_printing_key: 'kaido', language: 'English' },
+  ), 'exact')
+})
+
+test('allows a Normal and Parallel printing sharing a card number', () => {
+  assert.equal(classifyPrintingDuplicate(
+    { catalogue_match_id: 'kaido-normal:en:op17', catalogue_printing_key: 'kaido-normal', variant_label: 'Normal', language: 'English' },
+    { catalogue_match_id: 'kaido-parallel:en:op17', catalogue_printing_key: 'kaido-parallel', variant_label: 'Parallel', language: 'English' },
+  ), 'distinct')
+})
+
+test('treats different language printings as distinct', () => {
+  assert.equal(classifyPrintingDuplicate(
+    { catalogue_printing_key: 'kaido', language: 'English' },
+    { catalogue_printing_key: 'kaido', language: 'Japanese' },
+  ), 'distinct')
+})
+
+test('flags legacy entries without enough identity as possible duplicates', () => {
+  assert.equal(classifyPrintingDuplicate(
+    { variant_label: '', language: '' },
+    { catalogue_match_id: 'kaido-parallel:en:op17', catalogue_printing_key: 'kaido-parallel', variant_label: 'Parallel', language: 'English' },
+  ), 'possible')
+})
