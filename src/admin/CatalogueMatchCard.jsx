@@ -11,6 +11,7 @@ export default function CatalogueMatchCard({ match, onUseDetails, useLabel = 'Us
         <small>{match.colors || 'Colour not listed'} · {match.category || 'Card'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
         {match.setName && <small>{match.setName}</small>}
         <div className="catalogue-match-card__actions">
+          {match.officialCardlistUrl && <a className="button button--outline" href={match.officialCardlistUrl} target="_blank" rel="noopener noreferrer">Official Bandai list ↗</a>}
           <button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), '_blank', 'noopener,noreferrer')}>Open on Collectr ↗</button>
           {onUseDetails && <button className="button button--gold" type="button" disabled={disabled} onClick={onUseDetails}>{useLabel}</button>}
         </div>
