@@ -970,3 +970,8 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - The documentation update itself is included in exact PR #26 head `2ee14cb015255cc4d19d5be2538375de9fbc5a5d`. GitHub Actions run #479 (ID `45212103431`) passed tests, lint, and production build on this exact head.
 - Re-searched the current conversation and Library for genuine scanner photos, including the Saint Shamrock OP18-119 source. No accessible image file was returned, so no new physical-photo OCR was run or claimed.
 - No staging/browser deployment is accessible; production/live UI remains unverified.
+
+
+### Exact CI confirmation for the latest progress record — 23 November 2026
+
+- PR #26 head `1b26d34f6a7c12c1db0bea382c63c61a3be9e46e` passed GitHub Actions run #480 (ID `45212247254`): dependency installation, all tests, lint, and production build succeeded. This exact-head run includes the genuine-photo availability note and previous exact-head verification record.
