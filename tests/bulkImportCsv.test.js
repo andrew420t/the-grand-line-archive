@@ -95,3 +95,11 @@ test('prefers catalogue values while preserving zero and retaining CSV fallback 
   assert.equal(preferCatalogueValue('', '7'), '7')
   assert.equal(preferCatalogueValue(null, '7'), '7')
 })
+
+
+test('recognizes zero-valued card details as extended schema fields', async () => {
+  const { hasExtendedCardValues } = await import('../src/admin/bulkImportCsv.js')
+  assert.equal(hasExtendedCardValues([0]), true)
+  assert.equal(hasExtendedCardValues(['0']), true)
+  assert.equal(hasExtendedCardValues(['', null, undefined]), false)
+})
