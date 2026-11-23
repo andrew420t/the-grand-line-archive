@@ -963,3 +963,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Exact PR #26 head `5d641f76945c9424a801c49f2fbdc3398a2d8b53` passed GitHub Actions run #477 (ID `45211850487`): **100/100 tests passed, lint passed, production build passed**. This exact-head pass covers the crop gate, confirmation/photo identity guard, source pixel floor, tests, and the checklist/progress updates present on that commit. It still does not verify browser/device behaviour or real OCR.
 - Rechecked upstream Koala Kollect manifest: generated `2026-10-22T04:46:19Z`, `cards.jsonl` declares 3,003 rows; English products 99 rows and Japanese products 92 rows. Both product lists contain OP-17, but neither contains OP-18 nor EB-05. Product records are therefore demonstrably stale for those sets; full OP18/EB05 card-row retrieval was not independently completed this pass.
 - PR #26 remains open/unmerged. No merge/deploy or production data changes.
+
+
+### Documentation-head verification and genuine-photo availability — 23 November 2026
+
+- The documentation update itself is included in exact PR #26 head `2ee14cb015255cc4d19d5be2538375de9fbc5a5d`. GitHub Actions run #479 (ID `45212103431`) passed tests, lint, and production build on this exact head.
+- Re-searched the current conversation and Library for genuine scanner photos, including the Saint Shamrock OP18-119 source. No accessible image file was returned, so no new physical-photo OCR was run or claimed.
+- No staging/browser deployment is accessible; production/live UI remains unverified.
