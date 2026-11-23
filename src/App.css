@@ -4895,3 +4895,5 @@ h2 em {
   background: transparent;
   pointer-events: none;
 }
+
+.scanner-manual-crop__note--invalid { color: #d6a28e; }
