@@ -105,3 +105,28 @@ test('number evidence stays absent for matches with no OCR candidate evidence', 
   const ranked = rankCatalogueMatches([{ id: 'candidate', cardNumber: 'OP01-001', name: 'Zoro', language: 'English' }])
   assert.equal(ranked[0].numberEvidence, null)
 })
+
+test('stronger printed-number evidence ranks ahead of contradictory name/language OCR', () => {
+  const ranked = rankCatalogueMatches([
+    { id: 'name', cardNumber: 'OP01-002', name: 'Roronoa Zoro', language: 'English' },
+    { id: 'number', cardNumber: 'OP01-001', name: 'Trafalgar Law', language: 'Japanese' },
+  ], 'Roronoa Zoro', 'English', '', {
+    'OP01-001': { occurrences: 3, confidence: 92, sources: ['footer', 'wide', 'tight'] },
+    'OP01-002': { occurrences: 1, confidence: 51, sources: ['footer'] },
+  })
+  assert.equal(ranked[0].match.id, 'number')
+  assert.equal(ranked[0].nameMatch, false)
+  assert.equal(ranked[0].numberEvidence.occurrences, 3)
+  assert.equal(ranked[1].match.id, 'name')
+})
+
+test('number evidence occurrence count and confidence break ties before OCR name', () => {
+  const ranked = rankCatalogueMatches([
+    { id: 'weak', cardNumber: 'OP01-003', name: 'Roronoa Zoro', language: 'English' },
+    { id: 'strong', cardNumber: 'OP01-001', name: 'Trafalgar Law', language: 'Japanese' },
+  ], 'Roronoa Zoro', 'English', '', {
+    'OP01-003': { occurrences: 1, confidence: 80, sources: ['footer'] },
+    'OP01-001': { occurrences: 2, confidence: 70, sources: ['footer', 'wide'] },
+  })
+  assert.equal(ranked[0].match.id, 'strong')
+})
