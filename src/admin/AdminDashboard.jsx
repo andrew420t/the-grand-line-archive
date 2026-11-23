@@ -341,6 +341,12 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
       language: details.language, classification: details.classification,
       variant_label: details.variant_label, counter: details.counter,
       trigger_text: details.trigger_text, attributes: details.attributes,
+      catalogue_match_id: details.catalogue_match_id,
+      catalogue_printing_key: details.catalogue_printing_key,
+      catalogue_reference_image_url: details.catalogue_reference_image_url,
+      catalogue_reference_image_source: details.catalogue_reference_image_source,
+      reference_image_url: details.reference_image_url,
+      reference_printing_key: details.reference_printing_key,
     }
     Object.entries(mappings).forEach(([column, value]) => {
       const current = raw[column]
@@ -472,7 +478,7 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
             return (
               <article className="inventory-item" key={product.id}>
                 <div className="inventory-item__photo">{product.image ? <img src={product.image} alt={product.name} /> : <Image size={22} />}</div>
-                <div className="inventory-item__details"><p className="eyebrow">{product.setName || product.category || 'CARD'}</p><h3>{product.name}</h3><span>{raw.card_number || 'Card number not recorded'} · {product.rarity || 'Rarity not recorded'}</span><span className={String(raw.status || '').toLowerCase() === 'active' ? 'inventory-publication-status is-published' : 'inventory-publication-status'}>{String(raw.status || '').toLowerCase() === 'active' ? 'Published in Archive' : 'Private · Inventory only'}</span></div>
+                <div className="inventory-item__details"><p className="eyebrow">{product.setCode ? `${product.setCode} · ` : ''}{product.setName || product.category || 'CARD'}</p><h3>{product.name}</h3><span>{raw.card_number || 'Card number not recorded'} · {product.rarity || 'Rarity not recorded'}</span><span>{[raw.language, raw.variant_label].filter(Boolean).join(' · ') || 'Language / printing not recorded'}</span>{raw.catalogue_printing_key && <span className="admin-muted">Printing: {raw.catalogue_printing_key}</span>}<span className={String(raw.status || '').toLowerCase() === 'active' ? 'inventory-publication-status is-published' : 'inventory-publication-status'}>{String(raw.status || '').toLowerCase() === 'active' ? 'Published in Archive' : 'Private · Inventory only'}</span></div>
                 <label className="form-field inventory-input"><span>GBP price</span><input type="number" min="0" step="0.01" value={valueFor(product, 'price') || raw.price || ''} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], price: event.target.value } }))} /></label>
                 <label className="form-field inventory-input"><span>Quantity</span><input type="number" min="0" step="1" value={valueFor(product, 'stock') || raw.stock_quantity || 0} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], stock: event.target.value } }))} /></label>
                 <button className="button button--outline inventory-save" type="button" disabled={busyId === String(product.id)} onClick={() => saveInventory(product)}>{busyId === String(product.id) ? 'Saving…' : 'Update stock'}</button>
