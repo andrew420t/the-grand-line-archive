@@ -16,7 +16,7 @@ Requested 100 sample cases: 25 set/product targets × 2 English + 2 Japanese = 1
 - **Current catalogue locator gap:** the Koala Kollect product-linked locator dataset itself still has 92/100 rows and omits the eight OP18/EB05 sample slots. Those eight were supplemented from official Bandai card-list pages and all eight official images were subsequently visually loaded. The English EB-04 set is not a separate product—its cards are associated with combined OP14-EB04 and OP15-EB04 products.
 
 ## Reference matrix
-Sampling method: first two unique card numbers (sorted) with product-linked image locators for each exact set/product code and language. For OP14/OP15, combined English product codes were not reliably linked in the source data during this extraction; EB04 is included in Japanese product associations. Some samples are reprints and retain their original card number. URLs are official card-image path candidates; only the four OP01 URLs above were image-loaded/visually verified.
+Sampling method: first two unique card numbers (sorted) with product-linked image locators for each exact set/product code and language. For OP14/OP15, combined English product codes were not reliably linked in the source data during this extraction; EB04 is included in Japanese product associations. Some samples are reprints and retain their original card number. **Image verification status is updated in the summary above:** 94/100 sample slots were visually loaded via official Bandai card-list pages; 6 remain unverified (4 OP17 slots and 1 Japanese slot each for EB01/EB02). Visual loading is not OCR-engine testing.
 
 | Set | Language | Slot | Card number | Name | Image URL |
 |---|---|---:|---|---|---|
@@ -908,3 +908,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - GitHub Actions run #455 (ID `45204683070`) **passed** for commit `db159bbebc4eabf4b366a5f3a04a395fe05469e0`.
 - All workflow steps passed: dependency installation, test suite, lint, and production build.
 - This verifies the selected crop-file preparation and its scanner integration compile and pass automated tests. It does **not** prove real-photo OCR improvement; the Saint Shamrock photo is not available in the current file set and the browser/staging UI remains untested.
+
+
+### Manual-crop workflow review — 23 November 2026
+
+- Reviewed crop overlay implementation and coordinate mapping. The preview preserves the image aspect ratio (`width: 100%; height: auto`), and drag coordinates are normalized against the preview bounds; the same normalized crop is passed into the OCR crop preparation, so the UI selection and source crop are aligned in code review.
+- The crop is validated before scanning, selection minimums are enforced, and both focused number OCR and supporting full-card OCR use the selected crop. The original image remains unchanged for recognition memory/reference-photo purposes.
+- No new code issue found in this pass. **Still unverified:** touch/pointer behaviour on iOS/Safari and desktop browsers, reverse-direction drag, edge-touching selection, preview scaling, and a real physical-card OCR result. Added these as explicit staging checklist tests; CI cannot cover these browser/device behaviours.
+- Current PR #26 head: `7cfb7b3f67fa645bef28f551ca6294731be1d681`. Exact-head GitHub Actions run #456 (ID `45204894944`) passed tests, lint, and production build. PR remains open/unmerged; no deployment or production data change.
