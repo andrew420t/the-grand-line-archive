@@ -335,6 +335,42 @@ export function clearCatalogueCache() {
   loadedAt = 0
 }
 
+async function readDonCardSetOverrides() {
+  if (!supabase) return {}
+  const { data, error } = await supabase
+    .from('don_card_set_overrides')
+    .select('printing_key,language,set_code,source_note')
+  if (error) {
+    // The optional review-only migration may not have been applied yet.
+    if (error.code === '42P01' || error.code === 'PGRST205') return {}
+    throw error
+  }
+  return Object.fromEntries((data || []).map((row) => [row.printing_key, row]))
+}
+
+export async function saveDonCardSetOverride({ printingKey, language, setCode, userId, sourceNote = '' }) {
+  if (!supabase) throw new Error('Supabase is not configured.')
+  if (!printingKey || !['en', 'jp'].includes(language) || !String(setCode || '').trim()) {
+    throw new Error('Choose a source set and a valid DON!! printing before saving.')
+  }
+  const payload = {
+    printing_key: printingKey,
+    language,
+    set_code: String(setCode).trim().toUpperCase(),
+    source_note: sourceNote || 'Manually assigned in Grand Line Archive',
+    updated_by: userId || null,
+    updated_at: new Date().toISOString(),
+  }
+  const { error } = await supabase.from('don_card_set_overrides').upsert(payload, { onConflict: 'printing_key' })
+  if (error) {
+    if (error.code === '42P01' || error.code === 'PGRST205') {
+      throw new Error('DON!! set assignments are not enabled yet. Review and apply supabase/review-only/don-card-set-overrides.sql in Supabase first.')
+    }
+    throw new Error('Could not save DON!! set assignment: ' + error.message)
+  }
+  return true
+}
+
 
 /**
  * Opens Collectr's product search for a specific printing.
@@ -503,6 +539,7 @@ export async function getCatalogueCoverageReport() {
 /** Paged view of catalogue image URLs; these remain remote references, not stored uploads. */
 export async function getCatalogueImageGallery({ offset = 0, limit = 60, query = '', language = 'all' } = {}) {
   const catalogue = await getCatalogue()
+  const donOverrides = await readDonCardSetOverrides()
   const entries = []
   for (const language of LANGUAGES) {
     const data = catalogue.languages?.[language] || { printings: [] }
@@ -517,8 +554,9 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
       const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
       const product = links.map((link) => safeMapGet(index.productsByKey, link.product_key)).find(Boolean)
       const isDon = isDonCatalogueEntry({ printing, card, observation })
-      const setCode = formatSetCode(product?.code || '')
-      entries.push({ id: printing.key + ':' + language, cardNumber: card?.number || (isDon ? 'DON!!' : ''), name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode: setCode || (isDon ? 'DON!!' : ''), setName: product?.name || '', sourceText: printing.source_text || '', isDon, officialListUrl: getOfficialCardlistUrl(setCode, language, isDon), imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
+      const setOverride = isDon ? donOverrides[printing.key] : null
+      const setCode = formatSetCode(setOverride?.set_code || product?.code || '')
+      entries.push({ id: printing.key + ':' + language, printingKey: printing.key, cardNumber: card?.number || (isDon ? 'DON!!' : ''), name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode: setCode || (isDon ? 'DON!!' : ''), setName: setOverride ? 'Manually assigned set' : product?.name || '', setAssignmentSource: setOverride?.source_note || (product ? 'Catalogue product link' : ''), sourceText: printing.source_text || '', isDon, officialListUrl: getOfficialCardlistUrl(setCode, language, isDon), imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
     }
   }
   entries.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.language.localeCompare(b.language) || a.id.localeCompare(b.id))
