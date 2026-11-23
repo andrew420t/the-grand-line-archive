@@ -772,3 +772,13 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - **Regression-safety decision:** do not replace the detector with a more permissive corner threshold or force a crop from a connected foreground component; that risks cropping hands/holder/background as the card and producing confidently wrong OCR. Safe next implementation is a validated card quadrilateral/crop with confidence plus explicit manual crop fallback; OCR should run only inside the user-confirmed crop when auto-boundary confidence is inadequate.
 - Current real-photo evidence remains 1 physical sample tested (Saint Shamrock OP18-119), automatic card number/title failed; partial rules OCR only. No new photo or image-file access was available in this pass, so the real-photo count does not increase.
 - Production Worker and camera/live UI remain unverified; no deployment or production data changes were made.
+
+
+### Follow-up scheduled check — 23 November 2026
+
+- Verified current PR #26 head is `c48221d8b3534b05a138c88d65cc8738cd4a6c46`; the previous subsection's head value was a stale snapshot. PR remains open/unmerged and base is `master`.
+- CI run #419 (ID 45188699888) completed successfully for the exact current head. The run covers dependency install, tests, lint and production build; no physical OCR or browser/deployment checks are implied.
+- Re-review confirms the existing detector/crop helper has no validated four-corner card quadrilateral or manual interactive crop. It uses coarse connected-component bounds and global corner-background consistency; crop confidence can fail on scenes with hands/background intrusions. Number OCR is still applied to fixed full-image footer bands. A manual crop step remains the appropriate fallback, but implementation and browser verification are outstanding.
+- PR changed-file inventory includes the scanner, OCR region logic, image tools, catalogue logic and test files. No additional genuine user photo was accessible in this check, so real-photo OCR stays at 1 physical sample (Saint Shamrock OP18-119); no image load/retrieval statuses were promoted based on inference.
+- No live UI or production Worker access was achieved; no production deployment, database or inventory changes made.
+- Next actions: implement crop-confirmation fallback on the feature branch only with focused tests for hand/edge occlusion, perspective, orientation and uncertain detection; then exact-head CI and browser staging test before any claim of working UI.
