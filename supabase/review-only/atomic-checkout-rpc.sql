@@ -268,4 +268,15 @@ REVOKE ALL ON FUNCTION public.update_order_status_atomic(uuid, text) FROM PUBLIC
 REVOKE ALL ON FUNCTION public.update_order_status_atomic(uuid, text) FROM anon;
 GRANT EXECUTE ON FUNCTION public.update_order_status_atomic(uuid, text) TO authenticated;
 
+-- Enforce the atomic RPC as the only authenticated order-write path.
+-- Review the grants audit first; these revokes intentionally disable direct
+-- client INSERTs and status UPDATEs. SECURITY DEFINER RPCs execute as their
+-- owner, while authenticated users retain SELECT access subject to existing RLS.
+REVOKE INSERT ON public.orders FROM PUBLIC, anon, authenticated;
+REVOKE INSERT (user_id, status, total_amount, stock_reserved) ON public.orders FROM PUBLIC, anon, authenticated;
+REVOKE UPDATE ON public.orders FROM PUBLIC, anon, authenticated;
+REVOKE UPDATE (status) ON public.orders FROM PUBLIC, anon, authenticated;
+REVOKE INSERT ON public.order_items FROM PUBLIC, anon, authenticated;
+REVOKE INSERT (order_id, product_id, quantity, unit_price) ON public.order_items FROM PUBLIC, anon, authenticated;
+
 COMMIT;
