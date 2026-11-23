@@ -30,3 +30,9 @@ test('maps verified combined English products and EB04 split by card number', ()
   assert.equal(getOfficialCardlistUrl('EB04', 'en', false, 'EB04-061'), 'https://en.onepiece-cardgame.com/cardlist/?series=569115')
   assert.equal(getOfficialCardlistUrl('EB04', 'en', false, 'EB04-062'), '')
 })
+
+
+test('keeps mapped DON!! set assignments linking to the official DON!! PDF', () => {
+  assert.equal(getOfficialCardlistUrl('PRB-01', 'en', true), 'https://www.onepiece-cardgame.com/pdf/don-cardlist.pdf')
+  assert.equal(getOfficialCardlistUrl('DP-09', 'jp', true), 'https://www.onepiece-cardgame.com/pdf/don-cardlist.pdf')
+})
