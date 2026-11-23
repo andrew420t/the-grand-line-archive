@@ -461,17 +461,19 @@ export default function CardScanner({
             ].map(([key, label]) => (
               <label className="form-field" key={key}>
                 <span>{label} (%)</span>
-                <input type="number" min="0" max="100" step="1" value={manualCropPercent[key]} disabled={scanning} onChange={(event) => setManualCropPercent((current) => {
+                <input type="number" min="0" max="100" step="1" value={manualCropPercent[key]} disabled={scanning} onChange={(event) => {
                   const value = Math.max(0, Math.min(100, Number(event.target.value) || 0))
-                  const next = { ...current, [key]: value }
-                  if (key === 'x') next.width = Math.min(Number(current.width) || 0, 100 - value)
-                  if (key === 'y') next.height = Math.min(Number(current.height) || 0, 100 - value)
-                  if (key === 'width') next.width = Math.min(value, 100 - (Number(current.x) || 0))
-                  if (key === 'height') next.height = Math.min(value, 100 - (Number(current.y) || 0))
+                  setManualCropPercent((current) => {
+                    const next = { ...current, [key]: value }
+                    if (key === 'x') next.width = Math.min(Number(current.width) || 0, 100 - value)
+                    if (key === 'y') next.height = Math.min(Number(current.height) || 0, 100 - value)
+                    if (key === 'width') next.width = Math.min(value, 100 - (Number(current.x) || 0))
+                    if (key === 'height') next.height = Math.min(value, 100 - (Number(current.y) || 0))
+                    return next
+                  })
                   setManualCropConfirmed(false)
                   setManualCropSelectionMade(true)
-                  return next
-                })} />
+                }} />
               </label>
             ))}
             <button className="button button--quiet" type="button" disabled={scanning} onClick={() => { setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 }); setManualCropConfirmed(false); setManualCropSelectionMade(false) }}>Reset full photo</button>
