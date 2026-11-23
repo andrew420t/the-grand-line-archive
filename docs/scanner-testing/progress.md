@@ -413,3 +413,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - This client-side visibility filter is supplementary; the actual public database access must be restricted by RLS policies. Existing RLS is not verified against the live database, and no policy or database changes were made. CI pending.
 
 - Added a read-only product visibility/RLS audit SQL file for the authorised live-schema review: reports RLS flags, existing product policies and expressions, API-role grants, effective privileges, and status counts. It contains SELECT statements only. Crucial caveat: permissive RLS policies combine with OR, so an existing broad public policy must be reviewed/revised rather than assuming a new active-only policy would restrict it. No live DB access or changes.
+
+
+## Checkout double-submit and thrown-error recovery audit — 23 November 2026
+- Added a synchronous ref guard so rapid repeated checkout clicks cannot launch multiple order-creation attempts before React state updates.
+- Wrapped checkout in try/catch/finally so unexpected exceptions report an error and always release the busy state. If an order was created but item insertion did not finish, it attempts to clean up the pending order and reports cleanup failures.
+- The safeguard is client-side only and cannot replace server-side idempotency/transaction protection. CI pending.
