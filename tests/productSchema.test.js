@@ -101,6 +101,28 @@ test('treats different language printings as distinct', () => {
   ), 'distinct')
 })
 
+test('normalizes common language aliases before duplicate comparison', () => {
+  assert.equal(classifyPrintingDuplicate(
+    { catalogue_printing_key: 'kaido', language: 'EN' },
+    { catalogue_printing_key: 'kaido', language: 'English' },
+  ), 'exact')
+  assert.equal(classifyPrintingDuplicate(
+    { catalogue_printing_key: 'kaido', language: 'JP' },
+    { catalogue_printing_key: 'kaido', language: 'Japanese' },
+  ), 'exact')
+})
+
+test('does not block a shared printing key when either language is unknown', () => {
+  assert.equal(classifyPrintingDuplicate(
+    { catalogue_printing_key: 'kaido', language: '' },
+    { catalogue_printing_key: 'kaido', language: 'English' },
+  ), 'possible')
+  assert.equal(classifyPrintingDuplicate(
+    { catalogue_printing_key: 'kaido', language: null },
+    { catalogue_printing_key: 'kaido', language: undefined },
+  ), 'possible')
+})
+
 test('flags legacy entries without enough identity as possible duplicates', () => {
   assert.equal(classifyPrintingDuplicate(
     { variant_label: '', language: '' },
