@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS } from './productSchema'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
-import { parseCsv } from './bulkImportCsv'
+import { parseCsv, isBulkImportDuplicate } from './bulkImportCsv'
 
 const TEMPLATE_HEADERS = ['name','card_number','set_code','rarity','variant_label','color','power','cost','card_type','classification','language','condition','price_gbp','stock_quantity','category_name','description','effect_text','counter','trigger_text','attributes']
 function downloadTemplate() {
@@ -30,17 +30,13 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
   const prepared = useMemo(() => rows.map((row, rowIndex) => {
     const matchingSet = sets.find((set) => String(set.code || '').toUpperCase() === String(row.set_code || '').toUpperCase())
     const matchingCategory = categories.find((category) => String(category.name || '').toLowerCase() === String(row.category_name || '').toLowerCase())
-    const duplicate = products.find((product) =>
-      String(product.raw?.card_number || '').toUpperCase() === String(row.card_number || '').toUpperCase() &&
-      String(product.setCode || product.raw?.set_code || '').toUpperCase() === String(row.set_code || '').toUpperCase() &&
-      String(product.raw?.variant_label || '').toLowerCase() === String(row.variant_label || '').toLowerCase()
-    )
-    const duplicateInFile = rows.slice(0, rowIndex).some((previous) =>
-      String(previous.card_number || '').trim().toUpperCase() === String(row.card_number || '').trim().toUpperCase() &&
-      String(previous.set_code || '').trim().toUpperCase() === String(row.set_code || '').trim().toUpperCase() &&
-      String(previous.variant_label || '').trim().toLowerCase() === String(row.variant_label || '').trim().toLowerCase() &&
-      String(previous.language || '').trim().toLowerCase() === String(row.language || '').trim().toLowerCase()
-    )
+    const duplicate = products.find((product) => isBulkImportDuplicate({
+      card_number: product.raw?.card_number,
+      set_code: product.setCode || product.raw?.set_code,
+      variant_label: product.raw?.variant_label,
+      language: product.raw?.language,
+    }, row))
+    const duplicateInFile = rows.slice(0, rowIndex).some((previous) => isBulkImportDuplicate(previous, row))
     const issues = []
     if (!row.name.trim()) issues.push('Card name missing')
     if (row.set_code && !matchingSet) issues.push('Set code not found in site sets')
