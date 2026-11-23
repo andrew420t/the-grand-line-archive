@@ -893,3 +893,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Added a unit test for the 12% minimum crop dimension: exactly 12% is accepted, while 11.9% width or height is rejected.
 - Run #448 passed on `dfc321123cc79cc5744b58e1713db34fcd3de125`, covering live validation feedback and Scan button guard. Run #449 was running for the subsequent Rescan-button guard when checked.
 - Added the minimum-size regression test in commit `7f7fe3e`; exact-head CI pending.
+
+
+### Manual crop applied to full-card text OCR — 23 November 2026
+
+- Found during review that the selected crop was used for number-area scans but supporting full-card text OCR still used the original full-scene image. That made the crop less complete than its UI implied.
+- Added `prepareManualCardCropFile` and now use the selected crop for both focused number-region OCR and supporting full-card OCR. The original photo remains used for recognition-memory matching and saving the verified reference image.
+- Added a staging checklist item to verify this behavior.
+- Commits: `9581237` (crop file preparation), `0a981be` (scanner integration), `57aa39c` (manual checklist). Exact-head CI pending.
