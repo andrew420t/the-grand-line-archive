@@ -880,3 +880,9 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Run #439 passed on `da9817ec3d571d69af64ca7564806bed00a07c20`, including the new 35-format DON!! source-slug regression test.
 - Run #443 passed on `ed686e6a65baae9e4824c9c5d6cf5f56fb00628c`, including the crop numeric-state and bounds fixes.
 - The latest PR head subsequently received a documentation-only staging-checklist addition for testing DON!! override persistence/RLS. This final docs commit is awaiting its own exact-head workflow check.
+
+
+### Crop validation feedback — 23 November 2026
+
+- Added live crop validity feedback and disabled Scan/Rescan while a manual crop is too small or exceeds the photo bounds. The message explains the minimum 12% width/height and full-image-bound requirements; invalid state styling is differentiated.
+- Commits: `6752b46` (live validation and scan guard), `37ac9fd` (invalid state style). Exact-head CI is pending.
