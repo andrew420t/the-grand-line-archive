@@ -71,12 +71,15 @@ export default function PhotoStudio({ photos, onPhotosChange }) {
   }, [cameraActive, facingMode])
 
   const addFiles = (fileList) => {
+    if (!fileList.length) return
     const imageFiles = [...fileList].filter((file) => file.type.startsWith('image/'))
     const rejectedCount = fileList.length - imageFiles.length
     const remaining = Math.max(0, 12 - photos.length)
     const accepted = imageFiles.slice(0, remaining)
+    const overflowCount = imageFiles.length - accepted.length
     if (!accepted.length) {
       setNotice(rejectedCount ? 'Choose image files to add photographs.' : 'The photo limit is 12 per batch.')
+      if (rejectedCount) setCameraError(rejectedCount + ' non-image file' + (rejectedCount === 1 ? ' was' : 's were') + ' skipped.')
       return
     }
 
@@ -98,8 +101,11 @@ export default function PhotoStudio({ photos, onPhotosChange }) {
         }
       }),
     ])
-    setNotice(`${accepted.length} photograph${accepted.length === 1 ? '' : 's'} ready for review.`)
-    if (rejectedCount) setCameraError(`${rejectedCount} non-image file${rejectedCount === 1 ? ' was' : 's were'} skipped.`)
+    setNotice(accepted.length + ' photograph' + (accepted.length === 1 ? '' : 's') + ' ready for review.')
+    const skippedMessages = []
+    if (rejectedCount) skippedMessages.push(rejectedCount + ' non-image file' + (rejectedCount === 1 ? ' was' : 's were') + ' skipped.')
+    if (overflowCount) skippedMessages.push(overflowCount + ' image' + (overflowCount === 1 ? '' : 's') + ' skipped because the batch limit is 12.')
+    setCameraError(skippedMessages.join(' '))
   }
 
   const capturePhoto = async () => {
