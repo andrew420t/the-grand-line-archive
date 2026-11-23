@@ -19,6 +19,7 @@ export default function ImageLibraryPanel({ user }) {
   const imageListRequestId = useRef(0)
   const referenceRequestId = useRef(0)
   const matrixCheckLock = useRef(false)
+  const donSetSaveLock = useRef(false)
   const [files, setFiles] = useState([])
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(true)
@@ -130,8 +131,10 @@ export default function ImageLibraryPanel({ user }) {
   }
 
   const saveDonSet = async (item) => {
+    if (donSetSaveLock.current) return
     const setCode = donSetSelections[item.id] || (item.setCode && item.setCode !== 'DON!!' ? item.setCode : '')
     if (!setCode) { setDonSetError('Choose the source set for this DON!! printing first.'); return }
+    donSetSaveLock.current = true
     setDonSetSaving(item.id); setDonSetError(''); setDonSetNotice('')
     try {
       await saveDonCardSetOverride({
@@ -143,8 +146,12 @@ export default function ImageLibraryPanel({ user }) {
       })
       setDonSetNotice(`Saved ${item.cardNumber} as ${setCode}.`)
       await loadReferenceImages(0)
-    } catch (saveError) { setDonSetError(saveError.message) }
-    finally { setDonSetSaving('') }
+    } catch (saveError) {
+      setDonSetError(saveError.message || 'Could not save the DON!! source-set assignment.')
+    } finally {
+      donSetSaveLock.current = false
+      setDonSetSaving('')
+    }
   }
 
   const chooseFiles = (fileList) => {
@@ -293,7 +300,7 @@ export default function ImageLibraryPanel({ user }) {
             }
             setFailedReferenceIds((current) => current.includes(item.id) ? current : [...current, item.id])
           }} />}</div>
-          <div className="photo-card__body"><span className="photo-card__name" title={item.name}>{item.isDon ? (item.sourceText || item.name || 'DON!! Card') : (item.name || item.cardNumber)} · {item.cardNumber}</span><span className="muted-copy">{item.language.toUpperCase()} · {item.setCode || (item.isDon ? 'DON!! · set not identified' : 'Unassigned')} · {item.rarity} {item.variant}</span>{item.officialListUrl && <a className="muted-copy" href={item.officialListUrl} target="_blank" rel="noopener noreferrer">Official Bandai list / DON!! source ↗</a>}<span className="muted-copy">{failedReferenceIds.includes(item.id) ? 'Image failed to load' : fallbackReferenceIds.includes(item.id) ? 'Alternate official image loaded' : item.source || 'Reference artwork · not a personal upload'}{item.usesBaseImageFallback || fallbackReferenceIds.includes(item.id) ? ' · base/alternate artwork; special finish may differ' : ''}</span>{item.isDon && <div className="catalogue-don-set-assignment"><label className="form-field"><span>DON!! source set</span><select value={donSetSelections[item.id] ?? (item.setCode !== 'DON!!' ? item.setCode : '')} onChange={(event) => setDonSetSelections((current) => ({ ...current, [item.id]: event.target.value }))}><option value="">Choose source set…</option>{DON_SET_OPTIONS.map((code) => <option key={code} value={code}>{code}</option>)}</select></label><button className="button button--outline" type="button" disabled={donSetSaving === item.id} onClick={() => saveDonSet(item)}>{donSetSaving === item.id ? 'Saving set…' : 'Save source set'}</button>{item.setAssignmentSource && <span className="muted-copy">Set source: {item.setAssignmentSource}</span>}</div>}</div>
+          <div className="photo-card__body"><span className="photo-card__name" title={item.name}>{item.isDon ? (item.sourceText || item.name || 'DON!! Card') : (item.name || item.cardNumber)} · {item.cardNumber}</span><span className="muted-copy">{item.language.toUpperCase()} · {item.setCode || (item.isDon ? 'DON!! · set not identified' : 'Unassigned')} · {item.rarity} {item.variant}</span>{item.officialListUrl && <a className="muted-copy" href={item.officialListUrl} target="_blank" rel="noopener noreferrer">Official Bandai list / DON!! source ↗</a>}<span className="muted-copy">{failedReferenceIds.includes(item.id) ? 'Image failed to load' : fallbackReferenceIds.includes(item.id) ? 'Alternate official image loaded' : item.source || 'Reference artwork · not a personal upload'}{item.usesBaseImageFallback || fallbackReferenceIds.includes(item.id) ? ' · base/alternate artwork; special finish may differ' : ''}</span>{item.isDon && <div className="catalogue-don-set-assignment"><label className="form-field"><span>DON!! source set</span><select value={donSetSelections[item.id] ?? (item.setCode !== 'DON!!' ? item.setCode : '')} onChange={(event) => setDonSetSelections((current) => ({ ...current, [item.id]: event.target.value }))}><option value="">Choose source set…</option>{DON_SET_OPTIONS.map((code) => <option key={code} value={code}>{code}</option>)}</select></label><button className="button button--outline" type="button" disabled={Boolean(donSetSaving)} onClick={() => saveDonSet(item)}>{donSetSaving === item.id ? 'Saving set…' : 'Save source set'}</button>{item.setAssignmentSource && <span className="muted-copy">Set source: {item.setAssignmentSource}</span>}</div>}</div>
         </article>)}</div>}
         {referenceNextOffset !== null && <button className="button button--outline" type="button" disabled={referenceLoading} onClick={() => loadReferenceImages(referenceNextOffset)}>{referenceLoading ? 'Loading catalogue images…' : 'Load more reference images'}</button>}
         {referenceLoading && referenceImages.length === 0 && <div className="loading-state">Loading catalogue reference images…</div>}{!referenceLoading && referenceImages.length === 0 && !referenceError && <p className="muted-copy">No reference images match this search. Try another card number or select all languages.</p>}
