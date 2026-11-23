@@ -96,7 +96,7 @@ export default function CardScanner({
       setStatus('Finding the card number: zooming and checking several bottom-edge areas…')
       const numberRegions = await prepareCardNumberRegions(frontPhoto.file)
       const numberResults = await Promise.all(numberRegions.map(async (region) => {
-        const { data: regionData } = await worker.recognize(region.file, {}, { blocks: true })
+        const { data: regionData } = await worker.recognize(region.file, { tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-' }, { blocks: true })
         const lineConfidence = (regionData.lines || [])
           .map((line) => Number(line.confidence))
           .filter(Number.isFinite)
