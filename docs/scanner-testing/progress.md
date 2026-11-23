@@ -975,3 +975,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 ### Exact CI confirmation for the latest progress record — 23 November 2026
 
 - PR #26 head `1b26d34f6a7c12c1db0bea382c63c61a3be9e46e` passed GitHub Actions run #480 (ID `45212247254`): dependency installation, all tests, lint, and production build succeeded. This exact-head run includes the genuine-photo availability note and previous exact-head verification record.
+
+
+### Latest scanner candidate-parser review and CI — 23 November 2026
+
+- Reviewed the OCR card-number candidate parser's prefix normalization and promo handling. It normalizes common OCR confusions (`0P`, `E8`, `5T`, `PR8`) and deduplicates repeated candidate numbers across readings; candidate occurrence/confidence is advisory and does not auto-confirm a match.
+- Current PR head `6d4d52f3e7133d7462c79021e4e6e60b2230e886` verified by GitHub Actions run #481 (ID `45212349383`): tests, lint, and production build all passed.
+- Attempted to open the Cloudflare branch preview through the browser tool; it was inaccessible in this environment. This is a tooling limitation, not evidence that the preview is down. Browser/mobile manual verification remains outstanding.
