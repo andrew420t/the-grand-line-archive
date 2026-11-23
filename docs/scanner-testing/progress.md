@@ -225,3 +225,12 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Added unit tests for printing-specific image selection, safe same-card fallback, refusing cross-card fallbacks, and preserving direct third-party references.
 - Verification for commit `b769444b3c556cb49e54ba02fa146fb3a3321853`: GitHub Actions `build-and-test` passed tests, lint, and production build. Cloudflare preview deployment is queued/pending at the time of this note. Production has not been changed.
 - Still required: browser-load test of the newly deployed preview, check the three EB04-005 references, run all 100 smoke-test images, and verify real-card scans. Base/alternate image fallback is a visual identification aid, not proof of the special printing's artwork.
+
+
+## Official Bandai source links in scanner — 23 November 2026
+
+- Scanner catalogue matches now expose an official Bandai card-list link when the printing's linked set code can be resolved. The reference image gallery already carries official source links; this adds the same source affordance directly to scanner candidate cards.
+- Link resolver covers standard OP, EB, ST, PRB, and promo-list URL patterns in English and Japanese. Combined product identifiers such as OP14-EB04 intentionally remain unmapped until their series URL is independently verified.
+- Live official page checks (browser inspection): OP18 English `series=569118` returned 159 results; EB05 English `series=569205` returned 96; PRB01 English `series=569301` returned 319; ST10 English `series=569010` returned 19; the English promo list `series=569901` returned 375. Official card-list pages may include reprints/other product-linked printings and the page's displayed results are not a guaranteed unique-card count.
+- The official pages expose card number, rarity, card name, card attributes/effect, set association and card images. This is the primary verification source; the archive links to the official source rather than bulk-hosting Bandai artwork.
+- Tests now cover English and Japanese URLs, promo links, DON!! separate source, and deliberately unmapped combined products.
