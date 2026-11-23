@@ -661,8 +661,12 @@ function Storefront() {
     } catch (error) {
       let cleanupMessage = ''
       if (createdOrderId && !itemsSaved) {
-        const cleanup = await supabase.from('orders').delete().eq('id', createdOrderId)
-        if (cleanup.error) cleanupMessage = ` The pending order could not be removed: ${cleanup.error.message}`
+        try {
+          const cleanup = await supabase.from('orders').delete().eq('id', createdOrderId)
+          if (cleanup.error) cleanupMessage = ` The pending order could not be removed: ${cleanup.error.message}`
+        } catch (cleanupError) {
+          cleanupMessage = ` The pending order cleanup failed: ${cleanupError?.message || 'unknown error'}`
+        }
       }
       setOrdersError(`Checkout failed unexpectedly: ${error?.message || 'Please try again.'}${cleanupMessage}`)
     } finally {
