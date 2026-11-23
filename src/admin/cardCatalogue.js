@@ -397,16 +397,47 @@ export function collectrSearchUrl(match) {
  * Resolve one safe display reference for public archive tiles. Seller-uploaded
  * product photographs remain the primary image and are never overwritten.
  */
-export async function findPrimaryCatalogueMatch(cardNumber, language = '') {
-  const matches = await findCatalogueMatches(cardNumber)
-  if (!matches.length) return null
+export function selectPrimaryCatalogueMatch(matches = [], { language = '', printingKey = '', matchId = '', setCode = '', variantLabel = '' } = {}) {
   const requested = String(language || '').toLowerCase()
   const preferredCode = requested.startsWith('jp') || requested.includes('japanese') ? 'jp'
     : requested.startsWith('en') || requested.includes('english') ? 'en' : ''
-  return matches.find((match) => preferredCode && match.languageCode === preferredCode && match.imageUrl)
-    || matches.find((match) => match.languageCode === 'en' && match.imageUrl)
-    || matches.find((match) => match.imageUrl)
+  const hasIdentity = Boolean(matchId || printingKey || setCode || variantLabel)
+  const withImages = matches.filter((match) => match.imageUrl)
+  if (matchId) return withImages.find((match) => match.id === matchId) || null
+  if (printingKey) {
+    const exactPrinting = withImages.filter((match) => match.printingKey === printingKey)
+    return exactPrinting.find((match) => preferredCode && match.languageCode === preferredCode)
+      || exactPrinting[0]
+      || null
+  }
+  if (setCode || variantLabel) {
+    const normalizeSet = (value) => String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
+    const normalizeVariant = (value) => {
+      const normalized = String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '')
+      return ['', 'normal', 'base', 'regular'].includes(normalized) ? 'normal' : normalized
+    }
+    const exactIdentity = withImages.filter((match) =>
+      (!setCode || normalizeSet(match.setCode) === normalizeSet(setCode)) &&
+      (!variantLabel || normalizeVariant(match.variantLabel || match.variant) === normalizeVariant(variantLabel))
+    )
+    return exactIdentity.find((match) => preferredCode && match.languageCode === preferredCode)
+      || exactIdentity[0]
+      || null
+  }
+  // Legacy products without exact printing identity may use a generic catalogue
+  // reference, but products with identity fields never silently fall back to a
+  // different set/variant.
+  if (hasIdentity) return null
+  return withImages.find((match) => preferredCode && match.languageCode === preferredCode)
+    || withImages.find((match) => match.languageCode === 'en')
+    || withImages[0]
     || null
+}
+
+export async function findPrimaryCatalogueMatch(cardNumber, language = '', identity = {}) {
+  const matches = await findCatalogueMatches(cardNumber)
+  if (!matches.length) return null
+  return selectPrimaryCatalogueMatch(matches, { language, ...identity })
 }
 
 /**
