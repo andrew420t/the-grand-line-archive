@@ -37,6 +37,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
       set_code: product.setCode || product.raw?.set_code,
       variant_label: product.raw?.variant_label,
       language: product.raw?.language,
+      catalogue_printing_key: product.raw?.catalogue_printing_key,
     }, row))
     const duplicateInFile = rows.slice(0, rowIndex).some((previous) => isBulkImportDuplicate(previous, row))
     const issues = []
