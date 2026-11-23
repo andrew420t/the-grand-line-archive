@@ -703,7 +703,7 @@ function Storefront() {
       return
     }
     const lockKey = String(orderId)
-    if (orderStatusLocks.current.has(lockKey)) return
+    if (orderStatusLocks.current.size > 0) return
     orderStatusLocks.current.add(lockKey)
     setOrderAction(orderId)
     try {
