@@ -542,7 +542,7 @@ export async function getCatalogueReferenceTestMatrix() {
       if (prefix === 'EB04') return 'EB04'
       return code.startsWith('OP14') ? 'OP14' : 'OP15'
     }
-    const match = code.match(/^(OP\\d{2}|EB\\d{2}|PRB\\d{2})/)
+    const match = code.match(/^(OP\d{2}|EB\d{2}|PRB\d{2})/)
     return match?.[1] || ''
   }
 
