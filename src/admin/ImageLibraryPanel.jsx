@@ -70,7 +70,6 @@ export default function ImageLibraryPanel({ user }) {
           const image = new window.Image()
           image.onload = () => resolve({ ...item, status: 'loaded' })
           image.onerror = () => resolve({ ...item, status: 'failed' })
-          image.referrerPolicy = 'no-referrer'
           image.src = item.imageUrl
         })))
         results.push(...checked)
