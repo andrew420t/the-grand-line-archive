@@ -19,6 +19,17 @@ export function resolveSetIdForCode(sets, code) {
   return sets.find((set) => normalizeSetCode(set.code) === normalized)?.id || ''
 }
 
+export function buildQuickAddFieldUpdate(current, field, value, sets = []) {
+  const identityChanged = ['card_number', 'set_code', 'language', 'variant_label'].includes(field)
+    && String(current?.[field] || '').trim().toLocaleLowerCase() !== String(value || '').trim().toLocaleLowerCase()
+  return {
+    ...current,
+    [field]: value,
+    ...(field === 'set_code' ? { set_id: resolveSetIdForCode(sets, value) } : {}),
+    ...(identityChanged ? Object.fromEntries(CATALOGUE_IDENTITY_FIELDS.map((key) => [key, ''])) : {}),
+  }
+}
+
 export const EXTENDED_CARD_COLUMNS = [
   'color',
   'power',
