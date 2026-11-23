@@ -542,3 +542,10 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Found a schema/keying weakness in the manual DON!! source-set override path: the table's primary key and upsert conflict target used only `printing_key`, while each override also carries a language and the catalogue is indexed independently for English and Japanese.
 - Updated the review-only SQL definition to use the composite primary key `(printing_key, language)`; updated reads, catalogue matching, and upserts to use the same composite identity.
 - This prevents an English override from replacing or being applied to a Japanese printing if the upstream key is shared. The migration remains review-only and has not been applied. CI is pending.
+
+## Product front-image rollback hardening — 23 November 2026
+
+- Product photo linking now reads and retains the previous `products.image_url` before changing it to the newly uploaded front photograph.
+- The front-image update verifies that the target product row was actually returned, rather than treating a zero-row update as success.
+- If the front-image update fails or its response is ambiguous, the upload recovery path attempts to restore the previous image URL before removing the new image metadata and uploaded storage files. Any rollback failure is included in the surfaced error.
+- This remains best-effort recovery across separate Supabase Storage and database operations, not a single atomic transaction. No live database changes or migrations were performed.
