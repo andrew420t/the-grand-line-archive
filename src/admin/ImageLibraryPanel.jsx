@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ImagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './productStorage'
+import { getCatalogueCoverageReport } from './cardCatalogue'
 
 export default function ImageLibraryPanel({ user }) {
   const inputRef = useRef(null)
@@ -11,6 +12,8 @@ export default function ImageLibraryPanel({ user }) {
   const [deletingPath, setDeletingPath] = useState('')
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
+  const [coverage, setCoverage] = useState(null)
+  const [coverageError, setCoverageError] = useState('')
 
   const loadImages = useCallback(async () => {
     setLoading(true); setError('')
@@ -19,6 +22,13 @@ export default function ImageLibraryPanel({ user }) {
     finally { setLoading(false) }
   }, [user.id])
   useEffect(() => { loadImages() }, [loadImages])
+  useEffect(() => {
+    let active = true
+    getCatalogueCoverageReport()
+      .then((report) => { if (active) setCoverage(report) })
+      .catch((loadError) => { if (active) setCoverageError(loadError.message) })
+    return () => { active = false }
+  }, [])
 
   const chooseFiles = (fileList) => {
     const selected = [...fileList].filter((file) => file.type.startsWith('image/'))
@@ -75,6 +85,26 @@ export default function ImageLibraryPanel({ user }) {
       </div>}
       {error && <div className="error-notice"><ShieldAlert size={15} /><span>{error}</span></div>}
       {notice && <div className="success-notice"><Check size={15} /><span>{notice}</span></div>}
+      <section className="catalogue-health-panel">
+        <div className="photo-studio__heading"><div><p className="eyebrow">REFERENCE CATALOGUE</p><h3>Card image and set coverage</h3></div></div>
+        {coverageError && <div className="error-notice"><ShieldAlert size={15} /><span>{coverageError}</span></div>}
+        {!coverage && !coverageError && <div className="loading-state">Checking reference catalogue…</div>}
+        {coverage && <>
+          <div className="overview-metrics">
+            <article className="overview-metric"><strong>{coverage.cards.toLocaleString()}</strong><span>Card records</span></article>
+            <article className="overview-metric"><strong>{coverage.printings.toLocaleString()}</strong><span>Printings / variants</span></article>
+            <article className="overview-metric"><strong>{coverage.withOfficialImage.toLocaleString()}</strong><span>Official Bandai image references</span></article>
+            <article className="overview-metric"><strong>{coverage.withoutImageLocator.toLocaleString()}</strong><span>Printings without image locator</span></article>
+          </div>
+          <p className="muted-copy">English: {coverage.languages.en?.withImage || 0}/{coverage.languages.en?.printings || 0} with image references · Japanese: {coverage.languages.jp?.withImage || 0}/{coverage.languages.jp?.printings || 0}. This is source-feed coverage, not a live HTTP check of every image.</p>
+          <div className="catalogue-health-table">
+            {Object.entries(coverage.sets).sort(([a], [b]) => a.localeCompare(b)).map(([code, stats]) => (
+              <div className="catalogue-health-row" key={code}><strong>{code}</strong><span>{stats.printings} printings</span><span>{stats.withImage} images</span><span>{stats.withoutImage} missing</span></div>
+            ))}
+          </div>
+          <p className="muted-copy">Image source priority: Bandai official card-image URLs when an official image ID is present; structured card metadata is currently supplied by the Koala Kollect reference dataset. Seller-uploaded product photographs remain separate and take priority in the public archive.</p>
+        </>}
+      </section>
       <div className="photo-studio__heading"><div><p className="eyebrow">SAVED PHOTOGRAPHS</p><h3>{images.length} image{images.length === 1 ? '' : 's'} in storage</h3></div></div>
       {loading ? <div className="loading-state">Loading image library…</div> : images.length ? (
         <div className="photo-grid image-library-grid">{images.map((image) => <article className="photo-card" key={image.path}>

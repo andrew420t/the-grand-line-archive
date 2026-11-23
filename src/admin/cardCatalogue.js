@@ -131,7 +131,8 @@ export async function findCatalogueMatches(cardNumber) {
   for (const card of matchingCards) {
     for (const language of LANGUAGES) {
       const data = catalogue.languages[language]
-      const index = catalogue.indexes[language]\n      const observations = index.observationsByCard.get(card.key) || []
+      const index = catalogue.indexes[language]
+      const observations = index.observationsByCard.get(card.key) || []
       const observation = observations.sort((a, b) =>
         String(b.first_seen_at || '').localeCompare(String(a.first_seen_at || '')),
       )[0]
