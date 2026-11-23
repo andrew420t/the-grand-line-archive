@@ -478,3 +478,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Photo-upload duplicate-submit safeguards — 23 November 2026
 - Added synchronous upload locks to both Image Library batch uploads and Stock Photography product-photo uploads. Rapid taps cannot start concurrent upload batches before the React busy state renders.
 - Locks are released in `finally` on success or failure; existing partial-upload rollback/recovery paths remain in place. These are UI reliability safeguards, not storage/database changes. CI pending.
+
+
+## Photo-upload queue preservation — 23 November 2026
+- Image Library now rejects file-selection additions while an upload batch is in progress and removes only the batch that actually uploaded, rather than clearing the entire queue.
+- Stock Photography now removes only the photo IDs in the successful upload snapshot. Photos added during the upload remain queued for the next batch.
+- This prevents new photos from being silently discarded when an upload is already running. CI pending; no storage or product data changed.
