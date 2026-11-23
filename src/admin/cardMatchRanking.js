@@ -22,6 +22,11 @@ export function rankCatalogueMatches(matches = [], detectedName = '', detectedLa
       numberEvidence: numberEvidence[match.cardNumber] || null,
     }
   }).sort((a, b) =>
+    // Printed-number evidence is the primary identity signal; name/language
+    // OCR and remembered images support it but must not override it.
+    Number(Boolean(b.numberEvidence)) - Number(Boolean(a.numberEvidence)) ||
+    (b.numberEvidence?.occurrences || 0) - (a.numberEvidence?.occurrences || 0) ||
+    (b.numberEvidence?.confidence || 0) - (a.numberEvidence?.confidence || 0) ||
     Number(b.nameMatch) - Number(a.nameMatch) ||
     Number(b.languageMatch) - Number(a.languageMatch) ||
     Number(b.remembered) - Number(a.remembered),
