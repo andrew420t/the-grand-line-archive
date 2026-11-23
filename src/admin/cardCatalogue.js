@@ -386,6 +386,8 @@ export async function getCatalogueCoverageReport() {
   const report = {
     cards: catalogue.cards.length,
     printings: 0,
+    donPrintings: 0,
+    donWithoutSetLink: 0,
     withOfficialImage: 0,
     withFallbackImage: 0,
     withoutImageLocator: 0,
@@ -426,6 +428,11 @@ export async function getCatalogueCoverageReport() {
       const observation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       const setLabels = setCodes.length ? setCodes.map(formatSetCode) : ['Unassigned']
+      const isDon = isDonCatalogueEntry({ printing, card, observation })
+      if (isDon) {
+        report.donPrintings += 1
+        if (!setCodes.length) report.donWithoutSetLink += 1
+      }
 
       if (hasImage) {
         if (hasOfficialImage) report.withOfficialImage += 1
@@ -472,8 +479,9 @@ export async function getCatalogueCoverageReport() {
       }
 
       for (const setCode of setLabels) {
-        const entry = report.sets[setCode] || { printings: 0, withImage: 0, withFallbackImage: 0, withoutImage: 0 }
+        const entry = report.sets[setCode] || { printings: 0, donPrintings: 0, withImage: 0, withFallbackImage: 0, withoutImage: 0 }
         entry.printings += 1
+        if (isDon) entry.donPrintings += 1
         if (hasImage) entry.withImage += 1
         if (hasFallbackImage) entry.withFallbackImage += 1
         if (!hasImage) entry.withoutImage += 1
