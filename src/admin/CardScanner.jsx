@@ -67,7 +67,7 @@ export default function CardScanner({
   const updateCropFromPointer = (event, finish = false) => {
     const bounds = cropPreviewRef.current?.getBoundingClientRect()
     const start = cropDragRef.current
-    if (!bounds || !start) return
+    if (!bounds || bounds.width <= 0 || bounds.height <= 0 || !start) return
     const current = {
       x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
       y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)),
@@ -85,7 +85,7 @@ export default function CardScanner({
     event.preventDefault()
     event.currentTarget.setPointerCapture?.(event.pointerId)
     const bounds = cropPreviewRef.current?.getBoundingClientRect()
-    if (!bounds) return
+    if (!bounds || bounds.width <= 0 || bounds.height <= 0) return
     cropDragRef.current = {
       x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
       y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)),
@@ -431,7 +431,15 @@ export default function CardScanner({
             ].map(([key, label]) => (
               <label className="form-field" key={key}>
                 <span>{label} (%)</span>
-                <input type="number" min="0" max="100" step="1" value={manualCropPercent[key]} disabled={scanning} onChange={(event) => setManualCropPercent((current) => ({ ...current, [key]: event.target.value }))} />
+                <input type="number" min="0" max="100" step="1" value={manualCropPercent[key]} disabled={scanning} onChange={(event) => setManualCropPercent((current) => {
+                  const value = Math.max(0, Math.min(100, Number(event.target.value) || 0))
+                  const next = { ...current, [key]: value }
+                  if (key === 'x') next.width = Math.min(Number(current.width) || 0, 100 - value)
+                  if (key === 'y') next.height = Math.min(Number(current.height) || 0, 100 - value)
+                  if (key === 'width') next.width = Math.min(value, 100 - (Number(current.x) || 0))
+                  if (key === 'height') next.height = Math.min(value, 100 - (Number(current.y) || 0))
+                  return next
+                })} />
               </label>
             ))}
             <button className="button button--quiet" type="button" disabled={scanning} onClick={() => setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 })}>Reset full photo</button>
