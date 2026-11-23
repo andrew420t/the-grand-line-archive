@@ -368,3 +368,12 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Found inline price and quantity inputs used `||` fallbacks, making blank values revert visually to stored values and obscuring validation; switched to nullish fallbacks so explicit zero and blank edits are represented correctly.
 - Extracted `parseInventoryStockUpdate` to validate the stock/price pair consistently: whole-number non-negative stock, finite non-negative price, and no blank values. Explicit zero is supported.
 - Added tests for zero price/quantity and invalid/blank input. No live database writes performed.
+
+
+## DON!! set-attribution audit — 23 November 2026
+- Identified that the catalogue loader was not consuming the source dataset's dedicated `don_sets.jsonl`, despite it containing source-set assignments keyed to printing IDs. This left gallery cards showing `Unassigned` when product links were absent.
+- Verified the current source file contains **165 DON!! records and 308 unique printing keys**, with no conflicting duplicate printing-key assignments. The source manifest timestamp is **22 October 2026**; freshness is separately tracked in the catalogue coverage report.
+- Added source slug normalization (OP/EB/ST/PRB, combined OP14-EB04/OP15-EB04, Double Pack DP-xx, and Promo) and loaded the DON!! set mapping into the catalogue cache.
+- Gallery and coverage now prioritize a manually saved admin assignment, then the source DON!! set attribution, then linked product data. Gallery entries identify source-data attribution instead of implying a manually assigned set.
+- DON!! entries continue linking to Bandai's DON!! PDF regardless of their mapped source set. Regression tests added for slug mapping, key attribution, and official DON!! link routing.
+- This is source-data/code-level verification, not a live catalogue UI or database test. No live DB changes, production deployment, or migration execution.
