@@ -1012,3 +1012,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Reviewed the separate Image Library batch upload rollback path and found it still awaited Storage removal without guarding thrown exceptions. A cleanup runtime/network exception could replace the original upload failure and obscure which uploads were completed.
 - Added an independent cleanup exception guard so the original upload failure is preserved and any rollback failure is appended to the error message. Commit `36e53ca9ea1e0567f5c1c3002a62f99094407048`; exact-head CI pending.
 - Exact-head CI for preceding code commit `a088ad37d873dbc162eaa58b3b420258b11a825e` passed; CI for progress-doc commit `120bfdeaa604f027afb19ec61bcde7fc1e60e2d8` also passed. This new change is not yet verified.
+
+
+### Upload cleanup audit across image-library and recognition-memory storage — 23 November 2026
+
+- Image Library rollback guard commit `36e53ca9ea1e0567f5c1c3002a62f99094407048` passed GitHub Actions run `45218158238` (tests, lint, build).
+- Audited the shared recognition-memory upload path and found a third cleanup path where a thrown Storage removal could obscure the original database insertion error. Added guarded cleanup and a combined error message. Code commit `dd79953bd7cd630aa5fa11270b033d9a61462c5b`; exact-head CI pending.
+- These changes only improve error reporting and cleanup resilience. They do not modify storage policies, delete production data, or deploy anything.
