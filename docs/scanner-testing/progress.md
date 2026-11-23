@@ -606,3 +606,5 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 
 ### Bulk Import zero-value preservation — 23 November 2026
 - Applying a catalogue match now preserves legitimate numeric zero values for power, cost, and counter fields instead of falling back to the original CSV values. Empty/null catalogue fields still retain the CSV value. Regression tests cover zero, string-zero, and blank fallback cases. CI tests, lint, and production build passed in run 45154091787.
+
+- The bulk-import extended-schema preflight now treats numeric zero as a populated card detail, ensuring zero-only power/cost/counter data still triggers the required column check. Regression tests cover numeric and string zero values. CI verification pending.
