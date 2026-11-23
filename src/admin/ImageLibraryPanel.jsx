@@ -145,8 +145,9 @@ export default function ImageLibraryPanel({ user }) {
           <div className="overview-metrics">
             <article className="overview-metric"><strong>{coverage.cards.toLocaleString()}</strong><span>Card records</span></article>
             <article className="overview-metric"><strong>{coverage.printings.toLocaleString()}</strong><span>Printings / variants</span></article>
-            <article className="overview-metric"><strong>{coverage.withOfficialImage.toLocaleString()}</strong><span>Official Bandai image references</span></article>
-            <article className="overview-metric"><strong>{coverage.withoutImageLocator.toLocaleString()}</strong><span>Printings without image reference</span></article>
+            <article className="overview-metric"><strong>{coverage.withOfficialImage.toLocaleString()}</strong><span>Printing-specific official images</span></article>
+            <article className="overview-metric"><strong>{coverage.withFallbackImage?.toLocaleString() || 0}</strong><span>Official base-image fallbacks</span></article>
+            <article className="overview-metric"><strong>{coverage.withoutImageLocator.toLocaleString()}</strong><span>Printings without any image reference</span></article>
           </div>
           <p className="muted-copy">English: {coverage.languages.en?.withImage || 0}/{coverage.languages.en?.printings || 0} with image references · Japanese: {coverage.languages.jp?.withImage || 0}/{coverage.languages.jp?.printings || 0}. This is source-feed coverage, not a live HTTP check of every image.</p>
           {coverage.sourceGeneratedAt && <p className="muted-copy">Primary reference dataset last generated: {new Date(coverage.sourceGeneratedAt).toLocaleString()} · {coverage.sourceAgeDays} day{coverage.sourceAgeDays === 1 ? '' : 's'} old.</p>}
@@ -168,7 +169,7 @@ export default function ImageLibraryPanel({ user }) {
           </div>
           <div className="catalogue-health-table">
             {Object.entries(coverage.sets).sort(([a], [b]) => a.localeCompare(b)).map(([code, stats]) => (
-              <div className="catalogue-health-row" key={code}><strong>{code}</strong><span>{stats.printings} printings</span><span>{stats.withImage} images</span><span>{stats.withoutImage} missing</span></div>
+              <div className="catalogue-health-row" key={code}><strong>{code}</strong><span>{stats.printings} printings</span><span>{stats.withImage} images{stats.withFallbackImage ? ` (${stats.withFallbackImage} fallback)` : ''}</span><span>{stats.withoutImage} missing</span></div>
             ))}
           </div>
           <div className="catalogue-health-unassigned">
@@ -202,7 +203,7 @@ export default function ImageLibraryPanel({ user }) {
         {referenceError && <div className="error-notice"><ShieldAlert size={15} /><span>{referenceError}</span></div>}
         {referenceImages.length > 0 && <div className="photo-grid image-library-grid">{referenceImages.map((item) => <article className="photo-card" key={item.id}>
           <div className="photo-card__preview">{failedReferenceIds.includes(item.id) ? <div className="empty-catalogue"><ImagePlus size={20}/><span>Reference image unavailable</span></div> : <img key={`${item.id}:${imageRetryVersion}`} src={item.imageUrl} alt={item.name ? item.name + ' ' + item.cardNumber : 'One Piece card ' + item.cardNumber} loading="lazy" onLoad={() => setLoadedReferenceIds((current) => current.includes(item.id) ? current : [...current, item.id])} onError={() => { setLoadedReferenceIds((current) => current.filter((id) => id !== item.id)); setFailedReferenceIds((current) => current.includes(item.id) ? current : [...current, item.id]) }} />}</div>
-          <div className="photo-card__body"><span className="photo-card__name" title={item.name}>{item.name || item.cardNumber} · {item.cardNumber}</span><span className="muted-copy">{item.language.toUpperCase()} · {item.setCode || 'Unassigned'} · {item.rarity} {item.variant}</span><span className="muted-copy">{failedReferenceIds.includes(item.id) ? 'Image failed to load' : 'Reference artwork · not a personal upload'}</span></div>
+          <div className="photo-card__body"><span className="photo-card__name" title={item.name}>{item.name || item.cardNumber} · {item.cardNumber}</span><span className="muted-copy">{item.language.toUpperCase()} · {item.setCode || 'Unassigned'} · {item.rarity} {item.variant}</span><span className="muted-copy">{failedReferenceIds.includes(item.id) ? 'Image failed to load' : item.source || 'Reference artwork · not a personal upload'}{item.usesBaseImageFallback ? ' · base artwork only; special finish may differ' : ''}</span></div>
         </article>)}</div>}
         {referenceNextOffset !== null && <button className="button button--outline" type="button" disabled={referenceLoading} onClick={() => loadReferenceImages(referenceNextOffset)}>{referenceLoading ? 'Loading catalogue images…' : 'Load more reference images'}</button>}
         {referenceLoading && referenceImages.length === 0 && <div className="loading-state">Loading catalogue reference images…</div>}{!referenceLoading && referenceImages.length === 0 && !referenceError && <p className="muted-copy">No reference images match this search. Try another card number or select all languages.</p>}
