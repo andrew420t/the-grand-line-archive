@@ -8,7 +8,7 @@ const candidates = [
   { id: 'other', name: 'Monkey D. Luffy', language: 'English', setCode: 'OP05' },
 ]
 
-test('remembered choice outranks name and language signals', () => {
+test('verified visual-memory match outranks OCR name and language signals', () => {
   const ranked = rankCatalogueMatches(candidates, 'Roronoa Zoro', 'English', 'jp')
   assert.equal(ranked[0].match.id, 'jp')
   assert.equal(ranked[0].remembered, true)
