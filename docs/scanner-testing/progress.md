@@ -747,3 +747,17 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - PR #26 (feature/scanner-number-first-verification) is open and unmerged; current head e77d953603e1b78d9e851badbaa6c800d9b84a17.
 - GitHub Actions run #415 (45172660447) on that exact PR head completed successfully on 23 November 2026: dependency install, tests, lint, and production build all passed.
 - Passing CI does not change the physical-photo failure above. The production Worker still cannot be fetched by the available browser route, so deployed version and live scanner UI remain unverified.
+
+
+### Scanner UI code review after PR #26 number-first changes — 23 November 2026
+- The scanner now exposes a number-reading diagnostics panel with each crop label, OCR confidence and raw text; when no valid number is read it explicitly says so and advises manual entry.
+- Manual card-number search is available without scanning first.
+- The confirmation dialog compares the original user photo with the catalogue reference, shows name/number/language/set/rarity/variant, and warns when several printings share a card number.
+- Catalogue matching still depends on a valid number candidate (or a remembered image supplying a number). If the number crop misses the card, there is no automatic name/visual candidate fallback; manual number search is the recovery path. There is not yet an interactive manual crop/align step.
+- These are source-code observations only. Browser UI and production deployment remain unverified.
+
+### Latest repository / CI state — 23 November 2026 (refreshed)
+- master: 70029519438f2a15e6030523104325552d60674a.
+- PR #26 remains open and unmerged; feature branch head after report updates: 086ac3dfaed047ea6020e995a98744100441f689.
+- GitHub Actions run #417 (45174932236) passed on that exact branch head: dependency install, tests, lint and production build all succeeded.
+- The CI pass does not validate physical-card OCR, browser camera behaviour, Supabase policies or live Worker deployment. Production Worker fetch remains DisabledError through the browser route.
