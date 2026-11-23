@@ -68,8 +68,16 @@ export default function ImageLibraryPanel({ user }) {
         const batch = matrix.items.slice(offset, offset + 10)
         const checked = await Promise.all(batch.map((item) => new Promise((resolve) => {
           const image = new window.Image()
-          image.onload = () => resolve({ ...item, status: 'loaded' })
-          image.onerror = () => resolve({ ...item, status: 'failed' })
+          let settled = false
+          const finish = (status) => {
+            if (settled) return
+            settled = true
+            window.clearTimeout(timeout)
+            resolve({ ...item, status })
+          }
+          const timeout = window.setTimeout(() => finish('timeout'), 12000)
+          image.onload = () => finish('loaded')
+          image.onerror = () => finish('failed')
           image.src = item.imageUrl
         })))
         results.push(...checked)
@@ -158,7 +166,12 @@ export default function ImageLibraryPanel({ user }) {
             <p className="muted-copy">Checks two unique English and two Japanese image references for each of OP-01–OP-18, EB-01–EB-05 and PRB-01/02. It verifies that image URLs load in this browser; it does not run card OCR.</p>
             <button className="button button--outline" type="button" disabled={matrixRunning} onClick={runReferenceMatrixCheck}>{matrixRunning ? 'Checking image references…' : 'Run 100-image reference test'}</button>
             {matrixError && <p className="form-error">{matrixError}</p>}
-            {matrixReport && <p className="muted-copy">Image checks: {matrixResults.filter((item) => item.status === 'loaded').length} loaded · {matrixResults.filter((item) => item.status === 'failed').length} failed · {matrixReport.missingSlots.length} missing from source · {matrixReport.expectedTotal} expected.</p>}
+            {matrixReport && <p className="muted-copy">Image checks: {matrixResults.filter((item) => item.status === 'loaded').length} loaded · {matrixResults.filter((item) => item.status === 'failed').length} failed · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixReport.missingSlots.length} missing from source · {matrixReport.expectedTotal} expected. A complete run should contain 100 samples across all 25 target sets.</p>}
+            {matrixReport && <p className="muted-copy">Samples by target set: {[...new Set(matrixReport.items.map((item) => item.targetSet))].sort((a, b) => a.localeCompare(b)).map((set) => {
+              const rows = matrixReport.items.filter((item) => item.targetSet === set)
+              const passed = matrixResults.filter((item) => item.targetSet === set && item.status === 'loaded').length
+              return `${set}: ${rows.length}/4 samples, ${passed} loaded`
+            }).join(' · ')}</p>}
             {matrixReport && <details className="catalogue-health-missing">
               <summary>View image test results ({matrixResults.length + matrixReport.missingSlots.length} rows)</summary>
               <div className="catalogue-health-table">
