@@ -792,3 +792,12 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Reviewed the scanner lookup flow: it deduplicates up to six detected number candidates and merges catalogue results; a candidate mismatch/recovery message is shown when the selected match differs from the leading OCR number. The user must compare the original photo, official reference, number, language, set and variant before applying.
 - **Remaining scanner limitation unchanged:** number-region crops are still fixed relative to the whole photo, not a validated card boundary. The Saint Shamrock OP18-119 real-photo failure remains reproducible. There is no interactive crop/align fallback yet. This pass did not alter scanner code and did not add new real-photo results.
 - Production Worker, live camera/UI and Supabase staging remain unverified. No production deployment, database, inventory or order mutation was performed.
+
+
+### OCR cross-candidate ranking review — 23 November 2026
+
+- Exact latest-head CI run #421 succeeded for commit `e3ae039c1d82f74f02faea2772d6a11d46e6de23` (tests, lint and build workflow).
+- Re-reviewed the scanner's cross-number catalogue lookup: up to six unique OCR, parsed, or remembered card-number readings are looked up, then results are merged before ranking. The current ranking considers detected name, recognition language, and image-memory tie-break; it does not explicitly carry each OCR number candidate's occurrence/confidence support into the merged candidate ranking.
+- This is a review finding, not a demonstrated wrong-card result. Because candidates from different card numbers can be merged, this should be tested with deliberate competing valid numbers before changing ranking. Keep confirmation mandatory; do not auto-select/confirm based on OCR score.
+- Suggested next engineering task: add focused unit cases for competing OCR-number candidates and mismatched name/language evidence; decide a conservative evidence display/ranking policy, then implement only if tests show it improves correctness without hiding alternatives.
+- PR #26 remains open and unmerged. No production changes; no live browser/camera or staging data test performed.
