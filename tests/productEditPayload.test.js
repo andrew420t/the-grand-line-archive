@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { buildProductEditPayload, parseInventoryStockUpdate } from '../src/admin/productEditPayload.js'
+import { buildProductEditPayload, parseInventoryStockUpdate, productUpdateFailure } from '../src/admin/productEditPayload.js'
 
 const fields = [
   { key: 'name', column: 'name', required: true },
@@ -95,4 +95,10 @@ test('product deletion requires a confirmed deleted row', async () => {
   assert.equal(productDeleteFailure({ data: { id: 'product-1' }, error: null }), '')
   assert.equal(productDeleteFailure({ data: null, error: null }), 'Product was not found or deletion was not permitted.')
   assert.equal(productDeleteFailure({ data: null, error: { message: 'RLS denied' } }), 'RLS denied')
+})
+
+test('product updates require a confirmed affected row', () => {
+  assert.equal(productUpdateFailure({ data: { id: 'product-1' }, error: null }), '')
+  assert.equal(productUpdateFailure({ data: null, error: null }), 'Product was not found or the update was not permitted.')
+  assert.equal(productUpdateFailure({ data: null, error: { message: 'RLS denied' } }), 'RLS denied')
 })
