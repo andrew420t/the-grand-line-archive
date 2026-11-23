@@ -55,7 +55,9 @@ test('manual crop rounding never extends source bounds by a pixel', () => {
   assert.deepEqual(crop, { x: 3, y: 3, width: 7, height: 7 })
   assert.ok(crop.x + crop.width <= 10)
   assert.ok(crop.y + crop.height <= 10)
-})
+  const tiny = validateManualCardCrop({ x: 0.88, y: 0.88, width: 0.12, height: 0.12 }, 1, 1)
+  assert.deepEqual(tiny, { x: 0, y: 0, width: 1, height: 1 })
+} )
 
 test('manual crop validation maps normalized coordinates to pixels', () => {
   assert.deepEqual(validateManualCardCrop({ x: 0.1, y: 0.2, width: 0.6, height: 0.5 }, 1000, 2000), {
