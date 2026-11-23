@@ -17,3 +17,26 @@ test('recognizes DON category labels with punctuation and spacing', () => {
 test('does not misclassify ordinary cards as DON!!', () => {
   assert.equal(isDonCatalogueEntry({ printing: { rarity: 'SR', source_text: 'Luffy' }, card: { category: 'character' } }), false)
 })
+
+import { buildDonSetIndex, donSetSlugToCode } from '../src/admin/catalogueDonMetadata.js'
+
+test('normalizes DON!! source set slugs to display codes', () => {
+  assert.equal(donSetSlugToCode('op-01'), 'OP01')
+  assert.equal(donSetSlugToCode('eb-03'), 'EB03')
+  assert.equal(donSetSlugToCode('prb-02'), 'PRB02')
+  assert.equal(donSetSlugToCode('op15-eb04'), 'OP15-EB04')
+  assert.equal(donSetSlugToCode('dp-09'), 'DP-09')
+  assert.equal(donSetSlugToCode('promo'), 'PROMO')
+})
+
+test('maps printing keys to their source set without guessing', () => {
+  const index = buildDonSetIndex([
+    { printing_keys: ['print-a', 'print-b'], set_slug: 'prb-01', don_design: 'PRB-01:don-card-luffy', source: 'group' },
+    { printing_keys: ['print-c'], set_slug: 'dp-09', source: 'override' },
+    { printing_keys: ['print-empty'], set_slug: '' },
+  ])
+  assert.equal(index['print-a'].set_code, 'PRB01')
+  assert.equal(index['print-b'].source_note, 'Koala Kollect DON!! source-set data')
+  assert.equal(index['print-c'].set_code, 'DP-09')
+  assert.equal(index['print-empty'], undefined)
+})
