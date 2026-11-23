@@ -128,7 +128,7 @@ const value = (item, key) => item?.[key] ?? ''
 const safeMapGet = (map, key) => map instanceof Map ? map.get(key) : undefined
 
 function formatSetCode(code) {
-  return String(code || '').replace(/^(OP|EB|ST|PRB)(\d{2})$/, '$1-$2').toUpperCase()
+  return String(code || '').replace(/^(OP|EB|ST|PRB)(\d{2})$/, '$1-$2').replace(/^(OP\d{2})(EB\d{2})$/, '$1-$2').toUpperCase()
 }
 
 export async function findCatalogueMatches(cardNumber) {
@@ -558,7 +558,7 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
       const isDon = isDonCatalogueEntry({ printing, card, observation })
       const setOverride = isDon ? donOverrides[printing.key] : null
       const setCode = formatSetCode(setOverride?.set_code || product?.code || '')
-      entries.push({ id: printing.key + ':' + language, printingKey: printing.key, cardNumber: card?.number || (isDon ? 'DON!!' : ''), name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode: setCode || (isDon ? 'DON!!' : ''), setName: setOverride ? 'Manually assigned set' : product?.name || '', setAssignmentSource: setOverride?.source_note || (product ? 'Catalogue product link' : ''), sourceText: printing.source_text || '', isDon, officialListUrl: getOfficialCardlistUrl(setCode, language, isDon), imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
+      entries.push({ id: printing.key + ':' + language, printingKey: printing.key, cardNumber: card?.number || (isDon ? 'DON!!' : ''), name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode, setName: setOverride ? 'Manually assigned set' : product?.name || '', setAssignmentSource: setOverride?.source_note || (product ? 'Catalogue product link' : ''), sourceText: printing.source_text || '', isDon, officialListUrl: getOfficialCardlistUrl(setCode, language, isDon), imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
     }
   }
   entries.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.language.localeCompare(b.language) || a.id.localeCompare(b.id))
