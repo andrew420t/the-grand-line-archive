@@ -7,6 +7,9 @@ import {
   Check,
   ChevronDown,
   CircleUserRound,
+  Grid2X2,
+  List,
+  SlidersHorizontal,
   ClipboardList,
   LockKeyhole,
   Mail,
@@ -83,13 +86,14 @@ function ProductImage({ product, className = '' }) {
   )
 }
 
-function ProductCard({ product, onAdd }) {
+function ProductCard({ product, onAdd, viewMode = 'grid' }) {
   return (
-    <article className="product-card">
+    <article className={`product-card ${viewMode === 'list' ? 'product-card--list' : ''}`}>
       <div className="product-card__photo">
         <Link className="product-card__image-link" to={`/product/${encodeURIComponent(product.id)}`} aria-label={`View ${product.name} details`}>
           <ProductImage product={product} />
           <span className="product-card__rarity">{product.rarity || 'Trading card'}</span>
+          {product.raw?.language && <span className="product-card__language">{String(product.raw.language).toLowerCase().startsWith('jp') ? 'JP' : String(product.raw.language).slice(0, 2).toUpperCase()}</span>}
         </Link>
         <button
           className="quick-add"
@@ -102,8 +106,10 @@ function ProductCard({ product, onAdd }) {
         </button>
       </div>
       <Link className="product-card__body product-card__body-link" to={`/product/${encodeURIComponent(product.id)}`}>
-        <p className="eyebrow product-card__set">{product.setName || product.category}</p>
+        <p className="eyebrow product-card__set">{product.setCode ? `${product.setCode} · ` : ''}{product.setName || product.category}</p>
         <h3>{product.name}</h3>
+        {product.raw?.card_number && <span className="product-card__number">{product.raw.card_number}</span>}
+        <div className="product-card__tags">{product.raw?.condition && <span>{product.raw.condition}</span>}{product.raw?.variant_label && <span>{product.raw.variant_label}</span>}</div>
         <div className="product-card__meta">
           <strong>{money(product.price)}</strong>
           <span className={product.stock > 0 ? 'stock' : 'stock stock--empty'}>
@@ -209,6 +215,14 @@ function Storefront() {
   const [setFilter, setSetFilter] = useState('All sets')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
+  const [languageFilter, setLanguageFilter] = useState('All languages')
+  const [conditionFilter, setConditionFilter] = useState('All conditions')
+  const [variantFilter, setVariantFilter] = useState('All variants')
+  const [availabilityFilter, setAvailabilityFilter] = useState('In stock')
+  const [sortBy, setSortBy] = useState('newest')
+  const [viewMode, setViewMode] = useState('grid')
+  const [pageSize, setPageSize] = useState('24')
+  const [currentPage, setCurrentPage] = useState(1)
   const [orders, setOrders] = useState([])
   const [orderItems, setOrderItems] = useState([])
   const [ordersLoading, setOrdersLoading] = useState(false)
@@ -377,7 +391,7 @@ function Storefront() {
     return storefrontProducts.filter((product) => {
       const matchesSearch =
         !needle ||
-        [product.name, product.category, product.setName, product.rarity]
+        [product.name, product.category, product.setName, product.setCode, product.rarity, product.raw?.card_number, product.raw?.variant_label]
           .filter(Boolean)
           .some((value) => value.toLowerCase().includes(needle))
       const matchesSet = setFilter === 'All sets' || `${product.setCode} — ${product.setName}` === setFilter
@@ -385,20 +399,41 @@ function Storefront() {
         categoryFilter === 'All categories' || product.category === categoryFilter
       const matchesRarity =
         rarityFilter === 'All rarities' || product.rarity === rarityFilter
+      const language = String(product.raw?.language || '').toLowerCase()
+      const condition = String(product.raw?.condition || '').trim()
+      const variant = String(product.raw?.variant_label || '').trim()
+      const matchesLanguage = languageFilter === 'All languages' || (languageFilter === 'Japanese' ? language.startsWith('jp') || language.includes('japanese') : language.startsWith('en') || language.includes('english'))
+      const matchesCondition = conditionFilter === 'All conditions' || condition === conditionFilter
+      const matchesVariant = variantFilter === 'All variants' || variant === variantFilter
+      const matchesAvailability = availabilityFilter === 'All stock' || (availabilityFilter === 'In stock' ? product.stock > 0 : product.stock < 1)
       const matchesMin = minPrice === '' || product.price >= Number(minPrice)
       const matchesMax = maxPrice === '' || product.price <= Number(maxPrice)
-      return matchesSearch && matchesSet && matchesCategory && matchesRarity && matchesMin && matchesMax
+      return matchesSearch && matchesSet && matchesCategory && matchesRarity && matchesLanguage && matchesCondition && matchesVariant && matchesAvailability && matchesMin && matchesMax
     })
-  }, [storefrontProducts, search, setFilter, categoryFilter, rarityFilter, minPrice, maxPrice])
+  }, [storefrontProducts, search, setFilter, categoryFilter, rarityFilter, languageFilter, conditionFilter, variantFilter, availabilityFilter, minPrice, maxPrice])
+
+  const sortedProducts = useMemo(() => [...filteredProducts].sort((a, b) => {
+    if (sortBy === 'price-low') return a.price - b.price
+    if (sortBy === 'price-high') return b.price - a.price
+    if (sortBy === 'name') return a.name.localeCompare(b.name)
+    if (sortBy === 'card-number') return String(a.raw?.card_number || '').localeCompare(String(b.raw?.card_number || ''), undefined, { numeric: true })
+    return new Date(b.raw?.created_at || 0) - new Date(a.raw?.created_at || 0)
+  }), [filteredProducts, sortBy])
+  const pageCount = Math.max(1, Math.ceil(sortedProducts.length / Number(pageSize)))
+  const visibleProducts = sortedProducts.slice((currentPage - 1) * Number(pageSize), currentPage * Number(pageSize))
+
+  useEffect(() => { setCurrentPage(1) }, [search, setFilter, categoryFilter, rarityFilter, languageFilter, conditionFilter, variantFilter, availabilityFilter, minPrice, maxPrice, sortBy, pageSize])
 
   const setOptions = useMemo(
     () => [...new Set(storefrontProducts.map((product) => `${product.setCode} — ${product.setName}`.trim()).filter((value) => value !== '—'))].sort((a, b) => a.localeCompare(b)),
     [storefrontProducts],
   )
   const rarities = useMemo(
-    () => [...new Set(products.map((product) => product.rarity).filter(Boolean))].sort(),
-    [products],
+    () => [...new Set(storefrontProducts.map((product) => product.rarity).filter(Boolean))].sort(),
+    [storefrontProducts],
   )
+  const conditions = useMemo(() => [...new Set(storefrontProducts.map((product) => String(product.raw?.condition || '').trim()).filter(Boolean))].sort(), [storefrontProducts])
+  const variants = useMemo(() => [...new Set(storefrontProducts.map((product) => String(product.raw?.variant_label || '').trim()).filter(Boolean)).sort(), [storefrontProducts])
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0)
   const cartTotal = cart.reduce(
     (total, item) => total + item.product.price * item.quantity,
@@ -636,6 +671,12 @@ function Storefront() {
     setRarityFilter('All rarities')
     setMinPrice('')
     setMaxPrice('')
+    setLanguageFilter('All languages')
+    setConditionFilter('All conditions')
+    setVariantFilter('All variants')
+    setAvailabilityFilter('In stock')
+    setSortBy('newest')
+    setCurrentPage(1)
   }
 
   const imageFilter = { original:'none', grayscale:'grayscale(1)', sepia:'sepia(.78)', contrast:'contrast(1.3) saturate(.85)', soft:'saturate(.68) brightness(1.08)' }[siteSettings.card_image_filter] || 'none'
@@ -882,63 +923,37 @@ function Storefront() {
                 <h1>{siteSettings.archive_heading || 'Every card in the vault.'}</h1>
                 <p>{storefrontProducts.length} cards · {siteSettings.archive_description || 'photographed as found · local pickup in Gibraltar'}</p>
               </div>
-              <div className="shop-toolbar">
-                <label className="search-field">
-                  <Search size={17} />
-                  <input
-                    type="search"
-                    placeholder="Search cards, sets, rarity…"
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                  />
+              <div className="shop-search-row">
+                <label className="search-field shop-search-field">
+                  <Search size={18} />
+                  <input type="search" placeholder="Search by card name, number (OP01-001), set or rarity…" value={search} onChange={(event) => setSearch(event.target.value)} />
+                  <span className="search-hint">CARD NO.</span>
                 </label>
-                <label className="select-field">
-                  <span className="sr-only">Set</span>
-                  <select value={setFilter} onChange={(event) => setSetFilter(event.target.value)}>
-                    <option>All sets</option>
-                    {setOptions.map((name) => <option key={name}>{name}</option>)}
-                  </select>
-                  <ChevronDown size={15} />
-                </label>
-                <label className="select-field">
-                  <span className="sr-only">Category</span>
-                  <select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}>
-                    <option>All categories</option>
-                    {categoryNames.map((name) => <option key={name}>{name}</option>)}
-                  </select>
-                  <ChevronDown size={15} />
-                </label>
-                <label className="select-field">
-                  <span className="sr-only">Rarity</span>
-                  <select value={rarityFilter} onChange={(event) => setRarityFilter(event.target.value)}>
-                    <option>All rarities</option>
-                    {rarities.map((rarity) => <option key={rarity}>{rarity}</option>)}
-                  </select>
-                  <ChevronDown size={15} />
-                </label>
-                <div className="price-fields">
-                  <label><span className="sr-only">Minimum price</span><span>£</span><input type="number" min="0" placeholder="Min" value={minPrice} onChange={(event) => setMinPrice(event.target.value)} /></label>
-                  <span>–</span>
-                  <label><span className="sr-only">Maximum price</span><span>£</span><input type="number" min="0" placeholder="Max" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)} /></label>
-                </div>
+                <label className="shop-sort"><span>Sort by</span><select value={sortBy} onChange={(event) => setSortBy(event.target.value)}><option value="newest">Recently added</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="name">Card name</option><option value="card-number">Card number</option></select><ChevronDown size={14} /></label>
               </div>
-              <div className="results-row">
-                <span>Showing <strong>{filteredProducts.length}</strong> of {storefrontProducts.length} cards</span>
-                {(search || setFilter !== 'All sets' || categoryFilter !== 'All categories' || rarityFilter !== 'All rarities' || minPrice || maxPrice) && (
-                  <button className="clear-filters" type="button" onClick={resetFilters}>Clear filters <X size={13} /></button>
-                )}
+              <div className="shop-browse-layout">
+                <aside className="shop-filter-panel">
+                  <div className="shop-filter-heading"><div><SlidersHorizontal size={16} /><strong>Refine the archive</strong></div><button type="button" onClick={resetFilters}>Reset</button></div>
+                  <label className="shop-filter-field"><span>Set / expansion</span><select value={setFilter} onChange={(event) => setSetFilter(event.target.value)}><option>All sets</option>{setOptions.map((name) => <option key={name}>{name}</option>)}</select></label>
+                  <label className="shop-filter-field"><span>Card type / category</span><select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}><option>All categories</option>{categoryNames.map((name) => <option key={name}>{name}</option>)}</select></label>
+                  <label className="shop-filter-field"><span>Rarity</span><select value={rarityFilter} onChange={(event) => setRarityFilter(event.target.value)}><option>All rarities</option>{rarities.map((rarity) => <option key={rarity}>{rarity}</option>)}</select></label>
+                  <label className="shop-filter-field"><span>Language</span><select value={languageFilter} onChange={(event) => setLanguageFilter(event.target.value)}><option>All languages</option><option>English</option><option>Japanese</option></select></label>
+                  <label className="shop-filter-field"><span>Condition</span><select value={conditionFilter} onChange={(event) => setConditionFilter(event.target.value)}><option>All conditions</option>{conditions.map((condition) => <option key={condition}>{condition}</option>)}</select></label>
+                  <label className="shop-filter-field"><span>Printing / variant</span><select value={variantFilter} onChange={(event) => setVariantFilter(event.target.value)}><option>All variants</option>{variants.map((variant) => <option key={variant}>{variant}</option>)}</select></label>
+                  <label className="shop-filter-field"><span>Availability</span><select value={availabilityFilter} onChange={(event) => setAvailabilityFilter(event.target.value)}><option>In stock</option><option>All stock</option><option>Sold out</option></select></label>
+                  <div className="shop-filter-field"><span>Price range</span><div className="price-fields"><label><span className="sr-only">Minimum price</span><span>£</span><input type="number" min="0" placeholder="Min" value={minPrice} onChange={(event) => setMinPrice(event.target.value)} /></label><span>–</span><label><span className="sr-only">Maximum price</span><span>£</span><input type="number" min="0" placeholder="Max" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)} /></label></div></div>
+                </aside>
+                <section className="shop-results">
+                  <div className="shop-results-toolbar">
+                    <div className="results-row"><span><strong>{sortedProducts.length}</strong> cards found <i>·</i> {storefrontProducts.length} listed</span>{(search || setFilter !== 'All sets' || categoryFilter !== 'All categories' || rarityFilter !== 'All rarities' || languageFilter !== 'All languages' || conditionFilter !== 'All conditions' || variantFilter !== 'All variants' || availabilityFilter !== 'In stock' || minPrice || maxPrice) && <button className="clear-filters" type="button" onClick={resetFilters}>Clear filters <X size={13} /></button>}</div>
+                    <div className="shop-view-controls"><label><span>Show</span><select value={pageSize} onChange={(event) => setPageSize(event.target.value)}><option value="24">24</option><option value="48">48</option><option value="96">96</option></select></label><div className="shop-view-toggle" role="group" aria-label="Product layout"><button type="button" className={viewMode === 'grid' ? 'is-active' : ''} onClick={() => setViewMode('grid')} aria-label="Grid view"><Grid2X2 size={16} /></button><button type="button" className={viewMode === 'list' ? 'is-active' : ''} onClick={() => setViewMode('list')} aria-label="List view"><List size={17} /></button></div></div>
+                  </div>
+                  {catalogLoading ? <div className="loading-state"><span className="loader" />Opening the archive…</div> : visibleProducts.length ? <>
+                    <div className={`product-grid shop-grid ${viewMode === 'list' ? 'shop-grid--list' : ''}`}>{visibleProducts.map((product) => <ProductCard key={product.id} product={product} onAdd={addToCart} viewMode={viewMode} />)}</div>
+                    {pageCount > 1 && <nav className="shop-pagination" aria-label="Product pages"><button type="button" disabled={currentPage === 1} onClick={() => setCurrentPage((page) => page - 1)}>Previous</button><span>Page <strong>{currentPage}</strong> of {pageCount}</span><button type="button" disabled={currentPage === pageCount} onClick={() => setCurrentPage((page) => page + 1)}>Next</button></nav>}
+                  </> : <EmptyCatalogue error={catalogError} />}
+                </section>
               </div>
-              {catalogLoading ? (
-                <div className="loading-state"><span className="loader" />Opening the archive…</div>
-              ) : filteredProducts.length ? (
-                <div className="product-grid shop-grid">
-                  {filteredProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} onAdd={addToCart} />
-                  ))}
-                </div>
-              ) : (
-                <EmptyCatalogue error={catalogError} />
-              )}
             </main>
           }
         />
