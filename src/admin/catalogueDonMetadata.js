@@ -10,5 +10,5 @@ export function isDonCatalogueEntry({ printing, card, observation } = {}) {
     .toLowerCase()
     .replace(/[^a-z]/g, '')
   const name = String(observation?.name || '').toUpperCase()
-  return rarity === 'DON' || category === 'don' || /DON\\s*!{1,2}/.test(sourceText) || name.includes('DON!!')
+  return rarity === 'DON' || category === 'don' || /DON\s*!{1,2}/.test(sourceText) || name.includes('DON!!')
 }
