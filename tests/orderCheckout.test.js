@@ -42,3 +42,17 @@ test('rejects invalid quantities and prices', () => {
   assert.deepEqual(snapshot.issues.map((issue) => issue.reason), ['insufficient-stock', 'invalid-price'])
   assert.equal(snapshot.items[0].product.price, 1)
 })
+
+test('aggregates duplicate product lines when validating available stock', () => {
+  const cart = [
+    { product: { id: 'same', name: 'Duplicate card', price: 2 }, quantity: 2 },
+    { product: { id: 'same', name: 'Duplicate card', price: 2 }, quantity: 2 },
+  ]
+  const snapshot = buildCheckoutSnapshot(cart, [{ id: 'same', name: 'Duplicate card', status: 'active', price: 2, stock_quantity: 3 }])
+  assert.equal(snapshot.ok, false)
+  assert.equal(snapshot.total, 8)
+  assert.equal(snapshot.issues.length, 1)
+  assert.equal(snapshot.issues[0].reason, 'insufficient-stock')
+  assert.equal(snapshot.issues[0].requested, 4)
+  assert.equal(snapshot.issues[0].stock, 3)
+})
