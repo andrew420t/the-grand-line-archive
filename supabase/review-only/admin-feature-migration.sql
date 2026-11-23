@@ -148,6 +148,26 @@ BEGIN
 END
 $schema_preflight$;
 
+-- Read-only audit: report existing exact-printing identity collisions before
+-- relying on catalogue_printing_key + language for future duplicate protection.
+-- Rows with a blank language are grouped together so ambiguous legacy data is visible.
+SELECT
+  set_id,
+  card_number,
+  catalogue_printing_key,
+  lower(NULLIF(btrim(language), '')) AS normalized_language,
+  count(*) AS matching_products,
+  array_agg(id ORDER BY id) AS product_ids
+FROM public.products
+WHERE NULLIF(btrim(catalogue_printing_key), '') IS NOT NULL
+GROUP BY
+  set_id,
+  card_number,
+  catalogue_printing_key,
+  lower(NULLIF(btrim(language), ''))
+HAVING count(*) > 1
+ORDER BY matching_products DESC, card_number, catalogue_printing_key;
+
 ALTER TABLE public.products
   ADD COLUMN IF NOT EXISTS color text,
   ADD COLUMN IF NOT EXISTS power integer,
