@@ -26,25 +26,28 @@ function openDatabase() {
 
 function imageHash(file) {
   return createImageBitmap(file).then((bitmap) => {
-    const canvas = document.createElement('canvas');
-    canvas.width = 9;
-    canvas.height = 8;
-    const context = canvas.getContext('2d', { willReadFrequently: true });
-    if (!context) throw new Error('Image comparison is unavailable in this browser.');
-    context.drawImage(bitmap, 0, 0, 9, 8);
-    bitmap.close?.();
-    const pixels = context.getImageData(0, 0, 9, 8).data;
-    const gray = [];
-    for (let i = 0; i < pixels.length; i += 4) {
-      gray.push(Math.round((pixels[i] * 299 + pixels[i + 1] * 587 + pixels[i + 2] * 114) / 1000));
-    }
-    let hash = 0n;
-    for (let y = 0; y < 8; y += 1) {
-      for (let x = 0; x < 8; x += 1) {
-        hash = (hash << 1n) | (gray[y * 9 + x] > gray[y * 9 + x + 1] ? 1n : 0n);
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = 9;
+      canvas.height = 8;
+      const context = canvas.getContext('2d', { willReadFrequently: true });
+      if (!context) throw new Error('Image comparison is unavailable in this browser.');
+      context.drawImage(bitmap, 0, 0, 9, 8);
+      const pixels = context.getImageData(0, 0, 9, 8).data;
+      const gray = [];
+      for (let i = 0; i < pixels.length; i += 4) {
+        gray.push(Math.round((pixels[i] * 299 + pixels[i + 1] * 587 + pixels[i + 2] * 114) / 1000));
       }
+      let hash = 0n;
+      for (let y = 0; y < 8; y += 1) {
+        for (let x = 0; x < 8; x += 1) {
+          hash = (hash << 1n) | (gray[y * 9 + x] > gray[y * 9 + x + 1] ? 1n : 0n);
+        }
+      }
+      return hash.toString(16).padStart(16, '0');
+    } finally {
+      bitmap.close?.();
     }
-    return hash.toString(16).padStart(16, '0');
   });
 }
 
