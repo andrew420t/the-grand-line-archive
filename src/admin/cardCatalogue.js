@@ -1,4 +1,5 @@
 import { supabase } from '../lib/supabase'
+import { resolveCatalogueImage } from './catalogueImageReference.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
@@ -120,20 +121,6 @@ async function getCatalogue() {
 
 const value = (item, key) => item?.[key] ?? ''
 
-// TCGCSV may contain an extra stamped/foil printing without its own usable
-// image locator. Reuse the canonical Bandai image for the same card number as
-// a clearly-labelled identification fallback; it may not show the stamp.
-function findOfficialBaseImage(index, printings, cardKey, language) {
-  for (const candidate of printings || []) {
-    if (candidate.card_key !== cardKey || candidate.site !== language) continue
-    const locator = safeMapGet(index?.locatorsByPrinting, candidate.key + ':' + candidate.site)
-    if (!locator?.image_id) continue
-    const host = language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com'
-    return host + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
-  }
-  return ''
-}
-
 // Catalogue data can be partially unavailable during a failed/older cache load.
 // Treat absent indexes as empty rather than crashing the entire Image Library.
 const safeMapGet = (map, key) => map instanceof Map ? map.get(key) : undefined
@@ -161,14 +148,8 @@ export async function findCatalogueMatches(cardNumber) {
       const printings = safeMapGet(index.printingsByCard, card.key) || []
 
       for (const printing of printings) {
-        const locator = safeMapGet(index.locatorsByPrinting, printing.key + ':' + printing.site)
-        const officialImageFallback = locator?.site === 'en'
-          ? `https://en.onepiece-cardgame.com/images/cardlist/card/${encodeURIComponent(locator.image_id)}.png`
-          : locator?.site === 'jp'
-            ? `https://www.onepiece-cardgame.com/images/cardlist/card/${encodeURIComponent(locator.image_id)}.png`
-            : printing.site === 'tcgcsv'
-              ? findOfficialBaseImage(index, data.printings, card.key, language)
-              : ''
+        const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language })
+        const officialImageFallback = imageReference.imageUrl
         const productLinks = safeMapGet(index.printingProductsByPrinting, printing.key) || []
         const linkedProducts = productLinks
           .map((link) => safeMapGet(index.productsByKey, link.product_key))
@@ -207,11 +188,7 @@ export async function findCatalogueMatches(cardNumber) {
             releaseDate: value(product, 'release_date'),
             sourceUrl: value(product, 'product_url'),
             blockIcon: value(printing, 'block_icon'),
-            source: officialImageFallback && printing.site === 'tcgcsv'
-              ? (language === 'jp' ? 'Bandai official Japanese base-card fallback (stamped artwork may differ)' : 'Bandai official English base-card fallback (stamped artwork may differ)')
-              : officialImageFallback
-                ? (language === 'jp' ? 'Bandai official Japanese image' : 'Bandai official English image')
-                : printing.site === 'tcgcsv' ? 'TCGplayer catalogue reference' : 'Koala Kollect catalogue reference',
+            source: imageReference.source,
           })
         }
       }
@@ -409,6 +386,7 @@ export async function getCatalogueCoverageReport() {
     cards: catalogue.cards.length,
     printings: 0,
     withOfficialImage: 0,
+    withFallbackImage: 0,
     withoutImageLocator: 0,
     missingImageTotal: 0,
     missingImageBySet: {},
@@ -427,14 +405,13 @@ export async function getCatalogueCoverageReport() {
   for (const language of LANGUAGES) {
     const data = catalogue.languages?.[language] || { printings: [] }
     const index = catalogue.indexes?.[language] || {}
-    report.languages[language] = { printings: data.printings.length, withImage: 0, withoutImage: 0 }
+    report.languages[language] = { printings: data.printings.length, withImage: 0, withFallbackImage: 0, withoutImage: 0 }
     for (const printing of data.printings) {
       report.printings += 1
-      const locator = safeMapGet(index.locatorsByPrinting, printing.key + ':' + printing.site)
-      const hasOfficialImage = Boolean(locator?.image_id && (printing.site === 'en' || printing.site === 'jp'))
-      const imageUrl = hasOfficialImage
-        ? (printing.site === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
-        : String(printing.image_url || '')
+      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language })
+      const hasOfficialImage = Boolean(imageReference.imageUrl && imageReference.source.startsWith('Bandai official') && !imageReference.usesBaseImageFallback)
+      const hasFallbackImage = imageReference.usesBaseImageFallback
+      const imageUrl = imageReference.imageUrl
       const hasImage = Boolean(imageUrl)
       const products = safeMapGet(index.printingProductsByPrinting, printing.key) || []
       const linkedProducts = products
@@ -450,6 +427,10 @@ export async function getCatalogueCoverageReport() {
 
       if (hasImage) {
         if (hasOfficialImage) report.withOfficialImage += 1
+        if (hasFallbackImage) {
+          report.withFallbackImage += 1
+          report.languages[language].withFallbackImage += 1
+        }
         report.languages[language].withImage += 1
       } else {
         report.withoutImageLocator += 1
@@ -514,18 +495,15 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
     const data = catalogue.languages?.[language] || { printings: [] }
     const index = catalogue.indexes?.[language] || {}
     for (const printing of data.printings) {
-      const locator = safeMapGet(index.locatorsByPrinting, printing.key + ':' + printing.site)
-      const officialUrl = locator?.image_id && (printing.site === 'en' || printing.site === 'jp')
-        ? (printing.site === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
-        : ''
-      const imageUrl = officialUrl || printing.image_url || ''
+      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language })
+      const imageUrl = imageReference.imageUrl
       if (!imageUrl) continue
       const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
       const observations = safeMapGet(index.observationsByCard, printing.card_key) || []
       const observation = observations.reduce((latest, item) => !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
       const product = links.map((link) => safeMapGet(index.productsByKey, link.product_key)).find(Boolean)
-      entries.push({ id: printing.key + ':' + language, cardNumber: card?.number || '', name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode: formatSetCode(product?.code || ''), imageUrl })
+      entries.push({ id: printing.key + ':' + language, cardNumber: card?.number || '', name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode: formatSetCode(product?.code || ''), imageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
     }
   }
   entries.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.language.localeCompare(b.language) || a.id.localeCompare(b.id))
