@@ -21,8 +21,8 @@ export function rankCatalogueMatches(matches = [], detectedName = '', detectedLa
       remembered: match.id === rememberedId,
     }
   }).sort((a, b) =>
-    Number(b.remembered) - Number(a.remembered) ||
     Number(b.nameMatch) - Number(a.nameMatch) ||
-    Number(b.languageMatch) - Number(a.languageMatch),
+    Number(b.languageMatch) - Number(a.languageMatch) ||
+    Number(b.remembered) - Number(a.remembered),
   )
 }
