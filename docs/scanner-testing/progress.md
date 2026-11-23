@@ -352,3 +352,10 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 
 ### Recognition-memory ranking safety
 - Adjusted catalogue ranking so OCR name agreement and detected language agreement take precedence over a remembered image. Recognition memory now breaks ties only after these textual signals; it can no longer force a conflicting language/identity to the top of the list. Added tests for conflicting OCR signals and tie-break behavior. This remains a suggested ranking and requires user confirmation.
+
+
+## Scanner-to-inventory catalogue handoff audit — 23 November 2026
+- Confirmed scanner candidate selection maps printing identity (catalogue match ID, stable printing key, reference image URL/source, language, set code, variant label) into scan-field state; QuickAdd receives these values and resolves the selected set code to an existing set ID before saving.
+- Found a detail handoff gap: choosing a catalogue printing from the scanner filled the primary fields and identity but did not refresh **counter, trigger text, or attributes** from that selected catalogue candidate. Those fields could remain OCR/previous scan values rather than candidate-associated details.
+- Added a shared, testable buildCatalogueScannerFields mapping and used it for the scanner's selected-match application. It now carries all catalogue-derived card details and identity aliases, including counter, trigger, attributes, and reference aliases, consistently into QuickAdd.
+- Added a regression test for Japanese EB04-005 Parallel printing handoff and verifies missing fields safely default to blank. The review remains code/test-only; live admin UI and database insert are not verified.
