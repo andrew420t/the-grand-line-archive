@@ -73,6 +73,23 @@ $atomic_checkout_preflight$;
 ALTER TABLE public.orders
   ADD COLUMN IF NOT EXISTS stock_reserved boolean NOT NULL DEFAULT false;
 
+DO $reservation_marker_check$
+DECLARE
+  marker_type text;
+  marker_not_null boolean;
+BEGIN
+  SELECT format_type(atttypid, atttypmod), attnotnull
+    INTO marker_type, marker_not_null
+  FROM pg_attribute
+  WHERE attrelid = 'public.orders'::regclass
+    AND attname = 'stock_reserved'
+    AND NOT attisdropped;
+  IF marker_type IS DISTINCT FROM 'boolean' OR marker_not_null IS DISTINCT FROM true THEN
+    RAISE EXCEPTION 'orders.stock_reserved must be boolean NOT NULL; found type %, not-null %. Review manually.', marker_type, marker_not_null;
+  END IF;
+END
+$reservation_marker_check$;
+
 CREATE OR REPLACE FUNCTION public.create_order_atomic(p_items jsonb)
 RETURNS uuid
 LANGUAGE plpgsql
