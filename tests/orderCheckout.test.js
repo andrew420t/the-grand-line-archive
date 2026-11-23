@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { buildCheckoutSnapshot } from '../src/orderCheckout.js'
+import { buildCheckoutSnapshot, buildAtomicCheckoutItems } from '../src/orderCheckout.js'
 
 test('uses fresh active-product prices for checkout total', () => {
   const cart = [
@@ -55,4 +55,23 @@ test('aggregates duplicate product lines when validating available stock', () =>
   assert.equal(snapshot.issues[0].reason, 'insufficient-stock')
   assert.equal(snapshot.issues[0].requested, 4)
   assert.equal(snapshot.issues[0].stock, 3)
+})
+
+test('atomic checkout payload combines duplicate lines and sorts IDs', () => {
+  const payload = buildAtomicCheckoutItems([
+    { product: { id: 'b', price: 999 }, quantity: 1 },
+    { product: { id: 'a', price: -100 }, quantity: 2 },
+    { product: { id: 'b' }, quantity: 3 },
+  ])
+  assert.deepEqual(payload, [
+    { product_id: 'a', quantity: 2 },
+    { product_id: 'b', quantity: 4 },
+  ])
+})
+
+test('atomic checkout payload rejects empty, missing IDs and invalid quantities', () => {
+  assert.equal(buildAtomicCheckoutItems([]), null)
+  assert.equal(buildAtomicCheckoutItems([{ product: {}, quantity: 1 }]), null)
+  assert.equal(buildAtomicCheckoutItems([{ product: { id: 'x' }, quantity: 0 }]), null)
+  assert.equal(buildAtomicCheckoutItems([{ product: { id: 'x' }, quantity: 1.5 }]), null)
 })
