@@ -277,6 +277,60 @@ BEGIN
       TO authenticated
       USING (public.is_admin());
   END IF;
+
+  -- Restrictive guards ensure existing broad permissive policies cannot OR
+  -- around the intended public-active/admin visibility and admin write rules.
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'product_images'
+      AND policyname = 'gla_product_images_select_guard'
+  ) THEN
+    CREATE POLICY gla_product_images_select_guard
+      ON public.product_images AS RESTRICTIVE
+      FOR SELECT TO public
+      USING (
+        EXISTS (
+          SELECT 1 FROM public.products AS product
+          WHERE product.id = product_images.product_id
+            AND product.status = 'active'
+        ) OR coalesce(public.is_admin(), false)
+      );
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'product_images'
+      AND policyname = 'gla_product_images_insert_guard'
+  ) THEN
+    CREATE POLICY gla_product_images_insert_guard
+      ON public.product_images AS RESTRICTIVE
+      FOR INSERT TO public
+      WITH CHECK (coalesce(public.is_admin(), false));
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'product_images'
+      AND policyname = 'gla_product_images_update_guard'
+  ) THEN
+    CREATE POLICY gla_product_images_update_guard
+      ON public.product_images AS RESTRICTIVE
+      FOR UPDATE TO public
+      USING (coalesce(public.is_admin(), false))
+      WITH CHECK (coalesce(public.is_admin(), false));
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'product_images'
+      AND policyname = 'gla_product_images_delete_guard'
+  ) THEN
+    CREATE POLICY gla_product_images_delete_guard
+      ON public.product_images AS RESTRICTIVE
+      FOR DELETE TO public
+      USING (coalesce(public.is_admin(), false));
+  END IF;
+
 END
 $product_image_policies$;
 
@@ -345,6 +399,43 @@ BEGIN
       USING (public.is_admin())
       WITH CHECK (public.is_admin());
   END IF;
+
+  -- Restrictive site-settings guards prevent older broad policies from
+  -- exposing non-homepage rows or allowing non-admin writes.
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'site_settings'
+      AND policyname = 'gla_site_settings_select_guard'
+  ) THEN
+    CREATE POLICY gla_site_settings_select_guard
+      ON public.site_settings AS RESTRICTIVE
+      FOR SELECT TO public
+      USING (id = 'homepage' OR coalesce(public.is_admin(), false));
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'site_settings'
+      AND policyname = 'gla_site_settings_insert_guard'
+  ) THEN
+    CREATE POLICY gla_site_settings_insert_guard
+      ON public.site_settings AS RESTRICTIVE
+      FOR INSERT TO public
+      WITH CHECK (coalesce(public.is_admin(), false));
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'site_settings'
+      AND policyname = 'gla_site_settings_update_guard'
+  ) THEN
+    CREATE POLICY gla_site_settings_update_guard
+      ON public.site_settings AS RESTRICTIVE
+      FOR UPDATE TO public
+      USING (coalesce(public.is_admin(), false))
+      WITH CHECK (coalesce(public.is_admin(), false));
+  END IF;
+
 END
 $site_settings_policies$;
 
