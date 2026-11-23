@@ -47,3 +47,22 @@ export function buildCheckoutSnapshot(cart = [], productRows = []) {
   const total = items.reduce((sum, item) => sum + Number(item.product.price || 0) * Number(item.quantity || 0), 0)
   return { ok: issues.length === 0, items, total: Number(total.toFixed(2)), issues }
 }
+
+/**
+ * Build the minimal request for the atomic database checkout RPC.
+ * The server must re-check price, active status and stock under row locks;
+ * values from this client payload are only product IDs and quantities.
+ */
+export function buildAtomicCheckoutItems(items = []) {
+  if (!Array.isArray(items) || items.length === 0) return null
+  const combined = new Map()
+  for (const item of items) {
+    const productId = String(item?.product?.id ?? '').trim()
+    const quantity = Number(item?.quantity)
+    if (!productId || !Number.isInteger(quantity) || quantity < 1) return null
+    combined.set(productId, (combined.get(productId) || 0) + quantity)
+  }
+  return [...combined.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([product_id, quantity]) => ({ product_id, quantity }))
+}
