@@ -851,3 +851,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Updated image alt text so DON!! entries do not announce a card number that does not exist.
 - Existing DON!! source-set attribution remains in the set line; source dataset and admin-verified override are used, with the manual set assignment control retained for entries that cannot be attributed safely.
 - Commit: `6a25130`. Automated CI for this latest change is pending. No production database/migration/deployment changes.
+
+
+### DON!! source-data slug audit — 23 November 2026
+
+- Read the current upstream `don_sets.jsonl` source dataset and checked every distinct set-slug format against the local normalizer: **165 source rows, 308 unique printing keys, 35 distinct slugs; all 35 slug formats normalize without an unknown format**.
+- Slugs include OP/EB/ST/PRB sets, OP14-EB04 / OP15-EB04 crossover sets, Double Pack DP-02 through DP-12, and the generic Promo group.
+- The upstream source has 53 rows labelled `promo`; those remain generically attributed to PROMO rather than guessing a more specific product/set. Some printing-level cross-check files returned empty through the GitHub file connector, so printing-key coverage against the full EN/JP printing tables is not verified by this audit.
+- This is a source-data audit only; no external source was edited and no production data was changed.
