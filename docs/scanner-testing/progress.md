@@ -593,4 +593,4 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 
 ### Ambiguous normalized set-code safeguard — 23 November 2026
 - Set-code normalization now links a set only when exactly one site set matches the normalized code. If legacy data contains both OP17 and OP-17 as separate set rows, Quick Add and Bulk Import leave the relationship unresolved rather than selecting an arbitrary row. An exact set selected from the dropdown still preserves its exact ID.
-- Added regression coverage for ambiguous normalized set codes. CI verification pending.
+- Added regression coverage for ambiguous normalized set codes. Quick Add's displayed set selection now uses the same normalized resolver as save-time matching. CI verification pending.
