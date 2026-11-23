@@ -7,8 +7,9 @@ const DON_SET_OPTIONS = [
   ...Array.from({ length: 18 }, (_, index) => 'OP-' + String(index + 1).padStart(2, '0')),
   ...Array.from({ length: 5 }, (_, index) => 'EB-' + String(index + 1).padStart(2, '0')),
   'PRB-01', 'PRB-02', 'OP14-EB04', 'OP15-EB04',
+  ...Array.from({ length: 12 }, (_, index) => 'DP-' + String(index + 1).padStart(2, '0')),
   ...Array.from({ length: 36 }, (_, index) => 'ST-' + String(index + 1).padStart(2, '0')),
-  'Promo', 'Other Product',
+  'PROMO', 'Other Product',
 ]
 
 export default function ImageLibraryPanel({ user }) {
