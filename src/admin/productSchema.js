@@ -17,16 +17,11 @@ export const EXTENDED_CARD_COLUMNS = [
 const normalizedIdentity = (value) => String(value || '').trim().toLocaleLowerCase()
 
 export function classifyPrintingDuplicate(existing, candidate) {
-  const existingMatchId = normalizedIdentity(existing.catalogue_match_id)
-  const candidateMatchId = normalizedIdentity(candidate.catalogue_match_id)
-  if (existingMatchId && candidateMatchId) {
-    return existingMatchId === candidateMatchId ? 'exact' : 'distinct'
-  }
-
   const existingPrintingKey = normalizedIdentity(existing.catalogue_printing_key)
   const candidatePrintingKey = normalizedIdentity(candidate.catalogue_printing_key)
   const existingLanguage = normalizedIdentity(existing.language)
   const candidateLanguage = normalizedIdentity(candidate.language)
+
   if (existingPrintingKey && candidatePrintingKey) {
     if (existingPrintingKey !== candidatePrintingKey) return 'distinct'
     if (existingLanguage && candidateLanguage && existingLanguage !== candidateLanguage) return 'distinct'
@@ -34,11 +29,16 @@ export function classifyPrintingDuplicate(existing, candidate) {
     return 'possible'
   }
 
+  const existingMatchId = normalizedIdentity(existing.catalogue_match_id)
+  const candidateMatchId = normalizedIdentity(candidate.catalogue_match_id)
+  if (existingMatchId && candidateMatchId) {
+    return existingMatchId === candidateMatchId ? 'exact' : 'distinct'
+  }
+
   const existingVariant = normalizedIdentity(existing.variant_label)
   const candidateVariant = normalizedIdentity(candidate.variant_label)
   if (existingLanguage && candidateLanguage && existingLanguage !== candidateLanguage) return 'distinct'
   if (existingVariant && candidateVariant && existingVariant !== candidateVariant) return 'distinct'
-  if (existingLanguage && candidateLanguage && existingVariant && candidateVariant) return 'possible'
   return 'possible'
 }
 
