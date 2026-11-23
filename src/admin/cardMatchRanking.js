@@ -7,7 +7,7 @@ const languageFamily = (value) => {
   return ''
 }
 
-export function rankCatalogueMatches(matches = [], detectedName = '', detectedLanguage = '', rememberedId = '') {
+export function rankCatalogueMatches(matches = [], detectedName = '', detectedLanguage = '', rememberedId = '', numberEvidence = {}) {
   const name = normalize(detectedName)
   const language = languageFamily(detectedLanguage)
   return matches.map((match) => {
@@ -19,6 +19,7 @@ export function rankCatalogueMatches(matches = [], detectedName = '', detectedLa
       nameMatch,
       languageMatch,
       remembered: match.id === rememberedId,
+      numberEvidence: numberEvidence[match.cardNumber] || null,
     }
   }).sort((a, b) =>
     Number(b.nameMatch) - Number(a.nameMatch) ||
