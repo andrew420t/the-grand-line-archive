@@ -90,6 +90,10 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
       counter: details.counter || item.counter,
       trigger_text: details.trigger_text || item.trigger_text,
       attributes: details.attributes || item.attributes,
+      catalogue_match_id: details.catalogue_match_id || item.catalogue_match_id,
+      catalogue_printing_key: details.catalogue_printing_key || item.catalogue_printing_key,
+      catalogue_reference_image_url: details.catalogue_reference_image_url || item.catalogue_reference_image_url,
+      catalogue_reference_image_source: details.catalogue_reference_image_source || item.catalogue_reference_image_source,
       category_name: matchingCategory?.name || item.category_name,
     })))
     setCatalogueMatches((current) => ({ ...current, [row._row]: [] }))
@@ -111,7 +115,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
     importLock.current = true
     setBusy(true); setError(''); setReport(null)
     try {
-      const usesExtended = readyRows.some((row) => [row.color,row.power,row.cost,row.card_type,row.effect_text,row.language,row.classification,row.variant_label,row.counter,row.trigger_text,row.attributes].some((v) => String(v || '').trim()))
+      const usesExtended = readyRows.some((row) => [row.color,row.power,row.cost,row.card_type,row.effect_text,row.language,row.classification,row.variant_label,row.counter,row.trigger_text,row.attributes,row.catalogue_match_id,row.catalogue_printing_key,row.catalogue_reference_image_url,row.catalogue_reference_image_source].some((v) => String(v || '').trim()))
       if (usesExtended && !schemaReady) {
         const check = await supabase.from('products').select(EXTENDED_CARD_COLUMNS.join(',')).limit(0)
         if (check.error) throw new Error('Card-detail columns are unavailable. No rows were imported. Review the approved schema migration first: ' + check.error.message)
@@ -126,6 +130,8 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
           language: row.language, classification: row.classification, counter: row.counter === '-' ? '' : row.counter, trigger_text: row.trigger_text, attributes: row.attributes, condition: row.condition || 'Near Mint',
           price_gbp: row.price_gbp === '' ? '0' : row.price_gbp, stock_quantity: row.stock_quantity === '' ? '1' : row.stock_quantity,
           category_id: row.matchingCategory?.id || '', variant_label: row.variant_label, featured: false,
+          catalogue_match_id: row.catalogue_match_id || '', catalogue_printing_key: row.catalogue_printing_key || '',
+          catalogue_reference_image_url: row.catalogue_reference_image_url || '', catalogue_reference_image_source: row.catalogue_reference_image_source || '',
         }
         const payload = buildNewProductPayload(form, row.matchingSet?.id || '', usesExtended)
         if (Number(payload.price) === 0) payload.status = 'inactive'
