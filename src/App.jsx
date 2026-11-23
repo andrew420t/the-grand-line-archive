@@ -78,11 +78,16 @@ function ProductImage({ product, className = '' }) {
       setReferenceImage('')
       return () => { active = false }
     }
-    findPrimaryCatalogueMatch(product.raw.card_number, product.raw.language)
+    findPrimaryCatalogueMatch(product.raw.card_number, product.raw.language, {
+      printingKey: product.raw.catalogue_printing_key || product.raw.reference_printing_key || '',
+      matchId: product.raw.catalogue_match_id || product.raw.reference_match_id || '',
+      setCode: product.raw.set_code || product.setCode || '',
+      variantLabel: product.raw.variant_label || '',
+    })
       .then((match) => { if (active) setReferenceImage(match?.imageUrl || '') })
       .catch(() => { if (active) setReferenceImage('') })
     return () => { active = false }
-  }, [product.image, product.raw?.card_number, product.raw?.language])
+  }, [product.image, product.raw?.card_number, product.raw?.language, product.raw?.catalogue_printing_key, product.raw?.reference_printing_key, product.raw?.catalogue_match_id, product.raw?.reference_match_id, product.raw?.set_code, product.raw?.variant_label, product.setCode])
 
   const displayImage = product.image && !failed ? product.image
     : referenceImage && !referenceFailed ? referenceImage : ''
