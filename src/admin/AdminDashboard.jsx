@@ -822,10 +822,11 @@ function CollectionsSection({ categories, sets, onRefresh }) {
     setError('')
     setNotice('')
     try {
-      const duplicate = await supabase.from('sets').select('id').eq('name', setName.trim()).limit(1)
-      if (duplicate.error) throw new Error(`Could not check the set name: ${duplicate.error.message}`)
-      if (duplicate.data?.length) throw new Error('A set with that name already exists.')
-      const codeMatches = setCode.trim() ? findSetCodeMatches(sets, setCode) : []
+      const existingSets = await supabase.from('sets').select('id,name,code')
+      if (existingSets.error) throw new Error(`Could not check existing sets: ${existingSets.error.message}`)
+      const duplicateName = (existingSets.data || []).some((set) => String(set.name || '').trim().toLocaleLowerCase() === setName.trim().toLocaleLowerCase())
+      if (duplicateName) throw new Error('A set with that name already exists.')
+      const codeMatches = setCode.trim() ? findSetCodeMatches(existingSets.data || [], setCode) : []
       if (codeMatches.length) throw new Error('A set with that code already exists, or another set uses an equivalent code format. Choose a unique set code.')
       const result = await supabase.from('sets').insert({
         id: globalThis.crypto.randomUUID(),
