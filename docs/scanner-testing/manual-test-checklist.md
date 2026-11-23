@@ -115,7 +115,9 @@ Expected behaviour:
 - [ ] In staging only, simulate order-item insertion failure and confirm cleanup verifies that the pending order was actually deleted.
 - [ ] Confirm successful checkout creates the order and its items and clears the basket.
 - [ ] Confirm customer order history shows only that customer's orders.
-- [ ] Confirm admin order status changes accept only supported states and verify the affected order row.
+- [ ] Confirm admin order status changes use the reviewed atomic RPC, verify the returned order ID, and enforce the allowed lifecycle transitions.
+- [ ] In staging, cancel a pending/processing order and confirm its reserved stock is restored once; repeat the same cancellation and confirm no double-restock.
+- [ ] Confirm shipped/completed orders cannot be cancelled/restocked and cancelled orders cannot be reopened.
 - [ ] Review and apply the atomic checkout RPC proposal in staging only after verifying schema, existing stock triggers, RLS, grants, and order lifecycle.
 - [ ] With the RPC enabled and client integrated in staging, test two concurrent checkouts for the same low-stock product; only one may succeed.
 - [ ] Change the product price between the client's fresh price check and RPC call; the RPC must reject the stale expected price and ask the customer to review, not silently charge the new price.
