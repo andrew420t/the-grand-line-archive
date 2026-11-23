@@ -458,3 +458,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Admin inventory save error recovery — 23 November 2026
 - Inventory stock/price save now catches thrown Supabase/network errors and always clears its busy state. Previously a thrown request could leave the row's save action stuck; returned database errors remain surfaced as before.
 - Validation still requires a non-negative integer stock count and valid non-negative price. CI pending.
+
+
+## Admin catalogue fill and product edit recovery — 23 November 2026
+- Catalogue-fill updates and product-edit saves now catch unexpected request exceptions, show an actionable error, and release their saving state in `finally`. Returned Supabase errors remain handled. This prevents stuck save buttons during network failures.
+- Catalogue-fill still only applies missing catalogue details and leaves inventory, price, and uploaded photos untouched. CI pending.
