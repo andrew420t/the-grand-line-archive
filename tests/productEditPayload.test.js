@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { buildProductEditPayload } from '../src/admin/productEditPayload.js'
+import { buildProductEditPayload, parseInventoryStockUpdate } from '../src/admin/productEditPayload.js'
 
 const fields = [
   { key: 'name', column: 'name', required: true },
@@ -73,4 +73,18 @@ test('editing ordinary card fields does not overwrite exact catalogue printing i
   for (const key of Object.keys(raw).filter((key) => key !== 'updated_at')) {
     assert.equal(key in payload, false, `edit payload must not overwrite ${key}`)
   }
+})
+
+
+test('inventory inline updates accept explicit zero values', () => {
+  assert.deepEqual(parseInventoryStockUpdate({ stock: '0', price: '0' }, { stock_quantity: 4, price: 2.5 }), {
+    stock_quantity: 0, price: 0,
+  })
+})
+
+test('inventory inline updates reject blank and invalid values', () => {
+  assert.equal(parseInventoryStockUpdate({ stock: '', price: '2' }, { stock_quantity: 4, price: 2 }), null)
+  assert.equal(parseInventoryStockUpdate({ stock: '-1', price: '2' }, {}), null)
+  assert.equal(parseInventoryStockUpdate({ stock: '1.5', price: '2' }, {}), null)
+  assert.equal(parseInventoryStockUpdate({ stock: '1', price: 'NaN' }, {}), null)
 })
