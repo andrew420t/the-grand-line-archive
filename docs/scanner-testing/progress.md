@@ -306,3 +306,15 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Catalogue lookup from an existing product now also fills those catalogue identity/reference fields when the corresponding product columns exist and are blank, using the selected printing. Existing values remain untouched.
 - Added a regression test asserting ordinary card edits cannot overwrite exact catalogue printing identity.
 - This is an inventory UI/edit-flow safeguard, not a database migration or live deployment. The full variant-aware duplicate review and live schema compatibility review remain outstanding.
+
+
+## Variant-aware inventory duplicate protection and schema preflight — 23 November 2026
+
+- Quick Add now compares the selected catalogue match ID first, then printing key plus language, before deciding whether an existing card number/set is the same printing.
+- Exact catalogue-printing matches are blocked with instructions to update the existing inventory record instead of creating a second product.
+- Different confirmed catalogue printing IDs/keys are treated as distinct, so Normal and Parallel versions sharing a card number can be stored separately. Different language printings are also distinct.
+- Older inventory rows without enough printing metadata are treated as possible duplicates. The administrator must inspect the existing row and explicitly confirm a separate printing; a variant label is required. This avoids silently assuming legacy rows are different.
+- Duplicate lookup checks up to 50 rows for the same card number and set. This is a defensive application check, not a database uniqueness constraint.
+- Added unit coverage for exact duplicates, Normal vs Parallel, English vs Japanese, and ambiguous legacy records.
+- Added review-only SQL preflight checks that public.products exists with a UUID id, and that any existing public.product_images table has the required columns and UUID product_id before the migration attempts DDL.
+- The migration remains review-only and has not been run. No database, production site or live inventory was changed.
