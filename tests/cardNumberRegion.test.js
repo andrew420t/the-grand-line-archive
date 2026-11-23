@@ -62,3 +62,11 @@ test('manual crop validation rejects out-of-frame, tiny, and invalid selections'
   assert.equal(validateManualCardCrop({ x: 0, y: 0, width: 0.05, height: 0.5 }, 100, 100), null)
   assert.equal(validateManualCardCrop({ x: 0, y: 0, width: NaN, height: 0.5 }, 100, 100), null)
 })
+
+test('manual crop accepts the minimum 12 percent dimensions and rejects smaller edges', () => {
+  assert.deepEqual(validateManualCardCrop({ x: 0, y: 0, width: 0.12, height: 0.12 }, 100, 100), {
+    x: 0, y: 0, width: 12, height: 12,
+  })
+  assert.equal(validateManualCardCrop({ x: 0, y: 0, width: 0.119, height: 0.12 }, 100, 100), null)
+  assert.equal(validateManualCardCrop({ x: 0, y: 0, width: 0.12, height: 0.119 }, 100, 100), null)
+})
