@@ -426,3 +426,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Added regression tests for accepted values, normalization, and invalid/empty inputs. Database constraints and live RLS remain unverified. CI pending.
 
 - Admin order-status updates also use per-order in-flight guards, try/catch/finally error recovery, and reliably release busy state. This prevents rapid repeated status-change requests and stuck UI after unexpected errors. CI pending.
+
+
+## Order-history loading recovery audit — 23 November 2026
+- The customer/admin order-history loader previously handled returned Supabase errors but could remain in a loading state if a query unexpectedly threw.
+- Added catch/finally recovery: surfaced the error and clears stale order/order-item state; the loading flag is always released. No live orders were accessed or modified. CI pending.
