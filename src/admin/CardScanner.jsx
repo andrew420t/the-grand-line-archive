@@ -5,7 +5,8 @@ import { rankCatalogueMatches } from './cardMatchRanking'
 import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
 import CatalogueReferenceImage from './CatalogueReferenceImage'
 import { findRememberedCardImage, findSharedRememberedCardImage, rememberVerifiedCardImage } from './cardRecognitionMemory'
-import { prepareCardNumberRegion } from './cardNumberRegion'
+import { prepareCardNumberRegions } from './cardNumberRegion'
+import { extractCardNumberCandidates } from './cardNumberCandidates'
 
 const confidenceLabel = (field) => {
   if (!field.value) return 'Not detected'
@@ -40,6 +41,8 @@ export default function CardScanner({
   const [manualMatches, setManualMatches] = useState([])
   const [manualLoading, setManualLoading] = useState(false)
   const [manualError, setManualError] = useState('')
+  const [numberReadings, setNumberReadings] = useState([])
+  const [numberCandidates, setNumberCandidates] = useState([])
 
   const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
   const hasReview =
@@ -90,23 +93,42 @@ export default function CardScanner({
           if (message.status) setStatus(message.status)
         },
       })
-      setStatus('Reading the card number and rarity from the bottom-right corner…')
-      const numberRegion = await prepareCardNumberRegion(frontPhoto.file)
-      const numberResult = await worker.recognize(numberRegion, {}, { blocks: true })
-      setStatus('Card number region read. Checking the full card for name, rarity and language…')
+      setStatus('Finding the card number: zooming and checking several bottom-edge areas…')
+      const numberRegions = await prepareCardNumberRegions(frontPhoto.file)
+      const numberResults = await Promise.all(numberRegions.map(async (region) => {
+        const { data: regionData } = await worker.recognize(region.file, {}, { blocks: true })
+        const lineConfidence = (regionData.lines || [])
+          .map((line) => Number(line.confidence))
+          .filter(Number.isFinite)
+        return {
+          label: region.label,
+          text: regionData.text || '',
+          confidence: Number.isFinite(Number(regionData.confidence))
+            ? Number(regionData.confidence)
+            : lineConfidence.length ? Math.max(...lineConfidence) : 0,
+        }
+      }))
+      setNumberReadings(numberResults)
+      const candidates = extractCardNumberCandidates(numberResults)
+      setNumberCandidates(candidates)
+      setStatus('Number-area scans complete. Checking the full card for supporting details…')
       const { data } = await worker.recognize(frontPhoto.file, {}, { blocks: true })
       const lines =
         data.lines ||
         (data.blocks || []).flatMap((block) =>
           (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
         )
-      const numberLines =
-        numberResult.data.lines ||
-        (numberResult.data.blocks || []).flatMap((block) =>
-          (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
-        )
-      const combinedText = [numberResult.data.text || '', data.text || ''].filter(Boolean).join('\n')
-      const combinedLines = [...numberLines, ...lines]
+      const numberLines = numberResults.flatMap((result) =>
+        result.text.split(/\r?\n/).filter(Boolean).map((text) => ({ text, confidence: result.confidence })),
+      )
+      const numberCandidateText = candidates[0]?.number || ''
+      const combinedText = [numberCandidateText, ...numberResults.map((item) => item.text), data.text || ''].filter(Boolean).join('\n')
+      const combinedLines = [
+        ...(candidates[0] ? [{ text: candidates[0].number, confidence: candidates[0].confidence }] : []),
+        ...numberResults.flatMap((item) => item.text.split(/\r?\n/).filter(Boolean).map((text) => ({ text, confidence: item.confidence }))),
+        ...numberLines,
+        ...lines,
+      ]
       setRawText(combinedText)
       const parsed = parseCardDetails(combinedText, combinedLines, recognitionLanguage)
       setFields(parsed)
@@ -115,7 +137,7 @@ export default function CardScanner({
       setSelectedAutoMatchId('')
       setMatchConfirmationOpen(false)
       setAutoMatchStatus('')
-      const detectedNumber = parsed.card_number?.value || sharedRememberedImage?.cardNumber || rememberedImage?.cardNumber
+      const detectedNumber = candidates[0]?.number || parsed.card_number?.value || sharedRememberedImage?.cardNumber || rememberedImage?.cardNumber
       if (detectedNumber) {
         setStatus('Card number detected from the lower-right crop. Looking up the exact catalogue printing and checking rarity…')
         try {
@@ -300,6 +322,27 @@ export default function CardScanner({
           {error && <span className="form-error scanner-error" role="alert">{error}</span>}
         </div>
       </div>
+
+      {numberReadings.length > 0 && (
+        <section className="scanner-number-readings" aria-live="polite">
+          <div>
+            <p className="eyebrow">NUMBER READING · ZOOMED SCAN AREAS</p>
+            <h3>{numberCandidates[0]?.number || 'Card number not confidently read yet'}</h3>
+            <p>{numberCandidates.length
+              ? 'The scanner compares repeated number readings from multiple enlarged areas before searching the catalogue.'
+              : 'No valid card-number pattern was found. Check the enlarged-area OCR below, then enter the number manually if needed.'}</p>
+          </div>
+          <div className="scanner-number-readings__list">
+            {numberReadings.map((reading) => (
+              <div className="scanner-number-readings__item" key={reading.label}>
+                <strong>{reading.label}</strong>
+                <span>{reading.confidence ? Math.round(reading.confidence) + '% OCR confidence' : 'Confidence unavailable'}</span>
+                <code>{reading.text.trim() || 'No text read'}</code>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="scanner-photo-tools">
         <div>
