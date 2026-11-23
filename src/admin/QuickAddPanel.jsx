@@ -162,7 +162,7 @@ export default function QuickAddPanel({
        .select(`id,name,card_number,set_id${includeVariantMetadata ? ',variant_label,language,catalogue_match_id,catalogue_printing_key' : ''}`)
       .eq('card_number', form.card_number.trim())
     query = setId ? query.eq('set_id', setId) : query.is('set_id', null)
-    const { data, error: queryError } = await query.limit(10)
+    const { data, error: queryError } = await query.limit(50)
 
     if (queryError) {
       throw new Error(
@@ -353,11 +353,11 @@ export default function QuickAddPanel({
 
       {duplicateMatches.length > 0 && (
         <div className="duplicate-warning">
-          <div className="duplicate-warning__heading"><Search size={16} /><strong>Possible matching card number and set</strong></div>
+          <div className="duplicate-warning__heading"><Search size={16} /><strong>Existing products with this card number and set</strong></div>
           {duplicateMatches.map((product) => (
             <p key={product.id}>{product.name || 'Unnamed product'} · {product.card_number} · {product.set_code} · {product.variant_label || 'No variant label'} · {product.language || 'Language unknown'} · {product.matchType === 'exact' ? 'Exact printing' : 'Identity needs checking'} · ID {product.id}</p>
           ))}
-          <label className="check-field"><input type="checkbox" checked={allowVariant} onChange={(event) => setAllowVariant(event.target.checked)} /><span>This is a distinct card variant. Save it as a separate product.</span></label>
+          {duplicateMatches.some((product) => product.matchType === 'possible') && <label className="check-field"><input type="checkbox" checked={allowVariant} onChange={(event) => setAllowVariant(event.target.checked)} /><span>I checked the existing entry; this is a separate printing. Save it separately.</span></label>}
         </div>
       )}
 
