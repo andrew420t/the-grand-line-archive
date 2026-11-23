@@ -5,7 +5,7 @@ import {
   ensurePhotoStorageReady,
   uploadProductPhotos,
 } from './productStorage'
-import { buildNewProductPayload, EXTENDED_CARD_COLUMNS } from './productSchema'
+import { buildNewProductPayload, classifyPrintingDuplicate, EXTENDED_CARD_COLUMNS } from './productSchema'
 import { supabase } from '../lib/supabase'
 import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
@@ -155,11 +155,11 @@ export default function QuickAddPanel({
     sets.find((set) => String(set.code || '').toUpperCase() === String(form.set_code || '').trim().toUpperCase())?.id ||
     ''
 
-  const checkDuplicates = async (setId, includeVariantLabel) => {
+  const checkDuplicates = async (setId, includeVariantMetadata) => {
     if (!form.card_number.trim()) return []
     let query = supabase
       .from('products')
-      .select(`id,name,card_number,set_id${includeVariantLabel ? ',variant_label' : ''}`)
+       .select(`id,name,card_number,set_id${includeVariantMetadata ? ',variant_label,language,catalogue_match_id,catalogue_printing_key' : ''}`)
       .eq('card_number', form.card_number.trim())
     query = setId ? query.eq('set_id', setId) : query.is('set_id', null)
     const { data, error: queryError } = await query.limit(10)
@@ -176,6 +176,9 @@ export default function QuickAddPanel({
       set_id: row.set_id,
       set_code: sets.find((set) => String(set.id) === String(row.set_id))?.code || '',
       variant_label: row.variant_label || '',
+      language: row.language || '',
+      catalogue_match_id: row.catalogue_match_id || '',
+      catalogue_printing_key: row.catalogue_printing_key || '',
     }))
   }
 
@@ -255,16 +258,30 @@ export default function QuickAddPanel({
         extendedColumnsReady = true
       }
 
-      const matches = await checkDuplicates(resolvedSetId, extendedColumnsReady)
+      const existingProducts = await checkDuplicates(resolvedSetId, extendedColumnsReady)
+      const candidatePrinting = {
+        catalogue_match_id: form.catalogue_match_id,
+        catalogue_printing_key: form.catalogue_printing_key,
+        language: form.language,
+        variant_label: form.variant_label,
+      }
+      const matches = existingProducts
+        .map((product) => ({ ...product, matchType: classifyPrintingDuplicate(product, candidatePrinting) }))
+        .filter((product) => product.matchType !== 'distinct')
+      const exactMatches = matches.filter((product) => product.matchType === 'exact')
+      const possibleMatches = matches.filter((product) => product.matchType === 'possible')
       setDuplicateMatches(matches)
-      if (matches.length && !allowVariant) {
-        setError('A product with this card number and set already exists. Open that product for photos/stock, or confirm that this is a legitimate variant.')
+      if (exactMatches.length) {
+        throw new Error('This exact catalogue printing is already in your inventory. Open the existing product to update its quantity, price or photographs instead of creating a duplicate.')
+      }
+      if (possibleMatches.length && !allowVariant) {
+        setError('A product with this card number and set may already exist, but its exact printing identity is not recorded. Check the existing entry before confirming this is a separate printing.')
         return
       }
-      if (matches.length && allowVariant && !form.variant_label.trim()) {
-        throw new Error('Enter a variant label before saving a duplicate card number and set.')
+      if (possibleMatches.length && allowVariant && !form.variant_label.trim()) {
+        throw new Error('Enter a variant label before saving a possible duplicate as a separate printing.')
       }
-      if (matches.length && allowVariant && !extendedColumnsReady) {
+      if (possibleMatches.length && allowVariant && !extendedColumnsReady) {
         const schemaCheck = await supabase
           .from('products')
           .select('variant_label')
@@ -336,9 +353,9 @@ export default function QuickAddPanel({
 
       {duplicateMatches.length > 0 && (
         <div className="duplicate-warning">
-          <div className="duplicate-warning__heading"><Search size={16} /><strong>Matching card number and set code</strong></div>
+          <div className="duplicate-warning__heading"><Search size={16} /><strong>Possible matching card number and set</strong></div>
           {duplicateMatches.map((product) => (
-            <p key={product.id}>{product.name || 'Unnamed product'} · {product.card_number} · {product.set_code} · {product.variant_label || 'No variant label'} · ID {product.id}</p>
+            <p key={product.id}>{product.name || 'Unnamed product'} · {product.card_number} · {product.set_code} · {product.variant_label || 'No variant label'} · {product.language || 'Language unknown'} · {product.matchType === 'exact' ? 'Exact printing' : 'Identity needs checking'} · ID {product.id}</p>
           ))}
           <label className="check-field"><input type="checkbox" checked={allowVariant} onChange={(event) => setAllowVariant(event.target.checked)} /><span>This is a distinct card variant. Save it as a separate product.</span></label>
         </div>
