@@ -399,3 +399,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Added a pre-check against current product records: only active products, valid prices, and sufficient stock are accepted. Changed prices or availability stop checkout and refresh basket values so the customer can review them. Order totals and order-item unit prices are derived from the refreshed product rows.
 - If order-item insertion fails, checkout now attempts to delete the empty pending order and reports if cleanup is denied/failed.
 - Added unit tests for fresh totals, unavailable/draft items, stock shortage, price changes, and invalid values. This is still a client-side check and does not prevent simultaneous checkouts from overselling; server-side atomic stock reservation and database policies remain necessary for production order safety. No orders, stock, or live database data were changed. CI passed on commit `b04472d8` (tests, lint, build).
+
+
+## Duplicate cart quantity audit — 23 November 2026
+- Checkout validation previously checked each basket line against stock independently. A malformed/restored basket containing repeated product IDs could request more total copies than stock while each individual line passed.
+- Added aggregate requested quantities per product and one consolidated insufficient-stock issue per product. Regression test covers duplicate lines whose combined quantity exceeds stock.
+- CI verification pending. This is still not atomic stock reservation; concurrent customers can race, so a server-side transaction/RPC remains required before live sales.
