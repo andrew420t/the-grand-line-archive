@@ -982,3 +982,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Reviewed the OCR card-number candidate parser's prefix normalization and promo handling. It normalizes common OCR confusions (`0P`, `E8`, `5T`, `PR8`) and deduplicates repeated candidate numbers across readings; candidate occurrence/confidence is advisory and does not auto-confirm a match.
 - Current PR head `6d4d52f3e7133d7462c79021e4e6e60b2230e886` verified by GitHub Actions run #481 (ID `45212349383`): tests, lint, and production build all passed.
 - Attempted to open the Cloudflare branch preview through the browser tool; it was inaccessible in this environment. This is a tooling limitation, not evidence that the preview is down. Browser/mobile manual verification remains outstanding.
+
+
+### Additional boundary tests and rollback exception handling — 23 November 2026
+
+- Added image-tools regression coverage for malformed/empty pixel buffers, uniform-background/no-foreground inputs, and aspect-crop bounds near the photo's right/bottom edges. These remain conservative detector tests; they do not establish reliable detection on arbitrary card photos.
+- Reviewed product-photo upload rollback. Supabase normally reports cleanup failures as result errors, but thrown network/runtime exceptions during rollback could previously mask the original upload error and skip subsequent cleanup steps. Added independent try/catch guards for image URL rollback, metadata cleanup, and Storage cleanup so each failure is surfaced in the final error and later cleanup attempts continue.
+- New commits on the scanner branch: image boundary tests `2cce7df38da03461f6409569f91c633c694911ea`; rollback cleanup exception handling `2c33ba11b56a94cacc3f82d95f770888128dead0`. Exact-head CI is pending; do not mark these as verified until CI completes.
+- No deployment, merge, or production-data changes.
