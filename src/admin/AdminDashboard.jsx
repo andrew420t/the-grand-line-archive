@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertCircle,
   ArrowRight,
@@ -85,6 +85,14 @@ export default function AdminDashboard({
 }) {
   const [activeSection, setActiveSection] = useState('overview')
   const [photos, setPhotos] = useState([])
+  const photosRef = useRef(photos)
+  photosRef.current = photos
+
+  useEffect(() => () => {
+    photosRef.current.forEach((photo) => {
+      if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl)
+    })
+  }, [])
   const [scanFields, setScanFields] = useState(blankScanFields)
   const [scanVersion, setScanVersion] = useState(0)
   const [rawText, setRawText] = useState('')
