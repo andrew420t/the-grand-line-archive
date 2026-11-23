@@ -2,6 +2,7 @@ import { supabase } from '../lib/supabase'
 import { resolveCatalogueImage } from './catalogueImageReference.js'
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
+import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
@@ -397,42 +398,6 @@ export function collectrSearchUrl(match) {
  * Resolve one safe display reference for public archive tiles. Seller-uploaded
  * product photographs remain the primary image and are never overwritten.
  */
-export function selectPrimaryCatalogueMatch(matches = [], { language = '', printingKey = '', matchId = '', setCode = '', variantLabel = '' } = {}) {
-  const requested = String(language || '').toLowerCase()
-  const preferredCode = requested.startsWith('jp') || requested.includes('japanese') ? 'jp'
-    : requested.startsWith('en') || requested.includes('english') ? 'en' : ''
-  const hasIdentity = Boolean(matchId || printingKey || setCode || variantLabel)
-  const withImages = matches.filter((match) => match.imageUrl)
-  if (matchId) return withImages.find((match) => match.id === matchId) || null
-  if (printingKey) {
-    const exactPrinting = withImages.filter((match) => match.printingKey === printingKey)
-    return exactPrinting.find((match) => preferredCode && match.languageCode === preferredCode)
-      || exactPrinting[0]
-      || null
-  }
-  if (setCode || variantLabel) {
-    const normalizeSet = (value) => String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
-    const normalizeVariant = (value) => {
-      const normalized = String(value || '').trim().toLowerCase().replace(/[^a-z0-9]/g, '')
-      return ['', 'normal', 'base', 'regular'].includes(normalized) ? 'normal' : normalized
-    }
-    const exactIdentity = withImages.filter((match) =>
-      (!setCode || normalizeSet(match.setCode) === normalizeSet(setCode)) &&
-      (!variantLabel || normalizeVariant(match.variantLabel || match.variant) === normalizeVariant(variantLabel))
-    )
-    return exactIdentity.find((match) => preferredCode && match.languageCode === preferredCode)
-      || exactIdentity[0]
-      || null
-  }
-  // Legacy products without exact printing identity may use a generic catalogue
-  // reference, but products with identity fields never silently fall back to a
-  // different set/variant.
-  if (hasIdentity) return null
-  return withImages.find((match) => preferredCode && match.languageCode === preferredCode)
-    || withImages.find((match) => match.languageCode === 'en')
-    || withImages[0]
-    || null
-}
 
 export async function findPrimaryCatalogueMatch(cardNumber, language = '', identity = {}) {
   const matches = await findCatalogueMatches(cardNumber)
