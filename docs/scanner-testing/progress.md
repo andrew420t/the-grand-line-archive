@@ -495,3 +495,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Admin photo-preview cleanup on workspace exit — 23 November 2026
 - AdminDashboard now revokes all remaining queued-photo preview object URLs when the workspace unmounts. Previously previews were revoked when individual photos were removed or after a successful save, but leaving the admin workspace with an unsaved queue could retain browser object URLs.
 - The cleanup uses a ref to the latest photo queue so it does not revoke retained previews during normal queue updates. No photo files or storage records are changed. CI pending.
+
+
+## Photo queue limit feedback — 23 November 2026
+- Photo Studio now explicitly reports when selected images exceed the 12-photo batch limit, in addition to reporting non-image files skipped. A cancelled file picker no longer displays a misleading queue-limit message.
+- Accepted files remain queued and capped as before; this is feedback only and does not alter uploads. CI pending.
