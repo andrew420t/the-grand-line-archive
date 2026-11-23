@@ -1,3 +1,32 @@
+export function validateManualCardCrop(crop, imageWidth, imageHeight) {
+  if (!crop || !Number.isFinite(imageWidth) || !Number.isFinite(imageHeight) || imageWidth <= 0 || imageHeight <= 0) return null
+  const values = [crop.x, crop.y, crop.width, crop.height].map(Number)
+  if (!values.every(Number.isFinite)) return null
+  const [x, y, width, height] = values
+  if (x < 0 || y < 0 || width <= 0 || height <= 0 || x + width > 1 || y + height > 1) return null
+  // Reject tiny selections: they are unlikely to contain the whole card and
+  // can amplify background/noise into misleading OCR.
+  if (width < 0.12 || height < 0.12) return null
+  return {
+    x: Math.round(x * imageWidth),
+    y: Math.round(y * imageHeight),
+    width: Math.max(1, Math.round(width * imageWidth)),
+    height: Math.max(1, Math.round(height * imageHeight)),
+  }
+}
+
+function createManualCropCanvas(image, crop) {
+  const bounds = validateManualCardCrop(crop, image.width, image.height)
+  if (!bounds) throw new Error('The manual card crop is invalid. Select a larger rectangle fully inside the photograph.')
+  const canvas = document.createElement('canvas')
+  canvas.width = bounds.width
+  canvas.height = bounds.height
+  const context = canvas.getContext('2d')
+  if (!context) throw new Error('Canvas image processing is unavailable.')
+  context.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height, 0, 0, bounds.width, bounds.height)
+  return canvas
+}
+
 export function calculateAdaptiveContrastBounds(histogram, totalPixels) {
   if (!histogram?.length || !totalPixels) return null
   const percentileCount = Math.max(1, Math.round(totalPixels * 0.04))
@@ -113,7 +142,7 @@ async function createEnhancedCrop(image, zone, filename) {
   return output
 }
 
-export async function prepareCardNumberRegions(file) {
+export async function prepareCardNumberRegions(file, manualCrop = null) {
   if (!file?.type?.startsWith('image/')) throw new Error('Choose a supported card photograph.')
   const sourceUrl = URL.createObjectURL(file)
   try {
@@ -124,15 +153,16 @@ export async function prepareCardNumberRegions(file) {
       element.src = sourceUrl
     })
 
+    const scanImage = manualCrop ? createManualCropCanvas(image, manualCrop) : image
     const regions = await Promise.all(CROP_ZONES.map(async (zone, index) => ({
       label: zone.label,
-      file: await createEnhancedCrop(image, zone, `card-number-region-${index + 1}.jpg`),
+      file: await createEnhancedCrop(scanImage, zone, `card-number-region-${index + 1}.jpg`),
     })))
 
     // For sideways/upside-down photos, rotate the image and OCR only its footer band.
     // This avoids quadrupling the expensive focused-crop OCR work.
     const orientationRegions = await Promise.all(CARD_NUMBER_SCAN_ROTATIONS.map(async (rotation) => {
-      const oriented = createRotatedImageCanvas(image, rotation)
+      const oriented = createRotatedImageCanvas(scanImage, rotation)
       return {
         label: `Footer after ${rotation}° rotation`,
         file: await createEnhancedCrop(oriented, { x: 0, y: 0.65, width: 1, height: 0.35 }, `card-number-rotation-${rotation}.jpg`),
