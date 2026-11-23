@@ -34,7 +34,9 @@ Test several physical cards, not only screenshots:
 - [ ] Japanese card with a clear card number.
 - [ ] OP, EB, and promotional card layouts where available.
 - [ ] DON!! card with a catalogue sample image; confirm it is attributed to its source set where available, and does not show a pseudo card-number suffix or an unassigned-product label.
-- [ ] Enable the scanner manual crop; drag-select in both directions (top-left to bottom-right and reverse), adjust percentage fields, and reset to the full photo. Confirm the selected region is clear, surrounding area is dimmed, and the original image is unchanged.
+- [ ] Enable the required scanner crop; drag-select in both directions (top-left to bottom-right and reverse), adjust percentage fields, and reset to the full photo. Confirm scanning remains locked until a selection is made and explicitly confirmed, and that changing the crop/photo/toggle clears the confirmation.
+- [ ] Confirm the crop is validated against normalized bounds and a 64-pixel minimum on each source dimension; tiny source/crop combinations must be rejected before OCR, not silently enlarged into confident-looking text.
+- [ ] Confirm both number-area OCR and supporting full-card OCR use only the confirmed crop. The whole-frame OCR fallback must not be available; manual card-number search remains available.
 - [ ] Test drag-selection with mouse, touch, and pen where available; verify pointer capture keeps the selection stable if the pointer exits the preview, and test selections touching each photo edge.
 - [ ] Test a narrow/mobile viewport and a desktop viewport; confirm the preview's displayed aspect ratio matches the original photo and selection coordinates crop the intended pixels.
 - [ ] Confirm the selected crop is used for both card-number OCR and supporting full-card text OCR, while the original photo remains the one saved to recognition memory.
