@@ -924,3 +924,20 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Added regression tests for the 10×10 edge crop that previously rounded to an 11-pixel extent and for a 1×1 source image. These tests have been committed; exact-head CI is pending.
 
 - Follow-up review extended the same rounding protection to OCR's built-in footer/number-zone crops: crop origins and dimensions are clamped against the source image, preventing region scans from reading outside bounds on small or odd-sized photos. Exact-head CI for this follow-up is pending.
+
+
+### Confirmed crop gate added — 23 November 2026
+
+- Identified a safety gap in the existing manual-crop fallback: it was optional, and the scanner's number regions could still be derived from the full camera frame when it was off. This reproduced the earlier card-boundary risk in the default path.
+- On PR #26 only, changed scanner OCR to require the user to enable crop, make a drag or numeric selection, and explicitly confirm that the full card is inside the selection. Scan and Rescan remain disabled until that gate is satisfied. The confirmation is cleared when the photo changes, crop changes, or the crop toggle is switched.
+- Both number-region OCR and supporting full-card OCR now always use the confirmed crop. The crop helper rejects unconfirmed, out-of-bounds, normalized-small, and under-64-pixel source crops. Manual card-number lookup remains available without OCR. This is a human-confirmed crop workflow—not automatic card-edge detection, perspective correction, or proof that the selected rectangle contains a card.
+- Added unit coverage for the confirmation guard and source-pixel minimum; updated manual staging checklist for crop locking, reset/reconfirmation, reverse-direction/touch/edge selection, and both OCR paths.
+- First exact-head CI run #472 (ID `45211378371`) on `743954f9627fe74b6d182a2ca0f655002240a624` failed tests (99/100 passed). The single failure was an outdated test assertion still comparing the corrected crop to 10-pixel image bounds after the test dimensions had changed; implementation tests passed. Corrected the assertion in commit `80417c2d77f44b3b0b9325bd3ede877c1d757082`. Exact-head CI is pending; do not mark this change passed until it completes.
+- No deployment, production database/inventory/customer/order changes, or merge.
+
+### Official image direct-load retries — 23 November 2026
+
+- Retried direct official Bandai image paths through the browser-rendering route. OP17 sample images (EN/JP EB04-007_p2 and EB04-061_p2/p3) all returned inaccessible errors; no change to OP17's 0/4 official image-load status.
+- Japanese EB01-002 rendered successfully; Japanese EB01-001 still returned an Internal Error. Japanese EB02 sample paths EB01-001_p2 and EB01-021_p2 both remained inaccessible. English EB01-001 rendered successfully. These retries corroborate the earlier 94/100 image-load count; they do not raise the count because the already-successful paths were previously recorded.
+- Image-load status remains 94/100 PASS, 2/100 retrieval errors (Japanese EB01-001 and EB02's Japanese EB01-001_p2), 4/100 unverified (OP17). Official cardlist/image routes remain partially blocked by the browser tool. No images were sent to OCR.
+- Re-attempted the Wrangler-name-derived Worker root and `/shop`; both were inaccessible through the browser tool. Treat production/live UI as unverified, not a deployment failure.
