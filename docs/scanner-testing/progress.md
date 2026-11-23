@@ -707,3 +707,43 @@ The official Bandai PRB pages showed the English PRB01 OP01-006 sample as OP01-0
 - PR #26 remains open and unmerged. This run did not merge or deploy it.
 - Rechecked the production Worker root and `/shop`; both remain inaccessible through the browser tool, with `/shop` returning DisabledError. Live UI behaviour and deployed code version remain unverified.
 - Tried downloading an official Bandai card image directly into the local OCR runtime; download failed. Therefore official browser-rendered images remain visual-load checks only, not OCR test inputs.
+
+
+## Reproduction of PR #26 card-boundary failure on Saint Shamrock photo — 23 November 2026
+
+The user's original 1152 × 2048 photo was re-tested against the current PR #26 crop geometry and detectForegroundCardBounds() implementation.
+
+### Exact number-region geometry
+The four upright crops in prepareCardNumberRegions() are calculated against the entire camera frame, not a detected card rectangle:
+- Bottom-left: x=0–829, y=1475–2048.
+- Bottom-right: x=323–1152, y=1475–2048.
+- Full bottom edge: x=0–1152, y=1352–2048.
+- Lower-centre: x=138–1014, y=1270–2048.
+
+The physical card face in this photograph is approximately x=103–738, y=334–1178. Therefore all four upright number crops begin below the card face and have zero card-face overlap. The rotated footer bands do not recover the lower-right number area either: 90° maps the footer band to source x>749 (outside the card's right edge); 180° maps it to source y<717 (upper portion, not the footer); 270° maps it to source x<403 (left portion, not the lower-right footer). Re-running Tesseract 5.5.0 on the seven PR-style crops produced noisy background/card fragments only; none contained a valid OP/EB/ST/PRB/P- number candidate.
+
+### Existing foreground detector also rejects this photograph
+Reproduced the current detectForegroundCardBounds() corner sampling on the original pixels:
+- Top-left corner mean RGB: (219.8, 211.0, 197.2)
+- Top-right: (208.6, 201.3, 186.1)
+- Bottom-left: (172.7, 109.9, 81.5) — hand/fingers enter this corner
+- Bottom-right: (182.4, 173.0, 164.0)
+- Current average background estimate: (195.9, 173.8, 157.2)
+- Maximum corner deviation: 101.7, exceeding the hard rejection threshold of 42.
+
+So detectForegroundCardBounds() returns null on this exact user photo before connected-component bounds are considered. A median/three-corner background estimate avoids that first rejection, but the hand and card/holder form a large connected foreground region extending to the bottom of the frame; the largest-component bounding box is still not a card-only rectangle. This is a confirmed limitation of the current simple foreground detector on a card held in-hand.
+
+### Corrective requirement
+The scanner must first obtain a trustworthy card rectangle before computing footer OCR regions. Recommended safe behaviour:
+1. Try automatic card-boundary/quad detection and validate aspect ratio and confidence.
+2. If the detector cannot isolate the card (for example, a hand touches the card), show a simple manual crop/align step rather than running footer OCR against the whole scene.
+3. Generate number/title/detail OCR regions only inside the validated card crop.
+4. If the crop still cannot expose a readable number, keep OCR uncertain and use manual number search/candidate confirmation; never auto-confirm from a weak match.
+
+This is a reproduced physical-photo failure, not a CI failure. It does not imply all close-cropped card photos fail.
+
+### Latest repository / CI state
+- master currently points to 70029519438f2a15e6030523104325552d60674a (shared card-recognition memory commit).
+- PR #26 (feature/scanner-number-first-verification) is open and unmerged; current head e77d953603e1b78d9e851badbaa6c800d9b84a17.
+- GitHub Actions run #415 (45172660447) on that exact PR head completed successfully on 23 November 2026: dependency install, tests, lint, and production build all passed.
+- Passing CI does not change the physical-photo failure above. The production Worker still cannot be fetched by the available browser route, so deployed version and live scanner UI remain unverified.
