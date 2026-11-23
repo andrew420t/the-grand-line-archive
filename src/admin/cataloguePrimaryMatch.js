@@ -19,10 +19,12 @@ export function selectPrimaryCatalogueMatch(matches = [], { language = '', print
     // A set-only product defaults to the normal/base printing rather than
     // accidentally showing a parallel/alternate variant from the same set.
     const requestedVariant = variantLabel || (setCode ? 'normal' : '')
-    const exactIdentity = withImages.filter((match) =>
-      (!setCode || normalizeSet(match.setCode) === normalizeSet(setCode)) &&
-      (!requestedVariant || normalizeVariant(match.variantLabel || match.variant) === normalizeVariant(requestedVariant))
-    )
+    const exactIdentity = withImages.filter((match) => {
+      const candidateSet = match.setCode || match.set_code || match.sourceSetCode || ''
+      const candidateVariant = match.variantLabel || match.variant || match.rarityLabel || ''
+      return (!setCode || normalizeSet(candidateSet) === normalizeSet(setCode)) &&
+        (!requestedVariant || normalizeVariant(candidateVariant) === normalizeVariant(requestedVariant))
+    })
     return exactIdentity.find((match) => preferredCode && match.languageCode === preferredCode)
       || exactIdentity[0]
       || null
