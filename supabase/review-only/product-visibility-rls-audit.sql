@@ -174,3 +174,12 @@ WHERE table_schema = 'public'
   AND table_name IN ('orders', 'order_items')
   AND grantee IN ('anon', 'authenticated', 'PUBLIC')
 ORDER BY table_name, grantee, column_name, privilege_type;
+
+-- 12. Column-level grants on product images/site settings as well; table grants
+-- alone can miss column-specific access paths.
+SELECT grantee, table_name, column_name, privilege_type, is_grantable
+FROM information_schema.role_column_grants
+WHERE table_schema = 'public'
+  AND table_name IN ('product_images', 'site_settings', 'card_catalogue_overrides', 'don_card_set_overrides')
+  AND grantee IN ('anon', 'authenticated', 'PUBLIC')
+ORDER BY table_name, grantee, column_name, privilege_type;
