@@ -72,7 +72,8 @@ export default function CardScanner({
 
   useEffect(() => {
     setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 })
-    clearCropConfirmation()
+    setManualCropConfirmed(false)
+    setManualCropConfirmedForFile(null)
     setManualCropSelectionMade(false)
   }, [frontPhoto?.file])
 
@@ -484,7 +485,7 @@ export default function CardScanner({
             ))}
             <button className="button button--quiet" type="button" disabled={scanning} onClick={() => { setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 }); clearCropConfirmation(); setManualCropSelectionMade(false) }}>Reset full photo</button>
             <p className="scanner-manual-crop__note">{manualCropGeometryIsValid ? 'Crop dimensions are valid. Visually verify that all card edges are inside this area.' : 'Select a larger area: width and height must each be at least 12%, and the crop must stay within the photo.'}</p>
-            <label className="scanner-manual-crop__confirm"><input type="checkbox" checked={manualCropConfirmed} disabled={scanning || !manualCropGeometryIsValid || !manualCropSelectionMade} onChange={(event) => { setManualCropConfirmed(event.target.checked); setManualCropConfirmedForFile(event.target.checked ? frontPhoto?.file : null) }} /><span>I confirm the crop contains the entire card and avoids unrelated background.</span></label>
+            <label className="scanner-manual-crop__confirm"><input type="checkbox" checked={manualCropConfirmed} disabled={scanning || !frontPhoto || !manualCropGeometryIsValid || !manualCropSelectionMade} onChange={(event) => { setManualCropConfirmed(event.target.checked); setManualCropConfirmedForFile(event.target.checked ? frontPhoto.file : null) }} /><span>I confirm the crop contains the entire card and avoids unrelated background.</span></label>
           </div>
         )}
         {!manualCropEnabled && <p className="scanner-manual-crop__required-note">Scanning is locked until you enable the crop, select the card area, and confirm it.</p>}
