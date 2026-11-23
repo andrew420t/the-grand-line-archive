@@ -12,6 +12,7 @@ test('links standard set codes to official Bandai lists', () => {
 test('uses Japanese official list and separate DON!! source', () => {
   assert.equal(getOfficialCardlistUrl('OP-18', 'jp'), 'https://www.onepiece-cardgame.com/cardlist/?series=550118')
   assert.equal(getOfficialCardlistUrl('', 'jp', true), 'https://www.onepiece-cardgame.com/pdf/don-cardlist.pdf')
+  assert.equal(getOfficialCardlistUrl('DON!!', 'en', true), 'https://www.onepiece-cardgame.com/pdf/don-cardlist.pdf')
 })
 
 test('does not guess combined set series mappings', () => {
