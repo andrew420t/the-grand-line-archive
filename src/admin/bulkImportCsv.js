@@ -107,3 +107,9 @@ export function preferCatalogueValue(value, fallback) {
 export function hasExtendedCardValues(values = []) {
   return values.some((value) => value !== undefined && value !== null && String(value).trim() !== '')
 }
+
+export const BULK_IMPORT_TEMPLATE_HEADERS = ["name","card_number","set_code","rarity","variant_label","color","power","cost","card_type","classification","language","condition","price_gbp","stock_quantity","category_name","description","effect_text","counter","trigger_text","attributes"]
+
+export function buildBulkImportTemplateCsv() {
+  return `${BULK_IMPORT_TEMPLATE_HEADERS.join(',')}\n`
+}
