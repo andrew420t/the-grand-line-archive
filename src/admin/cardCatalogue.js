@@ -15,6 +15,8 @@ const normalizeCardNumber = (value) =>
     .replace(/-+/g, '-')
     .trim()
 
+const normalizeSearchText = (value) => String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
+
 const baseCardNumber = (value) => {
   const normalized = normalizeCardNumber(value)
   return normalized.match(/^(?:(?:OP|EB|ST|PRB)\d{1,2}|P)-\d{3}/)?.[0] || ''
@@ -136,7 +138,7 @@ export async function findCatalogueMatches(cardNumber) {
   for (const card of matchingCards) {
     for (const language of LANGUAGES) {
       const data = catalogue.languages[language]
-      const index = catalogue.indexes[language]
+      const index = catalogue.indexes?.[language] || {}
       const observations = safeMapGet(index.observationsByCard, card.key) || []
       const observation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest,
@@ -375,6 +377,9 @@ export async function getCatalogueCoverageReport() {
     printings: 0,
     withOfficialImage: 0,
     withoutImageLocator: 0,
+    missingImageTotal: 0,
+    missingImageBySet: {},
+    missingImageByLanguage: {},
     languages: {},
     sets: {},
     unassigned: { printings: 0, withImage: 0, withoutImage: 0, withoutImageBySite: {} },
@@ -383,14 +388,17 @@ export async function getCatalogueCoverageReport() {
     checkedAt: new Date().toISOString(),
   }
   for (const language of LANGUAGES) {
-    const data = catalogue.languages[language]
-    const index = catalogue.indexes[language]
+    const data = catalogue.languages?.[language] || { printings: [] }
+    const index = catalogue.indexes?.[language] || {}
     report.languages[language] = { printings: data.printings.length, withImage: 0, withoutImage: 0 }
     for (const printing of data.printings) {
       report.printings += 1
       const locator = safeMapGet(index.locatorsByPrinting, printing.key + ':' + printing.site)
-      const official = locator?.image_id && (printing.site === 'en' || printing.site === 'jp')
-      const image = official || printing.image_url
+      const hasOfficialImage = Boolean(locator?.image_id && (printing.site === 'en' || printing.site === 'jp'))
+      const imageUrl = hasOfficialImage
+        ? (printing.site === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
+        : String(printing.image_url || '')
+      const hasImage = Boolean(imageUrl)
       const products = safeMapGet(index.printingProductsByPrinting, printing.key) || []
       const linkedProducts = products
         .map((link) => safeMapGet(index.productsByKey, link.product_key))
@@ -398,43 +406,54 @@ export async function getCatalogueCoverageReport() {
       const setCodes = [...new Set(linkedProducts.map((product) => product.code).filter(Boolean))]
       const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
       const cardNumber = card?.number || ''
-      if (image) {
-        report.withOfficialImage += official ? 1 : 0
+      const observations = safeMapGet(index.observationsByCard, printing.card_key) || []
+      const observation = observations.reduce((latest, item) =>
+        !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
+      const setLabels = setCodes.length ? setCodes.map(formatSetCode) : ['Unassigned']
+
+      if (hasImage) {
+        if (hasOfficialImage) report.withOfficialImage += 1
         report.languages[language].withImage += 1
       } else {
         report.withoutImageLocator += 1
         report.languages[language].withoutImage += 1
-      }
-
-      if (!setCodes.length) {
-        report.unassigned.printings += 1
-        if (image) report.unassigned.withImage += 1
-        else {
-          report.unassigned.withoutImage += 1
-          const site = printing.site || 'unknown'
-          report.unassigned.withoutImageBySite[site] = (report.unassigned.withoutImageBySite[site] || 0) + 1
+        report.missingImageTotal += 1
+        report.missingImageByLanguage[language] = (report.missingImageByLanguage[language] || 0) + 1
+        for (const setCode of setLabels) report.missingImageBySet[setCode] = (report.missingImageBySet[setCode] || 0) + 1
+        // Keep a useful bounded sample for the admin screen while preserving the full missing total.
+        if (report.missingImageSamples.length < 250) {
           report.missingImageSamples.push({
             cardNumber,
-            name: '',
+            name: observation?.name || '',
             language,
             printingKey: printing.key || '',
-            sourceSite: site,
+            sourceSite: printing.site || 'unknown',
             rarity: printing.rarity || '',
             variant: printing.variant || '',
+            setCode: setLabels.join(', '),
             hasProductLink: products.length > 0,
             linkedProductCodes: setCodes,
             hasOfficialLocator: Boolean(locator?.image_id),
             imageUrl: printing.image_url || '',
-            numberPrefixHint: cardNumber.match(/^(OP\d{2}|EB\d{2}|ST\d{2}|PRB\d{2}|P)-/)?.[1] || '',
+            numberPrefixHint: cardNumber.match(/^(OP\\d{2}|EB\\d{2}|ST\\d{2}|PRB\\d{2}|P)-/)?.[1] || '',
           })
         }
       }
 
-      for (const code of setCodes.length ? setCodes : ['Unassigned']) {
-        const setCode = formatSetCode(code)
+      if (!setCodes.length) {
+        report.unassigned.printings += 1
+        if (hasImage) report.unassigned.withImage += 1
+        else {
+          report.unassigned.withoutImage += 1
+          const site = printing.site || 'unknown'
+          report.unassigned.withoutImageBySite[site] = (report.unassigned.withoutImageBySite[site] || 0) + 1
+        }
+      }
+
+      for (const setCode of setLabels) {
         const entry = report.sets[setCode] || { printings: 0, withImage: 0, withoutImage: 0 }
         entry.printings += 1
-        if (image) entry.withImage += 1
+        if (hasImage) entry.withImage += 1
         else entry.withoutImage += 1
         report.sets[setCode] = entry
       }
@@ -472,13 +491,13 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
     }
   }
   entries.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.language.localeCompare(b.language) || a.id.localeCompare(b.id))
-  const normalizedQuery = normalizeCardNumber(query)
+  const normalizedQuery = normalizeSearchText(query)
   const filtered = entries.filter((entry) => {
     if (language !== 'all' && entry.language !== language) return false
     if (!normalizedQuery) return true
-    return normalizeCardNumber(entry.cardNumber).includes(normalizedQuery)
-      || String(entry.name || '').toUpperCase().includes(String(query || '').trim().toUpperCase())
-      || String(entry.setCode || '').toUpperCase().includes(String(query || '').trim().toUpperCase())
+    return normalizeSearchText(entry.cardNumber).includes(normalizedQuery)
+      || normalizeSearchText(entry.name).includes(normalizedQuery)
+      || normalizeSearchText(entry.setCode).includes(normalizedQuery)
   })
   const start = Math.max(0, Number(offset) || 0)
   const pageSize = Math.min(120, Math.max(1, Number(limit) || 60))
