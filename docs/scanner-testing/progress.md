@@ -1022,3 +1022,8 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 
 ## Latest PR-head automated verification
 - PR #26 head `6f859959c9b4c64b6e3e984797de54e1bb12d86c` verified by GitHub Actions run **45218303830** (`build-and-test`): dependency install, test suite, lint, and production build all completed successfully. This is code CI only; no live Supabase or physical-card/browser testing was performed.
+
+## Number-first ranking review (latest code change; CI pending)
+- Review found that aggregated OCR candidate matches were annotated with printed-number evidence but sorted primarily by supporting name/language OCR. This could let a name match outrank a repeated, higher-confidence card-number reading.
+- Ranking now prioritizes whether number evidence exists, then occurrence count and confidence, with name/language and remembered-image signals used as supporting tie-breakers. Added regression tests for contradictory name/language signals and evidence-strength ordering.
+- The code change and tests are committed; automated CI must complete on the exact new head before considering this correction verified.
