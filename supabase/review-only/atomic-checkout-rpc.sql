@@ -170,10 +170,15 @@ BEGIN
     RAISE EXCEPTION 'Cancelled orders cannot be reopened through this routine.';
   END IF;
 
+  IF NOT (
+    (lower(v_current_status) = 'pending' AND lower(trim(p_new_status)) IN ('processing', 'cancelled')) OR
+    (lower(v_current_status) = 'processing' AND lower(trim(p_new_status)) IN ('shipped', 'cancelled')) OR
+    (lower(v_current_status) = 'shipped' AND lower(trim(p_new_status)) = 'completed')
+  ) THEN
+    RAISE EXCEPTION 'Invalid order status transition from % to %.', v_current_status, p_new_status;
+  END IF;
+
   IF lower(trim(p_new_status)) = 'cancelled' THEN
-    IF lower(v_current_status) NOT IN ('pending', 'processing') THEN
-      RAISE EXCEPTION 'Only pending or processing orders can be cancelled and restocked.';
-    END IF;
 
     UPDATE public.orders SET status = 'cancelled' WHERE id = p_order_id;
 
