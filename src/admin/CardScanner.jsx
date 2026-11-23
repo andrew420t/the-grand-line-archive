@@ -411,7 +411,7 @@ export default function CardScanner({
           >
             <img src={frontPhoto.previewUrl} alt="Photo to crop for OCR" draggable="false" />
             <div className="scanner-manual-crop__shade" style={{
-              clipPath: `polygon(0 0, 100% 0, 100% ${manualCropPercent.y}%, ${manualCropPercent.x + manualCropPercent.width}% ${manualCropPercent.y}%, ${manualCropPercent.x + manualCropPercent.width}% ${manualCropPercent.y + manualCropPercent.height}%, ${manualCropPercent.x}% ${manualCropPercent.y + manualCropPercent.height}%, ${manualCropPercent.x}% ${manualCropPercent.y}%, 0 ${manualCropPercent.y}%)`,
+              clipPath: `polygon(0 0, 100% 0, 100% ${manualCropPercent.y}%, ${Number(manualCropPercent.x) + Number(manualCropPercent.width)}% ${manualCropPercent.y}%, ${Number(manualCropPercent.x) + Number(manualCropPercent.width)}% ${Number(manualCropPercent.y) + Number(manualCropPercent.height)}%, ${manualCropPercent.x}% ${Number(manualCropPercent.y) + Number(manualCropPercent.height)}%, ${manualCropPercent.x}% ${manualCropPercent.y}%, 0 ${manualCropPercent.y}%)`,
             }} />
             <div className="scanner-manual-crop__selection" style={{
               left: manualCropPercent.x + '%',
