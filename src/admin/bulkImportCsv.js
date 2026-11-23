@@ -21,7 +21,7 @@ export function parseCsv(text) {
       cell = ''
       quoted = true
     } else if (char === ',') { row.push(cell); cell = '' }
-    else if (char === '\n') { row.push(cell.replace(/\r$/, '')); rows.push(row); row = []; cell = '' }
+    else if (char === '\n') { row.push(cell.replace(/\r$/, '')); if (row.some((value) => value.trim()) || rows.length === 0) rows.push(row); row = []; cell = '' }
     else cell += char
   }
   if (quoted) throw new Error('CSV contains an unmatched quote. Check the file formatting and try again.')
