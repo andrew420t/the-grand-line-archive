@@ -7,6 +7,10 @@ export const EXTENDED_CARD_COLUMNS = [
   'language',
   'classification',
   'variant_label',
+  'catalogue_match_id',
+  'catalogue_printing_key',
+  'catalogue_reference_image_url',
+  'catalogue_reference_image_source',
 ]
 
 const slugify = (value) =>
@@ -53,6 +57,10 @@ export function buildNewProductPayload(form, setId, includeCardDetails) {
       language: form.language.trim() || null,
       classification: form.classification.trim() || null,
       variant_label: form.variant_label.trim() || null,
+      catalogue_match_id: form.catalogue_match_id.trim() || null,
+      catalogue_printing_key: form.catalogue_printing_key.trim() || null,
+      catalogue_reference_image_url: form.catalogue_reference_image_url.trim() || null,
+      catalogue_reference_image_source: form.catalogue_reference_image_source.trim() || null,
     })
   }
 
