@@ -563,7 +563,7 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
       const setOverride = isDon ? donOverrides[printing.key + ':' + language] : null
       const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
       const sourceSetCodes = donSourceSet?.set_codes?.length ? donSourceSet.set_codes : donSourceSet?.set_code ? [donSourceSet.set_code] : []
-      const setCode = formatSetCode(setOverride?.set_code || (sourceSetCodes.length === 1 ? sourceSetCodes[0] : '') || product?.code || '')
+      const setCode = formatSetCode(setOverride?.set_code || (donSourceSet ? (sourceSetCodes.length === 1 ? sourceSetCodes[0] : '') : product?.code || ''))
       const displaySetCodes = setOverride?.set_code ? [setOverride.set_code] : sourceSetCodes.length ? sourceSetCodes : product?.code ? [product.code] : []
       const formattedSetCodes = displaySetCodes.map(formatSetCode)
       const setName = setOverride
