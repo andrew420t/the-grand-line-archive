@@ -4,11 +4,10 @@ import { supabase } from '../lib/supabase'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS, resolveSetIdForCode } from './productSchema'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
-import { parseCsv, isBulkImportDuplicate, validateBulkImportNumericFields, preferCatalogueValue, hasExtendedCardValues } from './bulkImportCsv'
+import { parseCsv, isBulkImportDuplicate, validateBulkImportNumericFields, preferCatalogueValue, hasExtendedCardValues, buildBulkImportTemplateCsv } from './bulkImportCsv'
 
-const TEMPLATE_HEADERS = ['name','card_number','set_code','rarity','variant_label','color','power','cost','card_type','classification','language','condition','price_gbp','stock_quantity','category_name','description','effect_text','counter','trigger_text','attributes']
 function downloadTemplate() {
-  const url = URL.createObjectURL(new Blob([TEMPLATE_HEADERS.join(',') + '      name: preferCatalogueValue(details.name, item.name),n'], { type: 'text/csv;charset=utf-8' }))
+  const url = URL.createObjectURL(new Blob([buildBulkImportTemplateCsv()], { type: 'text/csv;charset=utf-8' }))
   const link = document.createElement('a')
   link.href = url
   link.download = 'grand-line-archive-import-template.csv'
