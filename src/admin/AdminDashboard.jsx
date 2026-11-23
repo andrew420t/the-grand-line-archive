@@ -660,7 +660,7 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
           <input aria-label={field.label} required={field.required} type={field.numeric ? 'number' : 'text'} min={field.numeric ? '0' : undefined} step={field.key === 'price' ? '0.01' : field.numeric ? '1' : undefined} value={value ?? ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
         )}
         {['name', 'effect_text', 'classification'].includes(field.key) && (
-          <CatalogueLanguageButtons cardNumber={values.card_number || raw.card_number} fieldKey={field.key} onApply={(nextValue, language) => setValues((current) => ({ ...current, [field.key]: nextValue, language }))} />
+          <CatalogueLanguageButtons cardNumber={values.card_number || raw.card_number} fieldKey={field.key} onApply={(nextValue) => setValues((current) => ({ ...current, [field.key]: nextValue }))} />
         )}
       </div>
     )

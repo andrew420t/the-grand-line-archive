@@ -145,7 +145,7 @@ export default function CardScanner({
           setAutoMatchStatus('Catalogue verification was unavailable: ' + lookupError.message)
         }
       }
-      setStatus(data.text?.trim() ? 'Scan complete. Check every field before saving.' : 'No readable text found. Enter details manually or rescan.')
+      setStatus(combinedText.trim() ? 'Scan complete. Check every field before saving.' : 'No readable text found. Enter details manually or rescan.')
       setProgress(100)
     } catch (scanError) {
       setError(`OCR could not read this photograph: ${scanError.message}`)

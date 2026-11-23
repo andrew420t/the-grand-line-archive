@@ -219,3 +219,27 @@ export async function getRecognitionMemoryStats() {
     db.close();
   }
 }
+
+
+/**
+ * Returns a previously confirmed photograph for this exact catalogue printing.
+ * It deliberately does not fall back by card number alone: language, set and
+ * parallel-printing identity are part of the printing ID.
+ */
+export async function getRememberedCardImageForPrinting(printingId) {
+  if (!printingId) return null;
+  const db = await openDatabase();
+  try {
+    const records = await new Promise((resolve, reject) => {
+      const request = db.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME).getAll();
+      request.onsuccess = () => resolve(request.result || []);
+      request.onerror = () => reject(request.error || new Error('Could not read recognition memory.'));
+    });
+    const record = records
+      .filter((item) => item.printingId === printingId && item.image)
+      .sort((a, b) => b.savedAt - a.savedAt)[0];
+    return record?.image || null;
+  } finally {
+    db.close();
+  }
+}

@@ -38,7 +38,7 @@ export default function CatalogueLanguageButtons({ cardNumber, fieldKey, onApply
 
   return (
     <div className="catalogue-language-tools">
-      <span>Use card text:</span>
+      <span>Set this field to:</span>
       <button className="text-button" type="button" disabled={Boolean(loading)} onClick={() => chooseLanguage('en')}>{loading === 'en' ? 'Loading English…' : 'English'}</button>
       <button className="text-button" type="button" disabled={Boolean(loading)} onClick={() => chooseLanguage('jp')}>{loading === 'jp' ? 'Loading Japanese…' : 'Japanese'}</button>
       {error && <small className="form-error" role="status">{error}</small>}
