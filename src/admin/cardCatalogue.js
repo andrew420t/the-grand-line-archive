@@ -120,6 +120,20 @@ async function getCatalogue() {
 
 const value = (item, key) => item?.[key] ?? ''
 
+// TCGCSV may contain an extra stamped/foil printing without its own usable
+// image locator. Reuse the canonical Bandai image for the same card number as
+// a clearly-labelled identification fallback; it may not show the stamp.
+function findOfficialBaseImage(index, printings, cardKey, language) {
+  for (const candidate of printings || []) {
+    if (candidate.card_key !== cardKey || candidate.site !== language) continue
+    const locator = safeMapGet(index?.locatorsByPrinting, candidate.key + ':' + candidate.site)
+    if (!locator?.image_id) continue
+    const host = language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com'
+    return host + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
+  }
+  return ''
+}
+
 // Catalogue data can be partially unavailable during a failed/older cache load.
 // Treat absent indexes as empty rather than crashing the entire Image Library.
 const safeMapGet = (map, key) => map instanceof Map ? map.get(key) : undefined
@@ -152,7 +166,9 @@ export async function findCatalogueMatches(cardNumber) {
           ? `https://en.onepiece-cardgame.com/images/cardlist/card/${encodeURIComponent(locator.image_id)}.png`
           : locator?.site === 'jp'
             ? `https://www.onepiece-cardgame.com/images/cardlist/card/${encodeURIComponent(locator.image_id)}.png`
-            : ''
+            : printing.site === 'tcgcsv'
+              ? findOfficialBaseImage(index, data.printings, card.key, language)
+              : ''
         const productLinks = safeMapGet(index.printingProductsByPrinting, printing.key) || []
         const linkedProducts = productLinks
           .map((link) => safeMapGet(index.productsByKey, link.product_key))
@@ -191,7 +207,11 @@ export async function findCatalogueMatches(cardNumber) {
             releaseDate: value(product, 'release_date'),
             sourceUrl: value(product, 'product_url'),
             blockIcon: value(printing, 'block_icon'),
-            source: officialImageFallback ? (language === 'jp' ? 'Bandai official Japanese image' : 'Bandai official English image') : printing.site === 'tcgcsv' ? 'TCGplayer catalogue reference' : 'Koala Kollect catalogue reference',
+            source: officialImageFallback && printing.site === 'tcgcsv'
+              ? (language === 'jp' ? 'Bandai official Japanese base-card fallback (stamped artwork may differ)' : 'Bandai official English base-card fallback (stamped artwork may differ)')
+              : officialImageFallback
+                ? (language === 'jp' ? 'Bandai official Japanese image' : 'Bandai official English image')
+                : printing.site === 'tcgcsv' ? 'TCGplayer catalogue reference' : 'Koala Kollect catalogue reference',
           })
         }
       }
