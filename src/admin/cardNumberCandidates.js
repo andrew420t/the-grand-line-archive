@@ -21,11 +21,8 @@ export function extractCardNumberCandidates(readings = []) {
   const candidates = new Map()
   for (const reading of readings) {
     const text = String(reading.text || '')
-    CARD_NUMBER_PATTERN.lastIndex = 0
-    let match
-    while ((match = CARD_NUMBER_PATTERN.exec(text))) {
-      const number = normalizeCandidate(match[1], match[2], match[3])
-      if (!number) continue
+    const addCandidate = (number) => {
+      if (!number) return
       const existing = candidates.get(number) || {
         number,
         occurrences: 0,
@@ -36,6 +33,15 @@ export function extractCardNumberCandidates(readings = []) {
       existing.confidenceTotal += Math.max(0, Math.min(100, Number(reading.confidence) || 0))
       existing.sources.push(reading.label || 'OCR')
       candidates.set(number, existing)
+    }
+    CARD_NUMBER_PATTERN.lastIndex = 0
+    let match
+    while ((match = CARD_NUMBER_PATTERN.exec(text))) {
+      addCandidate(normalizeCandidate(match[1], match[2], match[3]))
+    }
+    PROMO_NUMBER_PATTERN.lastIndex = 0
+    while ((match = PROMO_NUMBER_PATTERN.exec(text))) {
+      addCandidate('P-' + match[1].toUpperCase().replace(/O/g, '0'))
     }
   }
   return [...candidates.values()]

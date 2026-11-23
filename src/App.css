@@ -3141,6 +3141,58 @@ h2 em {
   animation: spin 850ms linear infinite;
 }
 
+
+.scanner-number-readings {
+  margin: 15px 0;
+  padding: 16px;
+  background: #14130f;
+  border: 1px solid rgba(201, 168, 102, 0.24);
+}
+.scanner-number-readings h3 {
+  margin: 5px 0;
+  color: var(--cream);
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 400;
+}
+.scanner-number-readings p:not(.eyebrow) {
+  margin: 0;
+  color: #989181;
+  font-size: 10px;
+  line-height: 1.6;
+}
+.scanner-number-readings__list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 13px;
+}
+.scanner-number-readings__item {
+  min-width: 0;
+  display: grid;
+  gap: 5px;
+  padding: 10px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(201,168,102,0.12);
+}
+.scanner-number-readings__item strong {
+  color: var(--cream);
+  font-size: 10px;
+}
+.scanner-number-readings__item span {
+  color: #a99c7b;
+  font-size: 9px;
+}
+.scanner-number-readings__item code {
+  overflow-wrap: anywhere;
+  color: #c5b991;
+  font-size: 10px;
+  white-space: pre-wrap;
+}
+@media (max-width: 640px) {
+  .scanner-number-readings__list { grid-template-columns: 1fr; }
+}
+
 .scanner-photo-tools {
   margin: 15px 0;
   padding: 12px 14px;
