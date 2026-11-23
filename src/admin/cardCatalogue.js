@@ -191,7 +191,7 @@ export async function findCatalogueMatches(cardNumber) {
             sourceUrl: value(product, 'product_url'),
             blockIcon: value(printing, 'block_icon'),
             source: imageReference.source,
-            officialCardlistUrl: getOfficialCardlistUrl(setCode, language),
+            officialCardlistUrl: getOfficialCardlistUrl(setCode, language, false, card.number || ''),
           })
         }
       }
