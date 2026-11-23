@@ -916,3 +916,9 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - The crop is validated before scanning, selection minimums are enforced, and both focused number OCR and supporting full-card OCR use the selected crop. The original image remains unchanged for recognition memory/reference-photo purposes.
 - No new code issue found in this pass. **Still unverified:** touch/pointer behaviour on iOS/Safari and desktop browsers, reverse-direction drag, edge-touching selection, preview scaling, and a real physical-card OCR result. Added these as explicit staging checklist tests; CI cannot cover these browser/device behaviours.
 - Current PR #26 head: `7cfb7b3f67fa645bef28f551ca6294731be1d681`. Exact-head GitHub Actions run #456 (ID `45204894944`) passed tests, lint, and production build. PR remains open/unmerged; no deployment or production data change.
+
+
+### Crop pixel-boundary rounding fix — 23 November 2026
+
+- Code review found a rounding edge case: rounding normalized crop origin and size independently could extend the source rectangle one pixel past an image edge. The crop helper now clamps rounded origins and dimensions to the source image bounds, including tiny image dimensions.
+- Added regression tests for the 10×10 edge crop that previously rounded to an 11-pixel extent and for a 1×1 source image. These tests have been committed; exact-head CI is pending.
