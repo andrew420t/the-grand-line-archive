@@ -438,3 +438,7 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Wrapped the loader in catch/finally, reports the failure and clears stale catalogue/category/set state, and guarantees loading state resets. CI pending.
 
 - Order-status controls now serialize updates globally and disable all status dropdowns while one update is in flight, keeping the shared busy indicator accurate. CI pending.
+
+
+## Homepage settings load recovery audit — 23 November 2026
+- Website settings loading now catches unexpected Supabase/network exceptions and exposes a recoverable error instead of allowing the async callback to reject silently. CI pending.
