@@ -615,3 +615,5 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Added unit coverage for successful, zero-row, and database-error update responses. No live inventory, product, or database records were changed.
 
 - Follow-up audit also applied the confirmed-row check to the full product-edit form save, so every product update path in the admin inventory now distinguishes a successful affected-row update from a zero-row/RLS-denied response. CI verification pending.
+
+- Order-status updates now also verify the affected order ID and report zero-row/RLS-denied responses as failures rather than success. Added regression coverage for confirmed, missing-row and database-error outcomes. No live orders were changed; CI pending.
