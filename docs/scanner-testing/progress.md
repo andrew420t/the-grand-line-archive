@@ -484,3 +484,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Image Library now rejects file-selection additions while an upload batch is in progress and removes only the batch that actually uploaded, rather than clearing the entire queue.
 - Stock Photography now removes only the photo IDs in the successful upload snapshot. Photos added during the upload remain queued for the next batch.
 - This prevents new photos from being silently discarded when an upload is already running. CI pending; no storage or product data changed.
+
+
+## Camera capture reliability review — 23 November 2026
+- Added a synchronous capture lock so rapid taps cannot initiate overlapping camera captures before React updates the disabled state.
+- If camera startup/preview playback fails, the acquired stream is now stopped and the video element detached, preventing an error path from leaving camera tracks active.
+- Code-only safeguard; browser/device camera testing remains outstanding. No production or database changes. CI pending.
