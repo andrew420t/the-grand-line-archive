@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { selectPrimaryCatalogueMatch } from '../src/admin/cardCatalogue.js'
+import { selectPrimaryCatalogueMatch } from '../src/admin/cataloguePrimaryMatch.js'
 
 const matches = [
   { id: 'normal-en', printingKey: 'kaido-normal', cardNumber: 'OP17-062', languageCode: 'en', setCode: 'OP17', variantLabel: 'Normal', imageUrl: 'normal-en.jpg' },
