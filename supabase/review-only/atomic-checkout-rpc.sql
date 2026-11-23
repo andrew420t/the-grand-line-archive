@@ -130,4 +130,78 @@ GRANT EXECUTE ON FUNCTION public.create_order_atomic(jsonb) TO authenticated;
 -- adjust stock/order state, as double-decrementing would be harmful.
 -- Apply this proposal only after reviewing all schema, trigger, policy and
 -- lifecycle details in the target staging project.
+
+
+
+-- Admin order-status RPC: cancellation restores stock exactly once.
+-- A cancelled order is terminal; shipped/completed orders cannot be cancelled
+-- through this routine because automatic restocking would be unsafe.
+CREATE OR REPLACE FUNCTION public.update_order_status_atomic(p_order_id uuid, p_new_status text)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $function$
+DECLARE
+  v_current_status text;
+  v_item record;
+BEGIN
+  IF auth.uid() IS NULL OR NOT public.is_admin() THEN
+    RAISE EXCEPTION 'Administrator permission is required to update order status.';
+  END IF;
+
+  IF lower(trim(coalesce(p_new_status, ''))) NOT IN ('pending', 'processing', 'shipped', 'completed', 'cancelled') THEN
+    RAISE EXCEPTION 'Invalid order status.';
+  END IF;
+
+  SELECT status INTO v_current_status
+  FROM public.orders
+  WHERE id = p_order_id
+  FOR UPDATE;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Order was not found.';
+  END IF;
+
+  IF lower(v_current_status) = lower(trim(p_new_status)) THEN
+    RETURN p_order_id; -- idempotent retry; do not restock twice
+  END IF;
+
+  IF lower(v_current_status) = 'cancelled' THEN
+    RAISE EXCEPTION 'Cancelled orders cannot be reopened through this routine.';
+  END IF;
+
+  IF lower(trim(p_new_status)) = 'cancelled' THEN
+    IF lower(v_current_status) NOT IN ('pending', 'processing') THEN
+      RAISE EXCEPTION 'Only pending or processing orders can be cancelled and restocked.';
+    END IF;
+
+    UPDATE public.orders SET status = 'cancelled' WHERE id = p_order_id;
+
+    FOR v_item IN
+      SELECT product_id, SUM(quantity)::integer AS quantity
+      FROM public.order_items
+      WHERE order_id = p_order_id
+      GROUP BY product_id
+      ORDER BY product_id
+    LOOP
+      UPDATE public.products
+      SET stock_quantity = stock_quantity + v_item.quantity
+      WHERE id = v_item.product_id;
+      IF NOT FOUND THEN
+        RAISE EXCEPTION 'Could not restore stock for product %. Cancellation rolled back.', v_item.product_id;
+      END IF;
+    END LOOP;
+
+    RETURN p_order_id;
+  END IF;
+
+  UPDATE public.orders SET status = lower(trim(p_new_status)) WHERE id = p_order_id;
+  RETURN p_order_id;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.update_order_status_atomic(uuid, text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.update_order_status_atomic(uuid, text) FROM anon;
+GRANT EXECUTE ON FUNCTION public.update_order_status_atomic(uuid, text) TO authenticated;
+
 COMMIT;
