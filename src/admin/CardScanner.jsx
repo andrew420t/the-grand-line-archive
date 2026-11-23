@@ -177,7 +177,8 @@ export default function CardScanner({
             let rememberedId = ''
             if (rememberedImage?.cardNumber === topResolvedNumber) rememberedId = rememberedImage.printingId
             if (sharedRememberedImage?.cardNumber === topResolvedNumber) rememberedId = sharedRememberedImage.printingId
-            const ranked = rankCatalogueMatches(allMatches, parsed.name?.value, parsed.language?.value || recognitionLanguage, rememberedId)
+            const numberEvidence = Object.fromEntries(candidates.map((candidate) => [candidate.number, { occurrences: candidate.occurrences, confidence: candidate.confidence, sources: candidate.sources }]))
+            const ranked = rankCatalogueMatches(allMatches, parsed.name?.value, parsed.language?.value || recognitionLanguage, rememberedId, numberEvidence)
             const best = ranked[0]
             setRankedAutoMatches(ranked)
             setSelectedAutoMatchId(best.match.id)
@@ -443,7 +444,7 @@ export default function CardScanner({
                   {rankedAutoMatches.map(({ match, nameMatch, languageMatch }) => (
                     <button className={selectedAutoMatchId === match.id ? 'scanner-match-confirmation__option scanner-match-confirmation__option--selected' : 'scanner-match-confirmation__option'} type="button" key={match.id} onClick={() => setSelectedAutoMatchId(match.id)}>
                       <CatalogueReferenceImage match={match} className="scanner-match-confirmation__thumb" />
-                      <span><b>{match.name || 'Unknown card'}</b><small>{match.cardNumber} · {match.language} · {match.setCode || 'Set not listed'}</small>{match.setName && <small>{match.setName}</small>}<small>{match.rarity || 'Rarity unknown'} · {match.variantLabel || match.variant || 'Base version'}</small><small>{nameMatch ? 'Name match' : 'Name differs'} · {languageMatch ? 'Language match' : 'Language differs'}</small></span>
+                      <span><b>{match.name || 'Unknown card'}</b><small>{match.cardNumber} · {match.language} · {match.setCode || 'Set not listed'}</small>{match.setName && <small>{match.setName}</small>}<small>{match.rarity || 'Rarity unknown'} · {match.variantLabel || match.variant || 'Base version'}</small><small>{nameMatch ? 'Name match' : 'Name differs'} · {languageMatch ? 'Language match' : 'Language differs'}</small><small>{rankedAutoMatches.find((item) => item.match.id === match.id)?.numberEvidence ? `OCR number: ${rankedAutoMatches.find((item) => item.match.id === match.id).numberEvidence.occurrences} reading(s), ${rankedAutoMatches.find((item) => item.match.id === match.id).numberEvidence.confidence}% average confidence` : 'Number reading not independently corroborated'}</small></span>
                     </button>
                   ))}
                 </div>
