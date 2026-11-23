@@ -23,6 +23,28 @@ export function enhanceGrayValue(gray, bounds) {
   return Math.max(0, Math.min(255, Math.round((gray - 112) * 1.8 + 128)))
 }
 
+
+// Mild unsharp masking restores edges softened by phone-camera focus and crop
+// enlargement. A noise threshold prevents flat foil/grain from being amplified.
+export function sharpenGrayPixels(grayPixels, width, height, amount = 0.55, threshold = 8) {
+  if (!grayPixels || !Number.isInteger(width) || !Number.isInteger(height) || width < 3 || height < 3 || grayPixels.length !== width * height) return grayPixels
+  const source = grayPixels instanceof Uint8Array ? grayPixels : Uint8Array.from(grayPixels)
+  const output = new Uint8Array(source)
+  for (let y = 1; y < height - 1; y += 1) for (let x = 1; x < width - 1; x += 1) {
+    const index = y * width + x
+    const blurred = (
+      source[index] * 4 +
+      source[index - width] * 2 + source[index + width] * 2 +
+      source[index - 1] * 2 + source[index + 1] * 2 +
+      source[index - width - 1] + source[index - width + 1] +
+      source[index + width - 1] + source[index + width + 1]
+    ) / 16
+    const detail = source[index] - blurred
+    if (Math.abs(detail) >= threshold) output[index] = Math.max(0, Math.min(255, Math.round(source[index] + detail * amount)))
+  }
+  return output
+}
+
 const CROP_ZONES = [
   { label: 'Bottom-left number area', x: 0, y: 0.72, width: 0.72, height: 0.28 },
   { label: 'Bottom-right number area', x: 0.28, y: 0.72, width: 0.72, height: 0.28 },
@@ -72,8 +94,10 @@ async function createEnhancedCrop(image, zone, filename) {
     histogram[gray] += 1
   }
   const bounds = calculateAdaptiveContrastBounds(histogram, grays.length)
+  const enhancedGrays = Uint8Array.from(grays, (gray) => enhanceGrayValue(gray, bounds))
+  const sharpenedGrays = sharpenGrayPixels(enhancedGrays, canvas.width, canvas.height)
   for (let i = 0, pixel = 0; i < pixels.data.length; i += 4, pixel += 1) {
-    const enhanced = enhanceGrayValue(grays[pixel], bounds)
+    const enhanced = sharpenedGrays[pixel]
     pixels.data[i] = enhanced
     pixels.data[i + 1] = enhanced
     pixels.data[i + 2] = enhanced
