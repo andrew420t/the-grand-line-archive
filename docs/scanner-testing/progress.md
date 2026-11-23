@@ -324,3 +324,5 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - A shared catalogue printing key is treated as an exact duplicate only when both entries have a known, matching language. If either language is missing, it is surfaced as a possible duplicate for administrator review rather than automatically blocking a potentially distinct language printing.
 - Different stable printing keys remain distinct, preserving Normal/Parallel and other separate catalogue printings that share a card number. Different known languages remain distinct.
 - Regression tests cover language aliases and missing-language ambiguity. This is code/test coverage only; no live inventory records or production database were changed.
+
+- Migration review now includes a read-only audit query for repeated stable printing keys grouped by set, card number and normalized language. This surfaces pre-existing collisions (including blank-language legacy rows) before anyone considers a database uniqueness rule. The migration remains review-only and has not been executed.
