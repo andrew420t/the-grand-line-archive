@@ -536,3 +536,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Found that DON!! source-set assignment buttons only disabled the row currently saving. Two rapid clicks, or saves on different DON!! rows, could start overlapping writes while the single saving-state value was overwritten.
 - Added a synchronous save lock and disabled all assignment save buttons while a save is active. The lock releases in `finally`; unexpected errors now receive a safe fallback message.
 - Code-level safeguard only. No live catalogue/database records were changed; CI verification is pending.
+
+
+## DON!! override language isolation — 23 November 2026
+- Found a schema/keying weakness in the manual DON!! source-set override path: the table's primary key and upsert conflict target used only `printing_key`, while each override also carries a language and the catalogue is indexed independently for English and Japanese.
+- Updated the review-only SQL definition to use the composite primary key `(printing_key, language)`; updated reads, catalogue matching, and upserts to use the same composite identity.
+- This prevents an English override from replacing or being applied to a Japanese printing if the upstream key is shared. The migration remains review-only and has not been applied. CI is pending.
