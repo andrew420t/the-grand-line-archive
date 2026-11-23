@@ -16,17 +16,28 @@ export const EXTENDED_CARD_COLUMNS = [
 
 const normalizedIdentity = (value) => String(value || '').trim().toLocaleLowerCase()
 
+const normalizedLanguage = (value) => {
+  const language = normalizedIdentity(value)
+  if (['en', 'eng', 'english'].includes(language)) return 'english'
+  if (['ja', 'jp', 'jpn', 'japanese'].includes(language)) return 'japanese'
+  if (['zh', 'cn', 'chinese'].includes(language)) return 'chinese'
+  if (['ko', 'kr', 'korean'].includes(language)) return 'korean'
+  return language
+}
+
 export function classifyPrintingDuplicate(existing, candidate) {
   const existingPrintingKey = normalizedIdentity(existing.catalogue_printing_key)
   const candidatePrintingKey = normalizedIdentity(candidate.catalogue_printing_key)
-  const existingLanguage = normalizedIdentity(existing.language)
-  const candidateLanguage = normalizedIdentity(candidate.language)
+  const existingLanguage = normalizedLanguage(existing.language)
+  const candidateLanguage = normalizedLanguage(candidate.language)
 
   if (existingPrintingKey && candidatePrintingKey) {
     if (existingPrintingKey !== candidatePrintingKey) return 'distinct'
     if (existingLanguage && candidateLanguage && existingLanguage !== candidateLanguage) return 'distinct'
-    if (existingLanguage === candidateLanguage) return 'exact'
-    return 'possible'
+    // A shared printing key without a known language is not enough to safely
+    // block the add: legacy rows may represent another language printing.
+    if (!existingLanguage || !candidateLanguage) return 'possible'
+    return 'exact'
   }
 
   const existingMatchId = normalizedIdentity(existing.catalogue_match_id)
