@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ImagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './productStorage'
-import { getCatalogueCoverageReport } from './cardCatalogue'
+import { getCatalogueCoverageReport, getCatalogueImageGallery } from './cardCatalogue'
 
 export default function ImageLibraryPanel({ user }) {
   const inputRef = useRef(null)
@@ -14,6 +14,11 @@ export default function ImageLibraryPanel({ user }) {
   const [notice, setNotice] = useState('')
   const [coverage, setCoverage] = useState(null)
   const [coverageError, setCoverageError] = useState('')
+  const [referenceImages, setReferenceImages] = useState([])
+  const [referenceTotal, setReferenceTotal] = useState(0)
+  const [referenceNextOffset, setReferenceNextOffset] = useState(0)
+  const [referenceLoading, setReferenceLoading] = useState(false)
+  const [referenceError, setReferenceError] = useState('')
 
   const loadImages = useCallback(async () => {
     setLoading(true); setError('')
@@ -29,6 +34,18 @@ export default function ImageLibraryPanel({ user }) {
       .catch((loadError) => { if (active) setCoverageError(loadError.message) })
     return () => { active = false }
   }, [])
+
+  const loadReferenceImages = useCallback(async (offset = 0) => {
+    setReferenceLoading(true); setReferenceError('')
+    try {
+      const page = await getCatalogueImageGallery({ offset, limit: 60 })
+      setReferenceImages((current) => offset === 0 ? page.items : [...current, ...page.items])
+      setReferenceTotal(page.total)
+      setReferenceNextOffset(page.nextOffset)
+    } catch (loadError) { setReferenceError(loadError.message) }
+    finally { setReferenceLoading(false) }
+  }, [])
+  useEffect(() => { loadReferenceImages(0) }, [loadReferenceImages])
 
   const chooseFiles = (fileList) => {
     const selected = [...fileList].filter((file) => file.type.startsWith('image/'))
@@ -121,6 +138,16 @@ export default function ImageLibraryPanel({ user }) {
           </div>
           <p className="muted-copy">Image source priority: Bandai official card-image URLs when an official image ID is present; structured card metadata is currently supplied by the Koala Kollect reference dataset. Seller-uploaded product photographs remain separate and take priority in the public archive.</p>
         </>}
+      </section>
+      <section className="catalogue-reference-gallery">
+        <div className="photo-studio__heading"><div><p className="eyebrow">CATALOGUE ARTWORK REFERENCES</p><h3>{referenceImages.length.toLocaleString()} of {referenceTotal.toLocaleString()} reference images</h3><p className="muted-copy">These are images loaded from catalogue source URLs for card identification. They are not copies stored in your personal uploads.</p></div></div>
+        {referenceError && <div className="error-notice"><ShieldAlert size={15} /><span>{referenceError}</span></div>}
+        {referenceImages.length > 0 && <div className="photo-grid image-library-grid">{referenceImages.map((item) => <article className="photo-card" key={item.id}>
+          <div className="photo-card__preview"><img src={item.imageUrl} alt={item.name ? item.name + ' ' + item.cardNumber : 'One Piece card ' + item.cardNumber} loading="lazy" /></div>
+          <div className="photo-card__body"><span className="photo-card__name" title={item.name}>{item.name || item.cardNumber} · {item.cardNumber}</span><span className="muted-copy">{item.language.toUpperCase()} · {item.setCode || 'Unassigned'} · {item.rarity} {item.variant}</span></div>
+        </article>)}</div>}
+        {referenceNextOffset !== null && <button className="button button--outline" type="button" disabled={referenceLoading} onClick={() => loadReferenceImages(referenceNextOffset)}>{referenceLoading ? 'Loading catalogue images…' : 'Load more reference images'}</button>}
+        {referenceLoading && referenceImages.length === 0 && <div className="loading-state">Loading catalogue reference images…</div>}
       </section>
       <div className="photo-studio__heading"><div><p className="eyebrow">SAVED PHOTOGRAPHS</p><h3>{images.length} image{images.length === 1 ? '' : 's'} in storage</h3></div></div>
       {loading ? <div className="loading-state">Loading image library…</div> : images.length ? (

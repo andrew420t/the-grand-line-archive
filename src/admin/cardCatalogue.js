@@ -97,7 +97,7 @@ async function loadCatalogue() {
     const productsByKey = new Map(data.products.map((item) => [item.key, item]))
     indexes[language] = { observationsByCard, printingsByCard, locatorsByPrinting, printingProductsByPrinting, productsByKey }
   }
-  return { cards, languages, cardsByNumber, indexes }
+  return { cards, languages, cardsByNumber, cardsByKey, indexes }
 }
 
 async function getCatalogue() {
@@ -442,4 +442,33 @@ export async function getCatalogueCoverageReport() {
     a.printingKey.localeCompare(b.printingKey),
   )
   return report
+}
+
+
+/** Paged view of catalogue image URLs; these remain remote references, not stored uploads. */
+export async function getCatalogueImageGallery({ offset = 0, limit = 60 } = {}) {
+  const catalogue = await getCatalogue()
+  const entries = []
+  for (const language of LANGUAGES) {
+    const data = catalogue.languages[language]
+    const index = catalogue.indexes[language]
+    for (const printing of data.printings) {
+      const locator = index.locatorsByPrinting.get(printing.key + ':' + printing.site)
+      const officialUrl = locator?.image_id && (printing.site === 'en' || printing.site === 'jp')
+        ? (printing.site === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
+        : ''
+      const imageUrl = officialUrl || printing.image_url || ''
+      if (!imageUrl) continue
+      const card = catalogue.cardsByKey.get(printing.card_key)
+      const observations = index.observationsByCard.get(printing.card_key) || []
+      const observation = observations.reduce((latest, item) => !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
+      const links = index.printingProductsByPrinting.get(printing.key) || []
+      const product = links.map((link) => index.productsByKey.get(link.product_key)).find(Boolean)
+      entries.push({ id: printing.key + ':' + language, cardNumber: card?.number || '', name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode: formatSetCode(product?.code || ''), imageUrl })
+    }
+  }
+  entries.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.language.localeCompare(b.language) || a.id.localeCompare(b.id))
+  const start = Math.max(0, Number(offset) || 0)
+  const pageSize = Math.min(120, Math.max(1, Number(limit) || 60))
+  return { items: entries.slice(start, start + pageSize), total: entries.length, nextOffset: start + pageSize < entries.length ? start + pageSize : null }
 }
