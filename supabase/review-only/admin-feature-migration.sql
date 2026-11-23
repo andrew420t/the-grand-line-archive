@@ -148,6 +148,56 @@ BEGIN
 END
 $schema_preflight$;
 
+
+-- Validate public.products.status and any pre-existing site_settings table
+-- before CREATE TABLE IF NOT EXISTS would silently preserve an incompatible shape.
+DO $additional_schema_preflight$
+DECLARE
+  missing_site_columns text[];
+  site_id_type text;
+  settings_type text;
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_attribute
+    WHERE attrelid = 'public.products'::regclass
+      AND attname = 'status'
+      AND NOT attisdropped
+  ) THEN
+    RAISE EXCEPTION 'public.products.status is required for the public-active image policy.';
+  END IF;
+
+  IF to_regclass('public.site_settings') IS NOT NULL THEN
+    SELECT ARRAY(
+      SELECT required.column_name
+      FROM unnest(ARRAY['id','settings','updated_at','updated_by']) AS required(column_name)
+      WHERE NOT EXISTS (
+        SELECT 1 FROM pg_attribute
+        WHERE attrelid = 'public.site_settings'::regclass
+          AND attname = required.column_name
+          AND NOT attisdropped
+      )
+    ) INTO missing_site_columns;
+
+    IF cardinality(coalesce(missing_site_columns, ARRAY[]::text[])) > 0 THEN
+      RAISE EXCEPTION 'Existing public.site_settings is missing columns: %.', array_to_string(missing_site_columns, ', ');
+    END IF;
+
+    SELECT format_type(atttypid, atttypmod) INTO site_id_type
+    FROM pg_attribute
+    WHERE attrelid = 'public.site_settings'::regclass
+      AND attname = 'id' AND NOT attisdropped;
+    SELECT format_type(atttypid, atttypmod) INTO settings_type
+    FROM pg_attribute
+    WHERE attrelid = 'public.site_settings'::regclass
+      AND attname = 'settings' AND NOT attisdropped;
+
+    IF site_id_type IS DISTINCT FROM 'text' OR settings_type IS DISTINCT FROM 'jsonb' THEN
+      RAISE EXCEPTION 'Existing public.site_settings must use text id and jsonb settings; found id %, settings %.', site_id_type, settings_type;
+    END IF;
+  END IF;
+END
+$additional_schema_preflight$;
+
 -- Read-only audit: report existing exact-printing identity collisions before
 -- relying on catalogue_printing_key + language for future duplicate protection.
 -- Rows with a blank language are grouped together so ambiguous legacy data is visible.
