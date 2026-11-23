@@ -225,3 +225,12 @@ test('bulk catalogue printing identity is retained by product payload creation',
   assert.equal(payload.language, 'Japanese')
   assert.equal(payload.variant_label, 'Parallel')
 })
+
+
+test('finds normalized set-code collisions before a new set is created', async () => {
+  const { findSetCodeMatches } = await import('../src/admin/productSchema.js')
+  const sets = [{ id: 'op17', code: 'OP17' }, { id: 'eb04', code: 'EB-04' }]
+  assert.deepEqual(findSetCodeMatches(sets, 'OP-17').map((set) => set.id), ['op17'])
+  assert.deepEqual(findSetCodeMatches(sets, 'EB04').map((set) => set.id), ['eb04'])
+  assert.deepEqual(findSetCodeMatches(sets, 'OP99'), [])
+})
