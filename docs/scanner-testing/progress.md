@@ -515,3 +515,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Image Library saved-image refresh ordering — 23 November 2026
 - Added a request sequence guard to the saved-image listing. Rapid refreshes or refreshes overlapping with upload/delete operations cannot let an older response overwrite the newest image list or error/loading state.
 - The current request is invalidated on panel cleanup. No storage/database changes. CI pending.
+
+
+## Image reference matrix duplicate-run lock — 23 November 2026
+- Added a synchronous lock around the catalogue image reference matrix check so rapid clicks cannot launch overlapping 100-reference checks before the disabled state renders.
+- Lock is released in `finally` on completion or failure. This avoids duplicate browser image-check traffic; it does not change the test set or catalogue data. CI pending.
