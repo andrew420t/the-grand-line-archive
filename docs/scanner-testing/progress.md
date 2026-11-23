@@ -525,3 +525,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Image Library selection feedback — 23 November 2026
 - Image Library selection now reports non-image files rejected and images skipped when the 30-file batch limit is reached, instead of silently filtering/truncating those selections.
 - Accepted files stay queued; upload locking and queue preservation remain unchanged. CI pending.
+
+
+## Image Library delete lock — 23 November 2026
+- Added a synchronous delete lock and disabled all image delete buttons while one deletion is in progress, preventing rapid duplicate deletion requests or overlapping delete operations.
+- Lock releases in `finally` after success/failure; confirmation remains required. No storage/database changes beyond the existing user-requested deletion action. CI pending.
