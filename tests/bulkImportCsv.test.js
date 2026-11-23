@@ -72,3 +72,17 @@ test('ignores leading blank lines before CSV header', () => {
   const rows = parseCsv('\n\nname,card_number\nLuffy,OP01-001\n')
   assert.equal(rows[0].name, 'Luffy')
 })
+
+
+test('stable catalogue printing keys distinguish same-label printings', () => {
+  const existing = {
+    card_number: 'OP17-062', set_code: 'OP17', variant_label: 'Foil',
+    language: 'English', catalogue_printing_key: 'kaido-foil-a',
+  }
+  assert.equal(isBulkImportDuplicate(existing, {
+    ...existing, catalogue_printing_key: 'kaido-foil-b',
+  }), false)
+  assert.equal(isBulkImportDuplicate(existing, {
+    ...existing, catalogue_printing_key: 'kaido-foil-a',
+  }), true)
+})
