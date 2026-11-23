@@ -517,6 +517,7 @@ function Storefront() {
     if (!supabase || !user) return
     setOrdersLoading(true)
     setOrdersError('')
+    try {
     let result
     if (adminView) {
       result = await supabase.from('orders').select('*')
@@ -545,7 +546,6 @@ function Storefront() {
       setOrdersError(result.error.message)
       setOrders([])
       setOrderItems([])
-      setOrdersLoading(false)
       return
     }
 
