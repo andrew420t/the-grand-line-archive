@@ -86,3 +86,12 @@ test('stable catalogue printing keys distinguish same-label printings', () => {
     ...existing, catalogue_printing_key: 'kaido-foil-a',
   }), true)
 })
+
+
+test('prefers catalogue values while preserving zero and retaining CSV fallback for blanks', async () => {
+  const { preferCatalogueValue } = await import('../src/admin/bulkImportCsv.js')
+  assert.equal(preferCatalogueValue(0, '7'), 0)
+  assert.equal(preferCatalogueValue('0', '7'), '0')
+  assert.equal(preferCatalogueValue('', '7'), '7')
+  assert.equal(preferCatalogueValue(null, '7'), '7')
+})
