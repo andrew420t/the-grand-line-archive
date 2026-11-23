@@ -1037,3 +1037,4 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 ## Expanded read-only security audit
 - Extended `product-visibility-rls-audit.sql` to report RLS enabled/forced state for product images, site settings, catalogue overrides, and DON!! overrides; existing policies and grants across these feature tables; and Storage object policies plus the `product-card-images` bucket configuration.
 - This is still read-only and is intended to expose existing permissive-policy conflicts before any proposal is applied. No live database changes were made.
+- The same read-only audit now includes `orders`, `order_items`, and `profiles` RLS state, existing policies, and direct grants so account and checkout permissions can be reviewed before staging tests.
