@@ -94,7 +94,11 @@ ALTER TABLE public.products
   ADD COLUMN IF NOT EXISTS effect_text text,
   ADD COLUMN IF NOT EXISTS language text,
   ADD COLUMN IF NOT EXISTS classification text,
-  ADD COLUMN IF NOT EXISTS variant_label text;
+  ADD COLUMN IF NOT EXISTS variant_label text,
+  ADD COLUMN IF NOT EXISTS catalogue_match_id text,
+  ADD COLUMN IF NOT EXISTS catalogue_printing_key text,
+  ADD COLUMN IF NOT EXISTS catalogue_reference_image_url text,
+  ADD COLUMN IF NOT EXISTS catalogue_reference_image_source text;
 
 CREATE TABLE IF NOT EXISTS public.product_images (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
