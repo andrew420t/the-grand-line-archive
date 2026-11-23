@@ -6,6 +6,12 @@
 export function buildCheckoutSnapshot(cart = [], productRows = []) {
   const productsById = new Map((productRows || []).map((row) => [String(row.id), row]))
   const issues = []
+  const requestedByProduct = new Map()
+  for (const item of cart || []) {
+    const id = String(item.product?.id)
+    requestedByProduct.set(id, (requestedByProduct.get(id) || 0) + Number(item.quantity || 0))
+  }
+  const stockIssuesAdded = new Set()
   const items = (cart || []).map((item) => {
     const product = productsById.get(String(item.product?.id))
     const quantity = Number(item.quantity)
@@ -15,8 +21,10 @@ export function buildCheckoutSnapshot(cart = [], productRows = []) {
     }
     const stock = Number(product.stock_quantity)
     const price = Number(product.price)
-    if (!Number.isInteger(quantity) || quantity < 1 || !Number.isFinite(stock) || stock < quantity) {
-      issues.push({ productId: product.id, name: product.name || item.product?.name || 'Card', reason: 'insufficient-stock', stock: Number.isFinite(stock) ? Math.max(0, stock) : 0 })
+    const requestedQuantity = requestedByProduct.get(String(product.id)) || quantity
+    if ((!Number.isInteger(quantity) || quantity < 1 || !Number.isFinite(stock) || stock < requestedQuantity) && !stockIssuesAdded.has(String(product.id))) {
+      issues.push({ productId: product.id, name: product.name || item.product?.name || 'Card', reason: 'insufficient-stock', stock: Number.isFinite(stock) ? Math.max(0, stock) : 0, requested: requestedQuantity })
+      stockIssuesAdded.add(String(product.id))
     }
     const validPrice = Number.isFinite(price) && price >= 0
     if (!validPrice) {
