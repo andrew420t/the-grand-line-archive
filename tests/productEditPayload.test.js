@@ -49,3 +49,28 @@ test('keeps non-empty values and converts numeric fields', () => {
   assert.equal(payload.featured, true)
   assert.equal('updated_at' in payload, false)
 })
+
+test('editing ordinary card fields does not overwrite exact catalogue printing identity', () => {
+  const raw = {
+    catalogue_match_id: 'printing-kaido-parallel:en:product-op17',
+    catalogue_printing_key: 'printing-kaido-parallel',
+    catalogue_reference_image_url: 'https://example.test/kaido-parallel.png',
+    catalogue_reference_image_source: 'Bandai official image',
+    reference_image_url: 'https://example.test/legacy-reference.png',
+    reference_printing_key: 'printing-kaido-parallel',
+    updated_at: 'old',
+  }
+  const payload = buildProductEditPayload(fields, {
+    name: 'Kaido',
+    card_number: 'OP17-062',
+    effect_text: 'Updated effect text',
+    power: '12000',
+    rarity: 'Secret Rare',
+    set_id: 'set-op17',
+    featured: false,
+  }, raw)
+
+  for (const key of Object.keys(raw).filter((key) => key !== 'updated_at')) {
+    assert.equal(key in payload, false, `edit payload must not overwrite ${key}`)
+  }
+})
