@@ -431,3 +431,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Order-history loading recovery audit — 23 November 2026
 - The customer/admin order-history loader previously handled returned Supabase errors but could remain in a loading state if a query unexpectedly threw.
 - Added catch/finally recovery: surfaced the error and clears stale order/order-item state; the loading flag is always released. No live orders were accessed or modified. CI pending.
+
+
+## Catalogue loading recovery audit — 23 November 2026
+- Product/category/set catalogue loading handled Supabase returned errors but unexpected exceptions could leave the loading indicator stuck.
+- Wrapped the loader in catch/finally, reports the failure and clears stale catalogue/category/set state, and guarantees loading state resets. CI pending.
