@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase'
 import { resolveCatalogueImage } from './catalogueImageReference.js'
-import { isDonCatalogueEntry } from './catalogueDonMetadata.js'
+import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
@@ -37,9 +37,10 @@ async function readJsonLines(path) {
 }
 
 async function loadCatalogue() {
-  const [cards, tcgcsvPrintings, ...languageData] = await Promise.all([
+  const [cards, tcgcsvPrintings, donSetRows, ...languageData] = await Promise.all([
     readJsonLines('cards.jsonl'),
     readJsonLines('printings/tcgcsv.jsonl'),
+    readJsonLines('don_sets.jsonl'),
     ...LANGUAGES.flatMap((language) => [
       readJsonLines(`card_observations/${language}.jsonl`),
       readJsonLines(`printings/${language}.jsonl`),
@@ -103,7 +104,7 @@ async function loadCatalogue() {
     const productsByKey = new Map(data.products.map((item) => [item.key, item]))
     indexes[language] = { observationsByCard, printingsByCard, locatorsByPrinting, printingProductsByPrinting, productsByKey }
   }
-  return { cards, languages, cardsByNumber, cardsByKey, indexes }
+  return { cards, languages, cardsByNumber, cardsByKey, indexes, donSetsByPrintingKey: buildDonSetIndex(donSetRows) }
 }
 
 async function getCatalogue() {
@@ -473,7 +474,8 @@ export async function getCatalogueCoverageReport() {
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       const isDon = isDonCatalogueEntry({ printing, card, observation })
       const donOverride = isDon ? donOverrides[printing.key] : null
-      const setCodes = donOverride?.set_code ? [donOverride.set_code] : [...new Set(linkedProducts.map((product) => product.code).filter(Boolean))]
+      const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
+      const setCodes = donOverride?.set_code ? [donOverride.set_code] : donSourceSet?.set_code ? [donSourceSet.set_code] : [...new Set(linkedProducts.map((product) => product.code).filter(Boolean))]
       const setLabels = setCodes.length ? setCodes.map(formatSetCode) : ['Unassigned']
       if (isDon) {
         report.donPrintings += 1
@@ -564,8 +566,11 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
       const product = links.map((link) => safeMapGet(index.productsByKey, link.product_key)).find(Boolean)
       const isDon = isDonCatalogueEntry({ printing, card, observation })
       const setOverride = isDon ? donOverrides[printing.key] : null
-      const setCode = formatSetCode(setOverride?.set_code || product?.code || '')
-      entries.push({ id: printing.key + ':' + language, printingKey: printing.key, cardNumber: card?.number || (isDon ? 'DON!!' : ''), name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode, setName: setOverride ? 'Manually assigned set' : product?.name || '', setAssignmentSource: setOverride?.source_note || (product ? 'Catalogue product link' : ''), sourceText: printing.source_text || '', isDon, officialListUrl: getOfficialCardlistUrl(setCode, language, isDon, card?.number || ''), imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
+      const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
+      const setCode = formatSetCode(setOverride?.set_code || donSourceSet?.set_code || product?.code || '')
+      const setName = setOverride ? 'Manually assigned set' : donSourceSet ? setCode + ' (DON!! source data)' : product?.name || ''
+      const setAssignmentSource = setOverride?.source_note || (donSourceSet ? donSourceSet.source_note : product ? 'Catalogue product link' : '')
+      entries.push({ id: printing.key + ':' + language, printingKey: printing.key, cardNumber: card?.number || (isDon ? 'DON!!' : ''), name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode, setName, setAssignmentSource, sourceText: printing.source_text || '', isDon, officialListUrl: getOfficialCardlistUrl(setCode, language, isDon, card?.number || ''), imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
     }
   }
   entries.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.language.localeCompare(b.language) || a.id.localeCompare(b.id))
