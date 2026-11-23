@@ -596,3 +596,7 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Added regression coverage for ambiguous normalized set codes. Quick Add's displayed set selection now uses the same normalized resolver as save-time matching. CI verification pending.
 
 - The Collections and Sets admin flow now also blocks creating a set whose code collides after punctuation normalization, preventing new ambiguous set records from being introduced. Regression coverage added; CI verification pending.
+
+
+### Collections admin network recovery — 23 November 2026
+- Category and set creation now catch unexpected request failures and always release the shared busy state in finally. Duplicate-name/code checks and existing success feedback remain intact. CI verification pending.
