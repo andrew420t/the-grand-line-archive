@@ -17,6 +17,7 @@ export default function ImageLibraryPanel({ user }) {
   const uploadLock = useRef(false)
   const imageListRequestId = useRef(0)
   const referenceRequestId = useRef(0)
+  const matrixCheckLock = useRef(false)
   const [files, setFiles] = useState([])
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(true)
@@ -92,6 +93,8 @@ export default function ImageLibraryPanel({ user }) {
   }, [loadReferenceImages])
 
   const runReferenceMatrixCheck = async () => {
+    if (matrixCheckLock.current) return
+    matrixCheckLock.current = true
     setMatrixRunning(true); setMatrixError(''); setMatrixReport(null); setMatrixResults([])
     try {
       const matrix = await getCatalogueReferenceTestMatrix()
@@ -120,6 +123,7 @@ export default function ImageLibraryPanel({ user }) {
     } catch (checkError) {
       setMatrixError(checkError.message || 'Could not build the 100-image reference test.')
     } finally {
+      matrixCheckLock.current = false
       setMatrixRunning(false)
     }
   }
