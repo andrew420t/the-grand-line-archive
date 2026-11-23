@@ -566,3 +566,5 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Quick Add stale catalogue-identity invalidation — 23 November 2026
 - Extended the set reassignment fix: editing the card number, set code, language, or variant now invalidates the previously selected catalogue printing identity and its reference-image provenance. This prevents an old printing key/image from silently travelling with manually changed card identity fields.
 - Centralized the form update in a pure helper and added regression coverage for all four identity dimensions, including normalized set resolution after a set-code change. CI verification pending. No live inventory/database changes.
+
+- The Collection / set dropdown uses the same identity-aware update path as manual set-code edits, so changing the set through either control cannot retain an obsolete catalogue printing identity.
