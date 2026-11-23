@@ -287,6 +287,10 @@ export function catalogueMatchToForm(match) {
     reference_printing_key: match.printingKey || '',
     reference_match_id: match.id || '',
     reference_image_source: match.source || match.imageSource || '',
+    catalogue_match_id: match.id || '',
+    catalogue_printing_key: match.printingKey || '',
+    catalogue_reference_image_url: match.imageUrl || '',
+    catalogue_reference_image_source: match.source || match.imageSource || '',
   }
 }
  
