@@ -761,3 +761,14 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - PR #26 remains open and unmerged; feature branch head after report updates: 086ac3dfaed047ea6020e995a98744100441f689.
 - GitHub Actions run #417 (45174932236) passed on that exact branch head: dependency install, tests, lint and production build all succeeded.
 - The CI pass does not validate physical-card OCR, browser camera behaviour, Supabase policies or live Worker deployment. Production Worker fetch remains DisabledError through the browser route.
+
+
+### Scanner crop-boundary audit and latest CI refresh — 23 November 2026
+
+- Re-fetched PR #26 metadata rather than relying on the older report snapshot. PR is open, unmerged, base `master`; head is `79f90358082bc3f37ba12d34eda78f6fdf792b50`.
+- GitHub Actions run #418 (ID 45175439325) is confirmed successful on that exact head. CI checks dependency installation, tests, lint and production build only.
+- Source audit of `src/admin/CardScanner.jsx` and `src/admin/cardNumberRegion.js` confirms the number OCR regions are still fixed normalized bands of the full source photo (four bottom zones plus three rotated footer bands). They are not bounded by a detected card rectangle. This matches the Saint Shamrock photo's reproduced zero-overlap failure.
+- `src/admin/imageTools.js` has a conservative foreground-card detector, but it estimates background from all four corners and rejects high corner spread. It is not currently integrated into the number-first OCR preparation. On an in-hand photo with fingers touching a frame edge, a background detector alone is insufficient to guarantee a card-only rectangle.
+- **Regression-safety decision:** do not replace the detector with a more permissive corner threshold or force a crop from a connected foreground component; that risks cropping hands/holder/background as the card and producing confidently wrong OCR. Safe next implementation is a validated card quadrilateral/crop with confidence plus explicit manual crop fallback; OCR should run only inside the user-confirmed crop when auto-boundary confidence is inadequate.
+- Current real-photo evidence remains 1 physical sample tested (Saint Shamrock OP18-119), automatic card number/title failed; partial rules OCR only. No new photo or image-file access was available in this pass, so the real-photo count does not increase.
+- Production Worker and camera/live UI remain unverified; no deployment or production data changes were made.
