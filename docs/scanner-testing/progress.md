@@ -782,3 +782,13 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - PR changed-file inventory includes the scanner, OCR region logic, image tools, catalogue logic and test files. No additional genuine user photo was accessible in this check, so real-photo OCR stays at 1 physical sample (Saint Shamrock OP18-119); no image load/retrieval statuses were promoted based on inference.
 - No live UI or production Worker access was achieved; no production deployment, database or inventory changes made.
 - Next actions: implement crop-confirmation fallback on the feature branch only with focused tests for hand/edge occlusion, perspective, orientation and uncertain detection; then exact-head CI and browser staging test before any claim of working UI.
+
+
+### Latest exact-head verification and OCR candidate audit — 23 November 2026
+
+- Rechecked PR #26: open, unmerged, base `master`. Current feature-branch head at this review was `49066d06b8b4dbac285c1b45998c2d33f874a1f7`.
+- GitHub Actions verification run #420 (ID 45189031677) completed successfully for that exact head: dependency install, tests, lint and production build. The combined commit-status endpoint returned no status entries; the workflow run is the available confirmation.
+- Reviewed `cardNumberCandidates.js` and its tests. The extractor supports OP/EB/ST/PRB and promo P-### patterns and normalizes common O/0, E/8, S/5 substitutions. Its current confidence/occurrence ranking is heuristic; repeat OCR readings do not establish card identity. Confirmation remains manual, which is appropriate.
+- Reviewed the scanner lookup flow: it deduplicates up to six detected number candidates and merges catalogue results; a candidate mismatch/recovery message is shown when the selected match differs from the leading OCR number. The user must compare the original photo, official reference, number, language, set and variant before applying.
+- **Remaining scanner limitation unchanged:** number-region crops are still fixed relative to the whole photo, not a validated card boundary. The Saint Shamrock OP18-119 real-photo failure remains reproducible. There is no interactive crop/align fallback yet. This pass did not alter scanner code and did not add new real-photo results.
+- Production Worker, live camera/UI and Supabase staging remain unverified. No production deployment, database, inventory or order mutation was performed.
