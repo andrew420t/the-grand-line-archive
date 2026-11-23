@@ -378,3 +378,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Follow-up UI audit found the manual DON!! assignment dropdown omitted Double Pack sets even though the source data includes DP-02 through DP-12. Added DP-01–DP-12 options and standardized the Promo option value to `PROMO`, matching the normalized source-set code.
 - DON!! entries continue linking to Bandai's DON!! PDF regardless of their mapped source set. Regression tests added for slug mapping, key attribution, and official DON!! link routing.
 - This is source-data/code-level verification, not a live catalogue UI or database test. No live DB changes, production deployment, or migration execution.
+
+
+## DON!! category-label consistency audit — 23 November 2026
+- Found a detection edge case: category labels such as `DON card` and `DON cards` were normalized to `doncard`/`doncards` but did not count as DON!! printings. They could therefore bypass DON set attribution and show an incorrect `Unassigned` label.
+- Expanded exact category recognition for DON, DON card, and DON cards while deliberately not matching unrelated names such as `Donquixote`.
+- Added regression coverage for spaced/punctuated DON labels and a non-DON category false-positive guard. CI verification is pending; no live catalogue/database change was made.
