@@ -418,7 +418,7 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Checkout double-submit and thrown-error recovery audit — 23 November 2026
 - Added a synchronous ref guard so rapid repeated checkout clicks cannot launch multiple order-creation attempts before React state updates.
 - Wrapped checkout in try/catch/finally so unexpected exceptions report an error and always release the busy state. If an order was created but item insertion did not finish, it attempts to clean up the pending order and reports cleanup failures.
-- The safeguard is client-side only and cannot replace server-side idempotency/transaction protection. CI pending.
+- The safeguard is client-side only and cannot replace server-side idempotency/transaction protection. CI passed on commit `b7001543` (tests, lint, build).
 
 
 ## Order-status validation audit — 23 November 2026
