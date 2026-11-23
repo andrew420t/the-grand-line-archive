@@ -153,7 +153,6 @@ export async function findCatalogueMatches(cardNumber) {
 
       for (const printing of printings) {
         const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language })
-        const officialImageFallback = imageReference.imageUrl
         const productLinks = safeMapGet(index.printingProductsByPrinting, printing.key) || []
         const linkedProducts = productLinks
           .map((link) => safeMapGet(index.productsByKey, link.product_key))
