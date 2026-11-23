@@ -809,3 +809,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - **Ranking behaviour intentionally unchanged:** name/language/remembered-image signals continue to order the options; number evidence is shown for human review rather than being used to auto-select or override other signals. This avoids treating OCR confidence as calibrated proof or allowing a competing number reading to silently win.
 - Added focused ranking-helper tests for evidence attached to matching card numbers and absent evidence, including a competing-number scenario. The tests were committed, but have not been executed locally because this environment has no repository checkout/test runner. Exact-head GitHub Actions is pending/unavailable at this time.
 - Commits: `5fe1d79` (helper), `cfbb67b` (tests), `e3054b7` (scanner UI). PR #26 head: `e3054b70f35bc207a5a1d45b4701bdcdb955a730`.
+
+
+### Latest CI verification — 23 November 2026
+
+- Latest PR #26 head `198dbfa08f5c6cbdd21c6622cf2c644bac5b1e5a` passed GitHub Actions run #424 (ID 45196766947): dependency install, tests, lint, and production build completed successfully.
+- This exact-head CI pass covers the OCR evidence annotations and tests added in the preceding subsection. It does not substitute for local/physical-photo OCR, live browser camera/UI, staging, or deployment verification.
+- PR #26 remains open and unmerged. No production deployment or production database/inventory/order changes.
