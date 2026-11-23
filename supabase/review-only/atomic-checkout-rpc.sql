@@ -19,6 +19,56 @@
 
 BEGIN;
 
+
+-- Read-only preflight/audit: verify the assumed schema and inspect existing
+-- triggers that may already manage inventory or order transitions.
+SELECT
+  event_object_schema,
+  event_object_table,
+  trigger_name,
+  action_timing,
+  event_manipulation,
+  action_statement
+FROM information_schema.triggers
+WHERE event_object_schema = 'public'
+  AND event_object_table IN ('products', 'orders', 'order_items')
+ORDER BY event_object_table, trigger_name, event_manipulation;
+
+DO $atomic_checkout_preflight$
+DECLARE
+  missing_columns text[];
+  admin_function_result text;
+BEGIN
+  IF to_regprocedure('public.is_admin()') IS NULL THEN
+    RAISE EXCEPTION 'Expected public.is_admin() was not found; review the admin RPC security check before applying.';
+  END IF;
+  SELECT pg_get_function_result('public.is_admin()'::regprocedure)
+    INTO admin_function_result;
+  IF admin_function_result IS DISTINCT FROM 'boolean' THEN
+    RAISE EXCEPTION 'public.is_admin() must return boolean; found %.', admin_function_result;
+  END IF;
+
+  SELECT array_agg(required.table_name || '.' || required.column_name ORDER BY required.table_name, required.column_name)
+    INTO missing_columns
+  FROM (VALUES
+    ('products','id'), ('products','name'), ('products','price'), ('products','stock_quantity'), ('products','status'),
+    ('orders','id'), ('orders','user_id'), ('orders','status'), ('orders','total_amount'),
+    ('order_items','order_id'), ('order_items','product_id'), ('order_items','quantity'), ('order_items','unit_price')
+  ) AS required(table_name, column_name)
+  WHERE NOT EXISTS (
+    SELECT 1
+    FROM information_schema.columns AS existing
+    WHERE existing.table_schema = 'public'
+      AND existing.table_name = required.table_name
+      AND existing.column_name = required.column_name
+  );
+
+  IF cardinality(coalesce(missing_columns, ARRAY[]::text[])) > 0 THEN
+    RAISE EXCEPTION 'Atomic checkout proposal requires missing columns: %.', array_to_string(missing_columns, ', ');
+  END IF;
+END
+$atomic_checkout_preflight$;
+
 CREATE OR REPLACE FUNCTION public.create_order_atomic(p_items jsonb)
 RETURNS uuid
 LANGUAGE plpgsql
