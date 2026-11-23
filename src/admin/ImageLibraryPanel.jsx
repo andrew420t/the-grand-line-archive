@@ -14,6 +14,7 @@ const DON_SET_OPTIONS = [
 
 export default function ImageLibraryPanel({ user }) {
   const inputRef = useRef(null)
+  const uploadLock = useRef(false)
   const [files, setFiles] = useState([])
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(true)
@@ -131,7 +132,8 @@ export default function ImageLibraryPanel({ user }) {
     setNotice(accepted.length ? `${accepted.length} image${accepted.length === 1 ? '' : 's'} ready to upload.` : '')
   }
   const upload = async () => {
-    if (!files.length) return
+    if (!files.length || uploadLock.current) return
+    uploadLock.current = true
     setBusy(true); setError(''); setNotice('')
     try {
       const saved = await uploadLibraryPhotos({ userId: user.id, files })
@@ -139,7 +141,7 @@ export default function ImageLibraryPanel({ user }) {
       setNotice(`${saved.length} image${saved.length === 1 ? '' : 's'} saved to your image library.`)
       await loadImages()
     } catch (uploadError) { setError(uploadError.message) }
-    finally { setBusy(false) }
+    finally { uploadLock.current = false; setBusy(false) }
   }
   const removeImage = async (image) => {
     if (!window.confirm('Delete this image from the library?')) return
