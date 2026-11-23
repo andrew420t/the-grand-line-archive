@@ -490,3 +490,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Added a synchronous capture lock so rapid taps cannot initiate overlapping camera captures before React updates the disabled state.
 - If camera startup/preview playback fails, the acquired stream is now stopped and the video element detached, preventing an error path from leaving camera tracks active.
 - Code-only safeguard; browser/device camera testing remains outstanding. No production or database changes. CI pending.
+
+
+## Admin photo-preview cleanup on workspace exit — 23 November 2026
+- AdminDashboard now revokes all remaining queued-photo preview object URLs when the workspace unmounts. Previously previews were revoked when individual photos were removed or after a successful save, but leaving the admin workspace with an unsaved queue could retain browser object URLs.
+- The cleanup uses a ref to the latest photo queue so it does not revoke retained previews during normal queue updates. No photo files or storage records are changed. CI pending.
