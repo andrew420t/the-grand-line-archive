@@ -135,6 +135,8 @@ export default function QuickAddPanel({
       set_id: matchingSet?.id || current.set_id,
       category_id: matchingCategory?.id || current.category_id,
     }))
+    setAllowVariant(false)
+    setDuplicateMatches([])
     setCatalogueMatches([])
     setSuccess('Reference details filled in. Check the information against your physical card.')
   }
@@ -394,7 +396,7 @@ export default function QuickAddPanel({
           <label className="form-field"><span>Language</span><select value={form.language} onChange={(event) => setField('language', event.target.value)}><option value="">Choose language</option>{languageOptions.map((language) => <option key={language}>{language}</option>)}</select></label>
           <label className="form-field"><span>Condition</span><select value={form.condition} onChange={(event) => setField('condition', event.target.value)}><option>Near Mint</option><option>Lightly Played</option><option>Moderately Played</option><option>Heavily Played</option><option>Damaged</option></select></label>
           <label className="form-field"><span>Category</span><select value={form.category_id} onChange={(event) => setField('category_id', event.target.value)}><option value="">Choose category</option>{categories.map((category) => <option value={category.id} key={category.id}>{category.name}</option>)}</select></label>
-          <label className="form-field"><span>Collection / set</span><select value={inferredSetId} onChange={(event) => { const selected = sets.find((set) => String(set.id) === event.target.value); setForm((current) => ({ ...current, set_id: event.target.value, set_code: selected?.code || '' })); setError('') }}><option value="">Choose set</option>{sets.map((set) => <option value={set.id} key={set.id}>{set.name}{set.code ? ` · ${set.code}` : ''}</option>)}</select></label>
+          <label className="form-field"><span>Collection / set</span><select value={inferredSetId} onChange={(event) => { const selected = sets.find((set) => String(set.id) === event.target.value); setForm((current) => ({ ...current, set_id: event.target.value, set_code: selected?.code || '' })); setAllowVariant(false); setDuplicateMatches([]); setError('') }}><option value="">Choose set</option>{sets.map((set) => <option value={set.id} key={set.id}>{set.name}{set.code ? ` · ${set.code}` : ''}</option>)}</select></label>
           <label className="form-field"><span>Variant label</span><input value={form.variant_label} onChange={(event) => setField('variant_label', event.target.value)} placeholder="Parallel / alternate art, if applicable" /></label>
           <label className="check-field"><input type="checkbox" checked={form.featured} onChange={(event) => setField('featured', event.target.checked)} /><span>Feature this product on the homepage</span></label>
           <label className="form-field form-field--wide"><span>Product description</span><textarea rows="3" value={form.description} onChange={(event) => setField('description', event.target.value)} /></label>
