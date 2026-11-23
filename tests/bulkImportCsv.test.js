@@ -13,9 +13,9 @@ test('maps standard and extended card columns from the import CSV', () => {
 })
 
 test('handles quoted commas, doubled quotes, and multiline cells', () => {
-  const rows = parseCsv('name,description\n"Monkey D. Luffy","Says ""I'm going to be King"", loudly\n')
+  const rows = parseCsv('name,description\n"Monkey D. Luffy","Says ""I'm going to be King"", loudly"\n')
   assert.equal(rows[0].name, 'Monkey D. Luffy')
-  assert.equal(rows[0].description, 'Says "I\'m going to be King"", loudly')
+  assert.equal(rows[0].description, 'Says "I\'m going to be King", loudly')
 })
 
 test('accepts CRLF rows and ignores empty trailing rows', () => {
