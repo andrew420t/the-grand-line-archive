@@ -330,6 +330,7 @@ function Storefront() {
 
   const loadSiteSettings = useCallback(async () => {
     if (!supabase) return
+    try {
     const result = await supabase
       .from('site_settings')
       .select('settings')
@@ -341,6 +342,9 @@ function Storefront() {
     }
     setSiteSettings(normalizeSiteSettings(result.data?.settings))
     setSiteSettingsError('')
+    } catch (error) {
+      setSiteSettingsError(`Could not load website settings: ${error?.message || 'Unexpected error.'}`)
+    }
   }, [])
 
   useEffect(() => {
