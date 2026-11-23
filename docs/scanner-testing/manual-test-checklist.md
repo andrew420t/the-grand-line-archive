@@ -33,7 +33,9 @@ Test several physical cards, not only screenshots:
 - [ ] English card with a clear lower-right card number.
 - [ ] Japanese card with a clear card number.
 - [ ] OP, EB, and promotional card layouts where available.
-- [ ] DON!! card with a catalogue sample image; confirm it is grouped under its source set and does not display as an unassigned product.
+- [ ] DON!! card with a catalogue sample image; confirm it is attributed to its source set where available, and does not show a pseudo card-number suffix or an unassigned-product label.
+- [ ] Enable the scanner manual crop; drag-select the card area, adjust the percentage fields, and reset to the full photo. Confirm the selected region is clear, the surrounding area is dimmed, and the original image is unchanged.
+- [ ] Try a crop that is too small or extends beyond the photo; confirm validation rejects it and no scan runs on a silently altered crop.
 - [ ] A parallel/alternate-art printing that shares a card number with another version.
 - [ ] A deliberately blurred, angled, or partially obscured card.
 - [ ] A full-scene phone photo with tabletop/background margins and a card in a rigid holder (Saint Shamrock OP18-119 sample); verify the footer-region crops still include the card number or the scanner clearly requests a crop.
