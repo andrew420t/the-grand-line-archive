@@ -1,3 +1,13 @@
+export function normalizeSetCode(value) {
+  return String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
+}
+
+export function resolveSetIdForCode(sets, code) {
+  const normalized = normalizeSetCode(code)
+  if (!normalized) return ''
+  return sets.find((set) => normalizeSetCode(set.code) === normalized)?.id || ''
+}
+
 export const EXTENDED_CARD_COLUMNS = [
   'color',
   'power',
