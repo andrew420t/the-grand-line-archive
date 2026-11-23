@@ -1104,3 +1104,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - The successful run #604 / ID `45279048337` is attached to the code head `caa21afb79ce1bfff5e3032d84cd56ce52dbf1c4`, not the later documentation-only report commit `0641e657e080e0d995caf099b55bf0f9212dcf5a`. The latest report commit currently has no workflow run or combined status returned; do not label that exact docs commit CI-verified.
 - Cloudflare's PR bot comment lists successful preview build/deploys, but the newest deployment shown there is for commit `0a4c5a277812c7d7bc11542be0f92b4924238ace`, seven commits behind the current report head. The listed preview URL could not be opened through the available browser verification path. Therefore this is evidence of an earlier successful preview deployment, not proof that the current PR head is deployed or that the scanner UI works.
 - Production Worker verification still returns DisabledError. No live production status is claimed.
+
+
+## Image Library pagination audit — 23 November 2026
+- Found that the Image Library Storage listing requested only the first 100 objects, which could make older photographs appear missing once a user's library exceeded that page size.
+- Added a reusable paginated Storage listing helper and changed the Image Library to continue fetching pages until a short/empty page is returned. Storage errors are surfaced rather than silently presenting a partial listing as complete.
+- Added regression coverage for multiple pages (137 objects), exact page multiples (including the empty terminal page), storage errors, and invalid page sizes.
+- Changes are committed on `feature/scanner-number-first-verification`; CI is pending. This is a code-level fix only; no live Storage objects or database records were changed.
