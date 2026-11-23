@@ -408,6 +408,7 @@ export async function findPrimaryCatalogueMatch(cardNumber, language = '') {
  */
 export async function getCatalogueCoverageReport() {
   const catalogue = await getCatalogue()
+  const donOverrides = await readDonCardSetOverrides()
   let sourceManifest = null
   try {
     const manifestResponse = await fetch(MANIFEST_URL, { cache: 'no-cache' })
@@ -458,14 +459,15 @@ export async function getCatalogueCoverageReport() {
       const linkedProducts = products
         .map((link) => safeMapGet(index.productsByKey, link.product_key))
         .filter(Boolean)
-      const setCodes = [...new Set(linkedProducts.map((product) => product.code).filter(Boolean))]
       const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
       const cardNumber = card?.number || ''
       const observations = safeMapGet(index.observationsByCard, printing.card_key) || []
       const observation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
-      const setLabels = setCodes.length ? setCodes.map(formatSetCode) : ['Unassigned']
       const isDon = isDonCatalogueEntry({ printing, card, observation })
+      const donOverride = isDon ? donOverrides[printing.key] : null
+      const setCodes = [...new Set([donOverride?.set_code, ...linkedProducts.map((product) => product.code)].filter(Boolean))]
+      const setLabels = setCodes.length ? setCodes.map(formatSetCode) : ['Unassigned']
       if (isDon) {
         report.donPrintings += 1
         if (!setCodes.length) report.donWithoutSetLink += 1
