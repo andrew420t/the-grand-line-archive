@@ -267,6 +267,10 @@ export default function CardScanner({
         language: values.language,
         effect_text: values.effect_text,
         variant_label: values.variant_label,
+        catalogue_match_id: values.catalogue_match_id,
+        catalogue_printing_key: values.catalogue_printing_key,
+        catalogue_reference_image_url: values.catalogue_reference_image_url,
+        catalogue_reference_image_source: values.catalogue_reference_image_source,
       }).map(([key, value]) => [
         key,
         { value: value || '', confidence: value ? 95 : 0, needsReview: true },
