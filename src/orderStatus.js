@@ -4,9 +4,12 @@ export function isValidOrderStatus(status) {
   return ORDER_STATUSES.includes(String(status || '').trim().toLowerCase())
 }
 
-export function orderStatusUpdateFailure(result) {
+export function orderStatusUpdateFailure(result, expectedOrderId = '') {
   if (result?.error) return result.error.message || 'The database rejected the order status update.'
-  if (!result?.data?.id) return 'Order was not found or the status update was not permitted.'
+  const affectedOrderId = result?.data?.id || result?.data
+  if (!affectedOrderId || (expectedOrderId && String(affectedOrderId) !== String(expectedOrderId))) {
+    return 'Order was not found or the status update was not permitted.'
+  }
   return ''
 }
 
