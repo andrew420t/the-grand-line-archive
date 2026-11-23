@@ -62,3 +62,69 @@ ORDER BY 1;
 -- * Inspect every current policy for broad access. Since permissive policies OR
 --   together, broad policies must be safely revised, not merely supplemented.
 -- * Do not apply policy changes without an approved live-schema review.
+
+-- 6. RLS enabled/forced state for all feature tables proposed by the admin migration.
+SELECT
+  n.nspname AS schema_name,
+  c.relname AS table_name,
+  c.relrowsecurity AS rls_enabled,
+  c.relforcerowsecurity AS rls_forced
+FROM pg_class AS c
+JOIN pg_namespace AS n ON n.oid = c.relnamespace
+WHERE n.nspname = 'public'
+  AND c.relname IN (
+    'product_images', 'site_settings',
+    'card_catalogue_overrides', 'don_card_set_overrides'
+  )
+ORDER BY c.relname;
+
+-- 7. Existing policies on feature tables. Do not assume policies added by the
+-- proposed migration narrow existing permissive policies: permissive policies
+-- combine with OR and may already allow broader access.
+SELECT
+  schemaname,
+  tablename,
+  policyname,
+  permissive,
+  roles,
+  cmd,
+  qual,
+  with_check
+FROM pg_policies
+WHERE schemaname = 'public'
+  AND tablename IN (
+    'product_images', 'site_settings',
+    'card_catalogue_overrides', 'don_card_set_overrides'
+  )
+ORDER BY tablename, policyname;
+
+-- 8. Existing direct grants for feature tables, including PUBLIC grants.
+SELECT grantee, table_name, privilege_type, is_grantable
+FROM information_schema.role_table_grants
+WHERE table_schema = 'public'
+  AND table_name IN (
+    'products', 'product_images', 'site_settings',
+    'card_catalogue_overrides', 'don_card_set_overrides'
+  )
+  AND grantee IN ('anon', 'authenticated', 'PUBLIC')
+ORDER BY table_name, grantee, privilege_type;
+
+-- 9. Existing Storage policies and bucket configuration. Bucket-level public
+-- access is separate from object-table RLS and must be reviewed together.
+SELECT
+  schemaname,
+  tablename,
+  policyname,
+  permissive,
+  roles,
+  cmd,
+  qual,
+  with_check
+FROM pg_policies
+WHERE schemaname = 'storage'
+  AND tablename = 'objects'
+ORDER BY policyname;
+
+SELECT id, name, public, file_size_limit, allowed_mime_types
+FROM storage.buckets
+WHERE id = 'product-card-images';
