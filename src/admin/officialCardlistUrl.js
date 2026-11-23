@@ -4,8 +4,8 @@
  * mapping is verified. DON!! cards link to Bandai's separate DON!! PDF.
  */
 export function getOfficialCardlistUrl(setCode, language = 'en', isDon = false) {
-  if (isDon && !setCode) return 'https://www.onepiece-cardgame.com/pdf/don-cardlist.pdf'
   const normalized = String(setCode || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
+  if (isDon && (!normalized || normalized === 'DON')) return 'https://www.onepiece-cardgame.com/pdf/don-cardlist.pdf'
   const lang = language === 'jp' || language === 'Japanese' ? 'jp' : 'en'
   const prefix = lang === 'jp' ? '550' : '569'
   let series = ''
