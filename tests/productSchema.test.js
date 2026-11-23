@@ -52,3 +52,29 @@ test('includes OCR card metadata only when its reviewed columns exist', () => {
   assert.equal(payload.catalogue_reference_image_url, form.catalogue_reference_image_url)
   assert.equal(payload.catalogue_reference_image_source, form.catalogue_reference_image_source)
 })
+
+test('keeps normal and parallel catalogue printings distinct through inventory payload creation', () => {
+  const normal = buildNewProductPayload({
+    ...form,
+    card_number: 'OP17-062',
+    variant_label: 'Normal',
+    catalogue_match_id: 'printing-kaido-normal:en:product-op17',
+    catalogue_printing_key: 'printing-kaido-normal',
+    catalogue_reference_image_url: 'https://example.test/kaido-normal.png',
+  }, 'set-op17', true)
+  const parallel = buildNewProductPayload({
+    ...form,
+    card_number: 'OP17-062',
+    variant_label: 'Parallel',
+    catalogue_match_id: 'printing-kaido-parallel:en:product-op17',
+    catalogue_printing_key: 'printing-kaido-parallel',
+    catalogue_reference_image_url: 'https://example.test/kaido-parallel.png',
+  }, 'set-op17', true)
+
+  assert.equal(normal.card_number, parallel.card_number)
+  assert.notEqual(normal.catalogue_match_id, parallel.catalogue_match_id)
+  assert.notEqual(normal.catalogue_printing_key, parallel.catalogue_printing_key)
+  assert.notEqual(normal.catalogue_reference_image_url, parallel.catalogue_reference_image_url)
+  assert.equal(normal.variant_label, 'Normal')
+  assert.equal(parallel.variant_label, 'Parallel')
+})
