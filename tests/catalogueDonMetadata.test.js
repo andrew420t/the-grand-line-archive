@@ -62,3 +62,25 @@ test('normalizes all observed upstream DON!! source-set slug formats', () => {
     assert.equal(donSetSlugToCode(slug), expected, slug)
   }
 })
+
+
+test('preserves every verified source-set association for a printing without choosing one arbitrarily', () => {
+  const index = buildDonSetIndex([
+    { printing_keys: ['shared-print'], set_slug: 'op-01', don_design: 'DON Luffy', source: 'official-product-a' },
+    { printing_keys: ['shared-print'], set_slug: 'st-10', don_design: 'DON Luffy', source: 'official-product-b' },
+    { printing_keys: ['shared-print'], set_slug: 'op-01', source: 'duplicate-association' },
+  ])
+  assert.equal(index['shared-print'].set_code, '')
+  assert.deepEqual(index['shared-print'].set_codes, ['OP01', 'ST10'])
+  assert.deepEqual(index['shared-print'].set_slugs, ['op-01', 'st-10'])
+  assert.deepEqual(index['shared-print'].sources, ['official-product-a', 'official-product-b', 'duplicate-association'])
+})
+
+test('keeps a unique source-set attribution as the primary display code', () => {
+  const index = buildDonSetIndex([
+    { printing_keys: ['single-print'], set_slug: 'prb-02', source: 'verified-product' },
+    { printing_keys: ['single-print'], set_slug: 'prb-02', source: 'duplicate-link' },
+  ])
+  assert.equal(index['single-print'].set_code, 'PRB02')
+  assert.deepEqual(index['single-print'].set_codes, ['PRB02'])
+})
