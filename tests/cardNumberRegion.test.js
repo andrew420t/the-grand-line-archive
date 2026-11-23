@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { CARD_NUMBER_SCAN_ROTATIONS, calculateAdaptiveContrastBounds, enhanceGrayValue } from '../src/admin/cardNumberRegion.js'
+import { CARD_NUMBER_SCAN_ROTATIONS, calculateAdaptiveContrastBounds, enhanceGrayValue, sharpenGrayPixels } from '../src/admin/cardNumberRegion.js'
 
 test('rotation-aware number scans include sideways and upside-down orientations', () => {
   assert.deepEqual(CARD_NUMBER_SCAN_ROTATIONS, [90, 180, 270])
@@ -32,4 +32,19 @@ test('flat crops use conservative fallback contrast curve', () => {
   assert.equal(enhanceGrayValue(112, null), 128)
   assert.equal(enhanceGrayValue(0, null), 0)
   assert.equal(enhanceGrayValue(255, null), 255)
+})
+
+
+test('mild unsharp mask strengthens a printed edge without changing flat areas', () => {
+  const pixels = new Uint8Array(5 * 5).fill(180)
+  for (let y = 0; y < 5; y += 1) for (let x = 0; x < 2; x += 1) pixels[y * 5 + x] = 70
+  const sharpened = sharpenGrayPixels(pixels, 5, 5)
+  assert.equal(sharpened[2 * 5 + 0], 70)
+  assert.ok(sharpened[2 * 5 + 1] < pixels[2 * 5 + 1])
+  assert.equal(sharpened[2 * 5 + 3], 180)
+})
+
+test('unsharp mask leaves low-contrast noise below its threshold unchanged', () => {
+  const pixels = new Uint8Array([100, 102, 100, 102, 100, 102, 100, 102, 100])
+  assert.deepEqual([...sharpenGrayPixels(pixels, 3, 3)], [...pixels])
 })
