@@ -7,10 +7,14 @@ test('links standard set codes to official Bandai lists', () => {
   assert.equal(getOfficialCardlistUrl('EB-05'), 'https://en.onepiece-cardgame.com/cardlist/?series=569205')
   assert.equal(getOfficialCardlistUrl('PRB-01'), 'https://en.onepiece-cardgame.com/cardlist/?series=569301')
   assert.equal(getOfficialCardlistUrl('ST-10'), 'https://en.onepiece-cardgame.com/cardlist/?series=569010')
+  assert.equal(getOfficialCardlistUrl('PROMO'), 'https://en.onepiece-cardgame.com/cardlist/?series=569901')
+  assert.equal(getOfficialCardlistUrl('P'), 'https://en.onepiece-cardgame.com/cardlist/?series=569901')
 })
 
 test('uses Japanese official list and separate DON!! source', () => {
   assert.equal(getOfficialCardlistUrl('OP-18', 'jp'), 'https://www.onepiece-cardgame.com/cardlist/?series=550118')
+  assert.equal(getOfficialCardlistUrl('EB-05', 'jp'), 'https://www.onepiece-cardgame.com/cardlist/?series=550205')
+  assert.equal(getOfficialCardlistUrl('PRB-01', 'jp'), 'https://www.onepiece-cardgame.com/cardlist/?series=550301')
   assert.equal(getOfficialCardlistUrl('', 'jp', true), 'https://www.onepiece-cardgame.com/pdf/don-cardlist.pdf')
   assert.equal(getOfficialCardlistUrl('DON!!', 'en', true), 'https://www.onepiece-cardgame.com/pdf/don-cardlist.pdf')
 })
