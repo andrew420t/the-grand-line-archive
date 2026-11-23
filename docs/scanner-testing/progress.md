@@ -581,3 +581,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Bulk-import set-code normalization — 23 November 2026
 - Aligned CSV bulk-import set matching with Quick Add by using the shared punctuation-insensitive set-code resolver. Equivalent values such as `OP17` and `OP-17`, or `EB04` and `EB-04`, now resolve to the existing set row rather than producing a false unmatched-set warning and importing without a set link.
 - The bulk import still uses the exact resolved set row ID for the product payload. No CSV was imported and no live inventory/database records were changed. CI verification pending.
+
+
+### Bulk-import catalogue identity preservation — 23 November 2026
+- Selecting a catalogue match in Bulk Import now carries its catalogue match ID, stable printing key, reference image URL, and source through to the imported product payload.
+- The extended-schema preflight includes those identity columns, so imports fail safely before inserting any rows if the approved columns are not present.
+- Regression coverage verifies that Japanese/parallel catalogue identity survives product payload construction. CI verification pending.
