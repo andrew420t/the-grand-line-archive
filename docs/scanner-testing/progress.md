@@ -1096,3 +1096,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - **100-case matrix status remains:** 94/100 official sample images previously visually loaded; 6 remain unverified (4 OP17 slots and 1 Japanese EB01 + 1 Japanese EB02 slot). The official OP18 image opens above corroborate the OP18 entries but do not change the existing 94/100 count because OP18 was already recorded as 4/4 loaded.
 - **Real-photo OCR remains:** 1/100 physical photos; Saint Shamrock OP18-119 remains an automatic number/name identification failure after multiple preprocessing variants. The other 99 physical-photo cases have not been supplied. Synthetic OCR remains a separate 100/100 normalized result (57/100 raw), not a substitute for real-photo OCR.
 - **No production changes:** this follow-up only records evidence. No merge, deployment, database mutation, inventory/order change, or production setting change was performed.
+
+
+### Deployment/CI clarification — 23 November 2026
+
+- PR #26 was re-read after the report update: it remains open, unmerged, and GitHub currently reports it mergeable.
+- The successful run #604 / ID `45279048337` is attached to the code head `caa21afb79ce1bfff5e3032d84cd56ce52dbf1c4`, not the later documentation-only report commit `0641e657e080e0d995caf099b55bf0f9212dcf5a`. The latest report commit currently has no workflow run or combined status returned; do not label that exact docs commit CI-verified.
+- Cloudflare's PR bot comment lists successful preview build/deploys, but the newest deployment shown there is for commit `0a4c5a277812c7d7bc11542be0f92b4924238ace`, seven commits behind the current report head. The listed preview URL could not be opened through the available browser verification path. Therefore this is evidence of an earlier successful preview deployment, not proof that the current PR head is deployed or that the scanner UI works.
+- Production Worker verification still returns DisabledError. No live production status is claimed.
