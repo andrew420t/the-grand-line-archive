@@ -51,6 +51,14 @@ export default function CardScanner({
   const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
   const hasReview =
     Object.values(fields).some((field) => field.value) || Boolean(rawText.trim())
+  const manualCropIsValid = !manualCropEnabled || (
+    Number(manualCropPercent.x) >= 0 &&
+    Number(manualCropPercent.y) >= 0 &&
+    Number(manualCropPercent.width) >= 12 &&
+    Number(manualCropPercent.height) >= 12 &&
+    Number(manualCropPercent.x) + Number(manualCropPercent.width) <= 100 &&
+    Number(manualCropPercent.y) + Number(manualCropPercent.height) <= 100
+  )
 
   const updateField = (key, value) => {
     setFields((current) => ({
@@ -372,7 +380,7 @@ export default function CardScanner({
           <p className="eyebrow">01 · SOURCE PHOTOGRAPH</p>
           <h3>Use the clearest front image.</h3>
           <p>Keep the card square to the camera, in focus, and evenly lit. Front/back and detail images remain linked for the stock record.</p>
-          <button className="button button--gold" type="button" disabled={!frontPhoto || scanning} onClick={scanCard}>
+          <button className="button button--gold" type="button" disabled={!frontPhoto || scanning || !manualCropIsValid} onClick={scanCard}>
             {scanning ? <LoaderCircle className="spin-icon" size={16} /> : <ScanLine size={16} />}
             {scanning ? `Scanning… ${progress}%` : hasReview ? 'Rescan card' : 'Scan card'}
           </button>
@@ -443,7 +451,7 @@ export default function CardScanner({
               </label>
             ))}
             <button className="button button--quiet" type="button" disabled={scanning} onClick={() => setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 })}>Reset full photo</button>
-            <p className="scanner-manual-crop__note">Crop validity is checked when scanning. Invalid or too-small crops are rejected with an error instead of silently adjusted.</p>
+            <p className="scanner-manual-crop__note">{manualCropIsValid ? 'Crop looks valid. The full card must fit inside the selected area.' : 'Select a larger area: width and height must each be at least 12%, and the crop must stay within the photo.'}</p>
           </div>
         )}
       </section>
