@@ -124,6 +124,7 @@ export default function ImageLibraryPanel({ user }) {
   }
 
   const chooseFiles = (fileList) => {
+    if (uploadLock.current) { setError('Wait for the current upload to finish before adding more files.'); return }
     const selected = [...fileList].filter((file) => file.type.startsWith('image/'))
     const remaining = Math.max(0, 30 - files.length)
     const accepted = selected.slice(0, remaining)
@@ -137,7 +138,7 @@ export default function ImageLibraryPanel({ user }) {
     setBusy(true); setError(''); setNotice('')
     try {
       const saved = await uploadLibraryPhotos({ userId: user.id, files })
-      setFiles([])
+      setFiles((current) => current.filter((file) => !files.includes(file)))
       setNotice(`${saved.length} image${saved.length === 1 ? '' : 's'} saved to your image library.`)
       await loadImages()
     } catch (uploadError) { setError(uploadError.message) }
