@@ -1073,3 +1073,4 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - These guards are still proposals and require staging review against existing policies, RLS/grants, and `public.is_admin()` before applying. No database was changed.
 - Extended admin-feature migration preflight to reject missing `products.status` and incompatible existing `site_settings` column shapes (text ID/jsonb settings) instead of allowing `CREATE TABLE IF NOT EXISTS` to mask an incompatible table. SQL remains review-only.
 - Expanded the read-only grant audit again to include column-level grants for product_images, site_settings, catalogue override tables, and DON!! overrides, complementing the order/order_items audit.
+- Atomic checkout proposal now verifies `orders.stock_reserved` is boolean NOT NULL after adding it (default false), and stops if an existing incompatible column is found rather than silently using a wrong schema.
