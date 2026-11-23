@@ -10,6 +10,7 @@ import { supabase } from '../lib/supabase'
 import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
+import PhotoStudio from './PhotoStudio'
 
 const initialProduct = () => ({
   name: '',
@@ -60,6 +61,7 @@ export default function QuickAddPanel({
   user,
   onSaved,
   onResetScan,
+  onPhotosChange,
 }) {
   const [form, setForm] = useState(() => {
     const extracted = scannedValues(scanFields)
@@ -359,6 +361,16 @@ export default function QuickAddPanel({
           <div className="form-field form-field--wide"><span>Card effect / text</span><textarea rows="4" value={form.effect_text} onChange={(event) => setField('effect_text', event.target.value)} placeholder="Enter only text verified from the card." /><CatalogueLanguageButtons cardNumber={form.card_number} fieldKey="effect_text" onApply={(value) => setForm((current) => ({ ...current, effect_text: value }))} /></div>
           <label className="form-field"><span>Selling price · GBP *</span><div className="price-input"><span>£</span><input required type="number" min="0" step="0.01" value={form.price_gbp} onChange={(event) => setField('price_gbp', event.target.value)} placeholder="0.00" /></div></label>
           <label className="form-field"><span>Quantity *</span><input required type="number" min="0" step="1" value={form.stock_quantity} onChange={(event) => setField('stock_quantity', event.target.value)} /></label>
+        </div>
+        <div className="quick-add-photo-section">
+          <div className="admin-view-heading">
+            <div>
+              <p className="eyebrow">CARD PHOTOGRAPHS</p>
+              <h3>Add photos to this stock item</h3>
+              <p className="admin-muted">Upload or take the card photo here. Set the front image as the main catalogue picture; add a back or detail photo if needed.</p>
+            </div>
+          </div>
+          <PhotoStudio photos={photos} onPhotosChange={onPhotosChange} />
         </div>
         <div className="quick-add-form__footer">
           <p>{photos.length} photograph{photos.length === 1 ? '' : 's'} will be linked to this product. Keep the front photograph in the photo review to show it in the public catalogue.</p>

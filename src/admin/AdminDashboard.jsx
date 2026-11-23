@@ -189,6 +189,7 @@ export default function AdminDashboard({
           categories={categories}
           sets={sets}
           photos={photos}
+          onPhotosChange={setPhotos}
           scanFields={scanFields}
           user={user}
           onSaved={() => {
