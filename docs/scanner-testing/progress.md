@@ -561,3 +561,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Found that changing the Set code after applying a catalogue match could leave the previous `set_id` selected in form state. Saving could therefore associate the card with the old set even though the visible set code had changed.
 - Added shared punctuation-insensitive set-code normalization/resolution. Initial scanner values, catalogue matches, manual set-code edits, and final save resolution now use the same lookup; editing the set code clears or replaces the selected set ID instead of retaining a stale association.
 - Added regression coverage for OP/EB codes with and without hyphens and unknown set codes. CI verification pending. No live inventory/database changes.
+
+
+## Quick Add stale catalogue-identity invalidation — 23 November 2026
+- Extended the set reassignment fix: editing the card number, set code, language, or variant now invalidates the previously selected catalogue printing identity and its reference-image provenance. This prevents an old printing key/image from silently travelling with manually changed card identity fields.
+- Centralized the form update in a pure helper and added regression coverage for all four identity dimensions, including normalized set resolution after a set-code change. CI verification pending. No live inventory/database changes.
