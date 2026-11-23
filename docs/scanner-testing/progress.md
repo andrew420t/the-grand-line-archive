@@ -816,3 +816,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Latest PR #26 head `198dbfa08f5c6cbdd21c6622cf2c644bac5b1e5a` passed GitHub Actions run #424 (ID 45196766947): dependency install, tests, lint, and production build completed successfully.
 - This exact-head CI pass covers the OCR evidence annotations and tests added in the preceding subsection. It does not substitute for local/physical-photo OCR, live browser camera/UI, staging, or deployment verification.
 - PR #26 remains open and unmerged. No production deployment or production database/inventory/order changes.
+
+
+### Manual crop geometry foundation — 23 November 2026
+
+- Added a validated normalized manual-crop geometry helper to the number-region OCR preparation module. It converts a rectangle (normalized relative to the original image) to pixel bounds, and rejects invalid, out-of-frame, or very small selections rather than silently clipping them.
+- `prepareCardNumberRegions(file, manualCrop)` now supports an optional crop rectangle; when supplied, the four number zones and rotated-footer zones are generated from the cropped image instead of the full scene. Existing no-crop behaviour remains unchanged.
+- Added unit coverage for normalized-to-pixel mapping and invalid/tiny/out-of-bounds rectangles. **This is only the crop-processing foundation; no manual crop-selection UI is implemented yet and it is not integrated into CardScanner.** Do not claim this fixes the Saint Shamrock photo until a user-selectable crop flow and physical-photo OCR test are completed.
+- Commits: `3cbea63` crop API/helper, `1ae3027` tests. CI for these changes is pending.
