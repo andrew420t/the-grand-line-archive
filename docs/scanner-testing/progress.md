@@ -288,3 +288,12 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Removed that card-number-only preference from scanner ranking and removed its misleading checkbox. A prior choice can influence ranking only when the current uploaded photograph produces a match in the local/shared image-recognition memory; that remains a suggestion and still requires the user to confirm the candidate.
 - Added/retained regression coverage for the ranking signal: verified image-memory matches can help ranking, but OCR name and language signals remain available when no image-memory match exists.
 - This avoids treating a card number as a unique printing identity. It does not claim that image similarity can always distinguish foil/parallel finishes; human comparison and confirmation remain required.
+
+
+## Preserve exact selected printing in inventory — 23 November 2026
+- Traced the scanner-to-inventory handoff and found that the scanner's selected catalogue printing ID and reference image were not included in the Quick Add form's initial scan-field mapping or product insert payload. The descriptive variant label could also be dropped on this handoff.
+- The selected catalogue match now carries its composite match ID, source printing key, reference image URL and image source into the scanner's confirmed fields and Quick Add form. The normal uploaded front/back/detail photographs remain separate and continue to be the product's own photos.
+- Product creation now includes these four catalogue-reference fields alongside the existing variant label, but only when the extended product columns are confirmed available. The schema preflight checks all required columns before insert, so a missing migration stops the save rather than silently dropping the exact printing reference.
+- Added those columns to the existing review-only admin feature migration. No SQL was executed and no live database was changed. The migration remains subject to review/approval before anyone applies it.
+- Regression tests verify the reference metadata is included only with the extended schema and that Normal and Parallel OP17-062 records retain different match IDs, printing keys and image URLs despite sharing the same card number.
+- This persists the exact catalogue reference with the inventory record; it does not replace seller-uploaded photographs, infer the finish from OCR, or make the scanner's candidate confirmation automatic.
