@@ -34,7 +34,6 @@ export default function CardScanner({
   const [matchConfirmationOpen, setMatchConfirmationOpen] = useState(false)
   const [selectedAutoMatchId, setSelectedAutoMatchId] = useState('')
   const [rankedAutoMatches, setRankedAutoMatches] = useState([])
-  const [rememberMatch, setRememberMatch] = useState(true)
   const [catalogueLoading, setCatalogueLoading] = useState(false)
   const [catalogueError, setCatalogueError] = useState('')
   const [manualCardNumber, setManualCardNumber] = useState('')
@@ -159,8 +158,9 @@ export default function CardScanner({
           if (allMatches.length) {
             const candidateByNumber = new Map(candidates.map((candidate) => [candidate.number, candidate]))
             const topResolvedNumber = successfulLookups[0].cardNumber
+            // Only image-similarity memory may influence ranking. A card-number-only
+            // saved choice can point to the wrong parallel/normal printing.
             let rememberedId = ''
-            try { rememberedId = window.localStorage.getItem('glaScannerCardMatch:' + topResolvedNumber) || '' } catch { /* storage may be unavailable */ }
             if (rememberedImage?.cardNumber === topResolvedNumber) rememberedId = rememberedImage.printingId
             if (sharedRememberedImage?.cardNumber === topResolvedNumber) rememberedId = sharedRememberedImage.printingId
             const ranked = rankCatalogueMatches(allMatches, parsed.name?.value, parsed.language?.value || recognitionLanguage, rememberedId)
@@ -281,9 +281,6 @@ export default function CardScanner({
   const confirmAutoMatch = async () => {
     if (selectedAutoMatch) {
       applyCatalogueMatch(selectedAutoMatch)
-      if (rememberMatch && selectedAutoMatch.cardNumber) {
-        try { window.localStorage.setItem('glaScannerCardMatch:' + selectedAutoMatch.cardNumber, selectedAutoMatch.id) } catch { /* storage may be unavailable */ }
-      }
       setMatchConfirmationOpen(false)
       let memoryMessage = ''
       if (frontPhoto?.file) {
@@ -451,7 +448,6 @@ export default function CardScanner({
                 </div>
               </div>
             )}
-            <label className="scanner-match-confirmation__remember"><input type="checkbox" checked={rememberMatch} onChange={(event) => setRememberMatch(event.target.checked)} /> Remember my selection on this browser for future scans of this card number</label>
             <div className="scanner-match-confirmation__actions">
               <button className="button button--outline" type="button" onClick={() => setMatchConfirmationOpen(false)}>Not sure / enter manually</button>
               <button className="button button--gold" type="button" onClick={confirmAutoMatch} disabled={!selectedAutoMatch}>Yes, use this card</button>
