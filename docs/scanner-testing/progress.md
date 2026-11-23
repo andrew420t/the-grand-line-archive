@@ -318,3 +318,9 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Added unit coverage for exact duplicates, Normal vs Parallel, English vs Japanese, and ambiguous legacy records.
 - Added review-only SQL preflight checks that public.products exists with a UUID id, and that any existing public.product_images table has the required columns and UUID product_id before the migration attempts DDL.
 - The migration remains review-only and has not been run. No database, production site or live inventory was changed.
+
+## Inventory duplicate protection — 23 November 2026
+- Duplicate classification now normalizes common language labels and abbreviations (English/EN, Japanese/JP, Chinese/ZH, Korean/KR) before comparing otherwise identical catalogue printing keys.
+- A shared catalogue printing key is treated as an exact duplicate only when both entries have a known, matching language. If either language is missing, it is surfaced as a possible duplicate for administrator review rather than automatically blocking a potentially distinct language printing.
+- Different stable printing keys remain distinct, preserving Normal/Parallel and other separate catalogue printings that share a card number. Different known languages remain distinct.
+- Regression tests cover language aliases and missing-language ambiguity. This is code/test coverage only; no live inventory records or production database were changed.
