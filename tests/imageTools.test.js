@@ -48,3 +48,15 @@ test('aspect crop frames the detected card while keeping card aspect ratio', () 
 test('falls back when a detected object cannot fit inside the image crop', () => {
   assert.equal(calculateCardAspectCrop(100, 100, { x: 0, y: 0, width: 95, height: 95 }), null)
 })
+
+test('ignores isolated foreground specks outside the card component', () => {
+  const image = imageData(180, 240)
+  fillRect(image, 38, 44, 100, 140, [35, 90, 180])
+  fillRect(image, 3, 220, 2, 2, [0, 0, 0])
+  fillRect(image, 170, 12, 2, 2, [0, 0, 0])
+  fillRect(image, 8, 8, 2, 2, [0, 0, 0])
+  const bounds = detectForegroundCardBounds(image)
+  assert.ok(bounds)
+  assert.ok(bounds.x > 20 && bounds.y > 25)
+  assert.ok(bounds.width < 125 && bounds.height < 165)
+})
