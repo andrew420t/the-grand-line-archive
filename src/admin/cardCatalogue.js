@@ -505,7 +505,7 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
       const observation = observations.reduce((latest, item) => !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
       const product = links.map((link) => safeMapGet(index.productsByKey, link.product_key)).find(Boolean)
-      entries.push({ id: printing.key + ':' + language, cardNumber: card?.number || '', name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode: formatSetCode(product?.code || ''), imageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
+      entries.push({ id: printing.key + ':' + language, cardNumber: card?.number || '', name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode: formatSetCode(product?.code || ''), imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
     }
   }
   entries.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.language.localeCompare(b.language) || a.id.localeCompare(b.id))
