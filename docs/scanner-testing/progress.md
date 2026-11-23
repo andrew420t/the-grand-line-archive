@@ -872,3 +872,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Reviewed the visual crop overlay for numeric-state edge cases. Percentage-field input had string values, which could concatenate when computing the selection's right/bottom edges; these calculations now explicitly coerce to numbers.
 - Crop percentage controls now clamp to the image bounds and adjust width/height when the left/top values move. Pointer coordinate handling guards against zero-sized preview bounds.
 - Commits: `fd9f402` (numeric overlay calculations), `20af5ab` (bounds clamp and pointer guards). Exact-head CI is pending.
+
+
+### CI follow-up — 23 November 2026
+
+- Run #437 passed on `8f0f1f6a250e741a6128027f90e885503759be44`, covering the visual crop-selection implementation and DON!! label correction plus the updated manual test checklist at that point.
+- Run #439 passed on `da9817ec3d571d69af64ca7564806bed00a07c20`, including the new 35-format DON!! source-slug regression test.
+- Run #443 passed on `ed686e6a65baae9e4824c9c5d6cf5f56fb00628c`, including the crop numeric-state and bounds fixes.
+- The latest PR head subsequently received a documentation-only staging-checklist addition for testing DON!! override persistence/RLS. This final docs commit is awaiting its own exact-head workflow check.
