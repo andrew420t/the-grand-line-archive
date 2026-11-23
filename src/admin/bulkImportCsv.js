@@ -49,18 +49,23 @@ export function validateBulkImportNumericFields(row = {}) {
 
 export function parseCsv(text) {
   const rows = []
-  let row = [], cell = '', quoted = false
+  let row = [], cell = '', quoted = false, quoteClosed = false
   for (let i = 0; i < text.length; i += 1) {
     const char = text[i]
     if (quoted) {
       if (char === '"' && text[i + 1] === '"') { cell += '"'; i += 1 }
-      else if (char === '"') quoted = false
+      else if (char === '"') { quoted = false; quoteClosed = true }
       else cell += char
+    } else if (quoteClosed) {
+      if (char === ',') { row.push(cell); cell = ''; quoteClosed = false }
+      else if (char === '\n') { row.push(cell.replace(/\r$/, '')); if (row.some((value) => value.trim()) ) rows.push(row); row = []; cell = ''; quoteClosed = false }
+      else if (char === '\r' || char.trim() === '') continue
+      else throw new Error('CSV contains text after a closing quote. Check the file formatting and try again.')
     } else if (char === '"' && cell.trim() === '') {
       cell = ''
       quoted = true
     } else if (char === ',') { row.push(cell); cell = '' }
-    else if (char === '\n') { row.push(cell.replace(/\r$/, '')); if (row.some((value) => value.trim()) || rows.length === 0) rows.push(row); row = []; cell = '' }
+    else if (char === '\n') { row.push(cell.replace(/\r$/, '')); if (row.some((value) => value.trim())) rows.push(row); row = []; cell = '' }
     else cell += char
   }
   if (quoted) throw new Error('CSV contains an unmatched quote. Check the file formatting and try again.')
