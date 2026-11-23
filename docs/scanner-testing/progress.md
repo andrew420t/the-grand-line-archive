@@ -448,3 +448,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Removed the hardcoded four-digit frontend access code from the administrator sign-in screen. It was shipped in the client bundle and therefore offered no real security, while adding an unnecessary gate for legitimate admins.
 - Admin sign-in continues to require Supabase authentication and a verified `profiles.role = admin`; an already authenticated admin can proceed directly. UI role checks are not a substitute for database RLS policies, which remain a separate review requirement.
 - No database, account, or production changes made. CI pending.
+
+
+## Admin product publication error recovery — 23 November 2026
+- Publishing/unpublishing an inventory product now catches unexpected Supabase/network exceptions, reports a clear error, and always releases the row's busy state via `finally`. Previously a thrown request could leave the action stuck.
+- Existing confirmation and returned-error handling retained. CI pending.
