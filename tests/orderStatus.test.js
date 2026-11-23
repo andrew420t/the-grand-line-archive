@@ -18,3 +18,9 @@ test('order status updates require a confirmed affected order', () => {
   assert.equal(orderStatusUpdateFailure({ data: null, error: null }), 'Order was not found or the status update was not permitted.')
   assert.equal(orderStatusUpdateFailure({ data: null, error: { message: 'RLS denied' } }), 'RLS denied')
 })
+
+test('checkout cleanup requires a confirmed deleted order', () => {
+  assert.equal(orderDeleteFailure({ data: { id: 'order-1' }, error: null }), '')
+  assert.equal(orderDeleteFailure({ data: null, error: null }), 'The pending order was not found or deletion was not permitted.')
+  assert.equal(orderDeleteFailure({ data: null, error: { message: 'RLS denied' } }), 'RLS denied')
+})
