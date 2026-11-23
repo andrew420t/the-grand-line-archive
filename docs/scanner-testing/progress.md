@@ -661,3 +661,14 @@ EB05-001/002 English and Japanese direct Bandai image-path attempts were still i
 - PR #26 head c6af838a67717d41ff74b4e11bf20d4f3683e567 passed GitHub Actions run #411: dependency install, npm test, lint, and production build.
 - This verifies code/test/build only. The physical-photo number-region attempt above failed to identify OP18-119. No browser preview or live Worker deployment was available; production status remains unverified.
 - PR #26 is still open and unmerged. No production deployment or inventory/database mutation was performed.
+
+
+## EB05 official image-load recovery — 23 November 2026
+
+Correction to the earlier direct-path attempt: the four EB05 base-image URLs initially failed when opened without the Bandai card-list page's cache-busting query string. Opening the official Bandai series pages and following their own image links worked. English series 569205 returned 96 results; Japanese series 550205 returned 96 results. Official images loaded and were visually inspected for:
+- English EB05-001 Jewelry Bonney — PASS.
+- English EB05-002 Doll — PASS.
+- Japanese EB05-001 ジュエリー・ボニー (Jewelry Bonney) — PASS.
+- Japanese EB05-002 ドール (Doll) — PASS.
+
+Together with the four OP18 images above, all **8/8 previously unmatched OP18/EB05 sample image slots are now visually load-verified**. Official Bandai page associations confirm the card numbers, names, set and language. No local OCR was run on these browser-rendered images, and no real-photo OCR count changes. For future reference, use the official card-list links (including their generated query parameters) rather than testing only the bare image path.
