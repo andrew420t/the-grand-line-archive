@@ -5,7 +5,7 @@ import {
   ensurePhotoStorageReady,
   uploadProductPhotos,
 } from './productStorage'
-import { buildNewProductPayload, classifyPrintingDuplicate, EXTENDED_CARD_COLUMNS } from './productSchema'
+import { buildNewProductPayload, classifyPrintingDuplicate, EXTENDED_CARD_COLUMNS, resolveSetIdForCode } from './productSchema'
 import { supabase } from '../lib/supabase'
 import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
@@ -92,7 +92,7 @@ export default function QuickAddPanel({
     return {
       ...initialProduct(),
       ...extracted,
-      set_id: matchingSet?.id || '',
+      set_id: matchingSet?.id || resolveSetIdForCode(sets, extracted.set_code),
     }
   })
   const [busy, setBusy] = useState(false)
@@ -107,7 +107,11 @@ export default function QuickAddPanel({
   const [catalogueError, setCatalogueError] = useState('')
   const [librarySaving, setLibrarySaving] = useState(false)
   const setField = (field, value) => {
-    setForm((current) => ({ ...current, [field]: value }))
+    setForm((current) => ({
+      ...current,
+      [field]: value,
+      ...(field === 'set_code' ? { set_id: resolveSetIdForCode(sets, value) } : {}),
+    }))
     // Any change to the candidate card invalidates a prior manual duplicate
     // confirmation. Require the administrator to review the new match again.
     setAllowVariant(false)
@@ -134,7 +138,7 @@ export default function QuickAddPanel({
 
   const applyCatalogueMatch = (match) => {
     const details = catalogueMatchToForm(match)
-    const matchingSet = sets.find((set) => String(set.code || '').replace(/-/g, '').toUpperCase() === String(match.setCode || '').replace(/-/g, '').toUpperCase())
+    const matchingSetId = resolveSetIdForCode(sets, match.setCode)
     const matchingCategory = categories.find((category) => String(category.name || '').toLowerCase() === String(match.category || '').toLowerCase())
     setForm((current) => ({
       ...current,
@@ -142,7 +146,7 @@ export default function QuickAddPanel({
       // Never carry the previous set selection onto a catalogue match for a
       // different/unrecognised set code. That could silently assign the card
       // to the wrong set when saving.
-      set_id: matchingSet?.id || (match.setCode ? '' : current.set_id),
+      set_id: matchingSetId || (match.setCode ? '' : current.set_id),
       category_id: matchingCategory?.id || current.category_id,
     }))
     setAllowVariant(false)
@@ -253,10 +257,8 @@ export default function QuickAddPanel({
       }
 
       const selectedSet = sets.find((set) => String(set.id) === String(form.set_id))
-      const setFromCode = form.set_code
-        ? sets.find((set) => String(set.code || '').toUpperCase() === form.set_code.trim().toUpperCase())
-        : null
-      const resolvedSetId = selectedSet?.id || setFromCode?.id || ''
+      const setFromCodeId = resolveSetIdForCode(sets, form.set_code)
+      const resolvedSetId = selectedSet?.id || setFromCodeId
       if (form.set_code.trim() && !resolvedSetId) {
         throw new Error(`No existing set matches code "${form.set_code}". Select the correct set or add it to the sets table first.`)
       }
