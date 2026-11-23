@@ -18,3 +18,14 @@ export function orderDeleteFailure(result) {
   if (!result?.data?.id) return 'The pending order was not found or deletion was not permitted.'
   return ''
 }
+
+export function isAllowedOrderStatusTransition(currentStatus, nextStatus) {
+  const current = String(currentStatus || '').trim().toLowerCase()
+  const next = String(nextStatus || '').trim().toLowerCase()
+  if (current === next && ORDER_STATUSES.includes(current)) return true
+  return (
+    (current === 'pending' && ['processing', 'cancelled'].includes(next)) ||
+    (current === 'processing' && ['shipped', 'cancelled'].includes(next)) ||
+    (current === 'shipped' && next === 'completed')
+  )
+}
