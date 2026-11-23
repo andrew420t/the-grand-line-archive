@@ -954,3 +954,12 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 ### Follow-up exact-head verification — 23 November 2026
 
 - PR head advanced to `5d641f76945c9424a801c49f2fbdc3398a2d8b53`; GitHub Actions run #477 (ID `45211850487`) passed install, tests, lint, and production build. This is the latest exact-head verification checked during this pass.
+
+
+### Exact-head crop-gate verification and data-refresh recheck — 23 November 2026
+
+- Corrected the stale crop-bound assertion that caused CI #472 to fail. The test now uses 100×100 source dimensions, consistent with the expected 75×75 crop; separate tests cover the 64-pixel floor.
+- Added a final safety guard tying crop confirmation to the exact selected photo file. A photo change resets crop selection and confirmation, and a stale confirmation cannot unlock Scan/Rescan for a different file. Crop-input state updates were also moved out of React state-updater callbacks.
+- Exact PR #26 head `5d641f76945c9424a801c49f2fbdc3398a2d8b53` passed GitHub Actions run #477 (ID `45211850487`): **100/100 tests passed, lint passed, production build passed**. This exact-head pass covers the crop gate, confirmation/photo identity guard, source pixel floor, tests, and the checklist/progress updates present on that commit. It still does not verify browser/device behaviour or real OCR.
+- Rechecked upstream Koala Kollect manifest: generated `2026-10-22T04:46:19Z`, `cards.jsonl` declares 3,003 rows; English products 99 rows and Japanese products 92 rows. Both product lists contain OP-17, but neither contains OP-18 nor EB-05. Product records are therefore demonstrably stale for those sets; full OP18/EB05 card-row retrieval was not independently completed this pass.
+- PR #26 remains open/unmerged. No merge/deploy or production data changes.
