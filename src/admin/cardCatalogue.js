@@ -381,8 +381,9 @@ export async function getCatalogueCoverageReport() {
     // The catalogue remains usable if the optional source freshness check is offline.
   }
   const sourceGeneratedAt = sourceManifest?.generated_at || ''
-  const sourceAgeDays = sourceGeneratedAt
-    ? Math.max(0, Math.floor((Date.now() - new Date(sourceGeneratedAt).getTime()) / 86400000))
+  const sourceAgeTimestamp = sourceGeneratedAt ? new Date(sourceGeneratedAt).getTime() : NaN
+  const sourceAgeDays = Number.isFinite(sourceAgeTimestamp)
+    ? Math.max(0, Math.floor((Date.now() - sourceAgeTimestamp) / 86400000))
     : null
   const report = {
     cards: catalogue.cards.length,
@@ -490,8 +491,8 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
   const catalogue = await getCatalogue()
   const entries = []
   for (const language of LANGUAGES) {
-    const data = catalogue.languages[language]
-    const index = catalogue.indexes[language]
+    const data = catalogue.languages?.[language] || { printings: [] }
+    const index = catalogue.indexes?.[language] || {}
     for (const printing of data.printings) {
       const locator = safeMapGet(index.locatorsByPrinting, printing.key + ':' + printing.site)
       const officialUrl = locator?.image_id && (printing.site === 'en' || printing.site === 'jp')
