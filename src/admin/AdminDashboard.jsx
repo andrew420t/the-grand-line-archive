@@ -840,8 +840,8 @@ function CollectionsSection({ categories, sets, onRefresh }) {
       setSetDescription('')
       setNotice('Set added.')
       onRefresh()
-    } catch (setError) {
-      setError(setError.message || 'Set was not saved. Please try again.')
+    } catch (setFailure) {
+      setError(setFailure.message || 'Set was not saved. Please try again.')
     } finally {
       setBusy(false)
     }
