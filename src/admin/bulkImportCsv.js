@@ -103,3 +103,7 @@ export function parseCsv(text) {
 export function preferCatalogueValue(value, fallback) {
   return value === undefined || value === null || value === '' ? fallback : value
 }
+
+export function hasExtendedCardValues(values = []) {
+  return values.some((value) => value !== undefined && value !== null && String(value).trim() !== '')
+}
