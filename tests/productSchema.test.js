@@ -200,3 +200,24 @@ test('editing card number, set, language or variant clears stale catalogue ident
   }
 })
 
+
+
+test('bulk catalogue printing identity is retained by product payload creation', () => {
+  const catalogueForm = {
+    ...form,
+    card_number: 'EB04-005',
+    language: 'Japanese',
+    variant_label: 'Parallel',
+    catalogue_match_id: 'law-parallel:jp:product-eb04',
+    catalogue_printing_key: 'law-parallel',
+    catalogue_reference_image_url: 'https://example.test/law-parallel.png',
+    catalogue_reference_image_source: 'Bandai official image',
+  }
+  const payload = buildNewProductPayload(catalogueForm, 'set-eb04', true)
+  assert.equal(payload.catalogue_match_id, catalogueForm.catalogue_match_id)
+  assert.equal(payload.catalogue_printing_key, catalogueForm.catalogue_printing_key)
+  assert.equal(payload.catalogue_reference_image_url, catalogueForm.catalogue_reference_image_url)
+  assert.equal(payload.catalogue_reference_image_source, catalogueForm.catalogue_reference_image_source)
+  assert.equal(payload.language, 'Japanese')
+  assert.equal(payload.variant_label, 'Parallel')
+})
