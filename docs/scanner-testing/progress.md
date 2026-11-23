@@ -338,3 +338,8 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ## Stale scanner results cleared on rescan — 23 November 2026
 - Starting a new OCR scan now immediately clears prior catalogue/manual match panels, selection, confirmation state, previous OCR readings/candidates, and lookup errors. This prevents a previous card's candidate from remaining visible if the new photograph fails OCR or lookup.
 - Change is on PR #26 branch only; awaiting CI.
+
+
+## Progress-log correction — 23 November 2026
+- An earlier inventory-safety entry described duplicate lookup as checking up to 50 rows. That was superseded by the pagination work: duplicate lookup now retrieves matching rows in pages of 1,000 with stable ID ordering and continues until the final page. The earlier note is historical, not the current limit.
+- The rescan reset improvement passed CI on commit `db679d6bfdc4b420b6e7fcfd710ff5bb72e0d4c8` (tests, lint, build).
