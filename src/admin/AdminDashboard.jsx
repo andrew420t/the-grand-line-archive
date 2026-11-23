@@ -201,9 +201,12 @@ export default function AdminDashboard({
           onPhotosChange={setPhotos}
           scanFields={scanFields}
           user={user}
-          onSaved={() => {
-            photos.forEach((photo) => URL.revokeObjectURL(photo.previewUrl))
-            setPhotos([])
+          onSaved={({ uploadedPhotoIds = [] } = {}) => {
+            const uploadedIds = new Set(uploadedPhotoIds)
+            photos.filter((photo) => uploadedIds.has(photo.id)).forEach((photo) => {
+              if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl)
+            })
+            setPhotos((current) => current.filter((photo) => !uploadedIds.has(photo.id)))
             setScanFields(blankScanFields())
             setScanVersion((current) => current + 1)
             setRawText('')
