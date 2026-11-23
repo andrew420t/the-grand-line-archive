@@ -88,6 +88,7 @@ Expected behaviour:
 - [ ] Test normalized set-code matching and an unknown set code.
 - [ ] Test duplicates within the CSV and against existing inventory; confirm the default skips them.
 - [ ] Test a partial batch failure and confirm imported, skipped, and failed rows are reported accurately.
+- [ ] Add a duplicate in staging after the CSV is loaded but before Import; confirm the import-time fresh paginated inventory check catches it and reports its row as skipped.
 - [ ] Confirm imported non-zero-price products start as drafts and zero-price products start inactive.
 - [ ] Confirm a missing extended schema blocks the batch before any rows are inserted.
 
