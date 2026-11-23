@@ -586,6 +586,11 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 ### Bulk-import catalogue identity preservation — 23 November 2026
 - Selecting a catalogue match in Bulk Import now carries its catalogue match ID, stable printing key, reference image URL, and source through to the imported product payload.
 - The extended-schema preflight includes those identity columns, so imports fail safely before inserting any rows if the approved columns are not present.
-- Regression coverage verifies that Japanese/parallel catalogue identity survives product payload construction. CI verification pending.
+- Regression coverage verifies that Japanese/parallel catalogue identity survives product payload construction. CI verification passed for the import identity mapping and duplicate-key checks.
 
 - Follow-up: Bulk Import duplicate detection now prefers the stable catalogue printing key when both records have one. Distinct printing keys are not treated as duplicates even when card number, set, language, and display variant label match; legacy rows retain the conservative fallback. Regression tests cover distinct and identical printing keys.
+
+
+### Ambiguous normalized set-code safeguard — 23 November 2026
+- Set-code normalization now links a set only when exactly one site set matches the normalized code. If legacy data contains both OP17 and OP-17 as separate set rows, Quick Add and Bulk Import leave the relationship unresolved rather than selecting an arbitrary row. An exact set selected from the dropdown still preserves its exact ID.
+- Added regression coverage for ambiguous normalized set codes. CI verification pending.
