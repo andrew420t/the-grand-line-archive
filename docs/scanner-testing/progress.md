@@ -998,3 +998,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Re-reviewed Quick Add duplicate protection: duplicate lookup paginates rather than inspecting only the first page; exact catalogue printing duplicates are blocked, legacy uncertain matches require explicit review and a variant label, and catalogue identity fields are cleared when card number/set/language/variant changes. Set-code resolution rejects normalized ambiguity instead of silently choosing a set.
 - Re-reviewed review-only SQL proposals. They have not been applied. Live policies/grants must be audited because permissive RLS policies combine with OR and can undermine a newly added policy; production schema and bucket settings remain unverified.
 - PR #26 remains open. No merge, deployment, or production changes.
+
+
+### Latest PR verification and rollback-result check — 23 November 2026
+
+- GitHub Actions run for the progress-doc commit `0305184778a65d9ecf665dc8b8f1a34afbbb6143` completed successfully (`Verify application`).
+- A further rollback correctness gap was found during review: product-image rollback used a conditional update to protect concurrent admin edits, but it did not verify whether that condition matched a row. It could silently report no cleanup issue even if rollback was skipped. The rollback now requests the affected row and reports when it was not applied (e.g. the product was removed or the image changed concurrently). Commit `a088ad37d873dbc162eaa58b3b420258b11a825e`; exact-head CI is pending.
+- PR mergeability was refreshed and currently reports `false` for this latest commit; this may be GitHub's transient recalculation or a conflict and needs another check. No merge or deployment has been attempted.
