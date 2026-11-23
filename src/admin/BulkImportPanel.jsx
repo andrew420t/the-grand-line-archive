@@ -1,7 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import { AlertCircle, Check, FileSpreadsheet, Upload, Download } from 'lucide-react'
 import { supabase } from '../lib/supabase'
-import { buildNewProductPayload, EXTENDED_CARD_COLUMNS } from './productSchema'
+import { buildNewProductPayload, EXTENDED_CARD_COLUMNS, resolveSetIdForCode } from './productSchema'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import { parseCsv, isBulkImportDuplicate, validateBulkImportNumericFields } from './bulkImportCsv'
@@ -29,7 +29,8 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
   const [catalogueLoadingRow, setCatalogueLoadingRow] = useState(null)
 
   const prepared = useMemo(() => rows.map((row, rowIndex) => {
-    const matchingSet = sets.find((set) => String(set.code || '').toUpperCase() === String(row.set_code || '').toUpperCase())
+    const matchingSetId = resolveSetIdForCode(sets, row.set_code)
+    const matchingSet = sets.find((set) => String(set.id) === String(matchingSetId))
     const matchingCategory = categories.find((category) => String(category.name || '').toLowerCase() === String(row.category_name || '').toLowerCase())
     const duplicate = products.find((product) => isBulkImportDuplicate({
       card_number: product.raw?.card_number,
