@@ -119,7 +119,7 @@ const value = (item, key) => item?.[key] ?? ''
 
 // Catalogue data can be partially unavailable during a failed/older cache load.
 // Treat absent indexes as empty rather than crashing the entire Image Library.
-const safeMapGet = (map, key) => map instanceof Map ? safeMapGet(map, key) : undefined
+const safeMapGet = (map, key) => map instanceof Map ? map.get(key) : undefined
 
 function formatSetCode(code) {
   return String(code || '').replace(/^(OP|EB|ST|PRB)(\d{2})$/, '$1-$2').toUpperCase()
