@@ -1,5 +1,6 @@
 import { supabase } from '../lib/supabase'
 import { makePhotoFile, prepareCardImage } from './imageTools'
+import { fetchAllStorageFiles } from './storagePagination'
 
 export const CARD_IMAGE_BUCKET = 'product-card-images'
 
@@ -162,13 +163,18 @@ export async function removeLocalPhotos(photos) {
 export async function listLibraryPhotos(userId) {
   if (!supabase) throw new Error('Supabase is not configured.')
   const folder = `${userId}/library`
-  const result = await supabase.storage.from(CARD_IMAGE_BUCKET).list(folder, {
-    limit: 100,
-    sortBy: { column: 'created_at', order: 'desc' },
-  })
-  if (result.error) throw new Error(`Could not load the image library: ${result.error.message}`)
   const storage = supabase.storage.from(CARD_IMAGE_BUCKET)
-  return (result.data || []).filter((file) => file.name && !file.name.startsWith('.')).map((file) => {
+  let files
+  try {
+    files = await fetchAllStorageFiles(({ limit, offset }) => storage.list(folder, {
+      limit,
+      offset,
+      sortBy: { column: 'created_at', order: 'desc' },
+    }))
+  } catch (error) {
+    throw new Error(`Could not load the image library: ${error.message || String(error)}`)
+  }
+  return files.filter((file) => file.name && !file.name.startsWith('.')).map((file) => {
     const path = `${folder}/${file.name}`
     const { data } = storage.getPublicUrl(path)
     return { ...file, path, url: data.publicUrl }
