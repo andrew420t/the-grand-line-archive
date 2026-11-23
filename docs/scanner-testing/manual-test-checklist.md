@@ -116,7 +116,11 @@ Expected behaviour:
 - [ ] Confirm successful checkout creates the order and its items and clears the basket.
 - [ ] Confirm customer order history shows only that customer's orders.
 - [ ] Confirm admin order status changes accept only supported states and verify the affected order row.
-- [ ] Test two concurrent checkouts for the same low-stock product. Record the known limitation: current stock checking is client-side; atomic stock reservation/concurrency protection still requires a server-side transaction/RPC or equivalent database enforcement.
+- [ ] Review and apply the atomic checkout RPC proposal in staging only after verifying schema, existing stock triggers, RLS, grants, and order lifecycle.
+- [ ] With the RPC enabled and client integrated in staging, test two concurrent checkouts for the same low-stock product; only one may succeed.
+- [ ] Confirm successful checkout decrements/reserves stock exactly once and order + items + stock remain consistent if any insertion fails.
+- [ ] Verify direct order/order-item insertion cannot bypass the approved stock reservation path, without breaking admin/order workflows.
+- [ ] Do not run these concurrency/destructive tests against production.
 
 ## 9. Site settings and catalogue overrides
 
