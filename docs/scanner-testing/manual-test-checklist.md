@@ -15,7 +15,7 @@ Use this checklist only against a dedicated staging/test deployment and test Sup
 
 ## 1. Automated verification
 
-- [x] Latest verified PR CI run: tests, lint, and production build all passed on the current PR head at the time of the run.
+- [x] Latest verified PR CI run **45224390314** on PR head `892cfb1eeba708cf144628c91c9609e26894d401`: tests, lint, and production build all passed.
 - [ ] Re-check CI after any further code commit; the result must match the exact latest PR head.
 - [ ] Do not treat a successful build as proof of physical scanner, browser camera, Supabase policy, or end-to-end checkout correctness.
 
