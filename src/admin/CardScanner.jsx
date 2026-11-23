@@ -427,7 +427,7 @@ export default function CardScanner({
           </div>
           <label className="scanner-manual-crop__toggle">
             <input type="checkbox" checked={manualCropEnabled} disabled={scanning || !frontPhoto} onChange={(event) => { setManualCropEnabled(event.target.checked); clearCropConfirmation(); setManualCropSelectionMade(false) }} />
-            <span>Require manual card crop</span>
+            <span>Enable manual crop selection</span>
           </label>
         </div>
         {manualCropEnabled && frontPhoto?.previewUrl && (
