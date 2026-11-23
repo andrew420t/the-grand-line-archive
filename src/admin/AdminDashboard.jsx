@@ -38,7 +38,7 @@ import BulkImportPanel from './BulkImportPanel'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
-import { buildProductEditPayload } from './productEditPayload'
+import { buildProductEditPayload, parseInventoryStockUpdate } from './productEditPayload'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -389,10 +389,9 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     }
     const raw = product.raw || {}
     const values = changes[product.id] || {}
-    const quantity = Number(values.stock ?? raw.stock_quantity)
-    const price = Number(values.price ?? raw.price)
-    if (!Number.isInteger(quantity) || quantity < 0 || !Number.isFinite(price) || price < 0) {
-      setError('Enter a non-negative whole-number quantity and a valid price.')
+    const stockUpdate = parseInventoryStockUpdate(values, raw)
+    if (!stockUpdate) {
+      setError('Enter a non-negative whole-number quantity and a valid price. Neither field can be blank.')
       return
     }
 
@@ -401,7 +400,7 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     setNotice('')
     const result = await supabase
       .from('products')
-      .update({ stock_quantity: quantity, price, updated_at: new Date().toISOString() })
+      .update({ ...stockUpdate, updated_at: new Date().toISOString() })
       .eq('id', product.id)
     if (result.error) {
       setError(`Stock was not updated: ${result.error.message}`)
@@ -479,8 +478,8 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
               <article className="inventory-item" key={product.id}>
                 <div className="inventory-item__photo">{product.image ? <img src={product.image} alt={product.name} /> : <Image size={22} />}</div>
                 <div className="inventory-item__details"><p className="eyebrow">{product.setCode ? `${product.setCode} · ` : ''}{product.setName || product.category || 'CARD'}</p><h3>{product.name}</h3><span>{raw.card_number || 'Card number not recorded'} · {product.rarity || 'Rarity not recorded'}</span><span>{[raw.language, raw.variant_label].filter(Boolean).join(' · ') || 'Language / printing not recorded'}</span>{raw.catalogue_printing_key && <span className="admin-muted">Printing: {raw.catalogue_printing_key}</span>}<span className={String(raw.status || '').toLowerCase() === 'active' ? 'inventory-publication-status is-published' : 'inventory-publication-status'}>{String(raw.status || '').toLowerCase() === 'active' ? 'Published in Archive' : 'Private · Inventory only'}</span></div>
-                <label className="form-field inventory-input"><span>GBP price</span><input type="number" min="0" step="0.01" value={valueFor(product, 'price') || raw.price || ''} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], price: event.target.value } }))} /></label>
-                <label className="form-field inventory-input"><span>Quantity</span><input type="number" min="0" step="1" value={valueFor(product, 'stock') || raw.stock_quantity || 0} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], stock: event.target.value } }))} /></label>
+                <label className="form-field inventory-input"><span>GBP price</span><input type="number" min="0" step="0.01" value={valueFor(product, 'price') ?? raw.price ?? ''} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], price: event.target.value } }))} /></label>
+                <label className="form-field inventory-input"><span>Quantity</span><input type="number" min="0" step="1" value={valueFor(product, 'stock') ?? raw.stock_quantity ?? 0} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], stock: event.target.value } }))} /></label>
                 <button className="button button--outline inventory-save" type="button" disabled={busyId === String(product.id)} onClick={() => saveInventory(product)}>{busyId === String(product.id) ? 'Saving…' : 'Update stock'}</button>
                 <div className="inventory-item__actions">
                   <button className={String(raw.status || '').toLowerCase() === 'active' ? 'button button--outline' : 'button button--gold'} type="button" disabled={busyId === String(product.id)} onClick={() => toggleArchivePublication(product)}>{busyId === String(product.id) ? 'Saving…' : String(raw.status || '').toLowerCase() === 'active' ? 'Remove from Archive' : 'Post to Archive'}</button>
