@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabase'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
+const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
 const LANGUAGES = ['en', 'jp']
 const CACHE_TTL = 6 * 60 * 60 * 1000
 
@@ -372,6 +373,17 @@ export async function findPrimaryCatalogueMatch(cardNumber, language = '') {
  */
 export async function getCatalogueCoverageReport() {
   const catalogue = await getCatalogue()
+  let sourceManifest = null
+  try {
+    const manifestResponse = await fetch(MANIFEST_URL, { cache: 'no-cache' })
+    if (manifestResponse.ok) sourceManifest = await manifestResponse.json()
+  } catch {
+    // The catalogue remains usable if the optional source freshness check is offline.
+  }
+  const sourceGeneratedAt = sourceManifest?.generated_at || ''
+  const sourceAgeDays = sourceGeneratedAt
+    ? Math.max(0, Math.floor((Date.now() - new Date(sourceGeneratedAt).getTime()) / 86400000))
+    : null
   const report = {
     cards: catalogue.cards.length,
     printings: 0,
@@ -386,6 +398,10 @@ export async function getCatalogueCoverageReport() {
     missingImageSamples: [],
     sources: ['Bandai official image URLs where a Bandai locator exists', 'Koala Kollect structured catalogue metadata'],
     checkedAt: new Date().toISOString(),
+    sourceGeneratedAt,
+    sourceAgeDays,
+    sourceIsStale: sourceAgeDays !== null && sourceAgeDays > 7,
+    missingExpectedSets: [],
   }
   for (const language of LANGUAGES) {
     const data = catalogue.languages?.[language] || { printings: [] }
@@ -459,6 +475,7 @@ export async function getCatalogueCoverageReport() {
       }
     }
   }
+  report.missingExpectedSets = ['OP-18', 'EB-05'].filter((code) => !report.sets[code] || report.sets[code].printings === 0)
   report.missingImageSamples.sort((a, b) =>
     a.sourceSite.localeCompare(b.sourceSite) ||
     a.cardNumber.localeCompare(b.cardNumber) ||
