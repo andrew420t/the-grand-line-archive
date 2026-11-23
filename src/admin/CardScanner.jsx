@@ -276,6 +276,7 @@ export default function CardScanner({
   }
 
   const selectedAutoMatch = rankedAutoMatches.find((item) => item.match.id === selectedAutoMatchId)?.match
+  const sameNumberVariants = new Set(rankedAutoMatches.map(({ match }) => [match.cardNumber, match.languageCode, match.setCode, match.variantLabel || match.variant || match.rarity].join('|'))).size
 
   const confirmAutoMatch = async () => {
     if (selectedAutoMatch) {
@@ -429,7 +430,8 @@ export default function CardScanner({
                   <div>
                     <strong>{selectedAutoMatch.name || 'Name unavailable'}</strong>
                     <span>{selectedAutoMatch.cardNumber} · {selectedAutoMatch.language} · {selectedAutoMatch.setCode || 'Set not listed'}</span>
-                    <span>{selectedAutoMatch.rarity || 'Rarity unknown'} · {selectedAutoMatch.variant || 'Base version'}</span>
+                    {selectedAutoMatch.setName && <span>{selectedAutoMatch.setName}</span>}
+                    <span>{selectedAutoMatch.rarity || 'Rarity unknown'} · {selectedAutoMatch.variantLabel || selectedAutoMatch.variant || 'Base version'}</span>
                     <small>{rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.nameMatch ? 'Name agrees with OCR' : 'Name differs from OCR'} · {rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.languageMatch ? 'Language agrees' : 'Language needs checking'}</small>
                   </div>
                 </div>
@@ -437,12 +439,13 @@ export default function CardScanner({
             )}
             {rankedAutoMatches.length > 1 && (
               <div className="scanner-match-confirmation__options">
-                <strong>Select the card you believe is correct</strong>
+                <strong>Select the card you believe is correct ({rankedAutoMatches.length} catalogue printings)</strong>
+                {sameNumberVariants > 1 && <p className="scanner-match-confirmation__intro">Several printings share this card number. The scanner cannot reliably identify the finish from OCR alone—compare the artwork and variant details before choosing.</p>}
                 <div className="scanner-match-confirmation__list">
                   {rankedAutoMatches.map(({ match, nameMatch, languageMatch }) => (
                     <button className={selectedAutoMatchId === match.id ? 'scanner-match-confirmation__option scanner-match-confirmation__option--selected' : 'scanner-match-confirmation__option'} type="button" key={match.id} onClick={() => setSelectedAutoMatchId(match.id)}>
                       <CatalogueReferenceImage match={match} className="scanner-match-confirmation__thumb" />
-                      <span><b>{match.name || 'Unknown card'}</b><small>{match.cardNumber} · {match.language} · {match.setCode || 'Promo'}</small><small>{nameMatch ? 'Name match' : 'Name differs'} · {languageMatch ? 'Language match' : 'Language differs'}</small></span>
+                      <span><b>{match.name || 'Unknown card'}</b><small>{match.cardNumber} · {match.language} · {match.setCode || 'Set not listed'}</small>{match.setName && <small>{match.setName}</small>}<small>{match.rarity || 'Rarity unknown'} · {match.variantLabel || match.variant || 'Base version'}</small><small>{nameMatch ? 'Name match' : 'Name differs'} · {languageMatch ? 'Language match' : 'Language differs'}</small></span>
                     </button>
                   ))}
                 </div>
