@@ -326,3 +326,10 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Regression tests cover language aliases and missing-language ambiguity. This is code/test coverage only; no live inventory records or production database were changed.
 
 - Migration review now includes a read-only audit query for repeated stable printing keys grouped by set, card number and normalized language. This surfaces pre-existing collisions (including blank-language legacy rows) before anyone considers a database uniqueness rule. The migration remains review-only and has not been executed.
+
+
+## Scanner/inventory safety review — 23 November 2026
+- Reset possible-duplicate confirmation whenever candidate card fields change, or when a different catalogue match or set is selected. A prior confirmation cannot be reused for a changed card.
+- Catalogue match selection no longer carries a stale previous set ID when the new match has a different or unrecognised set code. The set must resolve from the selected match's code or remain unset for verification.
+- Duplicate checks now paginate matching inventory rows rather than stopping at 50, and sort by product ID for stable pagination. This prevents large inventories from hiding an existing duplicate.
+- These are defensive application changes on the PR branch. They do not change production or live database records. CI for the latest commit is pending.
