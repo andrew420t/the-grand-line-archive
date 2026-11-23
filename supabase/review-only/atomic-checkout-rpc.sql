@@ -11,7 +11,7 @@
 -- public.orders(user_id uuid, status text, total_amount numeric)
 -- public.order_items(order_id uuid, product_id uuid, quantity integer, unit_price numeric)
 --
--- API input: [{"product_id":"<uuid>","quantity":1}, ...]
+-- API input: [{"product_id":"<uuid>","quantity":1,"expected_unit_price":2.50}, ...]
 -- Duplicate product IDs are combined. Product rows are locked in UUID order to
 -- prevent concurrent checkouts from selling the same stock and reduce deadlocks.
 -- The whole function executes as one transaction; any exception rolls back the
@@ -46,14 +46,17 @@ BEGIN
     SELECT 1
     FROM jsonb_to_recordset(p_items) AS input(product_id uuid, quantity integer)
     WHERE product_id IS NULL OR quantity IS NULL OR quantity < 1
+       OR expected_unit_price IS NULL OR expected_unit_price < 0
   ) THEN
     RAISE EXCEPTION 'Every order item must have a product ID and positive whole quantity.';
   END IF;
 
   -- Lock all distinct product rows in deterministic order, then validate.
   FOR v_item IN
-    SELECT product_id, SUM(quantity)::integer AS quantity
-    FROM jsonb_to_recordset(p_items) AS input(product_id uuid, quantity integer)
+    SELECT product_id, SUM(quantity)::integer AS quantity,
+           MIN(expected_unit_price) AS expected_unit_price,
+           MAX(expected_unit_price) AS max_expected_unit_price
+    FROM jsonb_to_recordset(p_items) AS input(product_id uuid, quantity integer, expected_unit_price numeric)
     GROUP BY product_id
     ORDER BY product_id
   LOOP
@@ -71,6 +74,12 @@ BEGIN
     END IF;
     IF v_product.price IS NULL OR v_product.price < 0 THEN
       RAISE EXCEPTION 'Product % has an invalid price.', v_product.name;
+    END IF;
+    IF v_item.expected_unit_price IS DISTINCT FROM v_item.max_expected_unit_price THEN
+      RAISE EXCEPTION 'Basket has conflicting prices for product %.', v_product.name;
+    END IF;
+    IF v_product.price IS DISTINCT FROM v_item.expected_unit_price THEN
+      RAISE EXCEPTION 'Price changed for product %. Review the basket and retry.', v_product.name;
     END IF;
     IF v_product.stock_quantity IS NULL OR v_product.stock_quantity < v_item.quantity THEN
       RAISE EXCEPTION 'Insufficient stock for product %.', v_product.name;
