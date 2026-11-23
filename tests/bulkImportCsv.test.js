@@ -55,3 +55,10 @@ test('numeric card fields allow dash placeholders and zero but reject invalid va
   assert.deepEqual(validateBulkImportNumericFields({ price_gbp: '1.25', stock_quantity: '2', power: '5000', cost: '4', counter: '1000' }), [])
   assert.deepEqual(validateBulkImportNumericFields({ price_gbp: '-1', stock_quantity: '1.5', power: 'five', cost: '-2', counter: '1.5' }), ['Invalid price', 'Invalid quantity', 'Invalid power', 'Invalid cost', 'Invalid counter'])
 })
+
+test('blank, base, and Normal variant labels normalize to the same identity', () => {
+  assert.equal(isBulkImportDuplicate(
+    { card_number: 'OP01-016', set_code: 'OP01', variant_label: '', language: 'EN' },
+    { card_number: 'OP01-016', set_code: 'OP01', variant_label: 'Normal', language: 'English' },
+  ), true)
+})
