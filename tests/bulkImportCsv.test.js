@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { parseCsv, isBulkImportDuplicate } from '../src/admin/bulkImportCsv.js'
+import { parseCsv, isBulkImportDuplicate, validateBulkImportNumericFields } from '../src/admin/bulkImportCsv.js'
 
 test('maps standard and extended card columns from the import CSV', () => {
   const rows = parseCsv('Card Name,Card Number,Set Code,Counter,Trigger Text,Attributes\nNami,OP01-016,OP01,1000,If trigger is met,Slash\n')
@@ -44,4 +44,10 @@ test('different languages and variants are not exact bulk-import duplicates', ()
   const existing = { card_number: 'EB04-005', set_code: 'EB04', variant_label: 'Parallel', language: 'Japanese' }
   assert.equal(isBulkImportDuplicate(existing, { ...existing, language: 'English' }), false)
   assert.equal(isBulkImportDuplicate(existing, { ...existing, variant_label: 'Normal' }), false)
+})
+
+test('numeric card fields allow dash placeholders and zero but reject invalid values', () => {
+  assert.deepEqual(validateBulkImportNumericFields({ price_gbp: '0', stock_quantity: '0', power: '0', cost: '-', counter: '-' }), [])
+  assert.deepEqual(validateBulkImportNumericFields({ price_gbp: '1.25', stock_quantity: '2', power: '5000', cost: '4', counter: '1000' }), [])
+  assert.deepEqual(validateBulkImportNumericFields({ price_gbp: '-1', stock_quantity: '1.5', power: 'five', cost: '-2', counter: '1.5' }), ['Invalid price', 'Invalid quantity', 'Invalid power', 'Invalid cost', 'Invalid counter'])
 })
