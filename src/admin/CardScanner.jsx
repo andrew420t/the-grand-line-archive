@@ -3,6 +3,7 @@ import { AlertCircle, ArrowRight, Check, LoaderCircle, ScanLine } from 'lucide-r
 import { CARD_FIELDS, parseCardDetails } from './cardParser'
 import { rankCatalogueMatches } from './cardMatchRanking'
 import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
+import { buildCatalogueScannerFields } from './productSchema'
 import CatalogueReferenceImage from './CatalogueReferenceImage'
 import { findRememberedCardImage, findSharedRememberedCardImage, rememberVerifiedCardImage } from './cardRecognitionMemory'
 import { prepareCardNumberRegions } from './cardNumberRegion'
@@ -267,26 +268,7 @@ export default function CardScanner({
     const values = catalogueMatchToForm(match)
     setFields((current) => ({
       ...current,
-      ...Object.fromEntries(Object.entries({
-        name: values.name,
-        card_number: values.card_number,
-        set_code: values.set_code,
-        rarity: values.rarity,
-        color: values.color,
-        cost: values.cost,
-        power: values.power,
-        card_type: values.card_type,
-        classification: values.classification,
-        language: values.language,
-        effect_text: values.effect_text,
-        variant_label: values.variant_label,
-        catalogue_match_id: values.catalogue_match_id,
-        catalogue_printing_key: values.catalogue_printing_key,
-        catalogue_reference_image_url: values.catalogue_reference_image_url,
-        catalogue_reference_image_source: values.catalogue_reference_image_source,
-        reference_image_url: values.reference_image_url,
-        reference_printing_key: values.reference_printing_key,
-      }).map(([key, value]) => [
+      ...Object.fromEntries(Object.entries(buildCatalogueScannerFields(values)).map(([key, value]) => [
         key,
         { value: value || '', confidence: value ? 95 : 0, needsReview: true },
       ])),
