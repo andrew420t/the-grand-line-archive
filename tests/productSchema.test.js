@@ -17,6 +17,9 @@ const form = {
   cost: '5',
   card_type: 'Character',
   effect_text: 'On Play: Draw 1 card.',
+  counter: '1000',
+  trigger_text: 'Draw 1 card.',
+  attributes: 'Slash',
   language: 'English',
   classification: 'Character',
   variant_label: '',
@@ -46,6 +49,9 @@ test('includes OCR card metadata only when its reviewed columns exist', () => {
   assert.equal(payload.power, 5000)
   assert.equal(payload.cost, 5)
   assert.equal(payload.effect_text, 'On Play: Draw 1 card.')
+  assert.equal(payload.counter, 1000)
+  assert.equal(payload.trigger_text, 'Draw 1 card.')
+  assert.equal(payload.attributes, 'Slash')
   assert.equal(payload.language, 'English')
   assert.equal(payload.catalogue_match_id, form.catalogue_match_id)
   assert.equal(payload.catalogue_printing_key, form.catalogue_printing_key)
