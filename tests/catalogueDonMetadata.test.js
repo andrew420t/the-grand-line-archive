@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { isDonCatalogueEntry } from '../src/admin/catalogueDonMetadata.js'
+import { isDonCatalogueEntry, buildDonSetIndex, donSetSlugToCode } from '../src/admin/catalogueDonMetadata.js'
 
 test('detects DON!! printings from rarity and source text', () => {
   assert.equal(isDonCatalogueEntry({ printing: { rarity: 'DON', variant: 'normal' } }), true)
@@ -18,12 +18,11 @@ test('does not misclassify ordinary cards as DON!!', () => {
   assert.equal(isDonCatalogueEntry({ printing: { rarity: 'SR', source_text: 'Luffy' }, card: { category: 'character' } }), false)
 })
 
-import { buildDonSetIndex, donSetSlugToCode } from '../src/admin/catalogueDonMetadata.js'
-
 test('normalizes DON!! source set slugs to display codes', () => {
   assert.equal(donSetSlugToCode('op-01'), 'OP01')
   assert.equal(donSetSlugToCode('eb-03'), 'EB03')
   assert.equal(donSetSlugToCode('prb-02'), 'PRB02')
+  assert.equal(donSetSlugToCode('op14-eb04'), 'OP14-EB04')
   assert.equal(donSetSlugToCode('op15-eb04'), 'OP15-EB04')
   assert.equal(donSetSlugToCode('dp-09'), 'DP-09')
   assert.equal(donSetSlugToCode('promo'), 'PROMO')
