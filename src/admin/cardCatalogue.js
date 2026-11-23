@@ -435,7 +435,7 @@ export async function getCatalogueCoverageReport() {
             linkedProductCodes: setCodes,
             hasOfficialLocator: Boolean(locator?.image_id),
             imageUrl: printing.image_url || '',
-            numberPrefixHint: cardNumber.match(/^(OP\\d{2}|EB\\d{2}|ST\\d{2}|PRB\\d{2}|P)-/)?.[1] || '',
+            numberPrefixHint: cardNumber.match(/^(OP\d{2}|EB\d{2}|ST\d{2}|PRB\d{2}|P)-/)?.[1] || '',
           })
         }
       }
