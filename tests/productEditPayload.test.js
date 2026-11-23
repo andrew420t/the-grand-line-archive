@@ -88,3 +88,11 @@ test('inventory inline updates reject blank and invalid values', () => {
   assert.equal(parseInventoryStockUpdate({ stock: '1.5', price: '2' }, {}), null)
   assert.equal(parseInventoryStockUpdate({ stock: '1', price: 'NaN' }, {}), null)
 })
+
+
+test('product deletion requires a confirmed deleted row', async () => {
+  const { productDeleteFailure } = await import('../src/admin/productEditPayload.js')
+  assert.equal(productDeleteFailure({ data: { id: 'product-1' }, error: null }), '')
+  assert.equal(productDeleteFailure({ data: null, error: null }), 'Product was not found or deletion was not permitted.')
+  assert.equal(productDeleteFailure({ data: null, error: { message: 'RLS denied' } }), 'RLS denied')
+})
