@@ -1,20 +1,18 @@
-const CARD_NUMBER_PATTERN = /\b(O?P|0P|EB|E8|ST|5T|PRB|PR8|P)\s*[-–— ]?\s*([O0-9]{1,3})\s*[-–—]\s*([O0-9]{3})\b/gi
+const CARD_NUMBER_PATTERN = /\b(O?P|0P|EB|E8|ST|5T|PRB|PR8)\s*[-–— ]?\s*([O0-9]{1,3})\s*[-–—]\s*([O0-9]{3})\b/gi
+const PROMO_NUMBER_PATTERN = /\bP\s*[-–—]\s*([O0-9]{3})\b/gi
 
 function normalizeCandidate(prefix, rawSet, rawNumber) {
   const normalizedPrefix = prefix.toUpperCase()
     .replace(/^0P$/, 'OP')
-    .replace(/^OP$/, 'OP')
     .replace(/^E8$/, 'EB')
     .replace(/^5T$/, 'ST')
     .replace(/^PR8$/, 'PRB')
   let setNumber = rawSet.toUpperCase().replace(/O/g, '0')
   if (setNumber.length === 3 && setNumber.startsWith('0')) setNumber = setNumber.slice(1)
-  if (normalizedPrefix !== 'P' && !/^\d{1,2}$/.test(setNumber)) return ''
+  if (!/^\d{1,2}$/.test(setNumber)) return ''
   const cardNumber = rawNumber.toUpperCase().replace(/O/g, '0')
   if (!/^\d{3}$/.test(cardNumber)) return ''
-  return normalizedPrefix === 'P'
-    ? `P-${cardNumber}`
-    : `${normalizedPrefix}${setNumber.padStart(2, '0')}-${cardNumber}`
+  return `${normalizedPrefix}${setNumber.padStart(2, '0')}-${cardNumber}`
 }
 
 export function extractCardNumberCandidates(readings = []) {
@@ -41,7 +39,8 @@ export function extractCardNumberCandidates(readings = []) {
     }
     PROMO_NUMBER_PATTERN.lastIndex = 0
     while ((match = PROMO_NUMBER_PATTERN.exec(text))) {
-      addCandidate('P-' + match[1].toUpperCase().replace(/O/g, '0'))
+      const cardNumber = match[1].toUpperCase().replace(/O/g, '0')
+      if (/^\d{3}$/.test(cardNumber)) addCandidate(`P-${cardNumber}`)
     }
   }
   return [...candidates.values()]
