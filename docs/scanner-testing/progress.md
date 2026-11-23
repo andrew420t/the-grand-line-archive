@@ -1071,3 +1071,4 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 ## RLS hardening review (review-only migration updated; staging pending)
 - Review of `admin-feature-migration.sql` found that its product-image and site-settings policies were permissive additions; existing broad permissive policies could OR around them. Added restrictive SELECT/INSERT/UPDATE/DELETE guards for product_images and restrictive homepage/admin guards for site_settings. Storage already has restrictive bucket-specific guards.
 - These guards are still proposals and require staging review against existing policies, RLS/grants, and `public.is_admin()` before applying. No database was changed.
+- Extended admin-feature migration preflight to reject missing `products.status` and incompatible existing `site_settings` column shapes (text ID/jsonb settings) instead of allowing `CREATE TABLE IF NOT EXISTS` to mask an incompatible table. SQL remains review-only.
