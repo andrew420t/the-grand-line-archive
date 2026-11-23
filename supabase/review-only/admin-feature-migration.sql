@@ -86,6 +86,68 @@ BEGIN
 END
 $preflight$;
 
+-- Validate the product table shape before any DDL is attempted.
+DO $schema_preflight$
+DECLARE
+  product_id_type text;
+  image_product_id_type text;
+  missing_image_columns text[];
+BEGIN
+  IF to_regclass('public.products') IS NULL THEN
+    RAISE EXCEPTION
+      'Expected public.products table was not found. Stop and review the live schema before applying this proposal.';
+  END IF;
+
+  SELECT format_type(atttypid, atttypmod)
+    INTO product_id_type
+  FROM pg_attribute
+  WHERE attrelid = 'public.products'::regclass
+    AND attname = 'id'
+    AND NOT attisdropped;
+
+  IF product_id_type IS DISTINCT FROM 'uuid' THEN
+    RAISE EXCEPTION
+      'public.products.id must be uuid for the proposed product_images foreign key; found %. No schema changes were applied.', COALESCE(product_id_type, 'missing');
+  END IF;
+
+  IF to_regclass('public.product_images') IS NOT NULL THEN
+    SELECT ARRAY(
+      SELECT required.column_name
+      FROM unnest(ARRAY[
+        'id', 'product_id', 'image_url', 'storage_path',
+        'role', 'sort_order', 'uploaded_by', 'created_at'
+      ]) AS required(column_name)
+      WHERE NOT EXISTS (
+        SELECT 1
+        FROM pg_attribute
+        WHERE attrelid = 'public.product_images'::regclass
+          AND attname = required.column_name
+          AND NOT attisdropped
+      )
+    )
+    INTO missing_image_columns;
+
+    IF cardinality(missing_image_columns) > 0 THEN
+      RAISE EXCEPTION
+        'Existing public.product_images table is missing required columns: %. Review its structure before applying this proposal.',
+        array_to_string(missing_image_columns, ', ');
+    END IF;
+
+    SELECT format_type(atttypid, atttypmod)
+      INTO image_product_id_type
+    FROM pg_attribute
+    WHERE attrelid = 'public.product_images'::regclass
+      AND attname = 'product_id'
+      AND NOT attisdropped;
+
+    IF image_product_id_type IS DISTINCT FROM 'uuid' THEN
+      RAISE EXCEPTION
+        'Existing public.product_images.product_id must be uuid; found %. Review the existing table before applying this proposal.', COALESCE(image_product_id_type, 'missing');
+    END IF;
+  END IF;
+END
+$schema_preflight$;
+
 ALTER TABLE public.products
   ADD COLUMN IF NOT EXISTS color text,
   ADD COLUMN IF NOT EXISTS power integer,
