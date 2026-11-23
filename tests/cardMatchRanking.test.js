@@ -130,3 +130,26 @@ test('number evidence occurrence count and confidence break ties before OCR name
   })
   assert.equal(ranked[0].match.id, 'strong')
 })
+
+test('number OCR confidence ranks evidence-strength ties before name matching', () => {
+  const ranked = rankCatalogueMatches([
+    { id: 'name', cardNumber: 'OP01-002', name: 'Roronoa Zoro', language: 'English' },
+    { id: 'confident-number', cardNumber: 'OP01-001', name: 'Trafalgar Law', language: 'Japanese' },
+  ], 'Roronoa Zoro', 'English', '', {
+    'OP01-002': { occurrences: 2, confidence: 55, sources: ['footer', 'wide'] },
+    'OP01-001': { occurrences: 2, confidence: 91, sources: ['footer', 'wide'] },
+  })
+  assert.equal(ranked[0].match.id, 'confident-number')
+  assert.equal(ranked[1].match.id, 'name')
+})
+
+test('number-evidenced printing ranks before a match with no footer evidence', () => {
+  const ranked = rankCatalogueMatches([
+    { id: 'name-only', cardNumber: 'OP01-002', name: 'Roronoa Zoro', language: 'English' },
+    { id: 'footer', cardNumber: 'OP01-001', name: 'Trafalgar Law', language: 'Japanese' },
+  ], 'Roronoa Zoro', 'English', '', {
+    'OP01-001': { occurrences: 1, confidence: 60, sources: ['footer'] },
+  })
+  assert.equal(ranked[0].match.id, 'footer')
+  assert.equal(ranked[0].numberEvidence.occurrences, 1)
+})
