@@ -27,7 +27,7 @@ async function createEnhancedCrop(image, zone, filename) {
   const cropWidth = Math.max(1, Math.round(image.width * zone.width))
   const cropHeight = Math.max(1, Math.round(image.height * zone.height))
   // Enlarge the number area to make small printed text easier for OCR.
-  const scale = Math.max(3, Math.min(6, 2200 / Math.max(cropWidth, cropHeight)))
+  const scale = Math.max(1, Math.min(6, 2200 / Math.max(cropWidth, cropHeight)))
   const canvas = document.createElement('canvas')
   canvas.width = Math.max(1, Math.round(cropWidth * scale))
   canvas.height = Math.max(1, Math.round(cropHeight * scale))
