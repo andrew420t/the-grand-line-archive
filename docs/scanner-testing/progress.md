@@ -297,3 +297,12 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Added those columns to the existing review-only admin feature migration. No SQL was executed and no live database was changed. The migration remains subject to review/approval before anyone applies it.
 - Regression tests verify the reference metadata is included only with the extended schema and that Normal and Parallel OP17-062 records retain different match IDs, printing keys and image URLs despite sharing the same card number.
 - This persists the exact catalogue reference with the inventory record; it does not replace seller-uploaded photographs, infer the finish from OCR, or make the scanner's candidate confirmation automatic.
+
+
+## Inventory printing identity and edit safety — 23 November 2026
+
+- Inventory rows now show the set code alongside the set name, plus the recorded language and variant label. When available, the exact catalogue printing key is shown as a separate identifier.
+- The existing product edit workflow remains a partial update: catalogue match ID, printing key, reference image URL/source and legacy reference aliases are not part of the editable field list, so ordinary edits do not replace or clear them.
+- Catalogue lookup from an existing product now also fills those catalogue identity/reference fields when the corresponding product columns exist and are blank, using the selected printing. Existing values remain untouched.
+- Added a regression test asserting ordinary card edits cannot overwrite exact catalogue printing identity.
+- This is an inventory UI/edit-flow safeguard, not a database migration or live deployment. The full variant-aware duplicate review and live schema compatibility review remain outstanding.
