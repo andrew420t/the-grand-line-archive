@@ -39,6 +39,7 @@ import { findPrimaryCatalogueMatch } from './admin/cardCatalogue'
 import { hasSupabaseConfig, supabase } from './lib/supabase'
 import { DEFAULT_SITE_SETTINGS, normalizeSiteSettings } from './siteSettings'
 import { buildCheckoutSnapshot } from './orderCheckout'
+import { getPublicStorefrontProducts } from './publicProducts'
 import './App.css'
 
 const CART_KEY = 'grand-line-archive-cart'
@@ -400,11 +401,7 @@ function Storefront() {
   }, [user])
 
   const storefrontProducts = useMemo(
-    () => products.filter((product) => {
-      // Only products explicitly posted by an administrator appear publicly.
-      const status = String(product.raw?.status || '').trim().toLowerCase()
-      return status === 'active'
-    }),
+    () => getPublicStorefrontProducts(products),
     [products],
   )
 
