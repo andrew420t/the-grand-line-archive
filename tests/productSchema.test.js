@@ -170,6 +170,10 @@ test('normalizes set-code punctuation and resolves the matching set ID', async (
   assert.equal(resolveSetIdForCode(sets, 'OP-17'), 'op17-id')
   assert.equal(resolveSetIdForCode(sets, 'EB04'), 'eb04-id')
   assert.equal(resolveSetIdForCode(sets, 'OP99'), '')
+  assert.equal(resolveSetIdForCode([
+    { id: 'first', code: 'OP17' },
+    { id: 'second', code: 'OP-17' },
+  ], 'OP17'), '')
 })
 
 
