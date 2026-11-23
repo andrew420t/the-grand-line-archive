@@ -44,6 +44,8 @@ export async function uploadProductPhotos({ productId, userId, photos }) {
   const uploadedPaths = []
   let metadataInserted = false
   let imageRecords = []
+  let previousProductImageUrl = null
+  let productImageUpdateAttempted = false
 
   try {
     for (let index = 0; index < photos.length; index += 1) {
@@ -82,6 +84,16 @@ export async function uploadProductPhotos({ productId, userId, photos }) {
 
     const frontImage = imageRecords.find((image) => image.role === 'front')
     if (frontImage) {
+      const currentProduct = await supabase
+        .from('products')
+        .select('id,image_url')
+        .eq('id', productId)
+        .maybeSingle()
+      if (currentProduct.error || !currentProduct.data) {
+        throw new Error(`Could not verify the product before updating its front photograph: ${currentProduct.error?.message || 'Product not found'}`)
+      }
+      previousProductImageUrl = currentProduct.data.image_url ?? null
+      productImageUpdateAttempted = true
       const productResult = await supabase
         .from('products')
         .update({
@@ -89,14 +101,26 @@ export async function uploadProductPhotos({ productId, userId, photos }) {
           updated_at: new Date().toISOString(),
         })
         .eq('id', productId)
-      if (productResult.error) {
-        throw new Error(`Photographs are linked, but the public catalogue image could not be updated: ${productResult.error.message}`)
+        .select('id')
+        .maybeSingle()
+      if (productResult.error || !productResult.data) {
+        throw new Error(`Photographs are linked, but the public catalogue image could not be updated: ${productResult.error?.message || 'Product not found'}`)
       }
     }
 
     return imageRecords
   } catch (error) {
     const cleanupMessages = []
+    if (productImageUpdateAttempted) {
+      const restoreResult = await supabase
+        .from('products')
+        .update({
+          image_url: previousProductImageUrl,
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', productId)
+      if (restoreResult.error) cleanupMessages.push(`product image rollback failed: ${restoreResult.error.message}`)
+    }
     if (metadataInserted) {
       const deleteResult = await supabase
         .from('product_images')
