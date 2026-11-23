@@ -148,20 +148,6 @@ export default function ImageLibraryPanel({ user }) {
       {notice && <div className="success-notice"><Check size={15} /><span>{notice}</span></div>}
       <section className="catalogue-health-panel">
         <div className="photo-studio__heading"><div><p className="eyebrow">REFERENCE CATALOGUE</p><h3>Card image and set coverage</h3></div></div>
-        {coverageError && <div className="error-notice"><ShieldAlert size={15} /><span>{coverageError}</span></div>}
-        {!coverage && !coverageError && <div className="loading-state">Checking reference catalogue…</div>}
-        {coverage && <>
-          <div className="overview-metrics">
-            <article className="overview-metric"><strong>{coverage.cards.toLocaleString()}</strong><span>Card records</span></article>
-            <article className="overview-metric"><strong>{coverage.printings.toLocaleString()}</strong><span>Printings / variants</span></article>
-            <article className="overview-metric"><strong>{coverage.withOfficialImage.toLocaleString()}</strong><span>Printing-specific official images</span></article>
-            <article className="overview-metric"><strong>{coverage.withFallbackImage?.toLocaleString() || 0}</strong><span>Official base-image fallbacks</span></article>
-            <article className="overview-metric"><strong>{coverage.withoutImageLocator.toLocaleString()}</strong><span>Printings without any image reference</span></article>
-          </div>
-          <p className="muted-copy">English: {coverage.languages.en?.withImage || 0}/{coverage.languages.en?.printings || 0} with image references · Japanese: {coverage.languages.jp?.withImage || 0}/{coverage.languages.jp?.printings || 0}. This is source-feed coverage, not a live HTTP check of every image. Base-image fallbacks: EN {coverage.languages.en?.withFallbackImage || 0} · JP {coverage.languages.jp?.withFallbackImage || 0}.</p>
-          {coverage.sourceGeneratedAt && <p className="muted-copy">Primary reference dataset last generated: {new Date(coverage.sourceGeneratedAt).toLocaleString()} · {coverage.sourceAgeDays} day{coverage.sourceAgeDays === 1 ? '' : 's'} old.</p>}
-          {coverage.sourceIsStale && <div className="catalogue-health-unassigned"><strong>Reference data is out of date.</strong><p className="muted-copy">The upstream Koala Kollect manifest is more than 7 days old. Newer official sets may exist on Bandai's card list but not yet be present in this feed.</p></div>}
-          {coverage.missingExpectedSets?.length > 0 && <div className="catalogue-health-unassigned"><strong>Known set coverage gaps: {coverage.missingExpectedSets.join(', ')}</strong><p className="muted-copy">These sets are not represented in the current primary source feed. We are checking the current official Bandai lists and alternate reference feeds rather than treating them as empty sets.</p></div>}
           <div className="catalogue-health-unassigned">
             <h4>100-image reference smoke test</h4>
             <p className="muted-copy">Checks two unique English and two Japanese image references for each of OP-01–OP-18, EB-01–EB-05 and PRB-01/02. It verifies that image URLs load in this browser; it does not run card OCR.</p>
@@ -181,6 +167,20 @@ export default function ImageLibraryPanel({ user }) {
               </div>
             </details>}
           </div>
+        {coverageError && <div className="error-notice"><ShieldAlert size={15} /><span>{coverageError}</span></div>}
+        {!coverage && !coverageError && <div className="loading-state">Checking reference catalogue…</div>}
+        {coverage && <>
+          <div className="overview-metrics">
+            <article className="overview-metric"><strong>{coverage.cards.toLocaleString()}</strong><span>Card records</span></article>
+            <article className="overview-metric"><strong>{coverage.printings.toLocaleString()}</strong><span>Printings / variants</span></article>
+            <article className="overview-metric"><strong>{coverage.withOfficialImage.toLocaleString()}</strong><span>Printing-specific official images</span></article>
+            <article className="overview-metric"><strong>{coverage.withFallbackImage?.toLocaleString() || 0}</strong><span>Official base-image fallbacks</span></article>
+            <article className="overview-metric"><strong>{coverage.withoutImageLocator.toLocaleString()}</strong><span>Printings without any image reference</span></article>
+          </div>
+          <p className="muted-copy">English: {coverage.languages.en?.withImage || 0}/{coverage.languages.en?.printings || 0} with image references · Japanese: {coverage.languages.jp?.withImage || 0}/{coverage.languages.jp?.printings || 0}. This is source-feed coverage, not a live HTTP check of every image. Base-image fallbacks: EN {coverage.languages.en?.withFallbackImage || 0} · JP {coverage.languages.jp?.withFallbackImage || 0}.</p>
+          {coverage.sourceGeneratedAt && <p className="muted-copy">Primary reference dataset last generated: {new Date(coverage.sourceGeneratedAt).toLocaleString()} · {coverage.sourceAgeDays} day{coverage.sourceAgeDays === 1 ? '' : 's'} old.</p>}
+          {coverage.sourceIsStale && <div className="catalogue-health-unassigned"><strong>Reference data is out of date.</strong><p className="muted-copy">The upstream Koala Kollect manifest is more than 7 days old. Newer official sets may exist on Bandai's card list but not yet be present in this feed.</p></div>}
+          {coverage.missingExpectedSets?.length > 0 && <div className="catalogue-health-unassigned"><strong>Known set coverage gaps: {coverage.missingExpectedSets.join(', ')}</strong><p className="muted-copy">These sets are not represented in the current primary source feed. We are checking the current official Bandai lists and alternate reference feeds rather than treating them as empty sets.</p></div>}
           <div className="catalogue-health-table">
             {Object.entries(coverage.sets).sort(([a], [b]) => a.localeCompare(b)).map(([code, stats]) => (
               <div className="catalogue-health-row" key={code}><strong>{code}</strong><span>{stats.printings} printings</span><span>{stats.withImage} images{stats.withFallbackImage ? ` (${stats.withFallbackImage} fallback)` : ''}</span><span>{stats.withoutImage} missing</span></div>
