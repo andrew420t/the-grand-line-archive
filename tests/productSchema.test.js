@@ -20,6 +20,10 @@ const form = {
   language: 'English',
   classification: 'Character',
   variant_label: '',
+  catalogue_match_id: 'printing-variant-42:en:product-op17',
+  catalogue_printing_key: 'printing-variant-42',
+  catalogue_reference_image_url: 'https://en.onepiece-cardgame.com/images/cardlist/card/OP17-062.png',
+  catalogue_reference_image_source: 'Bandai official image',
 }
 
 test('builds inserts from confirmed products columns and links the existing set by ID', () => {
@@ -33,6 +37,7 @@ test('builds inserts from confirmed products columns and links the existing set 
   assert.equal('price_gbp' in payload, false)
   assert.equal('set_code' in payload, false)
   assert.equal('color' in payload, false)
+  assert.equal('catalogue_match_id' in payload, false)
 })
 
 test('includes OCR card metadata only when its reviewed columns exist', () => {
@@ -42,4 +47,8 @@ test('includes OCR card metadata only when its reviewed columns exist', () => {
   assert.equal(payload.cost, 5)
   assert.equal(payload.effect_text, 'On Play: Draw 1 card.')
   assert.equal(payload.language, 'English')
+  assert.equal(payload.catalogue_match_id, form.catalogue_match_id)
+  assert.equal(payload.catalogue_printing_key, form.catalogue_printing_key)
+  assert.equal(payload.catalogue_reference_image_url, form.catalogue_reference_image_url)
+  assert.equal(payload.catalogue_reference_image_source, form.catalogue_reference_image_source)
 })
