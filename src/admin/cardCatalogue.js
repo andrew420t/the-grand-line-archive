@@ -408,6 +408,7 @@ export async function getCatalogueCoverageReport() {
     report.languages[language] = { printings: data.printings.length, withImage: 0, withFallbackImage: 0, withoutImage: 0 }
     for (const printing of data.printings) {
       report.printings += 1
+      const locator = safeMapGet(index.locatorsByPrinting, printing.key + ':' + printing.site)
       const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language })
       const hasOfficialImage = Boolean(imageReference.imageUrl && imageReference.source.startsWith('Bandai official') && !imageReference.usesBaseImageFallback)
       const hasFallbackImage = imageReference.usesBaseImageFallback
