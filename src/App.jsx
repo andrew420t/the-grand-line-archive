@@ -40,6 +40,7 @@ import { hasSupabaseConfig, supabase } from './lib/supabase'
 import { DEFAULT_SITE_SETTINGS, normalizeSiteSettings } from './siteSettings'
 import { buildCheckoutSnapshot } from './orderCheckout'
 import { getPublicStorefrontProducts } from './publicProducts'
+import { isValidOrderStatus } from './orderStatus'
 import './App.css'
 
 const CART_KEY = 'grand-line-archive-cart'
@@ -677,6 +678,10 @@ function Storefront() {
 
   const updateOrderStatus = async (orderId, status) => {
     if (!supabase || !isAdmin) return
+    if (!isValidOrderStatus(status)) {
+      setOrdersError('Invalid order status. Choose a valid status from the order controls.')
+      return
+    }
     setOrderAction(orderId)
     const result = await supabase
       .from('orders')
