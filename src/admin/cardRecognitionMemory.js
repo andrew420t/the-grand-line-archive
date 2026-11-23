@@ -101,7 +101,14 @@ async function saveSharedExample(file, match, hash) {
     confirmed_by: authData.user.id,
   })
   if (error && error.code !== '23505') {
-    if (!alreadyUploaded) await storage.remove([path])
+    if (!alreadyUploaded) {
+      try {
+        const cleanup = await storage.remove([path])
+        if (cleanup.error) throw new Error(cleanup.error.message)
+      } catch (cleanupError) {
+        throw new Error(`${error.message} (Recognition image cleanup failed: ${cleanupError.message || String(cleanupError)})`)
+      }
+    }
     throw new Error(error.message)
   }
   return { saved: true, duplicate: Boolean(alreadyUploaded || error?.code === '23505') }
