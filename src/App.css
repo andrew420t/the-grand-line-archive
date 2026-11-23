@@ -4797,3 +4797,7 @@ h2 em {
  .shop-grid--list .product-card--list{grid-template-columns:92px minmax(0,1fr)}.product-card--list .product-card__photo{height:132px}
  .product-card--list .product-card__body{padding:10px}.product-card--list .product-card__body h3{font-size:15px}
 }
+
+.catalogue-don-set-assignment { display: grid; gap: .5rem; margin-top: .75rem; }
+.catalogue-don-set-assignment .form-field { margin: 0; }
+.catalogue-don-set-assignment .button { justify-self: start; }
