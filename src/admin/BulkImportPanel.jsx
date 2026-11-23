@@ -116,7 +116,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
     importLock.current = true
     setBusy(true); setError(''); setReport(null)
     try {
-      const usesExtended = readyRows.some((row) => [row.color,row.power,row.cost,row.card_type,row.effect_text,row.language,row.classification,row.variant_label,row.counter,row.trigger_text,row.attributes,row.catalogue_match_id,row.catalogue_printing_key,row.catalogue_reference_image_url,row.catalogue_reference_image_source].some((v) => v !== undefined && v !== null && String(v).trim() !== ''))
+      const usesExtended = readyRows.some((row) => hasExtendedCardValues([row.color,row.power,row.cost,row.card_type,row.effect_text,row.language,row.classification,row.variant_label,row.counter,row.trigger_text,row.attributes,row.catalogue_match_id,row.catalogue_printing_key,row.catalogue_reference_image_url,row.catalogue_reference_image_source]))
       if (usesExtended && !schemaReady) {
         const check = await supabase.from('products').select(EXTENDED_CARD_COLUMNS.join(',')).limit(0)
         if (check.error) throw new Error('Card-detail columns are unavailable. No rows were imported. Review the approved schema migration first: ' + check.error.message)
