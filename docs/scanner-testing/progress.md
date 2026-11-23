@@ -617,3 +617,10 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Follow-up audit also applied the confirmed-row check to the full product-edit form save, so every product update path in the admin inventory now distinguishes a successful affected-row update from a zero-row/RLS-denied response. CI verification pending.
 
 - Order-status updates now also verify the affected order ID and report zero-row/RLS-denied responses as failures rather than success. Added regression coverage for confirmed, missing-row and database-error outcomes. No live orders were changed; CI pending.
+
+
+## Checkout order-save and cleanup verification — 23 November 2026
+- The checkout path now marks order items as saved immediately after the item insert succeeds. Unexpected errors after that point no longer trigger cleanup that could delete an otherwise valid order.
+- If saving order items fails, the compensating order deletion now requests the deleted order ID and verifies an affected row before claiming the empty pending order was removed. The exception-recovery cleanup uses the same confirmation check.
+- Added regression coverage for confirmed deletion, zero-row/no-error responses, and database/RLS errors. This is still best-effort client-side compensation, not an atomic checkout transaction or stock reservation. Concurrent checkout stock protection remains a server-side requirement.
+- No live orders, stock, database policies, or migrations were changed.
