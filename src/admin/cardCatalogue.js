@@ -40,7 +40,7 @@ async function loadCatalogue() {
   const [cards, tcgcsvPrintings, donSetRows, ...languageData] = await Promise.all([
     readJsonLines('cards.jsonl'),
     readJsonLines('printings/tcgcsv.jsonl'),
-    readJsonLines('don_sets.jsonl'),
+    readJsonLines('don_sets.jsonl').catch(() => []),
     ...LANGUAGES.flatMap((language) => [
       readJsonLines(`card_observations/${language}.jsonl`),
       readJsonLines(`printings/${language}.jsonl`),
