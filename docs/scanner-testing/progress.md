@@ -865,3 +865,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 
 - Added a regression test covering all 35 slug formats observed in the upstream DON!! set-source file, including Double Pack, OP/EB crossover, PRB, promo, ST and OP formats.
 - The test asserts the exact normalized code expected for every observed slug. Automated CI is pending for this test commit.
+
+
+### Crop-control robustness review — 23 November 2026
+
+- Reviewed the visual crop overlay for numeric-state edge cases. Percentage-field input had string values, which could concatenate when computing the selection's right/bottom edges; these calculations now explicitly coerce to numbers.
+- Crop percentage controls now clamp to the image bounds and adjust width/height when the left/top values move. Pointer coordinate handling guards against zero-sized preview bounds.
+- Commits: `fd9f402` (numeric overlay calculations), `20af5ab` (bounds clamp and pointer guards). Exact-head CI is pending.
