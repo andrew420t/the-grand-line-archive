@@ -85,3 +85,23 @@ test('Japanese EB04-005 candidate keeps its language and printing identity', () 
   assert.equal(ranked[0].match.languageCode, 'jp')
   assert.equal(ranked[0].match.setName, 'Egghead Crisis')
 })
+
+
+test('number evidence is attached to matching printings without changing OCR name/language ranking', () => {
+  const evidence = {
+    'OP01-001': { occurrences: 3, confidence: 91, sources: ['footer', 'footer-wide', 'footer-tight'] },
+    'OP01-002': { occurrences: 1, confidence: 44, sources: ['footer-tight'] },
+  }
+  const ranked = rankCatalogueMatches([
+    { id: 'law', cardNumber: 'OP01-002', name: 'Trafalgar Law', language: 'English' },
+    { id: 'zoro', cardNumber: 'OP01-001', name: 'Roronoa Zoro', language: 'English' },
+  ], 'Roronoa Zoro', 'English', '', evidence)
+  assert.equal(ranked[0].match.id, 'zoro')
+  assert.deepEqual(ranked[0].numberEvidence, evidence['OP01-001'])
+  assert.deepEqual(ranked[1].numberEvidence, evidence['OP01-002'])
+})
+
+test('number evidence stays absent for matches with no OCR candidate evidence', () => {
+  const ranked = rankCatalogueMatches([{ id: 'candidate', cardNumber: 'OP01-001', name: 'Zoro', language: 'English' }])
+  assert.equal(ranked[0].numberEvidence, null)
+})
