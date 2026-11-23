@@ -801,3 +801,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - This is a review finding, not a demonstrated wrong-card result. Because candidates from different card numbers can be merged, this should be tested with deliberate competing valid numbers before changing ranking. Keep confirmation mandatory; do not auto-select/confirm based on OCR score.
 - Suggested next engineering task: add focused unit cases for competing OCR-number candidates and mismatched name/language evidence; decide a conservative evidence display/ranking policy, then implement only if tests show it improves correctness without hiding alternatives.
 - PR #26 remains open and unmerged. No production changes; no live browser/camera or staging data test performed.
+
+
+## 23 November 2026 — OCR candidate evidence transparency
+
+- Added a non-ranking evidence annotation to catalogue candidates: each candidate printing now carries the OCR number evidence for its exact card number (number of readings, average OCR confidence, and source regions). The candidate UI displays that evidence, or explicitly says that the number was not independently corroborated.
+- **Ranking behaviour intentionally unchanged:** name/language/remembered-image signals continue to order the options; number evidence is shown for human review rather than being used to auto-select or override other signals. This avoids treating OCR confidence as calibrated proof or allowing a competing number reading to silently win.
+- Added focused ranking-helper tests for evidence attached to matching card numbers and absent evidence, including a competing-number scenario. The tests were committed, but have not been executed locally because this environment has no repository checkout/test runner. Exact-head GitHub Actions is pending/unavailable at this time.
+- Commits: `5fe1d79` (helper), `cfbb67b` (tests), `e3054b7` (scanner UI). PR #26 head: `e3054b70f35bc207a5a1d45b4701bdcdb955a730`.
