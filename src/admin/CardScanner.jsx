@@ -410,7 +410,9 @@ export default function CardScanner({
             aria-label="Drag to select the crop area on the card photograph"
           >
             <img src={frontPhoto.previewUrl} alt="Photo to crop for OCR" draggable="false" />
-            <div className="scanner-manual-crop__shade" />
+            <div className="scanner-manual-crop__shade" style={{
+              clipPath: `polygon(0 0, 100% 0, 100% ${manualCropPercent.y}%, ${manualCropPercent.x + manualCropPercent.width}% ${manualCropPercent.y}%, ${manualCropPercent.x + manualCropPercent.width}% ${manualCropPercent.y + manualCropPercent.height}%, ${manualCropPercent.x}% ${manualCropPercent.y + manualCropPercent.height}%, ${manualCropPercent.x}% ${manualCropPercent.y}%, 0 ${manualCropPercent.y}%)`,
+            }} />
             <div className="scanner-manual-crop__selection" style={{
               left: manualCropPercent.x + '%',
               top: manualCropPercent.y + '%',
