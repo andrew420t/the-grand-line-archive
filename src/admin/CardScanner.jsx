@@ -72,6 +72,19 @@ export default function CardScanner({
     setError('')
     setStatus('Loading the free browser OCR engine…')
     setProgress(0)
+    // Clear the previous scan's result panels immediately so a failed/new scan
+    // cannot leave an old catalogue match looking like it belongs to this photo.
+    setCatalogueMatches([])
+    setAutoMatches([])
+    setRankedAutoMatches([])
+    setSelectedAutoMatchId('')
+    setMatchConfirmationOpen(false)
+    setAutoMatchStatus('')
+    setCatalogueError('')
+    setManualMatches([])
+    setManualError('')
+    setNumberReadings([])
+    setNumberCandidates([])
 
     try {
       try {
