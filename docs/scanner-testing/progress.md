@@ -630,3 +630,34 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - A review of the actual download path found that the generated CSV template appended an unrelated code fragment to the header row instead of a newline. This would make the downloaded template's final header invalid.
 - Moved the supported template header list and CSV generation into a pure helper and added regression coverage for the exact header row and newline. The downloadable template now matches the parser's supported columns.
 - No CSV was imported and no live inventory or database records were changed.
+
+
+## Physical-photo validation of PR #26 number-region OCR — 23 November 2026
+
+**Sample:** the user's real English Saint Shamrock photo (OP18-119), original JPEG 1152 × 2048. The card is inside a rigid holder with substantial tabletop/background margins; it does not fill the frame.
+
+- Reproduced the PR #26 number-region crop geometry locally with Tesseract 5.5.0: bottom-left, bottom-right, full bottom edge, lower-centre, plus footer bands after 90°, 180°, and 270° rotations.
+- Ran the same alphanumeric OCR whitelist (A-Z, 0-9, hyphen) and comparable contrast enhancement/upscaling/sharpening. **None of the seven region outputs produced a valid OP/EB/ST/PRB/P- card number.**
+- Also manually rectified the card face to a 600 × 1160 crop and reran the four bottom-region crops. No valid card number was recovered.
+- This is a genuine physical-photo negative result for the new region approach on a photo with large surrounding margins. It is not a CI failure and does not prove every close-cropped card will fail.
+
+### Code-review finding / next correction
+The prepareCardNumberRegions() function currently computes footer zones as percentages of the entire uploaded photograph. It does not first detect/trim the physical card boundary. On this 1152 × 2048 scene, the card ends well above the photo's bottom 28% band, so the two bottom-corner crops mostly contain background. The lower-centre/rotated crops contain portions of the card but still do not reliably isolate the tiny footer number. Add card-boundary detection or a robust card-crop step before number-region generation; alternatively expose a manual crop step and clearly state when the footer is outside the scan region. Preserve the original photo for evidence.
+
+The current scanner also only performs catalogue lookup when at least one card-number candidate is extracted (or a remembered image supplies a number). This sample produced no valid number, so no catalogue candidate lookup can occur. A future name/visual fallback would help, but it must remain explicitly unconfirmed until the user chooses a candidate.
+
+## Official OP18 image loading update — 23 November 2026
+The Bandai English card-list page (series=569118) and Japanese card-list page (series=550118) were opened successfully. Their official image links were followed and rendered for all four OP18 sample slots:
+- English OP18-001 Karoo — image loaded and visually inspected.
+- English OP18-002 Igaram — image loaded and visually inspected.
+- Japanese OP18-001 カルー (Karoo) — image loaded and visually inspected.
+- Japanese OP18-002 イガラム (Igaram) — image loaded and visually inspected.
+
+These four OP18 image cases are now **visual-load PASS** (4/4), and the official page confirms their names/numbers/languages. They were not passed through local OCR; browser-rendered image inspection does not count as OCR testing. The exact image URLs include Bandai's cache-busting query strings in the page links.
+
+EB05-001/002 English and Japanese direct Bandai image-path attempts were still inaccessible through the browser tool. Those four image slots remain **candidate URL / load unverified**, with no OCR result. This does not imply the official cards do not exist.
+
+## PR #26 verification snapshot — 23 November 2026
+- PR #26 head c6af838a67717d41ff74b4e11bf20d4f3683e567 passed GitHub Actions run #411: dependency install, npm test, lint, and production build.
+- This verifies code/test/build only. The physical-photo number-region attempt above failed to identify OP18-119. No browser preview or live Worker deployment was available; production status remains unverified.
+- PR #26 is still open and unmerged. No production deployment or inventory/database mutation was performed.
