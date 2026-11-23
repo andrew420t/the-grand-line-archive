@@ -118,7 +118,8 @@ Expected behaviour:
 - [ ] Confirm customer order history shows only that customer's orders.
 - [ ] Confirm admin order status changes use the reviewed atomic RPC, verify the returned order ID, and enforce the allowed lifecycle transitions.
 - [ ] Confirm the admin UI rejects invalid transitions before calling the RPC, and server-side checks still reject invalid transitions if the UI is bypassed.
-- [ ] In staging, cancel a pending/processing order and confirm its reserved stock is restored once; repeat the same cancellation and confirm no double-restock.
+- [ ] In staging, cancel a new pending/processing order with `stock_reserved=true` and confirm its stock is restored once; repeat the same cancellation and confirm no double-restock.
+- [ ] Cancel a pre-migration legacy order with `stock_reserved=false` and confirm it does not restock inventory that was never reserved.
 - [ ] Confirm shipped/completed orders cannot be cancelled/restocked and cancelled orders cannot be reopened.
 - [ ] Review and apply the atomic checkout RPC proposal in staging only after verifying schema, existing stock triggers, RLS, grants, and order lifecycle.
 - [ ] With the RPC enabled and client integrated in staging, test two concurrent checkouts for the same low-stock product; only one may succeed.
