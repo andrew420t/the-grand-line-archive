@@ -23,6 +23,7 @@ export default function ImageLibraryPanel({ user }) {
   const [referenceLanguage, setReferenceLanguage] = useState('all')
   const [failedReferenceIds, setFailedReferenceIds] = useState([])
   const [loadedReferenceIds, setLoadedReferenceIds] = useState([])
+  const [fallbackReferenceIds, setFallbackReferenceIds] = useState([])
   const [imageRetryVersion, setImageRetryVersion] = useState(0)
   const [matrixRunning, setMatrixRunning] = useState(false)
   const [matrixReport, setMatrixReport] = useState(null)
@@ -49,7 +50,7 @@ export default function ImageLibraryPanel({ user }) {
     try {
       const page = await getCatalogueImageGallery({ offset, limit: 60, query: referenceQuery, language: referenceLanguage })
       setReferenceImages((current) => offset === 0 ? page.items : [...current, ...page.items])
-      if (offset === 0) { setFailedReferenceIds([]); setLoadedReferenceIds([]) }
+      if (offset === 0) { setFailedReferenceIds([]); setLoadedReferenceIds([]); setFallbackReferenceIds([]) }
       setReferenceTotal(page.total)
       setReferenceNextOffset(page.nextOffset)
     } catch (loadError) { setReferenceError(loadError.message) }
@@ -157,7 +158,7 @@ export default function ImageLibraryPanel({ user }) {
             <article className="overview-metric"><strong>{coverage.withFallbackImage?.toLocaleString() || 0}</strong><span>Official base-image fallbacks</span></article>
             <article className="overview-metric"><strong>{coverage.withoutImageLocator.toLocaleString()}</strong><span>Printings without any image reference</span></article>
           </div>
-          <p className="muted-copy">English: {coverage.languages.en?.withImage || 0}/{coverage.languages.en?.printings || 0} with image references · Japanese: {coverage.languages.jp?.withImage || 0}/{coverage.languages.jp?.printings || 0}. This is source-feed coverage, not a live HTTP check of every image.</p>
+          <p className="muted-copy">English: {coverage.languages.en?.withImage || 0}/{coverage.languages.en?.printings || 0} with image references · Japanese: {coverage.languages.jp?.withImage || 0}/{coverage.languages.jp?.printings || 0}. This is source-feed coverage, not a live HTTP check of every image. Base-image fallbacks: EN {coverage.languages.en?.withFallbackImage || 0} · JP {coverage.languages.jp?.withFallbackImage || 0}.</p>
           {coverage.sourceGeneratedAt && <p className="muted-copy">Primary reference dataset last generated: {new Date(coverage.sourceGeneratedAt).toLocaleString()} · {coverage.sourceAgeDays} day{coverage.sourceAgeDays === 1 ? '' : 's'} old.</p>}
           {coverage.sourceIsStale && <div className="catalogue-health-unassigned"><strong>Reference data is out of date.</strong><p className="muted-copy">The upstream Koala Kollect manifest is more than 7 days old. Newer official sets may exist on Bandai's card list but not yet be present in this feed.</p></div>}
           {coverage.missingExpectedSets?.length > 0 && <div className="catalogue-health-unassigned"><strong>Known set coverage gaps: {coverage.missingExpectedSets.join(', ')}</strong><p className="muted-copy">These sets are not represented in the current primary source feed. We are checking the current official Bandai lists and alternate reference feeds rather than treating them as empty sets.</p></div>}
@@ -175,7 +176,7 @@ export default function ImageLibraryPanel({ user }) {
             {matrixReport && <details className="catalogue-health-missing">
               <summary>View image test results ({matrixResults.length + matrixReport.missingSlots.length} rows)</summary>
               <div className="catalogue-health-table">
-                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}</strong><span>{item.language.toUpperCase()} · sample {item.sampleSlot}</span><span>{item.name || 'Name not supplied'}</span><span>{item.status === 'loaded' ? 'Image loaded' : 'Image failed'} · {item.source}</span></div>)}
+                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}</strong><span>{item.language.toUpperCase()} · sample {item.sampleSlot}</span><span>{item.name || 'Name not supplied'}</span><span>{item.status === 'loaded' ? 'Image loaded' : item.status === 'timeout' ? 'Image timed out' : 'Image failed'} · {item.source}</span></div>)}
                 {matrixReport.missingSlots.map((item) => <div className="catalogue-health-row" key={item.targetSet + item.language + item.sampleSlot}><strong>{item.targetSet}</strong><span>{item.language.toUpperCase()} · sample {item.sampleSlot}</span><span>No source record</span><span>Missing from feed</span></div>)}
               </div>
             </details>}
@@ -208,15 +209,22 @@ export default function ImageLibraryPanel({ user }) {
       <section className="catalogue-reference-gallery">
         <div className="photo-studio__heading"><div><p className="eyebrow">CARD-NUMBER REFERENCE LIBRARY</p><h3>{referenceImages.length.toLocaleString()} of {referenceTotal.toLocaleString()} matching references</h3><p className="muted-copy">Indexed by card number, language, set and printing variant. References remain separate from your own uploaded photographs; source artwork is loaded from its catalogue host.</p></div></div>
         <p className="muted-copy">Live image check for references currently loaded in this browser: {loadedReferenceIds.length} loaded · {failedReferenceIds.length} failed. This checks displayed images only, not the entire catalogue.</p>
-        {failedReferenceIds.length > 0 && <button className="button button--outline" type="button" onClick={() => { setFailedReferenceIds([]); setLoadedReferenceIds([]); setImageRetryVersion((value) => value + 1) }}>Retry failed reference images</button>}
+        {(failedReferenceIds.length > 0 || fallbackReferenceIds.length > 0) && <button className="button button--outline" type="button" onClick={() => { setFailedReferenceIds([]); setLoadedReferenceIds([]); setFallbackReferenceIds([]); setImageRetryVersion((value) => value + 1) }}>Retry failed reference images</button>}
         <div className="catalogue-reference-filters">
           <label className="form-field"><span>Search card number, name or set</span><input type="search" value={referenceQuery} onChange={(event) => setReferenceQuery(event.target.value)} placeholder="OP01-001 or Monkey D. Luffy" /></label>
           <label className="form-field"><span>Language</span><select value={referenceLanguage} onChange={(event) => setReferenceLanguage(event.target.value)}><option value="all">All languages</option><option value="en">English</option><option value="jp">Japanese</option></select></label>
         </div>
         {referenceError && <div className="error-notice"><ShieldAlert size={15} /><span>{referenceError}</span></div>}
         {referenceImages.length > 0 && <div className="photo-grid image-library-grid">{referenceImages.map((item) => <article className="photo-card" key={item.id}>
-          <div className="photo-card__preview">{failedReferenceIds.includes(item.id) ? <div className="empty-catalogue"><ImagePlus size={20}/><span>Reference image unavailable</span></div> : <img key={`${item.id}:${imageRetryVersion}`} src={item.imageUrl} alt={item.name ? item.name + ' ' + item.cardNumber : 'One Piece card ' + item.cardNumber} loading="lazy" onLoad={() => setLoadedReferenceIds((current) => current.includes(item.id) ? current : [...current, item.id])} onError={() => { setLoadedReferenceIds((current) => current.filter((id) => id !== item.id)); setFailedReferenceIds((current) => current.includes(item.id) ? current : [...current, item.id]) }} />}</div>
-          <div className="photo-card__body"><span className="photo-card__name" title={item.name}>{item.name || item.cardNumber} · {item.cardNumber}</span><span className="muted-copy">{item.language.toUpperCase()} · {item.setCode || 'Unassigned'} · {item.rarity} {item.variant}</span><span className="muted-copy">{failedReferenceIds.includes(item.id) ? 'Image failed to load' : item.source || 'Reference artwork · not a personal upload'}{item.usesBaseImageFallback ? ' · base artwork only; special finish may differ' : ''}</span></div>
+          <div className="photo-card__preview">{failedReferenceIds.includes(item.id) ? <div className="empty-catalogue"><ImagePlus size={20}/><span>Reference image unavailable</span></div> : <img key={`${item.id}:${imageRetryVersion}`} src={fallbackReferenceIds.includes(item.id) ? item.fallbackImageUrl : item.imageUrl} alt={item.name ? item.name + ' ' + item.cardNumber : 'One Piece card ' + item.cardNumber} loading="lazy" onLoad={() => setLoadedReferenceIds((current) => current.includes(item.id) ? current : [...current, item.id])} onError={() => {
+            setLoadedReferenceIds((current) => current.filter((id) => id !== item.id))
+            if (item.fallbackImageUrl && !fallbackReferenceIds.includes(item.id)) {
+              setFallbackReferenceIds((current) => current.includes(item.id) ? current : [...current, item.id])
+              return
+            }
+            setFailedReferenceIds((current) => current.includes(item.id) ? current : [...current, item.id])
+          }} />}</div>
+          <div className="photo-card__body"><span className="photo-card__name" title={item.name}>{item.name || item.cardNumber} · {item.cardNumber}</span><span className="muted-copy">{item.language.toUpperCase()} · {item.setCode || 'Unassigned'} · {item.rarity} {item.variant}</span><span className="muted-copy">{failedReferenceIds.includes(item.id) ? 'Image failed to load' : fallbackReferenceIds.includes(item.id) ? 'Alternate official image loaded' : item.source || 'Reference artwork · not a personal upload'}{item.usesBaseImageFallback || fallbackReferenceIds.includes(item.id) ? ' · base/alternate artwork; special finish may differ' : ''}</span></div>
         </article>)}</div>}
         {referenceNextOffset !== null && <button className="button button--outline" type="button" disabled={referenceLoading} onClick={() => loadReferenceImages(referenceNextOffset)}>{referenceLoading ? 'Loading catalogue images…' : 'Load more reference images'}</button>}
         {referenceLoading && referenceImages.length === 0 && <div className="loading-state">Loading catalogue reference images…</div>}{!referenceLoading && referenceImages.length === 0 && !referenceError && <p className="muted-copy">No reference images match this search. Try another card number or select all languages.</p>}
