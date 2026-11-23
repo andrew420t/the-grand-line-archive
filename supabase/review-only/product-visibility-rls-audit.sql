@@ -165,3 +165,12 @@ ORDER BY table_name, grantee, privilege_type;
 -- Review customer ownership checks, admin exceptions, and whether customers
 -- can insert order_items for arbitrary orders/products. These query results are
 -- audit-only and do not establish that checkout stock is reserved atomically.
+
+-- 11. Column-level privileges on order and order-item tables. Table-level
+-- grants alone do not reveal column-specific INSERT/UPDATE bypasses.
+SELECT grantee, table_name, column_name, privilege_type, is_grantable
+FROM information_schema.role_column_grants
+WHERE table_schema = 'public'
+  AND table_name IN ('orders', 'order_items')
+  AND grantee IN ('anon', 'authenticated', 'PUBLIC')
+ORDER BY table_name, grantee, column_name, privilege_type;
