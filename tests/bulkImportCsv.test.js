@@ -3,7 +3,9 @@ import test from 'node:test'
 import { parseCsv, isBulkImportDuplicate, validateBulkImportNumericFields } from '../src/admin/bulkImportCsv.js'
 
 test('maps standard and extended card columns from the import CSV', () => {
-  const rows = parseCsv('Card Name,Card Number,Set Code,Counter,Trigger Text,Attributes\nNami,OP01-016,OP01,1000,If trigger is met,Slash\n')
+  const rows = parseCsv(`Card Name,Card Number,Set Code,Counter,Trigger Text,Attributes
+Nami,OP01-016,OP01,1000,If trigger is met,Slash
+`)
   assert.deepEqual(rows[0], {
     name: 'Nami', card_number: 'OP01-016', set_code: 'OP01', rarity: '', variant_label: '',
     color: '', power: '', cost: '', card_type: '', classification: '', language: '',
@@ -13,13 +15,15 @@ test('maps standard and extended card columns from the import CSV', () => {
 })
 
 test('handles quoted commas, doubled quotes, and multiline cells', () => {
-  const rows = parseCsv('name,description\n"Monkey D. Luffy","Says ""I'm going to be King"", loudly"\n')
+  const rows = parseCsv(`name,description
+"Monkey D. Luffy","Says ""I'm going to be King"", loudly"
+`)
   assert.equal(rows[0].name, 'Monkey D. Luffy')
-  assert.equal(rows[0].description, 'Says "I\'m going to be King", loudly')
+  assert.equal(rows[0].description, `Says "I'm going to be King", loudly`)
 })
 
 test('accepts CRLF rows and ignores empty trailing rows', () => {
-  const rows = parseCsv('name,card_number\r\nZoro,OP01-001\r\n\r\n')
+  const rows = parseCsv(['name,card_number', 'Zoro,OP01-001', '', ''].join('\r\n'))
   assert.equal(rows.length, 1)
   assert.equal(rows[0].card_number, 'OP01-001')
 })
