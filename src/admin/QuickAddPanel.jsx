@@ -171,6 +171,7 @@ export default function QuickAddPanel({
         .from('products')
         .select(`id,name,card_number,set_id${includeVariantMetadata ? ',variant_label,language,catalogue_match_id,catalogue_printing_key' : ''}`)
         .eq('card_number', form.card_number.trim())
+        .order('id', { ascending: true })
       return setId ? query.eq('set_id', setId) : query.is('set_id', null)
     }
     // Paginate rather than silently inspecting only the first 50 rows. A large
