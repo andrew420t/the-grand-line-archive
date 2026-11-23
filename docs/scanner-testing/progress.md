@@ -574,3 +574,5 @@ Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAH
 - Found that the product delete action treated a successful Supabase response with zero affected rows as a completed deletion. Under row-level security or a stale product list, the UI could report success even though no product row was deleted.
 - The delete now requests the deleted row ID and confirms that a row was actually returned before refreshing the inventory or removing its Storage photographs. Added regression tests for confirmed deletion, zero-row/no-error responses, and database/RLS errors.
 - No product rows, Storage objects, or live database policies were changed. CI verification pending.
+
+- The set dropdown also retains the exact selected set row ID (rather than re-resolving a potentially duplicated set code), while still invalidating stale catalogue identity fields.
