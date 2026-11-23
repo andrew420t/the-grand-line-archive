@@ -60,3 +60,23 @@ test('ignores isolated foreground specks outside the card component', () => {
   assert.ok(bounds.x > 20 && bounds.y > 25)
   assert.ok(bounds.width < 125 && bounds.height < 165)
 })
+
+
+test('rejects malformed or empty pixel buffers conservatively', () => {
+  assert.equal(detectForegroundCardBounds(null), null)
+  assert.equal(detectForegroundCardBounds({ width: 10, height: 10, data: new Uint8Array(10) }), null)
+  const blank = imageData(100, 120)
+  assert.equal(detectForegroundCardBounds(blank), null)
+})
+
+test('aspect crop near image edges still covers the supplied bounds', () => {
+  const bounds = { x: 150, y: 195, width: 25, height: 35 }
+  const crop = calculateCardAspectCrop(180, 240, bounds)
+  assert.ok(crop)
+  assert.ok(crop.x >= 0 && crop.y >= 0)
+  assert.ok(crop.x + crop.width <= 180)
+  assert.ok(crop.y + crop.height <= 240)
+  assert.ok(crop.x <= bounds.x && crop.y <= bounds.y)
+  assert.ok(crop.x + crop.width >= bounds.x + bounds.width)
+  assert.ok(crop.y + crop.height >= bounds.y + bounds.height)
+})
