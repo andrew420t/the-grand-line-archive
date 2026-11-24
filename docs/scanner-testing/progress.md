@@ -1260,3 +1260,9 @@ CI verified at the exact prior head `ec07e9f3d01838801e3183eb62c988bb5deead34`: 
 - Scanner UI now has **Full card — number + details** and **Card number only** modes. In number-only mode, full-card text OCR is skipped; if manual crop is enabled, the selected crop is OCRed directly as the number region. This lets the user crop either the whole card or just the printed number without forcing the crop through bottom-edge region extraction.
 - Added unit tests for the supplemental sample records and lookup behavior. GitHub Actions is running on the current PR head; tests/lint/build status will be recorded after completion.
 - No live inventory rows, Supabase data, or production deployment were changed.
+
+
+### CI correction and verification — 24 November 2026
+- First CI attempts for the new scan-mode UI failed at lint because the recognition-language JSX label was left unclosed when the scan-mode selector was added. The test suite itself passed (135/135), but lint stopped the build.
+- Corrected the JSX label structure and reran exact-head checks. GitHub Actions **run #725 (push) and #726 (pull request) both passed**: install, all tests, lint, and production build. Exact verified head: `eb1f6e72b0522681c6876e7b6b33d74fae1c4132`.
+- The new supplemental sample tests are included in the passing suite. The previous failed CI attempts are retained as history and are superseded by these successful exact-head runs.
