@@ -1142,3 +1142,12 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - **Exact-head CI rechecked:** GitHub Actions run #653 / run ID `45286553673` completed successfully for this head. All steps passed: checkout, Node setup, dependency install, test suite, lint, and production build. This run's API job summary did not expose test-count or lint-warning totals, so those are not repeated here.
 - **New test evidence this run:** none. This was a fresh exact-head CI verification, not a physical-photo or browser scanner test. The existing evidence gaps remain: no fresh 100-card image/OCR matrix, no new physical-card photos, and no safe isolated staging backend verified.
 - **Next concrete target:** add fresh reference-image checks to the matrix (starting with the unresolved OP17 and Japanese EB01/EB02 entries) or, if image access remains blocked, investigate a focused scanner regression test. Avoid repeating this CI-only check as the next work item.
+
+
+## Reference-source retry — 24 November 2026 (on-demand continuation)
+
+- **OP17 source retry:** searched fresh official and third-party OP17 sources. Bandai's official OP17 product page is indexed and identifies the set/card examples, but opening it through this verification path returned a page with no readable content (0 lines). This is an access limitation, not a card-image load failure, so OP17 matrix slots remain unverified.
+- **Japanese EB01 retry:** OPTCG.app's Japanese Memorial Collection index was found in search, but direct opening failed with a cache-miss error. Search snippets show card identifiers, but do not verify image loading; Japanese EB01 failing slot remains unverified.
+- **Japanese EB02 retry:** searched card-list sources. Search snippets returned EB02 card list data, but direct page opening failed with a cache-miss error. No actual Japanese card image load was verified; Japanese EB02 failing slot remains unverified.
+- **Source access distinction:** search-index snippets are not image-load evidence and are not counted toward the 100-case visual-load matrix. No OCR was run on these references.
+- **Next attempt:** use accessible direct image asset links from the card catalogue or a reproducible download/image-validation harness, rather than counting search snippets. No production/staging or data changes.
