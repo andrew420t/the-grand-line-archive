@@ -101,3 +101,13 @@ The shared recognition code uploads `prepareCardImage(file)` from the original s
 - Main changes: [1777669](https://github.com/andrew420t/the-grand-line-archive/commit/17776696713854fe4786ad2e19a1b4d91e75332c), [8f8b512](https://github.com/andrew420t/the-grand-line-archive/commit/8f8b5128d415ac2addffa5c670d2c041c9bcc695), [548af9c](https://github.com/andrew420t/the-grand-line-archive/commit/548af9c13330835b9cd6c3ec2dc002ab025d9f5a), [ac65713](https://github.com/andrew420t/the-grand-line-archive/commit/ac65713f9402f7af83d9c7c818fef2bb08d664ce), [089feaa](https://github.com/andrew420t/the-grand-line-archive/commit/089feaab92852f4cc80baa064a95ac5f948b83f2), [30ad4fb](https://github.com/andrew420t/the-grand-line-archive/commit/30ad4fb0298cd8e6994acdcc520dc0e59ab22fb3), [77da910](https://github.com/andrew420t/the-grand-line-archive/commit/77da9100eccadd5ff48c116b9df1a75beff8936e).
 
 **Required follow-up:** establish whether the original recognition SQL was ever manually applied. If it was, do not assume the updated initial-setup file will upgrade it: that file deliberately stops when the table already exists. Review the separate remediation proposal against the actual isolated staging schema and object usage first. No SQL, bucket setting, object, or database was changed by this audit.
+
+### Priority 2 — Recognition memory source precedence
+
+The scanner previously let any same-card-number shared-memory match overwrite the local-memory printing ID, even if the local example had higher visual similarity. This was a ranking-quality issue rather than auto-confirmation: the confirmation popup remains required. Added `chooseRememberedImageMatch` to select the higher-similarity local/shared example, ignore memory for a different OCR-resolved card number, and prefer local on ties. Four regression tests cover these cases. Exact code/test head [afb63af](https://github.com/andrew420t/the-grand-line-archive/commit/afb63af4ddcf785589f89a19f63a2f04fdd2baf3) passed [CI run #836](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45364536905) (install, tests, lint, build).
+
+### Latest branch checkpoint — 24 November 2026
+
+- PR #26 remains open, unmerged, and mergeable on `feature/scanner-number-first-verification`.
+- Latest code/test checkpoint `afb63af4ddcf785589f89a19f63a2f04fdd2baf3` passed exact-head run #836.
+- The audit and scanner progress documents were then updated; re-check CI against the resulting newest documentation head before closing this run.
