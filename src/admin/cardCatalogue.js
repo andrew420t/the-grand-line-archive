@@ -723,9 +723,20 @@ export async function getCatalogueReferenceTestMatrix() {
       const candidates = (bySlot.get(language + ':' + set) || [])
         .sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.id.localeCompare(b.id))
       const explicitSamples = officialFallbackSamples[set]?.[language] || []
-      // For OP17 use the exact product-attributed sample identities from the
-      // official set list; the direct images are candidate URLs until loaded.
-      const selected = explicitSamples.length ? [...explicitSamples] : [...candidates]
+      // Recent sets and OP17 use exact, set-attributed samples instead of
+      // whichever product links happen to be in the stale upstream feed.
+      const selected = explicitSamples.length
+        ? explicitSamples.map((sample) => ({
+          ...sample,
+          language,
+          setCode: formatSetCode(set),
+          setName: 'Official Bandai card-list sample',
+          variant: 'Base/sample printing',
+          source: sample.verificationStatus === 'candidate-unverified'
+            ? 'Bandai official image candidate (load not yet verified)'
+            : 'Bandai official card-list sample (visually verified)',
+        }))
+        : [...candidates]
       const imageOverrides = officialImageOverrides[set]?.[language] || {}
       for (const item of selected) {
         if (imageOverrides[item.cardNumber]) {
