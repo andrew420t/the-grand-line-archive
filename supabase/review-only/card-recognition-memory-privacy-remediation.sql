@@ -15,9 +15,11 @@ DECLARE
   storage_rls boolean;
   missing_columns text[];
 BEGIN
-  IF to_regprocedure('public.is_admin()') IS NULL
-     OR pg_get_function_result('public.is_admin()'::regprocedure) IS DISTINCT FROM 'boolean' THEN
-    RAISE EXCEPTION 'Expected public.is_admin() boolean function is missing or has an incompatible return type.';
+  IF to_regprocedure('public.is_admin()') IS NULL THEN
+    RAISE EXCEPTION 'Expected public.is_admin() function was not found.';
+  END IF;
+  IF pg_get_function_result('public.is_admin()'::regprocedure) IS DISTINCT FROM 'boolean' THEN
+    RAISE EXCEPTION 'Expected public.is_admin() function must return boolean.';
   END IF;
 
   IF to_regclass('public.card_recognition_examples') IS NULL THEN
