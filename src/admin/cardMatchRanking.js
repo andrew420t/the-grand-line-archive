@@ -29,14 +29,20 @@ export function rankCatalogueMatches(matches = [], detectedName = '', detectedLa
       numberEvidence: evidence,
       strongNumberEvidence: hasStrongNumberEvidence(evidence),
     }
-  }).sort((a, b) =>
-    Number(b.strongNumberEvidence) - Number(a.strongNumberEvidence) ||
-    (b.numberEvidence?.occurrences || 0) - (a.numberEvidence?.occurrences || 0) ||
-    (b.numberEvidence?.confidence || 0) - (a.numberEvidence?.confidence || 0) ||
-    Number(b.exactNameMatch) - Number(a.exactNameMatch) ||
-    Number(b.nameMatch) - Number(a.nameMatch) ||
-    Number(Boolean(b.numberEvidence)) - Number(Boolean(a.numberEvidence)) ||
-    Number(b.languageMatch) - Number(a.languageMatch) ||
-    Number(b.remembered) - Number(a.remembered),
-  )
+  }).sort((a, b) => {
+    const strongNumberDifference = Number(b.strongNumberEvidence) - Number(a.strongNumberEvidence)
+    if (strongNumberDifference) return strongNumberDifference
+    // Only compare strength metrics when both candidates have strong evidence.
+    if (a.strongNumberEvidence && b.strongNumberEvidence) {
+      const occurrenceDifference = (b.numberEvidence?.occurrences || 0) - (a.numberEvidence?.occurrences || 0)
+      if (occurrenceDifference) return occurrenceDifference
+      const confidenceDifference = (b.numberEvidence?.confidence || 0) - (a.numberEvidence?.confidence || 0)
+      if (confidenceDifference) return confidenceDifference
+    }
+    return Number(b.exactNameMatch) - Number(a.exactNameMatch) ||
+      Number(b.nameMatch) - Number(a.nameMatch) ||
+      Number(Boolean(b.numberEvidence)) - Number(Boolean(a.numberEvidence)) ||
+      Number(b.languageMatch) - Number(a.languageMatch) ||
+      Number(b.remembered) - Number(a.remembered)
+  })
 }
