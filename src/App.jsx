@@ -42,6 +42,7 @@ import { buildAtomicCheckoutItems, buildCheckoutSnapshot } from './orderCheckout
 import { getPublicStorefrontProducts } from './publicProducts'
 import { isAllowedOrderStatusTransition, isValidOrderStatus, orderStatusUpdateFailure } from './orderStatus'
 import './App.css'
+import PreviewDemo from './PreviewDemo.jsx'
 
 const CART_KEY = 'grand-line-archive-cart'
 const currentYear = new Date().getFullYear()
@@ -1268,6 +1269,7 @@ function ErrorNotice({ message }) {
 }
 
 function App() {
+  if (isPreviewBuild && !hasSupabaseConfig) return <PreviewDemo />
   return (
     <BrowserRouter>
       <Storefront />
