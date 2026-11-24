@@ -195,3 +195,41 @@ test('strong repeated number evidence still outranks contradictory OCR name', ()
   })
   assert.equal(ranked[0].match.id, 'repeated-number')
 })
+
+
+test('the more visually similar memory wins when local and shared examples disagree', () => {
+  const selected = chooseRememberedImageMatch(
+    { printingId: 'local-parallel', cardNumber: 'OP01-001', similarity: 94 },
+    { printingId: 'shared-normal', cardNumber: 'OP01-001', similarity: 86 },
+    'OP01-001',
+  )
+  assert.equal(selected.source, 'local')
+  assert.equal(selected.image.printingId, 'local-parallel')
+})
+
+test('a stronger shared image can beat a weaker local image for the same OCR number', () => {
+  const selected = chooseRememberedImageMatch(
+    { printingId: 'local-normal', cardNumber: 'OP01-001', similarity: 80 },
+    { printingId: 'shared-parallel', cardNumber: 'OP01-001', similarity: 96 },
+    'OP01-001',
+  )
+  assert.equal(selected.source, 'shared')
+  assert.equal(selected.image.printingId, 'shared-parallel')
+})
+
+test('recognition memory for a different OCR number cannot influence ranking', () => {
+  assert.equal(chooseRememberedImageMatch(
+    { printingId: 'local', cardNumber: 'OP01-002', similarity: 99 },
+    { printingId: 'shared', cardNumber: 'OP01-003', similarity: 99 },
+    'OP01-001',
+  ), null)
+})
+
+test('local recognition memory wins a visual-similarity tie deterministically', () => {
+  const selected = chooseRememberedImageMatch(
+    { printingId: 'local', cardNumber: 'OP01-001', similarity: 90 },
+    { printingId: 'shared', cardNumber: 'OP01-001', similarity: 90 },
+    'OP01-001',
+  )
+  assert.equal(selected.source, 'local')
+})
