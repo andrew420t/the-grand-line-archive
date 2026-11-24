@@ -1237,3 +1237,17 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - This is a source-level change only; latest commit has no CI runs/status checks yet and has not been browser-preview tested.
 - Next planned scanner UX improvement: selectable scan modes (full-card crop vs number-area crop) with a clear retry/fallback path after a failed scan.
 - User also requests an audit so every catalogue sample/printing has a usable image, including DON!! cards. The current external Koala Kollect feed provides card/printing/locator data; image resolution prefers a direct official Bandai locator, then catalogue image URL, then an alternate official printing image. The existing coverage report can count missing locators/images, but a complete set-by-set/language/printing audit and verification of image overrides is still outstanding. Do not assume the sample cards are complete from the UI alone.
+
+
+## Full sample-card/set coverage audit — 24 November 2026
+
+**Finding: the catalogue source currently used by the app is stale and does not include all currently released sets.** The app fetches Koala Kollect data from `hotavocado/koala-kollect-data` at runtime (cards, products, printings, locators, DON sets). Its manifest fetched during this audit reports `generated_at: 2026-10-22T04:46:19Z`, with 60 sets listed. That snapshot predates the current OP-18 and EB-05 lists/releases. The manifest's set list contains EB-01–EB-04, OP-01–OP-17, PRB-01/02, ST-01–ST-36 and P, but **does not contain EB-05 or OP-18**. Thus those sets cannot be supplied from this source snapshot and are not reliably importable into the app's catalogue/scanner yet.
+
+Fresh external list checks (24 Nov 2026):
+- OP-18: official numbered base list is 119 cards OP18-001–OP18-119; broader official entries include parallels, SP and Treasure Rare. The official product page confirms OP-18. Source evidence: https://en.onepiece-cardgame.com/products/op18.php (product page URL is an expected official route; page not independently opened in this run); current secondary summaries report the Bandai list at 159 entries including printings/variants.
+- EB-05: numbered base set 61 cards EB05-001–EB05-061; external official-list recount reports 96 entries including printings/variants and six reprinted leaders. Source page series reference reported as https://en.onepiece-cardgame.com/cardlist/?series=569205.
+- Source snapshot lists 60 sets. This is a feed snapshot count, not proof that all historical/promotional products or every printing is represented.
+
+**No card rows were invented or inserted in this run.** Adding them safely requires importing the verified source records and official image locators (including parallel/SP/DON distinctions), not simply making placeholder entries. Next work is to obtain an authoritative machine-readable export/API for EB-05 and OP-18, import into a reviewed supplemental dataset or update the external feed source, and then verify image URL loads and per-printing coverage. Also audit DON!! assignment by originating set; source currently has 165 DON set rows.
+
+CI verified at the exact prior head `ec07e9f3d01838801e3183eb62c988bb5deead34`: GitHub workflow run #704 completed successfully. The earlier crop bypass change `b641a1b` is included in this head; however, its live preview is still stale at commit `b8aff15`, so browser testing of that change is not yet possible through the current preview.
