@@ -12,10 +12,12 @@ export function rankCatalogueMatches(matches = [], detectedName = '', detectedLa
   const language = languageFamily(detectedLanguage)
   return matches.map((match) => {
     const candidateName = normalize(match.name)
+    const exactNameMatch = Boolean(name && candidateName && name === candidateName)
     const nameMatch = Boolean(name && candidateName && (candidateName.includes(name) || name.includes(candidateName)))
     const languageMatch = Boolean(language && languageFamily(match.language) === language)
     return {
       match,
+      exactNameMatch,
       nameMatch,
       languageMatch,
       remembered: match.id === rememberedId,
@@ -25,6 +27,7 @@ export function rankCatalogueMatches(matches = [], detectedName = '', detectedLa
     Number(Boolean(b.numberEvidence)) - Number(Boolean(a.numberEvidence)) ||
     (b.numberEvidence?.occurrences || 0) - (a.numberEvidence?.occurrences || 0) ||
     (b.numberEvidence?.confidence || 0) - (a.numberEvidence?.confidence || 0) ||
+    Number(b.exactNameMatch) - Number(a.exactNameMatch) ||
     Number(b.nameMatch) - Number(a.nameMatch) ||
     Number(b.languageMatch) - Number(a.languageMatch) ||
     Number(b.remembered) - Number(a.remembered),
