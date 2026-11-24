@@ -4884,10 +4884,15 @@ h2 em {
 }
 .scanner-manual-crop__shade {
   position: absolute;
-  inset: 0;
   background: rgba(0, 0, 0, 0.55);
   pointer-events: none;
 }
+.scanner-manual-crop__shade--top,
+.scanner-manual-crop__shade--bottom { left: 0; right: 0; }
+.scanner-manual-crop__shade--top { top: 0; }
+.scanner-manual-crop__shade--left { left: 0; }
+.scanner-manual-crop__shade--right { right: 0; }
+.scanner-manual-crop__shade--bottom { bottom: 0; }
 .scanner-manual-crop__selection {
   position: absolute;
   border: 2px solid #e4c47e;
