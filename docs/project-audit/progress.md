@@ -27,7 +27,7 @@ This log records repeatable source/CI evidence and safe improvements. It does no
 - Code commits: [4e4184c](https://github.com/andrew420t/the-grand-line-archive/commit/4e4184c703fe731695307873ea45f01c7f546976), [650c8fc](https://github.com/andrew420t/the-grand-line-archive/commit/650c8fc172e85d491f6e8a09e7c328c27b92b05c), [2577959](https://github.com/andrew420t/the-grand-line-archive/commit/257795979e0933ea00104354673b8e4bc9bd1cc1).
 - Scanner evidence was appended to [docs/scanner-testing/progress.md](../scanner-testing/progress.md).
 
-**Verification state:** baseline run #773 passed on the pre-fix SHA. The fixed code triggered Actions run #778; it was in progress at the time of the code check. A later documentation commit means CI must be checked against the newest branch head before reporting a final pass. No live browser or physical-card test was possible in this run.
+**Verification state:** baseline run #773 passed on the pre-fix SHA. The fixed code head `257795979e0933ea00104354673b8e4bc9bd1cc1` passed exact-head Actions [run #778](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45361595227): install, tests, lint, and production build. The first audit-log head `93906b7cc2103ff61cfcd2935259535e489c26d4` passed exact-head [run #782](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45361754071) with the same four steps. No live browser or physical-card test was possible in this run.
 
 ### Priority 1 / 7 — Checkout and order data integrity review
 
@@ -43,7 +43,7 @@ Reviewed `supabase/review-only/product-visibility-rls-audit.sql`. It is read-onl
 
 ### Scanner and catalogue evidence retained
 
-- The PR description and scanner progress log report all 100 sample matrix image slots as load-verified, including recovered OP17 and Japanese EB01/EB02 references. This is **image-load evidence only**, not OCR accuracy.
+- The PR description and scanner progress log report all 100 sample matrix image slots as load-verified, including recovered OP17 and Japanese EB01/EB02 references. I re-read the CSV: it contains 100 unique target-set/language/slot rows across 25 targets, with exactly two English and two Japanese rows per target; `tests/sampleCardMatrix.test.js` enforces those counts and the 100 `verified-load` statuses. This is **image-load evidence only**, not OCR accuracy or proof that every set's complete catalogue is imported.
 - Synthetic OCR, parser, matching, real-photo OCR, browser/preview, and production UI evidence remain separate categories.
 - No genuine physical-card photo was available to this run for a new OCR trial.
 - OP18 and EB05 supplemental sample entries must not be described as complete full-set imports.
