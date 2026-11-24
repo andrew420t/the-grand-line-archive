@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { rankCatalogueMatches } from '../src/admin/cardMatchRanking.js'
+import { chooseRememberedImageMatch, rankCatalogueMatches } from '../src/admin/cardMatchRanking.js'
 
 const candidates = [
   { id: 'jp', name: 'Roronoa Zoro', language: 'Japanese', setCode: 'OP01' },
