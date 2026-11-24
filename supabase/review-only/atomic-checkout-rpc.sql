@@ -286,14 +286,45 @@ REVOKE ALL ON FUNCTION public.update_order_status_atomic(uuid, text) FROM anon;
 GRANT EXECUTE ON FUNCTION public.update_order_status_atomic(uuid, text) TO authenticated;
 
 -- Enforce the atomic RPC as the only authenticated order-write path.
--- Review the grants audit first; these revokes intentionally disable direct
--- client INSERTs and status UPDATEs. SECURITY DEFINER RPCs execute as their
--- owner, while authenticated users retain SELECT access subject to existing RLS.
-REVOKE INSERT ON public.orders FROM PUBLIC, anon, authenticated;
-REVOKE INSERT (user_id, status, total_amount, stock_reserved) ON public.orders FROM PUBLIC, anon, authenticated;
-REVOKE UPDATE ON public.orders FROM PUBLIC, anon, authenticated;
-REVOKE UPDATE (user_id, status, total_amount, stock_reserved) ON public.orders FROM PUBLIC, anon, authenticated;
-REVOKE INSERT ON public.order_items FROM PUBLIC, anon, authenticated;
-REVOKE INSERT (order_id, product_id, quantity, unit_price) ON public.order_items FROM PUBLIC, anon, authenticated;
+-- The application has no direct order/order-item update or delete workflow.
+-- Review the grants audit first. Keep SELECT access subject to the existing RLS
+-- policies, but remove every direct client DML route, including DELETE and
+-- TRUNCATE. The SECURITY DEFINER RPCs execute as their owner.
+REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON public.orders FROM PUBLIC, anon, authenticated;
+REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON public.order_items FROM PUBLIC, anon, authenticated;
+
+-- PostgreSQL column-level grants survive table-level REVOKEs. Remove any
+-- existing per-column INSERT/UPDATE grants on every current column too, rather
+-- than assuming only the columns in the original schema snapshot exist.
+DO $revoke_order_column_writes$
+DECLARE
+  v_table text;
+  v_column text;
+BEGIN
+  FOR v_table, v_column IN
+    SELECT c.relname, a.attname
+    FROM pg_class AS c
+    JOIN pg_namespace AS n ON n.oid = c.relnamespace
+    JOIN pg_attribute AS a ON a.attrelid = c.oid
+    WHERE n.nspname = 'public'
+      AND c.relname IN ('orders', 'order_items')
+      AND c.relkind IN ('r', 'p')
+      AND a.attnum > 0
+      AND NOT a.attisdropped
+    ORDER BY c.relname, a.attnum
+  LOOP
+    EXECUTE format(
+      'REVOKE INSERT (%I) ON TABLE public.%I FROM PUBLIC, anon, authenticated',
+      v_column,
+      v_table
+    );
+    EXECUTE format(
+      'REVOKE UPDATE (%I) ON TABLE public.%I FROM PUBLIC, anon, authenticated',
+      v_column,
+      v_table
+    );
+  END LOOP;
+END
+$revoke_order_column_writes$;
 
 COMMIT;
