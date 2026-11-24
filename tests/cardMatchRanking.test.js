@@ -160,3 +160,14 @@ test('locale-style language codes such as en-US and ja-JP rank correctly', () =>
   assert.equal(rankCatalogueMatches(candidates, '', 'ja-JP')[0].match.id, 'jp')
   assert.equal(rankCatalogueMatches(candidates, '', 'EN-gb')[0].match.id, 'en')
 })
+
+
+test('exact OCR name match outranks a longer name containing the same text', () => {
+  const ranked = rankCatalogueMatches([
+    { id: 'long', name: 'Portgas D. Ace', language: 'English' },
+    { id: 'exact', name: 'Ace', language: 'Japanese' },
+  ], 'Ace', 'English')
+  assert.equal(ranked[0].match.id, 'exact')
+  assert.equal(ranked[0].exactNameMatch, true)
+  assert.equal(ranked[1].exactNameMatch, false)
+})
