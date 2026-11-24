@@ -1372,3 +1372,9 @@ No image identity mismatch was observed. The 100-case matrix manifest was update
 - **Code/test/documentation:** added a code comment warning that the uploaded image is not guaranteed to be card-cropped; added `tests/cardRecognitionMemorySqlSafety.test.js` for the initial and remediation SQL; and added an isolated-staging privacy check to the manual checklist.
 - **CI:** the first run [#809](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45363375472) failed only because one static test expected a multi-line SQL policy declaration on a single line. The assertion was corrected to allow line breaks. The corrected code/test head `089feaab92852f4cc80baa064a95ac5f948b83f2` passed exact-head run [#811](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45363619774): install, tests, lint and production build all succeeded.
 - **Evidence category:** source/data-flow review + static SQL-policy tests. No SQL was executed, no Storage object was inspected, and no live exposure is confirmed. If the earlier SQL was applied manually, use the separate remediation proposal only after reviewing it against isolated staging; do not assume this repository change has changed any existing bucket.
+
+### Recognition privacy preflight follow-up — 24 November 2026
+
+- Tightened the fresh-setup SQL preflight to require `public.is_admin()` to return boolean and to stop unless RLS is enabled on `storage.objects`; it will not create policies on an unprotected Storage table.
+- Added static regression assertions for both preflight conditions. The existing remediation SQL separately checks the admin function, table/bucket existence, required columns, and RLS on both the metadata table and Storage objects.
+- These are still review-only SQL proposals. They have not been run against staging or production. The exact-head CI result for this follow-up commit is pending.
