@@ -83,6 +83,13 @@ test('manual crop accepts the minimum 12 percent dimensions and rejects smaller 
 })
 
 
+test('automatic full-photo scanning does not require manual crop confirmation', () => {
+  assert.deepEqual(requireConfirmedManualCardCrop(null, 1200, 1800, false), {
+    x: 0, y: 0, width: 1200, height: 1800,
+  })
+  assert.throws(() => requireConfirmedManualCardCrop(null, 0, 1800, false), /invalid dimensions/)
+})
+
 test('confirmed crop guard rejects unconfirmed and invalid crop geometry', () => {
   const crop = { x: 0.1, y: 0.1, width: 0.8, height: 0.8 }
   assert.throws(() => requireConfirmedManualCardCrop(crop, 1000, 1000, false), /Confirm/)
