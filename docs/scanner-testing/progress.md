@@ -1182,3 +1182,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Workflow run **668** (run ID `45301645550`) on the corrected branch completed successfully: **128/128 tests passed**, lint passed, and production build passed.
 - The prior run 663 had caught the invalid `OP00-001` acceptance. The parser and regression test were corrected, and this run verifies that fix.
 - CI evidence is automated unit tests/lint/build only; no physical-card OCR, browser scanner, staging isolation, or production deployment was tested.
+
+
+## Scanner language-code robustness — 24 November 2026
+
+- Found a small compatibility gap in candidate ranking: language aliases handled English, Japanese, en, eng, jp, and jpn, but locale-style values such as `en-US` and `ja-JP` were not recognized. These formats are common in browser/API metadata.
+- Updated the language-family normalization to recognize any normalized code beginning with `en` or `ja`, while retaining existing aliases.
+- Added regression tests for `en-US`, `EN-gb`, and `ja-JP`.
+- This is a focused ranking unit-test improvement. CI for the resulting commit is pending; it is not scanner/browser or OCR evidence.
