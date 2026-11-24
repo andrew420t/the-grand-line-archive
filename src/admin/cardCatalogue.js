@@ -621,6 +621,16 @@ export async function getCatalogueReferenceTestMatrix() {
   ]
   const bySlot = new Map()
   const officialFallbackSamples = {
+    OP17: {
+      en: [
+        { cardNumber: 'EB04-007', name: 'Roronoa Zoro', rarity: 'SP CARD', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB04-007_p2.png?261113=', verificationStatus: 'candidate-unverified' },
+        { cardNumber: 'EB04-061', name: 'Monkey.D.Luffy', rarity: 'SEC', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB04-061_p2.png?261113=', verificationStatus: 'candidate-unverified' },
+      ],
+      jp: [
+        { cardNumber: 'EB04-007', name: 'ロロノア・ゾロ', rarity: 'SP CARD', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB04-007_p2.png?261113=', verificationStatus: 'candidate-unverified' },
+        { cardNumber: 'EB04-061', name: 'モンキー・D・ルフィ', rarity: 'SEC', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB04-061_p3.png?261113=', verificationStatus: 'candidate-unverified' },
+      ],
+    },
     OP18: {
       en: [
         { cardNumber: 'OP18-001', name: 'Karoo', rarity: 'L', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png?261016=' },
@@ -642,6 +652,17 @@ export async function getCatalogueReferenceTestMatrix() {
       ],
     },
   }
+  const officialImageOverrides = {
+    EB01: { jp: {
+      'EB01-001': 'https://www.onepiece-cardgame.com/images/cardlist/card/EB01-001.png?261113=',
+      'EB01-002': 'https://www.onepiece-cardgame.com/images/cardlist/card/EB01-002.png?261113=',
+    } },
+    EB02: { jp: {
+      'EB01-001': 'https://www.onepiece-cardgame.com/images/cardlist/card/EB01-001_p2.png?261113=',
+      'EB01-021': 'https://www.onepiece-cardgame.com/images/cardlist/card/EB01-021_p2.png?261113=',
+    } },
+  }
+
   const targetSetForProduct = (productCode, cardNumber) => {
     const code = String(productCode || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
     const prefix = baseCardNumber(cardNumber).split('-')[0]
@@ -701,7 +722,17 @@ export async function getCatalogueReferenceTestMatrix() {
     for (const language of LANGUAGES) {
       const candidates = (bySlot.get(language + ':' + set) || [])
         .sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.id.localeCompare(b.id))
-      const selected = [...candidates]
+      const explicitSamples = officialFallbackSamples[set]?.[language] || []
+      // For OP17 use the exact product-attributed sample identities from the
+      // official set list; the direct images are candidate URLs until loaded.
+      const selected = explicitSamples.length ? [...explicitSamples] : [...candidates]
+      const imageOverrides = officialImageOverrides[set]?.[language] || {}
+      for (const item of selected) {
+        if (imageOverrides[item.cardNumber]) {
+          item.imageUrl = imageOverrides[item.cardNumber]
+          item.source = 'Bandai official image reference (cache-busted retry)'
+        }
+      }
       for (const sample of officialFallbackSamples[set]?.[language] || []) {
         if (selected.length >= 2) break
         if (selected.some((item) => item.cardNumber === sample.cardNumber)) continue
