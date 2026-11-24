@@ -394,6 +394,7 @@ export default function CardScanner({
             <option value="number-only">Card number only — faster, less text noise</option>
           </select>
         </label>
+        <label className="form-field scanner-language">
           <span>Recognition language</span>
           <select value={recognitionLanguage} disabled={scanning} onChange={(event) => setRecognitionLanguage(event.target.value)}>
             <option value="eng">English</option>
