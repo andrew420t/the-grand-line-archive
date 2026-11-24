@@ -1386,3 +1386,9 @@ No image identity mismatch was observed. The 100-case matrix manifest was update
 - **Regression coverage:** four tests cover stronger local, stronger shared, mismatched card number, and deterministic tie behavior.
 - **CI:** exact head `afb63af4ddcf785589f89a19f63a2f04fdd2baf3` passed GitHub Actions [run #836](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45364536905): install, tests, lint, and production build all succeeded.
 - **Evidence category:** source review + unit tests. No physical-card or live-browser test was performed; the confirmation popup remains mandatory.
+
+### Recognition memory search performance note — 24 November 2026
+
+- Source review found that shared recognition lookup currently fetches every metadata row in pages of 1,000 and sorts all hashes in the browser for each scan. The local IndexedDB lookup also compares against all saved examples. This is correct for broad visual fallback but scales linearly with the number of remembered printings.
+- No cap or query rewrite was introduced in this run because memory is also used to recover a card number when OCR is weak; filtering only by OCR candidates could remove that fallback. Next scanner pass should design a two-stage/filtered lookup that preserves that recovery path and benchmark it with a larger synthetic memory set.
+- After the memory precedence documentation update, exact docs head `a8062178b26f65ac4db9cc0d9a840eb591b6d8c8` passed [CI run #839](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45364662064).
