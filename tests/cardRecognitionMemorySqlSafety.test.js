@@ -6,8 +6,8 @@ const proposal = readFileSync(new URL('../supabase/review-only/card-recognition-
 const remediation = readFileSync(new URL('../supabase/review-only/card-recognition-memory-privacy-remediation.sql', import.meta.url), 'utf8')
 
 test('shared recognition setup fails closed without the expected admin function and Storage RLS', () => {
-  assert.match(proposal, /pg_get_function_result\('public\\.is_admin\(\)'::regprocedure\) IS DISTINCT FROM 'boolean'/)
-  assert.match(proposal, /RLS must be enabled on storage\\.objects/)
+  assert.match(proposal, /pg_get_function_result\('public\.is_admin\(\)'::regprocedure\) IS DISTINCT FROM 'boolean'/)
+  assert.match(proposal, /RLS must be enabled on storage\.objects/)
 })
 
 test('shared recognition image bucket is private, including an existing bucket', () => {
