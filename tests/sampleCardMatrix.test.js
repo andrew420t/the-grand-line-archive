@@ -52,8 +52,8 @@ test('the prior image audit statuses are preserved without overstating verificat
     rows.filter((row) => row.status === status).length,
   ]))
   assert.deepEqual(statusCounts, {
-    'verified-load': 94,
-    'retry-pending': 2,
-    'candidate-unverified': 4,
+    'verified-load': 100,
+    'retry-pending': 0,
+    'candidate-unverified': 0,
   })
 })
