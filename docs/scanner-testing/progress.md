@@ -9,14 +9,14 @@ Requested 100 sample cases: 25 set/product targets × 2 English + 2 Japanese = 1
 - **Synthetic OCR using local Tesseract 5.5.0:** 100 text-crop fixtures. Raw OCR was exact for **57/100**. After the merged set-code correction from PR #20 and the OP-prefix correction from PR #21, normalized card numbers were exact **100/100**. Fixtures used OP/EB/PRB/ST-style codes with mild rotations, blur and JPEG compression. This is synthetic printed-number OCR only, not card-photo OCR.
 - **Parser fixes merged:** PR #20 commit ec4f2b244731dacaedcbe18b57ef25e3b7877a10 (O/0 confusion in set-code digits); PR #21 commit f2c865320bb1583aa687a927f34b81ca6f2d6eb1 (extra O in OP prefix such as OPO09). Both merged; regression tests added. **CI verified:** GitHub Actions runs #87 (PR #20), #88 (PR #21), and #89 (PR #22) each passed all steps: dependency install, `npm test`, lint, and production build. Run #86 and #84 were failed attempts before fixes; subsequent corrected runs passed.
 - **Reference data locators:** 92/100 requested sample slots in the current Koala Kollect product-linked locator data, 8 slots unmatched by the exact product-code query. The combined English OP14-EB04 and OP15-EB04 product-code mappings were included in this refreshed extraction. This does **not** mean cards are missing from official lists: English OP-14 and OP-15 products use combined product codes OP14-EB04 / OP15-EB04; EB-04 is not a separate English booster product. OP-18 and EB-05 official card lists are now published, but the current downloaded locator dataset appears not to have incorporated those recent releases.
-- **Official image visual check:** 94/100 sample image slots opened and visually checked via official Bandai card-list pages. OP01–OP16: 64/64; OP18: 4/4; EB01: 3/4; EB02: 3/4; EB03: 4/4; EB04: 4/4; EB05: 4/4; PRB01: 4/4; PRB02: 4/4. OP17: 0/4 unverified; two Japanese EB01/EB02 image retrievals failed. The original four OP01 English/Japanese Zoro/Law images were among the first checks. Browser-rendered images are visual-load checks, not OCR engine tests.
+- **Official image visual check (latest): 100/100 sample image slots loaded in browser and visually checked.** OP01–OP16: 64/64; OP17: 4/4; OP18: 4/4; EB01: 4/4; EB02: 4/4; EB03: 4/4; EB04: 4/4; EB05: 4/4; PRB01: 4/4; PRB02: 4/4. This verifies image loading/visible artwork only—not OCR-engine testing or full catalogue completeness.
 - **Real card-photo OCR:** 1/100. The user's physical English Saint Shamrock OP18-119 photo was run through local Tesseract 5.5.0 and multiple crops/preprocessing variants. Automatic name/number identification failed; rules text was partial. This is a real-photo failure sample, not a synthetic test. The other 99 requested real-photo slots have no physical photos supplied.
 - **Production/live UI:** not tested. Production URL open attempt failed through web browser tool; container DNS/network cannot reach the Worker. So scanner popup, candidate choice, remembered choice, manual fallback, and deployment status remain code-review-only/unverified in live UI.
 - **Code review:** candidate ranking order is remembered choice → exact OCR name → language. Popup displays image/name/number/language/set/rarity, lets the user select a candidate, has a remember checkbox using local browser storage keyed by detected card number, and “not sure/manual” closes without applying. Confirmation fills the form only; it does not save inventory.
 - **Current catalogue locator gap:** the Koala Kollect product-linked locator dataset itself still has 92/100 rows and omits the eight OP18/EB05 sample slots. Those eight were supplemented from official Bandai card-list pages and all eight official images were subsequently visually loaded. The English EB-04 set is not a separate product—its cards are associated with combined OP14-EB04 and OP15-EB04 products.
 
 ## Reference matrix
-Sampling method: first two unique card numbers (sorted) with product-linked image locators for each exact set/product code and language. For OP14/OP15, combined English product codes were not reliably linked in the source data during this extraction; EB04 is included in Japanese product associations. Some samples are reprints and retain their original card number. **Image verification status is updated in the summary above:** 94/100 sample slots were visually loaded via official Bandai card-list pages; 6 remain unverified (4 OP17 slots and 1 Japanese slot each for EB01/EB02). Visual loading is not OCR-engine testing.
+Sampling method: first two unique card numbers (sorted) with product-linked image locators for each exact set/product code and language. For OP14/OP15, combined English product codes were not reliably linked in the source data during this extraction; EB04 is included in Japanese product associations. Some samples are reprints and retain their original card number. **Image verification status is updated in the summary above:** all 100 sample slots are now visually loaded; the six previously unresolved slots passed after cache-busted direct image retries. Visual loading is not OCR-engine testing.
 
 | Set | Language | Slot | Card number | Name | Image URL |
 |---|---|---:|---|---|---|
@@ -681,7 +681,7 @@ A manual browser-rendering check was completed for the 100-row language/set samp
 | Target set | Official image loads | Status |
 |---|---:|---|
 | OP01–OP16 (each) | 4/4 each | PASS — 64/64 |
-| OP17 | 0/4 | Unverified — official series pages 569117/550117 inaccessible through browser tool |
+| OP17 | 4/4 | PASS — cache-busted direct image references load |
 | OP18 | 4/4 | PASS |
 | EB01 | 3/4 | 1 Japanese image retrieval failed |
 | EB02 | 3/4 | 1 Japanese image retrieval failed |
@@ -1266,3 +1266,12 @@ CI verified at the exact prior head `ec07e9f3d01838801e3183eb62c988bb5deead34`: 
 - First CI attempts for the new scan-mode UI failed at lint because the recognition-language JSX label was left unclosed when the scan-mode selector was added. The test suite itself passed (135/135), but lint stopped the build.
 - Corrected the JSX label structure and reran exact-head checks. GitHub Actions **run #725 (push) and #726 (pull request) both passed**: install, all tests, lint, and production build. Exact verified head: `eb1f6e72b0522681c6876e7b6b33d74fae1c4132`.
 - The new supplemental sample tests are included in the passing suite. The previous failed CI attempts are retained as history and are superseded by these successful exact-head runs.
+
+
+## Image-load audit recovery — 24 November 2026
+**Correction/superseding result to the 23 November 94/100 report: the sample image matrix is now 100/100 load-verified.** A live browser opened each of the six previously unresolved direct image URLs with cache-busting query strings and visually confirmed the images loaded:
+- OP17 English EB04-007_p2 (Roronoa Zoro) and EB04-061_p2 (Monkey.D.Luffy): 2/2 pass.
+- OP17 Japanese EB04-007_p2 and EB04-061_p3: 2/2 pass; the images include Bandai's SAMPLE watermark.
+- EB01 Japanese EB01-001 and EB02 Japanese EB01-001_p2: 2/2 pass, both show Kozuki Oden with the expected card number.
+
+No image identity mismatch was observed. The 100-case matrix manifest was updated to use the verified cache-busted URLs and now records 100 `verified-load`, 0 `retry-pending`, and 0 `candidate-unverified` rows. A regression test asserts exactly 100 unique sample slots across 25 sets, with two English and two Japanese samples per set. This is **image-load verification only**: no OCR was run on the 100 reference images and the 100 cases are not 100 physical card photos. The upstream catalogue still has 92/100 product-linked sample locators; the remaining 8 OP18/EB05 sample entries are supplemental, and those two sets are still not complete catalogue imports.
