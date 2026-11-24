@@ -79,6 +79,8 @@ async function saveSharedExample(file, match, hash) {
   if (authError || !authData?.user) return { saved: false, reason: 'Sign in as an administrator to contribute shared examples.' }
   const path = `${encodeURIComponent(match.id)}/${hash}.jpg`
   const storage = supabase.storage.from(SHARED_BUCKET)
+  // This is the original scan photo, not guaranteed to be card-cropped. The
+  // matching feature stores its hash; the uploaded source image must stay private.
   const compressed = await prepareCardImage(file)
   const referenceFile = makePhotoFile(compressed, file.name || 'verified-card.jpg')
   const upload = await storage.upload(path, referenceFile, {
