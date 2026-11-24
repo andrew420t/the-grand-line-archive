@@ -171,3 +171,27 @@ test('exact OCR name match outranks a longer name containing the same text', () 
   assert.equal(ranked[0].exactNameMatch, true)
   assert.equal(ranked[1].exactNameMatch, false)
 })
+
+
+test('weak single number reading does not outrank a strong exact OCR name', () => {
+  const ranked = rankCatalogueMatches([
+    { id: 'weak-number', cardNumber: 'OP01-002', name: 'Trafalgar Law', language: 'Japanese' },
+    { id: 'exact-name', cardNumber: 'OP01-001', name: 'Roronoa Zoro', language: 'English' },
+  ], 'Roronoa Zoro', 'English', '', {
+    'OP01-002': { occurrences: 1, confidence: 35, sources: ['footer'] },
+  })
+  assert.equal(ranked[0].match.id, 'exact-name')
+  assert.equal(ranked[1].match.id, 'weak-number')
+  assert.equal(ranked[1].numberEvidence.confidence, 35)
+})
+
+test('strong repeated number evidence still outranks contradictory OCR name', () => {
+  const ranked = rankCatalogueMatches([
+    { id: 'name', cardNumber: 'OP01-002', name: 'Roronoa Zoro', language: 'English' },
+    { id: 'repeated-number', cardNumber: 'OP01-001', name: 'Trafalgar Law', language: 'Japanese' },
+  ], 'Roronoa Zoro', 'English', '', {
+    'OP01-001': { occurrences: 2, confidence: 35, sources: ['footer', 'wide'] },
+    'OP01-002': { occurrences: 1, confidence: 90, sources: ['footer'] },
+  })
+  assert.equal(ranked[0].match.id, 'repeated-number')
+})
