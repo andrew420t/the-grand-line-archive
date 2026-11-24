@@ -1,6 +1,6 @@
 # Grand Line Archive scanner test — progress and reference matrix
 
-Updated: 23 November 2026
+Updated: 24 November 2026
 
 ## Scope
 Requested 100 sample cases: 25 set/product targets × 2 English + 2 Japanese = 100. Sets: OP-01–OP-18, EB-01–EB-05, PRB-01/02.
