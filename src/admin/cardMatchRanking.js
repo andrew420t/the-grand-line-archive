@@ -2,8 +2,8 @@ const normalize = (value) => String(value || '').trim().toLowerCase().replace(/[
 
 const languageFamily = (value) => {
   const normalized = normalize(value)
-  if (normalized.includes('japanese') || normalized === 'jp' || normalized === 'jpn') return 'jp'
-  if (normalized.includes('english') || normalized === 'en' || normalized === 'eng') return 'en'
+  if (normalized.startsWith('ja') || normalized.includes('japanese') || normalized === 'jp' || normalized === 'jpn') return 'jp'
+  if (normalized.startsWith('en') || normalized.includes('english') || normalized === 'eng') return 'en'
   return ''
 }
 
@@ -22,8 +22,6 @@ export function rankCatalogueMatches(matches = [], detectedName = '', detectedLa
       numberEvidence: numberEvidence[match.cardNumber] || null,
     }
   }).sort((a, b) =>
-    // Printed-number evidence is the primary identity signal; name/language
-    // OCR and remembered images support it but must not override it.
     Number(Boolean(b.numberEvidence)) - Number(Boolean(a.numberEvidence)) ||
     (b.numberEvidence?.occurrences || 0) - (a.numberEvidence?.occurrences || 0) ||
     (b.numberEvidence?.confidence || 0) - (a.numberEvidence?.confidence || 0) ||
