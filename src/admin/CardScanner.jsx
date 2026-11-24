@@ -179,7 +179,11 @@ export default function CardScanner({
       setStatus(scanMode === 'number-only'
         ? 'Number-only mode: reading the number crop without full-card text OCR…'
         : 'Finding the card number: checking bottom edges in upright, sideways and rotated orientations…')
-      const manualCrop = Object.fromEntries(Object.entries(manualCropPercent).map(([key, value]) => [key, Number(value) / 100]))
+      // Pass null when the crop tool is off. This is the explicit full-photo
+      // path; a non-null crop remains subject to the user's confirmation.
+      const manualCrop = manualCropEnabled
+        ? Object.fromEntries(Object.entries(manualCropPercent).map(([key, value]) => [key, Number(value) / 100]))
+        : null
       const numberRegions = scanMode === 'number-only' && manualCropEnabled
         ? [{ label: 'Manual number-area crop', file: await prepareManualCardCropFile(frontPhoto.file, manualCrop, manualCropConfirmed) }]
         : await prepareCardNumberRegions(frontPhoto.file, manualCrop, manualCropConfirmed)
