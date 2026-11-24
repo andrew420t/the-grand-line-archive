@@ -1173,7 +1173,7 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 
 - GitHub Actions run **663** (run ID `45301358502`) tested commit `913c5d2` and failed: 127/128 tests passed. The new malformed-number test exposed that OCR input `OP0001-001` could be partially accepted as the invalid set `OP00-001`.
 - Fixed `src/admin/cardNumberCandidates.js` to reject normalized set number `00`; expanded the regression case to include `OP00-001` explicitly.
-- Fix commits: `112258cf` (parser) and `436d45a` (test). The test change is the current branch head. CI for this corrected head has not appeared yet; do not count it as passing until a run verifies it.
+- Fix commits: `112258cf` (parser) and `436d45a` (test). This entry was written before the corrected CI run; see the later verification section below, which supersedes the pending-CI status.
 - This is a parser/unit-test result, not physical-card OCR evidence.
 
 
