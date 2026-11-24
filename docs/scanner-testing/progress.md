@@ -1378,3 +1378,11 @@ No image identity mismatch was observed. The 100-case matrix manifest was update
 - Tightened the fresh-setup SQL preflight to require `public.is_admin()` to return boolean and to stop unless RLS is enabled on `storage.objects`; it will not create policies on an unprotected Storage table.
 - Added static regression assertions for both preflight conditions. The existing remediation SQL separately checks the admin function, table/bucket existence, required columns, and RLS on both the metadata table and Storage objects.
 - These are still review-only SQL proposals. They have not been run against staging or production. The follow-up code/test head `0d69565d82531ed96f985ba6ae3b2d181dacdb70` passed exact-head GitHub Actions [run #827](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45364203712): install, tests, lint and production build all succeeded.
+
+## Recognition memory precedence correction — 24 November 2026
+
+- **Finding:** when both local and shared memory returned a visually similar example for the same OCR-resolved card number, the scanner always overwrote the local match with the shared match, even when the shared example had lower visual similarity. Memory only affects candidate ranking and the user still confirms the printing, but this could unnecessarily push a weaker normal/parallel choice ahead of a stronger local example.
+- **Fix:** added `chooseRememberedImageMatch`. It ignores memory for a different card number, selects the higher similarity between local and shared examples, and deterministically prefers local memory on an exact tie. The scanner now uses the selected source consistently in ranking and status text.
+- **Regression coverage:** four tests cover stronger local, stronger shared, mismatched card number, and deterministic tie behavior.
+- **CI:** exact head `afb63af4ddcf785589f89a19f63a2f04fdd2baf3` passed GitHub Actions [run #836](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45364536905): install, tests, lint, and production build all succeeded.
+- **Evidence category:** source review + unit tests. No physical-card or live-browser test was performed; the confirmation popup remains mandatory.
