@@ -1151,3 +1151,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - **Japanese EB02 retry:** searched card-list sources. Search snippets returned EB02 card list data, but direct page opening failed with a cache-miss error. No actual Japanese card image load was verified; Japanese EB02 failing slot remains unverified.
 - **Source access distinction:** search-index snippets are not image-load evidence and are not counted toward the 100-case visual-load matrix. No OCR was run on these references.
 - **Next attempt:** use accessible direct image asset links from the card catalogue or a reproducible download/image-validation harness, rather than counting search snippets. No production/staging or data changes.
+
+
+## Alternative OP17 image catalogue discovery — 24 November 2026
+
+- Fresh search surfaced additional candidate card-image catalogues: TCGGuy's OP17 Japanese list, Japanese TCG Supply's pictured OP17 list, OPTCG.app's Japanese OP17 index, and ExploreTCGsets' OP17 set page.
+- Search result content confirms useful OP17 card identifiers and notes parallel variants sharing numbers, reinforcing that image/printing identity cannot be determined from number alone. These are candidate sources only: direct opening of all four returned cache-miss errors through this tool, so no image was loaded or counted.
+- Links: https://tcgguy.com/blogs/card-lists/one-piece-op-17-the-worlds-strongest-warriors-japanese-card-list ; https://japanesetcgsupply.co.uk/en-ca/blogs/news/one-piece-op17-the-worlds-strongest-warriors-card-list-japanese ; https://optcg.app/jp/series/the-world-s-strongest-warriors/ ; https://exploretcgsets.com/onepiece/sets/op-17/
+- This is a source-discovery update, not a successful visual test. Next, investigate whether the catalogue image URLs can be extracted from indexed/static content in a reproducible way, without marking image-load results prematurely.
