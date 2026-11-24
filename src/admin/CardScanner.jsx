@@ -444,9 +444,10 @@ export default function CardScanner({
             aria-label="Drag to select the crop area on the card photograph"
           >
             <img src={frontPhoto.previewUrl} alt="Photo to crop for OCR" draggable="false" />
-            <div className="scanner-manual-crop__shade" style={{
-              clipPath: `polygon(0 0, 100% 0, 100% ${manualCropPercent.y}%, ${Number(manualCropPercent.x) + Number(manualCropPercent.width)}% ${manualCropPercent.y}%, ${Number(manualCropPercent.x) + Number(manualCropPercent.width)}% ${Number(manualCropPercent.y) + Number(manualCropPercent.height)}%, ${manualCropPercent.x}% ${Number(manualCropPercent.y) + Number(manualCropPercent.height)}%, ${manualCropPercent.x}% ${manualCropPercent.y}%, 0 ${manualCropPercent.y}%)`,
-            }} />
+            <div className="scanner-manual-crop__shade scanner-manual-crop__shade--top" style={{ height: manualCropPercent.y + '%' }} />
+            <div className="scanner-manual-crop__shade scanner-manual-crop__shade--left" style={{ top: manualCropPercent.y + '%', height: manualCropPercent.height + '%', width: manualCropPercent.x + '%' }} />
+            <div className="scanner-manual-crop__shade scanner-manual-crop__shade--right" style={{ top: manualCropPercent.y + '%', height: manualCropPercent.height + '%', left: (Number(manualCropPercent.x) + Number(manualCropPercent.width)) + '%', width: (100 - Number(manualCropPercent.x) - Number(manualCropPercent.width)) + '%' }} />
+            <div className="scanner-manual-crop__shade scanner-manual-crop__shade--bottom" style={{ top: (Number(manualCropPercent.y) + Number(manualCropPercent.height)) + '%', height: (100 - Number(manualCropPercent.y) - Number(manualCropPercent.height)) + '%' }} />
             <div className="scanner-manual-crop__selection" style={{
               left: manualCropPercent.x + '%',
               top: manualCropPercent.y + '%',
