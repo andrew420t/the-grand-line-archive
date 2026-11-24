@@ -29,3 +29,22 @@ test('recognizes promo card numbers', () => {
 test('ignores text that is not a supported card-number format', () => {
   assert.deepEqual(extractCardNumberCandidates([{ text: 'OP01-AB1 and Luffy 5000', confidence: 99 }]), [])
 })
+
+
+test('normalizes OCR O substitutions in promo card numbers and combines readings', () => {
+  const candidates = extractCardNumberCandidates([
+    { label: 'Footer A', text: 'P-O41', confidence: 110 },
+    { label: 'Footer B', text: 'P-041', confidence: 75 },
+  ])
+  assert.equal(candidates.length, 1)
+  assert.equal(candidates[0].number, 'P-041')
+  assert.equal(candidates[0].occurrences, 2)
+  assert.equal(candidates[0].confidence, 88)
+  assert.deepEqual(candidates[0].sources, ['Footer A', 'Footer B'])
+})
+
+test('rejects unsupported set-number lengths and malformed promo candidates', () => {
+  assert.deepEqual(extractCardNumberCandidates([
+    { text: 'OP0001-001 OP000-001 P-01 P-AB1', confidence: 99 },
+  ]), [])
+})
