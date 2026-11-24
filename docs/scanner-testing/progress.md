@@ -1206,3 +1206,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Ranking now treats number evidence as strong when it is repeated at least twice OR has confidence of 60 or higher. Strong number evidence remains ahead of name signals. Weak single-read number evidence ranks after exact/partial name evidence but ahead of language-only and remembered-image tie-breakers.
 - Added regression tests for weak single-read evidence losing to an exact name, and repeated number evidence still winning despite low average confidence.
 - This is a code/test improvement only; it is not physical-photo accuracy evidence. CI for the resulting exact branch head is pending.
+
+
+## Weak-evidence ranking CI failure and comparator correction — 24 November 2026
+
+- CI run **689** on commit `0ea5f6c` failed: **131/132 tests passed**. The failing regression demonstrated that a weak single number read still ranked above an exact OCR name because occurrence/confidence fields were compared before name signals, even when neither candidate had strong number evidence.
+- Corrected the comparator so number-strength/occurrence/confidence comparisons apply only when both candidates have strong number evidence. When evidence is weak, exact/partial name ranking precedes weak number presence, then language and remembered-image tie-breakers.
+- Fix commit: `4c2d95316f0b817d66f0c5dd5933efd9a19c2338`. CI for this exact commit is pending.
+- This is a regression-driven ranking correction, not physical-card accuracy evidence.
