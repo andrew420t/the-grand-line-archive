@@ -1167,3 +1167,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Search results include card identity and alternate-printing information, but this tool did not provide a directly testable image asset or page-open confirmation. Therefore these are source leads only and do not increase the visual-load count.
 - Useful source leads: https://onepiecedecklists.com/decklists/op17/edward-newgate.html ; https://tcg.directory/card/705924/edwardnewgate-001-alternate-art ; https://op.gotemtcg.com/en/cartes/en-op17-OP17001 ; https://op.gotemtcg.com/en/cartes/en-op17-OP17001_p1 ; https://www.onepiecetcgmarket.fr/en/cards/OP-17/OP17-001
 - Noted a useful scanner/catalogue matching requirement: source listings show OP17-001 base and parallel printings as separate identities. The candidate match should use printing/variant identity and reference-image comparison, not card number alone.
+
+
+## OCR candidate parser regression fix — 24 November 2026
+
+- GitHub Actions run **663** (run ID `45301358502`) tested commit `913c5d2` and failed: 127/128 tests passed. The new malformed-number test exposed that OCR input `OP0001-001` could be partially accepted as the invalid set `OP00-001`.
+- Fixed `src/admin/cardNumberCandidates.js` to reject normalized set number `00`; expanded the regression case to include `OP00-001` explicitly.
+- Fix commits: `112258cf` (parser) and `436d45a` (test). The test change is the current branch head. CI for this corrected head has not appeared yet; do not count it as passing until a run verifies it.
+- This is a parser/unit-test result, not physical-card OCR evidence.
