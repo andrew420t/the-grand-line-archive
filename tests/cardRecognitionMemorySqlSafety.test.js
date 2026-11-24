@@ -25,16 +25,16 @@ test('recognition metadata grants omit contributor identity and restrict direct 
 
 
 test('privacy remediation closes an already-created public recognition bucket', () => {
-  assert.match(remediation, /UPDATE storage\\.buckets\\s+SET public = false\\s+WHERE id = 'card-recognition-references'/)
-  assert.match(remediation, /DROP POLICY IF EXISTS ["']Public can view card recognition reference images["'] ON storage\\.objects/)
-  assert.match(remediation, /CREATE POLICY ["']Only admins can view recognition reference images["'] ON storage\\.objects AS RESTRICTIVE/)
-  assert.match(remediation, /CREATE POLICY ["']Only admins can upload recognition reference images["'] ON storage\\.objects AS RESTRICTIVE/)
+  assert.match(remediation, /UPDATE storage\.buckets\s+SET public = false\s+WHERE id = 'card-recognition-references'/)
+  assert.match(remediation, /DROP POLICY IF EXISTS ["']Public can view card recognition reference images["'] ON storage\.objects/)
+  assert.match(remediation, /CREATE POLICY ["']Only admins can view recognition reference images["'] ON storage\.objects AS RESTRICTIVE/)
+  assert.match(remediation, /CREATE POLICY ["']Only admins can upload recognition reference images["'] ON storage\.objects AS RESTRICTIVE/)
 })
 
 test('privacy remediation removes broad table and column grants while preserving safe metadata reads', () => {
-  assert.match(remediation, /REVOKE ALL ON public\\.card_recognition_examples FROM PUBLIC, anon, authenticated/)
-  assert.match(remediation, /REVOKE SELECT \\(%I\\) ON TABLE public\\.card_recognition_examples/)
-  assert.match(remediation, /GRANT SELECT \\([^)]*image_hash[^)]*\\)\\s+ON public\\.card_recognition_examples TO anon, authenticated/)
-  const selectedColumns = remediation.match(/GRANT SELECT \\(([^)]*)\\)/)?.[1] || ''
+  assert.match(remediation, /REVOKE ALL ON public\.card_recognition_examples FROM PUBLIC, anon, authenticated/)
+  assert.match(remediation, /REVOKE SELECT \(%I\) ON TABLE public\.card_recognition_examples/)
+  assert.match(remediation, /GRANT SELECT \([^)]*image_hash[^)]*\)\s+ON public\.card_recognition_examples TO anon, authenticated/)
+  const selectedColumns = remediation.match(/GRANT SELECT \(([^)]*)\)/)?.[1] || ''
   assert.doesNotMatch(selectedColumns, /confirmed_by/)
 })
