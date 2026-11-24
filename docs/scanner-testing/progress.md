@@ -1198,3 +1198,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Ranking now scores exact normalized-name equality ahead of partial/contained name matches, while printed-number evidence remains the primary signal. Language and remembered-image tie-breakers remain below name signals.
 - Added regression test using `Ace` versus `Portgas D. Ace`. This is a deterministic ranking test, not proof that OCR will read names accurately from physical photos.
 - CI pending for this branch head.
+
+
+## 24 November 2026 — weak OCR number evidence safeguard
+
+- Found a ranking edge case by code review: any detected number candidate previously outranked all name evidence, even a single low-confidence number reading. That could cause a weak OCR false-positive to beat an exact card-name match.
+- Ranking now treats number evidence as strong when it is repeated at least twice OR has confidence of 60 or higher. Strong number evidence remains ahead of name signals. Weak single-read number evidence ranks after exact/partial name evidence but ahead of language-only and remembered-image tie-breakers.
+- Added regression tests for weak single-read evidence losing to an exact name, and repeated number evidence still winning despite low average confidence.
+- This is a code/test improvement only; it is not physical-photo accuracy evidence. CI for the resulting exact branch head is pending.
