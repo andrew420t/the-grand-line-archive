@@ -1230,3 +1230,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Inspection found the dimmed overlay was built as a single complex polygon intended to represent the area outside the selection. That polygon was susceptible to incorrect/self-intersecting geometry as selection coordinates changed.
 - Replaced it with four independent rectangular shade panels (top, left, right, bottom) positioned from the selected crop percentages. The crop selection outline remains separate. This removes polygon winding/self-intersection from the overlay.
 - Code commits: `f1d6a6a` (component) and `5e7f6c4` (CSS). This is a source-level fix; it still needs preview/browser confirmation by dragging crops at different positions and sizes.
+
+
+## User-requested scanner and catalogue image improvements — 24 November 2026
+- Identified an interaction blocker in `CardScanner.jsx`: scanning was locked until manual crop was enabled, drawn, and confirmed. The manual crop is now optional; with it disabled the scanner can process the original full photo. If enabled, existing crop validation/confirmation remains required. Commit: `b641a1b90e4f5764f950cc78c7aa4e8ab7516337`.
+- This is a source-level change only; latest commit has no CI runs/status checks yet and has not been browser-preview tested.
+- Next planned scanner UX improvement: selectable scan modes (full-card crop vs number-area crop) with a clear retry/fallback path after a failed scan.
+- User also requests an audit so every catalogue sample/printing has a usable image, including DON!! cards. The current external Koala Kollect feed provides card/printing/locator data; image resolution prefers a direct official Bandai locator, then catalogue image URL, then an alternate official printing image. The existing coverage report can count missing locators/images, but a complete set-by-set/language/printing audit and verification of image overrides is still outstanding. Do not assume the sample cards are complete from the UI alone.
