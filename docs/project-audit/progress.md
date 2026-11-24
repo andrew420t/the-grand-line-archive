@@ -74,3 +74,16 @@ Reviewed `supabase/review-only/product-visibility-rls-audit.sql`. It is read-onl
 - [Baseline CI run #773](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45348304782)
 - [Scanner progress log](../scanner-testing/progress.md)
 - [Manual staging test checklist](../scanner-testing/manual-test-checklist.md)
+
+### Follow-up security review — order mutation grants
+
+A second source-level review found that the review-only atomic checkout proposal's comment promised the RPC would be the only authenticated order-write path, but its original grants block revoked direct order INSERT/UPDATE and order-item INSERT only. It did not revoke direct order DELETE or order-item UPDATE/DELETE. It also revoked only selected column-level INSERT/UPDATE grants, even though PostgreSQL column grants can remain after a table-level revoke. The application source has no direct order/order-item update or delete workflow; checkout and status changes use the two atomic RPCs.
+
+**Safe proposal improvement (not applied):**
+
+- The review-only SQL now revokes table-level INSERT, UPDATE, DELETE, and TRUNCATE on both `orders` and `order_items` from `PUBLIC`, `anon`, and `authenticated`.
+- A schema-driven block also revokes any existing per-column INSERT and UPDATE grants for every current column on those two tables, rather than assuming the original four-column snapshot is complete.
+- Added `tests/atomicCheckoutSqlSafety.test.js` to guard the proposal against losing those table-level and column-level protections.
+- Change commits: [9f1275d](https://github.com/andrew420t/the-grand-line-archive/commit/9f1275d8021ee985c0ea4494d0b819da382a5fb2), [46369b1](https://github.com/andrew420t/the-grand-line-archive/commit/46369b1b974024c6b22a62d83da0fbcc4d1b5b96).
+
+**Limit:** this is a reviewed SQL proposal and a static regression guard, not a live grant audit. The SQL has not been run. Confirm the real staging schema, existing triggers, policies, and grants before any staging application; never apply it to production as part of this automation.
