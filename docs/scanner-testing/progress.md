@@ -1134,3 +1134,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - **Outstanding before safe interactive preview testing:** confirm the Cloudflare Workers Builds Preview model/settings, configure or identify a separate staging Supabase project/branch and its build-time Vite variables, obtain a preview deployment for the exact PR head, and verify the preview URL loads. Do not create a paid Supabase resource or change Cloudflare settings without the user's approval.
 - **No live changes:** no Supabase schema/data, Storage objects, inventory, orders, customer data, Cloudflare settings, production deployment, or PR merge was changed during this audit.
 
+
+
+## Scheduled scanner work — 24 November 2026 (run started on demand)
+
+- **Fresh PR verification:** PR #26 remains open and unmerged. Current head: `ed0bcb8f49e5c8937b3375965b8e78ad8b96d704`; feature branch remains `feature/scanner-number-first-verification`. No master changes or merge.
+- **Exact-head CI rechecked:** GitHub Actions run #653 / run ID `45286553673` completed successfully for this head. All steps passed: checkout, Node setup, dependency install, test suite, lint, and production build. This run's API job summary did not expose test-count or lint-warning totals, so those are not repeated here.
+- **New test evidence this run:** none. This was a fresh exact-head CI verification, not a physical-photo or browser scanner test. The existing evidence gaps remain: no fresh 100-card image/OCR matrix, no new physical-card photos, and no safe isolated staging backend verified.
+- **Next concrete target:** add fresh reference-image checks to the matrix (starting with the unresolved OP17 and Japanese EB01/EB02 entries) or, if image access remains blocked, investigate a focused scanner regression test. Avoid repeating this CI-only check as the next work item.
