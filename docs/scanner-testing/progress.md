@@ -1377,4 +1377,4 @@ No image identity mismatch was observed. The 100-case matrix manifest was update
 
 - Tightened the fresh-setup SQL preflight to require `public.is_admin()` to return boolean and to stop unless RLS is enabled on `storage.objects`; it will not create policies on an unprotected Storage table.
 - Added static regression assertions for both preflight conditions. The existing remediation SQL separately checks the admin function, table/bucket existence, required columns, and RLS on both the metadata table and Storage objects.
-- These are still review-only SQL proposals. They have not been run against staging or production. The exact-head CI result for this follow-up commit is pending.
+- These are still review-only SQL proposals. They have not been run against staging or production. The follow-up code/test head `0d69565d82531ed96f985ba6ae3b2d181dacdb70` passed exact-head GitHub Actions [run #827](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45364203712): install, tests, lint and production build all succeeded.
