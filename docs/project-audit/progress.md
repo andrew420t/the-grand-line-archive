@@ -115,3 +115,10 @@ The scanner previously let any same-card-number shared-memory match overwrite th
 ### Scanner scaling follow-up
 
 The shared recognition lookup downloads every row in `card_recognition_examples` (1,000 per page) and sorts the full result in the browser on each scan; local IndexedDB lookup also compares every saved example. This is currently a linear network/CPU cost as the library grows. It was documented rather than changed because the broad visual search can recover a card number when OCR is weak; a naive OCR-number filter could remove that recovery path. Next run should design and benchmark a two-stage lookup that retains the fallback.
+
+### Run 1 final checkpoint — 24 November 2026
+
+- PR [#26](https://github.com/andrew420t/the-grand-line-archive/pull/26) remains open, unmerged, and mergeable on `feature/scanner-number-first-verification`.
+- Exact branch head `e67fead5dbeee7a02a606376407290138f4fc82a` passed GitHub Actions [run #842](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45364919582): dependency installation, tests, lint, and production build all succeeded.
+- This is source/CI verification only. Preview reachability, staging Supabase/Storage isolation, real physical-card OCR, live browser behavior, and production database policies remain unverified.
+- No PR merge, deployment, Cloudflare setting/secret change, Supabase query/write/migration, Storage operation, inventory/order/customer-data mutation, or production change was performed.
