@@ -7,6 +7,10 @@ const languageFamily = (value) => {
   return ''
 }
 
+const hasStrongNumberEvidence = (evidence) => Boolean(evidence && (
+  (evidence.occurrences || 0) >= 2 || (evidence.confidence || 0) >= 60
+))
+
 export function rankCatalogueMatches(matches = [], detectedName = '', detectedLanguage = '', rememberedId = '', numberEvidence = {}) {
   const name = normalize(detectedName)
   const language = languageFamily(detectedLanguage)
@@ -15,20 +19,23 @@ export function rankCatalogueMatches(matches = [], detectedName = '', detectedLa
     const exactNameMatch = Boolean(name && candidateName && name === candidateName)
     const nameMatch = Boolean(name && candidateName && (candidateName.includes(name) || name.includes(candidateName)))
     const languageMatch = Boolean(language && languageFamily(match.language) === language)
+    const evidence = numberEvidence[match.cardNumber] || null
     return {
       match,
       exactNameMatch,
       nameMatch,
       languageMatch,
       remembered: match.id === rememberedId,
-      numberEvidence: numberEvidence[match.cardNumber] || null,
+      numberEvidence: evidence,
+      strongNumberEvidence: hasStrongNumberEvidence(evidence),
     }
   }).sort((a, b) =>
-    Number(Boolean(b.numberEvidence)) - Number(Boolean(a.numberEvidence)) ||
+    Number(b.strongNumberEvidence) - Number(a.strongNumberEvidence) ||
     (b.numberEvidence?.occurrences || 0) - (a.numberEvidence?.occurrences || 0) ||
     (b.numberEvidence?.confidence || 0) - (a.numberEvidence?.confidence || 0) ||
     Number(b.exactNameMatch) - Number(a.exactNameMatch) ||
     Number(b.nameMatch) - Number(a.nameMatch) ||
+    Number(Boolean(b.numberEvidence)) - Number(Boolean(a.numberEvidence)) ||
     Number(b.languageMatch) - Number(a.languageMatch) ||
     Number(b.remembered) - Number(a.remembered),
   )
