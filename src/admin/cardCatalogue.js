@@ -631,12 +631,12 @@ export async function getCatalogueReferenceTestMatrix() {
   const officialFallbackSamples = {
     OP17: {
       en: [
-        { cardNumber: 'EB04-007', name: 'Roronoa Zoro', rarity: 'SP CARD', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB04-007_p2.png?261113=', verificationStatus: 'candidate-unverified' },
-        { cardNumber: 'EB04-061', name: 'Monkey.D.Luffy', rarity: 'SEC', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB04-061_p2.png?261113=', verificationStatus: 'candidate-unverified' },
+        { cardNumber: 'EB04-007', name: 'Roronoa Zoro', rarity: 'SP CARD', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB04-007_p2.png?261113=', verificationStatus: 'verified-load' },
+        { cardNumber: 'EB04-061', name: 'Monkey.D.Luffy', rarity: 'SEC', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB04-061_p2.png?261113=', verificationStatus: 'verified-load' },
       ],
       jp: [
-        { cardNumber: 'EB04-007', name: 'ロロノア・ゾロ', rarity: 'SP CARD', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB04-007_p2.png?261113=', verificationStatus: 'candidate-unverified' },
-        { cardNumber: 'EB04-061', name: 'モンキー・D・ルフィ', rarity: 'SEC', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB04-061_p3.png?261113=', verificationStatus: 'candidate-unverified' },
+        { cardNumber: 'EB04-007', name: 'ロロノア・ゾロ', rarity: 'SP CARD', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB04-007_p2.png?261113=', verificationStatus: 'verified-load' },
+        { cardNumber: 'EB04-061', name: 'モンキー・D・ルフィ', rarity: 'SEC', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB04-061_p3.png?261113=', verificationStatus: 'verified-load' },
       ],
     },
     OP18: {
