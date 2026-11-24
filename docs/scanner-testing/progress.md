@@ -1175,3 +1175,10 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Fixed `src/admin/cardNumberCandidates.js` to reject normalized set number `00`; expanded the regression case to include `OP00-001` explicitly.
 - Fix commits: `112258cf` (parser) and `436d45a` (test). The test change is the current branch head. CI for this corrected head has not appeared yet; do not count it as passing until a run verifies it.
 - This is a parser/unit-test result, not physical-card OCR evidence.
+
+
+## Corrected OCR parser CI verified — 24 November 2026
+
+- Workflow run **668** (run ID `45301645550`) on the corrected branch completed successfully: **128/128 tests passed**, lint passed, and production build passed.
+- The prior run 663 had caught the invalid `OP00-001` acceptance. The parser and regression test were corrected, and this run verifies that fix.
+- CI evidence is automated unit tests/lint/build only; no physical-card OCR, browser scanner, staging isolation, or production deployment was tested.
