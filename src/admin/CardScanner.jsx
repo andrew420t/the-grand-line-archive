@@ -25,6 +25,7 @@ export default function CardScanner({
   onContinue,
 }) {
   const [recognitionLanguage, setRecognitionLanguage] = useState('eng')
+  const [scanMode, setScanMode] = useState('full-card')
   const [scanning, setScanning] = useState(false)
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState('')
@@ -175,9 +176,13 @@ export default function CardScanner({
           if (message.status) setStatus(message.status)
         },
       })
-      setStatus('Finding the card number: checking bottom edges in upright, sideways and rotated orientations…')
+      setStatus(scanMode === 'number-only'
+        ? 'Number-only mode: reading the number crop without full-card text OCR…'
+        : 'Finding the card number: checking bottom edges in upright, sideways and rotated orientations…')
       const manualCrop = Object.fromEntries(Object.entries(manualCropPercent).map(([key, value]) => [key, Number(value) / 100]))
-      const numberRegions = await prepareCardNumberRegions(frontPhoto.file, manualCrop, manualCropConfirmed)
+      const numberRegions = scanMode === 'number-only' && manualCropEnabled
+        ? [{ label: 'Manual number-area crop', file: await prepareManualCardCropFile(frontPhoto.file, manualCrop, manualCropConfirmed) }]
+        : await prepareCardNumberRegions(frontPhoto.file, manualCrop, manualCropConfirmed)
       const numberResults = await Promise.all(numberRegions.map(async (region) => {
         const { data: regionData } = await worker.recognize(region.file, { tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-' }, { blocks: true })
         const lineConfidence = (regionData.lines || [])
@@ -194,14 +199,12 @@ export default function CardScanner({
       setNumberReadings(numberResults)
       const candidates = extractCardNumberCandidates(numberResults)
       setNumberCandidates(candidates)
-      setStatus('Number-area scans complete. Checking the card photo for supporting details…')
-      const fullCardScanFile = await prepareManualCardCropFile(frontPhoto.file, manualCrop, manualCropConfirmed)
-      const { data } = await worker.recognize(fullCardScanFile, {}, { blocks: true })
-      const lines =
-        data.lines ||
-        (data.blocks || []).flatMap((block) =>
-          (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
-        )
+      const data = scanMode === 'number-only'
+        ? { text: '', lines: [], blocks: [] }
+        : await worker.recognize(await prepareManualCardCropFile(frontPhoto.file, manualCrop, manualCropConfirmed), {}, { blocks: true }).then((result) => result.data)
+      const lines = data.lines || (data.blocks || []).flatMap((block) =>
+        (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
+      )
       const numberLines = numberResults.flatMap((result) =>
         result.text.split(/\r?\n/).filter(Boolean).map((text) => ({ text, confidence: result.confidence })),
       )
@@ -385,6 +388,12 @@ export default function CardScanner({
           <p>OCR runs in your browser using Tesseract.js. Missing or uncertain values stay blank for manual review.</p>
         </div>
         <label className="form-field scanner-language">
+          <span>Scan mode</span>
+          <select value={scanMode} disabled={scanning} onChange={(event) => setScanMode(event.target.value)}>
+            <option value="full-card">Full card — number + details</option>
+            <option value="number-only">Card number only — faster, less text noise</option>
+          </select>
+        </label>
           <span>Recognition language</span>
           <select value={recognitionLanguage} disabled={scanning} onChange={(event) => setRecognitionLanguage(event.target.value)}>
             <option value="eng">English</option>
@@ -420,7 +429,7 @@ export default function CardScanner({
           <div>
             <p className="eyebrow">OPTIONAL SCAN PREPARATION</p>
             <h3 id="scanner-manual-crop-title">Crop the photo if needed</h3>
-            <p>Use a crop when the photo contains background or the card is difficult to read. If cropping is not helping, turn it off and scan the full photo. Values are percentages from the photo's top-left; the original photo is not changed.</p>
+            <p>Use a crop to isolate the card or the card-number area. Full-card mode uses the crop for number regions and supporting text. Number-only mode reads the selected crop directly when cropping is enabled. If cropping is not helping, turn it off and scan the full photo. Values are percentages from the photo's top-left; the original photo is not changed.</p>
           </div>
           <label className="scanner-manual-crop__toggle">
             <input type="checkbox" checked={manualCropEnabled} disabled={scanning || !frontPhoto} onChange={(event) => { setManualCropEnabled(event.target.checked); clearCropConfirmation(); setManualCropSelectionMade(false) }} />
@@ -429,7 +438,7 @@ export default function CardScanner({
         </div>
         {manualCropEnabled && frontPhoto?.previewUrl && (
           <div className="scanner-manual-crop__preview-instructions">
-            Drag across the photo to select the card area. The crop should include all four card edges and leave a little margin.
+            Drag across the photo to select either the whole card (full-card mode) or just the printed card-number area (number-only mode).
           </div>
         )}
         {manualCropEnabled && frontPhoto?.previewUrl && (
@@ -483,7 +492,7 @@ export default function CardScanner({
             ))}
             <button className="button button--quiet" type="button" disabled={scanning} onClick={() => { setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 }); clearCropConfirmation(); setManualCropSelectionMade(false) }}>Reset full photo</button>
             <p className="scanner-manual-crop__note">{manualCropGeometryIsValid ? 'Crop dimensions are valid. Visually verify that all card edges are inside this area.' : 'Select a larger area: width and height must each be at least 12%, and the crop must stay within the photo.'}</p>
-            <label className="scanner-manual-crop__confirm"><input type="checkbox" checked={manualCropConfirmed} disabled={scanning || !frontPhoto || !manualCropGeometryIsValid || !manualCropSelectionMade} onChange={(event) => { setManualCropConfirmed(event.target.checked); setManualCropConfirmedForFile(event.target.checked ? frontPhoto.file : null) }} /><span>I confirm the crop contains the entire card and avoids unrelated background.</span></label>
+            <label className="scanner-manual-crop__confirm"><input type="checkbox" checked={manualCropConfirmed} disabled={scanning || !frontPhoto || !manualCropGeometryIsValid || !manualCropSelectionMade} onChange={(event) => { setManualCropConfirmed(event.target.checked); setManualCropConfirmedForFile(event.target.checked ? frontPhoto.file : null) }} /><span>{scanMode === 'number-only' ? 'I confirm the crop contains the printed card number.' : 'I confirm the crop contains the entire card and avoids unrelated background.'}</span></label>
           </div>
         )}
         {!manualCropEnabled && <p className="scanner-manual-crop__required-note">Manual crop is off. The scanner will use the full original photo.</p>}
