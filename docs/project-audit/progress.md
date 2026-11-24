@@ -110,4 +110,8 @@ The scanner previously let any same-card-number shared-memory match overwrite th
 
 - PR #26 remains open, unmerged, and mergeable on `feature/scanner-number-first-verification`.
 - Latest code/test checkpoint `afb63af4ddcf785589f89a19f63a2f04fdd2baf3` passed exact-head run #836.
-- The audit and scanner progress documents were then updated; re-check CI against the resulting newest documentation head before closing this run.
+- The audit and scanner progress documents were updated, and exact documentation head `a8062178b26f65ac4db9cc0d9a840eb591b6d8c8` passed [CI run #839](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45364662064) (install, tests, lint, build).
+
+### Scanner scaling follow-up
+
+The shared recognition lookup downloads every row in `card_recognition_examples` (1,000 per page) and sorts the full result in the browser on each scan; local IndexedDB lookup also compares every saved example. This is currently a linear network/CPU cost as the library grows. It was documented rather than changed because the broad visual search can recover a card number when OCR is weak; a naive OCR-number filter could remove that recovery path. Next run should design and benchmark a two-stage lookup that retains the fallback.
