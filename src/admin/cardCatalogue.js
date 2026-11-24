@@ -3,6 +3,7 @@ import { resolveCatalogueImage } from './catalogueImageReference.js'
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
+import { getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
@@ -197,6 +198,18 @@ export async function findCatalogueMatches(cardNumber) {
         }
       }
     }
+  }
+
+  // Add only explicitly identified recent-set sample printings when the upstream
+  // feed has not supplied the exact card/set/language identity. These are clearly
+  // labelled samples, not a claim that the complete set has been imported.
+  for (const sample of getSupplementalSampleMatches(requestedNumber)) {
+    const exists = results.some((match) =>
+      match.cardNumber === sample.cardNumber &&
+      match.languageCode === sample.languageCode &&
+      String(match.setCode || '').replace(/[^A-Z0-9]/g, '') === String(sample.setCode || '').replace(/[^A-Z0-9]/g, ''),
+    )
+    if (!exists) results.push(sample)
   }
 
   // Admin-entered corrections and custom cards are layered over the public reference data.
