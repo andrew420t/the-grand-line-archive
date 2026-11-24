@@ -153,3 +153,10 @@ test('number-evidenced printing ranks before a match with no footer evidence', (
   assert.equal(ranked[0].match.id, 'footer')
   assert.equal(ranked[0].numberEvidence.occurrences, 1)
 })
+
+
+test('locale-style language codes such as en-US and ja-JP rank correctly', () => {
+  assert.equal(rankCatalogueMatches(candidates, '', 'en-US')[0].match.id, 'en')
+  assert.equal(rankCatalogueMatches(candidates, '', 'ja-JP')[0].match.id, 'jp')
+  assert.equal(rankCatalogueMatches(candidates, '', 'EN-gb')[0].match.id, 'en')
+})
