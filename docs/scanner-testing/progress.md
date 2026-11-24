@@ -1214,3 +1214,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Corrected the comparator so number-strength/occurrence/confidence comparisons apply only when both candidates have strong number evidence. When evidence is weak, exact/partial name ranking precedes weak number presence, then language and remembered-image tie-breakers.
 - Fix commit: `4c2d95316f0b817d66f0c5dd5933efd9a19c2338`. CI for this exact commit is pending.
 - This is a regression-driven ranking correction, not physical-card accuracy evidence.
+
+
+## Latest ranking safeguard CI verified — 24 November 2026
+
+- GitHub Actions run **693** (run ID `45303683421`) for exact feature-branch head `e5d7820343ae37e5bf72b7d08351fac8d8cecff3` completed successfully.
+- Steps confirmed: dependency installation, tests, lint, and production build all succeeded.
+- This supersedes the pending-CI note in the weak-evidence ranking section above. It does not establish scanner UI behavior, physical-card OCR accuracy, or production deployment.
+- PR #26 remains open and unmerged. The currently reported Cloudflare preview deployment is older (commit `b8aff15`), so it is not a preview of this verified head. A current preview for `e5d7820` remains the next user-testing prerequisite.
