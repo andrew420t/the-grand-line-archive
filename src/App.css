@@ -4925,3 +4925,14 @@ h2 em {
   line-height: 1.55;
 }
 .scanner-manual-crop__note--invalid { color: #d6a28e; }
+
+
+.preview-safety-banner {
+  padding: 9px 16px;
+  border-bottom: 1px solid rgba(201, 168, 102, 0.28);
+  background: rgba(54, 42, 25, 0.92);
+  color: #e6d5ad;
+  text-align: center;
+  font-size: 11px;
+  line-height: 1.5;
+}
