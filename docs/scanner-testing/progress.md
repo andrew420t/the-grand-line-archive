@@ -1222,3 +1222,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Steps confirmed: dependency installation, tests, lint, and production build all succeeded.
 - This supersedes the pending-CI note in the weak-evidence ranking section above. It does not establish scanner UI behavior, physical-card OCR accuracy, or production deployment.
 - PR #26 remains open and unmerged. The currently reported Cloudflare preview deployment is older (commit `b8aff15`), so it is not a preview of this verified head. A current preview for `e5d7820` remains the next user-testing prerequisite.
+
+
+## Manual crop overlay bug fix — 24 November 2026
+
+- User reported the crop-selection preview was highlighting/shading area outside the selected crop.
+- Inspection found the dimmed overlay was built as a single complex polygon intended to represent the area outside the selection. That polygon was susceptible to incorrect/self-intersecting geometry as selection coordinates changed.
+- Replaced it with four independent rectangular shade panels (top, left, right, bottom) positioned from the selected crop percentages. The crop selection outline remains separate. This removes polygon winding/self-intersection from the overlay.
+- Code commits: `f1d6a6a` (component) and `5e7f6c4` (CSS). This is a source-level fix; it still needs preview/browser confirmation by dragging crops at different positions and sizes.
