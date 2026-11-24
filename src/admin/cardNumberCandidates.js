@@ -9,7 +9,7 @@ function normalizeCandidate(prefix, rawSet, rawNumber) {
     .replace(/^PR8$/, 'PRB')
   let setNumber = rawSet.toUpperCase().replace(/O/g, '0')
   if (setNumber.length === 3 && setNumber.startsWith('0')) setNumber = setNumber.slice(1)
-  if (!/^\d{1,2}$/.test(setNumber)) return ''
+  if (!/^\d{1,2}$/.test(setNumber) || setNumber === '00') return ''
   const cardNumber = rawNumber.toUpperCase().replace(/O/g, '0')
   if (!/^\d{3}$/.test(cardNumber)) return ''
   return `${normalizedPrefix}${setNumber.padStart(2, '0')}-${cardNumber}`
