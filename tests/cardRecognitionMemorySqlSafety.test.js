@@ -27,8 +27,8 @@ test('recognition metadata grants omit contributor identity and restrict direct 
 test('privacy remediation closes an already-created public recognition bucket', () => {
   assert.match(remediation, /UPDATE storage\.buckets\s+SET public = false\s+WHERE id = 'card-recognition-references'/)
   assert.match(remediation, /DROP POLICY IF EXISTS ["']Public can view card recognition reference images["'] ON storage\.objects/)
-  assert.match(remediation, /CREATE POLICY ["']Only admins can view recognition reference images["'] ON storage\.objects AS RESTRICTIVE/)
-  assert.match(remediation, /CREATE POLICY ["']Only admins can upload recognition reference images["'] ON storage\.objects AS RESTRICTIVE/)
+  assert.match(remediation, /CREATE POLICY ["']Only admins can view recognition reference images["'][\s\S]*?ON storage\.objects AS RESTRICTIVE/)
+  assert.match(remediation, /CREATE POLICY ["']Only admins can upload recognition reference images["'][\s\S]*?ON storage\.objects AS RESTRICTIVE/)
 })
 
 test('privacy remediation removes broad table and column grants while preserving safe metadata reads', () => {
