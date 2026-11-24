@@ -3,7 +3,7 @@ import { resolveCatalogueImage } from './catalogueImageReference.js'
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
-import { getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
+import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
@@ -458,6 +458,14 @@ export async function getCatalogueCoverageReport() {
     sourceAgeDays,
     sourceIsStale: sourceAgeDays !== null && sourceAgeDays > 7,
     missingExpectedSets: [],
+    supplementalSampleCards: {
+      total: SUPPLEMENTAL_SAMPLE_CARDS.length,
+      bySet: Object.fromEntries([...new Set(SUPPLEMENTAL_SAMPLE_CARDS.map((sample) => sample.setCode))].map((setCode) => [
+        setCode,
+        SUPPLEMENTAL_SAMPLE_CARDS.filter((sample) => sample.setCode === setCode).length,
+      ])),
+      scope: 'sample cards only; not complete set imports',
+    },
   }
   for (const language of LANGUAGES) {
     const data = catalogue.languages?.[language] || { printings: [] }
