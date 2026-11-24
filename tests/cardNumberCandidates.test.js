@@ -45,6 +45,6 @@ test('normalizes OCR O substitutions in promo card numbers and combines readings
 
 test('rejects unsupported set-number lengths and malformed promo candidates', () => {
   assert.deepEqual(extractCardNumberCandidates([
-    { text: 'OP0001-001 OP000-001 P-01 P-AB1', confidence: 99 },
+    { text: 'OP0001-001 OP000-001 OP00-001 P-01 P-AB1', confidence: 99 },
   ]), [])
 })
