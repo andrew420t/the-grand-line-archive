@@ -43,6 +43,7 @@ Test several physical cards, not only screenshots:
 - [ ] Test drag-selection with mouse, touch, and pen where available; verify pointer capture keeps the selection stable if the pointer exits the preview, and test selections touching each photo edge.
 - [ ] Test a narrow/mobile viewport and a desktop viewport; confirm the preview's displayed aspect ratio matches the original photo and selection coordinates crop the intended pixels.
 - [ ] Confirm the selected crop is used for both card-number OCR and supporting full-card text OCR, while the original photo remains the one saved to recognition memory.
+- [ ] In isolated staging, verify shared recognition metadata can be read but only an administrator can contribute/delete examples; confirm the `card-recognition-references` bucket is private and anon/non-admin users cannot list or download original scan-photo objects. Confirm local recognition memory still works if shared storage is unavailable.
 - [ ] Try a crop that is too small or extends beyond the photo; confirm validation rejects it and no scan runs on a silently altered crop.
 - [ ] A parallel/alternate-art printing that shares a card number with another version.
 - [ ] A deliberately blurred, angled, or partially obscured card.
