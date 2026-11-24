@@ -65,6 +65,11 @@ CREATE POLICY "Admins can delete verified card recognition examples"
   FOR DELETE TO authenticated
   USING (public.is_admin());
 
+-- Start from no direct API-role privileges, then grant only the columns and
+-- operations required by the scanner. This also neutralizes permissive default
+-- table grants that might otherwise expose confirmed_by or allow broad writes.
+REVOKE ALL ON public.card_recognition_examples FROM PUBLIC, anon, authenticated;
+
 -- Expose only recognition metadata, not the contributor's auth UUID.
 -- Column-level grants also keep the internal contributor field private.
 GRANT SELECT (id, printing_id, card_number, card_name, language, set_code, rarity, variant, image_hash, storage_path, confirmed_at)
