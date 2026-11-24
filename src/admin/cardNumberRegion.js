@@ -25,6 +25,15 @@ export function validateManualCardCrop(crop, imageWidth, imageHeight) {
 }
 
 export function requireConfirmedManualCardCrop(crop, imageWidth, imageHeight, confirmed) {
+  // A null crop means manual cropping is disabled: scan the complete photo.
+  // An explicit crop object is always treated as a user-selected region and
+  // still requires confirmation before any OCR work can use it.
+  if (crop == null) {
+    if (!Number.isFinite(imageWidth) || !Number.isFinite(imageHeight) || imageWidth < 1 || imageHeight < 1) {
+      throw new Error('The card photograph has invalid dimensions.')
+    }
+    return { x: 0, y: 0, width: Math.floor(imageWidth), height: Math.floor(imageHeight) }
+  }
   if (!confirmed) throw new Error('Confirm that the crop contains the entire card before scanning.')
   const bounds = validateManualCardCrop(crop, imageWidth, imageHeight)
   if (!bounds) throw new Error('The manual card crop is invalid or too small for OCR.')
