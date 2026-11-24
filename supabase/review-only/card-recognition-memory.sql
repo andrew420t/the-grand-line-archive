@@ -11,6 +11,16 @@ BEGIN
   IF to_regprocedure('public.is_admin()') IS NULL THEN
     RAISE EXCEPTION 'Expected public.is_admin() function was not found. Stop and review admin authorization.';
   END IF;
+  IF pg_get_function_result('public.is_admin()'::regprocedure) IS DISTINCT FROM 'boolean' THEN
+    RAISE EXCEPTION 'Expected public.is_admin() function must return boolean.';
+  END IF;
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_class
+    WHERE oid = 'storage.objects'::regclass
+      AND relrowsecurity = true
+  ) THEN
+    RAISE EXCEPTION 'RLS must be enabled on storage.objects before configuring shared recognition images.';
+  END IF;
   IF to_regclass('public.card_recognition_examples') IS NOT NULL THEN
     RAISE EXCEPTION 'public.card_recognition_examples already exists. Inspect it before applying this migration.';
   END IF;
