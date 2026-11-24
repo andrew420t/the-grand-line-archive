@@ -1190,3 +1190,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Updated the language-family normalization to recognize any normalized code beginning with `en` or `ja`, while retaining existing aliases.
 - Added regression tests for `en-US`, `EN-gb`, and `ja-JP`.
 - This is a focused ranking unit-test improvement. CI for the resulting commit is pending; it is not scanner/browser or OCR evidence.
+
+
+## Exact OCR name ranking refinement — 24 November 2026
+
+- Code review found candidate names were only scored as a boolean substring/containment match. Thus a short OCR name such as `Ace` could tie a longer candidate name containing it (`Portgas D. Ace`), allowing language/remembered signals to select the longer candidate.
+- Ranking now scores exact normalized-name equality ahead of partial/contained name matches, while printed-number evidence remains the primary signal. Language and remembered-image tie-breakers remain below name signals.
+- Added regression test using `Ace` versus `Portgas D. Ace`. This is a deterministic ranking test, not proof that OCR will read names accurately from physical photos.
+- CI pending for this branch head.
