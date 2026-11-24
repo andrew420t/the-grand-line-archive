@@ -1159,3 +1159,11 @@ This is a reproduced physical-photo failure, not a CI failure. It does not imply
 - Search result content confirms useful OP17 card identifiers and notes parallel variants sharing numbers, reinforcing that image/printing identity cannot be determined from number alone. These are candidate sources only: direct opening of all four returned cache-miss errors through this tool, so no image was loaded or counted.
 - Links: https://tcgguy.com/blogs/card-lists/one-piece-op-17-the-worlds-strongest-warriors-japanese-card-list ; https://japanesetcgsupply.co.uk/en-ca/blogs/news/one-piece-op17-the-worlds-strongest-warriors-card-list-japanese ; https://optcg.app/jp/series/the-world-s-strongest-warriors/ ; https://exploretcgsets.com/onepiece/sets/op-17/
 - This is a source-discovery update, not a successful visual test. Next, investigate whether the catalogue image URLs can be extracted from indexed/static content in a reproducible way, without marking image-load results prematurely.
+
+
+## OP17 single-card reference alternatives — 24 November 2026
+
+- Fresh image/card search identified additional single-card reference pages for OP17-001 Edward.Newgate: OnePieceDecklists, TCG.DIRECTORY, GotemTCG (base and parallel), and OnePieceTCGMarket.
+- Search results include card identity and alternate-printing information, but this tool did not provide a directly testable image asset or page-open confirmation. Therefore these are source leads only and do not increase the visual-load count.
+- Useful source leads: https://onepiecedecklists.com/decklists/op17/edward-newgate.html ; https://tcg.directory/card/705924/edwardnewgate-001-alternate-art ; https://op.gotemtcg.com/en/cartes/en-op17-OP17001 ; https://op.gotemtcg.com/en/cartes/en-op17-OP17001_p1 ; https://www.onepiecetcgmarket.fr/en/cards/OP-17/OP17-001
+- Noted a useful scanner/catalogue matching requirement: source listings show OP17-001 base and parallel printings as separate identities. The candidate match should use printing/variant identity and reference-image comparison, not card number alone.
