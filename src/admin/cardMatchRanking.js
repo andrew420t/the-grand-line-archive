@@ -46,3 +46,27 @@ export function rankCatalogueMatches(matches = [], detectedName = '', detectedLa
       Number(b.remembered) - Number(a.remembered)
   })
 }
+
+export function chooseRememberedImageMatch(localImage, sharedImage, cardNumber) {
+  const expectedNumber = String(cardNumber || '').trim().toUpperCase()
+  if (!expectedNumber) return null
+
+  const candidates = [
+    { image: localImage, source: 'local' },
+    { image: sharedImage, source: 'shared' },
+  ].filter(({ image }) => (
+    image?.printingId &&
+    String(image.cardNumber || '').trim().toUpperCase() === expectedNumber
+  ))
+
+  if (!candidates.length) return null
+  return candidates.reduce((best, candidate) => {
+    const score = Number.isFinite(Number(candidate.image.similarity))
+      ? Number(candidate.image.similarity)
+      : -1
+    const bestScore = Number.isFinite(Number(best.image.similarity))
+      ? Number(best.image.similarity)
+      : -1
+    return score > bestScore ? candidate : best
+  })
+}
