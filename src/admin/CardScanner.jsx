@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AlertCircle, ArrowRight, Check, LoaderCircle, ScanLine } from 'lucide-react'
 import { CARD_FIELDS, parseCardDetails } from './cardParser'
-import { rankCatalogueMatches } from './cardMatchRanking'
+import { chooseRememberedImageMatch, rankCatalogueMatches } from './cardMatchRanking'
 import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
 import { mergeCatalogueScannerFields } from './productSchema'
 import CatalogueReferenceImage from './CatalogueReferenceImage'
@@ -252,9 +252,10 @@ export default function CardScanner({
             const topResolvedNumber = successfulLookups[0].cardNumber
             // Only image-similarity memory may influence ranking. A card-number-only
             // saved choice can point to the wrong parallel/normal printing.
-            let rememberedId = ''
-            if (rememberedImage?.cardNumber === topResolvedNumber) rememberedId = rememberedImage.printingId
-            if (sharedRememberedImage?.cardNumber === topResolvedNumber) rememberedId = sharedRememberedImage.printingId
+            // When both stores have an example for this number, use the stronger
+            // visual match instead of always letting the shared example override local.
+            const rememberedMatch = chooseRememberedImageMatch(rememberedImage, sharedRememberedImage, topResolvedNumber)
+            const rememberedId = rememberedMatch?.image.printingId || ''
             const numberEvidence = Object.fromEntries(candidates.map((candidate) => [candidate.number, { occurrences: candidate.occurrences, confidence: candidate.confidence, sources: candidate.sources }]))
             const ranked = rankCatalogueMatches(allMatches, parsed.name?.value, parsed.language?.value || recognitionLanguage, rememberedId, numberEvidence)
             const best = ranked[0]
@@ -263,8 +264,8 @@ export default function CardScanner({
             setMatchConfirmationOpen(true)
             const winningReading = candidateByNumber.get(best.match.cardNumber)
             const recoveredAlternate = candidates[0]?.number !== best.match.cardNumber
-            setAutoMatchStatus((rememberedImage?.printingId === best.match.id || sharedRememberedImage?.printingId === best.match.id)
-              ? (sharedRememberedImage?.printingId === best.match.id ? 'Shared recognition library match' : 'Previously confirmed local image') + ' (' + (sharedRememberedImage?.printingId === best.match.id ? sharedRememberedImage.similarity : rememberedImage.similarity) + '% visual similarity). Please confirm the card and variant.'
+            setAutoMatchStatus(rememberedMatch?.image.printingId === best.match.id
+              ? (rememberedMatch.source === 'shared' ? 'Shared recognition library match' : 'Previously confirmed local image') + ' (' + rememberedMatch.image.similarity + '% visual similarity). Please confirm the card and variant.'
               : recoveredAlternate
                 ? 'The first OCR number did not resolve, so the scanner recovered a catalogue match from another number reading. Compare the card number, name, language, set and variant before confirming.'
                 : winningReading?.occurrences > 1
