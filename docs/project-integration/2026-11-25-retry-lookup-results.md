@@ -92,3 +92,10 @@ The retry lookup succeeded across GitHub, Cloudflare and the dedicated Supabase 
 
 ## Recommended next gate
 Use the PR #27 safe demo preview for visual/local scanner interaction tests. Separately verify that the integration preview uses only the dedicated testing project's preview-prefixed credentials before any database-backed staging tests. Keep PR #28 draft until those checks and the 8 lint warnings / bundle-size warning are reviewed.
+
+
+# Current branch follow-up — 25 November 2026
+
+After the read-only lookup report was committed, the integration branch received documentation-only commit `680d6284e8e52dacddcaf5ccb7a0a3b7e7f95214` (`docs: record retried integration lookup results`). PR #28 now contains 72 changed files and remains open, draft, and unmerged. GitHub Actions run #848 was triggered for this exact head and was still in progress at the last check; do not treat it as passed until its final result is confirmed.
+
+The Cloudflare preview that was inspected and confirmed Ready is still the prior source commit `b47bb8f699b619cc384a13f5dc042b375ae269b8` at `https://db699eec-the-grand-line-archive.andrew420-t27.workers.dev`. The documentation-only commit may trigger a subsequent preview deployment; its deployment was not yet verified at the time of this update.
