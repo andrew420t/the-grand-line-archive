@@ -4,11 +4,23 @@ on:
   pull_request:
     branches: [master]
   push:
-    branches: [feature/card-identification, feature/scanner-number-first-verification]
+    branches:
+      - feature/card-identification
+      - feature/scanner-number-first-verification
+      - 'integration/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
