@@ -1,5 +1,5 @@
 # REMEMBER — Grand Line Archive Master Project Memory
-**Last updated:** 25 November 2026 — Prompt 4 investigation update  
+**Last updated:** 25 November 2026 — Prompt 4 investigation update (schema and auth comparison)  
 **Purpose:** Single-file recovery handover for continuing the Grand Line Archive project after a lost or reset conversation.
 
 > **How to use this file:** Upload `REMEMBER.md` into a new ChatGPT conversation and say:  
@@ -564,3 +564,38 @@ Still unknown:
 
 ### Latest activity safety statement
 This investigation included read-only GitHub, Cloudflare dashboard, browser preview and Supabase queries. It made no GitHub writes, no Cloudflare setting edits, no deployment, no Supabase data/schema changes, no migration execution and no production data transfer.
+
+### Additional schema and authentication compatibility findings (read-only, 25 Nov 2026)
+
+- Production has 10 public base tables: `cards`, `categories`, `messages`, `order_items`, `orders`, `product_images`, `products`, `profiles`, `sets`, `site_settings`.
+- Testing has 13 public base tables: the same 10 plus `card_catalogue_overrides`, `card_recognition_examples`, and `don_card_set_overrides`.
+- Production has only the `product-card-images` Storage bucket. Testing has `product-card-images` plus `card-recognition-references`.
+- Production migration history API returned no recorded migrations. Testing returned seven migration entries (names/versions recorded by the earlier Supabase audit).
+- Production `orders` and `order_items` currently have zero rows. Testing `orders` and `order_items` also have zero rows.
+- Testing has RPC functions `create_order_atomic` and `update_order_status_atomic`. The same query found no `%atomic%` RPC functions in production.
+- Production `products` does not include the newer columns found in testing: `counter`, `trigger_text`, `attributes`, `catalogue_match_id`, `catalogue_printing_key`, `catalogue_reference_image_url`, and `catalogue_reference_image_source`.
+- Testing `order_items` includes both legacy `card_id` / `price_at_purchase` and newer `product_id` / `unit_price`; production only has `card_id` / `price_at_purchase`.
+- Testing `orders` includes `stock_reserved`; production does not.
+- This establishes a material schema gap. The integration candidate's new checkout RPC and extended product/catalogue fields are supported by testing schema but not yet shown to exist in production. Do not apply these migrations to production as part of Prompt 4. Production release will need a separate reviewed migration and rollback plan in Prompt 9/10.
+- Production has no orders at present, but this does not remove the need to protect the database.
+
+### Refined original website recovery conclusions
+- The original `master/src/App.jsx` is the database-backed storefront app. It loads the `site_settings` row with `id='homepage'`, normalizes the JSON settings and renders homepage sections based on them.
+- Card of the Week selection order in original master source is: product ID from `siteSettings.card_of_the_week_product_id`; otherwise first active product with `featured=true`; otherwise first active storefront product.
+- Production Loki has an active featured record, so the original master homepage code should select it as Card of the Week when it is included in the active storefront products. The dedicated setting is blank but is not necessarily a blocker due to this fallback.
+- Production also contains an inactive duplicate Loki record without an image. Any testing seed should deliberately select only the active Loki record and preserve its correct image metadata; do not blindly duplicate both.
+- Original master AdminAccess included a four-digit access-code interstitial before Supabase Auth. The candidate removes this extra screen but retains Supabase email/password authentication and a server-side profile-role check in the UI flow. The access code is hard-coded in source and must not be treated as a security boundary. Preserve `profiles.role='admin'` enforcement; decide whether the old extra UI step should be retained for user familiarity only after confirming original expected login flow.
+- Testing preview's empty storefront is explained by zero test products and zero test profiles/auth users, not by missing production records.
+
+### Safe staging data plan (proposal only; not executed)
+1. Create a manifest from production containing only selected product fields needed for a representative preview, starting with active Brook and the active/featured Loki record, plus the minimum related category/set rows.
+2. Replace production product IDs with new UUIDs in testing and remap all foreign keys; do not copy user IDs, auth records, customer messages, orders, or personal data.
+3. Copy only the two selected image objects from the public `product-card-images` bucket into the testing bucket, using new object paths and matching `product_images` metadata; validate URLs and image rendering.
+4. Add a testing homepage settings row derived from safe public display settings; explicitly select the testing Loki product ID for Card of the Week, rather than depending on a featured fallback.
+5. Create a dedicated testing administrator account through Supabase Auth in the testing project and add its own profile row with role `admin`, only after reviewing testing RLS and auth trigger behavior. Never copy production credentials or passwords.
+6. Add a clearly synthetic test customer account only if customer order testing needs it.
+7. Run read-only verification after seed: expected products, images, settings, roles, and storage object counts. Then run browser acceptance tests against testing only.
+8. Keep all seed SQL/scripts versioned and repeatable; obtain explicit user approval before any data write to the testing database. No production writes.
+
+### Prompt 4 status update
+The existing integration branch already contains the PR #26 application changes and its source tests; PR #28 is a draft integration/validation branch, not yet a completed original-data recovery. PR #27 remains a separate demo overlay and should not replace the database-backed storefront. Prompt 4 remains **IN PROGRESS** because the candidate has not yet been populated with approved representative test data, production deployed-source lineage is not fully resolved, and checkout/runtime acceptance is not complete.
