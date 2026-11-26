@@ -1086,6 +1086,7 @@ function Storefront() {
           element={
             adminAccessGranted ? (
               <AdminDashboard
+                key={user?.id || 'signed-out'}
                 user={user}
                 isAdmin={isAdmin}
                 profileError={profileError}
