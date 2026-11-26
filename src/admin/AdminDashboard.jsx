@@ -96,7 +96,9 @@ export default function AdminDashboard({
   const [photosReady, setPhotosReady] = useState(false)
   const [photoDraftError, setPhotoDraftError] = useState('')
   const photosRef = useRef(photos)
-  photosRef.current = photos
+  useEffect(() => {
+    photosRef.current = photos
+  }, [photos])
 
   useEffect(() => () => {
     photosRef.current.forEach((photo) => {
@@ -110,7 +112,6 @@ export default function AdminDashboard({
 
   useEffect(() => {
     let active = true
-    setPhotosReady(false)
     loadAdminPhotoDraft(user?.id)
       .then((restoredPhotos) => {
         if (!active) {
