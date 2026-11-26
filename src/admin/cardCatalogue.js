@@ -2,6 +2,7 @@ import { supabase } from '../lib/supabase'
 import { resolveCatalogueImage } from './catalogueImageReference.js'
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
+import { createOfficialImageOnlyMatch } from './officialImageOnlyFallback.js'
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
 
@@ -19,6 +20,7 @@ const normalizeCardNumber = (value) =>
     .replace(/\s+/g, '')
     .replace(/_/g, '-')
     .replace(/-+/g, '-')
+    .replace(/^(OP|EB|ST|PRB)-(\d{2})-/, '$1$2-')
     .trim()
 
 const normalizeSearchText = (value) => String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
@@ -273,6 +275,19 @@ export async function findCatalogueMatches(cardNumber) {
     }
   }
 
+  // The current local feed may omit newer cards or one language. Add a
+  // clearly labelled Bandai base-image-only reference only where there is no
+  // existing image for that language. Never guess details or variant identity.
+  for (const languageCode of LANGUAGES) {
+    const hasLanguageImage = results.some((match) =>
+      match.languageCode === languageCode && Boolean(match.imageUrl),
+    )
+    if (!hasLanguageImage) {
+      const fallback = createOfficialImageOnlyMatch(requestedNumber, languageCode)
+      if (fallback) results.push(fallback)
+    }
+  }
+
   return results.sort((a, b) =>
     a.language.localeCompare(b.language) ||
     a.setCode.localeCompare(b.setCode) ||
@@ -415,8 +430,11 @@ export function collectrSearchUrl(match) {
 
 export async function findPrimaryCatalogueMatch(cardNumber, language = '', identity = {}) {
   const matches = await findCatalogueMatches(cardNumber)
-  if (!matches.length) return null
-  return selectPrimaryCatalogueMatch(matches, { language, ...identity })
+  const selected = selectPrimaryCatalogueMatch(matches, { language, ...identity })
+  if (selected) return selected
+  // A reprint set may not be represented in the local feed yet. Retain an
+  // official same-card base image rather than leave the product tile blank.
+  return createOfficialImageOnlyMatch(cardNumber, language || 'en', identity.setCode || '')
 }
 
 /**
@@ -602,6 +620,39 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
   }
   entries.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.language.localeCompare(b.language) || a.id.localeCompare(b.id))
   const normalizedQuery = normalizeSearchText(query)
+  // Search the official base image by exact card number when the local feed
+  // lacks that card/language. This is an image-only result, not a fake record.
+  if (normalizedQuery && baseCardNumber(query)) {
+    const normalizedNumber = baseCardNumber(query)
+    for (const languageCode of LANGUAGES) {
+      const exists = entries.some((entry) =>
+        entry.cardNumber === normalizedNumber && entry.language === languageCode,
+      )
+      if (exists) continue
+      const fallback = createOfficialImageOnlyMatch(normalizedNumber, languageCode)
+      if (fallback) entries.push({
+        id: fallback.id,
+        printingKey: '',
+        cardNumber: fallback.cardNumber,
+        name: '',
+        language: fallback.languageCode,
+        rarity: '',
+        variant: fallback.variant,
+        setCode: fallback.setCode,
+        setCodes: [fallback.setCode],
+        setName: fallback.setName,
+        setAssignmentSource: '',
+        sourceText: fallback.sourceText,
+        isDon: false,
+        officialListUrl: fallback.officialCardlistUrl,
+        imageUrl: fallback.imageUrl,
+        fallbackImageUrl: '',
+        source: fallback.source,
+        usesBaseImageFallback: true,
+        officialImageOnly: true,
+      })
+    }
+  }
   const filtered = entries.filter((entry) => {
     if (language !== 'all' && entry.language !== language) return false
     if (!normalizedQuery) return true
