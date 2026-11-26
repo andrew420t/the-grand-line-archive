@@ -36,6 +36,7 @@ import {
 import AdminDashboard from './admin/AdminDashboard'
 import AdminAccess from './admin/AdminAccess'
 import { findPrimaryCatalogueMatch } from './admin/cardCatalogue'
+import { buildOfficialBaseImageUrl } from './admin/catalogueImageReference'
 import { hasSupabaseConfig, isPreviewBuild, supabase } from './lib/supabase'
 import { DEFAULT_SITE_SETTINGS, normalizeSiteSettings } from './siteSettings'
 import { buildAtomicCheckoutItems, buildCheckoutSnapshot } from './orderCheckout'
@@ -70,32 +71,38 @@ const readCart = () => {
 
 function ProductImage({ product, className = '' }) {
   const [failed, setFailed] = useState(false)
-  const [referenceImage, setReferenceImage] = useState('')
-  const [referenceFailed, setReferenceFailed] = useState(false)
+  const [referenceImages, setReferenceImages] = useState([])
+  const [referenceIndex, setReferenceIndex] = useState(0)
 
   useEffect(() => {
     let active = true
     // Reset image error state when the displayed product/identity changes;
     // otherwise a prior failed image can suppress the next product's image.
     setFailed(false)
-    setReferenceFailed(false)
-    if (!product.raw?.card_number) {
-      setReferenceImage('')
-      return () => { active = false }
-    }
-    findPrimaryCatalogueMatch(product.raw.card_number, product.raw.language, {
+    setReferenceImages([])
+    setReferenceIndex(0)
+    const cardNumber = product.raw?.card_number || ''
+    const baseFallback = buildOfficialBaseImageUrl(cardNumber, product.raw?.language)
+    if (!cardNumber) return () => { active = false }
+    findPrimaryCatalogueMatch(cardNumber, product.raw.language, {
       printingKey: product.raw.catalogue_printing_key || product.raw.reference_printing_key || '',
       matchId: product.raw.catalogue_match_id || product.raw.reference_match_id || '',
       setCode: product.raw.set_code || product.setCode || '',
       variantLabel: product.raw.variant_label || '',
     })
-      .then((match) => { if (active) setReferenceImage(match?.imageUrl || '') })
-      .catch(() => { if (active) setReferenceImage('') })
+      .then((match) => {
+        if (!active) return
+        setReferenceImages([...new Set([match?.imageUrl, match?.fallbackImageUrl, baseFallback].filter(Boolean))])
+      })
+      .catch(() => {
+        if (active) setReferenceImages(baseFallback ? [baseFallback] : [])
+      })
     return () => { active = false }
   }, [product.image, product.raw?.card_number, product.raw?.language, product.raw?.catalogue_printing_key, product.raw?.reference_printing_key, product.raw?.catalogue_match_id, product.raw?.reference_match_id, product.raw?.set_code, product.raw?.variant_label, product.setCode])
 
-  const displayImage = product.image && !failed ? product.image
-    : referenceImage && !referenceFailed ? referenceImage : ''
+  const showingProductImage = Boolean(product.image && !failed)
+  const referenceImage = referenceImages[referenceIndex] || ''
+  const displayImage = showingProductImage ? product.image : referenceImage
   if (!displayImage) {
     return (
       <div className={`product-image product-image--empty ${className}`}>
@@ -106,17 +113,20 @@ function ProductImage({ product, className = '' }) {
   }
 
   return (
-    <img
-      className={`product-image ${className}`}
-      src={displayImage}
-      alt={product.name + (displayImage === referenceImage ? ' · catalogue reference image' : '')}
-      loading="lazy"
-      referrerPolicy="no-referrer"
-      onError={() => {
-        if (displayImage === product.image) setFailed(true)
-        else setReferenceFailed(true)
-      }}
-    />
+    <>
+      <img
+        className={`product-image ${className}`}
+        src={displayImage}
+        alt={product.name + (showingProductImage ? '' : ' · catalogue reference image; exact finish may differ')}
+        loading="lazy"
+        referrerPolicy="no-referrer"
+        onError={() => {
+          if (showingProductImage) setFailed(true)
+          else setReferenceIndex((current) => Math.min(current + 1, referenceImages.length))
+        }}
+      />
+      {!showingProductImage && <span className="product-image__reference-label">Catalogue reference · confirm finish</span>}
+    </>
   )
 }
 

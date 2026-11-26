@@ -153,7 +153,7 @@ export async function findCatalogueMatches(cardNumber) {
       const printings = safeMapGet(index.printingsByCard, card.key) || []
 
       for (const printing of printings) {
-        const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language })
+        const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language, cardNumber: card.number || '' })
         const productLinks = safeMapGet(index.printingProductsByPrinting, printing.key) || []
         const linkedProducts = productLinks
           .map((link) => safeMapGet(index.productsByKey, link.product_key))
@@ -185,6 +185,7 @@ export async function findCatalogueMatches(cardNumber) {
             variantLabel: value(printing, 'variant'),
             imageUrl: imageReference.imageUrl,
             fallbackImageUrl: imageReference.fallbackImageUrl,
+            usesBaseImageFallback: imageReference.usesBaseImageFallback,
             sourceText: value(printing, 'source_text'),
             setCode,
             setName: value(product, 'name'),
@@ -474,7 +475,9 @@ export async function getCatalogueCoverageReport() {
     for (const printing of data.printings) {
       report.printings += 1
       const locator = safeMapGet(index.locatorsByPrinting, printing.key + ':' + printing.site)
-      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language })
+      const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
+      const cardNumber = card?.number || ''
+      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language, cardNumber })
       const hasOfficialImage = Boolean(imageReference.imageUrl && imageReference.source.startsWith('Bandai official') && !imageReference.usesBaseImageFallback)
       const hasFallbackImage = imageReference.usesBaseImageFallback
       const imageUrl = imageReference.imageUrl
@@ -483,8 +486,6 @@ export async function getCatalogueCoverageReport() {
       const linkedProducts = products
         .map((link) => safeMapGet(index.productsByKey, link.product_key))
         .filter(Boolean)
-      const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
-      const cardNumber = card?.number || ''
       const observations = safeMapGet(index.observationsByCard, printing.card_key) || []
       const observation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
@@ -572,10 +573,10 @@ export async function getCatalogueImageGallery({ offset = 0, limit = 60, query =
     const data = catalogue.languages?.[language] || { printings: [] }
     const index = catalogue.indexes?.[language] || {}
     for (const printing of data.printings) {
-      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language })
+      const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
+      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language, cardNumber: card?.number || '' })
       const imageUrl = imageReference.imageUrl
       if (!imageUrl) continue
-      const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
       const observations = safeMapGet(index.observationsByCard, printing.card_key) || []
       const observation = observations.reduce((latest, item) => !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []

@@ -5256,3 +5256,21 @@ h2 em {
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Clearly distinguish catalogue fallback art from the seller's own photograph. */
+.product-image__reference-label {
+  position: absolute;
+  z-index: 2;
+  left: 9px;
+  bottom: 9px;
+  max-width: calc(100% - 18px);
+  padding: 5px 7px;
+  color: #e7dcc2;
+  background: rgba(17, 16, 13, .88);
+  border: 1px solid rgba(201, 168, 102, .34);
+  font-size: 8px;
+  line-height: 1.35;
+  letter-spacing: .035em;
+  pointer-events: none;
+}

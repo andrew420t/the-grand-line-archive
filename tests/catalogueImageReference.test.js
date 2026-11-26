@@ -35,3 +35,58 @@ test('keeps a direct third-party image when there is no official locator', () =>
   assert.equal(result.imageUrl, 'https://example.test/law.jpg')
   assert.equal(result.usesBaseImageFallback, false)
 })
+
+
+test('builds a validated official base-card URL for English and Japanese card numbers', async () => {
+  const { buildOfficialBaseImageUrl } = await import('../src/admin/catalogueImageReference.js')
+  assert.equal(buildOfficialBaseImageUrl('OP18-001', 'English'), 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png')
+  assert.equal(buildOfficialBaseImageUrl('EB05-061', 'jp'), 'https://www.onepiece-cardgame.com/images/cardlist/card/EB05-061.png')
+  assert.equal(buildOfficialBaseImageUrl('P-101', 'en'), 'https://en.onepiece-cardgame.com/images/cardlist/card/P-101.png')
+})
+
+test('does not invent an image URL for DON!! or malformed card numbers', async () => {
+  const { buildOfficialBaseImageUrl } = await import('../src/admin/catalogueImageReference.js')
+  assert.equal(buildOfficialBaseImageUrl('DON!!', 'en'), '')
+  assert.equal(buildOfficialBaseImageUrl('OP18-1000', 'en'), '')
+  assert.equal(buildOfficialBaseImageUrl('OP18-001', 'zh'), '')
+})
+
+test('uses a same-language Bandai base-image fallback when a known official printing has no locator', () => {
+  const printing = { key: 'op18-missing-locator', card_key: 'karoo', site: 'en', image_url: '' }
+  const result = resolveCatalogueImage({
+    printing,
+    index: { locatorsByPrinting: new Map() },
+    printings: [printing],
+    language: 'en',
+    cardNumber: 'OP18-001',
+  })
+  assert.equal(result.imageUrl, 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png')
+  assert.equal(result.usesBaseImageFallback, true)
+  assert.match(result.source, /special finish may differ/)
+})
+
+test('uses a numbered base-card fallback for a TCGCSV printing when no exact or alternate image exists', () => {
+  const printing = { key: 'tcg-stamp', card_key: 'karoo', site: 'tcgcsv', image_url: '' }
+  const result = resolveCatalogueImage({
+    printing,
+    index: { locatorsByPrinting: new Map() },
+    printings: [printing],
+    language: 'en',
+    cardNumber: 'OP18-001',
+  })
+  assert.equal(result.imageUrl, 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png')
+  assert.equal(result.usesBaseImageFallback, true)
+})
+
+test('uses the requested language host for a numbered Japanese base-card fallback', () => {
+  const printing = { key: 'jp-card', card_key: 'karoo', site: 'jp', image_url: '' }
+  const result = resolveCatalogueImage({
+    printing,
+    index: { locatorsByPrinting: new Map() },
+    printings: [printing],
+    language: 'jp',
+    cardNumber: 'OP18-001',
+  })
+  assert.equal(result.imageUrl, 'https://www.onepiece-cardgame.com/images/cardlist/card/OP18-001.png')
+  assert.equal(result.usesBaseImageFallback, true)
+})
