@@ -17,7 +17,7 @@ test('uses same-card official base artwork for an unpictured TCGCSV printing', (
   const result = resolveCatalogueImage({ printing: stamped, index, printings: [stamped, base], language: 'en' })
   assert.equal(result.imageUrl, 'https://en.onepiece-cardgame.com/images/cardlist/card/EB04-005.png')
   assert.equal(result.usesBaseImageFallback, true)
-  assert.match(result.source, /stamped artwork may differ/)
+  assert.match(result.source, /special finish may differ/)
 })
 
 test('does not borrow an image from a different card or language', () => {
