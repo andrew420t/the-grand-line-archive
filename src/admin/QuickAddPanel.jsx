@@ -111,7 +111,8 @@ export default function QuickAddPanel({
   const [catalogueError, setCatalogueError] = useState('')
   const [librarySaving, setLibrarySaving] = useState(false)
   const hasMeaningfulDraft = Object.entries(form).some(([key, value]) => {
-    if (key === 'stock_quantity' || key === 'condition') return false
+    if (key === 'stock_quantity') return String(value) !== '1'
+    if (key === 'condition') return value !== 'Near Mint'
     return typeof value === 'boolean' ? value : String(value ?? '').trim() !== ''
   }) || Boolean(partialProductId)
 
