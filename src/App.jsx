@@ -796,7 +796,7 @@ function Storefront() {
   const safeBg = typeof bg === 'string' && /^https:\/\//i.test(bg) ? bg : ''
   return (
     <div className="site-shell" style={storefrontPage ? { ...storefrontStyle, backgroundImage: safeBg ? 'linear-gradient(rgba(17,17,15,.88), rgba(17,17,15,.92)), url("' + safeBg + '")' : undefined, backgroundSize: 'cover', backgroundAttachment: 'fixed' } : undefined}>
-      {isPreviewBuild && !isDedicatedPreviewSupabaseProject(import.meta.env.VITE_PREVIEW_SUPABASE_URL) && <div className="preview-safety-banner" role="alert">Preview database mismatch: this build must use the dedicated Grand Line Archive Testing database. Do not test this preview until VITE_PREVIEW_SUPABASE_URL points to the staging project and its matching public key is configured.</div>}
+      {isPreviewBuild && (!hasSupabaseConfig || !isDedicatedPreviewSupabaseProject(import.meta.env.VITE_PREVIEW_SUPABASE_URL)) && <div className="preview-safety-banner" role="alert">Preview database mismatch: this build must use the dedicated Grand Line Archive Testing database. Do not test this preview until VITE_PREVIEW_SUPABASE_URL and its matching public key are configured.</div>}
       {siteSettings.announcement_enabled !== false && <div className="announcement">
         <span>{siteSettings.announcement_headline}</span>
         <i />
