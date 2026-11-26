@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AlertCircle, Check, PackagePlus, RotateCcw, Save, Search } from 'lucide-react'
 import { CARD_FIELDS } from './cardParser'
 import {
@@ -11,6 +11,7 @@ import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride } fro
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
 import PhotoStudio from './PhotoStudio'
+import { clearQuickAddDraft, readQuickAddDraft, saveQuickAddDraft } from './adminDraftStorage'
 
 const initialProduct = () => ({
   name: '',
@@ -84,7 +85,9 @@ export default function QuickAddPanel({
   onResetScan,
   onPhotosChange,
 }) {
+  const [storedDraft] = useState(() => readQuickAddDraft(user?.id))
   const [form, setForm] = useState(() => {
+    if (storedDraft?.form) return { ...initialProduct(), ...storedDraft.form }
     const extracted = scannedValues(scanFields)
     const matchingSet = sets.find(
       (set) => String(set.code || '').toUpperCase() === String(extracted.set_code || '').toUpperCase(),
@@ -101,11 +104,50 @@ export default function QuickAddPanel({
   const [success, setSuccess] = useState('')
   const [duplicateMatches, setDuplicateMatches] = useState([])
   const [allowVariant, setAllowVariant] = useState(false)
-  const [partialProductId, setPartialProductId] = useState('')
+  const [partialProductId, setPartialProductId] = useState(() => storedDraft?.partialProductId || '')
+  const [draftStatus, setDraftStatus] = useState(() => storedDraft ? 'restored' : '')
   const [catalogueMatches, setCatalogueMatches] = useState([])
   const [catalogueLoading, setCatalogueLoading] = useState(false)
   const [catalogueError, setCatalogueError] = useState('')
   const [librarySaving, setLibrarySaving] = useState(false)
+  const hasMeaningfulDraft = Object.entries(form).some(([key, value]) => {
+    if (key === 'stock_quantity' || key === 'condition') return false
+    return typeof value === 'boolean' ? value : String(value ?? '').trim() !== ''
+  }) || Boolean(partialProductId)
+
+  useEffect(() => {
+    if (!user?.id) return undefined
+    if (!hasMeaningfulDraft) {
+      clearQuickAddDraft(user.id)
+      setDraftStatus('')
+      return undefined
+    }
+
+    setDraftStatus('saving')
+    const save = () => {
+      saveQuickAddDraft(user.id, { form, partialProductId })
+      setDraftStatus('saved')
+    }
+    const timeout = window.setTimeout(save, 220)
+    const flushWhenHidden = () => {
+      if (document.visibilityState === 'hidden') {
+        window.clearTimeout(timeout)
+        save()
+      }
+    }
+    const flushOnPageHide = () => {
+      window.clearTimeout(timeout)
+      save()
+    }
+    document.addEventListener('visibilitychange', flushWhenHidden)
+    window.addEventListener('pagehide', flushOnPageHide)
+    return () => {
+      window.clearTimeout(timeout)
+      document.removeEventListener('visibilitychange', flushWhenHidden)
+      window.removeEventListener('pagehide', flushOnPageHide)
+    }
+  }, [form, partialProductId, user?.id, hasMeaningfulDraft])
+
   const setField = (field, value) => {
     setForm((current) => buildQuickAddFieldUpdate(current, field, value, sets))
     // Any change to the candidate card invalidates a prior manual duplicate
@@ -334,6 +376,12 @@ export default function QuickAddPanel({
         throw new Error(`Product was not saved: ${result.error.message}`)
       }
 
+      // Persist the new product ID immediately. If this tab is discarded while
+      // its photographs are uploading, resume by linking to this product rather
+      // than accidentally inserting a duplicate when the administrator returns.
+      saveQuickAddDraft(user.id, { form, partialProductId: result.data.id })
+      setPartialProductId(result.data.id)
+
       if (photos.length) {
         try {
           await savePhotosForProduct(result.data.id)
@@ -344,6 +392,9 @@ export default function QuickAddPanel({
         }
       }
 
+      clearQuickAddDraft(user.id)
+      setDraftStatus('')
+      setPartialProductId('')
       setForm(initialProduct())
       setDuplicateMatches([])
       setAllowVariant(false)
@@ -358,6 +409,9 @@ export default function QuickAddPanel({
   }
 
   const resetManual = () => {
+    clearQuickAddDraft(user?.id)
+    setDraftStatus('')
+    setPartialProductId('')
     setForm(initialProduct())
     setError('')
     setSuccess('')
@@ -382,6 +436,15 @@ export default function QuickAddPanel({
 
       {error && <div className="error-notice"><AlertCircle size={16} /><span>{error}</span></div>}
       {success && <div className="success-notice"><Check size={16} /><span>{success}</span></div>}
+      {draftStatus && (
+        <p className="form-notice" role="status">
+          <Check size={14} /> {draftStatus === 'restored'
+            ? 'Your unfinished card draft has been restored from this browser.'
+            : draftStatus === 'saving'
+              ? 'Saving your card draft on this device…'
+              : 'Your card draft is being saved automatically on this device.'}
+        </p>
+      )}
 
       {duplicateMatches.length > 0 && (
         <div className="duplicate-warning">
