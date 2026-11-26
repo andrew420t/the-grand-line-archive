@@ -1,0 +1,76 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+import { handleCardImageProxy, resolveCardImageTarget } from '../src/cardImageProxy.js'
+
+test('resolves English Bandai image IDs to a fixed host and official Referer', () => {
+  const target = resolveCardImageTarget('https://archive.example/_card-image/bandai/en/OP01-036.png')
+  assert.equal(target.url.toString(), 'https://en.onepiece-cardgame.com/images/cardlist/card/OP01-036.png')
+  assert.equal(target.referer, 'https://en.onepiece-cardgame.com/cardlist/')
+  assert.equal(target.kind, 'bandai')
+})
+
+test('resolves Japanese Bandai printings to the Japanese official host', () => {
+  const target = resolveCardImageTarget('https://archive.example/_card-image/bandai/jp/OP18-001_p1.png')
+  assert.equal(target.url.toString(), 'https://www.onepiece-cardgame.com/images/cardlist/card/OP18-001_p1.png')
+  assert.equal(target.referer, 'https://www.onepiece-cardgame.com/cardlist/')
+})
+
+test('rejects malformed Bandai IDs and arbitrary external URLs', () => {
+  assert.equal(resolveCardImageTarget('https://archive.example/_card-image/bandai/en/../../secret.png'), null)
+  assert.equal(resolveCardImageTarget('https://archive.example/_card-image/bandai/en/OP18-9999.png'), null)
+  assert.equal(resolveCardImageTarget('https://archive.example/_card-image/external?url=https%3A%2F%2Fevil.example%2Fsecret.png'), null)
+  assert.equal(resolveCardImageTarget('https://archive.example/_card-image/external?url=http%3A%2F%2Ftcgplayer-cdn.tcgplayer.com%2Fproduct%2F123_in_1000x1000.jpg'), null)
+})
+
+test('resolves allowlisted TCGPlayer and Chinese catalogue image URLs', () => {
+  const tcg = resolveCardImageTarget('https://archive.example/_card-image/external?url=' + encodeURIComponent('https://tcgplayer-cdn.tcgplayer.com/product/620759_in_1000x1000.jpg'))
+  const cn = resolveCardImageTarget('https://archive.example/_card-image/external?url=' + encodeURIComponent('https://source.windoent.com/OnePiecePc/Picture/card-01.png'))
+  assert.equal(tcg.url.hostname, 'tcgplayer-cdn.tcgplayer.com')
+  assert.equal(cn.url.hostname, 'source.windoent.com')
+})
+
+test('fetches Bandai bytes with official Referer and returns a cacheable image response', async () => {
+  let called
+  const response = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/en/OP01-036.png'),
+    async (url, options) => {
+      called = { url, options }
+      return new Response(new Uint8Array([137, 80, 78, 71]), { status: 200, headers: { 'Content-Type': 'image/png', 'Content-Length': '4' } })
+    },
+  )
+  assert.equal(called.url, 'https://en.onepiece-cardgame.com/images/cardlist/card/OP01-036.png')
+  assert.equal(called.options.headers.Referer, 'https://en.onepiece-cardgame.com/cardlist/')
+  assert.equal(response.status, 200)
+  assert.equal(response.headers.get('content-type'), 'image/png')
+  assert.match(response.headers.get('cache-control'), /max-age=86400/)
+  assert.equal((await response.arrayBuffer()).byteLength, 4)
+})
+
+test('does not follow redirects to untrusted hosts', async () => {
+  const response = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/en/OP01-036.png'),
+    async () => new Response(null, { status: 302, headers: { Location: 'https://evil.example/steal.png' } }),
+  )
+  assert.equal(response.status, 502)
+})
+
+test('rejects non-image upstream responses', async () => {
+  const response = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/en/OP01-036.png'),
+    async () => new Response('<html>blocked</html>', { status: 200, headers: { 'Content-Type': 'text/html' } }),
+  )
+  assert.equal(response.status, 502)
+})
+
+test('permits HEAD but rejects other methods', async () => {
+  const head = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/en/OP01-036.png', { method: 'HEAD' }),
+    async () => new Response(null, { status: 200, headers: { 'Content-Type': 'image/png' } }),
+  )
+  const post = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/en/OP01-036.png', { method: 'POST' }),
+    async () => { throw new Error('must not fetch') },
+  )
+  assert.equal(head.status, 200)
+  assert.equal(post.status, 405)
+})

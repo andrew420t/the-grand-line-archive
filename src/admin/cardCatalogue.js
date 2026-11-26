@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase'
-import { resolveCatalogueImage } from './catalogueImageReference.js'
+import { resolveCatalogueImage, buildCatalogueImageProxyUrl } from './catalogueImageReference.js'
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 import { createOfficialImageOnlyMatch } from './officialImageOnlyFallback.js'
@@ -913,6 +913,7 @@ export async function getCatalogueReferenceTestMatrix() {
       const selected = explicitSamples.length
         ? explicitSamples.map((sample) => ({
           ...sample,
+          imageUrl: buildCatalogueImageProxyUrl(sample.imageUrl) || sample.imageUrl,
           language,
           setCode: formatSetCode(set),
           setName: 'Official Bandai card-list sample',
@@ -925,7 +926,7 @@ export async function getCatalogueReferenceTestMatrix() {
       const imageOverrides = officialImageOverrides[set]?.[language] || {}
       for (const item of selected) {
         if (imageOverrides[item.cardNumber]) {
-          item.imageUrl = imageOverrides[item.cardNumber]
+          item.imageUrl = buildCatalogueImageProxyUrl(imageOverrides[item.cardNumber]) || imageOverrides[item.cardNumber]
           item.source = 'Bandai official image reference (cache-busted retry)'
         }
       }
@@ -935,6 +936,7 @@ export async function getCatalogueReferenceTestMatrix() {
         selected.push({
           id: 'bandai-fallback:' + language + ':' + set + ':' + sample.cardNumber,
           ...sample,
+          imageUrl: buildCatalogueImageProxyUrl(sample.imageUrl, language) || sample.imageUrl,
           language,
           setCode: formatSetCode(set),
           setName: 'Official Bandai card list',
