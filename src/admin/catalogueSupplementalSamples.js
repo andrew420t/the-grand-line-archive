@@ -1,5 +1,3 @@
-import { buildOfficialImageProxyUrl } from './catalogueImageReference.js'
-
 /**
  * Small, explicitly labelled supplemental sample catalogue for recent sets that
  * are not yet present in the upstream Koala Kollect snapshot.
@@ -83,9 +81,9 @@ export function getSupplementalSampleMatches(cardNumber) {
       rarity: sample.rarity,
       variant: 'Base',
       variantLabel: 'Base',
-      imageUrl: buildOfficialImageProxyUrl(sample.cardNumber, sample.languageCode) || sample.imageUrl,
-      imageUrls: [buildOfficialImageProxyUrl(sample.cardNumber, sample.languageCode), sample.imageUrl].filter(Boolean),
-      fallbackImageUrl: sample.imageUrl,
+      imageUrl: sample.imageUrl,
+      imageUrls: [sample.imageUrl].filter(Boolean),
+      fallbackImageUrl: '',
       sourceText: 'Supplemental scanner sample only; upstream catalogue is stale for this set.',
       setCode: sample.setCode,
       setName: sample.setCode + ' supplemental sample',

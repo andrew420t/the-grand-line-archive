@@ -1,4 +1,4 @@
-import { buildOfficialBaseImageUrl, buildOfficialImageProxyUrl } from './catalogueImageReference.js'
+import { buildOfficialBaseImageUrl } from './catalogueImageReference.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 
 const normalizeCardNumber = (value) => String(value || '')
@@ -35,8 +35,7 @@ export function createOfficialImageOnlyMatch(cardNumber, language = 'en', reques
   const inferredSetCode = numberMatch[1] === 'P' ? 'PROMO' : normalizeSetCode(numberMatch[1])
   const setCode = normalizeSetCode(requestedSetCode) || inferredSetCode
   const languageLabel = languageCode === 'jp' ? 'Japanese' : 'English'
-  const directImageUrl = buildOfficialBaseImageUrl(normalizedNumber, languageCode)
-  const imageUrl = buildOfficialImageProxyUrl(normalizedNumber, languageCode)
+  const imageUrl = buildOfficialBaseImageUrl(normalizedNumber, languageCode)
   if (!imageUrl) return null
 
   return {
@@ -61,8 +60,8 @@ export function createOfficialImageOnlyMatch(cardNumber, language = 'en', reques
     variant: 'Base image reference',
     variantLabel: '',
     imageUrl,
-    imageUrls: [imageUrl, directImageUrl].filter(Boolean),
-    fallbackImageUrl: directImageUrl,
+    imageUrls: [imageUrl],
+    fallbackImageUrl: '',
     usesBaseImageFallback: true,
     usesAlternateOfficialFallback: false,
     sourceText: 'Official Bandai image reference only. Full card metadata is not available in the current local catalogue feed.',

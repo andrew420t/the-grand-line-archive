@@ -1,22 +1,8 @@
-const OPTCG_IMAGE_PROXY_ROOT = 'https://optcg-api.arjunbansal-ai.workers.dev/images/'
-
 /**
- * Public image transport for official card artwork. The proxy fetches Bandai
- * images with a Bandai referrer, retries via its image CDN when hot-link
- * protection blocks the first request, and returns cache/CORS headers.
- * It does not re-host or claim ownership of the card art.
+ * Resolve card artwork using only image sources available to this application.
+ * Bandai remains the source of truth for official English/Japanese card art.
+ * Exact third-party catalogue photos remain preferred for stamped/foil entries.
  */
-export function buildOfficialImageProxyUrl(imageId, language = 'en') {
-  const id = String(imageId || '').trim().toUpperCase()
-  const safeId = /^(?:(?:OP|EB|ST|PRB)\d{2}|P)-\d{3}(?:_(?:P|R)\d+|_JP\d+|_T\d+)?$/.test(id)
-    || /^DON-\d{3}$/.test(id)
-  if (!safeId) return ''
-  const languageText = String(language || '').toLowerCase()
-  const lang = languageText.startsWith('jp') || languageText.includes('japanese') ? 'ja' : 'en'
-  return OPTCG_IMAGE_PROXY_ROOT + encodeURIComponent(id) + (lang === 'ja' ? '?lang=ja' : '')
-}
-
-/** Construct the direct Bandai base-card URL retained as a final fallback. */
 export function buildOfficialBaseImageUrl(cardNumber, language = 'en') {
   const normalized = String(cardNumber || '')
     .toUpperCase()
@@ -38,8 +24,9 @@ function uniqueUrls(values) {
 }
 
 /**
- * Exact photo first, then official image through the referrer-aware proxy,
- * direct Bandai, same-card alternate art, then base-card reference.
+ * Resolution order: exact printing locator / photo, same-card same-language
+ * alternate artwork, then the official base-card image. Chinese rows never
+ * fall back to English/Japanese art.
  */
 export function resolveCatalogueImage({ printing, index = {}, printings = [], language = 'en', cardNumber = '' } = {}) {
   if (!printing) return { imageUrl: '', imageUrls: [], fallbackImageUrl: '', source: 'No image reference', usesBaseImageFallback: false }
@@ -51,11 +38,7 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
   const officialImageFor = (candidate, locator) => {
     if (!locator?.image_id || !['en', 'jp'].includes(candidate.site)) return null
     const host = candidate.site === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com'
-    const imageId = String(locator.image_id)
-    return {
-      proxyUrl: buildOfficialImageProxyUrl(imageId, candidate.site),
-      directUrl: host + '/images/cardlist/card/' + encodeURIComponent(imageId) + '.png',
-    }
+    return host + '/images/cardlist/card/' + encodeURIComponent(String(locator.image_id)) + '.png'
   }
 
   const exactOfficial = officialImageFor(printing, locatorFor(printing))
@@ -63,41 +46,25 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
   const exactProductPhoto = printing.site === 'tcgcsv' && Boolean(directProductUrl)
   const exactOtherSourceImage = !exactOfficial && printing.site !== 'tcgcsv' && Boolean(directProductUrl)
   const exactUrls = exactOfficial
-    ? [exactOfficial.proxyUrl, exactOfficial.directUrl]
+    ? [exactOfficial, directProductUrl]
     : [directProductUrl]
 
-  const alternateOfficial = (printings || [])
+  const alternateUrls = (printings || [])
     .filter((candidate) => candidate.card_key === printing.card_key && candidate.site === language && candidate.key !== printing.key)
-    .map((candidate) => {
-      const official = officialImageFor(candidate, locatorFor(candidate))
-      if (official) return { urls: [official.proxyUrl, official.directUrl].filter(Boolean), site: candidate.site }
-      // The Chinese feed supplies its own hosted image URLs and numeric image
-      // locators. Retry same-card CN printings only; never borrow EN/JP artwork.
-      if (candidate.site === 'cn' && candidate.image_url) return { urls: [candidate.image_url], site: 'cn' }
-      return null
-    })
+    .map((candidate) => officialImageFor(candidate, locatorFor(candidate)) || (candidate.site === 'cn' ? candidate.image_url : ''))
     .filter(Boolean)
-  const alternateUrls = alternateOfficial.flatMap((candidate) => candidate.urls)
 
   const canUseSameLanguageFallback = (printing.site === 'tcgcsv' || printing.site === language) && ['en', 'jp'].includes(language)
-  const normalizedNumber = String(cardNumber || '').toUpperCase().replace(/^(OP|EB|ST|PRB)-(\d{2})-/, '$1$2-')
-  const baseProxyUrl = canUseSameLanguageFallback ? buildOfficialImageProxyUrl(normalizedNumber, language) : ''
   const baseDirectUrl = canUseSameLanguageFallback ? buildOfficialBaseImageUrl(cardNumber, language) : ''
-
-  const imageUrls = uniqueUrls([
-    ...exactUrls,
-    ...alternateUrls,
-    baseProxyUrl,
-    baseDirectUrl,
-  ])
+  const imageUrls = uniqueUrls([...exactUrls, ...alternateUrls, baseDirectUrl])
 
   const usesAlternateOfficialFallback = !exactOfficial && !exactProductPhoto && alternateUrls.length > 0
   const hasExactImage = Boolean(exactOfficial || exactProductPhoto || exactOtherSourceImage)
-  const usesBaseImageFallback = !hasExactImage && !usesAlternateOfficialFallback && Boolean(baseProxyUrl || baseDirectUrl)
+  const usesBaseImageFallback = !hasExactImage && !usesAlternateOfficialFallback && Boolean(baseDirectUrl)
 
   let source = 'No image reference'
   if (exactOfficial) {
-    source = 'Bandai official ' + (printing.site === 'jp' ? 'Japanese' : 'English') + ' image via OPTCG image proxy'
+    source = 'Bandai official ' + (printing.site === 'jp' ? 'Japanese' : 'English') + ' printing image'
   } else if (exactProductPhoto) {
     source = 'Catalogue product image (TCGPlayer / TCGCSV source)'
   } else if (exactOtherSourceImage) {
@@ -105,9 +72,9 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
   } else if (usesAlternateOfficialFallback) {
     source = language === 'cn'
       ? 'Chinese catalogue alternate printing image (exact finish may differ)'
-      : 'Bandai official alternate printing via OPTCG image proxy (exact finish may differ)'
+      : 'Bandai official alternate printing image (exact finish may differ)'
   } else if (usesBaseImageFallback) {
-    source = 'Bandai official ' + (language === 'jp' ? 'Japanese' : 'English') + ' base-card image via OPTCG image proxy (special finish may differ)'
+    source = 'Bandai official ' + (language === 'jp' ? 'Japanese' : 'English') + ' base-card image (special finish may differ)'
   }
 
   return {
