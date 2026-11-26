@@ -7,7 +7,7 @@ import {
 } from './productStorage'
 import { buildNewProductPayload, buildQuickAddFieldUpdate, classifyPrintingDuplicate, EXTENDED_CARD_COLUMNS, resolveSetIdForCode } from './productSchema'
 import { supabase } from '../lib/supabase'
-import { findCatalogueMatches, catalogueMatchToForm, saveCatalogueOverride } from './cardCatalogue'
+import { findCatalogueSearchMatches, catalogueMatchToForm, saveCatalogueOverride } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
 import PhotoStudio from './PhotoStudio'
@@ -105,6 +105,7 @@ export default function QuickAddPanel({
   const [catalogueMatches, setCatalogueMatches] = useState([])
   const [catalogueLoading, setCatalogueLoading] = useState(false)
   const [catalogueError, setCatalogueError] = useState('')
+  const [catalogueSearchNotice, setCatalogueSearchNotice] = useState('')
   const [librarySaving, setLibrarySaving] = useState(false)
   const setField = (field, value) => {
     setForm((current) => buildQuickAddFieldUpdate(current, field, value, sets))
@@ -117,16 +118,34 @@ export default function QuickAddPanel({
   }
 
   const lookupCard = async () => {
-    if (!form.card_number.trim()) return
+    const cardNumberQuery = form.card_number.trim()
+    const nameQuery = form.name.trim()
+    if (!cardNumberQuery && !nameQuery) return
     setCatalogueLoading(true)
     setCatalogueError('')
+    setCatalogueSearchNotice('')
     setCatalogueMatches([])
     try {
-      const matches = await findCatalogueMatches(form.card_number)
+      const looksLikeCardNumber = (value) => /^(?:(?:OP|EB|ST|PRB)-?\d{1,2}|P)-?\d{3}/i.test(String(value || '').replace(/\s+/g, ''))
+      const numberInName = looksLikeCardNumber(nameQuery)
+      const mismatchedNumberFields = numberInName && cardNumberQuery
+        && String(nameQuery).replace(/[^a-z0-9]/gi, '').toUpperCase() !== String(cardNumberQuery).replace(/[^a-z0-9]/gi, '').toUpperCase()
+      const queries = []
+      if (cardNumberQuery) queries.push(cardNumberQuery)
+      if (nameQuery && (!cardNumberQuery || mismatchedNumberFields || !looksLikeCardNumber(cardNumberQuery))) queries.push(nameQuery)
+      const uniqueQueries = [...new Set(queries)]
+      const resultGroups = await Promise.all(uniqueQueries.map((query) => findCatalogueSearchMatches(query)))
+      const matches = [...new Map(resultGroups.flat().map((match) => [match.id, match])).values()]
       setCatalogueMatches(matches)
-      if (!matches.length) setCatalogueError('No matching card was found. You can still enter the details manually.')
+      if (mismatchedNumberFields) {
+        setCatalogueSearchNotice('The card name field also looks like a card number and differs from the Card number field. Results include both numbers; check the card number and image before using a match.')
+      } else if (!matches.length) {
+        setCatalogueError('No catalogue match was found by card number or name. Check the spelling or number, or enter the details manually.')
+      } else {
+        setCatalogueSearchNotice('Check the card number, language, set and printing against your physical card before using a result.')
+      }
     } catch (lookupError) {
-      setCatalogueError(lookupError.message)
+      setCatalogueError(lookupError.message || 'Card lookup could not complete.')
     } finally {
       setCatalogueLoading(false)
     }
@@ -398,10 +417,11 @@ export default function QuickAddPanel({
           <div className="form-field form-field--wide"><span>Card name / character *</span><input required value={form.name} onChange={(event) => setField('name', event.target.value)} placeholder="e.g. Monkey D. Luffy" /><CatalogueLanguageButtons cardNumber={form.card_number} fieldKey="name" onApply={(value) => setForm((current) => ({ ...current, name: value }))} /></div>
           <label className="form-field"><span>Card number</span><input value={form.card_number} onChange={(event) => setField('card_number', event.target.value)} placeholder="OP05-119" /></label>
           <div className="form-field form-field--wide catalogue-lookup-control">
-            <button className="button button--outline" type="button" disabled={!form.card_number.trim() || catalogueLoading} onClick={lookupCard}>
-              <Search size={14} /> {catalogueLoading ? 'Searching English and Japanese cards…' : 'Look up card details'}
+            <button className="button button--outline" type="button" disabled={(!form.card_number.trim() && !form.name.trim()) || catalogueLoading} onClick={lookupCard}>
+              <Search size={14} /> {catalogueLoading ? 'Searching card numbers and names…' : 'Look up by card number or name'}
             </button>
-            <small>Reference images are for identification only; your uploaded stock photographs are never changed. Reference data: Koala Kollect (CC BY 4.0). Card artwork remains Bandai's.</small>
+            <small>Search the card number or character name. Reference artwork is separate from your uploaded stock photographs; check language and printing before applying.</small>
+            {catalogueSearchNotice && <span className="admin-muted">{catalogueSearchNotice}</span>}
             {form.card_number.trim() && form.name.trim() && (
               <button className="text-button" type="button" disabled={librarySaving} onClick={saveCurrentCardToLibrary}>
                 {librarySaving ? 'Saving to shared library…' : 'Save these details to the shared card library'}
