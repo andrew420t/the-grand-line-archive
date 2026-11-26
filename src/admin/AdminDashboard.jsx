@@ -379,6 +379,8 @@ function ProductsSection({ products, categories, sets, user, onRefresh }) {
   const [sectionDraft] = useState(() => readPersistentDraft(user?.id, 'products-section', {}))
   const [query, setQuery] = useState(() => String(sectionDraft.query || ''))
   const [changes, setChanges] = useState(() => sectionDraft.changes && typeof sectionDraft.changes === 'object' ? sectionDraft.changes : {})
+  const [editingProductId, setEditingProductId] = useState(() => sectionDraft.editingProductId || '')
+  const editingProduct = products.find((product) => String(product.id) === String(editingProductId)) || null
   const [busyId, setBusyId] = useState('')
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
@@ -390,8 +392,8 @@ function ProductsSection({ products, categories, sets, user, onRefresh }) {
   const [lookupError, setLookupError] = useState('')
   useEffect(() => {
     if (!user?.id) return
-    savePersistentDraft(user.id, 'products-section', { query, changes })
-  }, [user?.id, query, changes])
+    savePersistentDraft(user.id, 'products-section', { query, changes, editingProductId })
+  }, [user?.id, query, changes, editingProductId])
   const visibleProducts = products.filter((product) =>
     [product.name, product.setName, product.category, product.rarity, product.raw?.card_number]
       .filter(Boolean)
@@ -604,7 +606,7 @@ function ProductsSection({ products, categories, sets, user, onRefresh }) {
                 <button className="button button--outline inventory-save" type="button" disabled={busyId === String(product.id)} onClick={() => saveInventory(product)}>{busyId === String(product.id) ? 'Saving…' : 'Update stock'}</button>
                 <div className="inventory-item__actions">
                   <button className={String(raw.status || '').toLowerCase() === 'active' ? 'button button--outline' : 'button button--gold'} type="button" disabled={busyId === String(product.id)} onClick={() => toggleArchivePublication(product)}>{busyId === String(product.id) ? 'Saving…' : String(raw.status || '').toLowerCase() === 'active' ? 'Remove from Archive' : 'Post to Archive'}</button>
-                  <button className="button button--outline" type="button" onClick={() => setEditingProduct(product)}><Pencil size={14} /> Edit card</button>
+                  <button className="button button--outline" type="button" onClick={() => setEditingProductId(String(product.id))}><Pencil size={14} /> Edit card</button>
                   <button className="button button--outline" type="button" disabled={busyId === String(product.id) || !raw.card_number} onClick={() => lookupProductCard(product)}><Search size={14} /> Look up card</button>
                   <button className="button button--danger" type="button" disabled={busyId === String(product.id)} onClick={() => deleteProduct(product)}><Trash2 size={14} /> Delete</button>
                 </div>
@@ -640,11 +642,11 @@ function ProductsSection({ products, categories, sets, user, onRefresh }) {
           userId={user?.id}
           onClose={() => {
             clearPersistentDraft(user?.id, 'product-edit:' + editingProduct.id)
-            setEditingProduct(null)
+            setEditingProductId('')
           }}
           onSaved={() => {
             clearPersistentDraft(user?.id, 'product-edit:' + editingProduct.id)
-            setEditingProduct(null)
+            setEditingProductId('')
             onRefresh()
           }}
         />
