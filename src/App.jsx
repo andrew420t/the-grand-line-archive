@@ -40,6 +40,7 @@ import { hasSupabaseConfig, isPreviewBuild, supabase } from './lib/supabase'
 import { DEFAULT_SITE_SETTINGS, normalizeSiteSettings } from './siteSettings'
 import { buildAtomicCheckoutItems, buildCheckoutSnapshot } from './orderCheckout'
 import { getPublicStorefrontProducts } from './publicProducts'
+import { readPersistentDraft, savePersistentDraft } from './admin/persistentDraftStorage'
 import { isAllowedOrderStatusTransition, isValidOrderStatus, orderStatusUpdateFailure } from './orderStatus'
 import './App.css'
 
@@ -223,6 +224,7 @@ function ProductDetailPage({ products, onAdd }) {
 function Storefront() {
   const location = useLocation()
   const navigate = useNavigate()
+  const [shopDraft] = useState(() => readPersistentDraft('public', 'shop-controls', {}))
   const [products, setProducts] = useState([])
   const [categories, setCategories] = useState([])
   const [sets, setSets] = useState([])
@@ -242,20 +244,21 @@ function Storefront() {
   const [authOpen, setAuthOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [toast, setToast] = useState('')
-  const [search, setSearch] = useState('')
-  const [categoryFilter, setCategoryFilter] = useState('All categories')
-  const [rarityFilter, setRarityFilter] = useState('All rarities')
-  const [setFilter, setSetFilter] = useState('All sets')
-  const [minPrice, setMinPrice] = useState('')
-  const [maxPrice, setMaxPrice] = useState('')
-  const [languageFilter, setLanguageFilter] = useState('All languages')
-  const [conditionFilter, setConditionFilter] = useState('All conditions')
-  const [variantFilter, setVariantFilter] = useState('All variants')
-  const [availabilityFilter, setAvailabilityFilter] = useState('In stock')
-  const [sortBy, setSortBy] = useState('newest')
-  const [viewMode, setViewMode] = useState('grid')
-  const [pageSize, setPageSize] = useState('24')
-  const [currentPage, setCurrentPage] = useState(1)
+  const [search, setSearch] = useState(() => String(shopDraft.search || ''))
+  const [categoryFilter, setCategoryFilter] = useState(() => shopDraft.categoryFilter || 'All categories')
+  const [rarityFilter, setRarityFilter] = useState(() => shopDraft.rarityFilter || 'All rarities')
+  const [setFilter, setSetFilter] = useState(() => shopDraft.setFilter || 'All sets')
+  const [minPrice, setMinPrice] = useState(() => String(shopDraft.minPrice || ''))
+  const [maxPrice, setMaxPrice] = useState(() => String(shopDraft.maxPrice || ''))
+  const [languageFilter, setLanguageFilter] = useState(() => shopDraft.languageFilter || 'All languages')
+  const [conditionFilter, setConditionFilter] = useState(() => shopDraft.conditionFilter || 'All conditions')
+  const [variantFilter, setVariantFilter] = useState(() => shopDraft.variantFilter || 'All variants')
+  const [availabilityFilter, setAvailabilityFilter] = useState(() => shopDraft.availabilityFilter || 'In stock')
+  const [sortBy, setSortBy] = useState(() => shopDraft.sortBy || 'newest')
+  const [viewMode, setViewMode] = useState(() => shopDraft.viewMode === 'list' ? 'list' : 'grid')
+  const [pageSize, setPageSize] = useState(() => ['24', '48', '96'].includes(String(shopDraft.pageSize)) ? String(shopDraft.pageSize) : '24')
+  const [currentPage, setCurrentPage] = useState(() => Math.max(1, Number(shopDraft.currentPage) || 1))
+  const firstFilterRender = useRef(true)
   const [orders, setOrders] = useState([])
   const [orderItems, setOrderItems] = useState([])
   const [ordersLoading, setOrdersLoading] = useState(false)
@@ -360,6 +363,18 @@ function Storefront() {
     localStorage.setItem(CART_KEY, JSON.stringify(cart))
   }, [cart])
 
+  // Keep archive search, filters and layout on this device so a mobile browser
+  // reload or tab discard restores the collector's place in the catalogue.
+  useEffect(() => {
+    savePersistentDraft('public', 'shop-controls', {
+      search, categoryFilter, rarityFilter, setFilter, minPrice, maxPrice,
+      languageFilter, conditionFilter, variantFilter, availabilityFilter,
+      sortBy, viewMode, pageSize, currentPage,
+    })
+  }, [search, categoryFilter, rarityFilter, setFilter, minPrice, maxPrice,
+    languageFilter, conditionFilter, variantFilter, availabilityFilter,
+    sortBy, viewMode, pageSize, currentPage])
+
   useEffect(() => {
     if (!hasSupabaseConfig || !supabase) return undefined
 
@@ -393,6 +408,7 @@ function Storefront() {
       setUser(session?.user || null)
       setProfile(null)
       setProfileError('')
+      setAdminAccessGranted(false)
     })
 
     return () => {
@@ -417,9 +433,13 @@ function Storefront() {
       if (result.error) {
         setProfileError(result.error.message)
         setProfile(null)
+        setAdminAccessGranted(false)
       } else {
         setProfile(result.data)
         setProfileError('')
+        // Re-derive the admin gate from the current authenticated session and
+        // the live profiles.role row. Never trust a localStorage admin flag.
+        setAdminAccessGranted(String(result.data?.role || '').toLowerCase() === 'admin')
       }
     }
 
@@ -470,7 +490,13 @@ function Storefront() {
   const pageCount = Math.max(1, Math.ceil(sortedProducts.length / Number(pageSize)))
   const visibleProducts = sortedProducts.slice((currentPage - 1) * Number(pageSize), currentPage * Number(pageSize))
 
-  useEffect(() => { setCurrentPage(1) }, [search, setFilter, categoryFilter, rarityFilter, languageFilter, conditionFilter, variantFilter, availabilityFilter, minPrice, maxPrice, sortBy, pageSize])
+  useEffect(() => {
+    if (firstFilterRender.current) {
+      firstFilterRender.current = false
+      return
+    }
+    setCurrentPage(1)
+  }, [search, setFilter, categoryFilter, rarityFilter, languageFilter, conditionFilter, variantFilter, availabilityFilter, minPrice, maxPrice, sortBy, pageSize])
 
   const setOptions = useMemo(
     () => [...new Set(storefrontProducts.map((product) => `${product.setCode} — ${product.setName}`.trim()).filter((value) => value !== '—'))].sort((a, b) => a.localeCompare(b)),
@@ -885,18 +911,20 @@ function Storefront() {
         <Route
           path="/admin/access"
           element={
-            <AdminAccess
-              user={user}
-              isAdmin={isAdmin}
-              profile={profile}
-              onAuthenticated={(authenticatedUser, authenticatedProfile) => {
-                setUser(authenticatedUser)
-                setProfile(authenticatedProfile)
-                setProfileError('')
-                setAdminAccessGranted(true)
-                navigate('/admin', { replace: true })
-              }}
-            />
+            user && isAdmin ? <Navigate to="/admin" replace /> : (
+              <AdminAccess
+                user={user}
+                isAdmin={isAdmin}
+                profile={profile}
+                onAuthenticated={(authenticatedUser, authenticatedProfile) => {
+                  setUser(authenticatedUser)
+                  setProfile(authenticatedProfile)
+                  setProfileError('')
+                  setAdminAccessGranted(true)
+                  navigate('/admin', { replace: true })
+                }}
+              />
+            )
           }
         />
         <Route
