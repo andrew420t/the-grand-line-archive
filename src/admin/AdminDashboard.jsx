@@ -654,7 +654,7 @@ const productEditFields = [
   { key: 'category_id', label: 'Category', columns: ['category_id'], select: 'categories' },
   { key: 'set_id', label: 'Set', columns: ['set_id'], select: 'sets' },
   { key: 'featured', label: 'Featured product', columns: ['featured'], checkbox: true },
-  { key: 'status', label: 'Status', columns: ['status'], options: ['active', 'draft', 'archived'] },
+  { key: 'status', label: 'Status', columns: ['status'], options: ['active', 'inactive', 'sold_out'] },
   { key: 'slug', label: 'Slug', columns: ['slug'] },
   { key: 'variant_label', label: 'Variant label', columns: ['variant_label'] },
 ]
