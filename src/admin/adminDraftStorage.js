@@ -1,6 +1,7 @@
 const DATABASE_NAME = 'grand-line-admin-drafts'
-const DATABASE_VERSION = 1
+const DATABASE_VERSION = 2
 const PHOTO_STORE = 'photoDrafts'
+const LIBRARY_FILE_STORE = 'libraryFileDrafts'
 const DRAFT_TTL_MS = 14 * 24 * 60 * 60 * 1000
 
 const workspaceKey = (userId) => `gla:admin-workspace:${userId}`
@@ -88,6 +89,9 @@ function openPhotoDatabase() {
       if (!database.objectStoreNames.contains(PHOTO_STORE)) {
         database.createObjectStore(PHOTO_STORE, { keyPath: 'userId' })
       }
+      if (!database.objectStoreNames.contains(LIBRARY_FILE_STORE)) {
+        database.createObjectStore(LIBRARY_FILE_STORE, { keyPath: 'userId' })
+      }
     }
     request.onsuccess = () => resolve(request.result)
     request.onerror = () => reject(request.error || new Error('Could not open local photo draft storage.'))
@@ -171,6 +175,73 @@ export async function deleteAdminPhotoDraft(userId) {
       transaction.oncomplete = resolve
       transaction.onerror = () => reject(transaction.error || new Error('Could not clear saved photographs.'))
       transaction.onabort = () => reject(transaction.error || new Error('Could not clear saved photographs.'))
+    })
+  } finally {
+    database.close()
+  }
+}
+
+export async function loadAdminLibraryFileDraft(userId) {
+  if (!userId) return []
+  const database = await openPhotoDatabase()
+  try {
+    const record = await new Promise((resolve, reject) => {
+      const transaction = database.transaction(LIBRARY_FILE_STORE, 'readonly')
+      const request = transaction.objectStore(LIBRARY_FILE_STORE).get(userId)
+      request.onsuccess = () => resolve(request.result || null)
+      request.onerror = () => reject(request.error || new Error('Could not read the saved image upload queue.'))
+      transaction.onabort = () => reject(transaction.error || new Error('Could not read the saved image upload queue.'))
+    })
+    if (!record) return []
+    if (!record.savedAt || Date.now() - record.savedAt > DRAFT_TTL_MS) {
+      await deleteAdminLibraryFileDraft(userId)
+      return []
+    }
+    return (record.files || []).map((item) => new File([item.blob], item.name, {
+      type: item.type || item.blob?.type || 'image/jpeg',
+      lastModified: item.lastModified || Date.now(),
+    }))
+  } finally {
+    database.close()
+  }
+}
+
+export async function saveAdminLibraryFileDraft(userId, files) {
+  if (!userId) return
+  const database = await openPhotoDatabase()
+  try {
+    const storedFiles = (files || []).filter((file) => file instanceof Blob).map((file) => ({
+      name: file.name || 'card-image',
+      type: file.type || 'image/jpeg',
+      lastModified: file.lastModified || Date.now(),
+      blob: file,
+    }))
+    await new Promise((resolve, reject) => {
+      const transaction = database.transaction(LIBRARY_FILE_STORE, 'readwrite')
+      transaction.objectStore(LIBRARY_FILE_STORE).put({
+        userId,
+        savedAt: Date.now(),
+        files: storedFiles,
+      })
+      transaction.oncomplete = resolve
+      transaction.onerror = () => reject(transaction.error || new Error('Could not save the image upload queue on this device.'))
+      transaction.onabort = () => reject(transaction.error || new Error('Could not save the image upload queue on this device.'))
+    })
+  } finally {
+    database.close()
+  }
+}
+
+export async function deleteAdminLibraryFileDraft(userId) {
+  if (!userId) return
+  const database = await openPhotoDatabase()
+  try {
+    await new Promise((resolve, reject) => {
+      const transaction = database.transaction(LIBRARY_FILE_STORE, 'readwrite')
+      transaction.objectStore(LIBRARY_FILE_STORE).delete(userId)
+      transaction.oncomplete = resolve
+      transaction.onerror = () => reject(transaction.error || new Error('Could not clear the saved image upload queue.'))
+      transaction.onabort = () => reject(transaction.error || new Error('Could not clear the saved image upload queue.'))
     })
   } finally {
     database.close()

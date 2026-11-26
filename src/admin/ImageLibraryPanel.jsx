@@ -2,6 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ImagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './productStorage'
 import { getCatalogueCoverageReport, getCatalogueImageGallery, getCatalogueReferenceTestMatrix, saveDonCardSetOverride } from './cardCatalogue'
+import { loadAdminLibraryFileDraft, saveAdminLibraryFileDraft } from './adminDraftStorage'
+import { readPersistentDraft, savePersistentDraft } from './persistentDraftStorage'
 
 const DON_SET_OPTIONS = [
   ...Array.from({ length: 18 }, (_, index) => 'OP-' + String(index + 1).padStart(2, '0')),
@@ -21,6 +23,8 @@ export default function ImageLibraryPanel({ user }) {
   const matrixCheckLock = useRef(false)
   const donSetSaveLock = useRef(false)
   const [files, setFiles] = useState([])
+  const [filesRestored, setFilesRestored] = useState(false)
+  const [fileDraftError, setFileDraftError] = useState('')
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(true)
   const [busy, setBusy] = useState(false)
@@ -34,8 +38,9 @@ export default function ImageLibraryPanel({ user }) {
   const [referenceNextOffset, setReferenceNextOffset] = useState(0)
   const [referenceLoading, setReferenceLoading] = useState(false)
   const [referenceError, setReferenceError] = useState('')
-  const [referenceQuery, setReferenceQuery] = useState('')
-  const [referenceLanguage, setReferenceLanguage] = useState('all')
+  const [savedLibraryDraft] = useState(() => readPersistentDraft(user?.id, 'image-library', {}))
+  const [referenceQuery, setReferenceQuery] = useState(() => savedLibraryDraft.referenceQuery || '')
+  const [referenceLanguage, setReferenceLanguage] = useState(() => savedLibraryDraft.referenceLanguage || 'all')
   const [failedReferenceIds, setFailedReferenceIds] = useState([])
   const [loadedReferenceIds, setLoadedReferenceIds] = useState([])
   const [fallbackReferenceIds, setFallbackReferenceIds] = useState([])
@@ -44,7 +49,7 @@ export default function ImageLibraryPanel({ user }) {
   const [matrixReport, setMatrixReport] = useState(null)
   const [matrixResults, setMatrixResults] = useState([])
   const [matrixError, setMatrixError] = useState('')
-  const [donSetSelections, setDonSetSelections] = useState({})
+  const [donSetSelections, setDonSetSelections] = useState(() => savedLibraryDraft.donSetSelections || {})
   const [donSetSaving, setDonSetSaving] = useState('')
   const [donSetError, setDonSetError] = useState('')
   const [donSetNotice, setDonSetNotice] = useState('')
@@ -61,6 +66,47 @@ export default function ImageLibraryPanel({ user }) {
       if (requestId === imageListRequestId.current) setLoading(false)
     }
   }, [user.id])
+  useEffect(() => {
+    let active = true
+    loadAdminLibraryFileDraft(user?.id)
+      .then((restoredFiles) => {
+        if (active) {
+          setFiles(restoredFiles)
+          setFilesRestored(true)
+        }
+      })
+      .catch((restoreError) => {
+        if (active) setFileDraftError(restoreError.message || 'The saved image upload queue could not be restored.')
+      })
+    return () => { active = false }
+  }, [user?.id])
+
+  useEffect(() => {
+    if (!user?.id || !filesRestored) return undefined
+    let active = true
+    const save = () => {
+      saveAdminLibraryFileDraft(user.id, files)
+        .then(() => { if (active) setFileDraftError('') })
+        .catch((saveError) => { if (active) setFileDraftError(saveError.message || 'The image upload queue could not be saved on this device.') })
+    }
+    save()
+    const flushWhenHidden = () => {
+      if (document.visibilityState === 'hidden') save()
+    }
+    document.addEventListener('visibilitychange', flushWhenHidden)
+    window.addEventListener('pagehide', save)
+    return () => {
+      active = false
+      document.removeEventListener('visibilitychange', flushWhenHidden)
+      window.removeEventListener('pagehide', save)
+    }
+  }, [user?.id, files, filesRestored])
+
+  useEffect(() => {
+    if (!user?.id) return
+    savePersistentDraft(user.id, 'image-library', { referenceQuery, referenceLanguage, donSetSelections })
+  }, [user?.id, referenceQuery, referenceLanguage, donSetSelections])
+
   useEffect(() => {
     loadImages()
     return () => { imageListRequestId.current += 1 }
@@ -216,6 +262,8 @@ export default function ImageLibraryPanel({ user }) {
         <ul>{files.map((file, index) => <li key={`${file.name}-${file.lastModified}-${index}`}>{file.name} <span>{(file.size / 1024 / 1024).toFixed(1)} MB</span></li>)}</ul>
         <button className="button button--outline" type="button" disabled={busy} onClick={() => setFiles([])}>Clear selection</button>
       </div>}
+      {fileDraftError && <div className="error-notice"><ShieldAlert size={15} /><span>{fileDraftError}</span></div>}
+      {!filesRestored && <p className="admin-muted">Restoring the saved image upload queue…</p>}
       {error && <div className="error-notice"><ShieldAlert size={15} /><span>{error}</span></div>}
       {notice && <div className="success-notice"><Check size={15} /><span>{notice}</span></div>}
       <section className="catalogue-health-panel">

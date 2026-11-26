@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Camera, Check, ShieldAlert, Upload } from 'lucide-react'
 import PhotoStudio from './PhotoStudio'
+import { readPersistentDraft, savePersistentDraft } from './persistentDraftStorage'
 import {
   ensurePhotoStorageReady,
   removeLocalPhotos,
@@ -14,12 +15,18 @@ export default function StockPhotographyPanel({
   user,
   onSaved,
 }) {
-  const [productId, setProductId] = useState('')
+  const [productDraft] = useState(() => readPersistentDraft(user?.id, 'stock-photography', {}))
+  const [productId, setProductId] = useState(() => productDraft.productId || '')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const uploadLock = useRef(false)
   const selectedProduct = products.find((product) => String(product.id) === productId)
+
+  useEffect(() => {
+    if (!user?.id) return
+    savePersistentDraft(user.id, 'stock-photography', { productId })
+  }, [user?.id, productId])
 
   const upload = async () => {
     if (uploadLock.current) return

@@ -5,6 +5,7 @@ import { chooseRememberedImageMatch, rankCatalogueMatches } from './cardMatchRan
 import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
 import { mergeCatalogueScannerFields } from './productSchema'
 import CatalogueReferenceImage from './CatalogueReferenceImage'
+import { readPersistentDraft, savePersistentDraft } from './persistentDraftStorage'
 import { findRememberedCardImage, findSharedRememberedCardImage, rememberVerifiedCardImage } from './cardRecognitionMemory'
 import { prepareCardNumberRegions, prepareManualCardCropFile } from './cardNumberRegion'
 import { extractCardNumberCandidates } from './cardNumberCandidates'
@@ -17,6 +18,7 @@ const confidenceLabel = (field) => {
 }
 
 export default function CardScanner({
+  userId,
   photos,
   fields,
   setFields,
@@ -24,8 +26,9 @@ export default function CardScanner({
   setRawText,
   onContinue,
 }) {
-  const [recognitionLanguage, setRecognitionLanguage] = useState('eng')
-  const [scanMode, setScanMode] = useState('full-card')
+  const [savedScannerDraft] = useState(() => readPersistentDraft(userId, 'card-scanner', {}))
+  const [recognitionLanguage, setRecognitionLanguage] = useState(() => savedScannerDraft.recognitionLanguage || 'eng')
+  const [scanMode, setScanMode] = useState(() => savedScannerDraft.scanMode || 'full-card')
   const [scanning, setScanning] = useState(false)
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState('')
@@ -38,18 +41,21 @@ export default function CardScanner({
   const [rankedAutoMatches, setRankedAutoMatches] = useState([])
   const [catalogueLoading, setCatalogueLoading] = useState(false)
   const [catalogueError, setCatalogueError] = useState('')
-  const [manualCardNumber, setManualCardNumber] = useState('')
+  const [manualCardNumber, setManualCardNumber] = useState(() => savedScannerDraft.manualCardNumber || '')
   const [manualMatches, setManualMatches] = useState([])
   const [manualLoading, setManualLoading] = useState(false)
   const [manualError, setManualError] = useState('')
   const [numberReadings, setNumberReadings] = useState([])
   const [numberCandidates, setNumberCandidates] = useState([])
-  const [manualCropEnabled, setManualCropEnabled] = useState(false)
+  const [manualCropEnabled, setManualCropEnabled] = useState(() => Boolean(savedScannerDraft.manualCropEnabled))
+  // A crop selection can be restored, but its confirmation is deliberately
+  // reset: the administrator must reconfirm the crop against the restored photo.
   const [manualCropConfirmed, setManualCropConfirmed] = useState(false)
   const [manualCropConfirmedForFile, setManualCropConfirmedForFile] = useState(null)
-  const [manualCropSelectionMade, setManualCropSelectionMade] = useState(false)
-  const [manualCropPercent, setManualCropPercent] = useState({ x: 0, y: 0, width: 100, height: 100 })
+  const [manualCropSelectionMade, setManualCropSelectionMade] = useState(() => Boolean(savedScannerDraft.manualCropSelectionMade))
+  const [manualCropPercent, setManualCropPercent] = useState(() => savedScannerDraft.manualCropPercent || { x: 0, y: 0, width: 100, height: 100 })
   const cropPreviewRef = useRef(null)
+  const previousFrontPhotoFile = useRef(frontPhoto?.file)
   const cropDragRef = useRef(null)
 
   const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
@@ -72,11 +78,25 @@ export default function CardScanner({
   }
 
   useEffect(() => {
+    if (previousFrontPhotoFile.current === frontPhoto?.file) return
+    previousFrontPhotoFile.current = frontPhoto?.file
     setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 })
     setManualCropConfirmed(false)
     setManualCropConfirmedForFile(null)
     setManualCropSelectionMade(false)
   }, [frontPhoto?.file])
+
+  useEffect(() => {
+    if (!userId) return
+    savePersistentDraft(userId, 'card-scanner', {
+      recognitionLanguage,
+      scanMode,
+      manualCardNumber,
+      manualCropEnabled,
+      manualCropSelectionMade,
+      manualCropPercent,
+    })
+  }, [userId, recognitionLanguage, scanMode, manualCardNumber, manualCropEnabled, manualCropSelectionMade, manualCropPercent])
 
   const updateField = (key, value) => {
     setFields((current) => ({
