@@ -7,8 +7,7 @@ The official Booster selector exposes these 62 lists (excluding No filter):
 
 - Premium Boosters: PRB-02 (569302), PRB-01 (569301).
 - Stand-alone Extra Boosters: EB-05 (569205), EB-03 (569203), EB-02 (569202), EB-01 (569201).
-- Main boosters: OP-18 through OP-01 (569118 down to 569101).
-- Combined booster products: OP15-EB04 (569115), OP14-EB04 (569114).
+- Main/combined booster selector entries: OP-18 (569118), OP-17 (569117), OP-16 (569116), OP15-EB04 (569115), OP14-EB04 (569114), then OP-13 through OP-01 (569113 down to 569101). The combined entries replace separate OP-15 and OP-14 selector entries.
 - Starter / Ultra decks: ST-36 through ST-01 (569036 down to 569001).
 - Promotion card list (569901).
 - Other Product Card list (569801).
