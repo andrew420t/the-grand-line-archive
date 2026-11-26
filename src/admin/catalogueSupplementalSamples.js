@@ -1,4 +1,5 @@
 import { buildCatalogueImageProxyUrl } from './catalogueImageReference.js'
+import { getOp18SupplementalMatches } from './op18OfficialCatalogue.js'
 
 /**
  * Small, explicitly labelled supplemental sample catalogue for recent sets that
@@ -60,7 +61,7 @@ export const SUPPLEMENTAL_SAMPLE_CARDS = [
 
 export function getSupplementalSampleMatches(cardNumber) {
   const normalized = String(cardNumber || '').toUpperCase().replace(/\s+/g, '').replace(/_/g, '-')
-  return SUPPLEMENTAL_SAMPLE_CARDS
+  const legacySamples = SUPPLEMENTAL_SAMPLE_CARDS
     .filter((sample) => sample.cardNumber === normalized)
     .map((sample) => ({
       id: 'supplemental-sample:' + sample.languageCode + ':' + sample.setCode + ':' + sample.cardNumber,
@@ -97,4 +98,5 @@ export function getSupplementalSampleMatches(cardNumber) {
       officialCardlistUrl: '',
       supplementalSample: true,
     }))
+  return [...legacySamples, ...getOp18SupplementalMatches(normalized)]
 }
