@@ -13,6 +13,7 @@ export function getOfficialCardlistUrl(setCode, language = 'en', isDon = false, 
 
   // EB-04 has a standalone Japanese series, but English EB04-numbered cards
   // are split across the official OP14 and OP15 combined-product lists.
+  if (normalized === 'EB04' && lang === 'en' && !number) return ''
   if (/^EB04-\d{3}/.test(number)) {
     if (lang === 'jp') return 'https://' + host + '/cardlist/?series=550204'
     const cardIndex = Number(number.match(/^EB04-(\d{3})/)?.[1] || 0)
@@ -29,6 +30,7 @@ export function getOfficialCardlistUrl(setCode, language = 'en', isDon = false, 
   else if (/^PRB\d{2}$/.test(normalized)) series = prefix + '3' + normalized.slice(3)
   else if (/^ST\d{2}$/.test(normalized)) series = prefix + '0' + normalized.slice(2)
   else if (normalized === 'P' || normalized === 'PROMO') series = prefix + '901'
+  else if (normalized === 'OTHER' || normalized === 'OTHERPRODUCT' || normalized === 'OTHERPRODUCTCARD') series = prefix + '801'
   if (!series) return ''
   return 'https://' + host + '/cardlist/?series=' + series
 }
