@@ -171,7 +171,9 @@ export default function QuickAddPanel({
     const matchingCategory = categories.find((category) => String(category.name || '').toLowerCase() === String(match.category || '').toLowerCase())
     setForm((current) => ({
       ...current,
-      ...details,
+      ...(match.officialImageOnly
+        ? Object.fromEntries(Object.entries(details).filter(([, value]) => value !== '' && value !== null && value !== undefined))
+        : details),
       // Never carry the previous set selection onto a catalogue match for a
       // different/unrecognised set code. That could silently assign the card
       // to the wrong set when saving.
@@ -181,7 +183,9 @@ export default function QuickAddPanel({
     setAllowVariant(false)
     setDuplicateMatches([])
     setCatalogueMatches([])
-    setSuccess('Reference details filled in. Check the information against your physical card.')
+    setSuccess(match.officialImageOnly
+      ? 'Official Bandai image reference attached. Complete the missing card details and verify the exact printing before saving.'
+      : 'Reference details filled in. Check the information against your physical card.')
   }
 
 

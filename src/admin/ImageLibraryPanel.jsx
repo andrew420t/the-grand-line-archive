@@ -367,6 +367,7 @@ export default function ImageLibraryPanel({ user }) {
           <label className="form-field"><span>Search card number, name or set</span><input type="search" value={referenceQuery} onChange={(event) => setReferenceQuery(event.target.value)} placeholder="OP01-001 or Monkey D. Luffy" /></label>
           <label className="form-field"><span>Language</span><select value={referenceLanguage} onChange={(event) => setReferenceLanguage(event.target.value)}><option value="all">All languages</option><option value="en">English</option><option value="jp">Japanese</option></select></label>
         </div>
+        <p className="muted-copy">For a card missing from the local feed, search by card number here, in Card Scanner or Quick Add to retrieve an official Bandai base-image reference. To browse every booster, starter, premium and promo filter, <a href="https://en.onepiece-cardgame.com/cardlist/" target="_blank" rel="noopener noreferrer">open Bandai’s complete card list ↗</a>.</p>
         {donSetError && <div className="error-notice"><ShieldAlert size={15} /><span>{donSetError}</span></div>}
         {donSetNotice && <div className="success-notice"><Check size={15} /><span>{donSetNotice}</span></div>}
         {referenceError && <div className="error-notice"><ShieldAlert size={15} /><span>{referenceError}</span></div>}

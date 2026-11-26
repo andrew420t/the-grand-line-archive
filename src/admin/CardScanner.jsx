@@ -377,7 +377,9 @@ export default function CardScanner({
       ...current,
       ...mergeCatalogueScannerFields(current, values),
     }))
-    setStatus('Catalogue details filled in. Check each value against the physical card before saving.')
+    setStatus(match.officialImageOnly
+      ? 'Official Bandai image reference added. Card name, rarity, effect and exact printing are not in the local feed; enter and verify those details manually.'
+      : 'Catalogue details filled in. Check each value against the physical card before saving.')
   }
 
   const selectedAutoMatch = rankedAutoMatches.find((item) => item.match.id === selectedAutoMatchId)?.match
@@ -388,7 +390,8 @@ export default function CardScanner({
       applyCatalogueMatch(selectedAutoMatch)
       setMatchConfirmationOpen(false)
       let memoryMessage = ''
-      if (frontPhoto?.file) {
+      // A base-image-only reference is not a verified printing identity.
+      if (frontPhoto?.file && !selectedAutoMatch.officialImageOnly) {
         try {
           const result = await rememberVerifiedCardImage(frontPhoto.file, selectedAutoMatch)
           memoryMessage = result.shared?.saved
@@ -402,7 +405,9 @@ export default function CardScanner({
           memoryMessage = ' The card was confirmed, but its reference image could not be saved on this browser.'
         }
       }
-      setStatus('Confirmed card match. Catalogue details filled in—review them before saving.' + memoryMessage)
+      setStatus(selectedAutoMatch.officialImageOnly
+        ? 'Confirmed the card number against an official Bandai base-image reference. Full metadata and exact printing are unavailable in the local feed; complete and verify them manually.'
+        : 'Confirmed card match. Catalogue details filled in—review them before saving.' + memoryMessage)
     }
   }
 
@@ -581,12 +586,13 @@ export default function CardScanner({
           <article className="scanner-catalogue__match" key={match.id}>
             <CatalogueReferenceImage match={match} className="scanner-catalogue__reference" />
             <div>
-              <strong>{match.name || 'Unnamed card'}</strong>
+              <strong>{match.officialImageOnly ? 'Official card image found' : match.name || 'Unnamed card'}</strong>
               <span>{match.cardNumber} · {match.language} · {match.setCode || 'Promo'} · {match.rarity || 'Rarity not listed'} · {match.variant || 'Base'}</span>
               <small>{match.category || 'Card'} · {match.colors || 'Colour not listed'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
+              {match.officialImageOnly && <small>Image-only fallback. Bandai base artwork is shown; verify the exact set, rarity and finish on its official list.</small>}
               {match.setName && <small>{match.setName}</small>}
             </div>
-            <div className="scanner-catalogue__actions"><button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), "_blank", "noopener,noreferrer")}>Search on Collectr ↗</button><button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use details</button></div>
+            <div className="scanner-catalogue__actions">{match.officialCardlistUrl && <a className="button button--outline" href={match.officialCardlistUrl} target="_blank" rel="noopener noreferrer">Official Bandai list ↗</a>}<button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), "_blank", "noopener,noreferrer")}>Search on Collectr ↗</button><button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>{match.officialImageOnly ? 'Use image reference' : 'Use details'}</button></div>
           </article>
         ))}
       </section>
@@ -615,6 +621,7 @@ export default function CardScanner({
                   <div>
                     <strong>{selectedAutoMatch.name || 'Name unavailable'}</strong>
                     <span>{selectedAutoMatch.cardNumber} · {selectedAutoMatch.language} · {selectedAutoMatch.setCode || 'Set not listed'}</span>
+                    {selectedAutoMatch.officialImageOnly && <small>Image-only fallback from Bandai. The base artwork is shown, but exact set, rarity and finish must be checked manually.</small>}
                     {selectedAutoMatch.setName && <span>{selectedAutoMatch.setName}</span>}
                     <span>{selectedAutoMatch.rarity || 'Rarity unknown'} · {selectedAutoMatch.variantLabel || selectedAutoMatch.variant || 'Base version'}</span>
                     <small>{rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.nameMatch ? 'Name agrees with OCR' : 'Name differs from OCR'} · {rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.languageMatch ? 'Language agrees' : 'Language needs checking'}</small>
@@ -686,7 +693,7 @@ export default function CardScanner({
                   <small>{match.category || 'Card'} · {match.colors || 'Colour not listed'} · {match.power ? match.power + ' power' : 'No power'} · {match.cost !== '' ? match.cost + ' cost' : 'No cost'}</small>
                   {match.setName && <small>{match.setName}</small>}
                 </div>
-                <div className="scanner-catalogue__actions"><button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), "_blank", "noopener,noreferrer")}>Search on Collectr ↗</button><button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>Use details</button></div>
+                <div className="scanner-catalogue__actions">{match.officialCardlistUrl && <a className="button button--outline" href={match.officialCardlistUrl} target="_blank" rel="noopener noreferrer">Official Bandai list ↗</a>}<button className="button button--outline" type="button" onClick={() => window.open(collectrSearchUrl(match), "_blank", "noopener,noreferrer")}>Search on Collectr ↗</button><button className="button button--gold" type="button" onClick={() => applyCatalogueMatch(match)}>{match.officialImageOnly ? 'Use image reference' : 'Use details'}</button></div>
               </div>
             ))}
           </div>
