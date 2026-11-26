@@ -37,6 +37,7 @@ import AdminDashboard from './admin/AdminDashboard'
 import AdminAccess from './admin/AdminAccess'
 import { findPrimaryCatalogueMatch } from './admin/cardCatalogue'
 import { hasSupabaseConfig, isPreviewBuild, supabase } from './lib/supabase'
+import { isDedicatedPreviewSupabaseProject } from './lib/supabaseConfig.js'
 import { DEFAULT_SITE_SETTINGS, normalizeSiteSettings } from './siteSettings'
 import { buildAtomicCheckoutItems, buildCheckoutSnapshot } from './orderCheckout'
 import { getPublicStorefrontProducts } from './publicProducts'
@@ -795,7 +796,7 @@ function Storefront() {
   const safeBg = typeof bg === 'string' && /^https:\/\//i.test(bg) ? bg : ''
   return (
     <div className="site-shell" style={storefrontPage ? { ...storefrontStyle, backgroundImage: safeBg ? 'linear-gradient(rgba(17,17,15,.88), rgba(17,17,15,.92)), url("' + safeBg + '")' : undefined, backgroundSize: 'cover', backgroundAttachment: 'fixed' } : undefined}>
-      {isPreviewBuild && <div className="preview-safety-banner" role="status">Cloud preview build: only VITE_PREVIEW_SUPABASE_* variables are exposed. {hasSupabaseConfig ? 'Preview database settings are present—confirm they point to a dedicated staging project before testing.' : 'Supabase is disabled until preview-specific settings are supplied.'}</div>}
+      {isPreviewBuild && (!hasSupabaseConfig || !isDedicatedPreviewSupabaseProject(import.meta.env.VITE_PREVIEW_SUPABASE_URL)) && <div className="preview-safety-banner" role="alert">Preview database mismatch: this build must use the dedicated Grand Line Archive Testing database. Do not test this preview until VITE_PREVIEW_SUPABASE_URL and its matching public key are configured.</div>}
       {siteSettings.announcement_enabled !== false && <div className="announcement">
         <span>{siteSettings.announcement_headline}</span>
         <i />
