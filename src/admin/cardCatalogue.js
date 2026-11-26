@@ -1,13 +1,27 @@
 import { supabase } from '../lib/supabase'
-import { resolveCatalogueImage } from './catalogueImageReference.js'
+import { resolveCatalogueImage, buildOfficialImageProxyUrl } from './catalogueImageReference.js'
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
+import { createOfficialImageOnlyMatch } from './officialImageOnlyFallback.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions } from './catalogueImageFilters.js'
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
-const LANGUAGES = ['en', 'jp']
+const LANGUAGES = ['en', 'jp', 'cn']
+const REFERENCE_TEST_LANGUAGES = ['en', 'jp']
+const LANGUAGE_LABELS = { en: 'English', jp: 'Japanese', cn: 'Chinese (CN)', tcgcsv: 'English (promo/stamped)' }
+
+const proxyBandaiImageUrl = (url, language = 'en') => {
+  const match = String(url || '').match(/\/([^/?]+)\.png(?:[?#]|$)/i)
+  if (!match) return url || ''
+  try {
+    return buildOfficialImageProxyUrl(decodeURIComponent(match[1]), language) || url
+  } catch {
+    return url
+  }
+}
 const CACHE_TTL = 6 * 60 * 60 * 1000
 
 let cataloguePromise
@@ -19,6 +33,7 @@ const normalizeCardNumber = (value) =>
     .replace(/\s+/g, '')
     .replace(/_/g, '-')
     .replace(/-+/g, '-')
+    .replace(/^(OP|EB|ST|PRB)-(\d{2})-/, '$1$2-')
     .trim()
 
 const normalizeSearchText = (value) => String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
@@ -153,7 +168,7 @@ export async function findCatalogueMatches(cardNumber) {
       const printings = safeMapGet(index.printingsByCard, card.key) || []
 
       for (const printing of printings) {
-        const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language })
+        const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language, cardNumber: card.number || '' })
         const productLinks = safeMapGet(index.printingProductsByPrinting, printing.key) || []
         const linkedProducts = productLinks
           .map((link) => safeMapGet(index.productsByKey, link.product_key))
@@ -168,7 +183,7 @@ export async function findCatalogueMatches(cardNumber) {
             printingKey: printing.key,
             cardNumber: card.number || '',
             name: observation?.name || '',
-            language: printing.site === 'tcgcsv' ? 'English (promo/stamped)' : language === 'jp' ? 'Japanese' : 'English',
+            language: LANGUAGE_LABELS[printing.site === 'tcgcsv' ? 'tcgcsv' : language] || 'English',
             languageCode: printing.site === 'tcgcsv' ? 'tcgcsv' : language,
             category: observation?.category || card.category || '',
             colors: (observation?.colors || card.colors || []).join(' / '),
@@ -184,7 +199,10 @@ export async function findCatalogueMatches(cardNumber) {
             variant: value(printing, 'variant'),
             variantLabel: value(printing, 'variant'),
             imageUrl: imageReference.imageUrl,
+            imageUrls: imageReference.imageUrls || [imageReference.imageUrl, imageReference.fallbackImageUrl].filter(Boolean),
             fallbackImageUrl: imageReference.fallbackImageUrl,
+            usesBaseImageFallback: imageReference.usesBaseImageFallback,
+            usesAlternateOfficialFallback: imageReference.usesAlternateOfficialFallback,
             sourceText: value(printing, 'source_text'),
             setCode,
             setName: value(product, 'name'),
@@ -193,7 +211,7 @@ export async function findCatalogueMatches(cardNumber) {
             sourceUrl: value(product, 'product_url'),
             blockIcon: value(printing, 'block_icon'),
             source: imageReference.source,
-            officialCardlistUrl: getOfficialCardlistUrl(setCode, language, false, card.number || ''),
+            officialCardlistUrl: language === 'cn' || printing.site === 'tcgcsv' ? '' : getOfficialCardlistUrl(setCode, language, false, card.number || ''),
           })
         }
       }
@@ -271,6 +289,19 @@ export async function findCatalogueMatches(cardNumber) {
     }
   }
 
+  // The current local feed may omit newer cards or one language. Add a
+  // clearly labelled Bandai base-image-only reference only where there is no
+  // existing image for that language. Never guess details or variant identity.
+  for (const languageCode of LANGUAGES) {
+    const hasLanguageImage = results.some((match) =>
+      match.languageCode === languageCode && Boolean(match.imageUrl),
+    )
+    if (!hasLanguageImage) {
+      const fallback = createOfficialImageOnlyMatch(requestedNumber, languageCode)
+      if (fallback) results.push(fallback)
+    }
+  }
+
   return results.sort((a, b) =>
     a.language.localeCompare(b.language) ||
     a.setCode.localeCompare(b.setCode) ||
@@ -279,8 +310,43 @@ export async function findCatalogueMatches(cardNumber) {
   )
 }
 
+
+/** Search catalogue entries by either card number or the card name. */
+export async function findCatalogueSearchMatches(query, { limit = 12 } = {}) {
+  const rawQuery = String(query || '').trim()
+  if (!rawQuery) return []
+  const cardNumber = baseCardNumber(rawQuery)
+  if (cardNumber) return findCatalogueMatches(cardNumber)
+
+  const normalized = normalizeSearchText(rawQuery)
+  if (normalized.length < 2) return []
+  const catalogue = await getCatalogue()
+  const matchedNumbers = new Map()
+  for (const language of LANGUAGES) {
+    const index = catalogue.indexes?.[language] || {}
+    for (const card of catalogue.cards || []) {
+      const observations = safeMapGet(index.observationsByCard, card.key) || []
+      const nameMatches = observations.some((observation) =>
+        !observation.superseded_at && normalizeSearchText(observation.name).includes(normalized),
+      )
+      if (!nameMatches || !card.number) continue
+      const number = baseCardNumber(card.number)
+      if (number && !matchedNumbers.has(number)) matchedNumbers.set(number, card)
+      if (matchedNumbers.size >= Math.max(1, Math.min(20, limit))) break
+    }
+    if (matchedNumbers.size >= Math.max(1, Math.min(20, limit))) break
+  }
+  const groups = await Promise.all([...matchedNumbers.keys()].map((number) => findCatalogueMatches(number)))
+  return [...new Map(groups.flat().map((match) => [match.id, match])).values()]
+    .slice(0, Math.max(1, Math.min(60, limit * 4)))
+}
+
 export function catalogueMatchToForm(match) {
   const category = String(match.category || '').toLowerCase()
+  // Image-only references are not verified printing identities. Keep their
+  // image URL, but never persist the synthetic reference ID as a printing key.
+  const verifiedMatchId = match.officialImageOnly ? '' : (match.id || '')
+  const verifiedPrintingKey = match.officialImageOnly ? '' : (match.printingKey || '')
   return {
     name: match.name || '',
     card_number: match.cardNumber || '',
@@ -298,11 +364,11 @@ export function catalogueMatchToForm(match) {
     trigger_text: match.trigger || '',
     attributes: match.attributes || '',
     reference_image_url: match.imageUrl || '',
-    reference_printing_key: match.printingKey || '',
-    reference_match_id: match.id || '',
+    reference_printing_key: verifiedPrintingKey,
+    reference_match_id: verifiedMatchId,
     reference_image_source: match.source || match.imageSource || '',
-    catalogue_match_id: match.id || '',
-    catalogue_printing_key: match.printingKey || '',
+    catalogue_match_id: verifiedMatchId,
+    catalogue_printing_key: verifiedPrintingKey,
     catalogue_reference_image_url: match.imageUrl || '',
     catalogue_reference_image_source: match.source || match.imageSource || '',
   }
@@ -413,8 +479,11 @@ export function collectrSearchUrl(match) {
 
 export async function findPrimaryCatalogueMatch(cardNumber, language = '', identity = {}) {
   const matches = await findCatalogueMatches(cardNumber)
-  if (!matches.length) return null
-  return selectPrimaryCatalogueMatch(matches, { language, ...identity })
+  const selected = selectPrimaryCatalogueMatch(matches, { language, ...identity })
+  if (selected) return selected
+  // A reprint set may not be represented in the local feed yet. Retain an
+  // official same-card base image rather than leave the product tile blank.
+  return createOfficialImageOnlyMatch(cardNumber, language || 'en', identity.setCode || '')
 }
 
 /**
@@ -474,7 +543,9 @@ export async function getCatalogueCoverageReport() {
     for (const printing of data.printings) {
       report.printings += 1
       const locator = safeMapGet(index.locatorsByPrinting, printing.key + ':' + printing.site)
-      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language })
+      const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
+      const cardNumber = card?.number || ''
+      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language, cardNumber })
       const hasOfficialImage = Boolean(imageReference.imageUrl && imageReference.source.startsWith('Bandai official') && !imageReference.usesBaseImageFallback)
       const hasFallbackImage = imageReference.usesBaseImageFallback
       const imageUrl = imageReference.imageUrl
@@ -483,8 +554,6 @@ export async function getCatalogueCoverageReport() {
       const linkedProducts = products
         .map((link) => safeMapGet(index.productsByKey, link.product_key))
         .filter(Boolean)
-      const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
-      const cardNumber = card?.number || ''
       const observations = safeMapGet(index.observationsByCard, printing.card_key) || []
       const observation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
@@ -564,55 +633,171 @@ export async function getCatalogueCoverageReport() {
 
 
 /** Paged view of catalogue image URLs; these remain remote references, not stored uploads. */
-export async function getCatalogueImageGallery({ offset = 0, limit = 60, query = '', language = 'all' } = {}) {
+export async function getCatalogueImageGallery({
+  offset = 0,
+  limit = 60,
+  query = '',
+  language = 'all',
+  set = 'all',
+  rarity = 'all',
+  cardType = 'all',
+  color = 'all',
+  variant = 'all',
+  imageStatus = 'all',
+} = {}) {
   const catalogue = await getCatalogue()
   const donOverrides = await readDonCardSetOverrides()
   const entries = []
-  for (const language of LANGUAGES) {
-    const data = catalogue.languages?.[language] || { printings: [] }
-    const index = catalogue.indexes?.[language] || {}
-    for (const printing of data.printings) {
-      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language })
-      const imageUrl = imageReference.imageUrl
-      if (!imageUrl) continue
+
+  for (const siteLanguage of LANGUAGES) {
+    const data = catalogue.languages?.[siteLanguage] || { printings: [] }
+    const index = catalogue.indexes?.[siteLanguage] || {}
+    for (const printing of data.printings || []) {
       const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
-      const observations = safeMapGet(index.observationsByCard, printing.card_key) || []
-      const observation = observations.reduce((latest, item) => !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
-      const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
-      const product = links.map((link) => safeMapGet(index.productsByKey, link.product_key)).find(Boolean)
+      const observation = (safeMapGet(index.observationsByCard, printing.card_key) || [])
+        .filter((item) => !item.superseded_at)
+        .reduce((latest, item) => !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       const isDon = isDonCatalogueEntry({ printing, card, observation })
-      const setOverride = isDon ? donOverrides[printing.key + ':' + language] : null
+      const imageReference = resolveCatalogueImage({
+        printing,
+        index,
+        printings: data.printings,
+        language: siteLanguage,
+        cardNumber: card?.number || '',
+      })
+      const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
+      const products = links
+        .map((link) => safeMapGet(index.productsByKey, link.product_key))
+        .filter(Boolean)
+      const productChoices = products.length ? products : [null]
+      const setOverride = isDon ? donOverrides[printing.key + ':' + siteLanguage] : null
       const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
-      const sourceSetCodes = donSourceSet?.set_codes?.length ? donSourceSet.set_codes : donSourceSet?.set_code ? [donSourceSet.set_code] : []
-      const setCode = formatSetCode(setOverride?.set_code || (donSourceSet ? (sourceSetCodes.length === 1 ? sourceSetCodes[0] : '') : product?.code || ''))
-      const displaySetCodes = setOverride?.set_code ? [setOverride.set_code] : sourceSetCodes.length ? sourceSetCodes : product?.code ? [product.code] : []
-      const formattedSetCodes = displaySetCodes.map(formatSetCode)
-      const setName = setOverride
-        ? 'Manually assigned set'
-        : sourceSetCodes.length > 1
-          ? 'Multiple source sets (DON!! source data)'
-          : donSourceSet
-            ? setCode + ' (DON!! source data)'
-            : product?.name || ''
-      const setAssignmentSource = setOverride?.source_note || (donSourceSet ? donSourceSet.source_note : product ? 'Catalogue product link' : '')
-      entries.push({ id: printing.key + ':' + language, printingKey: printing.key, cardNumber: card?.number || (isDon ? 'DON!!' : ''), name: observation?.name || '', language, rarity: printing.rarity || '', variant: printing.variant || '', setCode, setCodes: formattedSetCodes, setName, setAssignmentSource, sourceText: printing.source_text || '', isDon, officialListUrl: setCode ? getOfficialCardlistUrl(setCode, language, isDon, card?.number || '') : '', imageUrl, fallbackImageUrl: imageReference.fallbackImageUrl, source: imageReference.source, usesBaseImageFallback: imageReference.usesBaseImageFallback })
+      const sourceSetCodes = donSourceSet?.set_codes?.length
+        ? donSourceSet.set_codes
+        : donSourceSet?.set_code ? [donSourceSet.set_code] : []
+
+      for (const product of productChoices) {
+        const rawSetCode = setOverride?.set_code
+          || (donSourceSet
+            ? (sourceSetCodes.length === 1 ? sourceSetCodes[0] : '')
+            : product?.code || '')
+        const inferredSetCode = (card?.number || '').match(/^(OP\d{2}|EB\d{2}|ST\d{2}|PRB\d{2})-/)?.[1] || ''
+        const setCode = formatSetCode(rawSetCode || inferredSetCode || (isDon ? 'DON!!' : ''))
+        const displaySetCodes = setOverride?.set_code
+          ? [setOverride.set_code]
+          : sourceSetCodes.length ? sourceSetCodes : product?.code ? [product.code] : inferredSetCode ? [inferredSetCode] : []
+        const formattedSetCodes = displaySetCodes.map(formatSetCode)
+        const setName = setOverride
+          ? 'Manually assigned set'
+          : sourceSetCodes.length > 1
+            ? 'Multiple source sets (DON!! source data)'
+            : donSourceSet
+              ? setCode + ' (DON!! source data)'
+              : product?.name || ''
+        const setAssignmentSource = setOverride?.source_note || (donSourceSet ? donSourceSet.source_note : product ? 'Catalogue product link' : '')
+        const languageCode = printing.site === 'tcgcsv' ? 'tcgcsv' : siteLanguage
+        const languageLabel = LANGUAGE_LABELS[languageCode] || languageCode.toUpperCase()
+        const imageUrls = imageReference.imageUrls || [imageReference.imageUrl, imageReference.fallbackImageUrl].filter(Boolean)
+        const imageStatus = !imageUrls.length
+          ? 'missing'
+          : imageReference.usesBaseImageFallback || imageReference.usesAlternateOfficialFallback
+            ? 'fallback'
+            : 'available'
+        const colorValues = observation?.colors || card?.colors || []
+        entries.push({
+          id: printing.key + ':' + siteLanguage + ':' + (product?.key || 'no-product'),
+          printingKey: printing.key,
+          cardNumber: card?.number || (isDon ? 'DON!!' : ''),
+          name: observation?.name || '',
+          language: languageLabel,
+          languageCode,
+          rarity: printing.rarity || '',
+          variant: printing.variant || '',
+          setCode,
+          setCodes: formattedSetCodes,
+          setName,
+          setAssignmentSource,
+          sourceText: printing.source_text || '',
+          isDon,
+          category: observation?.category || card?.category || (isDon ? 'DON!!' : ''),
+          colors: Array.isArray(colorValues) ? colorValues.join(' / ') : String(colorValues || ''),
+          colorValues: Array.isArray(colorValues) ? colorValues : String(colorValues || '').split('/').map((v) => v.trim()).filter(Boolean),
+          officialListUrl: siteLanguage === 'cn' || printing.site === 'tcgcsv'
+            ? ''
+            : setCode ? getOfficialCardlistUrl(setCode, siteLanguage, isDon, card?.number || '') : '',
+          imageUrl: imageUrls[0] || '',
+          imageUrls,
+          fallbackImageUrl: imageUrls[1] || '',
+          source: imageReference.source,
+          usesBaseImageFallback: Boolean(imageReference.usesBaseImageFallback),
+          usesAlternateOfficialFallback: Boolean(imageReference.usesAlternateOfficialFallback),
+          hasImage: imageUrls.length > 0,
+          imageStatus,
+        })
+      }
     }
   }
-  entries.sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.language.localeCompare(b.language) || a.id.localeCompare(b.id))
-  const normalizedQuery = normalizeSearchText(query)
-  const filtered = entries.filter((entry) => {
-    if (language !== 'all' && entry.language !== language) return false
-    if (!normalizedQuery) return true
-    return normalizeSearchText(entry.cardNumber).includes(normalizedQuery)
-      || normalizeSearchText(entry.name).includes(normalizedQuery)
-      || normalizeSearchText(entry.setCode).includes(normalizedQuery)
-      || normalizeSearchText(entry.setName).includes(normalizedQuery)
-      || (entry.setCodes || []).some((code) => normalizeSearchText(code).includes(normalizedQuery))
-      || normalizeSearchText(entry.sourceText).includes(normalizedQuery)
-  })
+
+  // When a typed card number is absent from the feed entirely, try an official
+  // English or Japanese base-image reference. Keep the result image-only.
+  const normalizedNumber = baseCardNumber(query)
+  if (normalizedNumber) {
+    for (const languageCode of ['en', 'jp']) {
+      const exists = entries.some((entry) => entry.cardNumber === normalizedNumber && entry.languageCode === languageCode)
+      if (exists) continue
+      const fallback = createOfficialImageOnlyMatch(normalizedNumber, languageCode)
+      if (!fallback) continue
+      entries.push({
+        id: fallback.id,
+        printingKey: '',
+        cardNumber: fallback.cardNumber,
+        name: '',
+        language: fallback.language,
+        languageCode,
+        rarity: '',
+        variant: fallback.variant,
+        setCode: fallback.setCode,
+        setCodes: [fallback.setCode],
+        setName: fallback.setName,
+        setAssignmentSource: '',
+        sourceText: fallback.sourceText,
+        isDon: false,
+        category: '',
+        colors: '',
+        colorValues: [],
+        officialListUrl: fallback.officialCardlistUrl,
+        imageUrl: fallback.imageUrl,
+        imageUrls: fallback.imageUrls || [fallback.imageUrl, fallback.fallbackImageUrl].filter(Boolean),
+        fallbackImageUrl: fallback.fallbackImageUrl || '',
+        source: fallback.source,
+        usesBaseImageFallback: true,
+        usesAlternateOfficialFallback: false,
+        hasImage: Boolean(fallback.imageUrl),
+        imageStatus: 'fallback',
+        officialImageOnly: true,
+      })
+    }
+  }
+
+  const filterEntries = filterCatalogueImageEntries(entries, { query, language, set, rarity, cardType, color, variant, imageStatus })
+  const rawFilters = getCatalogueImageFilterOptions(entries)
+  const filters = {
+    languages: rawFilters.languages.map((value) => ({ value, label: LANGUAGE_LABELS[value] || value })),
+    sets: rawFilters.sets.map((value) => ({ value, label: value })),
+    rarities: rawFilters.rarities.map((value) => ({ value, label: value })),
+    cardTypes: rawFilters.cardTypes.map((value) => ({ value, label: String(value).replace(/^./, (c) => c.toUpperCase()) })),
+    colors: rawFilters.colors.map((value) => ({ value, label: value })),
+    variants: rawFilters.variants.map((value) => ({ value, label: value })),
+  }
+
   const start = Math.max(0, Number(offset) || 0)
   const pageSize = Math.min(120, Math.max(1, Number(limit) || 60))
-  return { items: filtered.slice(start, start + pageSize), total: filtered.length, nextOffset: start + pageSize < filtered.length ? start + pageSize : null }
+  return {
+    items: filterEntries.slice(start, start + pageSize),
+    total: filterEntries.length,
+    nextOffset: start + pageSize < filterEntries.length ? start + pageSize : null,
+    filters,
+  }
 }
 
 /**
@@ -682,7 +867,7 @@ export async function getCatalogueReferenceTestMatrix() {
     return match?.[1] || ''
   }
 
-  for (const language of LANGUAGES) {
+  for (const language of REFERENCE_TEST_LANGUAGES) {
     const data = catalogue.languages?.[language] || { printings: [] }
     const index = catalogue.indexes?.[language] || {}
     for (const printing of data.printings) {
@@ -694,7 +879,8 @@ export async function getCatalogueReferenceTestMatrix() {
       const officialUrl = locator?.image_id
         ? (language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
         : ''
-      const imageUrl = officialUrl || printing.image_url || ''
+      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language, cardNumber })
+      const imageUrl = imageReference.imageUrl || printing.image_url || ''
       if (!imageUrl) continue
       const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
       const products = links.map((link) => safeMapGet(index.productsByKey, link.product_key)).filter(Boolean)
@@ -727,7 +913,7 @@ export async function getCatalogueReferenceTestMatrix() {
   const items = []
   const missingSlots = []
   for (const set of expectedSets) {
-    for (const language of LANGUAGES) {
+    for (const language of REFERENCE_TEST_LANGUAGES) {
       const candidates = (bySlot.get(language + ':' + set) || [])
         .sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.id.localeCompare(b.id))
       const explicitSamples = officialFallbackSamples[set]?.[language] || []
@@ -736,6 +922,7 @@ export async function getCatalogueReferenceTestMatrix() {
       const selected = explicitSamples.length
         ? explicitSamples.map((sample) => ({
           ...sample,
+          imageUrl: proxyBandaiImageUrl(sample.imageUrl, language),
           language,
           setCode: formatSetCode(set),
           setName: 'Official Bandai card-list sample',
@@ -748,7 +935,7 @@ export async function getCatalogueReferenceTestMatrix() {
       const imageOverrides = officialImageOverrides[set]?.[language] || {}
       for (const item of selected) {
         if (imageOverrides[item.cardNumber]) {
-          item.imageUrl = imageOverrides[item.cardNumber]
+          item.imageUrl = proxyBandaiImageUrl(imageOverrides[item.cardNumber], language)
           item.source = 'Bandai official image reference (cache-busted retry)'
         }
       }
@@ -758,6 +945,7 @@ export async function getCatalogueReferenceTestMatrix() {
         selected.push({
           id: 'bandai-fallback:' + language + ':' + set + ':' + sample.cardNumber,
           ...sample,
+          imageUrl: proxyBandaiImageUrl(sample.imageUrl, language),
           language,
           setCode: formatSetCode(set),
           setName: 'Official Bandai card list',
@@ -771,7 +959,7 @@ export async function getCatalogueReferenceTestMatrix() {
       }
     }
   }
-  return { expectedTotal: expectedSets.length * LANGUAGES.length * 2, items, missingSlots, checkedAt: new Date().toISOString() }
+  return { expectedTotal: expectedSets.length * REFERENCE_TEST_LANGUAGES.length * 2, items, missingSlots, checkedAt: new Date().toISOString() }
 }
 
 /** Card-number-first reference lookup shared by search, Quick Add and scanner. */
@@ -789,6 +977,7 @@ export async function getCatalogueImagesForCard(cardNumber, language = 'all') {
       rarity: match.rarity,
       variant: match.variant,
       imageUrl: match.imageUrl,
+      imageUrls: match.imageUrls || [match.imageUrl, match.fallbackImageUrl].filter(Boolean),
       fallbackImageUrl: match.fallbackImageUrl || '',
       source: match.source || match.imageSource || (match.imageUrl.includes('onepiece-cardgame.com') ? 'Bandai' : 'Catalogue source'),
     }))

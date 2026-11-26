@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react'
 import { getRememberedCardImageForPrinting } from './cardRecognitionMemory'
 
 export default function CatalogueReferenceImage({ match, className = '' }) {
-  const candidates = [...new Set([match?.imageUrl, match?.fallbackImageUrl].filter(Boolean))]
+  const candidates = [...new Set([
+    ...(Array.isArray(match?.imageUrls) ? match.imageUrls : []),
+    match?.imageUrl,
+    match?.fallbackImageUrl,
+  ].filter(Boolean))]
   const [imageIndex, setImageIndex] = useState(0)
-  const [useMemory, setUseMemory] = useState(candidates.length === 0)
+  const [useMemory, setUseMemory] = useState(false)
   const [failed, setFailed] = useState(false)
   const [rememberedUrl, setRememberedUrl] = useState('')
   const [memoryChecked, setMemoryChecked] = useState(false)
@@ -18,7 +22,10 @@ export default function CatalogueReferenceImage({ match, className = '' }) {
     setFailed(false)
     setUseMemory(candidates.length === 0)
 
-    if (!match?.id) return undefined
+    if (!match?.id) {
+      setMemoryChecked(true)
+      return undefined
+    }
     getRememberedCardImageForPrinting(match.id)
       .then((blob) => {
         if (cancelled) return
@@ -29,7 +36,6 @@ export default function CatalogueReferenceImage({ match, className = '' }) {
         setMemoryChecked(true)
       })
       .catch(() => {
-        // A missing local database must never prevent catalogue lookup.
         if (!cancelled) setMemoryChecked(true)
       })
 
@@ -37,21 +43,21 @@ export default function CatalogueReferenceImage({ match, className = '' }) {
       cancelled = true
       if (objectUrl) URL.revokeObjectURL(objectUrl)
     }
-  }, [match?.id, match?.imageUrl, match?.fallbackImageUrl])
+  }, [match?.id, match?.imageUrl, match?.fallbackImageUrl, JSON.stringify(match?.imageUrls || [])])
 
-  const imageUrl = useMemory ? rememberedUrl : candidates[imageIndex]
-  if (imageUrl && !failed) {
+  const currentCandidate = useMemory ? rememberedUrl : candidates[imageIndex]
+  if (currentCandidate && !failed) {
     return (
       <img
         className={className}
-        src={imageUrl}
+        src={currentCandidate}
         alt={(match?.name || 'One Piece card') + ' · ' + (match?.language || 'reference') + (useMemory ? ' · saved reference photo' : ' reference image')}
         loading="lazy"
-        referrerPolicy="no-referrer"
+        referrerPolicy="strict-origin-when-cross-origin"
         onError={() => {
           if (!useMemory && imageIndex + 1 < candidates.length) {
             setImageIndex((current) => current + 1)
-          } else if (!useMemory) {
+          } else if (!useMemory && rememberedUrl) {
             setUseMemory(true)
           } else {
             setFailed(true)
@@ -61,8 +67,8 @@ export default function CatalogueReferenceImage({ match, className = '' }) {
     )
   }
 
-  if (useMemory && !rememberedUrl && !memoryChecked && !failed) {
-    return <div className={'catalogue-reference-empty ' + className} role="img" aria-label={'Loading saved reference image for ' + (match?.cardNumber || 'this card')}><span>Checking saved card images…</span><small>{match?.language || 'Card reference'}</small></div>
+  if (!memoryChecked && !failed) {
+    return <div className={'catalogue-reference-empty ' + className} role="img" aria-label={'Checking saved reference image for ' + (match?.cardNumber || 'this card')}><span>Checking saved card images…</span><small>{match?.language || 'Card reference'}</small></div>
   }
 
   return <div className={'catalogue-reference-empty ' + className} role="img" aria-label={'No reference image available for ' + (match?.cardNumber || 'this card')}><span>Image unavailable</span><small>{match?.language || 'Card reference'}</small></div>
