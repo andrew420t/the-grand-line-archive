@@ -68,9 +68,16 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
 
   const alternateOfficial = (printings || [])
     .filter((candidate) => candidate.card_key === printing.card_key && candidate.site === language && candidate.key !== printing.key)
-    .map((candidate) => officialImageFor(candidate, locatorFor(candidate)))
+    .map((candidate) => {
+      const official = officialImageFor(candidate, locatorFor(candidate))
+      if (official) return { urls: [official.proxyUrl, official.directUrl].filter(Boolean), site: candidate.site }
+      // The Chinese feed supplies its own hosted image URLs and numeric image
+      // locators. Retry same-card CN printings only; never borrow EN/JP artwork.
+      if (candidate.site === 'cn' && candidate.image_url) return { urls: [candidate.image_url], site: 'cn' }
+      return null
+    })
     .filter(Boolean)
-  const alternateUrls = alternateOfficial.flatMap((candidate) => [candidate.proxyUrl, candidate.directUrl])
+  const alternateUrls = alternateOfficial.flatMap((candidate) => candidate.urls)
 
   const canUseSameLanguageFallback = (printing.site === 'tcgcsv' || printing.site === language) && ['en', 'jp'].includes(language)
   const normalizedNumber = String(cardNumber || '').toUpperCase().replace(/^(OP|EB|ST|PRB)-(\d{2})-/, '$1$2-')
@@ -96,7 +103,9 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
   } else if (exactOtherSourceImage) {
     source = printing.site === 'cn' ? 'Chinese catalogue source image' : 'Third-party catalogue image source'
   } else if (usesAlternateOfficialFallback) {
-    source = 'Bandai official alternate printing via OPTCG image proxy (exact finish may differ)'
+    source = language === 'cn'
+      ? 'Chinese catalogue alternate printing image (exact finish may differ)'
+      : 'Bandai official alternate printing via OPTCG image proxy (exact finish may differ)'
   } else if (usesBaseImageFallback) {
     source = 'Bandai official ' + (language === 'jp' ? 'Japanese' : 'English') + ' base-card image via OPTCG image proxy (special finish may differ)'
   }

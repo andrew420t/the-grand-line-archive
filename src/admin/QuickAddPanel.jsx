@@ -148,6 +148,7 @@ export default function QuickAddPanel({
     setDuplicateMatches([])
     setError('')
     setSuccess('')
+    setCatalogueSearchNotice('')
   }
 
   const lookupCard = async () => {
@@ -202,6 +203,7 @@ export default function QuickAddPanel({
     setAllowVariant(false)
     setDuplicateMatches([])
     setCatalogueMatches([])
+    setCatalogueSearchNotice('')
     setSuccess(match.officialImageOnly
       ? 'Official Bandai image reference attached. Complete the missing card details and verify the exact printing before saving.'
       : 'Reference details filled in. Check the information against your physical card.')
