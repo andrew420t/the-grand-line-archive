@@ -298,6 +298,10 @@ export async function findCatalogueMatches(cardNumber) {
 
 export function catalogueMatchToForm(match) {
   const category = String(match.category || '').toLowerCase()
+  // Image-only references are not verified printing identities. Keep their
+  // image URL, but never persist the synthetic reference ID as a printing key.
+  const verifiedMatchId = match.officialImageOnly ? '' : (match.id || '')
+  const verifiedPrintingKey = match.officialImageOnly ? '' : (match.printingKey || '')
   return {
     name: match.name || '',
     card_number: match.cardNumber || '',
@@ -315,11 +319,11 @@ export function catalogueMatchToForm(match) {
     trigger_text: match.trigger || '',
     attributes: match.attributes || '',
     reference_image_url: match.imageUrl || '',
-    reference_printing_key: match.printingKey || '',
-    reference_match_id: match.id || '',
+    reference_printing_key: verifiedPrintingKey,
+    reference_match_id: verifiedMatchId,
     reference_image_source: match.source || match.imageSource || '',
-    catalogue_match_id: match.id || '',
-    catalogue_printing_key: match.printingKey || '',
+    catalogue_match_id: verifiedMatchId,
+    catalogue_printing_key: verifiedPrintingKey,
     catalogue_reference_image_url: match.imageUrl || '',
     catalogue_reference_image_source: match.source || match.imageSource || '',
   }
