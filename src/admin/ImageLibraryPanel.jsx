@@ -39,14 +39,21 @@ export default function ImageLibraryPanel({ user }) {
   const [referenceNextOffset, setReferenceNextOffset] = useState(0)
   const [referenceLoading, setReferenceLoading] = useState(false)
   const [referenceError, setReferenceError] = useState('')
+  const [referenceFilterOptions, setReferenceFilterOptions] = useState({ languages: [], sets: [], rarities: [], cardTypes: [], colors: [], variants: [] })
   const [savedLibraryDraft] = useState(() => readPersistentDraft(user?.id, 'image-library', {}))
   const [referenceQuery, setReferenceQuery] = useState(() => savedLibraryDraft.referenceQuery || '')
   const [referenceLanguage, setReferenceLanguage] = useState(() => savedLibraryDraft.referenceLanguage || 'all')
+  const [referenceSet, setReferenceSet] = useState(() => savedLibraryDraft.referenceSet || 'all')
+  const [referenceRarity, setReferenceRarity] = useState(() => savedLibraryDraft.referenceRarity || 'all')
+  const [referenceCardType, setReferenceCardType] = useState(() => savedLibraryDraft.referenceCardType || 'all')
+  const [referenceColor, setReferenceColor] = useState(() => savedLibraryDraft.referenceColor || 'all')
+  const [referenceVariant, setReferenceVariant] = useState(() => savedLibraryDraft.referenceVariant || 'all')
+  const [referenceImageStatus, setReferenceImageStatus] = useState(() => savedLibraryDraft.referenceImageStatus || 'all')
   const [failedReferenceIds, setFailedReferenceIds] = useState([])
   const [loadedReferenceIds, setLoadedReferenceIds] = useState([])
-  const [fallbackReferenceIds, setFallbackReferenceIds] = useState([])
-  const [imageRetryVersion, setImageRetryVersion] = useState(0)
+  const [referenceImageIndexes, setReferenceImageIndexes] = useState({})
   const [matrixRunning, setMatrixRunning] = useState(false)
+  const [coverageLoading, setCoverageLoading] = useState(false)
   const [matrixReport, setMatrixReport] = useState(() => savedLibraryDraft.matrixReport || null)
   const [matrixResults, setMatrixResults] = useState(() => savedLibraryDraft.matrixResults || [])
   const [matrixError, setMatrixError] = useState('')
@@ -109,29 +116,46 @@ export default function ImageLibraryPanel({ user }) {
 
   useEffect(() => {
     if (!user?.id) return
-    savePersistentDraft(user.id, 'image-library', { referenceQuery, referenceLanguage, donSetSelections, matrixReport, matrixResults })
-  }, [user?.id, referenceQuery, referenceLanguage, donSetSelections, matrixReport, matrixResults])
+    savePersistentDraft(user.id, 'image-library', {
+      referenceQuery, referenceLanguage, referenceSet, referenceRarity, referenceCardType,
+      referenceColor, referenceVariant, referenceImageStatus, donSetSelections, matrixReport, matrixResults,
+    })
+  }, [user?.id, referenceQuery, referenceLanguage, referenceSet, referenceRarity, referenceCardType, referenceColor, referenceVariant, referenceImageStatus, donSetSelections, matrixReport, matrixResults])
 
   useEffect(() => {
     loadImages()
     return () => { imageListRequestId.current += 1 }
   }, [loadImages])
-  useEffect(() => {
-    let active = true
-    getCatalogueCoverageReport()
-      .then((report) => { if (active) setCoverage(report) })
-      .catch((loadError) => { if (active) setCoverageError(loadError.message) })
-    return () => { active = false }
-  }, [])
+  const loadCoverageReport = async () => {
+    if (coverage || coverageLoading) return
+    setCoverageLoading(true)
+    setCoverageError('')
+    try {
+      setCoverage(await getCatalogueCoverageReport())
+    } catch (loadError) {
+      setCoverageError(loadError.message || 'Could not load catalogue coverage.')
+    } finally {
+      setCoverageLoading(false)
+    }
+  }
 
   const loadReferenceImages = useCallback(async (offset = 0) => {
     const requestId = ++referenceRequestId.current
     setReferenceLoading(true); setReferenceError('')
     try {
-      const page = await getCatalogueImageGallery({ offset, limit: 24, query: referenceQuery, language: referenceLanguage })
+      const page = await getCatalogueImageGallery({
+        offset, limit: 24, query: referenceQuery, language: referenceLanguage,
+        set: referenceSet, rarity: referenceRarity, cardType: referenceCardType,
+        color: referenceColor, variant: referenceVariant, imageStatus: referenceImageStatus,
+      })
       if (requestId !== referenceRequestId.current) return
       setReferenceImages((current) => offset === 0 ? page.items : [...current, ...page.items])
-      if (offset === 0) { setFailedReferenceIds([]); setLoadedReferenceIds([]); setFallbackReferenceIds([]) }
+      if (offset === 0) {
+        setFailedReferenceIds([])
+        setLoadedReferenceIds([])
+        setReferenceImageIndexes({})
+      }
+      setReferenceFilterOptions(page.filters || { languages: [], sets: [], rarities: [], cardTypes: [], colors: [], variants: [] })
       setReferenceTotal(page.total)
       setReferenceNextOffset(page.nextOffset)
     } catch (loadError) {
@@ -139,7 +163,7 @@ export default function ImageLibraryPanel({ user }) {
     } finally {
       if (requestId === referenceRequestId.current) setReferenceLoading(false)
     }
-  }, [referenceQuery, referenceLanguage])
+  }, [referenceQuery, referenceLanguage, referenceSet, referenceRarity, referenceCardType, referenceColor, referenceVariant, referenceImageStatus])
   useEffect(() => {
     loadReferenceImages(0)
     return () => { referenceRequestId.current += 1 }
