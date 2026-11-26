@@ -83,7 +83,7 @@ export function getSupplementalSampleMatches(cardNumber) {
       rarity: sample.rarity,
       variant: 'Base',
       variantLabel: 'Base',
-      imageUrl: buildCatalogueImageProxyUrl(sample.imageUrl, sample.languageCode) || sample.imageUrl,
+      imageUrl: buildCatalogueImageProxyUrl(sample.imageUrl) || sample.imageUrl,
       imageUrls: [buildCatalogueImageProxyUrl(sample.imageUrl, sample.languageCode), sample.imageUrl].filter(Boolean),
       fallbackImageUrl: sample.imageUrl,
       sourceText: 'Supplemental scanner sample only; upstream catalogue is stale for this set.',

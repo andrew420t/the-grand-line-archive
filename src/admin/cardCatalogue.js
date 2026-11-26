@@ -913,7 +913,7 @@ export async function getCatalogueReferenceTestMatrix() {
       const selected = explicitSamples.length
         ? explicitSamples.map((sample) => ({
           ...sample,
-          imageUrl: buildCatalogueImageProxyUrl(sample.imageUrl, language) || sample.imageUrl,
+          imageUrl: buildCatalogueImageProxyUrl(sample.imageUrl) || sample.imageUrl,
           language,
           setCode: formatSetCode(set),
           setName: 'Official Bandai card-list sample',
@@ -926,7 +926,7 @@ export async function getCatalogueReferenceTestMatrix() {
       const imageOverrides = officialImageOverrides[set]?.[language] || {}
       for (const item of selected) {
         if (imageOverrides[item.cardNumber]) {
-          item.imageUrl = buildCatalogueImageProxyUrl(imageOverrides[item.cardNumber], language) || imageOverrides[item.cardNumber]
+          item.imageUrl = buildCatalogueImageProxyUrl(imageOverrides[item.cardNumber]) || imageOverrides[item.cardNumber]
           item.source = 'Bandai official image reference (cache-busted retry)'
         }
       }

@@ -29,7 +29,7 @@ export function buildOfficialImageProxyUrl(imageId, language = 'en') {
   return '/_card-image/bandai/' + lang + '/' + encodeURIComponent(id) + '.png'
 }
 
-export function buildCatalogueImageProxyUrl(imageUrl, language = 'en') {
+export function buildCatalogueImageProxyUrl(imageUrl) {
   const raw = String(imageUrl || '').trim()
   if (!raw) return ''
   let url
@@ -62,10 +62,10 @@ function uniqueUrls(values) {
   return [...new Set(values.filter((url) => typeof url === 'string' && url.trim()))]
 }
 
-function sourceImageCandidates(url, language) {
+function sourceImageCandidates(url) {
   const raw = String(url || '').trim()
   if (!raw) return []
-  return uniqueUrls([buildCatalogueImageProxyUrl(raw, language), raw])
+  return uniqueUrls([buildCatalogueImageProxyUrl(raw), raw])
 }
 
 export function resolveCatalogueImage({ printing, index = {}, printings = [], language = 'en', cardNumber = '' } = {}) {
@@ -88,14 +88,14 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
   const exactProductPhoto = printing.site === 'tcgcsv' && Boolean(directProductUrl)
   const exactOtherSourceImage = !exactOfficial && printing.site !== 'tcgcsv' && Boolean(directProductUrl)
   const exactUrls = exactOfficial
-    ? uniqueUrls([exactOfficial.proxyUrl, exactOfficial.directUrl, ...sourceImageCandidates(directProductUrl, language)])
+    ? uniqueUrls([exactOfficial.proxyUrl, exactOfficial.directUrl, ...sourceImageCandidates(directProductUrl)])
     : sourceImageCandidates(directProductUrl, language)
   const alternateUrls = (printings || [])
     .filter((candidate) => candidate.card_key === printing.card_key && candidate.site === language && candidate.key !== printing.key)
     .flatMap((candidate) => {
       const official = officialImageFor(candidate, locatorFor(candidate))
       if (official) return [official.proxyUrl, official.directUrl]
-      return candidate.site === 'cn' ? sourceImageCandidates(candidate.image_url, language) : []
+      return candidate.site === 'cn' ? sourceImageCandidates(candidate.image_url) : []
     })
 
   const canUseSameLanguageFallback = (printing.site === 'tcgcsv' || printing.site === language) && ['en', 'jp'].includes(language)
