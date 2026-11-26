@@ -47,8 +47,8 @@ export default function ImageLibraryPanel({ user }) {
   const [fallbackReferenceIds, setFallbackReferenceIds] = useState([])
   const [imageRetryVersion, setImageRetryVersion] = useState(0)
   const [matrixRunning, setMatrixRunning] = useState(false)
-  const [matrixReport, setMatrixReport] = useState(null)
-  const [matrixResults, setMatrixResults] = useState([])
+  const [matrixReport, setMatrixReport] = useState(() => savedLibraryDraft.matrixReport || null)
+  const [matrixResults, setMatrixResults] = useState(() => savedLibraryDraft.matrixResults || [])
   const [matrixError, setMatrixError] = useState('')
   const [donSetSelections, setDonSetSelections] = useState(() => savedLibraryDraft.donSetSelections || {})
   const [donSetSaving, setDonSetSaving] = useState('')
@@ -109,8 +109,8 @@ export default function ImageLibraryPanel({ user }) {
 
   useEffect(() => {
     if (!user?.id) return
-    savePersistentDraft(user.id, 'image-library', { referenceQuery, referenceLanguage, donSetSelections })
-  }, [user?.id, referenceQuery, referenceLanguage, donSetSelections])
+    savePersistentDraft(user.id, 'image-library', { referenceQuery, referenceLanguage, donSetSelections, matrixReport, matrixResults })
+  }, [user?.id, referenceQuery, referenceLanguage, donSetSelections, matrixReport, matrixResults])
 
   useEffect(() => {
     loadImages()

@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [master]
   push:
-    branches: [feature/card-identification, feature/scanner-number-first-verification, preview/scanner-staging-restore]
+    branches: [feature/card-identification, feature/scanner-number-first-verification, preview/scanner-staging-restore, preview/mobile-resume-state]
 
 jobs:
   build-and-test:
