@@ -1,5 +1,5 @@
 import { supabase } from '../lib/supabase'
-import { resolveCatalogueImage, buildOfficialImageProxyUrl } from './catalogueImageReference.js'
+import { resolveCatalogueImage } from './catalogueImageReference.js'
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 import { createOfficialImageOnlyMatch } from './officialImageOnlyFallback.js'
@@ -13,15 +13,6 @@ const LANGUAGES = ['en', 'jp', 'cn']
 const REFERENCE_TEST_LANGUAGES = ['en', 'jp']
 const LANGUAGE_LABELS = { en: 'English', jp: 'Japanese', cn: 'Chinese (CN)', tcgcsv: 'English (promo/stamped)' }
 
-const proxyBandaiImageUrl = (url, language = 'en') => {
-  const match = String(url || '').match(/\/([^/?]+)\.png(?:[?#]|$)/i)
-  if (!match) return url || ''
-  try {
-    return buildOfficialImageProxyUrl(decodeURIComponent(match[1]), language) || url
-  } catch {
-    return url
-  }
-}
 const CACHE_TTL = 6 * 60 * 60 * 1000
 
 let cataloguePromise
@@ -922,7 +913,6 @@ export async function getCatalogueReferenceTestMatrix() {
       const selected = explicitSamples.length
         ? explicitSamples.map((sample) => ({
           ...sample,
-          imageUrl: proxyBandaiImageUrl(sample.imageUrl, language),
           language,
           setCode: formatSetCode(set),
           setName: 'Official Bandai card-list sample',
@@ -935,7 +925,7 @@ export async function getCatalogueReferenceTestMatrix() {
       const imageOverrides = officialImageOverrides[set]?.[language] || {}
       for (const item of selected) {
         if (imageOverrides[item.cardNumber]) {
-          item.imageUrl = proxyBandaiImageUrl(imageOverrides[item.cardNumber], language)
+          item.imageUrl = imageOverrides[item.cardNumber]
           item.source = 'Bandai official image reference (cache-busted retry)'
         }
       }
@@ -945,7 +935,6 @@ export async function getCatalogueReferenceTestMatrix() {
         selected.push({
           id: 'bandai-fallback:' + language + ':' + set + ':' + sample.cardNumber,
           ...sample,
-          imageUrl: proxyBandaiImageUrl(sample.imageUrl, language),
           language,
           setCode: formatSetCode(set),
           setName: 'Official Bandai card list',
