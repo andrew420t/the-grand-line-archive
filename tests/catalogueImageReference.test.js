@@ -46,6 +46,14 @@ test('validates English, Japanese, DON and alternate-printing proxy URLs', () =>
   assert.equal(buildOfficialImageProxyUrl('https://evil.example/a.png', 'en'), '')
 })
 
+test('uses the original Chinese catalogue image and does not substitute English artwork', () => {
+  const printing = { key: 'cn-card', card_key: 'law', site: 'cn', image_url: 'https://source.windoent.com/OnePiecePc/Picture/1705891765183OP06-050.png' }
+  const result = resolveCatalogueImage({ printing, index: {}, printings: [printing], language: 'cn', cardNumber: 'OP06-050' })
+  assert.equal(result.imageUrl, printing.image_url)
+  assert.equal(result.usesBaseImageFallback, false)
+  assert.equal(result.source, 'Chinese catalogue source image')
+})
+
 test('does not invent direct image URLs for DON!! or malformed card numbers', () => {
   assert.equal(buildOfficialBaseImageUrl('DON!!', 'en'), '')
   assert.equal(buildOfficialBaseImageUrl('OP18-1000', 'en'), '')

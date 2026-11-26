@@ -60,7 +60,8 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
 
   const exactOfficial = officialImageFor(printing, locatorFor(printing))
   const directProductUrl = String(printing.image_url || '')
-  const exactProductPhoto = !exactOfficial && Boolean(directProductUrl)
+  const exactProductPhoto = printing.site === 'tcgcsv' && Boolean(directProductUrl)
+  const exactOtherSourceImage = !exactOfficial && printing.site !== 'tcgcsv' && Boolean(directProductUrl)
   const exactUrls = exactOfficial
     ? [exactOfficial.proxyUrl, exactOfficial.directUrl]
     : [directProductUrl]
@@ -71,7 +72,7 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
     .filter(Boolean)
   const alternateUrls = alternateOfficial.flatMap((candidate) => [candidate.proxyUrl, candidate.directUrl])
 
-  const canUseSameLanguageFallback = printing.site === 'tcgcsv' || printing.site === language
+  const canUseSameLanguageFallback = (printing.site === 'tcgcsv' || printing.site === language) && ['en', 'jp'].includes(language)
   const normalizedNumber = String(cardNumber || '').toUpperCase().replace(/^(OP|EB|ST|PRB)-(\d{2})-/, '$1$2-')
   const baseProxyUrl = canUseSameLanguageFallback ? buildOfficialImageProxyUrl(normalizedNumber, language) : ''
   const baseDirectUrl = canUseSameLanguageFallback ? buildOfficialBaseImageUrl(cardNumber, language) : ''
@@ -84,7 +85,7 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
   ])
 
   const usesAlternateOfficialFallback = !exactOfficial && !exactProductPhoto && alternateUrls.length > 0
-  const hasExactImage = Boolean(exactOfficial || exactProductPhoto)
+  const hasExactImage = Boolean(exactOfficial || exactProductPhoto || exactOtherSourceImage)
   const usesBaseImageFallback = !hasExactImage && !usesAlternateOfficialFallback && Boolean(baseProxyUrl || baseDirectUrl)
 
   let source = 'No image reference'
@@ -92,6 +93,8 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
     source = 'Bandai official ' + (printing.site === 'jp' ? 'Japanese' : 'English') + ' image via OPTCG image proxy'
   } else if (exactProductPhoto) {
     source = 'Catalogue product image (TCGPlayer / TCGCSV source)'
+  } else if (exactOtherSourceImage) {
+    source = printing.site === 'cn' ? 'Chinese catalogue source image' : 'Third-party catalogue image source'
   } else if (usesAlternateOfficialFallback) {
     source = 'Bandai official alternate printing via OPTCG image proxy (exact finish may differ)'
   } else if (usesBaseImageFallback) {

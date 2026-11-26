@@ -313,11 +313,13 @@ export async function findCatalogueSearchMatches(query, { limit = 12 } = {}) {
   const catalogue = await getCatalogue()
   const matchedNumbers = new Map()
   for (const language of LANGUAGES) {
-    const data = catalogue.languages?.[language]
-    for (const observation of data?.observations || []) {
-      if (observation.superseded_at || !normalizeSearchText(observation.name).includes(normalized)) continue
-      const card = safeMapGet(catalogue.cardsByKey, observation.card_key)
-      if (!card?.number) continue
+    const index = catalogue.indexes?.[language] || {}
+    for (const card of catalogue.cards || []) {
+      const observations = safeMapGet(index.observationsByCard, card.key) || []
+      const nameMatches = observations.some((observation) =>
+        !observation.superseded_at && normalizeSearchText(observation.name).includes(normalized),
+      )
+      if (!nameMatches || !card.number) continue
       const number = baseCardNumber(card.number)
       if (number && !matchedNumbers.has(number)) matchedNumbers.set(number, card)
       if (matchedNumbers.size >= Math.max(1, Math.min(20, limit))) break
@@ -867,7 +869,8 @@ export async function getCatalogueReferenceTestMatrix() {
       const officialUrl = locator?.image_id
         ? (language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
         : ''
-      const imageUrl = officialUrl || printing.image_url || ''
+      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language, cardNumber })
+      const imageUrl = imageReference.imageUrl || printing.image_url || ''
       if (!imageUrl) continue
       const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
       const products = links.map((link) => safeMapGet(index.productsByKey, link.product_key)).filter(Boolean)
@@ -944,7 +947,7 @@ export async function getCatalogueReferenceTestMatrix() {
       }
     }
   }
-  return { expectedTotal: expectedSets.length * LANGUAGES.length * 2, items, missingSlots, checkedAt: new Date().toISOString() }
+  return { expectedTotal: expectedSets.length * REFERENCE_TEST_LANGUAGES.length * 2, items, missingSlots, checkedAt: new Date().toISOString() }
 }
 
 /** Card-number-first reference lookup shared by search, Quick Add and scanner. */
