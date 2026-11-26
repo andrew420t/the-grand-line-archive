@@ -516,7 +516,7 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     }
     const currentStatus = String(product.raw?.status || '').trim().toLowerCase()
     const willPublish = currentStatus !== 'active'
-    const nextStatus = willPublish ? 'active' : 'draft'
+    const nextStatus = willPublish ? 'active' : 'inactive'
     const actionLabel = willPublish ? 'post to the public Archive' : 'remove from the public Archive'
     if (!window.confirm(`Are you sure you want to ${actionLabel}: "${product.name}"?`)) return
 
