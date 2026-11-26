@@ -24,6 +24,7 @@ export default function ImageLibraryPanel({ user }) {
   const donSetSaveLock = useRef(false)
   const [files, setFiles] = useState([])
   const [filesRestored, setFilesRestored] = useState(false)
+  const [fileDraftWritable, setFileDraftWritable] = useState(false)
   const [fileDraftError, setFileDraftError] = useState('')
   const [images, setImages] = useState([])
   const [loading, setLoading] = useState(true)
@@ -72,17 +73,21 @@ export default function ImageLibraryPanel({ user }) {
       .then((restoredFiles) => {
         if (active) {
           setFiles(restoredFiles)
+          setFileDraftWritable(true)
           setFilesRestored(true)
         }
       })
       .catch((restoreError) => {
-        if (active) setFileDraftError(restoreError.message || 'The saved image upload queue could not be restored.')
+        if (active) {
+          setFileDraftError(restoreError.message || 'The saved image upload queue could not be restored.')
+          setFilesRestored(true)
+        }
       })
     return () => { active = false }
   }, [user?.id])
 
   useEffect(() => {
-    if (!user?.id || !filesRestored) return undefined
+    if (!user?.id || !filesRestored || !fileDraftWritable) return undefined
     let active = true
     const save = () => {
       saveAdminLibraryFileDraft(user.id, files)
@@ -100,7 +105,7 @@ export default function ImageLibraryPanel({ user }) {
       document.removeEventListener('visibilitychange', flushWhenHidden)
       window.removeEventListener('pagehide', save)
     }
-  }, [user?.id, files, filesRestored])
+  }, [user?.id, files, filesRestored, fileDraftWritable])
 
   useEffect(() => {
     if (!user?.id) return

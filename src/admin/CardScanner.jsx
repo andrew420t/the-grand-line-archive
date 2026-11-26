@@ -56,6 +56,7 @@ export default function CardScanner({
   const [manualCropPercent, setManualCropPercent] = useState(() => savedScannerDraft.manualCropPercent || { x: 0, y: 0, width: 100, height: 100 })
   const cropPreviewRef = useRef(null)
   const previousFrontPhotoFile = useRef(frontPhoto?.file)
+  const hasObservedFrontPhoto = useRef(Boolean(frontPhoto?.file))
   const cropDragRef = useRef(null)
 
   const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
@@ -78,8 +79,14 @@ export default function CardScanner({
   }
 
   useEffect(() => {
-    if (previousFrontPhotoFile.current === frontPhoto?.file) return
-    previousFrontPhotoFile.current = frontPhoto?.file
+    if (!frontPhoto?.file) return
+    if (!hasObservedFrontPhoto.current) {
+      hasObservedFrontPhoto.current = true
+      previousFrontPhotoFile.current = frontPhoto.file
+      return
+    }
+    if (previousFrontPhotoFile.current === frontPhoto.file) return
+    previousFrontPhotoFile.current = frontPhoto.file
     setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 })
     setManualCropConfirmed(false)
     setManualCropConfirmedForFile(null)
