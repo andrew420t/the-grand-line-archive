@@ -40,6 +40,12 @@ import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
 import { buildProductEditPayload, parseInventoryStockUpdate, productDeleteFailure, productUpdateFailure } from './productEditPayload'
 import { findSetCodeMatches } from './productSchema'
+import {
+  loadAdminPhotoDraft,
+  readAdminWorkspaceDraft,
+  saveAdminPhotoDraft,
+  saveAdminWorkspaceDraft,
+} from './adminDraftStorage'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -84,8 +90,11 @@ export default function AdminDashboard({
   onRefreshProducts,
   onSaveSiteSettings,
 }) {
-  const [activeSection, setActiveSection] = useState('overview')
+  const [workspaceDraft] = useState(() => readAdminWorkspaceDraft(user?.id))
+  const [activeSection, setActiveSection] = useState(() => workspaceDraft?.activeSection || 'overview')
   const [photos, setPhotos] = useState([])
+  const [photosReady, setPhotosReady] = useState(false)
+  const [photoDraftError, setPhotoDraftError] = useState('')
   const photosRef = useRef(photos)
   photosRef.current = photos
 
@@ -94,9 +103,70 @@ export default function AdminDashboard({
       if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl)
     })
   }, [])
-  const [scanFields, setScanFields] = useState(blankScanFields)
+
+  const [scanFields, setScanFields] = useState(() => workspaceDraft?.scanFields || blankScanFields())
   const [scanVersion, setScanVersion] = useState(0)
-  const [rawText, setRawText] = useState('')
+  const [rawText, setRawText] = useState(() => workspaceDraft?.rawText || '')
+
+  useEffect(() => {
+    let active = true
+    setPhotosReady(false)
+    loadAdminPhotoDraft(user?.id)
+      .then((restoredPhotos) => {
+        if (!active) {
+          restoredPhotos.forEach((photo) => {
+            if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl)
+          })
+          return
+        }
+        setPhotos(restoredPhotos)
+        setPhotosReady(true)
+      })
+      .catch((restoreError) => {
+        if (!active) return
+        setPhotoDraftError(restoreError.message || 'Saved photographs could not be restored.')
+        setPhotosReady(true)
+      })
+    return () => { active = false }
+  }, [user?.id])
+
+  useEffect(() => {
+    if (!user?.id) return
+    saveAdminWorkspaceDraft(user.id, { activeSection, scanFields, rawText })
+  }, [user?.id, activeSection, scanFields, rawText])
+
+  useEffect(() => {
+    if (!user?.id || !photosReady) return undefined
+    let active = true
+    const save = () => {
+      saveAdminPhotoDraft(user.id, photos)
+        .then(() => {
+          if (active) setPhotoDraftError('')
+        })
+        .catch((saveError) => {
+          if (active) setPhotoDraftError(saveError.message || 'Card photographs could not be saved on this device.')
+        })
+    }
+    const timeout = window.setTimeout(save, 260)
+    const flushWhenHidden = () => {
+      if (document.visibilityState === 'hidden') {
+        window.clearTimeout(timeout)
+        save()
+      }
+    }
+    const flushOnPageHide = () => {
+      window.clearTimeout(timeout)
+      save()
+    }
+    document.addEventListener('visibilitychange', flushWhenHidden)
+    window.addEventListener('pagehide', flushOnPageHide)
+    return () => {
+      active = false
+      window.clearTimeout(timeout)
+      document.removeEventListener('visibilitychange', flushWhenHidden)
+      window.removeEventListener('pagehide', flushOnPageHide)
+    }
+  }, [user?.id, photos, photosReady])
 
   const customerSummary = useMemo(() => {
     const customers = new Map()
@@ -144,6 +214,12 @@ export default function AdminDashboard({
         </div>
         <span className="admin-role"><Check size={14} /> Admin profile verified</span>
       </div>
+      <div className="admin-security-note admin-draft-note">
+        <Check size={16} />
+        <span>Unfinished card details, scanner results, and card photographs are saved locally on this device so you can recover your work if the browser reloads.</span>
+      </div>
+      {photoDraftError && <div className="error-notice"><ShieldAlert size={15} /><span>{photoDraftError}</span></div>}
+      {!photosReady && <p className="admin-muted">Restoring saved card photographs…</p>}
 
       <div className="admin-dashboard__workspace">
         <nav className="admin-navigation" aria-label="Administrator sections">
