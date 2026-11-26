@@ -168,7 +168,7 @@ export default function BulkImportPanel({ products, categories, sets, user, onSa
         }
         const payload = buildNewProductPayload(form, row.matchingSet?.id || '', usesExtended)
         if (Number(payload.price) === 0) payload.status = 'inactive'
-        else payload.status = 'draft'
+        else payload.status = 'inactive'
         const insert = await supabase.from('products').insert(payload)
         if (insert.error) result.failures.push({ row: row._row, name: row.name, error: insert.error.message })
         else {
