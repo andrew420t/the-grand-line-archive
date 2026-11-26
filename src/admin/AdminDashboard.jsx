@@ -147,24 +147,19 @@ export default function AdminDashboard({
           if (active) setPhotoDraftError(saveError.message || 'Card photographs could not be saved on this device.')
         })
     }
-    const timeout = window.setTimeout(save, 260)
+    // Start the IndexedDB write immediately after a photo change. The
+    // visibility/pagehide handlers flush again when the browser backgrounds or
+    // discards the tab.
+    save()
     const flushWhenHidden = () => {
-      if (document.visibilityState === 'hidden') {
-        window.clearTimeout(timeout)
-        save()
-      }
-    }
-    const flushOnPageHide = () => {
-      window.clearTimeout(timeout)
-      save()
+      if (document.visibilityState === 'hidden') save()
     }
     document.addEventListener('visibilitychange', flushWhenHidden)
-    window.addEventListener('pagehide', flushOnPageHide)
+    window.addEventListener('pagehide', save)
     return () => {
       active = false
-      window.clearTimeout(timeout)
       document.removeEventListener('visibilitychange', flushWhenHidden)
-      window.removeEventListener('pagehide', flushOnPageHide)
+      window.removeEventListener('pagehide', save)
     }
   }, [user?.id, photos, photosReady])
 
