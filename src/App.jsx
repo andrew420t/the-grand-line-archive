@@ -900,6 +900,10 @@ function Storefront() {
           }
         />
         <Route
+          path="/welcome"
+          element={<WelcomePage user={user} onSignIn={() => setAuthOpen(true)} />}
+        />
+        <Route
           path="/"
           element={
             <main>
@@ -1156,6 +1160,94 @@ function Storefront() {
   )
 }
 
+function WelcomePage({ user, onSignIn }) {
+  const [status, setStatus] = useState('checking')
+  const [confirmedEmail, setConfirmedEmail] = useState('')
+
+  useEffect(() => {
+    if (!supabase) {
+      setStatus('unavailable')
+      return undefined
+    }
+
+    let active = true
+    const applySession = (session) => {
+      if (!active) return
+      if (session?.user) {
+        setConfirmedEmail(session.user.email || '')
+        setStatus('confirmed')
+      } else {
+        setStatus('pending')
+      }
+    }
+
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (!active) return
+      if (error) setStatus('error')
+      else applySession(data.session)
+    }).catch(() => {
+      if (active) setStatus('error')
+    })
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) applySession(session)
+    })
+
+    return () => {
+      active = false
+      subscription.unsubscribe()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (user?.email) {
+      setConfirmedEmail(user.email)
+      setStatus('confirmed')
+    }
+  }, [user])
+
+  const isConfirmed = status === 'confirmed'
+
+  return (
+    <main className="welcome-page page-width">
+      <div className="welcome-page__surround">
+        <span className="welcome-page__orbit welcome-page__orbit--one" />
+        <span className="welcome-page__orbit welcome-page__orbit--two" />
+        <section className="welcome-card" aria-labelledby="welcome-title">
+          <div className={`welcome-card__seal ${isConfirmed ? 'is-confirmed' : ''}`}>
+            {isConfirmed ? <BadgeCheck size={34} strokeWidth={1.4} /> : <Anchor size={34} strokeWidth={1.3} />}
+          </div>
+          <p className="eyebrow">{isConfirmed ? 'CREW MEMBERSHIP CONFIRMED' : 'GRAND LINE ARCHIVE'}</p>
+          <h1 id="welcome-title">{isConfirmed ? <>Welcome to the <em>crew.</em></> : <>Your next voyage <em>awaits.</em></>}</h1>
+          {status === 'checking' && <p className="welcome-card__copy">Checking your confirmation and preparing your place aboard…</p>}
+          {isConfirmed && (
+            <>
+              <p className="welcome-card__copy">Your email is confirmed and your account is ready. We’re glad to have you aboard. The archive is yours to explore.</p>
+              {confirmedEmail && <p className="welcome-card__email"><Mail size={15} /> {confirmedEmail}</p>}
+              <div className="welcome-card__rule"><span /><Anchor size={17} /><span /></div>
+              <div className="welcome-card__actions">
+                <Link className="button button--gold" to="/shop">Explore the archive <ArrowRight size={16} /></Link>
+                <Link className="button button--outline" to="/account/orders">View your account</Link>
+              </div>
+              <p className="welcome-card__footnote">Thoughtfully collected. Carefully sent. Made for collectors in Gibraltar.</p>
+            </>
+          )}
+          {(status === 'pending' || status === 'error' || status === 'unavailable') && (
+            <>
+              <p className="welcome-card__copy">We reached the welcome page, but couldn’t confirm an active sign-in session in this browser. Your email may already be verified. Sign in to continue, or return to the archive.</p>
+              <div className="welcome-card__actions">
+                <button className="button button--gold" type="button" onClick={onSignIn}>Sign in to continue <ArrowRight size={16} /></button>
+                <Link className="button button--outline" to="/shop">Return to the archive</Link>
+              </div>
+              <p className="welcome-card__footnote">Having trouble? Try opening the confirmation link in the same browser where you created your account.</p>
+            </>
+          )}
+        </section>
+      </div>
+    </main>
+  )
+}
+
 function EmptyCatalogue({ error }) {
   return (
     <div className="empty-catalogue">
@@ -1189,7 +1281,10 @@ function AuthModal({ onClose, message, onMessage }) {
         : await supabase.auth.signUp({
             email,
             password,
-            options: { data: { full_name: fullName } },
+            options: {
+              data: { full_name: fullName, display_name: fullName },
+              emailRedirectTo: `${window.location.origin}/welcome`,
+            },
           })
     setBusy(false)
     if (result.error) {
