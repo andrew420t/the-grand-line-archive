@@ -170,7 +170,7 @@ export function buildNewProductPayload(form, setId, includeCardDetails) {
     image_url: null,
     featured: Boolean(form.featured),
     condition: form.condition,
-    status: 'draft',
+    status: 'inactive',
     created_at: timestamp,
     updated_at: timestamp,
   }
