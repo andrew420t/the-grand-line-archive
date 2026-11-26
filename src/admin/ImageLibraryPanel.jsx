@@ -177,28 +177,54 @@ export default function ImageLibraryPanel({ user }) {
       const matrix = await getCatalogueReferenceTestMatrix()
       setMatrixReport(matrix)
       const results = []
-      // Check ten official image references at a time to avoid flooding image hosts.
-      for (let offset = 0; offset < matrix.items.length; offset += 10) {
-        const batch = matrix.items.slice(offset, offset + 10)
+      // Check up to 20 references at a time; variant checks retry the same-card
+      // base image if the exact parallel/SP artwork is not available in that language.
+      for (let offset = 0; offset < matrix.items.length; offset += 20) {
+        const batch = matrix.items.slice(offset, offset + 20)
         const checked = await Promise.all(batch.map((item) => new Promise((resolve) => {
           const image = new window.Image()
+          const candidates = [...new Set([item.imageUrl, item.fallbackImageUrl].filter(Boolean))]
+          let candidateIndex = 0
           let settled = false
+          let timeout
           const finish = (status) => {
             if (settled) return
             settled = true
             window.clearTimeout(timeout)
-            resolve({ ...item, status })
+            resolve({ ...item, status, checkedUrl: candidates[candidateIndex] || '' })
           }
-          const timeout = window.setTimeout(() => finish('timeout'), 12000)
-          image.onload = () => finish('loaded')
-          image.onerror = () => finish('failed')
-          image.src = item.imageUrl
+          const tryCandidate = () => {
+            window.clearTimeout(timeout)
+            timeout = window.setTimeout(() => {
+              if (candidateIndex + 1 < candidates.length) {
+                candidateIndex += 1
+                tryCandidate()
+              } else {
+                finish('timeout')
+              }
+            }, 12000)
+            image.onload = () => finish(candidateIndex === 0 ? 'loaded' : 'fallback-loaded')
+            image.onerror = () => {
+              if (candidateIndex + 1 < candidates.length) {
+                candidateIndex += 1
+                tryCandidate()
+              } else {
+                finish('failed')
+              }
+            }
+            image.src = candidates[candidateIndex]
+          }
+          if (!candidates.length) {
+            finish('missing-url')
+            return
+          }
+          tryCandidate()
         })))
         results.push(...checked)
         setMatrixResults([...results])
       }
     } catch (checkError) {
-      setMatrixError(checkError.message || 'Could not build the 100-image reference test.')
+      setMatrixError(checkError.message || 'Could not build the full image audit.')
     } finally {
       matrixCheckLock.current = false
       setMatrixRunning(false)
@@ -316,14 +342,14 @@ export default function ImageLibraryPanel({ user }) {
           <p className="muted-copy">This report describes metadata in the source feed; it is not a live test of every image file. Actual image loading is counted in the reference gallery.</p>
           <div className="catalogue-health-unassigned">
             <h4>Reference image smoke test</h4>
-            <p className="muted-copy">Checks 100 English and Japanese references across OP-01–OP-18, EB-01–EB-05 and PRB-01/02. This tests image loading, not OCR.</p>
-            <button className="button button--outline" type="button" disabled={matrixRunning} onClick={runReferenceMatrixCheck}>{matrixRunning ? 'Checking images…' : 'Run 100-image check'}</button>
+            <p className="muted-copy">Checks every OP-18 product printing (119 base cards, 33 parallel printings and 7 special printings) in English and Japanese, plus the existing two-card-per-language smoke test for every other tracked set. It tests image loading and same-card fallback, not OCR.</p>
+            <button className="button button--outline" type="button" disabled={matrixRunning} onClick={runReferenceMatrixCheck}>{matrixRunning ? 'Checking images…' : 'Run full image audit'}</button>
             {matrixError && <p className="form-error">{matrixError}</p>}
-            {matrixReport && <p className="muted-copy">{matrixResults.filter((item) => item.status === 'loaded').length} loaded · {matrixResults.filter((item) => item.status === 'failed').length} failed · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixReport.missingSlots.length} missing from source (100 expected).</p>}
+            {matrixReport && <p className="muted-copy">{matrixResults.filter((item) => item.status === 'loaded').length} exact loaded · {matrixResults.filter((item) => item.status === 'fallback-loaded').length} fallback loaded · {matrixResults.filter((item) => item.status === 'failed').length} failed · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixReport.missingSlots.length} missing from source ({matrixReport.expectedTotal} expected).</p>}
             {matrixReport && <details className="catalogue-health-missing">
-              <summary>View sample-by-sample results ({matrixResults.length + matrixReport.missingSlots.length})</summary>
+              <summary>View image-by-image results ({matrixResults.length + matrixReport.missingSlots.length})</summary>
               <div className="catalogue-health-table">
-                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}</strong><span>{item.language.toUpperCase()}</span><span>{item.status} · {item.source}</span></div>)}
+                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}{item.imageId ? ' · ' + item.imageId : ''}</strong><span>{item.language.toUpperCase()}</span><span>{item.status} · {item.source}</span></div>)}
                 {matrixReport.missingSlots.map((item) => <div className="catalogue-health-row" key={item.targetSet + item.language + item.sampleSlot}><strong>{item.targetSet}</strong><span>{item.language.toUpperCase()}</span><span>Missing sample</span></div>)}
               </div>
             </details>}
