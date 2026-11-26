@@ -44,3 +44,12 @@ test('missing or partial preview config leaves Supabase unconfigured', () => {
     key: '',
   })
 })
+
+test('recognises only the dedicated Grand Line Archive Testing project as safe for previews', async () => {
+  const { isDedicatedPreviewSupabaseProject } = await import('../src/lib/supabaseConfig.js')
+  assert.equal(isDedicatedPreviewSupabaseProject('https://ehzqsnfkmwphyllhaqhe.supabase.co'), true)
+  assert.equal(isDedicatedPreviewSupabaseProject('https://aknokkfeufkfsggdfsyi.supabase.co'), false)
+  assert.equal(isDedicatedPreviewSupabaseProject('http://ehzqsnfkmwphyllhaqhe.supabase.co'), false)
+  assert.equal(isDedicatedPreviewSupabaseProject('https://other-project.supabase.co'), false)
+  assert.equal(isDedicatedPreviewSupabaseProject(''), false)
+})
