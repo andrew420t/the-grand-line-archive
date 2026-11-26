@@ -128,7 +128,7 @@ export default function ImageLibraryPanel({ user }) {
     const requestId = ++referenceRequestId.current
     setReferenceLoading(true); setReferenceError('')
     try {
-      const page = await getCatalogueImageGallery({ offset, limit: 60, query: referenceQuery, language: referenceLanguage })
+      const page = await getCatalogueImageGallery({ offset, limit: 24, query: referenceQuery, language: referenceLanguage })
       if (requestId !== referenceRequestId.current) return
       setReferenceImages((current) => offset === 0 ? page.items : [...current, ...page.items])
       if (offset === 0) { setFailedReferenceIds([]); setLoadedReferenceIds([]); setFallbackReferenceIds([]) }
@@ -247,8 +247,8 @@ export default function ImageLibraryPanel({ user }) {
   return (
     <section className="admin-view image-library-panel">
       <div className="admin-view-heading">
-        <div><p className="eyebrow"><ImagePlus size={14} /> IMAGE LIBRARY</p><h2>Store card photographs for later.</h2>
-          <p>Upload one image or a whole batch. These images are stored separately from product listings, ready for future card entries.</p></div>
+        <div><p className="eyebrow"><ImagePlus size={14} /> IMAGE LIBRARY</p><h2>Your image library.</h2>
+          <p>Upload and reuse your own card photographs. Your saved images stay separate from catalogue reference artwork and are only added to a product when you choose.</p></div>
         <button className="button button--outline" type="button" onClick={loadImages} disabled={loading}><RefreshCw size={14} /> Refresh library</button>
       </div>
       <div className="photo-dropzone image-library-dropzone" role="button" tabIndex={0}
@@ -271,7 +271,23 @@ export default function ImageLibraryPanel({ user }) {
       {!filesRestored && <p className="admin-muted">Restoring the saved image upload queue…</p>}
       {error && <div className="error-notice"><ShieldAlert size={15} /><span>{error}</span></div>}
       {notice && <div className="success-notice"><Check size={15} /><span>{notice}</span></div>}
-      <section className="catalogue-health-panel">
+      <div className="photo-studio__heading"><div><p className="eyebrow">SAVED PHOTOGRAPHS</p><h3>{images.length} image{images.length === 1 ? '' : 's'} in storage</h3></div></div>
+      {loading ? <div className="loading-state">Loading image library…</div> : images.length ? (
+        <div className="photo-grid image-library-grid">{images.map((image) => <article className="photo-card" key={image.path}>
+          <div className="photo-card__preview"><img src={image.url} alt="Saved card photograph" loading="lazy" /></div>
+          <div className="photo-card__body"><span className="photo-card__name" title={image.name}>{image.name}</span>
+            <button className="button button--danger" type="button" disabled={Boolean(deletingPath)} onClick={() => removeImage(image)}><Trash2 size={14} /> {deletingPath === image.path ? 'Deleting…' : 'Delete image'}</button></div>
+        </article>)}</div>
+      ) : <div className="empty-catalogue"><ImagePlus size={24} /><h3>Your image library is empty.</h3><p>Upload card photographs above and they will be kept here for future card entries.</p></div>}
+      <details className="image-library-disclosure image-library-diagnostics">
+        <summary>
+          <span className="image-library-disclosure__copy">
+            <strong>Catalogue coverage & technical diagnostics</strong>
+            <small>Set coverage, missing-image reports and the 100-image scanner reference check. Kept here for maintenance, not everyday uploads.</small>
+          </span>
+          <span className="image-library-disclosure__meta">Technical details <span aria-hidden="true">⌄</span></span>
+        </summary>
+        <section className="catalogue-health-panel">
         <div className="photo-studio__heading"><div><p className="eyebrow">REFERENCE CATALOGUE</p><h3>Card image and set coverage</h3></div></div>
           <div className="catalogue-health-unassigned">
             <h4>100-image reference smoke test</h4>
@@ -333,8 +349,17 @@ export default function ImageLibraryPanel({ user }) {
           </div>
           <p className="muted-copy">Image source priority: Bandai official card-image URLs when an official image ID is present; structured card metadata is currently supplied by the Koala Kollect reference dataset. DON!! cards have no standard card number and use Bandai’s separate DON!! list; missing source-set links are flagged instead of guessed. Seller-uploaded product photographs remain separate and take priority in the public archive.</p>
         </>}
-      </section>
-      <section className="catalogue-reference-gallery">
+        </section>
+      </details>
+      <details className="image-library-disclosure image-library-reference">
+        <summary>
+          <span className="image-library-disclosure__copy">
+            <strong>Browse card reference images</strong>
+            <small>Search official catalogue artwork by card number, character, language or set. These are reference images, not your uploaded stock photos.</small>
+          </span>
+          <span className="image-library-disclosure__meta">{referenceTotal.toLocaleString()} references <span aria-hidden="true">⌄</span></span>
+        </summary>
+        <section className="catalogue-reference-gallery">
         <div className="photo-studio__heading"><div><p className="eyebrow">CARD-NUMBER REFERENCE LIBRARY</p><h3>{referenceImages.length.toLocaleString()} of {referenceTotal.toLocaleString()} matching references</h3><p className="muted-copy">Indexed by card number, language, set and printing variant. References remain separate from your own uploaded photographs; source artwork is loaded from its catalogue host.</p></div></div>
         <p className="muted-copy">Live image check for references currently loaded in this browser: {loadedReferenceIds.length} loaded · {failedReferenceIds.length} failed. This checks displayed images only, not the entire catalogue.</p>
         {(failedReferenceIds.length > 0 || fallbackReferenceIds.length > 0) && <button className="button button--outline" type="button" onClick={() => { setFailedReferenceIds([]); setLoadedReferenceIds([]); setFallbackReferenceIds([]); setImageRetryVersion((value) => value + 1) }}>Retry failed reference images</button>}
@@ -358,15 +383,8 @@ export default function ImageLibraryPanel({ user }) {
         </article>)}</div>}
         {referenceNextOffset !== null && <button className="button button--outline" type="button" disabled={referenceLoading} onClick={() => loadReferenceImages(referenceNextOffset)}>{referenceLoading ? 'Loading catalogue images…' : 'Load more reference images'}</button>}
         {referenceLoading && referenceImages.length === 0 && <div className="loading-state">Loading catalogue reference images…</div>}{!referenceLoading && referenceImages.length === 0 && !referenceError && <p className="muted-copy">No reference images match this search. Try another card number or select all languages.</p>}
-      </section>
-      <div className="photo-studio__heading"><div><p className="eyebrow">SAVED PHOTOGRAPHS</p><h3>{images.length} image{images.length === 1 ? '' : 's'} in storage</h3></div></div>
-      {loading ? <div className="loading-state">Loading image library…</div> : images.length ? (
-        <div className="photo-grid image-library-grid">{images.map((image) => <article className="photo-card" key={image.path}>
-          <div className="photo-card__preview"><img src={image.url} alt="Saved card photograph" loading="lazy" /></div>
-          <div className="photo-card__body"><span className="photo-card__name" title={image.name}>{image.name}</span>
-            <button className="button button--danger" type="button" disabled={Boolean(deletingPath)} onClick={() => removeImage(image)}><Trash2 size={14} /> {deletingPath === image.path ? 'Deleting…' : 'Delete image'}</button></div>
-        </article>)}</div>
-      ) : <div className="empty-catalogue"><ImagePlus size={24} /><h3>Your image library is empty.</h3><p>Upload card photographs above and they will be kept here for future card entries.</p></div>}
+        </section>
+      </details>
     </section>
   )
 }

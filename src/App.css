@@ -5109,3 +5109,150 @@ h2 em {
     width: 100%;
   }
 }
+
+
+/* A calmer Image Library: everyday uploads first, specialist reference tools on demand. */
+.image-library-panel {
+  display: grid;
+  gap: 16px;
+}
+.image-library-panel > .admin-view-heading {
+  margin-bottom: 0;
+  align-items: center;
+}
+.image-library-panel > .admin-view-heading > div > p:not(.eyebrow) {
+  max-width: 680px;
+  margin-bottom: 0;
+  line-height: 1.65;
+}
+.image-library-panel .image-library-dropzone {
+  min-height: 112px;
+  gap: 6px;
+  padding: 18px;
+  border-radius: 8px;
+}
+.image-library-panel .image-library-dropzone > svg {
+  width: 22px;
+  height: 22px;
+}
+.image-library-panel .image-library-dropzone > span {
+  max-width: 520px;
+}
+.image-library-panel > .photo-studio__heading {
+  margin: 4px 0 0;
+  align-items: center;
+}
+.image-library-panel > .photo-studio__heading h3 {
+  font-size: 20px;
+}
+.image-library-disclosure {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(201, 168, 102, .22);
+  border-radius: 8px;
+  background: rgba(13, 13, 11, .42);
+}
+.image-library-disclosure > summary {
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 13px 16px;
+  cursor: pointer;
+  list-style: none;
+}
+.image-library-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+.image-library-disclosure > summary::marker {
+  content: '';
+}
+.image-library-disclosure > summary:hover {
+  background: rgba(201, 168, 102, .045);
+}
+.image-library-disclosure__copy {
+  min-width: 0;
+  display: grid;
+  gap: 4px;
+}
+.image-library-disclosure__copy strong {
+  color: var(--cream);
+  font-size: 12px;
+  font-weight: 600;
+}
+.image-library-disclosure__copy small {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.55;
+}
+.image-library-disclosure__meta {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--gold-light);
+  font-size: 10px;
+}
+.image-library-disclosure__meta > span {
+  display: inline-grid;
+  width: 23px;
+  height: 23px;
+  place-items: center;
+  border: 1px solid rgba(201, 168, 102, .32);
+  border-radius: 50%;
+  font-size: 13px;
+  transition: transform 160ms ease;
+}
+.image-library-disclosure[open] > summary {
+  border-bottom: 1px solid rgba(201, 168, 102, .16);
+}
+.image-library-disclosure[open] > summary .image-library-disclosure__meta > span {
+  transform: rotate(180deg);
+}
+.image-library-disclosure > .catalogue-health-panel,
+.image-library-disclosure > .catalogue-reference-gallery {
+  margin: 0;
+  padding: 16px;
+  border: 0;
+  background: transparent;
+}
+.image-library-diagnostics .overview-metrics {
+  grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+  gap: 8px;
+}
+.image-library-diagnostics .catalogue-health-table {
+  max-height: 360px;
+  overflow: auto;
+}
+.image-library-reference .catalogue-reference-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(160px, 220px);
+  align-items: end;
+  gap: 12px;
+}
+.image-library-reference .catalogue-reference-gallery > .photo-grid {
+  margin-top: 12px;
+}
+.image-library-reference > .catalogue-reference-gallery > .button {
+  margin-top: 12px;
+}
+@media (max-width: 680px) {
+  .image-library-panel {
+    gap: 12px;
+  }
+  .image-library-disclosure > summary {
+    align-items: flex-start;
+    padding: 12px;
+  }
+  .image-library-disclosure__meta {
+    font-size: 9px;
+  }
+  .image-library-disclosure__copy small {
+    font-size: 9px;
+  }
+  .image-library-reference .catalogue-reference-filters {
+    grid-template-columns: 1fr;
+  }
+}
