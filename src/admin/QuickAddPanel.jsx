@@ -105,7 +105,6 @@ export default function QuickAddPanel({
   const [duplicateMatches, setDuplicateMatches] = useState([])
   const [allowVariant, setAllowVariant] = useState(false)
   const [partialProductId, setPartialProductId] = useState(() => storedDraft?.partialProductId || '')
-  const [draftStatus, setDraftStatus] = useState(() => storedDraft ? 'restored' : '')
   const [catalogueMatches, setCatalogueMatches] = useState([])
   const [catalogueLoading, setCatalogueLoading] = useState(false)
   const [catalogueError, setCatalogueError] = useState('')
@@ -120,14 +119,11 @@ export default function QuickAddPanel({
     if (!user?.id) return undefined
     if (!hasMeaningfulDraft) {
       clearQuickAddDraft(user.id)
-      setDraftStatus('')
       return undefined
     }
 
-    setDraftStatus('saving')
     const save = () => {
       saveQuickAddDraft(user.id, { form, partialProductId })
-      setDraftStatus('saved')
     }
     // Write on every committed form change so SPA navigation or a discarded
     // background tab cannot cancel a pending debounce timer.
@@ -388,7 +384,6 @@ export default function QuickAddPanel({
       }
 
       clearQuickAddDraft(user.id)
-      setDraftStatus('')
       setPartialProductId('')
       setForm(initialProduct())
       setDuplicateMatches([])
@@ -431,15 +426,9 @@ export default function QuickAddPanel({
 
       {error && <div className="error-notice"><AlertCircle size={16} /><span>{error}</span></div>}
       {success && <div className="success-notice"><Check size={16} /><span>{success}</span></div>}
-      {draftStatus && (
-        <p className="form-notice" role="status">
-          <Check size={14} /> {draftStatus === 'restored'
-            ? 'Your unfinished card draft has been restored from this browser.'
-            : draftStatus === 'saving'
-              ? 'Saving your card draft on this device…'
-              : 'Your card draft is being saved automatically on this device.'}
-        </p>
-      )}
+      <p className="form-notice" role="status">
+        <Check size={14} /> Card details are saved automatically on this device as you work.
+      </p>
 
       {duplicateMatches.length > 0 && (
         <div className="duplicate-warning">
