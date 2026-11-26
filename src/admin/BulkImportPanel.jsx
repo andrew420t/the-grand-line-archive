@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { buildNewProductPayload, EXTENDED_CARD_COLUMNS, resolveSetIdForCode } from './productSchema'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
+import { clearPersistentDraft, readPersistentDraft, savePersistentDraft } from './persistentDraftStorage'
 import { parseCsv, isBulkImportDuplicate, validateBulkImportNumericFields, preferCatalogueValue, hasExtendedCardValues, buildBulkImportTemplateCsv } from './bulkImportCsv'
 
 function downloadTemplate() {
@@ -16,13 +17,22 @@ function downloadTemplate() {
 }
 
 export default function BulkImportPanel({ products, categories, sets, user, onSaved }) {
-  const [rows, setRows] = useState([])
-  const [fileName, setFileName] = useState('')
+  const [savedDraft] = useState(() => readPersistentDraft(user?.id, 'bulk-import', null))
+  const [rows, setRows] = useState(() => Array.isArray(savedDraft?.rows) ? savedDraft.rows : [])
+  const [fileName, setFileName] = useState(() => String(savedDraft?.fileName || ''))
   const [busy, setBusy] = useState(false)
   const importLock = useRef(false)
-  const [report, setReport] = useState(null)
+  const [report, setReport] = useState(() => savedDraft?.report || null)
   const [error, setError] = useState('')
-  const [includeDuplicates, setIncludeDuplicates] = useState(false)
+  const [includeDuplicates, setIncludeDuplicates] = useState(() => Boolean(savedDraft?.includeDuplicates))
+  useEffect(() => {
+    if (!user?.id) return
+    if (!rows.length && !fileName && !report) {
+      clearPersistentDraft(user.id, 'bulk-import')
+      return
+    }
+    savePersistentDraft(user.id, 'bulk-import', { rows, fileName, report, includeDuplicates })
+  }, [user?.id, rows, fileName, report, includeDuplicates])
   const [schemaReady, setSchemaReady] = useState(false)
   const [catalogueMatches, setCatalogueMatches] = useState({})
   const [catalogueLoadingRow, setCatalogueLoadingRow] = useState(null)
