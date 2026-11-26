@@ -40,6 +40,7 @@ test('keeps a direct third-party image when there is no official locator', () =>
 test('builds a validated official base-card URL for English and Japanese card numbers', async () => {
   const { buildOfficialBaseImageUrl } = await import('../src/admin/catalogueImageReference.js')
   assert.equal(buildOfficialBaseImageUrl('OP18-001', 'English'), 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png')
+  assert.equal(buildOfficialBaseImageUrl('OP-18-001', 'English'), 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png')
   assert.equal(buildOfficialBaseImageUrl('EB05-061', 'jp'), 'https://www.onepiece-cardgame.com/images/cardlist/card/EB05-061.png')
   assert.equal(buildOfficialBaseImageUrl('P-101', 'en'), 'https://en.onepiece-cardgame.com/images/cardlist/card/P-101.png')
 })

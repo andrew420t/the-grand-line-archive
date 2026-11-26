@@ -9,6 +9,7 @@ export function buildOfficialBaseImageUrl(cardNumber, language = 'en') {
     .replace(/\s+/g, '')
     .replace(/_/g, '-')
     .replace(/-+/g, '-')
+    .replace(/^(OP|EB|ST|PRB)-(\d{2})-/, '$1$2-')
     .trim()
   const languageText = String(language || '').toLowerCase()
   const languageCode = languageText.startsWith('jp') || languageText.includes('japanese') ? 'jp'
