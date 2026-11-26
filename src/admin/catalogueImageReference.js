@@ -6,14 +6,14 @@
 export function buildOfficialBaseImageUrl(cardNumber, language = 'en') {
   const normalized = String(cardNumber || '')
     .toUpperCase()
-    .replace(/\\s+/g, '')
+    .replace(/\s+/g, '')
     .replace(/_/g, '-')
     .replace(/-+/g, '-')
     .trim()
   const languageText = String(language || '').toLowerCase()
   const languageCode = languageText.startsWith('jp') || languageText.includes('japanese') ? 'jp'
     : languageText.startsWith('en') || languageText.includes('english') ? 'en' : ''
-  if (!languageCode || !/^(?:(?:OP|EB|ST|PRB)\\d{2}|P)-\\d{3}$/.test(normalized)) return ''
+  if (!languageCode || !/^(?:(?:OP|EB|ST|PRB)\d{2}|P)-\d{3}$/.test(normalized)) return ''
   const host = languageCode === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com'
   return host + '/images/cardlist/card/' + encodeURIComponent(normalized) + '.png'
 }
