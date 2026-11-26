@@ -3,6 +3,7 @@ import { resolveCatalogueImage } from './catalogueImageReference.js'
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 import { createOfficialImageOnlyMatch } from './officialImageOnlyFallback.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions } from './catalogueImageFilters.js'
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
 
@@ -766,34 +767,15 @@ export async function getCatalogueImageGallery({
     }
   }
 
-  const filterEntries = entries.filter((entry) => {
-    if (language !== 'all' && entry.languageCode !== language) return false
-    if (set !== 'all' && !(entry.setCode === set || (entry.setCodes || []).includes(set))) return false
-    if (rarity !== 'all' && entry.rarity !== rarity) return false
-    if (cardType !== 'all' && entry.category !== cardType) return false
-    if (color !== 'all' && !(entry.colorValues || []).some((v) => v.toLowerCase() === color.toLowerCase())) return false
-    if (variant !== 'all' && entry.variant !== variant) return false
-    if (imageStatus === 'missing' && entry.imageStatus !== 'missing') return false
-    if (imageStatus === 'available' && entry.imageStatus === 'missing') return false
-    if (imageStatus === 'fallback' && entry.imageStatus !== 'fallback') return false
-    const normalizedQuery = normalizeSearchText(query)
-    if (!normalizedQuery) return true
-    return normalizeSearchText(entry.cardNumber).includes(normalizedQuery)
-      || normalizeSearchText(entry.name).includes(normalizedQuery)
-      || normalizeSearchText(entry.setCode).includes(normalizedQuery)
-      || normalizeSearchText(entry.setName).includes(normalizedQuery)
-      || (entry.setCodes || []).some((code) => normalizeSearchText(code).includes(normalizedQuery))
-      || normalizeSearchText(entry.sourceText).includes(normalizedQuery)
-  })
-
-  const uniqueOptions = (values) => [...new Set(values.filter(Boolean))].sort((a, b) => String(a).localeCompare(String(b)))
+  const filterEntries = filterCatalogueImageEntries(entries, { query, language, set, rarity, cardType, color, variant, imageStatus })
+  const rawFilters = getCatalogueImageFilterOptions(entries)
   const filters = {
-    languages: uniqueOptions(entries.map((entry) => entry.languageCode)).map((value) => ({ value, label: LANGUAGE_LABELS[value] || value })),
-    sets: uniqueOptions(entries.flatMap((entry) => [entry.setCode, ...(entry.setCodes || [])])).map((value) => ({ value, label: value })),
-    rarities: uniqueOptions(entries.map((entry) => entry.rarity)).map((value) => ({ value, label: value })),
-    cardTypes: uniqueOptions(entries.map((entry) => entry.category)).map((value) => ({ value, label: String(value).replace(/^./, (c) => c.toUpperCase()) })),
-    colors: uniqueOptions(entries.flatMap((entry) => entry.colorValues || [])).map((value) => ({ value, label: value })),
-    variants: uniqueOptions(entries.map((entry) => entry.variant)).map((value) => ({ value, label: value })),
+    languages: rawFilters.languages.map((value) => ({ value, label: LANGUAGE_LABELS[value] || value })),
+    sets: rawFilters.sets.map((value) => ({ value, label: value })),
+    rarities: rawFilters.rarities.map((value) => ({ value, label: value })),
+    cardTypes: rawFilters.cardTypes.map((value) => ({ value, label: String(value).replace(/^./, (c) => c.toUpperCase()) })),
+    colors: rawFilters.colors.map((value) => ({ value, label: value })),
+    variants: rawFilters.variants.map((value) => ({ value, label: value })),
   }
 
   const start = Math.max(0, Number(offset) || 0)
