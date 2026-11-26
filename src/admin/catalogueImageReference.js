@@ -49,8 +49,8 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
     ? buildOfficialBaseImageUrl(cardNumber, language)
     : ''
   const fallbackCandidates = [...new Set([
-    baseImageFallbackUrl,
     ...alternateOfficialUrls,
+    baseImageFallbackUrl,
   ].filter((url) => url && url !== directUrl))]
 
   if (directUrl) {
@@ -65,13 +65,18 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
   }
 
   if (fallbackCandidates.length) {
+    const selectedFallback = fallbackCandidates[0]
+    const usesAlternateOfficialFallback = alternateOfficialUrls.includes(selectedFallback)
     return {
-      imageUrl: fallbackCandidates[0],
+      imageUrl: selectedFallback,
       fallbackImageUrl: fallbackCandidates[1] || '',
-      source: language === 'jp'
-        ? 'Bandai official Japanese base-card fallback (special finish may differ)'
-        : 'Bandai official English base-card fallback (special finish may differ)',
-      usesBaseImageFallback: true,
+      source: usesAlternateOfficialFallback
+        ? 'Bandai official alternate printing reference (exact finish may differ)'
+        : language === 'jp'
+          ? 'Bandai official Japanese base-card fallback (special finish may differ)'
+          : 'Bandai official English base-card fallback (special finish may differ)',
+      usesBaseImageFallback: !usesAlternateOfficialFallback,
+      usesAlternateOfficialFallback,
     }
   }
 

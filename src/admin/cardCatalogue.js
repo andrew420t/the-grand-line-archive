@@ -186,6 +186,7 @@ export async function findCatalogueMatches(cardNumber) {
             imageUrl: imageReference.imageUrl,
             fallbackImageUrl: imageReference.fallbackImageUrl,
             usesBaseImageFallback: imageReference.usesBaseImageFallback,
+            usesAlternateOfficialFallback: imageReference.usesAlternateOfficialFallback,
             sourceText: value(printing, 'source_text'),
             setCode,
             setName: value(product, 'name'),

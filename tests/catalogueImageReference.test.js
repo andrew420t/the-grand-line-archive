@@ -91,3 +91,19 @@ test('uses the requested language host for a numbered Japanese base-card fallbac
   assert.equal(result.imageUrl, 'https://www.onepiece-cardgame.com/images/cardlist/card/OP18-001.png')
   assert.equal(result.usesBaseImageFallback, true)
 })
+
+test('prefers same-card alternate official printing artwork before generic base artwork', () => {
+  const missing = { key: 'parallel-missing', card_key: 'karoo', site: 'en', image_url: '' }
+  const base = { key: 'base-printing', card_key: 'karoo', site: 'en', image_url: '' }
+  const index = { locatorsByPrinting: new Map([['base-printing:en', { image_id: 'OP18-001_p1' }]]) }
+  const result = resolveCatalogueImage({
+    printing: missing,
+    index,
+    printings: [missing, base],
+    language: 'en',
+    cardNumber: 'OP18-001',
+  })
+  assert.equal(result.imageUrl, 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001_p1.png')
+  assert.equal(result.usesAlternateOfficialFallback, true)
+  assert.equal(result.usesBaseImageFallback, false)
+})
