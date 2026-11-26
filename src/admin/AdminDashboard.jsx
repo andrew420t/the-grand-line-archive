@@ -46,6 +46,7 @@ import {
   saveAdminPhotoDraft,
   saveAdminWorkspaceDraft,
 } from './adminDraftStorage'
+import { clearPersistentDraft, readPersistentDraft, savePersistentDraft } from './persistentDraftStorage'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -212,7 +213,7 @@ export default function AdminDashboard({
       </div>
       <div className="admin-security-note admin-draft-note">
         <Check size={16} />
-        <span>Unfinished card details, scanner results, and card photographs are saved locally on this device so you can recover your work if the browser reloads.</span>
+        <span>Unfinished card details, scanner work, CSV reviews, product edits, archive filters, and queued card photographs are saved on this device so you can resume after switching apps or reopening this browser. Saved products, stock, sets, orders, and published settings are stored in the archive database.</span>
       </div>
       {photoDraftError && <div className="error-notice"><ShieldAlert size={15} /><span>{photoDraftError}</span></div>}
       {!photosReady && <p className="admin-muted">Restoring saved card photographs…</p>}
@@ -260,6 +261,7 @@ export default function AdminDashboard({
           products={products}
           categories={categories}
           sets={sets}
+          user={user}
           onRefresh={onRefreshProducts}
         />
       )}
@@ -299,6 +301,7 @@ export default function AdminDashboard({
 
       <div className="admin-hidden-panel" hidden={activeSection !== 'scan-card'}>
         <CardScanner
+          userId={user?.id}
           photos={photos}
           fields={scanFields}
           setFields={setScanFields}
@@ -330,7 +333,7 @@ export default function AdminDashboard({
       </div>
 
       {activeSection === 'collections' && (
-        <CollectionsSection categories={categories} sets={sets} onRefresh={onRefreshProducts} />
+        <CollectionsSection categories={categories} sets={sets} user={user} onRefresh={onRefreshProducts} />
       )}
 
       {activeSection === 'orders' && (
@@ -356,6 +359,7 @@ export default function AdminDashboard({
           products={products}
           settings={siteSettings}
           settingsError={siteSettingsError}
+          userId={user?.id}
           onSave={onSaveSiteSettings}
         />
       )}
@@ -371,9 +375,10 @@ function Metric({ icon: Icon, label, value }) {
   return <article className="overview-metric"><span className="overview-metric__icon"><Icon size={17} /></span><span>{label}</span><strong>{value}</strong></article>
 }
 
-function ProductsSection({ products, categories, sets, onRefresh }) {
-  const [query, setQuery] = useState('')
-  const [changes, setChanges] = useState({})
+function ProductsSection({ products, categories, sets, user, onRefresh }) {
+  const [sectionDraft] = useState(() => readPersistentDraft(user?.id, 'products-section', {}))
+  const [query, setQuery] = useState(() => String(sectionDraft.query || ''))
+  const [changes, setChanges] = useState(() => sectionDraft.changes && typeof sectionDraft.changes === 'object' ? sectionDraft.changes : {})
   const [busyId, setBusyId] = useState('')
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
@@ -383,6 +388,10 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
   const [lookupBusy, setLookupBusy] = useState(false)
   const [lookupSaving, setLookupSaving] = useState(false)
   const [lookupError, setLookupError] = useState('')
+  useEffect(() => {
+    if (!user?.id) return
+    savePersistentDraft(user.id, 'products-section', { query, changes })
+  }, [user?.id, query, changes])
   const visibleProducts = products.filter((product) =>
     [product.name, product.setName, product.category, product.rarity, product.raw?.card_number]
       .filter(Boolean)
@@ -500,6 +509,11 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
         setError(`Stock was not updated: ${updateFailure}`)
       } else {
         setNotice(`${product.name} inventory updated.`)
+        setChanges((current) => {
+          const next = { ...current }
+          delete next[product.id]
+          return next
+        })
         onRefresh()
       }
     } catch (stockError) {
@@ -619,11 +633,17 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
       )}
       {editingProduct && (
         <ProductEditModal
+          key={editingProduct.id}
           product={editingProduct}
           categories={categories}
           sets={sets}
-          onClose={() => setEditingProduct(null)}
+          userId={user?.id}
+          onClose={() => {
+            clearPersistentDraft(user?.id, 'product-edit:' + editingProduct.id)
+            setEditingProduct(null)
+          }}
           onSaved={() => {
+            clearPersistentDraft(user?.id, 'product-edit:' + editingProduct.id)
             setEditingProduct(null)
             onRefresh()
           }}
@@ -659,16 +679,22 @@ const productEditFields = [
   { key: 'variant_label', label: 'Variant label', columns: ['variant_label'] },
 ]
 
-function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
+function ProductEditModal({ product, categories, sets, userId, onClose, onSaved }) {
   const raw = product.raw || {}
   const fields = productEditFields
     .map((field) => ({ ...field, column: field.columns.find((column) => column in raw) }))
     .filter((field) => field.column)
-  const [values, setValues] = useState(() =>
-    Object.fromEntries(fields.map((field) => [field.key, raw[field.column] ?? ''])),
-  )
+  const [savedEditDraft] = useState(() => readPersistentDraft(userId, 'product-edit:' + product.id, null))
+  const [values, setValues] = useState(() => ({
+    ...Object.fromEntries(fields.map((field) => [field.key, raw[field.column] ?? ''])),
+    ...(savedEditDraft?.values || {}),
+  }))
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
+  useEffect(() => {
+    if (!userId) return
+    savePersistentDraft(userId, 'product-edit:' + product.id, { values })
+  }, [userId, product.id, values])
 
   const submit = async (event) => {
     event.preventDefault()
@@ -700,6 +726,7 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
         setError(`Product was not updated: ${updateFailure}`)
         return
       }
+      clearPersistentDraft(userId, 'product-edit:' + product.id)
       onSaved()
     } catch (saveError) {
       setError(`Product was not updated: ${saveError.message || 'Unexpected error.'}`)
@@ -816,15 +843,24 @@ const ONE_PIECE_OP_EB_SETS = [
   { code: 'PRB-01', name: 'Premium Booster -The Best-' },
   { code: 'PRB-02', name: 'Premium Booster -The Best- Vol. 2' },
 ]
-function CollectionsSection({ categories, sets, onRefresh }) {
-  const [categoryName, setCategoryName] = useState('')
-  const [setName, setSetName] = useState('')
-  const [setCode, setSetCode] = useState('')
-  const [setDescription, setSetDescription] = useState('')
+function CollectionsSection({ categories, sets, user, onRefresh }) {
+  const [savedDraft] = useState(() => readPersistentDraft(user?.id, 'collections', {}))
+  const [categoryName, setCategoryName] = useState(() => savedDraft.categoryName || '')
+  const [setName, setSetName] = useState(() => savedDraft.setName || '')
+  const [setCode, setSetCode] = useState(() => savedDraft.setCode || '')
+  const [setDescription, setSetDescription] = useState(() => savedDraft.setDescription || '')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [importingSets, setImportingSets] = useState(false)
+  useEffect(() => {
+    if (!user?.id) return
+    if (!categoryName && !setName && !setCode && !setDescription) {
+      clearPersistentDraft(user.id, 'collections')
+      return
+    }
+    savePersistentDraft(user.id, 'collections', { categoryName, setName, setCode, setDescription })
+  }, [user?.id, categoryName, setName, setCode, setDescription])
 
   const importOfficialSets = async () => {
     if (!supabase) {
@@ -1001,12 +1037,16 @@ function CustomersSection({ customers }) {
   )
 }
 
-function CustomisationSection({ products, settings, settingsError, onSave }) {
-  const [draft, setDraft] = useState(settings)
+function CustomisationSection({ products, settings, settingsError, userId, onSave }) {
+  const [draft, setDraft] = useState(() => readPersistentDraft(userId, 'website-customisation', null)?.draft || settings)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
-  const [panel, setPanel] = useState('homepage')
+  const [panel, setPanel] = useState(() => readPersistentDraft(userId, 'website-customisation', null)?.panel || 'homepage')
+  useEffect(() => {
+    if (!userId) return
+    savePersistentDraft(userId, 'website-customisation', { draft, panel })
+  }, [userId, draft, panel])
   const sections = [['trust','Trust strip'],['featured','Featured cards'],['browse','Shop callout'],['values','Archive values'],['shipping','Pickup information']]
   const update = (key, value) => { setDraft((current) => ({ ...current, [key]: value })); setError(''); setNotice('') }
   const toggleFeaturedProduct = (id) => {
@@ -1019,7 +1059,11 @@ function CustomisationSection({ products, settings, settingsError, onSave }) {
   }
   const save = async (event) => {
     event.preventDefault(); setBusy(true); setError(''); setNotice('')
-    try { await onSave(draft); setNotice('Your storefront changes have been saved and published.') }
+    try {
+      await onSave(draft)
+      clearPersistentDraft(userId, 'website-customisation')
+      setNotice('Your storefront changes have been saved and published.')
+    }
     catch (failure) { setError(failure.message) }
     finally { setBusy(false) }
   }
