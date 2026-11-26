@@ -400,7 +400,6 @@ export default function QuickAddPanel({
 
   const resetManual = () => {
     clearQuickAddDraft(user?.id)
-    setDraftStatus('')
     setPartialProductId('')
     setForm(initialProduct())
     setError('')
