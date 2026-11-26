@@ -2,7 +2,6 @@ const BANDAI_IMAGE_HOSTS = {
   en: 'en.onepiece-cardgame.com',
   jp: 'www.onepiece-cardgame.com',
 }
-const EXTERNAL_IMAGE_HOSTS = new Set(['tcgplayer-cdn.tcgplayer.com', 'source.windoent.com'])
 const BANDAI_IMAGE_ID = /^(?:(?:OP|EB|ST|PRB)\d{2}|P)-\d{3}(?:_[a-z]\d+)?$/i
 const TCGPLAYER_IMAGE_PATH = /^\/product\/\d+_in_\d+x\d+\.(?:jpe?g|png|webp)$/i
 const CHINESE_IMAGE_PATH = /^\/OnePiecePc\/Picture\/[a-z0-9_.-]+\.(?:jpe?g|png|webp)$/i

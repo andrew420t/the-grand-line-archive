@@ -6,15 +6,16 @@ test('creates English and Japanese Bandai base-image references for cards absent
   const english = createOfficialImageOnlyMatch('OP18-003', 'en')
   const japanese = createOfficialImageOnlyMatch('OP18-003', 'jp')
 
-  assert.equal(english.imageUrl, 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-003.png')
-  assert.deepEqual(english.imageUrls, [english.imageUrl])
-  assert.equal(english.fallbackImageUrl, '')
+  assert.equal(english.imageUrl, '/_card-image/bandai/en/OP18-003.png')
+  assert.deepEqual(english.imageUrls, [english.imageUrl, 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-003.png'])
+  assert.equal(english.fallbackImageUrl, 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-003.png')
   assert.equal(english.language, 'English')
   assert.equal(english.setCode, 'OP-18')
   assert.equal(english.officialCardlistUrl, 'https://en.onepiece-cardgame.com/cardlist/?series=569118')
   assert.equal(english.officialImageOnly, true)
 
-  assert.equal(japanese.imageUrl, 'https://www.onepiece-cardgame.com/images/cardlist/card/OP18-003.png')
+  assert.equal(japanese.imageUrl, '/_card-image/bandai/jp/OP18-003.png')
+  assert.equal(japanese.fallbackImageUrl, 'https://www.onepiece-cardgame.com/images/cardlist/card/OP18-003.png')
   assert.equal(japanese.language, 'Japanese')
   assert.equal(japanese.officialCardlistUrl, 'https://www.onepiece-cardgame.com/cardlist/?series=550118')
 })
@@ -32,7 +33,8 @@ test('preserves requested reprint set while using the official base image for th
   const match = createOfficialImageOnlyMatch('OP01-016', 'en', 'EB-05')
 
   assert.equal(match.setCode, 'EB-05')
-  assert.equal(match.imageUrl, 'https://en.onepiece-cardgame.com/images/cardlist/card/OP01-016.png')
+  assert.equal(match.imageUrl, '/_card-image/bandai/en/OP01-016.png')
+  assert.equal(match.fallbackImageUrl, 'https://en.onepiece-cardgame.com/images/cardlist/card/OP01-016.png')
   assert.equal(match.officialCardlistUrl, 'https://en.onepiece-cardgame.com/cardlist/?series=569205')
 })
 
