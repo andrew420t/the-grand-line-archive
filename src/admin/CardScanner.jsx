@@ -54,12 +54,12 @@ export default function CardScanner({
   const [manualCropConfirmedForFile, setManualCropConfirmedForFile] = useState(null)
   const [manualCropSelectionMade, setManualCropSelectionMade] = useState(() => Boolean(savedScannerDraft.manualCropSelectionMade))
   const [manualCropPercent, setManualCropPercent] = useState(() => savedScannerDraft.manualCropPercent || { x: 0, y: 0, width: 100, height: 100 })
+  const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
   const cropPreviewRef = useRef(null)
   const previousFrontPhotoFile = useRef(frontPhoto?.file)
   const hasObservedFrontPhoto = useRef(Boolean(frontPhoto?.file))
   const cropDragRef = useRef(null)
 
-  const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
   const hasReview =
     Object.values(fields).some((field) => field.value) || Boolean(rawText.trim())
   const manualCropGeometryIsValid = (

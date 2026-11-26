@@ -384,7 +384,6 @@ function ProductsSection({ products, categories, sets, user, onRefresh }) {
   const [busyId, setBusyId] = useState('')
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
-  const [editingProduct, setEditingProduct] = useState(null)
   const [lookupProduct, setLookupProduct] = useState(null)
   const [lookupMatches, setLookupMatches] = useState([])
   const [lookupBusy, setLookupBusy] = useState(false)
