@@ -1,13 +1,99 @@
+export const CATALOGUE_IDENTITY_FIELDS = [
+  'catalogue_match_id',
+  'catalogue_printing_key',
+  'catalogue_reference_image_url',
+  'catalogue_reference_image_source',
+  'reference_image_url',
+  'reference_printing_key',
+  'reference_match_id',
+  'reference_image_source',
+]
+
+export function normalizeSetCode(value) {
+  return String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
+}
+
+export function findSetCodeMatches(sets, code) {
+  const normalized = normalizeSetCode(code)
+  if (!normalized) return []
+  return sets.filter((set) => normalizeSetCode(set.code) === normalized)
+}
+
+export function resolveSetIdForCode(sets, code) {
+  const matches = findSetCodeMatches(sets, code)
+  // Do not silently attach a product to an arbitrary set when legacy data
+  // contains multiple rows whose codes normalize to the same value.
+  return matches.length === 1 ? matches[0].id || '' : ''
+}
+
+export function buildQuickAddFieldUpdate(current, field, value, sets = []) {
+  const identityChanged = ['card_number', 'set_code', 'language', 'variant_label'].includes(field)
+    && String(current?.[field] || '').trim().toLocaleLowerCase() !== String(value || '').trim().toLocaleLowerCase()
+  return {
+    ...current,
+    [field]: value,
+    ...(field === 'set_code' ? { set_id: resolveSetIdForCode(sets, value) } : {}),
+    ...(identityChanged ? Object.fromEntries(CATALOGUE_IDENTITY_FIELDS.map((key) => [key, ''])) : {}),
+  }
+}
+
 export const EXTENDED_CARD_COLUMNS = [
   'color',
   'power',
   'cost',
   'card_type',
   'effect_text',
+  'counter',
+  'trigger_text',
+  'attributes',
   'language',
   'classification',
   'variant_label',
+  'catalogue_match_id',
+  'catalogue_printing_key',
+  'catalogue_reference_image_url',
+  'catalogue_reference_image_source',
 ]
+
+
+const normalizedIdentity = (value) => String(value || '').trim().toLocaleLowerCase()
+
+const normalizedLanguage = (value) => {
+  const language = normalizedIdentity(value)
+  if (['en', 'eng', 'english'].includes(language)) return 'english'
+  if (['ja', 'jp', 'jpn', 'japanese'].includes(language)) return 'japanese'
+  if (['zh', 'cn', 'chinese'].includes(language)) return 'chinese'
+  if (['ko', 'kr', 'korean'].includes(language)) return 'korean'
+  return language
+}
+
+export function classifyPrintingDuplicate(existing, candidate) {
+  const existingPrintingKey = normalizedIdentity(existing.catalogue_printing_key)
+  const candidatePrintingKey = normalizedIdentity(candidate.catalogue_printing_key)
+  const existingLanguage = normalizedLanguage(existing.language)
+  const candidateLanguage = normalizedLanguage(candidate.language)
+
+  if (existingPrintingKey && candidatePrintingKey) {
+    if (existingPrintingKey !== candidatePrintingKey) return 'distinct'
+    if (existingLanguage && candidateLanguage && existingLanguage !== candidateLanguage) return 'distinct'
+    // A shared printing key without a known language is not enough to safely
+    // block the add: legacy rows may represent another language printing.
+    if (!existingLanguage || !candidateLanguage) return 'possible'
+    return 'exact'
+  }
+
+  const existingMatchId = normalizedIdentity(existing.catalogue_match_id)
+  const candidateMatchId = normalizedIdentity(candidate.catalogue_match_id)
+  if (existingMatchId && candidateMatchId) {
+    return existingMatchId === candidateMatchId ? 'exact' : 'distinct'
+  }
+
+  const existingVariant = normalizedIdentity(existing.variant_label)
+  const candidateVariant = normalizedIdentity(candidate.variant_label)
+  if (existingLanguage && candidateLanguage && existingLanguage !== candidateLanguage) return 'distinct'
+  if (existingVariant && candidateVariant && existingVariant !== candidateVariant) return 'distinct'
+  return 'possible'
+}
 
 const slugify = (value) =>
   String(value || '')
@@ -16,6 +102,52 @@ const slugify = (value) =>
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
+
+
+// Keep the catalogue selection fields aligned with the scanner → QuickAdd handoff.
+// Values are copied as reviewed form values, not silently treated as verified facts.
+export function buildCatalogueScannerFields(values) {
+  const fieldNames = [
+    'name', 'card_number', 'set_code', 'rarity', 'color', 'cost', 'power',
+    'card_type', 'classification', 'language', 'effect_text', 'variant_label',
+    'counter', 'trigger_text', 'attributes', 'catalogue_match_id',
+    'catalogue_printing_key', 'catalogue_reference_image_url',
+    'catalogue_reference_image_source', 'reference_image_url',
+    'reference_printing_key', 'reference_match_id', 'reference_image_source',
+  ]
+  return Object.fromEntries(fieldNames.map((key) => [key, values?.[key] ?? '']))
+}
+
+const CATALOGUE_SCANNER_IDENTITY_FIELDS = new Set([
+  'catalogue_match_id',
+  'catalogue_printing_key',
+  'catalogue_reference_image_url',
+  'catalogue_reference_image_source',
+  'reference_image_url',
+  'reference_printing_key',
+  'reference_match_id',
+  'reference_image_source',
+])
+
+// Prefer verified catalogue values, but do not discard useful OCR text when a
+// catalogue observation is blank. Identity fields are always replaced so a
+// previous printing can never remain attached to a newly selected card.
+export function mergeCatalogueScannerFields(currentFields, values) {
+  const catalogueValues = buildCatalogueScannerFields(values)
+  return Object.fromEntries(Object.entries(catalogueValues).map(([key, catalogueValue]) => {
+    const current = currentFields?.[key] || {}
+    const hasCatalogueValue = catalogueValue !== '' && catalogueValue !== null && catalogueValue !== undefined
+    const value = CATALOGUE_SCANNER_IDENTITY_FIELDS.has(key)
+      ? (catalogueValue ?? '')
+      : hasCatalogueValue ? catalogueValue : (current.value ?? '')
+    return [key, {
+      ...current,
+      value,
+      confidence: hasCatalogueValue ? 95 : (current.confidence || 0),
+      needsReview: true,
+    }]
+  }))
+}
 
 export function buildNewProductPayload(form, setId, includeCardDetails) {
   const timestamp = new Date().toISOString()
@@ -50,9 +182,16 @@ export function buildNewProductPayload(form, setId, includeCardDetails) {
       cost: form.cost === '' ? null : Number(form.cost),
       card_type: form.card_type.trim() || null,
       effect_text: form.effect_text.trim() || null,
+      counter: form.counter === '' ? null : Number(form.counter),
+      trigger_text: form.trigger_text.trim() || null,
+      attributes: form.attributes.trim() || null,
       language: form.language.trim() || null,
       classification: form.classification.trim() || null,
       variant_label: form.variant_label.trim() || null,
+      catalogue_match_id: String(form.catalogue_match_id || '').trim() || null,
+      catalogue_printing_key: String(form.catalogue_printing_key || '').trim() || null,
+      catalogue_reference_image_url: String(form.catalogue_reference_image_url || '').trim() || null,
+      catalogue_reference_image_source: String(form.catalogue_reference_image_source || '').trim() || null,
     })
   }
 

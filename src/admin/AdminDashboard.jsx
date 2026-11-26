@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertCircle,
   ArrowRight,
@@ -38,6 +38,8 @@ import BulkImportPanel from './BulkImportPanel'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
+import { buildProductEditPayload, parseInventoryStockUpdate, productDeleteFailure, productUpdateFailure } from './productEditPayload'
+import { findSetCodeMatches } from './productSchema'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -84,6 +86,14 @@ export default function AdminDashboard({
 }) {
   const [activeSection, setActiveSection] = useState('overview')
   const [photos, setPhotos] = useState([])
+  const photosRef = useRef(photos)
+  photosRef.current = photos
+
+  useEffect(() => () => {
+    photosRef.current.forEach((photo) => {
+      if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl)
+    })
+  }, [])
   const [scanFields, setScanFields] = useState(blankScanFields)
   const [scanVersion, setScanVersion] = useState(0)
   const [rawText, setRawText] = useState('')
@@ -189,11 +199,15 @@ export default function AdminDashboard({
           categories={categories}
           sets={sets}
           photos={photos}
+          onPhotosChange={setPhotos}
           scanFields={scanFields}
           user={user}
-          onSaved={() => {
-            photos.forEach((photo) => URL.revokeObjectURL(photo.previewUrl))
-            setPhotos([])
+          onSaved={({ uploadedPhotoIds = [] } = {}) => {
+            const uploadedIds = new Set(uploadedPhotoIds)
+            photos.filter((photo) => uploadedIds.has(photo.id)).forEach((photo) => {
+              if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl)
+            })
+            setPhotos((current) => current.filter((photo) => !uploadedIds.has(photo.id)))
             setScanFields(blankScanFields())
             setScanVersion((current) => current + 1)
             setRawText('')
@@ -339,6 +353,12 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
       language: details.language, classification: details.classification,
       variant_label: details.variant_label, counter: details.counter,
       trigger_text: details.trigger_text, attributes: details.attributes,
+      catalogue_match_id: details.catalogue_match_id,
+      catalogue_printing_key: details.catalogue_printing_key,
+      catalogue_reference_image_url: details.catalogue_reference_image_url,
+      catalogue_reference_image_source: details.catalogue_reference_image_source,
+      reference_image_url: details.reference_image_url,
+      reference_printing_key: details.reference_printing_key,
     }
     Object.entries(mappings).forEach(([column, value]) => {
       const current = raw[column]
@@ -362,16 +382,22 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     }
     setLookupSaving(true)
     setLookupError('')
-    const result = await supabase.from('products').update(payload).eq('id', lookupProduct.id)
-    setLookupSaving(false)
-    if (result.error) {
-      setLookupError('Product details were not updated: ' + result.error.message)
-      return
+    try {
+      const result = await supabase.from('products').update(payload).eq('id', lookupProduct.id).select('id').maybeSingle()
+      const updateFailure = productUpdateFailure(result)
+      if (updateFailure) {
+        setLookupError('Product details were not updated: ' + updateFailure)
+        return
+      }
+      setNotice('Missing card details filled from the catalogue. Your stock, price and uploaded photos were left unchanged.')
+      setLookupProduct(null)
+      setLookupMatches([])
+      onRefresh()
+    } catch (lookupSaveError) {
+      setLookupError('Product details were not updated: ' + (lookupSaveError.message || 'Unexpected error.'))
+    } finally {
+      setLookupSaving(false)
     }
-    setNotice('Missing card details filled from the catalogue. Your stock, price and uploaded photos were left unchanged.')
-    setLookupProduct(null)
-    setLookupMatches([])
-    onRefresh()
   }
 
   const saveInventory = async (product) => {
@@ -381,27 +407,34 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     }
     const raw = product.raw || {}
     const values = changes[product.id] || {}
-    const quantity = Number(values.stock ?? raw.stock_quantity)
-    const price = Number(values.price ?? raw.price)
-    if (!Number.isInteger(quantity) || quantity < 0 || !Number.isFinite(price) || price < 0) {
-      setError('Enter a non-negative whole-number quantity and a valid price.')
+    const stockUpdate = parseInventoryStockUpdate(values, raw)
+    if (!stockUpdate) {
+      setError('Enter a non-negative whole-number quantity and a valid price. Neither field can be blank.')
       return
     }
 
     setBusyId(String(product.id))
     setError('')
     setNotice('')
-    const result = await supabase
-      .from('products')
-      .update({ stock_quantity: quantity, price, updated_at: new Date().toISOString() })
-      .eq('id', product.id)
-    if (result.error) {
-      setError(`Stock was not updated: ${result.error.message}`)
-    } else {
-      setNotice(`${product.name} inventory updated.`)
-      onRefresh()
+    try {
+      const result = await supabase
+        .from('products')
+        .update({ ...stockUpdate, updated_at: new Date().toISOString() })
+        .eq('id', product.id)
+        .select('id')
+        .maybeSingle()
+      const updateFailure = productUpdateFailure(result)
+      if (updateFailure) {
+        setError(`Stock was not updated: ${updateFailure}`)
+      } else {
+        setNotice(`${product.name} inventory updated.`)
+        onRefresh()
+      }
+    } catch (stockError) {
+      setError(`Stock was not updated: ${stockError.message || 'Unexpected error.'}`)
+    } finally {
+      setBusyId('')
     }
-    setBusyId('')
   }
 
   const toggleArchivePublication = async (product) => {
@@ -418,17 +451,25 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     setBusyId(String(product.id))
     setError('')
     setNotice('')
-    const result = await supabase
-      .from('products')
-      .update({ status: nextStatus, updated_at: new Date().toISOString() })
-      .eq('id', product.id)
-    if (result.error) {
-      setError(`Product publication was not updated: ${result.error.message}`)
-    } else {
-      setNotice(willPublish ? `${product.name} is now posted to the public Archive.` : `${product.name} is now private in the Inventory Book.`)
-      onRefresh()
+    try {
+      const result = await supabase
+        .from('products')
+        .update({ status: nextStatus, updated_at: new Date().toISOString() })
+        .eq('id', product.id)
+        .select('id')
+        .maybeSingle()
+      const updateFailure = productUpdateFailure(result)
+      if (updateFailure) {
+        setError(`Product publication was not updated: ${updateFailure}`)
+      } else {
+        setNotice(willPublish ? `${product.name} is now posted to the public Archive.` : `${product.name} is now private in the Inventory Book.`)
+        onRefresh()
+      }
+    } catch (publicationError) {
+      setError(`Product publication was not updated: ${publicationError.message || 'Unexpected error.'}`)
+    } finally {
+      setBusyId('')
     }
-    setBusyId('')
   }
 
   const deleteProduct = async (product) => {
@@ -438,9 +479,10 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     setNotice('')
     try {
       const imagePaths = await getProductImagePaths(product.id)
-      const result = await supabase.from('products').delete().eq('id', product.id)
-      if (result.error) {
-        setError(`Product was not deleted: ${result.error.message}`)
+      const result = await supabase.from('products').delete().eq('id', product.id).select('id').maybeSingle()
+      const deleteFailure = productDeleteFailure(result)
+      if (deleteFailure) {
+        setError(`Product was not deleted: ${deleteFailure}`)
         return
       }
       onRefresh()
@@ -470,9 +512,9 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
             return (
               <article className="inventory-item" key={product.id}>
                 <div className="inventory-item__photo">{product.image ? <img src={product.image} alt={product.name} /> : <Image size={22} />}</div>
-                <div className="inventory-item__details"><p className="eyebrow">{product.setName || product.category || 'CARD'}</p><h3>{product.name}</h3><span>{raw.card_number || 'Card number not recorded'} · {product.rarity || 'Rarity not recorded'}</span><span className={String(raw.status || '').toLowerCase() === 'active' ? 'inventory-publication-status is-published' : 'inventory-publication-status'}>{String(raw.status || '').toLowerCase() === 'active' ? 'Published in Archive' : 'Private · Inventory only'}</span></div>
-                <label className="form-field inventory-input"><span>GBP price</span><input type="number" min="0" step="0.01" value={valueFor(product, 'price') || raw.price || ''} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], price: event.target.value } }))} /></label>
-                <label className="form-field inventory-input"><span>Quantity</span><input type="number" min="0" step="1" value={valueFor(product, 'stock') || raw.stock_quantity || 0} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], stock: event.target.value } }))} /></label>
+                <div className="inventory-item__details"><p className="eyebrow">{product.setCode ? `${product.setCode} · ` : ''}{product.setName || product.category || 'CARD'}</p><h3>{product.name}</h3><span>{raw.card_number || 'Card number not recorded'} · {product.rarity || 'Rarity not recorded'}</span><span>{[raw.language, raw.variant_label].filter(Boolean).join(' · ') || 'Language / printing not recorded'}</span>{raw.catalogue_printing_key && <span className="admin-muted">Printing: {raw.catalogue_printing_key}</span>}<span className={String(raw.status || '').toLowerCase() === 'active' ? 'inventory-publication-status is-published' : 'inventory-publication-status'}>{String(raw.status || '').toLowerCase() === 'active' ? 'Published in Archive' : 'Private · Inventory only'}</span></div>
+                <label className="form-field inventory-input"><span>GBP price</span><input type="number" min="0" step="0.01" value={valueFor(product, 'price') ?? raw.price ?? ''} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], price: event.target.value } }))} /></label>
+                <label className="form-field inventory-input"><span>Quantity</span><input type="number" min="0" step="1" value={valueFor(product, 'stock') ?? raw.stock_quantity ?? 0} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], stock: event.target.value } }))} /></label>
                 <button className="button button--outline inventory-save" type="button" disabled={busyId === String(product.id)} onClick={() => saveInventory(product)}>{busyId === String(product.id) ? 'Saving…' : 'Update stock'}</button>
                 <div className="inventory-item__actions">
                   <button className={String(raw.status || '').toLowerCase() === 'active' ? 'button button--outline' : 'button button--gold'} type="button" disabled={busyId === String(product.id)} onClick={() => toggleArchivePublication(product)}>{busyId === String(product.id) ? 'Saving…' : String(raw.status || '').toLowerCase() === 'active' ? 'Remove from Archive' : 'Post to Archive'}</button>
@@ -529,6 +571,9 @@ const productEditFields = [
   { key: 'cost', label: 'Cost', columns: ['cost'], numeric: true },
   { key: 'card_type', label: 'Card type', columns: ['card_type'] },
   { key: 'effect_text', label: 'Card effect', columns: ['effect_text'], multiline: true },
+  { key: 'counter', label: 'Counter', columns: ['counter'], numeric: true },
+  { key: 'trigger_text', label: 'Trigger', columns: ['trigger_text'], multiline: true },
+  { key: 'attributes', label: 'Attributes', columns: ['attributes'] },
   { key: 'language', label: 'Language', columns: ['language'], options: ['English', 'Japanese', 'Chinese', 'Korean'] },
   { key: 'classification', label: 'Classification', columns: ['classification'] },
   { key: 'condition', label: 'Condition', columns: ['condition'] },
@@ -559,27 +604,7 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
       setError('Supabase is not configured.')
       return
     }
-    const payload = {}
-    fields.forEach((field) => {
-      const value = values[field.key]
-      if (field.numeric) {
-        // Power and cost are optional card details; price and stock are required
-        // inventory values and must not be cleared accidentally.
-        payload[field.column] = value === '' ? null : Number(value)
-      } else if (field.checkbox) {
-        payload[field.column] = Boolean(value)
-      } else if (field.select && value === '') {
-        payload[field.column] = null
-      } else if (field.options && value === '') {
-        payload[field.column] = null
-      } else if (typeof value === 'string' && value.trim() === '' && !field.required) {
-        // Store cleared optional text fields as NULL, not an empty string.
-        payload[field.column] = null
-      } else {
-        payload[field.column] = value
-      }
-    })
-    if ('updated_at' in raw) payload.updated_at = new Date().toISOString()
+    const payload = buildProductEditPayload(fields, values, raw)
     if (fields.some((field) => field.key === 'name') && !String(values.name || '').trim()) {
       setError('Card name is required.')
       return
@@ -596,14 +621,19 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
 
     setBusy(true)
     setError('')
-    const result = await supabase.from('products').update(payload).eq('id', product.id)
-    if (result.error) {
-      setError(`Product was not updated: ${result.error.message}`)
+    try {
+      const result = await supabase.from('products').update(payload).eq('id', product.id).select('id').maybeSingle()
+      const updateFailure = productUpdateFailure(result)
+      if (updateFailure) {
+        setError(`Product was not updated: ${updateFailure}`)
+        return
+      }
+      onSaved()
+    } catch (saveError) {
+      setError(`Product was not updated: ${saveError.message || 'Unexpected error.'}`)
+    } finally {
       setBusy(false)
-      return
     }
-    setBusy(false)
-    onSaved()
   }
 
   const renderField = (field) => {
@@ -660,7 +690,7 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
           <input aria-label={field.label} required={field.required} type={field.numeric ? 'number' : 'text'} min={field.numeric ? '0' : undefined} step={field.key === 'price' ? '0.01' : field.numeric ? '1' : undefined} value={value ?? ''} onChange={(event) => setValues((current) => ({ ...current, [field.key]: event.target.value }))} />
         )}
         {['name', 'effect_text', 'classification'].includes(field.key) && (
-          <CatalogueLanguageButtons cardNumber={values.card_number || raw.card_number} fieldKey={field.key} onApply={(nextValue, language) => setValues((current) => ({ ...current, [field.key]: nextValue, language }))} />
+          <CatalogueLanguageButtons cardNumber={values.card_number || raw.card_number} fieldKey={field.key} onApply={(nextValue) => setValues((current) => ({ ...current, [field.key]: nextValue }))} />
         )}
       </div>
     )
@@ -770,30 +800,24 @@ function CollectionsSection({ categories, sets, onRefresh }) {
     setBusy(true)
     setError('')
     setNotice('')
-    const duplicate = await supabase.from('categories').select('id').eq('name', categoryName.trim()).limit(1)
-    if (duplicate.error) {
-      setError(`Could not check the category name: ${duplicate.error.message}`)
-      setBusy(false)
-      return
-    }
-    if (duplicate.data?.length) {
-      setError('A category with that name already exists.')
-      setBusy(false)
-      return
-    }
-    const result = await supabase.from('categories').insert({
-      id: globalThis.crypto.randomUUID(),
-      name: categoryName.trim(),
-      created_at: new Date().toISOString(),
-    })
-    if (result.error) {
-      setError(`Category was not saved: ${result.error.message}`)
-    } else {
+    try {
+      const duplicate = await supabase.from('categories').select('id').eq('name', categoryName.trim()).limit(1)
+      if (duplicate.error) throw new Error(`Could not check the category name: ${duplicate.error.message}`)
+      if (duplicate.data?.length) throw new Error('A category with that name already exists.')
+      const result = await supabase.from('categories').insert({
+        id: globalThis.crypto.randomUUID(),
+        name: categoryName.trim(),
+        created_at: new Date().toISOString(),
+      })
+      if (result.error) throw new Error(`Category was not saved: ${result.error.message}`)
       setCategoryName('')
       setNotice('Category added.')
       onRefresh()
+    } catch (categoryError) {
+      setError(categoryError.message || 'Category was not saved. Please try again.')
+    } finally {
+      setBusy(false)
     }
-    setBusy(false)
   }
 
   const addSet = async (event) => {
@@ -805,34 +829,31 @@ function CollectionsSection({ categories, sets, onRefresh }) {
     setBusy(true)
     setError('')
     setNotice('')
-    const duplicate = await supabase.from('sets').select('id').eq('name', setName.trim()).limit(1)
-    if (duplicate.error) {
-      setError(`Could not check the set name: ${duplicate.error.message}`)
-      setBusy(false)
-      return
-    }
-    if (duplicate.data?.length) {
-      setError('A set with that name already exists.')
-      setBusy(false)
-      return
-    }
-    const result = await supabase.from('sets').insert({
-      id: globalThis.crypto.randomUUID(),
-      name: setName.trim(),
-      code: setCode.trim() || null,
-      description: setDescription.trim() || null,
-      created_at: new Date().toISOString(),
-    })
-    if (result.error) {
-      setError(`Set was not saved: ${result.error.message}`)
-    } else {
+    try {
+      const existingSets = await supabase.from('sets').select('id,name,code')
+      if (existingSets.error) throw new Error(`Could not check existing sets: ${existingSets.error.message}`)
+      const duplicateName = (existingSets.data || []).some((set) => String(set.name || '').trim().toLocaleLowerCase() === setName.trim().toLocaleLowerCase())
+      if (duplicateName) throw new Error('A set with that name already exists.')
+      const codeMatches = setCode.trim() ? findSetCodeMatches(existingSets.data || [], setCode) : []
+      if (codeMatches.length) throw new Error('A set with that code already exists, or another set uses an equivalent code format. Choose a unique set code.')
+      const result = await supabase.from('sets').insert({
+        id: globalThis.crypto.randomUUID(),
+        name: setName.trim(),
+        code: setCode.trim() || null,
+        description: setDescription.trim() || null,
+        created_at: new Date().toISOString(),
+      })
+      if (result.error) throw new Error(`Set was not saved: ${result.error.message}`)
       setSetName('')
       setSetCode('')
       setSetDescription('')
       setNotice('Set added.')
       onRefresh()
+    } catch (setFailure) {
+      setError(setFailure.message || 'Set was not saved. Please try again.')
+    } finally {
+      setBusy(false)
     }
-    setBusy(false)
   }
 
   return (

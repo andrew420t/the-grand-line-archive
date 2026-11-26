@@ -1,6 +1,6 @@
 # Grand Line Archive scanner test — progress and reference matrix
 
-Updated: 22 November 2026
+Updated: 24 November 2026
 
 ## Scope
 Requested 100 sample cases: 25 set/product targets × 2 English + 2 Japanese = 100. Sets: OP-01–OP-18, EB-01–EB-05, PRB-01/02.
@@ -9,14 +9,14 @@ Requested 100 sample cases: 25 set/product targets × 2 English + 2 Japanese = 1
 - **Synthetic OCR using local Tesseract 5.5.0:** 100 text-crop fixtures. Raw OCR was exact for **57/100**. After the merged set-code correction from PR #20 and the OP-prefix correction from PR #21, normalized card numbers were exact **100/100**. Fixtures used OP/EB/PRB/ST-style codes with mild rotations, blur and JPEG compression. This is synthetic printed-number OCR only, not card-photo OCR.
 - **Parser fixes merged:** PR #20 commit ec4f2b244731dacaedcbe18b57ef25e3b7877a10 (O/0 confusion in set-code digits); PR #21 commit f2c865320bb1583aa687a927f34b81ca6f2d6eb1 (extra O in OP prefix such as OPO09). Both merged; regression tests added. **CI verified:** GitHub Actions runs #87 (PR #20), #88 (PR #21), and #89 (PR #22) each passed all steps: dependency install, `npm test`, lint, and production build. Run #86 and #84 were failed attempts before fixes; subsequent corrected runs passed.
 - **Reference data locators:** 92/100 requested sample slots in the current Koala Kollect product-linked locator data, 8 slots unmatched by the exact product-code query. The combined English OP14-EB04 and OP15-EB04 product-code mappings were included in this refreshed extraction. This does **not** mean cards are missing from official lists: English OP-14 and OP-15 products use combined product codes OP14-EB04 / OP15-EB04; EB-04 is not a separate English booster product. OP-18 and EB-05 official card lists are now published, but the current downloaded locator dataset appears not to have incorporated those recent releases.
-- **Official image visual check:** 4 images opened successfully and visually checked for card number/name: English OP01-001 Roronoa Zoro, Japanese OP01-001 Zoro, English OP01-002 Trafalgar Law, Japanese OP01-002 Law. This confirms those URLs load; it does not constitute OCR engine testing of those image files.
-- **Real card-photo OCR:** 0/100. Network/DNS in the execution environment blocks downloading source images to local disk for Tesseract. The web image viewer can display images but cannot provide a file to the local OCR process.
+- **Official image visual check (latest): 100/100 sample image slots loaded in browser and visually checked.** OP01–OP16: 64/64; OP17: 4/4; OP18: 4/4; EB01: 4/4; EB02: 4/4; EB03: 4/4; EB04: 4/4; EB05: 4/4; PRB01: 4/4; PRB02: 4/4. This verifies image loading/visible artwork only—not OCR-engine testing or full catalogue completeness.
+- **Real card-photo OCR:** 1/100. The user's physical English Saint Shamrock OP18-119 photo was run through local Tesseract 5.5.0 and multiple crops/preprocessing variants. Automatic name/number identification failed; rules text was partial. This is a real-photo failure sample, not a synthetic test. The other 99 requested real-photo slots have no physical photos supplied.
 - **Production/live UI:** not tested. Production URL open attempt failed through web browser tool; container DNS/network cannot reach the Worker. So scanner popup, candidate choice, remembered choice, manual fallback, and deployment status remain code-review-only/unverified in live UI.
 - **Code review:** candidate ranking order is remembered choice → exact OCR name → language. Popup displays image/name/number/language/set/rarity, lets the user select a candidate, has a remember checkbox using local browser storage keyed by detected card number, and “not sure/manual” closes without applying. Confirmation fills the form only; it does not save inventory.
-- **8 unmatched locator rows:** OP18 EN/JP (4) and EB05 EN/JP (4). The current locator dataset is lagging; both sets have card lists now. The English EB-04 set is not a separate product—its cards are associated with combined OP14-EB04 and OP15-EB04 products.
+- **Current catalogue locator gap:** the Koala Kollect product-linked locator dataset itself still has 92/100 rows and omits the eight OP18/EB05 sample slots. Those eight were supplemented from official Bandai card-list pages and all eight official images were subsequently visually loaded. The English EB-04 set is not a separate product—its cards are associated with combined OP14-EB04 and OP15-EB04 products.
 
 ## Reference matrix
-Sampling method: first two unique card numbers (sorted) with product-linked image locators for each exact set/product code and language. For OP14/OP15, combined English product codes were not reliably linked in the source data during this extraction; EB04 is included in Japanese product associations. Some samples are reprints and retain their original card number. URLs are official card-image path candidates; only the four OP01 URLs above were image-loaded/visually verified.
+Sampling method: first two unique card numbers (sorted) with product-linked image locators for each exact set/product code and language. For OP14/OP15, combined English product codes were not reliably linked in the source data during this extraction; EB04 is included in Japanese product associations. Some samples are reprints and retain their original card number. **Image verification status is updated in the summary above:** all 100 sample slots are now visually loaded; the six previously unresolved slots passed after cache-busted direct image retries. Visual loading is not OCR-engine testing.
 
 | Set | Language | Slot | Card number | Name | Image URL |
 |---|---|---:|---|---|---|
@@ -88,10 +88,10 @@ Sampling method: first two unique card numbers (sorted) with product-linked imag
 | OP17 | English | 2 | EB04-061 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB04-061_p2.png |
 | OP17 | Japanese | 1 | EB04-007 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB04-007_p2.png |
 | OP17 | Japanese | 2 | EB04-061 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB04-061_p3.png |
-| OP18 | English | 1 | OP18-001 | Karoo | https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png (candidate; not load-verified) |
-| OP18 | English | 2 | OP18-002 | Igaram | https://en.onepiece-cardgame.com/images/cardlist/card/OP18-002.png (candidate; not load-verified) |
-| OP18 | Japanese | 1 | OP18-001 | カルー (Karoo) | https://www.onepiece-cardgame.com/images/cardlist/card/OP18-001.png (candidate; not load-verified) |
-| OP18 | Japanese | 2 | OP18-002 | イガラム (Igaram) | https://www.onepiece-cardgame.com/images/cardlist/card/OP18-002.png (candidate; not load-verified) |
+| OP18 | English | 1 | OP18-001 | Karoo | https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| OP18 | English | 2 | OP18-002 | Igaram | https://en.onepiece-cardgame.com/images/cardlist/card/OP18-002.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| OP18 | Japanese | 1 | OP18-001 | カルー (Karoo) | https://www.onepiece-cardgame.com/images/cardlist/card/OP18-001.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| OP18 | Japanese | 2 | OP18-002 | イガラム (Igaram) | https://www.onepiece-cardgame.com/images/cardlist/card/OP18-002.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
 | EB01 | English | 1 | EB01-001 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-001.png |
 | EB01 | English | 2 | EB01-002 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-002.png |
 | EB01 | Japanese | 1 | EB01-001 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-001.png |
@@ -108,18 +108,18 @@ Sampling method: first two unique card numbers (sorted) with product-linked imag
 | EB04 | English | 2 | EB01-023 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-023_p1.png |
 | EB04 | Japanese | 1 | EB01-023 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-023_p2.png |
 | EB04 | Japanese | 2 | EB04-001 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB04-001.png |
-| EB05 | English | 1 | EB05-001 | Jewelry Bonney | https://en.onepiece-cardgame.com/images/cardlist/card/EB05-001.png (candidate; not load-verified) |
-| EB05 | English | 2 | EB05-002 | Doll | https://en.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (candidate; not load-verified) |
-| EB05 | Japanese | 1 | EB05-001 | ジュエリー・ボニー (Jewelry Bonney) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-001.png (candidate; not load-verified) |
-| EB05 | Japanese | 2 | EB05-002 | ドール (Doll) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (candidate; not load-verified) |
-| PRB01 | English | 1 | EB01-006 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png |
-| PRB01 | English | 2 | OP01-006 | — | https://en.onepiece-cardgame.com/images/cardlist/card/OP01-006_p3.png |
-| PRB01 | Japanese | 1 | EB01-006 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png |
-| PRB01 | Japanese | 2 | OP01-006 | — | https://www.onepiece-cardgame.com/images/cardlist/card/OP01-006_p1.png |
-| PRB02 | English | 1 | EB01-009 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-009_p1.png |
-| PRB02 | English | 2 | EB01-012 | — | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-012_r1.png |
-| PRB02 | Japanese | 1 | EB01-009 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-009_p1.png |
-| PRB02 | Japanese | 2 | EB01-012 | — | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-012_r1.png |
+| EB05 | English | 1 | EB05-001 | Jewelry Bonney | https://en.onepiece-cardgame.com/images/cardlist/card/EB05-001.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| EB05 | English | 2 | EB05-002 | Doll | https://en.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| EB05 | Japanese | 1 | EB05-001 | ジュエリー・ボニー (Jewelry Bonney) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-001.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| EB05 | Japanese | 2 | EB05-002 | ドール (Doll) | https://www.onepiece-cardgame.com/images/cardlist/card/EB05-002.png (official image visually loaded via Bandai card-list page; cache-busted URL) |
+| PRB01 | English | 1 | EB01-006 | Tony Tony.Chopper | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png?261016= |
+| PRB01 | English | 2 | OP01-006 | Otama | https://en.onepiece-cardgame.com/images/cardlist/card/OP01-006_r1.png?261016= |
+| PRB01 | Japanese | 1 | EB01-006 | トニートニー・チョッパー | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-006_r1.png?261113= |
+| PRB01 | Japanese | 2 | OP01-006 | お玉 | https://www.onepiece-cardgame.com/images/cardlist/card/OP01-006_p1.png?261113= |
+| PRB02 | English | 1 | EB01-009 | Just Shut Up and Come with Us!!!! | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-009_r1.png?261016= |
+| PRB02 | English | 2 | EB01-012 | Cavendish | https://en.onepiece-cardgame.com/images/cardlist/card/EB01-012_r1.png?261016= |
+| PRB02 | Japanese | 1 | EB01-009 | うるせェ!!!いこう!!!! | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-009_p1.png?261113= |
+| PRB02 | Japanese | 2 | EB01-012 | キャベンディッシュ | https://www.onepiece-cardgame.com/images/cardlist/card/EB01-012_r1.png?261113= |
 
 ## Sources
 - Project scanner: https://github.com/andrew420t/the-grand-line-archive/blob/master/src/admin/CardScanner.jsx
@@ -203,3 +203,1192 @@ Applied manual card-face perspective rectification (approximate 4-corner homogra
 
 ### Follow-up OCR variants on Test #1 (23 Nov)
 Re-ran rectified card regions using Tesseract PSM 6/7/11/13 with grayscale, CLAHE, and sharpening, all upscaled 4×. OCR still did not recover the card title or card code. The best partial rules-text variants recognized fragments including “On K.O.”, “You may trash 1 card from your hand”, and “Character card from your trash”, but still missed/garbled other text. **No auto-identification pass**. This confirms ROI processing helps recover some key text but title/code remain the hardest, likely because of foil reflections, tiny vertical code print, and perspective/holder obstruction.
+
+
+## Catalogue freshness and OP18 / EB05 gap investigation — 23 November 2026
+
+- **Primary source freshness verified:** the upstream Koala Kollect `manifest.json` reports `generated_at: 2026-10-22T04:46:19Z`. Its English/Japanese product indexes contain 99 / 92 products and do not include OP18 or EB05. The cached product-page state lists the English and Japanese OP18 and EB05 product pages, but each was captured on 2026-10-08 with an empty series list. The source manifest and card catalogue therefore lag the current official card list.
+- **Official OP18 pages confirmed:** English Bandai card list `series=569118` returns 159 results; Japanese Bandai card list `series=550118` returns 159 results. The Japanese page shows OP18-001 Karoo and OP18-002 Igaram with official Bandai image links. This confirms OP18 exists in both languages and is not a genuinely empty set.
+- **Independent recent data comparison:** `hugoprudente/optcgjson` has OP18 and EB05 files with metadata date 2026-11-22: OP18 has 159 printing entries / 125 unique card numbers; EB05 has 96 printing entries / 72 unique card numbers. Its sample image links use Bandai's Asia-English host. It is currently English-focused; Japanese variants and image IDs still need independent validation. No artwork has been downloaded or copied.
+- **Integration decision:** use the recent files as a comparison/test source, not as the primary production catalogue yet. Confirm provenance/licensing and validate Japanese printing identities and variant suffixes before wiring the feed into scanner results. Keep official Bandai URLs as image references and keep seller uploads separate.
+- **Admin diagnostics improvement:** the Image Library now reports source manifest date/age, flags source feeds older than 7 days, identifies OP18/EB05 coverage gaps, and lists missing-image printings across assigned and unassigned sets (previously only unassigned missing-image rows were shown). It also reports actual load/failure counts for reference images currently rendered in the browser; this is not a whole-catalogue URL crawl.
+- **Scanner improvements in the current PR branch:** lookup now checks up to six OCR number candidates instead of only the top candidate; card-number OCR uses an alphanumeric whitelist; name matching normalizes punctuation and partial OCR text; recognition language aliases `eng`/`jpn` are understood; local remembered-match keys use the selected catalogue card number. Regression tests were added for OCR substitutions, OP/EB/ST/PRB/promo number formats, language aliases, and partial-name ranking.
+- **Still unverified:** no 100-card physical-photo OCR run has been completed. The current runtime cannot download source images to the local Tesseract process. The new browser gallery load counter can verify visible image loads/failures when an administrator opens the preview, but it is not a substitute for running OCR on the 100 physical/photo cases.
+
+
+## Catalogue image fallback hardening — 23 November 2026
+
+- Added a shared image resolver used by scanner matching, coverage diagnostics, and the reference gallery. A TCGCSV printing with no native image can now use official Bandai artwork for the same card key and language as an explicitly labelled base-image fallback.
+- The coverage report now counts printing-specific official images, fallback images, and truly missing image references separately. Fallbacks are not counted as printing-specific images.
+- The reference gallery can retry a failed primary image using an alternate official image reference for the same card key. The UI labels alternate/base artwork so it is not mistaken for the exact stamped or parallel finish.
+- The 100-image smoke test now times out individual image requests after 12 seconds instead of hanging indefinitely, reports loaded/failed/timed-out counts, and displays sample coverage per target set. A complete matrix must show four samples for each of the 25 target sets, including OP-18 and EB-05.
+- Added unit tests for printing-specific image selection, safe same-card fallback, refusing cross-card fallbacks, and preserving direct third-party references.
+- Verification for commit `b769444b3c556cb49e54ba02fa146fb3a3321853`: GitHub Actions `build-and-test` passed tests, lint, and production build. Cloudflare preview deployment is queued/pending at the time of this note. Production has not been changed.
+- Still required: browser-load test of the newly deployed preview, check the three EB04-005 references, run all 100 smoke-test images, and verify real-card scans. Base/alternate image fallback is a visual identification aid, not proof of the special printing's artwork.
+
+
+## Official Bandai source links in scanner — 23 November 2026
+
+- Scanner catalogue matches now expose an official Bandai card-list link when the printing's linked set code can be resolved. The reference image gallery already carries official source links; this adds the same source affordance directly to scanner candidate cards.
+- Link resolver covers standard OP, EB, ST, PRB, and promo-list URL patterns in English and Japanese. Combined product identifiers such as OP14-EB04 intentionally remain unmapped until their series URL is independently verified.
+- Live official page checks (browser inspection): OP18 English `series=569118` returned 159 results; EB05 English `series=569205` returned 96; PRB01 English `series=569301` returned 319; ST10 English `series=569010` returned 19; the English promo list `series=569901` returned 375. Official card-list pages may include reprints/other product-linked printings and the page's displayed results are not a guaranteed unique-card count.
+- The official pages expose card number, rarity, card name, card attributes/effect, set association and card images. This is the primary verification source; the archive links to the official source rather than bulk-hosting Bandai artwork.
+- Tests now cover English and Japanese URLs, promo links, DON!! separate source, and deliberately unmapped combined products.
+
+
+## Combined OP14/OP15 and EB-04 official source routing — 23 November 2026
+- Verified Bandai's English official series **569114** (OP14-EB04, 199 results) and **569115** (OP15-EB04, 196 results), plus Japanese series **550114**, **550115**, and standalone **550204** (Japanese EB04).
+- English EB04-numbered cards route by printed card number: **EB04-011–041 → OP14-EB04 / 569114**; **EB04-001–010 and EB04-042–061 → OP15-EB04 / 569115**. This keeps the same EB04 prefix from linking to the wrong official list.
+- Scanner matches and Image Library rows now pass the card number to the official-list resolver. Combined product codes also link directly to their Bandai series pages.
+- Added regression tests for both combined product pages, Japanese EB04, English EB04 range boundaries and invalid numbers. No card data or artwork is copied; this change adds verified source links only.
+
+## Rotation-aware card-number OCR — 23 November 2026
+- Scanner number preprocessing retains the four focused upright lower-edge crops and adds three lower-footer crops after rotating the full photograph 90°, 180° and 270°.
+- This covers cards photographed sideways and upside-down without multiplying the focused crop OCR calls by four. All seven number-area reads feed the existing candidate deduplication, catalogue lookup and human confirmation flow.
+- Scanner status now explains that it is checking multiple orientations. A regression test confirms the supported rotation set.
+- OCR crop enlargement is bounded to avoid creating oversized canvases from high-resolution phone photos; smaller focused crops can still be enlarged for readability.
+- This is an OCR robustness improvement, not a verified photo benchmark; physical card testing across orientations is still needed.
+
+## Adaptive contrast for card-number OCR — 23 November 2026
+- Number-area crops now calculate a grayscale histogram and stretch the central 4th–96th percentile range when the crop has enough tonal spread. This adapts to darker/brightly lit photos and suppresses a small number of glare/shadow outliers.
+- Flat/low-spread crops retain the conservative previous contrast curve instead of amplifying noise.
+- Added pure-function regression tests for outlier handling, range stretching, monotonicity, and fallback. This is preprocessing only; it does not remove glare or detect card boundaries, and it has not yet been validated on a real-photo benchmark.
+
+## Background-aware card photo crop — 23 November 2026
+- When an administrator chooses **Crop to card**, photo preparation now attempts to detect a foreground card against a consistent background using corner-color consistency and foreground bounds. It centers the crop around the detected object (not the photo center) and adds padding.
+- The crop only activates when detection confidence and aspect checks pass. Busy/uneven backgrounds, uncertain results, or crops that cannot fit safely fall back to the previous centered aspect crop.
+- Added tests for offset-card detection, inconsistent-background rejection, aspect framing, and safe fallback. This is a simple background heuristic, not full perspective correction; physical photo testing remains needed.
+
+
+## Foreground crop noise rejection — 23 November 2026
+- Improved background-aware crop detection to use a coarse foreground mask and retain the largest 8-connected foreground component, instead of letting every thresholded pixel contribute to the crop's global bounds.
+- This is intended to reject isolated dust, background specks, and disconnected shadows that previously could widen the auto-crop.
+- The existing safe-fallback behavior is unchanged: inconsistent corner colors, unsuitable card geometry, or low confidence still use the centered aspect crop.
+- Added a regression test with isolated foreground specks outside the card, verifying the detected bounds remain centered on the card component.
+- This reduces sensitivity to disconnected noise; it does not solve cards on busy backgrounds or detect perspective corners.
+
+
+## Noise-aware edge sharpening for card-number OCR — 23 November 2026
+- Number-area crops now apply a mild 3×3 unsharp mask after grayscale contrast normalization. This is intended to recover small printed character edges softened by camera focus and enlargement.
+- A contrast threshold leaves low-detail pixels unchanged so mild foil grain and sensor noise are less likely to be amplified. Sharpening is bounded and does not alter the original uploaded photograph.
+- Added pure-function regression tests for edge strengthening and low-contrast noise preservation.
+- This is a preprocessing enhancement, not a measured OCR-accuracy claim. It still needs browser/physical-card evaluation, especially on foil, glare, and already-sharp images; perspective correction remains outstanding.
+
+
+## Scanner variant-choice clarity — 23 November 2026
+- Reviewed the existing scanner confirmation flow before changing it. It already retained distinct catalogue printing IDs, showed the uploaded photo beside the selected catalogue reference, offered candidate thumbnails, and required an explicit confirmation; it did not auto-save stock.
+- Improved the candidate picker so each option now exposes set name, rarity, and printing variant as well as card number, language, and set code. The selected candidate summary also shows the set name.
+- When multiple catalogue printings share a card number, the confirmation dialog explicitly warns that OCR cannot determine the finish by itself and asks the user to compare the artwork and variant.
+- Added focused regression fixtures for the OP17-062 Kaido normal/parallel pair and Japanese EB04-005 Trafalgar Law. These test candidate retention and identity metadata, not live catalogue completeness or OCR accuracy.
+- Variant selection still requires human confirmation. Price editing/overrides are not implemented in this increment, and no prices are sourced or changed by this UI.
+
+
+## Prevent stale card-number-only variant memory — 23 November 2026
+- Found a subtle variant-selection risk during review: a browser preference keyed only by card number could promote a previously chosen Parallel printing when the next physical card with that same number was the Normal version (or vice versa).
+- Removed that card-number-only preference from scanner ranking and removed its misleading checkbox. A prior choice can influence ranking only when the current uploaded photograph produces a match in the local/shared image-recognition memory; that remains a suggestion and still requires the user to confirm the candidate.
+- Added/retained regression coverage for the ranking signal: verified image-memory matches can help ranking, but OCR name and language signals remain available when no image-memory match exists.
+- This avoids treating a card number as a unique printing identity. It does not claim that image similarity can always distinguish foil/parallel finishes; human comparison and confirmation remain required.
+
+
+## Preserve exact selected printing in inventory — 23 November 2026
+- Traced the scanner-to-inventory handoff and found that the scanner's selected catalogue printing ID and reference image were not included in the Quick Add form's initial scan-field mapping or product insert payload. The descriptive variant label could also be dropped on this handoff.
+- The selected catalogue match now carries its composite match ID, source printing key, reference image URL and image source into the scanner's confirmed fields and Quick Add form. The normal uploaded front/back/detail photographs remain separate and continue to be the product's own photos.
+- Product creation now includes these four catalogue-reference fields alongside the existing variant label, but only when the extended product columns are confirmed available. The schema preflight checks all required columns before insert, so a missing migration stops the save rather than silently dropping the exact printing reference.
+- Added those columns to the existing review-only admin feature migration. No SQL was executed and no live database was changed. The migration remains subject to review/approval before anyone applies it.
+- Regression tests verify the reference metadata is included only with the extended schema and that Normal and Parallel OP17-062 records retain different match IDs, printing keys and image URLs despite sharing the same card number.
+- This persists the exact catalogue reference with the inventory record; it does not replace seller-uploaded photographs, infer the finish from OCR, or make the scanner's candidate confirmation automatic.
+
+
+## Inventory printing identity and edit safety — 23 November 2026
+
+- Inventory rows now show the set code alongside the set name, plus the recorded language and variant label. When available, the exact catalogue printing key is shown as a separate identifier.
+- The existing product edit workflow remains a partial update: catalogue match ID, printing key, reference image URL/source and legacy reference aliases are not part of the editable field list, so ordinary edits do not replace or clear them.
+- Catalogue lookup from an existing product now also fills those catalogue identity/reference fields when the corresponding product columns exist and are blank, using the selected printing. Existing values remain untouched.
+- Added a regression test asserting ordinary card edits cannot overwrite exact catalogue printing identity.
+- This is an inventory UI/edit-flow safeguard, not a database migration or live deployment. The full variant-aware duplicate review and live schema compatibility review remain outstanding.
+
+
+## Variant-aware inventory duplicate protection and schema preflight — 23 November 2026
+
+- Quick Add now compares the selected catalogue match ID first, then printing key plus language, before deciding whether an existing card number/set is the same printing.
+- Exact catalogue-printing matches are blocked with instructions to update the existing inventory record instead of creating a second product.
+- Different confirmed catalogue printing IDs/keys are treated as distinct, so Normal and Parallel versions sharing a card number can be stored separately. Different language printings are also distinct.
+- Older inventory rows without enough printing metadata are treated as possible duplicates. The administrator must inspect the existing row and explicitly confirm a separate printing; a variant label is required. This avoids silently assuming legacy rows are different.
+- Duplicate lookup checks up to 50 rows for the same card number and set. This is a defensive application check, not a database uniqueness constraint.
+- Added unit coverage for exact duplicates, Normal vs Parallel, English vs Japanese, and ambiguous legacy records.
+- Added review-only SQL preflight checks that public.products exists with a UUID id, and that any existing public.product_images table has the required columns and UUID product_id before the migration attempts DDL.
+- The migration remains review-only and has not been run. No database, production site or live inventory was changed.
+
+## Inventory duplicate protection — 23 November 2026
+- Duplicate classification now normalizes common language labels and abbreviations (English/EN, Japanese/JP, Chinese/ZH, Korean/KR) before comparing otherwise identical catalogue printing keys.
+- A shared catalogue printing key is treated as an exact duplicate only when both entries have a known, matching language. If either language is missing, it is surfaced as a possible duplicate for administrator review rather than automatically blocking a potentially distinct language printing.
+- Different stable printing keys remain distinct, preserving Normal/Parallel and other separate catalogue printings that share a card number. Different known languages remain distinct.
+- Regression tests cover language aliases and missing-language ambiguity. This is code/test coverage only; no live inventory records or production database were changed.
+
+- Migration review now includes a read-only audit query for repeated stable printing keys grouped by set, card number and normalized language. This surfaces pre-existing collisions (including blank-language legacy rows) before anyone considers a database uniqueness rule. The migration remains review-only and has not been executed.
+
+
+## Scanner/inventory safety review — 23 November 2026
+- Reset possible-duplicate confirmation whenever candidate card fields change, or when a different catalogue match or set is selected. A prior confirmation cannot be reused for a changed card.
+- Catalogue match selection no longer carries a stale previous set ID when the new match has a different or unrecognised set code. The set must resolve from the selected match's code or remain unset for verification.
+- Duplicate checks now paginate matching inventory rows rather than stopping at 50, and sort by product ID for stable pagination. This prevents large inventories from hiding an existing duplicate.
+- These are defensive application changes on the PR branch. They do not change production or live database records. CI for the latest commit is pending.
+
+
+## Stale scanner results cleared on rescan — 23 November 2026
+- Starting a new OCR scan now immediately clears prior catalogue/manual match panels, selection, confirmation state, previous OCR readings/candidates, and lookup errors. This prevents a previous card's candidate from remaining visible if the new photograph fails OCR or lookup.
+- Change is on PR #26 branch only; awaiting CI.
+
+
+## Progress-log correction — 23 November 2026
+- An earlier inventory-safety entry described duplicate lookup as checking up to 50 rows. That was superseded by the pagination work: duplicate lookup now retrieves matching rows in pages of 1,000 with stable ID ordering and continues until the final page. The earlier note is historical, not the current limit.
+- The rescan reset improvement passed CI on commit `db679d6bfdc4b420b6e7fcfd710ff5bb72e0d4c8` (tests, lint, build).
+
+
+## Shared recognition-memory coverage — 23 November 2026
+- The shared-photo lookup previously capped reads at the first 5,000 examples without a deterministic order, meaning later confirmed examples could be ignored. It now reads ordered pages of 1,000 records until the final page, then compares the query hash against the complete returned set.
+- This removes the silent 5,000-example coverage ceiling. Query volume/performance with a very large shared library still needs real database benchmarking; the migration remains review-only and has not been applied.
+
+
+### Recognition-memory ranking safety
+- Adjusted catalogue ranking so OCR name agreement and detected language agreement take precedence over a remembered image. Recognition memory now breaks ties only after these textual signals; it can no longer force a conflicting language/identity to the top of the list. Added tests for conflicting OCR signals and tie-break behavior. This remains a suggested ranking and requires user confirmation.
+
+
+## Scanner-to-inventory catalogue handoff audit — 23 November 2026
+- Confirmed scanner candidate selection maps printing identity (catalogue match ID, stable printing key, reference image URL/source, language, set code, variant label) into scan-field state; QuickAdd receives these values and resolves the selected set code to an existing set ID before saving.
+- Found a detail handoff gap: choosing a catalogue printing from the scanner filled the primary fields and identity but did not refresh **counter, trigger text, or attributes** from that selected catalogue candidate. Those fields could remain OCR/previous scan values rather than candidate-associated details.
+- Added a shared, testable buildCatalogueScannerFields mapping and used it for the scanner's selected-match application. It now carries all catalogue-derived card details and identity aliases, including counter, trigger, attributes, and reference aliases, consistently into QuickAdd.
+- Added a regression test for Japanese EB04-005 Parallel printing handoff and verifies missing fields safely default to blank. The review remains code/test-only; live admin UI and database insert are not verified.
+
+- Follow-up discovered those three fields were not part of the inventory product schema/payload, so merely mapping them into scanner state would not persist them. Added Counter, Trigger, and Attributes to QuickAdd, product insert payload, product edit fields, and the review-only migration (`counter integer`, `trigger_text text`, `attributes text`). Regression assertions now verify all three survive payload construction. Migration remains unexecuted; database persistence is not live-verified.
+
+
+## Inventory inline-edit safety audit — 23 November 2026
+- Reviewed inline stock/price updates and product-edit payload mapping. Existing edit payload remains restricted to editable fields and does not write catalogue printing identity/reference metadata.
+- Found inline price and quantity inputs used `||` fallbacks, making blank values revert visually to stored values and obscuring validation; switched to nullish fallbacks so explicit zero and blank edits are represented correctly.
+- Extracted `parseInventoryStockUpdate` to validate the stock/price pair consistently: whole-number non-negative stock, finite non-negative price, and no blank values. Explicit zero is supported.
+- Added tests for zero price/quantity and invalid/blank input. No live database writes performed.
+
+
+## DON!! set-attribution audit — 23 November 2026
+- Identified that the catalogue loader was not consuming the source dataset's dedicated `don_sets.jsonl`, despite it containing source-set assignments keyed to printing IDs. This left gallery cards showing `Unassigned` when product links were absent.
+- Verified the current source file contains **165 DON!! records and 308 unique printing keys**, with no conflicting duplicate printing-key assignments. The source manifest timestamp is **22 October 2026**; freshness is separately tracked in the catalogue coverage report.
+- Added source slug normalization (OP/EB/ST/PRB, combined OP14-EB04/OP15-EB04, Double Pack DP-xx, and Promo) and loaded the DON!! set mapping into the catalogue cache.
+- Gallery and coverage now prioritize a manually saved admin assignment, then the source DON!! set attribution, then linked product data. Gallery entries identify source-data attribution instead of implying a manually assigned set.
+- Follow-up UI audit found the manual DON!! assignment dropdown omitted Double Pack sets even though the source data includes DP-02 through DP-12. Added DP-01–DP-12 options and standardized the Promo option value to `PROMO`, matching the normalized source-set code.
+- DON!! entries continue linking to Bandai's DON!! PDF regardless of their mapped source set. Regression tests added for slug mapping, key attribution, and official DON!! link routing.
+- This is source-data/code-level verification, not a live catalogue UI or database test. No live DB changes, production deployment, or migration execution.
+
+
+## DON!! category-label consistency audit — 23 November 2026
+- Found a detection edge case: category labels such as `DON card` and `DON cards` were normalized to `doncard`/`doncards` but did not count as DON!! printings. They could therefore bypass DON set attribution and show an incorrect `Unassigned` label.
+- Expanded exact category recognition for DON, DON card, and DON cards while deliberately not matching unrelated names such as `Donquixote`.
+- Added regression coverage for spaced/punctuated DON labels and a non-DON category false-positive guard. CI verification is pending; no live catalogue/database change was made.
+
+
+## Bulk import safety and card-detail preservation audit — 23 November 2026
+- Found that the CSV bulk-import template and field mapping omitted Counter, Trigger Text and Attributes. These values could be lost when importing catalogue-reviewed card details, and the extended-schema preflight did not consider them.
+- Added the three columns to the template, parser aliases, catalogue-match application, insert form payload and extended-column preflight, so the fields are checked before any import attempts to write them.
+- Extracted CSV parsing into a testable module, added unmatched-quote and duplicate-header errors, and made blank rows safe to ignore while rejecting text after closing quotes and accepting multiline quoted cells.
+- Added duplicate detection within the uploaded CSV as well as existing inventory. Identity matching normalizes set-code formatting and treats known different languages or variants as distinct; blank/Normal/Base variant labels are treated consistently, while ambiguous missing-language records remain flagged for review.
+- Numeric preflight also validates non-negative integer Power/Cost/Counter, non-negative price, and whole-number stock; a dash is treated as a blank numeric value rather than producing NaN. Regression tests cover field mapping, quoted commas/quotes, multiline cells, CRLF and blank rows, malformed CSV, duplicate identity, and numeric edge cases. Import was not executed; no live inventory was changed. CI passed on commit `76e72efd` (tests, lint, build).
+
+
+## Checkout stock/price revalidation audit — 23 November 2026
+- Found that checkout previously trusted the basket's cached price and stock values without a fresh product query immediately before order creation.
+- Added a pre-check against current product records: only active products, valid prices, and sufficient stock are accepted. Changed prices or availability stop checkout and refresh basket values so the customer can review them. Order totals and order-item unit prices are derived from the refreshed product rows.
+- If order-item insertion fails, checkout now attempts to delete the empty pending order and reports if cleanup is denied/failed.
+- Added unit tests for fresh totals, unavailable/draft items, stock shortage, price changes, and invalid values. This is still a client-side check and does not prevent simultaneous checkouts from overselling; server-side atomic stock reservation and database policies remain necessary for production order safety. No orders, stock, or live database data were changed. CI passed on commit `b04472d8` (tests, lint, build).
+
+
+## Duplicate cart quantity audit — 23 November 2026
+- Checkout validation previously checked each basket line against stock independently. A malformed/restored basket containing repeated product IDs could request more total copies than stock while each individual line passed.
+- Added aggregate requested quantities per product and one consolidated insufficient-stock issue per product. Regression test covers duplicate lines whose combined quantity exceeds stock.
+- CI verification pending. This is still not atomic stock reservation; concurrent customers can race, so a server-side transaction/RPC remains required before live sales.
+
+
+## Storefront publication visibility audit — 23 November 2026
+- The public shop and product detail pages already use a strict active-status filter, but it was inline in the application and lacked isolated regression coverage.
+- Extracted a shared helper that permits only explicitly active products (case/whitespace normalized); draft, archived, blank and unknown statuses remain private. Added tests for status edge cases and null inputs.
+- This client-side visibility filter is supplementary; the actual public database access must be restricted by RLS policies. Existing RLS is not verified against the live database, and no policy or database changes were made. CI passed on commit `652d80c5` (tests, lint, build).
+
+- Added a read-only product visibility/RLS audit SQL file for the authorised live-schema review: reports RLS flags, existing product policies and expressions, API-role grants, effective privileges, and status counts. It contains SELECT statements only. Crucial caveat: permissive RLS policies combine with OR, so an existing broad public policy must be reviewed/revised rather than assuming a new active-only policy would restrict it. No live DB access or changes.
+
+
+## Checkout double-submit and thrown-error recovery audit — 23 November 2026
+- Added a synchronous ref guard so rapid repeated checkout clicks cannot launch multiple order-creation attempts before React state updates.
+- Wrapped checkout in try/catch/finally so unexpected exceptions report an error and always release the busy state. If an order was created but item insertion did not finish, it attempts to clean up the pending order and reports cleanup failures.
+- The safeguard is client-side only and cannot replace server-side idempotency/transaction protection. CI passed on commit `b7001543` (tests, lint, build).
+
+
+## Order-status validation audit — 23 November 2026
+- Admin order status changes now validate against the supported lifecycle values (pending, processing, shipped, completed, cancelled) before issuing an update. UI dropdown values were already restricted; this adds a guard at the action boundary.
+- Added regression tests for accepted values, normalization, and invalid/empty inputs. Database constraints and live RLS remain unverified. CI passed on commit `30f3a5c3` (tests, lint, build).
+
+- Admin order-status updates also use per-order in-flight guards, try/catch/finally error recovery, and reliably release busy state. This prevents rapid repeated status-change requests and stuck UI after unexpected errors. CI pending.
+
+
+## Order-history loading recovery audit — 23 November 2026
+- The customer/admin order-history loader previously handled returned Supabase errors but could remain in a loading state if a query unexpectedly threw.
+- Added catch/finally recovery: surfaced the error and clears stale order/order-item state; the loading flag is always released. No live orders were accessed or modified. CI pending.
+
+
+## Catalogue loading recovery audit — 23 November 2026
+- Product/category/set catalogue loading handled Supabase returned errors but unexpected exceptions could leave the loading indicator stuck.
+- Wrapped the loader in catch/finally, reports the failure and clears stale catalogue/category/set state, and guarantees loading state resets. CI pending.
+
+- Order-status controls now serialize updates globally and disable all status dropdowns while one update is in flight, keeping the shared busy indicator accurate. CI pending.
+
+
+## Homepage settings load recovery audit — 23 November 2026
+- Website settings loading now catches unexpected Supabase/network exceptions and exposes a recoverable error instead of allowing the async callback to reject silently. CI pending.
+
+
+## Admin sign-in security cleanup — 23 November 2026
+- Removed the hardcoded four-digit frontend access code from the administrator sign-in screen. It was shipped in the client bundle and therefore offered no real security, while adding an unnecessary gate for legitimate admins.
+- Admin sign-in continues to require Supabase authentication and a verified `profiles.role = admin`; an already authenticated admin can proceed directly. UI role checks are not a substitute for database RLS policies, which remain a separate review requirement.
+- No database, account, or production changes made. CI pending.
+
+
+## Admin product publication error recovery — 23 November 2026
+- Publishing/unpublishing an inventory product now catches unexpected Supabase/network exceptions, reports a clear error, and always releases the row's busy state via `finally`. Previously a thrown request could leave the action stuck.
+- Existing confirmation and returned-error handling retained. CI pending.
+
+
+## Admin inventory save error recovery — 23 November 2026
+- Inventory stock/price save now catches thrown Supabase/network errors and always clears its busy state. Previously a thrown request could leave the row's save action stuck; returned database errors remain surfaced as before.
+- Validation still requires a non-negative integer stock count and valid non-negative price. CI pending.
+
+
+## Admin catalogue fill and product edit recovery — 23 November 2026
+- Catalogue-fill updates and product-edit saves now catch unexpected request exceptions, show an actionable error, and release their saving state in `finally`. Returned Supabase errors remain handled. This prevents stuck save buttons during network failures.
+- Catalogue-fill still only applies missing catalogue details and leaves inventory, price, and uploaded photos untouched. CI pending.
+
+
+## Bulk-import duplicate-submit guard — 23 November 2026
+- Added a synchronous ref lock to bulk CSV import so rapid repeated clicks cannot start concurrent imports before React updates the busy state. Lock is always released in `finally`, including failures.
+- Unexpected bulk-import errors now use a safe fallback message if the thrown value has no message. Partial row failures continue to be reported individually. CI pending.
+
+
+## Quick-add duplicate-submit guard — 23 November 2026
+- Quick Add now has a synchronous submission lock, preventing rapid double taps/clicks from creating duplicate product records while the asynchronous save or photo-link workflow is in progress. The lock resets in `finally` on all outcomes.
+- The existing photo-upload partial-save recovery remains in place, directing the user to retry photos on the saved product rather than re-create it. CI pending.
+
+
+## Photo-upload duplicate-submit safeguards — 23 November 2026
+- Added synchronous upload locks to both Image Library batch uploads and Stock Photography product-photo uploads. Rapid taps cannot start concurrent upload batches before the React busy state renders.
+- Locks are released in `finally` on success or failure; existing partial-upload rollback/recovery paths remain in place. These are UI reliability safeguards, not storage/database changes. CI pending.
+
+
+## Photo-upload queue preservation — 23 November 2026
+- Image Library now rejects file-selection additions while an upload batch is in progress and removes only the batch that actually uploaded, rather than clearing the entire queue.
+- Stock Photography now removes only the photo IDs in the successful upload snapshot. Photos added during the upload remain queued for the next batch.
+- This prevents new photos from being silently discarded when an upload is already running. CI pending; no storage or product data changed.
+
+
+## Camera capture reliability review — 23 November 2026
+- Added a synchronous capture lock so rapid taps cannot initiate overlapping camera captures before React updates the disabled state.
+- If camera startup/preview playback fails, the acquired stream is now stopped and the video element detached, preventing an error path from leaving camera tracks active.
+- Code-only safeguard; browser/device camera testing remains outstanding. No production or database changes. CI pending.
+
+
+## Admin photo-preview cleanup on workspace exit — 23 November 2026
+- AdminDashboard now revokes all remaining queued-photo preview object URLs when the workspace unmounts. Previously previews were revoked when individual photos were removed or after a successful save, but leaving the admin workspace with an unsaved queue could retain browser object URLs.
+- The cleanup uses a ref to the latest photo queue so it does not revoke retained previews during normal queue updates. No photo files or storage records are changed. CI pending.
+
+
+## Photo queue limit feedback — 23 November 2026
+- Photo Studio now explicitly reports when selected images exceed the 12-photo batch limit, in addition to reporting non-image files skipped. A cancelled file picker no longer displays a misleading queue-limit message.
+- Accepted files remain queued and capped as before; this is feedback only and does not alter uploads. CI pending.
+
+
+## Stock-photo preview cleanup after successful upload — 23 November 2026
+- Stock Photography now revokes queued preview object URLs after a successful upload and removes the matching uploaded queue entries. This closes a lifecycle gap where uploaded previews were removed from state without releasing their browser object URLs.
+- Failed uploads still retain the queue and previews for retry. No storage/database/production changes. CI pending.
+
+
+## Image Library gallery request ordering — 23 November 2026
+- Added a request sequence guard to the catalogue-reference image gallery. If searches, language filters, or pagination overlap, only the latest request can update gallery state; earlier results/errors/loading completions are ignored.
+- The request sequence is invalidated when the gallery effect is cleaned up, so responses from an obsolete filter or unmounted panel cannot overwrite the current view. No catalogue data or DB changes. CI pending.
+
+
+## Image Library saved-image refresh ordering — 23 November 2026
+- Added a request sequence guard to the saved-image listing. Rapid refreshes or refreshes overlapping with upload/delete operations cannot let an older response overwrite the newest image list or error/loading state.
+- The current request is invalidated on panel cleanup. No storage/database changes. CI pending.
+
+
+## Image reference matrix duplicate-run lock — 23 November 2026
+- Added a synchronous lock around the catalogue image reference matrix check so rapid clicks cannot launch overlapping 100-reference checks before the disabled state renders.
+- Lock is released in `finally` on completion or failure. This avoids duplicate browser image-check traffic; it does not change the test set or catalogue data. CI pending.
+
+
+## Image Library selection feedback — 23 November 2026
+- Image Library selection now reports non-image files rejected and images skipped when the 30-file batch limit is reached, instead of silently filtering/truncating those selections.
+- Accepted files stay queued; upload locking and queue preservation remain unchanged. CI pending.
+
+
+## Image Library delete lock — 23 November 2026
+- Added a synchronous delete lock and disabled all image delete buttons while one deletion is in progress, preventing rapid duplicate deletion requests or overlapping delete operations.
+- Lock releases in `finally` after success/failure; confirmation remains required. No storage/database changes beyond the existing user-requested deletion action. CI pending.
+
+
+## DON!! source-set save concurrency audit — 23 November 2026
+- Found that DON!! source-set assignment buttons only disabled the row currently saving. Two rapid clicks, or saves on different DON!! rows, could start overlapping writes while the single saving-state value was overwritten.
+- Added a synchronous save lock and disabled all assignment save buttons while a save is active. The lock releases in `finally`; unexpected errors now receive a safe fallback message.
+- Code-level safeguard only. No live catalogue/database records were changed; CI verification is pending.
+
+
+## DON!! override language isolation — 23 November 2026
+- Found a schema/keying weakness in the manual DON!! source-set override path: the table's primary key and upsert conflict target used only `printing_key`, while each override also carries a language and the catalogue is indexed independently for English and Japanese.
+- Updated the review-only SQL definition to use the composite primary key `(printing_key, language)`; updated reads, catalogue matching, and upserts to use the same composite identity.
+- This prevents an English override from replacing or being applied to a Japanese printing if the upstream key is shared. The migration remains review-only and has not been applied. CI is pending.
+
+## Product front-image rollback hardening — 23 November 2026
+
+- Product photo linking now reads and retains the previous `products.image_url` before changing it to the newly uploaded front photograph.
+- The front-image update verifies that the target product row was actually returned, rather than treating a zero-row update as success.
+- If the front-image update fails or its response is ambiguous, the upload recovery path attempts to restore the previous image URL before removing the new image metadata and uploaded storage files. Any rollback failure is included in the surfaced error.
+- This remains best-effort recovery across separate Supabase Storage and database operations, not a single atomic transaction. No live database changes or migrations were performed.
+- Follow-up concurrency safeguard: rollback now restores the previous product image only when the row still contains the exact front-image URL written by this upload. This avoids overwriting a newer image selected by another administrator during recovery.
+## Quick Add photo queue preservation — 23 November 2026
+
+- Quick Add now reports the exact photo IDs included in the successful save (including the retry path for a product whose photo upload previously failed).
+- The admin parent revokes preview URLs and removes only those uploaded IDs from the current queue. Photos added while the asynchronous save is running remain queued instead of being cleared by a stale render snapshot.
+- This mirrors the snapshot-based queue preservation already used by the stock photography and image-library upload flows.
+
+
+## Quick Add set-code reassignment safety — 23 November 2026
+- Found that changing the Set code after applying a catalogue match could leave the previous `set_id` selected in form state. Saving could therefore associate the card with the old set even though the visible set code had changed.
+- Added shared punctuation-insensitive set-code normalization/resolution. Initial scanner values, catalogue matches, manual set-code edits, and final save resolution now use the same lookup; editing the set code clears or replaces the selected set ID instead of retaining a stale association.
+- Added regression coverage for OP/EB codes with and without hyphens and unknown set codes. CI verification pending. No live inventory/database changes.
+
+
+## Quick Add stale catalogue-identity invalidation — 23 November 2026
+- Extended the set reassignment fix: editing the card number, set code, language, or variant now invalidates the previously selected catalogue printing identity and its reference-image provenance. This prevents an old printing key/image from silently travelling with manually changed card identity fields.
+- Centralized the form update in a pure helper and added regression coverage for all four identity dimensions, including normalized set resolution after a set-code change. CI verification pending. No live inventory/database changes.
+
+- The Collection / set dropdown uses the same identity-aware update path as manual set-code edits, so changing the set through either control cannot retain an obsolete catalogue printing identity.
+
+
+## Admin product deletion confirmation — 23 November 2026
+- Found that the product delete action treated a successful Supabase response with zero affected rows as a completed deletion. Under row-level security or a stale product list, the UI could report success even though no product row was deleted.
+- The delete now requests the deleted row ID and confirms that a row was actually returned before refreshing the inventory or removing its Storage photographs. Added regression tests for confirmed deletion, zero-row/no-error responses, and database/RLS errors.
+- No product rows, Storage objects, or live database policies were changed. CI verification pending.
+
+- The set dropdown also retains the exact selected set row ID (rather than re-resolving a potentially duplicated set code), while still invalidating stale catalogue identity fields.
+
+
+## Bulk-import set-code normalization — 23 November 2026
+- Aligned CSV bulk-import set matching with Quick Add by using the shared punctuation-insensitive set-code resolver. Equivalent values such as `OP17` and `OP-17`, or `EB04` and `EB-04`, now resolve to the existing set row rather than producing a false unmatched-set warning and importing without a set link.
+- The bulk import still uses the exact resolved set row ID for the product payload. No CSV was imported and no live inventory/database records were changed. CI verification pending.
+
+
+### Bulk-import catalogue identity preservation — 23 November 2026
+- Selecting a catalogue match in Bulk Import now carries its catalogue match ID, stable printing key, reference image URL, and source through to the imported product payload.
+- The extended-schema preflight includes those identity columns, so imports fail safely before inserting any rows if the approved columns are not present.
+- Regression coverage verifies that Japanese/parallel catalogue identity survives product payload construction. CI verification passed for the import identity mapping and duplicate-key checks.
+
+- Follow-up: Bulk Import duplicate detection now prefers the stable catalogue printing key when both records have one. Distinct printing keys are not treated as duplicates even when card number, set, language, and display variant label match; legacy rows retain the conservative fallback. Regression tests cover distinct and identical printing keys.
+
+
+### Ambiguous normalized set-code safeguard — 23 November 2026
+- Set-code normalization now links a set only when exactly one site set matches the normalized code. If legacy data contains both OP17 and OP-17 as separate set rows, Quick Add and Bulk Import leave the relationship unresolved rather than selecting an arbitrary row. An exact set selected from the dropdown still preserves its exact ID.
+- Added regression coverage for ambiguous normalized set codes. Quick Add's displayed set selection now uses the same normalized resolver as save-time matching. CI verification pending.
+
+- The Collections and Sets admin flow now also blocks creating a set whose code collides after punctuation normalization, preventing new ambiguous set records from being introduced. Regression coverage added; CI verification pending.
+
+
+### Collections admin network recovery — 23 November 2026
+- Category and set creation now catch unexpected request failures and always release the shared busy state in finally. Duplicate-name/code checks and existing success feedback remain intact. CI verification pending.
+
+- Set creation now checks a fresh read of existing set IDs, names, and codes rather than relying only on the admin screen's potentially stale set list. The name check is case-insensitive; the normalized code check still rejects punctuation-equivalent collisions. CI verification pending.
+
+
+### Bulk Import zero-value preservation — 23 November 2026
+- Applying a catalogue match now preserves legitimate numeric zero values for power, cost, and counter fields instead of falling back to the original CSV values. Empty/null catalogue fields still retain the CSV value. Regression tests cover zero, string-zero, and blank fallback cases. CI tests, lint, and production build passed in run 45154091787.
+
+- The bulk-import extended-schema preflight now treats numeric zero as a populated card detail, ensuring zero-only power/cost/counter data still triggers the required column check. Regression tests cover numeric and string zero values. CI tests, lint, and production build passed in run 45154282261.
+
+
+## Confirmed admin product-update results — 23 November 2026
+- Inventory stock/price saves, publication toggles, and catalogue-fill updates now request the affected product ID and treat a zero-row/no-error response as a failure. This matches the existing confirmed-delete safeguard and avoids reporting success when a stale product row or RLS policy prevented the update.
+- Added unit coverage for successful, zero-row, and database-error update responses. No live inventory, product, or database records were changed.
+
+- Follow-up audit also applied the confirmed-row check to the full product-edit form save, so every product update path in the admin inventory now distinguishes a successful affected-row update from a zero-row/RLS-denied response. CI verification pending.
+
+- Order-status updates now also verify the affected order ID and report zero-row/RLS-denied responses as failures rather than success. Added regression coverage for confirmed, missing-row and database-error outcomes. No live orders were changed; CI pending.
+
+
+## Checkout order-save and cleanup verification — 23 November 2026
+- The checkout path now marks order items as saved immediately after the item insert succeeds. Unexpected errors after that point no longer trigger cleanup that could delete an otherwise valid order.
+- If saving order items fails, the compensating order deletion now requests the deleted order ID and verifies an affected row before claiming the empty pending order was removed. The exception-recovery cleanup uses the same confirmation check.
+- Added regression coverage for confirmed deletion, zero-row/no-error responses, and database/RLS errors. This is still best-effort client-side compensation, not an atomic checkout transaction or stock reservation. Concurrent checkout stock protection remains a server-side requirement.
+- No live orders, stock, database policies, or migrations were changed.
+
+
+## Bulk Import template download correction — 23 November 2026
+- A review of the actual download path found that the generated CSV template appended an unrelated code fragment to the header row instead of a newline. This would make the downloaded template's final header invalid.
+- Moved the supported template header list and CSV generation into a pure helper and added regression coverage for the exact header row and newline. The downloadable template now matches the parser's supported columns.
+- No CSV was imported and no live inventory or database records were changed.
+
+
+## Physical-photo validation of PR #26 number-region OCR — 23 November 2026
+
+**Sample:** the user's real English Saint Shamrock photo (OP18-119), original JPEG 1152 × 2048. The card is inside a rigid holder with substantial tabletop/background margins; it does not fill the frame.
+
+- Reproduced the PR #26 number-region crop geometry locally with Tesseract 5.5.0: bottom-left, bottom-right, full bottom edge, lower-centre, plus footer bands after 90°, 180°, and 270° rotations.
+- Ran the same alphanumeric OCR whitelist (A-Z, 0-9, hyphen) and comparable contrast enhancement/upscaling/sharpening. **None of the seven region outputs produced a valid OP/EB/ST/PRB/P- card number.**
+- Also manually rectified the card face to a 600 × 1160 crop and reran the four bottom-region crops. No valid card number was recovered.
+- This is a genuine physical-photo negative result for the new region approach on a photo with large surrounding margins. It is not a CI failure and does not prove every close-cropped card will fail.
+
+### Code-review finding / next correction
+The prepareCardNumberRegions() function currently computes footer zones as percentages of the entire uploaded photograph. It does not first detect/trim the physical card boundary. On this 1152 × 2048 scene, the card ends well above the photo's bottom 28% band, so the two bottom-corner crops mostly contain background. The lower-centre/rotated crops contain portions of the card but still do not reliably isolate the tiny footer number. Add card-boundary detection or a robust card-crop step before number-region generation; alternatively expose a manual crop step and clearly state when the footer is outside the scan region. Preserve the original photo for evidence.
+
+The current scanner also only performs catalogue lookup when at least one card-number candidate is extracted (or a remembered image supplies a number). This sample produced no valid number, so no catalogue candidate lookup can occur. A future name/visual fallback would help, but it must remain explicitly unconfirmed until the user chooses a candidate.
+
+## Official OP18 image loading update — 23 November 2026
+The Bandai English card-list page (series=569118) and Japanese card-list page (series=550118) were opened successfully. Their official image links were followed and rendered for all four OP18 sample slots:
+- English OP18-001 Karoo — image loaded and visually inspected.
+- English OP18-002 Igaram — image loaded and visually inspected.
+- Japanese OP18-001 カルー (Karoo) — image loaded and visually inspected.
+- Japanese OP18-002 イガラム (Igaram) — image loaded and visually inspected.
+
+These four OP18 image cases are now **visual-load PASS** (4/4), and the official page confirms their names/numbers/languages. They were not passed through local OCR; browser-rendered image inspection does not count as OCR testing. The exact image URLs include Bandai's cache-busting query strings in the page links.
+
+EB05-001/002 English and Japanese direct Bandai image-path attempts were still inaccessible through the browser tool. Those four image slots remain **candidate URL / load unverified**, with no OCR result. This does not imply the official cards do not exist.
+
+## PR #26 verification snapshot — 23 November 2026
+- PR #26 head c6af838a67717d41ff74b4e11bf20d4f3683e567 passed GitHub Actions run #411: dependency install, npm test, lint, and production build.
+- This verifies code/test/build only. The physical-photo number-region attempt above failed to identify OP18-119. No browser preview or live Worker deployment was available; production status remains unverified.
+- PR #26 is still open and unmerged. No production deployment or inventory/database mutation was performed.
+
+
+## EB05 official image-load recovery — 23 November 2026
+
+Correction to the earlier direct-path attempt: the four EB05 base-image URLs initially failed when opened without the Bandai card-list page's cache-busting query string. Opening the official Bandai series pages and following their own image links worked. English series 569205 returned 96 results; Japanese series 550205 returned 96 results. Official images loaded and were visually inspected for:
+- English EB05-001 Jewelry Bonney — PASS.
+- English EB05-002 Doll — PASS.
+- Japanese EB05-001 ジュエリー・ボニー (Jewelry Bonney) — PASS.
+- Japanese EB05-002 ドール (Doll) — PASS.
+
+Together with the four OP18 images above, all **8/8 previously unmatched OP18/EB05 sample image slots are now visually load-verified**. Official Bandai page associations confirm the card numbers, names, set and language. No local OCR was run on these browser-rendered images, and no real-photo OCR count changes. For future reference, use the official card-list links (including their generated query parameters) rather than testing only the bare image path.
+
+
+## Official Bandai image-load run — 23 November 2026
+
+A manual browser-rendering check was completed for the 100-row language/set sample matrix. Each successful result below came from following the image link on the official Bandai card-list page and visually seeing the card image render. These are **image-load checks only**; none of these browser images was passed to local OCR.
+
+| Target set | Official image loads | Status |
+|---|---:|---|
+| OP01–OP16 (each) | 4/4 each | PASS — 64/64 |
+| OP17 | 4/4 | PASS — cache-busted direct image references load |
+| OP18 | 4/4 | PASS |
+| EB01 | 3/4 | 1 Japanese image retrieval failed |
+| EB02 | 3/4 | 1 Japanese image retrieval failed |
+| EB03 | 4/4 | PASS |
+| EB04 | 4/4 | PASS; English samples loaded from combined OP14/OP15-EB04 pages, Japanese samples from standalone EB04 page |
+| EB05 | 4/4 | PASS |
+| PRB01 | 4/4 | PASS |
+| PRB02 | 4/4 | PASS |
+
+**Total: 94/100 image-load PASS, 2/100 official image retrieval errors, 4/100 unverified.** The two retrieval errors are Japanese EB01-001 (EB01 sample) and Japanese EB01-001_p2 (EB02 sample). The official Bandai page itself lists both cards, but clicking the corresponding image links and retrying their direct image URLs returned Internal Error; do not treat this as proof the source files are absent. The four unverified cases are OP17 English/Japanese sample 1 and sample 2; both official OP17 series page requests (569117 and 550117) returned inaccessible errors. Third-party references corroborate the OP17 sample identities (EB04-007 Roronoa Zoro and EB04-061 Monkey.D.Luffy), but those are not counted as official image loads.
+
+### Exact official page series checked
+- OP01–OP18 English: 569101–569118; Japanese: 550101–550118 (OP17 page inaccessible; OP18 passed).
+- EB01–EB05 English: 569201–569205; Japanese: 550201–550205 (EB04 English uses the combined OP14/OP15-EB04 product pages; standalone English 569204 was inaccessible).
+- PRB01/02 English: 569301/569302; Japanese: 550301/550302.
+
+### Sample URL corrections discovered
+The official Bandai PRB pages showed the English PRB01 OP01-006 sample as OP01-006_r1.png (not the earlier guessed _p3 filename), and the English PRB02 EB01-009 sample as EB01-009_r1.png (not the earlier guessed _p1 filename). The matrix URLs above have been corrected to the exact image-link destinations returned by Bandai. Japanese PRB01/02 image paths matched the selected variants.
+
+
+### Latest CI and production access check — 23 November 2026
+- After the 94/100 official image-load report update, PR #26 head `6394868e73055e29d23ecbb6747ffb970756f12d` passed GitHub Actions run #414. The `build-and-test` job completed dependency installation, `npm test`, lint, and production build successfully.
+- PR #26 remains open and unmerged. This run did not merge or deploy it.
+- Rechecked the production Worker root and `/shop`; both remain inaccessible through the browser tool, with `/shop` returning DisabledError. Live UI behaviour and deployed code version remain unverified.
+- Tried downloading an official Bandai card image directly into the local OCR runtime; download failed. Therefore official browser-rendered images remain visual-load checks only, not OCR test inputs.
+
+
+## Reproduction of PR #26 card-boundary failure on Saint Shamrock photo — 23 November 2026
+
+The user's original 1152 × 2048 photo was re-tested against the current PR #26 crop geometry and detectForegroundCardBounds() implementation.
+
+### Exact number-region geometry
+The four upright crops in prepareCardNumberRegions() are calculated against the entire camera frame, not a detected card rectangle:
+- Bottom-left: x=0–829, y=1475–2048.
+- Bottom-right: x=323–1152, y=1475–2048.
+- Full bottom edge: x=0–1152, y=1352–2048.
+- Lower-centre: x=138–1014, y=1270–2048.
+
+The physical card face in this photograph is approximately x=103–738, y=334–1178. Therefore all four upright number crops begin below the card face and have zero card-face overlap. The rotated footer bands do not recover the lower-right number area either: 90° maps the footer band to source x>749 (outside the card's right edge); 180° maps it to source y<717 (upper portion, not the footer); 270° maps it to source x<403 (left portion, not the lower-right footer). Re-running Tesseract 5.5.0 on the seven PR-style crops produced noisy background/card fragments only; none contained a valid OP/EB/ST/PRB/P- number candidate.
+
+### Existing foreground detector also rejects this photograph
+Reproduced the current detectForegroundCardBounds() corner sampling on the original pixels:
+- Top-left corner mean RGB: (219.8, 211.0, 197.2)
+- Top-right: (208.6, 201.3, 186.1)
+- Bottom-left: (172.7, 109.9, 81.5) — hand/fingers enter this corner
+- Bottom-right: (182.4, 173.0, 164.0)
+- Current average background estimate: (195.9, 173.8, 157.2)
+- Maximum corner deviation: 101.7, exceeding the hard rejection threshold of 42.
+
+So detectForegroundCardBounds() returns null on this exact user photo before connected-component bounds are considered. A median/three-corner background estimate avoids that first rejection, but the hand and card/holder form a large connected foreground region extending to the bottom of the frame; the largest-component bounding box is still not a card-only rectangle. This is a confirmed limitation of the current simple foreground detector on a card held in-hand.
+
+### Corrective requirement
+The scanner must first obtain a trustworthy card rectangle before computing footer OCR regions. Recommended safe behaviour:
+1. Try automatic card-boundary/quad detection and validate aspect ratio and confidence.
+2. If the detector cannot isolate the card (for example, a hand touches the card), show a simple manual crop/align step rather than running footer OCR against the whole scene.
+3. Generate number/title/detail OCR regions only inside the validated card crop.
+4. If the crop still cannot expose a readable number, keep OCR uncertain and use manual number search/candidate confirmation; never auto-confirm from a weak match.
+
+This is a reproduced physical-photo failure, not a CI failure. It does not imply all close-cropped card photos fail.
+
+### Latest repository / CI state
+- master currently points to 70029519438f2a15e6030523104325552d60674a (shared card-recognition memory commit).
+- PR #26 (feature/scanner-number-first-verification) is open and unmerged; current head e77d953603e1b78d9e851badbaa6c800d9b84a17.
+- GitHub Actions run #415 (45172660447) on that exact PR head completed successfully on 23 November 2026: dependency install, tests, lint, and production build all passed.
+- Passing CI does not change the physical-photo failure above. The production Worker still cannot be fetched by the available browser route, so deployed version and live scanner UI remain unverified.
+
+
+### Scanner UI code review after PR #26 number-first changes — 23 November 2026
+- The scanner now exposes a number-reading diagnostics panel with each crop label, OCR confidence and raw text; when no valid number is read it explicitly says so and advises manual entry.
+- Manual card-number search is available without scanning first.
+- The confirmation dialog compares the original user photo with the catalogue reference, shows name/number/language/set/rarity/variant, and warns when several printings share a card number.
+- Catalogue matching still depends on a valid number candidate (or a remembered image supplying a number). If the number crop misses the card, there is no automatic name/visual candidate fallback; manual number search is the recovery path. There is not yet an interactive manual crop/align step.
+- These are source-code observations only. Browser UI and production deployment remain unverified.
+
+### Latest repository / CI state — 23 November 2026 (refreshed)
+- master: 70029519438f2a15e6030523104325552d60674a.
+- PR #26 remains open and unmerged; feature branch head after report updates: 086ac3dfaed047ea6020e995a98744100441f689.
+- GitHub Actions run #417 (45174932236) passed on that exact branch head: dependency install, tests, lint and production build all succeeded.
+- The CI pass does not validate physical-card OCR, browser camera behaviour, Supabase policies or live Worker deployment. Production Worker fetch remains DisabledError through the browser route.
+
+
+### Scanner crop-boundary audit and latest CI refresh — 23 November 2026
+
+- Re-fetched PR #26 metadata rather than relying on the older report snapshot. PR is open, unmerged, base `master`; head is `79f90358082bc3f37ba12d34eda78f6fdf792b50`.
+- GitHub Actions run #418 (ID 45175439325) is confirmed successful on that exact head. CI checks dependency installation, tests, lint and production build only.
+- Source audit of `src/admin/CardScanner.jsx` and `src/admin/cardNumberRegion.js` confirms the number OCR regions are still fixed normalized bands of the full source photo (four bottom zones plus three rotated footer bands). They are not bounded by a detected card rectangle. This matches the Saint Shamrock photo's reproduced zero-overlap failure.
+- `src/admin/imageTools.js` has a conservative foreground-card detector, but it estimates background from all four corners and rejects high corner spread. It is not currently integrated into the number-first OCR preparation. On an in-hand photo with fingers touching a frame edge, a background detector alone is insufficient to guarantee a card-only rectangle.
+- **Regression-safety decision:** do not replace the detector with a more permissive corner threshold or force a crop from a connected foreground component; that risks cropping hands/holder/background as the card and producing confidently wrong OCR. Safe next implementation is a validated card quadrilateral/crop with confidence plus explicit manual crop fallback; OCR should run only inside the user-confirmed crop when auto-boundary confidence is inadequate.
+- Current real-photo evidence remains 1 physical sample tested (Saint Shamrock OP18-119), automatic card number/title failed; partial rules OCR only. No new photo or image-file access was available in this pass, so the real-photo count does not increase.
+- Production Worker and camera/live UI remain unverified; no deployment or production data changes were made.
+
+
+### Follow-up scheduled check — 23 November 2026
+
+- Verified current PR #26 head is `c48221d8b3534b05a138c88d65cc8738cd4a6c46`; the previous subsection's head value was a stale snapshot. PR remains open/unmerged and base is `master`.
+- CI run #419 (ID 45188699888) completed successfully for the exact current head. The run covers dependency install, tests, lint and production build; no physical OCR or browser/deployment checks are implied.
+- Re-review confirms the existing detector/crop helper has no validated four-corner card quadrilateral or manual interactive crop. It uses coarse connected-component bounds and global corner-background consistency; crop confidence can fail on scenes with hands/background intrusions. Number OCR is still applied to fixed full-image footer bands. A manual crop step remains the appropriate fallback, but implementation and browser verification are outstanding.
+- PR changed-file inventory includes the scanner, OCR region logic, image tools, catalogue logic and test files. No additional genuine user photo was accessible in this check, so real-photo OCR stays at 1 physical sample (Saint Shamrock OP18-119); no image load/retrieval statuses were promoted based on inference.
+- No live UI or production Worker access was achieved; no production deployment, database or inventory changes made.
+- Next actions: implement crop-confirmation fallback on the feature branch only with focused tests for hand/edge occlusion, perspective, orientation and uncertain detection; then exact-head CI and browser staging test before any claim of working UI.
+
+
+### Latest exact-head verification and OCR candidate audit — 23 November 2026
+
+- Rechecked PR #26: open, unmerged, base `master`. Current feature-branch head at this review was `49066d06b8b4dbac285c1b45998c2d33f874a1f7`.
+- GitHub Actions verification run #420 (ID 45189031677) completed successfully for that exact head: dependency install, tests, lint and production build. The combined commit-status endpoint returned no status entries; the workflow run is the available confirmation.
+- Reviewed `cardNumberCandidates.js` and its tests. The extractor supports OP/EB/ST/PRB and promo P-### patterns and normalizes common O/0, E/8, S/5 substitutions. Its current confidence/occurrence ranking is heuristic; repeat OCR readings do not establish card identity. Confirmation remains manual, which is appropriate.
+- Reviewed the scanner lookup flow: it deduplicates up to six detected number candidates and merges catalogue results; a candidate mismatch/recovery message is shown when the selected match differs from the leading OCR number. The user must compare the original photo, official reference, number, language, set and variant before applying.
+- **Remaining scanner limitation unchanged:** number-region crops are still fixed relative to the whole photo, not a validated card boundary. The Saint Shamrock OP18-119 real-photo failure remains reproducible. There is no interactive crop/align fallback yet. This pass did not alter scanner code and did not add new real-photo results.
+- Production Worker, live camera/UI and Supabase staging remain unverified. No production deployment, database, inventory or order mutation was performed.
+
+
+### OCR cross-candidate ranking review — 23 November 2026
+
+- Exact latest-head CI run #421 succeeded for commit `e3ae039c1d82f74f02faea2772d6a11d46e6de23` (tests, lint and build workflow).
+- Re-reviewed the scanner's cross-number catalogue lookup: up to six unique OCR, parsed, or remembered card-number readings are looked up, then results are merged before ranking. The current ranking considers detected name, recognition language, and image-memory tie-break; it does not explicitly carry each OCR number candidate's occurrence/confidence support into the merged candidate ranking.
+- This is a review finding, not a demonstrated wrong-card result. Because candidates from different card numbers can be merged, this should be tested with deliberate competing valid numbers before changing ranking. Keep confirmation mandatory; do not auto-select/confirm based on OCR score.
+- Suggested next engineering task: add focused unit cases for competing OCR-number candidates and mismatched name/language evidence; decide a conservative evidence display/ranking policy, then implement only if tests show it improves correctness without hiding alternatives.
+- PR #26 remains open and unmerged. No production changes; no live browser/camera or staging data test performed.
+
+
+## 23 November 2026 — OCR candidate evidence transparency
+
+- Added a non-ranking evidence annotation to catalogue candidates: each candidate printing now carries the OCR number evidence for its exact card number (number of readings, average OCR confidence, and source regions). The candidate UI displays that evidence, or explicitly says that the number was not independently corroborated.
+- **Ranking behaviour intentionally unchanged:** name/language/remembered-image signals continue to order the options; number evidence is shown for human review rather than being used to auto-select or override other signals. This avoids treating OCR confidence as calibrated proof or allowing a competing number reading to silently win.
+- Added focused ranking-helper tests for evidence attached to matching card numbers and absent evidence, including a competing-number scenario. The tests were committed, but have not been executed locally because this environment has no repository checkout/test runner. Exact-head GitHub Actions is pending/unavailable at this time.
+- Commits: `5fe1d79` (helper), `cfbb67b` (tests), `e3054b7` (scanner UI). PR #26 head: `e3054b70f35bc207a5a1d45b4701bdcdb955a730`.
+
+
+### Latest CI verification — 23 November 2026
+
+- Latest PR #26 head `198dbfa08f5c6cbdd21c6622cf2c644bac5b1e5a` passed GitHub Actions run #424 (ID 45196766947): dependency install, tests, lint, and production build completed successfully.
+- This exact-head CI pass covers the OCR evidence annotations and tests added in the preceding subsection. It does not substitute for local/physical-photo OCR, live browser camera/UI, staging, or deployment verification.
+- PR #26 remains open and unmerged. No production deployment or production database/inventory/order changes.
+
+
+### Manual crop geometry foundation — 23 November 2026
+
+- Added a validated normalized manual-crop geometry helper to the number-region OCR preparation module. It converts a rectangle (normalized relative to the original image) to pixel bounds, and rejects invalid, out-of-frame, or very small selections rather than silently clipping them.
+- `prepareCardNumberRegions(file, manualCrop)` now supports an optional crop rectangle; when supplied, the four number zones and rotated-footer zones are generated from the cropped image instead of the full scene. Existing no-crop behaviour remains unchanged.
+- Added unit coverage for normalized-to-pixel mapping and invalid/tiny/out-of-bounds rectangles. **This is only the crop-processing foundation; no manual crop-selection UI is implemented yet and it is not integrated into CardScanner.** Do not claim this fixes the Saint Shamrock photo until a user-selectable crop flow and physical-photo OCR test are completed.
+- Commits: `3cbea63` crop API/helper, `1ae3027` tests. CI for these changes is pending.
+
+
+### Optional manual crop controls integrated — 23 November 2026
+
+- Integrated the manual crop-processing helper into the CardScanner flow: users can enable a crop and enter left/top/width/height as percentages, then scan the cropped photo; a reset returns to the full image.
+- The crop is optional and off by default. The original uploaded photo remains unchanged. Invalid or too-small rectangles are rejected by the crop validator.
+- Added responsive controls styling for desktop and narrow screens.
+- **Important UX limitation:** this first control is percentage-based rather than a drag-to-select overlay, so users must estimate coordinates. It is a usable recovery control but needs a visual crop-selection/preview improvement and a real photo test before calling it complete.
+- Code commits: scanner controls `74e6eda`; CSS `19eff00`. CI has not yet reported for the exact latest head at the time of this note.
+- PR #26 remains open/unmerged; no production deployment or production data changes.
+
+
+### Visual drag-to-select crop added — 23 November 2026
+
+- Replaced the percentage-only crop workflow's main interaction with a visual preview: when enabled, users can drag a rectangle directly over the uploaded card photograph to define the OCR crop.
+- The selected region is outlined and remains visually bright while the surrounding area is dimmed. Percentage fields remain available for precise adjustment, and the full-photo reset remains available.
+- Selection uses normalized coordinates relative to the displayed photo and passes through the existing validation before OCR. This is a UI implementation review only; it has not yet been exercised in a real browser or on the Saint Shamrock test photo.
+- Commits: `760edd6` (drag selection), `b1c8fc9` (preview styling), `dddaecd` (selected-area highlighting).
+- CI is awaiting exact-head verification. PR #26 remains open/unmerged; no deployment or production changes.
+
+
+### DON!! Image Library label correction — 23 November 2026
+
+- Removed the standard card-number suffix from DON!! gallery cards. Their display title now uses the DON!! source text/name without appending the pseudo-number `DON!!`; non-DON cards retain their normal number label.
+- Updated image alt text so DON!! entries do not announce a card number that does not exist.
+- Existing DON!! source-set attribution remains in the set line; source dataset and admin-verified override are used, with the manual set assignment control retained for entries that cannot be attributed safely.
+- Commit: `6a25130`. Automated CI for this latest change is pending. No production database/migration/deployment changes.
+
+
+### DON!! source-data slug audit — 23 November 2026
+
+- Read the current upstream `don_sets.jsonl` source dataset and checked every distinct set-slug format against the local normalizer: **165 source rows, 308 unique printing keys, 35 distinct slugs; all 35 slug formats normalize without an unknown format**.
+- Slugs include OP/EB/ST/PRB sets, OP14-EB04 / OP15-EB04 crossover sets, Double Pack DP-02 through DP-12, and the generic Promo group.
+- The upstream source has 53 rows labelled `promo`; those remain generically attributed to PROMO rather than guessing a more specific product/set. Some printing-level cross-check files returned empty through the GitHub file connector, so printing-key coverage against the full EN/JP printing tables is not verified by this audit.
+- This is a source-data audit only; no external source was edited and no production data was changed.
+
+
+### DON!! slug-normalization regression tests — 23 November 2026
+
+- Added a regression test covering all 35 slug formats observed in the upstream DON!! set-source file, including Double Pack, OP/EB crossover, PRB, promo, ST and OP formats.
+- The test asserts the exact normalized code expected for every observed slug. Automated CI is pending for this test commit.
+
+
+### Crop-control robustness review — 23 November 2026
+
+- Reviewed the visual crop overlay for numeric-state edge cases. Percentage-field input had string values, which could concatenate when computing the selection's right/bottom edges; these calculations now explicitly coerce to numbers.
+- Crop percentage controls now clamp to the image bounds and adjust width/height when the left/top values move. Pointer coordinate handling guards against zero-sized preview bounds.
+- Commits: `fd9f402` (numeric overlay calculations), `20af5ab` (bounds clamp and pointer guards). Exact-head CI is pending.
+
+
+### CI follow-up — 23 November 2026
+
+- Run #437 passed on `8f0f1f6a250e741a6128027f90e885503759be44`, covering the visual crop-selection implementation and DON!! label correction plus the updated manual test checklist at that point.
+- Run #439 passed on `da9817ec3d571d69af64ca7564806bed00a07c20`, including the new 35-format DON!! source-slug regression test.
+- Run #443 passed on `ed686e6a65baae9e4824c9c5d6cf5f56fb00628c`, including the crop numeric-state and bounds fixes.
+- The latest PR head subsequently received a documentation-only staging-checklist addition for testing DON!! override persistence/RLS. This final docs commit is awaiting its own exact-head workflow check.
+
+
+### Crop validation feedback — 23 November 2026
+
+- Added live crop validity feedback and disabled Scan/Rescan while a manual crop is too small or exceeds the photo bounds. The message explains the minimum 12% width/height and full-image-bound requirements; invalid state styling is differentiated.
+- Commits: `6752b46` (live validation and scan guard), `37ac9fd` (invalid state style). Exact-head CI is pending.
+
+
+### Manual-crop boundary regression test — 23 November 2026
+
+- Added a unit test for the 12% minimum crop dimension: exactly 12% is accepted, while 11.9% width or height is rejected.
+- Run #448 passed on `dfc321123cc79cc5744b58e1713db34fcd3de125`, covering live validation feedback and Scan button guard. Run #449 was running for the subsequent Rescan-button guard when checked.
+- Added the minimum-size regression test in commit `7f7fe3e`; exact-head CI pending.
+
+
+### Manual crop applied to full-card text OCR — 23 November 2026
+
+- Found during review that the selected crop was used for number-area scans but supporting full-card text OCR still used the original full-scene image. That made the crop less complete than its UI implied.
+- Added `prepareManualCardCropFile` and now use the selected crop for both focused number-region OCR and supporting full-card OCR. The original photo remains used for recognition-memory matching and saving the verified reference image.
+- Added a staging checklist item to verify this behavior.
+- Commits: `9581237` (crop file preparation), `0a981be` (scanner integration), `57aa39c` (manual checklist). Exact-head CI pending.
+
+
+### Exact-head CI verification — manual-crop full OCR integration
+
+- GitHub Actions run #455 (ID `45204683070`) **passed** for commit `db159bbebc4eabf4b366a5f3a04a395fe05469e0`.
+- All workflow steps passed: dependency installation, test suite, lint, and production build.
+- This verifies the selected crop-file preparation and its scanner integration compile and pass automated tests. It does **not** prove real-photo OCR improvement; the Saint Shamrock photo is not available in the current file set and the browser/staging UI remains untested.
+
+
+### Manual-crop workflow review — 23 November 2026
+
+- Reviewed crop overlay implementation and coordinate mapping. The preview preserves the image aspect ratio (`width: 100%; height: auto`), and drag coordinates are normalized against the preview bounds; the same normalized crop is passed into the OCR crop preparation, so the UI selection and source crop are aligned in code review.
+- The crop is validated before scanning, selection minimums are enforced, and both focused number OCR and supporting full-card OCR use the selected crop. The original image remains unchanged for recognition memory/reference-photo purposes.
+- No new code issue found in this pass. **Still unverified:** touch/pointer behaviour on iOS/Safari and desktop browsers, reverse-direction drag, edge-touching selection, preview scaling, and a real physical-card OCR result. Added these as explicit staging checklist tests; CI cannot cover these browser/device behaviours.
+- Current PR #26 head: `7cfb7b3f67fa645bef28f551ca6294731be1d681`. Exact-head GitHub Actions run #456 (ID `45204894944`) passed tests, lint, and production build. PR remains open/unmerged; no deployment or production data change.
+
+
+### Crop pixel-boundary rounding fix — 23 November 2026
+
+- Code review found a rounding edge case: rounding normalized crop origin and size independently could extend the source rectangle one pixel past an image edge. The crop helper now clamps rounded origins and dimensions to the source image bounds, including tiny image dimensions.
+- Added regression tests for the 10×10 edge crop that previously rounded to an 11-pixel extent and for a 1×1 source image. These tests have been committed; exact-head CI is pending.
+
+- Follow-up review extended the same rounding protection to OCR's built-in footer/number-zone crops: crop origins and dimensions are clamped against the source image, preventing region scans from reading outside bounds on small or odd-sized photos. Exact-head CI for this follow-up is pending.
+
+
+### Confirmed crop gate added — 23 November 2026
+
+- Identified a safety gap in the existing manual-crop fallback: it was optional, and the scanner's number regions could still be derived from the full camera frame when it was off. This reproduced the earlier card-boundary risk in the default path.
+- On PR #26 only, changed scanner OCR to require the user to enable crop, make a drag or numeric selection, and explicitly confirm that the full card is inside the selection. Scan and Rescan remain disabled until that gate is satisfied. The confirmation is cleared when the photo changes, crop changes, or the crop toggle is switched.
+- Both number-region OCR and supporting full-card OCR now always use the confirmed crop. The crop helper rejects unconfirmed, out-of-bounds, normalized-small, and under-64-pixel source crops. Manual card-number lookup remains available without OCR. This is a human-confirmed crop workflow—not automatic card-edge detection, perspective correction, or proof that the selected rectangle contains a card.
+- Added unit coverage for the confirmation guard and source-pixel minimum; updated manual staging checklist for crop locking, reset/reconfirmation, reverse-direction/touch/edge selection, and both OCR paths.
+- First exact-head CI run #472 (ID `45211378371`) on `743954f9627fe74b6d182a2ca0f655002240a624` failed tests (99/100 passed). The single failure was an outdated test assertion still comparing the corrected crop to 10-pixel image bounds after the test dimensions had changed; implementation tests passed. Corrected the assertion in commit `80417c2d77f44b3b0b9325bd3ede877c1d757082`. Exact-head CI is pending; do not mark this change passed until it completes.
+- No deployment, production database/inventory/customer/order changes, or merge.
+
+### Official image direct-load retries — 23 November 2026
+
+- Retried direct official Bandai image paths through the browser-rendering route. OP17 sample images (EN/JP EB04-007_p2 and EB04-061_p2/p3) all returned inaccessible errors; no change to OP17's 0/4 official image-load status.
+- Japanese EB01-002 rendered successfully; Japanese EB01-001 still returned an Internal Error. Japanese EB02 sample paths EB01-001_p2 and EB01-021_p2 both remained inaccessible. English EB01-001 rendered successfully. These retries corroborate the earlier 94/100 image-load count; they do not raise the count because the already-successful paths were previously recorded.
+- Image-load status remains 94/100 PASS, 2/100 retrieval errors (Japanese EB01-001 and EB02's Japanese EB01-001_p2), 4/100 unverified (OP17). Official cardlist/image routes remain partially blocked by the browser tool. No images were sent to OCR.
+- Re-attempted the Wrangler-name-derived Worker root and `/shop`; both were inaccessible through the browser tool. Treat production/live UI as unverified, not a deployment failure.
+
+
+### Crop-boundary correction and exact-head CI — 23 November 2026
+
+- Corrected the crop-boundary regression assertion after the earlier test failure; the failure was a stale expected bound, not a crop implementation defect.
+- Follow-up review also clamped the automatic OCR footer-zone crop geometry to source image dimensions, preventing rounded coordinates from exceeding the image on tiny/odd-sized inputs.
+- GitHub Actions run #474 (ID `45211676697`) passed on PR head `a840ae544de57a031e352d3872bdf64f4a4c6f13`: install, tests, lint, and production build all succeeded. This exact-head CI is now verified.
+- Remaining validation is still physical-card OCR and browser/mobile interaction, especially iOS Safari, crop selection, camera flow, and staging integration. No production deployment, merge, or production-data change.
+
+
+### Follow-up exact-head verification — 23 November 2026
+
+- PR head advanced to `5d641f76945c9424a801c49f2fbdc3398a2d8b53`; GitHub Actions run #477 (ID `45211850487`) passed install, tests, lint, and production build. This is the latest exact-head verification checked during this pass.
+
+
+### Exact-head crop-gate verification and data-refresh recheck — 23 November 2026
+
+- Corrected the stale crop-bound assertion that caused CI #472 to fail. The test now uses 100×100 source dimensions, consistent with the expected 75×75 crop; separate tests cover the 64-pixel floor.
+- Added a final safety guard tying crop confirmation to the exact selected photo file. A photo change resets crop selection and confirmation, and a stale confirmation cannot unlock Scan/Rescan for a different file. Crop-input state updates were also moved out of React state-updater callbacks.
+- Exact PR #26 head `5d641f76945c9424a801c49f2fbdc3398a2d8b53` passed GitHub Actions run #477 (ID `45211850487`): **100/100 tests passed, lint passed, production build passed**. This exact-head pass covers the crop gate, confirmation/photo identity guard, source pixel floor, tests, and the checklist/progress updates present on that commit. It still does not verify browser/device behaviour or real OCR.
+- Rechecked upstream Koala Kollect manifest: generated `2026-10-22T04:46:19Z`, `cards.jsonl` declares 3,003 rows; English products 99 rows and Japanese products 92 rows. Both product lists contain OP-17, but neither contains OP-18 nor EB-05. Product records are therefore demonstrably stale for those sets; full OP18/EB05 card-row retrieval was not independently completed this pass.
+- PR #26 remains open/unmerged. No merge/deploy or production data changes.
+
+
+### Documentation-head verification and genuine-photo availability — 23 November 2026
+
+- The documentation update itself is included in exact PR #26 head `2ee14cb015255cc4d19d5be2538375de9fbc5a5d`. GitHub Actions run #479 (ID `45212103431`) passed tests, lint, and production build on this exact head.
+- Re-searched the current conversation and Library for genuine scanner photos, including the Saint Shamrock OP18-119 source. No accessible image file was returned, so no new physical-photo OCR was run or claimed.
+- No staging/browser deployment is accessible; production/live UI remains unverified.
+
+
+### Exact CI confirmation for the latest progress record — 23 November 2026
+
+- PR #26 head `1b26d34f6a7c12c1db0bea382c63c61a3be9e46e` passed GitHub Actions run #480 (ID `45212247254`): dependency installation, all tests, lint, and production build succeeded. This exact-head run includes the genuine-photo availability note and previous exact-head verification record.
+
+
+### Latest scanner candidate-parser review and CI — 23 November 2026
+
+- Reviewed the OCR card-number candidate parser's prefix normalization and promo handling. It normalizes common OCR confusions (`0P`, `E8`, `5T`, `PR8`) and deduplicates repeated candidate numbers across readings; candidate occurrence/confidence is advisory and does not auto-confirm a match.
+- Current PR head `6d4d52f3e7133d7462c79021e4e6e60b2230e886` verified by GitHub Actions run #481 (ID `45212349383`): tests, lint, and production build all passed.
+- Attempted to open the Cloudflare branch preview through the browser tool; it was inaccessible in this environment. This is a tooling limitation, not evidence that the preview is down. Browser/mobile manual verification remains outstanding.
+
+
+### Additional boundary tests and rollback exception handling — 23 November 2026
+
+- Added image-tools regression coverage for malformed/empty pixel buffers, uniform-background/no-foreground inputs, and aspect-crop bounds near the photo's right/bottom edges. These remain conservative detector tests; they do not establish reliable detection on arbitrary card photos.
+- Reviewed product-photo upload rollback. Supabase normally reports cleanup failures as result errors, but thrown network/runtime exceptions during rollback could previously mask the original upload error and skip subsequent cleanup steps. Added independent try/catch guards for image URL rollback, metadata cleanup, and Storage cleanup so each failure is surfaced in the final error and later cleanup attempts continue.
+- New commits on the scanner branch: image boundary tests `2cce7df38da03461f6409569f91c633c694911ea`; rollback cleanup exception handling `2c33ba11b56a94cacc3f82d95f770888128dead0`. Exact-head CI is pending; do not mark these as verified until CI completes.
+- No deployment, merge, or production-data changes.
+
+
+### Verification of additional boundary/rollback work — 23 November 2026
+
+- GitHub Actions run #482 (ID `45216437678`) passed on exact PR head `748f48b0b83c7d290060035ec8180c7fba2ba2e7`: dependency installation, tests, lint, and production build succeeded. This includes the image-boundary tests and thrown-cleanup-exception handling.
+- Re-reviewed Quick Add duplicate protection: duplicate lookup paginates rather than inspecting only the first page; exact catalogue printing duplicates are blocked, legacy uncertain matches require explicit review and a variant label, and catalogue identity fields are cleared when card number/set/language/variant changes. Set-code resolution rejects normalized ambiguity instead of silently choosing a set.
+- Re-reviewed review-only SQL proposals. They have not been applied. Live policies/grants must be audited because permissive RLS policies combine with OR and can undermine a newly added policy; production schema and bucket settings remain unverified.
+- PR #26 remains open. No merge, deployment, or production changes.
+
+
+### Latest PR verification and rollback-result check — 23 November 2026
+
+- GitHub Actions run for the progress-doc commit `0305184778a65d9ecf665dc8b8f1a34afbbb6143` completed successfully (`Verify application`).
+- A further rollback correctness gap was found during review: product-image rollback used a conditional update to protect concurrent admin edits, but it did not verify whether that condition matched a row. It could silently report no cleanup issue even if rollback was skipped. The rollback now requests the affected row and reports when it was not applied (e.g. the product was removed or the image changed concurrently). Commit `a088ad37d873dbc162eaa58b3b420258b11a825e`; exact-head CI is pending.
+- PR mergeability was refreshed and currently reports `false` for this latest commit; this may be GitHub's transient recalculation or a conflict and needs another check. No merge or deployment has been attempted.
+
+
+### Image Library upload rollback exception audit — 23 November 2026
+
+- Reviewed the separate Image Library batch upload rollback path and found it still awaited Storage removal without guarding thrown exceptions. A cleanup runtime/network exception could replace the original upload failure and obscure which uploads were completed.
+- Added an independent cleanup exception guard so the original upload failure is preserved and any rollback failure is appended to the error message. Commit `36e53ca9ea1e0567f5c1c3002a62f99094407048`; exact-head CI pending.
+- Exact-head CI for preceding code commit `a088ad37d873dbc162eaa58b3b420258b11a825e` passed; CI for progress-doc commit `120bfdeaa604f027afb19ec61bcde7fc1e60e2d8` also passed. This new change is not yet verified.
+
+
+### Upload cleanup audit across image-library and recognition-memory storage — 23 November 2026
+
+- Image Library rollback guard commit `36e53ca9ea1e0567f5c1c3002a62f99094407048` passed GitHub Actions run `45218158238` (tests, lint, build).
+- Audited the shared recognition-memory upload path and found a third cleanup path where a thrown Storage removal could obscure the original database insertion error. Added guarded cleanup and a combined error message. Code commit `dd79953bd7cd630aa5fa11270b033d9a61462c5b`; exact-head CI pending.
+- These changes only improve error reporting and cleanup resilience. They do not modify storage policies, delete production data, or deploy anything.
+
+## Latest PR-head automated verification
+- PR #26 head `6f859959c9b4c64b6e3e984797de54e1bb12d86c` verified by GitHub Actions run **45218303830** (`build-and-test`): dependency install, test suite, lint, and production build all completed successfully. This is code CI only; no live Supabase or physical-card/browser testing was performed.
+
+## Number-first ranking review (latest code change; CI pending)
+- Review found that aggregated OCR candidate matches were annotated with printed-number evidence but sorted primarily by supporting name/language OCR. This could let a name match outrank a repeated, higher-confidence card-number reading.
+- Ranking now prioritizes whether number evidence exists, then occurrence count and confidence, with name/language and remembered-image signals used as supporting tie-breakers. Added regression tests for contradictory name/language signals and evidence-strength ordering.
+- The code change and tests are committed; automated CI must complete on the exact new head before considering this correction verified.
+
+## Bulk-import safety review and verified head
+- Bulk import now refreshes the live products table at import time (paginated) before inserting, rather than relying only on the catalogue snapshot loaded earlier in the admin UI. Newly found duplicates are skipped and their CSV row numbers are reported. Successfully inserted rows are added to the in-memory duplicate set for the remainder of that batch.
+- Duplicate-override copy now explicitly warns that it creates separate records and should only be used intentionally; it no longer suggests the override is for different variants, which are normally already distinguished.
+- Scanner crop-toggle wording clarified to `Enable manual crop selection`.
+- Exact PR head `a55eb159927aa800bf99572cde72cc6a81709cd6` CI run **45220180779** passed tests, lint, and production build. PR #26 remains open and mergeable at this check. This still does not prove live staging RLS, browser/device OCR, or atomic checkout stock reservation.
+
+## Expanded read-only security audit
+- Extended `product-visibility-rls-audit.sql` to report RLS enabled/forced state for product images, site settings, catalogue overrides, and DON!! overrides; existing policies and grants across these feature tables; and Storage object policies plus the `product-card-images` bucket configuration.
+- This is still read-only and is intended to expose existing permissive-policy conflicts before any proposal is applied. No live database changes were made.
+- The same read-only audit now includes `orders`, `order_items`, and `profiles` RLS state, existing policies, and direct grants so account and checkout permissions can be reviewed before staging tests.
+
+## Storefront reference-image identity safeguard (CI pending)
+- Review found that catalogue fallback images were selected by card number/language only, which could display a different set or variant for a product lacking a seller photograph.
+- Storefront fallback now prefers an exact catalogue match ID or printing key; when set/variant identity is available it filters to that identity and returns no fallback if none matches. Only legacy products without printing identity use generic number/language fallback.
+- Added unit tests for exact match IDs, printing-key/language, set+variant filtering, normal/base aliases, and no cross-variant fallback. CI must verify this exact head.
+- The first CI attempt for storefront-reference selection failed only because the new unit test imported the large catalogue module, whose Supabase import path is Vite-resolved but not Node-test-resolved. The pure selector was extracted to `cataloguePrimaryMatch.js`; the test now imports that dependency-free helper. This is a test-isolation fix; the next exact-head CI run is pending.
+- Storefront fallback matching now defaults set-only identity to the normal/base printing and resets image error state when product identity changes, so a previous image failure cannot suppress the next product's image. The matcher unit fixture's promo set code was corrected after its initial test assertion exposed the fixture mismatch. Exact code head `b2e16bb97d85af32bb5ddf732a9ef278d8d5f25c` CI run **45221189480** passed tests, lint, and production build.
+
+## Quick Add photo-retry duplicate safeguard (CI pending)
+- Review found that after a product was saved but its photograph upload failed, the retry path could link the photos successfully yet leave the original card form populated after clearing the partial-save state. A second submit could then create a duplicate.
+- The successful photo-retry path now resets the product form and duplicate-review state after linking the photos, and its success message explains why. Verify exact latest-head CI before marking this fix complete.
+- Exact PR head `f80d53e0ee249750339742ef598455c4ce344029` CI run **45221407333** passed all **111 tests**, lint, and production build. This verifies the Quick Add photo-retry reset and the preceding storefront, bulk-import, scanner, and cleanup code changes at that head.
+- A follow-up compatibility correction also handles catalogue records whose set/variant identity fields use alternate property names (`set_code`, `sourceSetCode`, `rarityLabel`). Latest code commit `014c0378150ac8c44eeb6203d1a96439a2da71c1` passed exact CI run **45221555422** (tests, lint, production build).
+
+## Atomic checkout stock-reservation proposal
+- Checkout review confirmed the current client flow inserts `orders` and `order_items` separately and does not atomically reserve/decrement product stock. The existing client-side refresh and lock cannot prevent two users purchasing the last copy concurrently or stock remaining unchanged after order creation.
+- Added `supabase/review-only/atomic-checkout-rpc.sql`: proposed authenticated RPC locks distinct product rows in deterministic order, validates status/price/stock, combines duplicate product lines, creates order + item snapshots, decrements stock, and returns order ID inside one transaction. It is **review-only and not applied**.
+- Required before integration: inspect live order/product schemas, existing triggers and order lifecycle, staging RLS/grants, confirm whether any current trigger already adjusts stock (avoid double-decrement), apply and test in staging, then switch client checkout to the RPC and remove/deny bypass direct insert paths if approved. This remains a pre-production blocker.
+
+## Atomic checkout and order-status client integration (CI/staging pending)
+- Client checkout now calls `create_order_atomic` with aggregated product IDs, quantities, and expected unit prices; it no longer creates order/order-item rows through separate client inserts. Missing RPC reports a clear fail-closed message and does not place an order.
+- The review-only SQL now rejects stale/conflicting expected prices under product row locks, atomically reserves stock, creates the order and items, and returns the order ID. Added atomic admin status RPC with a restricted lifecycle and idempotent cancellation restock for pending/processing orders; cancelled orders cannot reopen and shipped/completed orders cannot be cancelled/restocked.
+- Admin order-status UI now calls the atomic RPC and verifies the returned order ID. Unit tests cover RPC payload validation and expected order ID verification. Manual staging checklist covers simultaneous checkout, stale-price race, exactly-once restock, and lifecycle transitions.
+- This coordinated code+SQL requires staging schema/trigger/RLS review and applying the proposal before checkout/status controls work. Do not deploy this PR without the reviewed RPCs installed. SQL remains unapplied.
+- RPC proposal now also preflights required schema columns and lists existing order/product triggers for review. Admin checks fail closed if `is_admin()` returns NULL. Cancellation is idempotent and restores stock only for pending/processing orders; cancelled orders cannot reopen, and shipped/completed orders cannot be cancelled/restocked.
+- Exact PR head `d002a414a4b1f8f07ddea2d50d5b3ea58ee71ceb` CI run **45225388109** passed all **115 tests**, lint, and production build. This run includes atomic checkout/status client changes, the review-only SQL proposals and RLS audit updates, catalogue selector, bulk import and scanner work. CI does not execute SQL against staging or cover browser/device/physical-card testing.
+- Added client-side order-transition helper and guard mirroring the RPC lifecycle (`pending→processing/cancelled`, `processing→shipped/cancelled`, `shipped→completed`, same-state retry). Server remains authoritative; regression tests and manual checks were added.
+- Added an explicit `orders.stock_reserved` marker (default false for existing rows, true for orders created through the atomic checkout RPC). Cancellation only restores inventory for marked reservations and clears the marker, preventing accidental restock of legacy orders that predate the stock-decrement workflow.
+- The review-only atomic RPC proposal now includes explicit revokes for direct authenticated order/order-item INSERTs and order status/data UPDATEs, so the RPC is intended to be the only client write path once staged and reviewed. Added a read-only audit for column-level order grants because table-grant reports alone can miss those bypasses. Do not apply until current grants and any other workflows are reviewed.
+
+## RLS hardening review (review-only migration updated; staging pending)
+- Review of `admin-feature-migration.sql` found that its product-image and site-settings policies were permissive additions; existing broad permissive policies could OR around them. Added restrictive SELECT/INSERT/UPDATE/DELETE guards for product_images and restrictive homepage/admin guards for site_settings. Storage already has restrictive bucket-specific guards.
+- These guards are still proposals and require staging review against existing policies, RLS/grants, and `public.is_admin()` before applying. No database was changed.
+- Extended admin-feature migration preflight to reject missing `products.status` and incompatible existing `site_settings` column shapes (text ID/jsonb settings) instead of allowing `CREATE TABLE IF NOT EXISTS` to mask an incompatible table. SQL remains review-only.
+- Expanded the read-only grant audit again to include column-level grants for product_images, site_settings, catalogue override tables, and DON!! overrides, complementing the order/order_items audit.
+- Atomic checkout proposal now verifies `orders.stock_reserved` is boolean NOT NULL after adding it (default false), and stops if an existing incompatible column is found rather than silently using a wrong schema.
+
+
+## Initial full-testing audit — 23 November 2026
+- Exact PR #26 head checked: `0a4c5a277812c7d7bc11542be0f92b4924238ace`.
+- GitHub Actions run **45225534821** passed the automated pipeline: `npm ci`, `npm test` (**115 tests; 115 pass, 0 fail**), `npm run lint` (**12 warnings, 0 errors**), and `npm run build`.
+- CI warning review started. Warnings include unused declarations/imports, React ref/effect lint warnings, and action-runtime Node.js deprecation. They are not CI failures, but require triage before readiness.
+- Still unverified: live Cloudflare environment/branch/deployment; safe staging Supabase schema/RLS/grants and proposed RPC setup; browser auth, customer/admin permissions, scanner camera and physical-card cases; image-library uploads/cleanup; bulk import; storefront filtering/details; cart/checkout/order lifecycle; mobile layout; and end-to-end regression.
+- No production/staging data was modified. No merge or deployment was performed.
+
+
+## Follow-up verification — 23 November 2026 (current session)
+
+- **Repository / PR state:** default branch is `master`. PR #26 remains open and unmerged; its base SHA is `70029519438f2a15e6030523104325552d60674a` and its feature-branch head is `caa21afb79ce1bfff5e3032d84cd56ce52dbf1c4`.
+- **Exact-head CI:** GitHub Actions run #604 (run ID `45279048337`) completed successfully on the exact PR head. All seven job steps passed: checkout, Node setup, dependency installation, tests, lint, production build, and job completion.
+- **Scanner source review:** confirmed the current UI requires the manual crop to be enabled, a selection to be made, and explicit confirmation for the currently selected front-photo file. Changing the photo resets selection/confirmation; pointer drag and percentage controls clear confirmation. Both number-region OCR and supporting full-card OCR receive the confirmed crop. Helper tests cover 64-pixel minimum dimensions, 12% minimum geometry, out-of-bounds rejection, and edge rounding. This is source/test evidence, not browser interaction verification.
+- **Candidate ranking source review:** ranking order is OCR number evidence first (presence, repeat count, confidence), then exact/partial name match, language match, and remembered printing as a final tie-breaker. Normal and parallel printings with the same card number remain separate selectable candidates in unit tests. Manual card-number search is available when OCR fails. No live Supabase catalogue match was executed.
+- **Language limitation:** the scanner's recognition-language control is manually selected (English/Japanese). Parser fallback uses that selection when OCR text does not reveal a language; Japanese text detection depends on Japanese characters being present in OCR output. This is not automatic language classification and still needs real Japanese-card photo tests.
+- **Official image follow-up:** the official English Bandai card-list page at `https://en.onepiece-cardgame.com/cardlist/?series=569118` was reachable in this session. It lists OP18-001 Karoo and OP18-002 Igaram; their official image assets were opened and visually confirmed. The same 159-result page also contains OP17-119 Loki, whose official image opened; the card-list entry associates it with the OP18 product list, so this is a cross-set/reprint example and must not be counted as one of the OP17 target-set sample slots. These image opens are visual-load checks only, not OCR.
+- **Production:** `https://the-grand-line-archive.andrew420-t27.workers.dev/shop` still failed with DisabledError through the available browser verification path. Production deployment and live scanner UI remain unverified.
+- **100-case matrix status remains:** 94/100 official sample images previously visually loaded; 6 remain unverified (4 OP17 slots and 1 Japanese EB01 + 1 Japanese EB02 slot). The official OP18 image opens above corroborate the OP18 entries but do not change the existing 94/100 count because OP18 was already recorded as 4/4 loaded.
+- **Real-photo OCR remains:** 1/100 physical photos; Saint Shamrock OP18-119 remains an automatic number/name identification failure after multiple preprocessing variants. The other 99 physical-photo cases have not been supplied. Synthetic OCR remains a separate 100/100 normalized result (57/100 raw), not a substitute for real-photo OCR.
+- **No production changes:** this follow-up only records evidence. No merge, deployment, database mutation, inventory/order change, or production setting change was performed.
+
+
+### Deployment/CI clarification — 23 November 2026
+
+- PR #26 was re-read after the report update: it remains open, unmerged, and GitHub currently reports it mergeable.
+- The successful run #604 / ID `45279048337` is attached to the code head `caa21afb79ce1bfff5e3032d84cd56ce52dbf1c4`, not the later documentation-only report commit `0641e657e080e0d995caf099b55bf0f9212dcf5a`. The latest report commit currently has no workflow run or combined status returned; do not label that exact docs commit CI-verified.
+- Cloudflare's PR bot comment lists successful preview build/deploys, but the newest deployment shown there is for commit `0a4c5a277812c7d7bc11542be0f92b4924238ace`, seven commits behind the current report head. The listed preview URL could not be opened through the available browser verification path. Therefore this is evidence of an earlier successful preview deployment, not proof that the current PR head is deployed or that the scanner UI works.
+- Production Worker verification still returns DisabledError. No live production status is claimed.
+
+
+## Image Library pagination audit — 23 November 2026
+- Found that the Image Library Storage listing requested only the first 100 objects, which could make older photographs appear missing once a user's library exceeded that page size.
+- Added a reusable paginated Storage listing helper and changed the Image Library to continue fetching pages until a short/empty page is returned. Storage errors are surfaced rather than silently presenting a partial listing as complete.
+- Added regression coverage for multiple pages (137 objects), exact page multiples (including the empty terminal page), storage errors, and invalid page sizes.
+- Changes are committed on `feature/scanner-number-first-verification`; GitHub Actions passed both workflow runs for this commit, including dependency installation, the complete Node test suite (including the new pagination tests), lint, and production build. This is a code-level fix only; no live Storage objects or database records were changed.
+
+- Extended the same pagination protection to product-linked image metadata: deleting a product now retrieves every linked Storage path in stable ID order (1,000 rows per page) before the database row is deleted, rather than relying on PostgREST's default response cap. Missing optional image-metadata tables retain the existing safe empty-list behavior; other query failures still stop deletion before it begins.
+
+
+## Checkout quantity boundary audit — 24 November 2026
+- Review found the checkout client accepted any JavaScript integer quantity, while the proposed atomic RPC parses quantities as PostgreSQL `integer` values. A quantity or duplicate-line total above 2,147,483,647 could therefore fail at the RPC boundary instead of being rejected cleanly in the client.
+- Added safe-integer validation for checkout snapshot quantities and bounded atomic RPC payload quantities and combined duplicate-line totals to the PostgreSQL signed-integer maximum.
+- Added regression tests for an over-limit single line, duplicate-line aggregate overflow, and unsafe JavaScript integer values.
+- Automated CI for the resulting PR head is pending; do not treat this change as verified until the exact-head workflow completes.
+- No database, inventory, order, production deployment, or live setting was changed.
+
+## Preview readiness audit — 24 November 2026
+
+- **PR/branch state:** PR #26 remains open and unmerged on `feature/scanner-number-first-verification`, targeting `master`. The verified head at the start of this audit was `2e8d63be7d56956df9dedbb5fa53fb6a50746586`. No merge or production deployment was performed.
+- **Scanner source location and crop gate:** the scanner is implemented in `src/admin/CardScanner.jsx` (not `src/App.jsx`). Source review confirms the manual crop UI supports pointer drag selection and percentage fields; Scan/Rescan remain disabled until the user enables cropping, makes a selection, and confirms it for the exact current photo. Photo/crop changes clear confirmation. Both number-region OCR and supporting full-card OCR receive the confirmed crop. This is source review, not browser interaction or physical-card OCR evidence.
+- **Crop helper:** `src/admin/cardNumberRegion.js` validates normalized crop geometry, rejects unconfirmed/invalid crops and source crops smaller than 64 pixels in either dimension, and clamps rounded crop origins and dimensions to source-image bounds. The OCR footer/number regions are also clamped to image bounds. Automated tests exist in `tests/cardNumberRegion.test.js`; the exact-head CI run below includes the full test suite.
+- **Exact-head CI:** GitHub Actions run #647 (ID `45285232386`) completed successfully on `2e8d63be7d56956df9dedbb5fa53fb6a50746586`. Job steps for dependency installation, tests, lint, and production build all succeeded. The logs report 126 tests passed, 0 failed; lint reports 8 warnings and 0 errors; the Vite production build completed. This is automated code verification only, not a deployed preview or browser test.
+- **Preview deployment status:** the latest Cloudflare PR comment available in this audit lists a completed preview deployment for commit `0a4c5a2` and a newer build in progress for `472edc1`. Neither is the verified current head `2e8d63be7d56956df9dedbb5fa53fb6a50746586`. No deployment of the exact current head is confirmed. The preview URL could not be opened through the available web verification path, so browser/UI reachability remains unverified.
+- **Preview environment configuration:** `wrangler.jsonc` currently contains an empty `"previews": {}` block. The Supabase client in `src/lib/supabase.js` reads build-time `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` from `import.meta.env`. The connected Supabase account currently exposes one project and no development branches; no separate staging project/branch was found. The Cloudflare Preview Base/build-time variable settings could not be inspected, so it is not possible to prove that preview builds are isolated from the existing database. Do not use the preview for write operations until a separate staging Supabase target and Preview build variables are confirmed.
+- **Cloudflare configuration reference:** current Cloudflare Workers documentation says Worker Previews have separate Preview configuration and secrets, and that Preview bindings should point to test/staging resources; dashboard Preview Base settings must be checked where applicable. See https://developers.cloudflare.com/workers/previews/configuration/ and https://developers.cloudflare.com/workers/ci-cd/builds/configuration/.
+- **Outstanding before safe interactive preview testing:** confirm the Cloudflare Workers Builds Preview model/settings, configure or identify a separate staging Supabase project/branch and its build-time Vite variables, obtain a preview deployment for the exact PR head, and verify the preview URL loads. Do not create a paid Supabase resource or change Cloudflare settings without the user's approval.
+- **No live changes:** no Supabase schema/data, Storage objects, inventory, orders, customer data, Cloudflare settings, production deployment, or PR merge was changed during this audit.
+
+
+
+## Scheduled scanner work — 24 November 2026 (run started on demand)
+
+- **Fresh PR verification:** PR #26 remains open and unmerged. Current head: `ed0bcb8f49e5c8937b3375965b8e78ad8b96d704`; feature branch remains `feature/scanner-number-first-verification`. No master changes or merge.
+- **Exact-head CI rechecked:** GitHub Actions run #653 / run ID `45286553673` completed successfully for this head. All steps passed: checkout, Node setup, dependency install, test suite, lint, and production build. This run's API job summary did not expose test-count or lint-warning totals, so those are not repeated here.
+- **New test evidence this run:** none. This was a fresh exact-head CI verification, not a physical-photo or browser scanner test. The existing evidence gaps remain: no fresh 100-card image/OCR matrix, no new physical-card photos, and no safe isolated staging backend verified.
+- **Next concrete target:** add fresh reference-image checks to the matrix (starting with the unresolved OP17 and Japanese EB01/EB02 entries) or, if image access remains blocked, investigate a focused scanner regression test. Avoid repeating this CI-only check as the next work item.
+
+
+## Reference-source retry — 24 November 2026 (on-demand continuation)
+
+- **OP17 source retry:** searched fresh official and third-party OP17 sources. Bandai's official OP17 product page is indexed and identifies the set/card examples, but opening it through this verification path returned a page with no readable content (0 lines). This is an access limitation, not a card-image load failure, so OP17 matrix slots remain unverified.
+- **Japanese EB01 retry:** OPTCG.app's Japanese Memorial Collection index was found in search, but direct opening failed with a cache-miss error. Search snippets show card identifiers, but do not verify image loading; Japanese EB01 failing slot remains unverified.
+- **Japanese EB02 retry:** searched card-list sources. Search snippets returned EB02 card list data, but direct page opening failed with a cache-miss error. No actual Japanese card image load was verified; Japanese EB02 failing slot remains unverified.
+- **Source access distinction:** search-index snippets are not image-load evidence and are not counted toward the 100-case visual-load matrix. No OCR was run on these references.
+- **Next attempt:** use accessible direct image asset links from the card catalogue or a reproducible download/image-validation harness, rather than counting search snippets. No production/staging or data changes.
+
+
+## Alternative OP17 image catalogue discovery — 24 November 2026
+
+- Fresh search surfaced additional candidate card-image catalogues: TCGGuy's OP17 Japanese list, Japanese TCG Supply's pictured OP17 list, OPTCG.app's Japanese OP17 index, and ExploreTCGsets' OP17 set page.
+- Search result content confirms useful OP17 card identifiers and notes parallel variants sharing numbers, reinforcing that image/printing identity cannot be determined from number alone. These are candidate sources only: direct opening of all four returned cache-miss errors through this tool, so no image was loaded or counted.
+- Links: https://tcgguy.com/blogs/card-lists/one-piece-op-17-the-worlds-strongest-warriors-japanese-card-list ; https://japanesetcgsupply.co.uk/en-ca/blogs/news/one-piece-op17-the-worlds-strongest-warriors-card-list-japanese ; https://optcg.app/jp/series/the-world-s-strongest-warriors/ ; https://exploretcgsets.com/onepiece/sets/op-17/
+- This is a source-discovery update, not a successful visual test. Next, investigate whether the catalogue image URLs can be extracted from indexed/static content in a reproducible way, without marking image-load results prematurely.
+
+
+## OP17 single-card reference alternatives — 24 November 2026
+
+- Fresh image/card search identified additional single-card reference pages for OP17-001 Edward.Newgate: OnePieceDecklists, TCG.DIRECTORY, GotemTCG (base and parallel), and OnePieceTCGMarket.
+- Search results include card identity and alternate-printing information, but this tool did not provide a directly testable image asset or page-open confirmation. Therefore these are source leads only and do not increase the visual-load count.
+- Useful source leads: https://onepiecedecklists.com/decklists/op17/edward-newgate.html ; https://tcg.directory/card/705924/edwardnewgate-001-alternate-art ; https://op.gotemtcg.com/en/cartes/en-op17-OP17001 ; https://op.gotemtcg.com/en/cartes/en-op17-OP17001_p1 ; https://www.onepiecetcgmarket.fr/en/cards/OP-17/OP17-001
+- Noted a useful scanner/catalogue matching requirement: source listings show OP17-001 base and parallel printings as separate identities. The candidate match should use printing/variant identity and reference-image comparison, not card number alone.
+
+
+## OCR candidate parser regression fix — 24 November 2026
+
+- GitHub Actions run **663** (run ID `45301358502`) tested commit `913c5d2` and failed: 127/128 tests passed. The new malformed-number test exposed that OCR input `OP0001-001` could be partially accepted as the invalid set `OP00-001`.
+- Fixed `src/admin/cardNumberCandidates.js` to reject normalized set number `00`; expanded the regression case to include `OP00-001` explicitly.
+- Fix commits: `112258cf` (parser) and `436d45a` (test). This entry was written before the corrected CI run; see the later verification section below, which supersedes the pending-CI status.
+- This is a parser/unit-test result, not physical-card OCR evidence.
+
+
+## Corrected OCR parser CI verified — 24 November 2026
+
+- Workflow run **668** (run ID `45301645550`) on the corrected branch completed successfully: **128/128 tests passed**, lint passed, and production build passed.
+- The prior run 663 had caught the invalid `OP00-001` acceptance. The parser and regression test were corrected, and this run verifies that fix.
+- CI evidence is automated unit tests/lint/build only; no physical-card OCR, browser scanner, staging isolation, or production deployment was tested.
+
+
+## Scanner language-code robustness — 24 November 2026
+
+- Found a small compatibility gap in candidate ranking: language aliases handled English, Japanese, en, eng, jp, and jpn, but locale-style values such as `en-US` and `ja-JP` were not recognized. These formats are common in browser/API metadata.
+- Updated the language-family normalization to recognize any normalized code beginning with `en` or `ja`, while retaining existing aliases.
+- Added regression tests for `en-US`, `EN-gb`, and `ja-JP`.
+- This is a focused ranking unit-test improvement. CI for the resulting commit is pending; it is not scanner/browser or OCR evidence.
+
+
+## Exact OCR name ranking refinement — 24 November 2026
+
+- Code review found candidate names were only scored as a boolean substring/containment match. Thus a short OCR name such as `Ace` could tie a longer candidate name containing it (`Portgas D. Ace`), allowing language/remembered signals to select the longer candidate.
+- Ranking now scores exact normalized-name equality ahead of partial/contained name matches, while printed-number evidence remains the primary signal. Language and remembered-image tie-breakers remain below name signals.
+- Added regression test using `Ace` versus `Portgas D. Ace`. This is a deterministic ranking test, not proof that OCR will read names accurately from physical photos.
+- CI pending for this branch head.
+
+
+## 24 November 2026 — weak OCR number evidence safeguard
+
+- Found a ranking edge case by code review: any detected number candidate previously outranked all name evidence, even a single low-confidence number reading. That could cause a weak OCR false-positive to beat an exact card-name match.
+- Ranking now treats number evidence as strong when it is repeated at least twice OR has confidence of 60 or higher. Strong number evidence remains ahead of name signals. Weak single-read number evidence ranks after exact/partial name evidence but ahead of language-only and remembered-image tie-breakers.
+- Added regression tests for weak single-read evidence losing to an exact name, and repeated number evidence still winning despite low average confidence.
+- This is a code/test improvement only; it is not physical-photo accuracy evidence. CI for the resulting exact branch head is pending.
+
+
+## Weak-evidence ranking CI failure and comparator correction — 24 November 2026
+
+- CI run **689** on commit `0ea5f6c` failed: **131/132 tests passed**. The failing regression demonstrated that a weak single number read still ranked above an exact OCR name because occurrence/confidence fields were compared before name signals, even when neither candidate had strong number evidence.
+- Corrected the comparator so number-strength/occurrence/confidence comparisons apply only when both candidates have strong number evidence. When evidence is weak, exact/partial name ranking precedes weak number presence, then language and remembered-image tie-breakers.
+- Fix commit: `4c2d95316f0b817d66f0c5dd5933efd9a19c2338`. CI for this exact commit is pending.
+- This is a regression-driven ranking correction, not physical-card accuracy evidence.
+
+
+## Latest ranking safeguard CI verified — 24 November 2026
+
+- GitHub Actions run **693** (run ID `45303683421`) for exact feature-branch head `e5d7820343ae37e5bf72b7d08351fac8d8cecff3` completed successfully.
+- Steps confirmed: dependency installation, tests, lint, and production build all succeeded.
+- This supersedes the pending-CI note in the weak-evidence ranking section above. It does not establish scanner UI behavior, physical-card OCR accuracy, or production deployment.
+- PR #26 remains open and unmerged. The currently reported Cloudflare preview deployment is older (commit `b8aff15`), so it is not a preview of this verified head. A current preview for `e5d7820` remains the next user-testing prerequisite.
+
+
+## Manual crop overlay bug fix — 24 November 2026
+
+- User reported the crop-selection preview was highlighting/shading area outside the selected crop.
+- Inspection found the dimmed overlay was built as a single complex polygon intended to represent the area outside the selection. That polygon was susceptible to incorrect/self-intersecting geometry as selection coordinates changed.
+- Replaced it with four independent rectangular shade panels (top, left, right, bottom) positioned from the selected crop percentages. The crop selection outline remains separate. This removes polygon winding/self-intersection from the overlay.
+- Code commits: `f1d6a6a` (component) and `5e7f6c4` (CSS). This is a source-level fix; it still needs preview/browser confirmation by dragging crops at different positions and sizes.
+
+
+## User-requested scanner and catalogue image improvements — 24 November 2026
+- Identified an interaction blocker in `CardScanner.jsx`: scanning was locked until manual crop was enabled, drawn, and confirmed. The manual crop is now optional; with it disabled the scanner can process the original full photo. If enabled, existing crop validation/confirmation remains required. Commit: `b641a1b90e4f5764f950cc78c7aa4e8ab7516337`.
+- This is a source-level change only; latest commit has no CI runs/status checks yet and has not been browser-preview tested.
+- Next planned scanner UX improvement: selectable scan modes (full-card crop vs number-area crop) with a clear retry/fallback path after a failed scan.
+- User also requests an audit so every catalogue sample/printing has a usable image, including DON!! cards. The current external Koala Kollect feed provides card/printing/locator data; image resolution prefers a direct official Bandai locator, then catalogue image URL, then an alternate official printing image. The existing coverage report can count missing locators/images, but a complete set-by-set/language/printing audit and verification of image overrides is still outstanding. Do not assume the sample cards are complete from the UI alone.
+
+
+## Full sample-card/set coverage audit — 24 November 2026
+
+**Finding: the catalogue source currently used by the app is stale and does not include all currently released sets.** The app fetches Koala Kollect data from `hotavocado/koala-kollect-data` at runtime (cards, products, printings, locators, DON sets). Its manifest fetched during this audit reports `generated_at: 2026-10-22T04:46:19Z`, with 60 sets listed. That snapshot predates the current OP-18 and EB-05 lists/releases. The manifest's set list contains EB-01–EB-04, OP-01–OP-17, PRB-01/02, ST-01–ST-36 and P, but **does not contain EB-05 or OP-18**. Thus those sets cannot be supplied from this source snapshot and are not reliably importable into the app's catalogue/scanner yet.
+
+Fresh external list checks (24 Nov 2026):
+- OP-18: official numbered base list is 119 cards OP18-001–OP18-119; broader official entries include parallels, SP and Treasure Rare. The official product page confirms OP-18. Source evidence: https://en.onepiece-cardgame.com/products/op18.php (product page URL is an expected official route; page not independently opened in this run); current secondary summaries report the Bandai list at 159 entries including printings/variants.
+- EB-05: numbered base set 61 cards EB05-001–EB05-061; external official-list recount reports 96 entries including printings/variants and six reprinted leaders. Source page series reference reported as https://en.onepiece-cardgame.com/cardlist/?series=569205.
+- Source snapshot lists 60 sets. This is a feed snapshot count, not proof that all historical/promotional products or every printing is represented.
+
+**No card rows were invented or inserted in this run.** Adding them safely requires importing the verified source records and official image locators (including parallel/SP/DON distinctions), not simply making placeholder entries. Next work is to obtain an authoritative machine-readable export/API for EB-05 and OP-18, import into a reviewed supplemental dataset or update the external feed source, and then verify image URL loads and per-printing coverage. Also audit DON!! assignment by originating set; source currently has 165 DON set rows.
+
+CI verified at the exact prior head `ec07e9f3d01838801e3183eb62c988bb5deead34`: GitHub workflow run #704 completed successfully. The earlier crop bypass change `b641a1b` is included in this head; however, its live preview is still stale at commit `b8aff15`, so browser testing of that change is not yet possible through the current preview.
+
+
+## Follow-up: supplemental samples and scan modes — 24 November 2026
+- Added an explicit supplemental sample catalogue for **OP18-001/002 and EB05-001/002 in English and Japanese (8 printing samples)**. These samples are now available to scanner number lookup when the upstream feed does not contain that exact card/set/language identity. They carry a clear supplemental-sample label and are **not** represented as complete OP18 or EB05 imports.
+- Image Library coverage now reports the supplemental sample count and per-set breakdown separately from upstream card/printing counts, preserving the warning that full set coverage is missing.
+- The 100-case reference matrix now uses explicit, set-attributed OP17 sample identities (EB04-007 Roronoa Zoro and EB04-061 Monkey.D.Luffy in both languages) as candidate official-image references. Their image URLs are cache-busted, but remain **unverified** until a browser image check succeeds. Japanese EB01 and EB02 sample image references now also retry with cache-busting query strings. This does not promote any image-load status by itself.
+- Scanner UI now has **Full card — number + details** and **Card number only** modes. In number-only mode, full-card text OCR is skipped; if manual crop is enabled, the selected crop is OCRed directly as the number region. This lets the user crop either the whole card or just the printed number without forcing the crop through bottom-edge region extraction.
+- Added unit tests for the supplemental sample records and lookup behavior. GitHub Actions is running on the current PR head; tests/lint/build status will be recorded after completion.
+- No live inventory rows, Supabase data, or production deployment were changed.
+
+
+### CI correction and verification — 24 November 2026
+- First CI attempts for the new scan-mode UI failed at lint because the recognition-language JSX label was left unclosed when the scan-mode selector was added. The test suite itself passed (135/135), but lint stopped the build.
+- Corrected the JSX label structure and reran exact-head checks. GitHub Actions **run #725 (push) and #726 (pull request) both passed**: install, all tests, lint, and production build. Exact verified head: `eb1f6e72b0522681c6876e7b6b33d74fae1c4132`.
+- The new supplemental sample tests are included in the passing suite. The previous failed CI attempts are retained as history and are superseded by these successful exact-head runs.
+
+
+## Image-load audit recovery — 24 November 2026
+**Correction/superseding result to the 23 November 94/100 report: the sample image matrix is now 100/100 load-verified.** A live browser opened each of the six previously unresolved direct image URLs with cache-busting query strings and visually confirmed the images loaded:
+- OP17 English EB04-007_p2 (Roronoa Zoro) and EB04-061_p2 (Monkey.D.Luffy): 2/2 pass.
+- OP17 Japanese EB04-007_p2 and EB04-061_p3: 2/2 pass; the images include Bandai's SAMPLE watermark.
+- EB01 Japanese EB01-001 and EB02 Japanese EB01-001_p2: 2/2 pass, both show Kozuki Oden with the expected card number.
+
+No image identity mismatch was observed. The 100-case matrix manifest was updated to use the verified cache-busted URLs and now records 100 `verified-load`, 0 `retry-pending`, and 0 `candidate-unverified` rows. A regression test asserts exactly 100 unique sample slots across 25 sets, with two English and two Japanese samples per set. This is **image-load verification only**: no OCR was run on the 100 reference images and the 100 cases are not 100 physical card photos. The upstream catalogue still has 92/100 product-linked sample locators; the remaining 8 OP18/EB05 sample entries are supplemental, and those two sets are still not complete catalogue imports.
+
+
+## Cloud preview readiness check — 24 November 2026
+- Current PR #26 head at this follow-up: `bbee015a7599d130b5e0b8ade0cbc0dc49cdea42` (this report-only commit). GitHub Actions run **#744** (`45309796054`) completed successfully on this exact head: install, tests, lint, and production build all passed. [Run #744](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45309796054). The preceding code head `bc2d17b30c8a43fd4b442f1734ad6510a7355ea7` also passed run #742.
+- Cloudflare's PR bot's latest preview report was updated **2026-11-24 01:06:14 UTC** and reports deployment commit `b8aff15`. GitHub compare shows current head is **34 commits ahead, 0 behind** that deployed commit, with source changes among the intervening commits; it is not an equivalent preview. The bot reports build/deployment success for that old commit only. Commit-specific URL: https://0090036f-the-grand-line-archive.andrew420-t27.workers.dev; branch alias: https://feature-scanner-number-first-verificatio-the-grand-line-archive.andrew420-t27.workers.dev. Do not treat either as current-head preview.
+- Attempts to open both reported URLs and a guessed current-head URL via browser/web and direct HTTP failed (browser-tool error / container DNS resolution failure). **App reachability and live UI are unverified**, not a successful/failed app load.
+- Environment isolation is **not verified**. `wrangler.jsonc` has an empty `previews` block. The Supabase client reads compile-time `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`. Repository code does not establish what Cloudflare's Preview Base/build settings contain. No separate staging Supabase project or Preview build values were visible/confirmed, so the preview must not be used for scanner testing that could access production data.
+- No Cloudflare dashboard settings, secrets, Supabase resources, or deployments were changed. The empty Wrangler Preview configuration was left unchanged: these static-app Vite values are build-time settings, and adding runtime Wrangler vars alone would not prove a safe Supabase boundary. Required confirmation is that Cloudflare Preview build settings use a dedicated test Supabase project and isolated storage, with no production credentials. See Cloudflare's [Preview configuration](https://developers.cloudflare.com/workers/previews/configuration/) and [Workers Builds configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/) documentation.
+
+
+## Cloud preview safety guard — 24 November 2026
+- Confirmed PR #26 head before this change: `3fad84d96a5ecb6ae5e19239fc5ade41ae33dcf`. Exact-head GitHub Actions run **#746** completed successfully (install, tests, lint, production build): [run #746](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45309963942).
+- Cloudflare's latest PR preview comment reports a successful build/deployment for that exact head at **2026-11-24 02:07:23 UTC**. Commit-specific URL: https://224a7850-the-grand-line-archive.andrew420-t27.workers.dev; branch alias: https://feature-scanner-number-first-verificatio-the-grand-line-archive.andrew420-t27.workers.dev. This is deployment evidence, not live-page evidence.
+- Direct HTTP and browser/web attempts to open the preview URLs failed in this environment (DNS resolution / fetch errors). Live app load and scanner UI remain **unverified**.
+- Added a fail-closed code guard on this feature branch: Cloudflare preview builds are detected from `WORKERS_CI_BRANCH` (or equivalent build branch metadata); unknown Cloudflare branch metadata is treated as Preview. Preview builds expose only `VITE_PREVIEW_*` variables, and the Supabase client selects only `VITE_PREVIEW_SUPABASE_URL` + `VITE_PREVIEW_SUPABASE_ANON_KEY`. It never falls back to production `VITE_SUPABASE_*` values in Preview. If dedicated preview values are absent, Supabase stays disconnected. A visible preview safety banner warns that any configured Preview project must still be confirmed as a separate staging project.
+- Added regression tests for production/preview branch detection and for preventing preview Supabase fallback. CI for the new exact head is pending.
+- This code guard cannot verify the Cloudflare dashboard's Preview build variables, Preview settings, or the identity of a project configured under the preview-prefixed values. No dashboard settings, secrets, Supabase projects/storage, production data, or deployments were manually changed. Cloudflare must have a dedicated staging project and isolated storage configured before database/write-feature testing.
+- Reference: Cloudflare [Worker Preview configuration](https://developers.cloudflare.com/workers/previews/configuration/) and [Build branches](https://developers.cloudflare.com/workers/ci-cd/builds/build-branches/) explain Preview configuration and branch build metadata. Wrangler `previews` remains empty in this repository.
+
+- CI confirmation for the safety-guard commit: GitHub Actions **run #761** (`45314946268`) completed successfully on exact commit `9c22ff9aa022a4a2357304a027ff3449aec48673`; install, tests, lint, and production build all passed. [Run #761](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45314946268).
+
+
+## Cloud preview readiness — 24 November 2026
+
+- **Current PR/branch:** PR #26 remains open and unmerged; branch `feature/scanner-number-first-verification` head at this check: `775639fcae66b40547e3bb6d4b16ba4a6a7b6005`.
+- **Cloudflare preview deployment record:** the Cloudflare Workers & Pages bot reports build and deployment success for the exact current head (short SHA `775639f`) at [https://4ac0fdf7-the-grand-line-archive.andrew420-t27.workers.dev](https://4ac0fdf7-the-grand-line-archive.andrew420-t27.workers.dev), recorded 2026-11-24 02:49:37 UTC. This is a current deployment record, not proof that the app can be reached from the verification environment.
+- **Reachability / app load:** unverified. Direct HTTPS attempts to the deployment hostname failed DNS resolution from the available container network; the web fetch tool also reported the URL inaccessible. The stable branch preview alias was also inaccessible. No page HTML, JavaScript bundle, or browser-rendered app was obtained.
+- **Exact-head CI:** GitHub Actions run ID `45315021927` completed successfully for this exact SHA. Its `build-and-test` job passed dependency installation, tests, lint, and production build. [Run details](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45315021927).
+- **Isolation evidence:** `wrangler.jsonc` has an empty `previews` object, so no explicit preview binding/variable configuration is committed there. The branch's Vite configuration detects non-production/unknown Cloudflare build branches and exposes only `VITE_PREVIEW_*` variables in preview bundles. The Supabase resolver reads only `VITE_PREVIEW_SUPABASE_URL` and `VITE_PREVIEW_SUPABASE_ANON_KEY` for previews and does not fall back to production variables; with either missing, `supabase` remains `null`. The UI includes a preview safety banner that asks the operator to confirm the configured project is dedicated staging.
+- **Isolation conclusion:** not proven. Cloudflare dashboard build variables and the actual deployed bundle could not be inspected here. A preview-specific URL/key could still be configured to point at the production Supabase project. Do not sign in, upload images, or run scanner tests against this deployment until a dedicated staging Supabase project (including its Storage bucket) is confirmed.
+- **Scanner implementation evidence only:** source contains full-card and number-only scan modes, manual crop selection/confirmation controls, OCR processing, remote catalogue lookup plus the explicitly labelled supplemental sample cards, and a human catalogue-match confirmation panel. These are source/CI observations only. No preview UI feature has been browser-verified: full-card scan, number-only scan, crop interaction, number-crop OCR, catalogue identification/confirmation, and supplemental sample rendering all remain unverified in the live preview.
+- **Safety:** no Cloudflare settings, secrets, Supabase configuration, databases, Storage, inventory, orders, customer data, merge, or production deployment were changed during this check.
+
+
+## Cloud preview readiness re-check — 24 November 2026, 05:13 UTC
+
+- **PR and branch:** PR #26 is open, unmerged, and mergeable. The current head at the start of this check was `8e29fb8c167b4ae19e4e63915df965ddf83c8879` on `feature/scanner-number-first-verification`.
+- **Cloudflare preview record:** the Cloudflare Workers & Pages PR comment updated at **2026-11-24 03:52:34 UTC** reports Build Success and Deployment Success for exact commit `8e29fb8`. Commit-specific URL: https://4036e694-the-grand-line-archive.andrew420-t27.workers.dev. The comment also reports the branch alias https://feature-scanner-number-first-verificatio-the-grand-line-archive.andrew420-t27.workers.dev. This is provider deployment evidence only.
+- **Exact-head CI:** GitHub Actions run **#765** (ID `45322412843`) completed successfully for exact head `8e29fb8c167b4ae19e4e63915df965ddf83c8879`. The `build-and-test` job passed dependency installation, all tests, lint, and production build. [Run #765](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45322412843).
+- **Reachability / app load:** not verified. Direct DNS lookup and HTTPS requests from the available environment failed to resolve `4036e694-the-grand-line-archive.andrew420-t27.workers.dev`; the web fetch also reported the URL inaccessible. No HTML, JavaScript bundle, or browser-rendered app was obtained.
+- **Preview isolation:** source-level guard remains present. Cloudflare feature/unknown-branch builds are treated as preview; Vite exposes only `VITE_PREVIEW_*` variables to preview bundles; `resolveSupabaseConfig` reads only `VITE_PREVIEW_SUPABASE_URL` and `VITE_PREVIEW_SUPABASE_ANON_KEY` in preview and never falls back to production variables. Missing preview values leave Supabase unconfigured. Regression tests cover branch detection and no-production-fallback behavior. However, `wrangler.jsonc` still has an empty `previews` object, and no Cloudflare dashboard build variables or deployed bundle could be inspected. The preview-specific URL could still identify the production Supabase project; Storage isolation is also unconfirmed. **Do not sign in, upload, or test database-backed scanner workflows until a separate staging Supabase project and Storage bucket are confirmed.**
+- **Scanner UI:** source/CI evidence only for full-card mode, number-only mode, manual crop selection and confirmation, number-region OCR, catalogue matching and manual confirmation, and supplemental samples. None of these features has been verified in the live preview browser because the page could not be loaded.
+- **Actions and safety:** inspected `wrangler.jsonc`, `vite.config.js`, `src/lib/buildEnvironment.js`, `src/lib/supabase.js`, `src/lib/supabaseConfig.js`, and their regression tests. No further config change was safe without Cloudflare Preview environment visibility. No Cloudflare settings, secrets, Supabase resources, Storage, inventory, orders, customer data, merge, or production deployment were changed.
+- **Next required evidence:** Cloudflare preview hostname resolution / browser access, plus confirmation (without sharing secret values) that Preview build variables point to a dedicated staging Supabase project with isolated Storage. Then run the documented scanner UI checklist using staging-only accounts and sample data.
+
+
+## Cloud preview readiness re-check — 24 November 2026, 07:15 UTC
+
+- **PR / exact branch head:** PR [#26](https://github.com/andrew420t/the-grand-line-archive/pull/26) remains open, unmerged, and mergeable. GitHub reports head `18f0c3fee79906b76af221164752d7ae1c1172b3` on `feature/scanner-number-first-verification`; a commit comparison reports the branch and that SHA as identical (0 ahead / 0 behind).
+- **Cloudflare deployment record:** the latest Cloudflare Workers & Pages PR bot deployment entry was updated at **2026-11-24 05:19:51 UTC** and reports Build Success + Deployment Success for exact commit `18f0c3f`, deployed at **05:14:56 UTC**. Immutable deployment URL: https://cc8cabd3-the-grand-line-archive.andrew420-t27.workers.dev. The bot's branch alias is https://feature-scanner-number-first-verificatio-the-grand-line-archive.andrew420-t27.workers.dev. This is a matching deployment record, not proof of browser reachability.
+- **Exact-head CI:** GitHub Actions **run #767** (ID `45331863984`) completed successfully for exact SHA `18f0c3fee79906b76af221164752d7ae1c1172b3`. The `build-and-test` job passed dependency installation, tests, lint, and production build. [Run #767](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45331863984).
+- **Reachability / app load:** still **unverified**. Direct HTTPS probes to both the immutable deployment URL and branch alias failed DNS resolution (`curl: (6) Could not resolve host`); the web fetch tool also reported the URLs inaccessible. No HTML or browser-rendered page was obtained, so this is a network-resolution limitation in the verification environment, not evidence that the Worker returned an application error.
+- **Preview-build detection:** source uses `WORKERS_CI` and `WORKERS_CI_BRANCH` to detect Workers Builds. Cloudflare's official [Workers Builds configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/) documents both as default injected build variables (lines 181–190), so this detection path is supported by the provider documentation. The existing `tests/buildEnvironment.test.js` covers feature-branch detection and fail-closed behavior when Cloudflare branch metadata is missing.
+- **Supabase isolation: code evidence vs account evidence:** `vite.config.js` switches preview bundles to the `VITE_PREVIEW_` prefix; `src/lib/supabaseConfig.js` reads only `VITE_PREVIEW_SUPABASE_URL` and `VITE_PREVIEW_SUPABASE_ANON_KEY` for preview builds and never falls back to production `VITE_SUPABASE_*` values. Missing preview values leave the Supabase client disconnected. This is a useful fail-closed source guard, not proof of the configured target. Cloudflare distinguishes build-time variables from runtime Preview settings; see [Workers Builds configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/) and [Preview configuration](https://developers.cloudflare.com/workers/previews/configuration/). The repository's `wrangler.jsonc` has an empty `previews` block; Cloudflare documents that this can be valid when no separate Worker runtime bindings are needed. For this Vite SPA, the Supabase URL/key are embedded at build time, so the decisive missing evidence is the actual Cloudflare Preview build-variable configuration and confirmation that its URL identifies a dedicated staging Supabase project with isolated Storage. Neither account settings nor the deployed bundle were inspectable here. **Do not sign in, upload, or run database-backed scanner tests until that staging target is confirmed.**
+- **Scanner feature evidence:** source and CI show full-card and number-only modes, crop selection/confirmation, number-region OCR, catalogue matching with human confirmation, and supplemental sample-card lookup. These remain **code/CI evidence only**. Full-card scan, number-only scan, crop interaction, number-crop OCR, catalogue confirmation, and supplemental sample rendering have not been verified in a live browser.
+- **Actions / safety:** no code change to scanner or deployment configuration was needed in this check. No Cloudflare settings, secrets, Supabase projects, Storage, inventory, orders, customer data, merge, or production deployment were changed. This record is a documentation-only update on the feature branch.
+- **Next evidence required:** (1) successful resolution and browser load of the exact deployment URL; (2) Cloudflare Preview build settings verified to use a dedicated staging Supabase project and Storage; then (3) run the scanner checklist using staging-only accounts and sample data. Cloudflare's [Preview settings](https://developers.cloudflare.com/workers/previews/configuration/) explain that Preview variables, secrets, and bindings are configured separately from production; their actual values must be checked without exposing secret values.
+
+
+### Follow-up: documentation-head CI and Preview — 24 November 2026, 06:19 UTC
+
+- The preceding readiness record was committed as `275a546f784e6f77235d58f03576fcc7c7f087f0`, which became the exact PR head. GitHub Actions **run #769** (ID `45339375489`) passed dependency installation, tests, lint, and production build on that exact commit: https://github.com/andrew420t/the-grand-line-archive/actions/runs/45339375489.
+- Cloudflare then reported Build Success and Deployment Success for the same commit `275a546` at **2026-11-24 06:18:19 UTC**. Immutable Preview URL: https://6de62ba0-the-grand-line-archive.andrew420-t27.workers.dev. The branch alias now points to `275a546` according to the bot's latest PR comment.
+- Direct HTTPS and web-open attempts against both URLs still fail at DNS/fetch resolution in the verification environment. App loading and all live scanner UI checks remain unverified.
+- Environment isolation remains unverified at account level. The source guard and Cloudflare build metadata behavior are supported by code/tests and official documentation, but the actual Preview build variable values and Supabase project/Storage target remain unavailable. Do not use authenticated or data-writing features.
+- This follow-up is documentation-only; no scanner, Wrangler, Cloudflare account, Supabase, or production data/configuration was changed.
+
+
+### Cloud preview readiness re-check — 24 November 2026, 07:27 UTC
+
+- **PR / branch:** PR [#26](https://github.com/andrew420t/the-grand-line-archive/pull/26) is open, unmerged, and mergeable. Branch `feature/scanner-number-first-verification` head at this check: `8c218a3ede2289ae8895b41dbd2bfefc31797ee8`.
+- **Exact-head CI:** GitHub Actions run [#771](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45339582020) completed successfully for that exact SHA. The `build-and-test` job passed dependency installation, all tests, lint, and production build. The fetched job record confirms each of those steps completed with success.
+- **Cloudflare Preview deployment:** the Cloudflare Workers & Pages PR bot's latest deployment table, updated 2026-11-24 06:21:17 UTC, reports Build Success and Deployment Success for exact commit `8c218a3` at 2026-11-24 06:19:56 UTC. Immutable deployment URL: https://d8ebc6c2-the-grand-line-archive.andrew420-t27.workers.dev. This is a current matching deployment record, not proof of reachability or browser rendering.
+- **Reachability / app load:** not verified. Direct HTTPS/DNS probes to the immutable deployment hostname and branch alias failed with temporary DNS resolution failure; web open attempts also reported both URLs inaccessible. No HTML, JS bundle, or browser-rendered app was obtained. This is a limitation of the verification path and does not establish that Cloudflare itself is returning an application error.
+- **Preview isolation — code evidence:** `vite.config.js` selects the `VITE_PREVIEW_` prefix for non-production/unknown Cloudflare build branches; `src/lib/supabaseConfig.js` uses only `VITE_PREVIEW_SUPABASE_URL` and `VITE_PREVIEW_SUPABASE_ANON_KEY` for preview builds and never falls back to production `VITE_SUPABASE_*` variables. Missing preview values leave Supabase unconfigured. Regression tests in `tests/buildEnvironment.test.js` and `tests/supabaseConfig.test.js` cover branch detection and no-production-fallback behavior.
+- **Preview isolation — account evidence:** not verified. `wrangler.jsonc` still has an empty `previews` block; the actual Cloudflare Preview build-variable values and deployed bundle were not accessible. A preview-prefixed URL could still be configured to identify the production Supabase project, and its Storage bucket could also be production. Do not sign in, upload, or exercise database-backed workflows until a dedicated staging Supabase project and isolated Storage are confirmed.
+- **Scanner UI:** source and passing CI provide code-level evidence for full-card and number-only modes, crop selection/confirmation, number-region OCR, catalogue matching with human confirmation, and supplemental sample cards. None has been verified in the live Preview UI in this check: full-card scan, number-only scan, crop interaction, number-crop OCR, catalogue identification/confirmation, and supplemental sample rendering all remain browser-unverified.
+- **Safety:** no Cloudflare settings, secrets, Supabase resources, Storage, inventory, orders, customer data, production deployment, or PR merge were changed. No live UI/data-backed scanner testing was attempted because the Preview could not be reached and account-level isolation remains unconfirmed.
+- **Next required evidence:** a reachable exact-commit Preview URL plus confirmation that Cloudflare Preview build variables point to a dedicated staging Supabase project and isolated Storage. Then perform the scanner checklist using staging-only accounts and sample data.
+
+## Full-photo scanner path correction — 24 November 2026
+
+- **Finding:** a source audit found that disabling the manual crop left a full-frame crop object paired with `manualCropConfirmed=false`. Both automatic number-region preparation and full-card OCR passed that object to the strict confirmation guard, which rejected it. As a result, the advertised no-manual-crop path could stop before OCR even though the scanner UI allowed scanning with the crop tool off.
+- **Fix:** `CardScanner` now passes `null` when manual cropping is disabled. The crop helper interprets only that null value as the full source image; any explicit user-selected crop still requires confirmation and retains the existing size/bounds validation.
+- **Regression coverage:** added a test that the full-photo path returns the exact image bounds without manual confirmation, while invalid image dimensions still fail. Existing tests continue to require confirmation for explicit crop rectangles.
+- **Evidence category:** source review + automated regression test. This is not physical-card OCR or live browser verification.
+- **CI:** the pre-fix baseline at `3690663cc1ee2fe46faa4e71377bf6f4d16ac929` passed exact-head GitHub Actions run [#773](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45348304782). The fixed code head `257795979e0933ea00104354673b8e4bc9bd1cc1` passed run [#778](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45361595227): install, tests, lint, and production build all succeeded. The audit documentation head `93906b7cc2103ff61cfcd2935259535e489c26d4` also passed exact-head run [#782](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45361754071), including all four verification steps.
+- **Safety:** no database, Storage, inventory, order, customer, Cloudflare setting, production deployment, or merge was changed.
+
+## Shared recognition image privacy hardening — 24 November 2026
+
+- **Finding:** `saveSharedExample` calls `prepareCardImage(file)` without enabling card-only cropping, so the stored object is the original scan photo and may include a table, room, or other background. The original review-only setup SQL created a **public** Storage bucket and a public object-read policy. If applied as written, original scan photos could be downloaded by anyone with a public object URL. This was a proposal-level exposure; no live bucket state or prior application was verified.
+- **Fix to initial setup proposal:** `card-recognition-memory.sql` now creates/sets the bucket to private, allows only administrators to read the image objects, and adds restrictive Storage policies so older broad policies cannot grant public/non-admin access. The metadata table starts from revoked API-role privileges and grants only the columns/operations the scanner needs; the contributor auth UUID is not publicly selectable.
+- **Existing-setup remediation:** added `card-recognition-memory-privacy-remediation.sql` for a database where the earlier public-bucket setup may already exist. It preflights the table, bucket, RLS and admin function; makes the bucket private; removes the public object-read policy; adds restrictive admin-only object/write guards; and revokes table/column grants before re-granting safe metadata access.
+- **Code/test/documentation:** added a code comment warning that the uploaded image is not guaranteed to be card-cropped; added `tests/cardRecognitionMemorySqlSafety.test.js` for the initial and remediation SQL; and added an isolated-staging privacy check to the manual checklist.
+- **CI:** the first run [#809](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45363375472) failed only because one static test expected a multi-line SQL policy declaration on a single line. The assertion was corrected to allow line breaks. The corrected code/test head `089feaab92852f4cc80baa064a95ac5f948b83f2` passed exact-head run [#811](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45363619774): install, tests, lint and production build all succeeded.
+- **Evidence category:** source/data-flow review + static SQL-policy tests. No SQL was executed, no Storage object was inspected, and no live exposure is confirmed. If the earlier SQL was applied manually, use the separate remediation proposal only after reviewing it against isolated staging; do not assume this repository change has changed any existing bucket.
+
+### Recognition privacy preflight follow-up — 24 November 2026
+
+- Tightened the fresh-setup SQL preflight to require `public.is_admin()` to return boolean and to stop unless RLS is enabled on `storage.objects`; it will not create policies on an unprotected Storage table.
+- Added static regression assertions for both preflight conditions. The existing remediation SQL separately checks the admin function, table/bucket existence, required columns, and RLS on both the metadata table and Storage objects.
+- These are still review-only SQL proposals. They have not been run against staging or production. The follow-up code/test head `0d69565d82531ed96f985ba6ae3b2d181dacdb70` passed exact-head GitHub Actions [run #827](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45364203712): install, tests, lint and production build all succeeded.
+
+## Recognition memory precedence correction — 24 November 2026
+
+- **Finding:** when both local and shared memory returned a visually similar example for the same OCR-resolved card number, the scanner always overwrote the local match with the shared match, even when the shared example had lower visual similarity. Memory only affects candidate ranking and the user still confirms the printing, but this could unnecessarily push a weaker normal/parallel choice ahead of a stronger local example.
+- **Fix:** added `chooseRememberedImageMatch`. It ignores memory for a different card number, selects the higher similarity between local and shared examples, and deterministically prefers local memory on an exact tie. The scanner now uses the selected source consistently in ranking and status text.
+- **Regression coverage:** four tests cover stronger local, stronger shared, mismatched card number, and deterministic tie behavior.
+- **CI:** exact head `afb63af4ddcf785589f89a19f63a2f04fdd2baf3` passed GitHub Actions [run #836](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45364536905): install, tests, lint, and production build all succeeded.
+- **Evidence category:** source review + unit tests. No physical-card or live-browser test was performed; the confirmation popup remains mandatory.
+
+### Recognition memory search performance note — 24 November 2026
+
+- Source review found that shared recognition lookup currently fetches every metadata row in pages of 1,000 and sorts all hashes in the browser for each scan. The local IndexedDB lookup also compares against all saved examples. This is correct for broad visual fallback but scales linearly with the number of remembered printings.
+- No cap or query rewrite was introduced in this run because memory is also used to recover a card number when OCR is weak; filtering only by OCR candidates could remove that fallback. Next scanner pass should design a two-stage/filtered lookup that preserves that recovery path and benchmark it with a larger synthetic memory set.
+- After the memory precedence documentation update, exact docs head `a8062178b26f65ac4db9cc0d9a840eb591b6d8c8` passed [CI run #839](https://github.com/andrew420t/the-grand-line-archive/actions/runs/45364662064).

@@ -1,10 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AlertCircle, ArrowRight, Check, LoaderCircle, ScanLine } from 'lucide-react'
 import { CARD_FIELDS, parseCardDetails } from './cardParser'
-import { rankCatalogueMatches } from './cardMatchRanking'
+import { chooseRememberedImageMatch, rankCatalogueMatches } from './cardMatchRanking'
 import { findCatalogueMatches, catalogueMatchToForm, collectrSearchUrl } from './cardCatalogue'
+import { mergeCatalogueScannerFields } from './productSchema'
 import CatalogueReferenceImage from './CatalogueReferenceImage'
 import { findRememberedCardImage, findSharedRememberedCardImage, rememberVerifiedCardImage } from './cardRecognitionMemory'
+import { prepareCardNumberRegions, prepareManualCardCropFile } from './cardNumberRegion'
+import { extractCardNumberCandidates } from './cardNumberCandidates'
 
 const confidenceLabel = (field) => {
   if (!field.value) return 'Not detected'
@@ -22,6 +25,7 @@ export default function CardScanner({
   onContinue,
 }) {
   const [recognitionLanguage, setRecognitionLanguage] = useState('eng')
+  const [scanMode, setScanMode] = useState('full-card')
   const [scanning, setScanning] = useState(false)
   const [progress, setProgress] = useState(0)
   const [status, setStatus] = useState('')
@@ -32,17 +36,47 @@ export default function CardScanner({
   const [matchConfirmationOpen, setMatchConfirmationOpen] = useState(false)
   const [selectedAutoMatchId, setSelectedAutoMatchId] = useState('')
   const [rankedAutoMatches, setRankedAutoMatches] = useState([])
-  const [rememberMatch, setRememberMatch] = useState(true)
   const [catalogueLoading, setCatalogueLoading] = useState(false)
   const [catalogueError, setCatalogueError] = useState('')
   const [manualCardNumber, setManualCardNumber] = useState('')
   const [manualMatches, setManualMatches] = useState([])
   const [manualLoading, setManualLoading] = useState(false)
   const [manualError, setManualError] = useState('')
+  const [numberReadings, setNumberReadings] = useState([])
+  const [numberCandidates, setNumberCandidates] = useState([])
+  const [manualCropEnabled, setManualCropEnabled] = useState(false)
+  const [manualCropConfirmed, setManualCropConfirmed] = useState(false)
+  const [manualCropConfirmedForFile, setManualCropConfirmedForFile] = useState(null)
+  const [manualCropSelectionMade, setManualCropSelectionMade] = useState(false)
+  const [manualCropPercent, setManualCropPercent] = useState({ x: 0, y: 0, width: 100, height: 100 })
+  const cropPreviewRef = useRef(null)
+  const cropDragRef = useRef(null)
 
   const frontPhoto = photos.find((photo) => photo.role === 'front') || photos[0]
   const hasReview =
     Object.values(fields).some((field) => field.value) || Boolean(rawText.trim())
+  const manualCropGeometryIsValid = (
+    Number(manualCropPercent.x) >= 0 &&
+    Number(manualCropPercent.y) >= 0 &&
+    Number(manualCropPercent.width) >= 12 &&
+    Number(manualCropPercent.height) >= 12 &&
+    Number(manualCropPercent.x) + Number(manualCropPercent.width) <= 100 &&
+    Number(manualCropPercent.y) + Number(manualCropPercent.height) <= 100
+  )
+  const manualCropIsValid = manualCropEnabled && manualCropGeometryIsValid
+  const manualCropReady = !manualCropEnabled || (manualCropIsValid && manualCropSelectionMade && manualCropConfirmed && manualCropConfirmedForFile === frontPhoto?.file)
+
+  const clearCropConfirmation = () => {
+    setManualCropConfirmed(false)
+    setManualCropConfirmedForFile(null)
+  }
+
+  useEffect(() => {
+    setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 })
+    setManualCropConfirmed(false)
+    setManualCropConfirmedForFile(null)
+    setManualCropSelectionMade(false)
+  }, [frontPhoto?.file])
 
   const updateField = (key, value) => {
     setFields((current) => ({
@@ -56,9 +90,49 @@ export default function CardScanner({
     }))
   }
 
+  const updateCropFromPointer = (event, finish = false) => {
+    const bounds = cropPreviewRef.current?.getBoundingClientRect()
+    const start = cropDragRef.current
+    if (!bounds || bounds.width <= 0 || bounds.height <= 0 || !start) return
+    const current = {
+      x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
+      y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)),
+    }
+    const x = Math.min(start.x, current.x)
+    const y = Math.min(start.y, current.y)
+    const width = Math.abs(current.x - start.x)
+    const height = Math.abs(current.y - start.y)
+    setManualCropPercent({ x: x * 100, y: y * 100, width: width * 100, height: height * 100 })
+    clearCropConfirmation()
+    if (finish) {
+      cropDragRef.current = null
+      setManualCropSelectionMade(true)
+    }
+  }
+
+  const startCropSelection = (event) => {
+    if (scanning || !manualCropEnabled) return
+    event.preventDefault()
+    event.currentTarget.setPointerCapture?.(event.pointerId)
+    const bounds = cropPreviewRef.current?.getBoundingClientRect()
+    if (!bounds || bounds.width <= 0 || bounds.height <= 0) return
+    cropDragRef.current = {
+      x: Math.max(0, Math.min(1, (event.clientX - bounds.left) / bounds.width)),
+      y: Math.max(0, Math.min(1, (event.clientY - bounds.top) / bounds.height)),
+    }
+    clearCropConfirmation()
+    setManualCropSelectionMade(false)
+    setManualCropPercent({ x: cropDragRef.current.x * 100, y: cropDragRef.current.y * 100, width: 0, height: 0 })
+  }
+
   const scanCard = async () => {
     if (!frontPhoto) {
       setError('Add a card-front photograph in the photo panel before scanning.')
+      return
+    }
+    if (manualCropEnabled && !manualCropReady) {
+      setError('Select the crop area and confirm it, or disable manual cropping to scan the full photo.')
+      setStatus('')
       return
     }
 
@@ -69,6 +143,19 @@ export default function CardScanner({
     setError('')
     setStatus('Loading the free browser OCR engine…')
     setProgress(0)
+    // Clear the previous scan's result panels immediately so a failed/new scan
+    // cannot leave an old catalogue match looking like it belongs to this photo.
+    setCatalogueMatches([])
+    setAutoMatches([])
+    setRankedAutoMatches([])
+    setSelectedAutoMatchId('')
+    setMatchConfirmationOpen(false)
+    setAutoMatchStatus('')
+    setCatalogueError('')
+    setManualMatches([])
+    setManualError('')
+    setNumberReadings([])
+    setNumberCandidates([])
 
     try {
       try {
@@ -77,7 +164,7 @@ export default function CardScanner({
           findSharedRememberedCardImage(frontPhoto.file),
         ])
         if (rememberedImage || sharedRememberedImage) setStatus('Found a similar previously confirmed card image. Checking it against OCR…')
-      } catch (memoryError) {
+      } catch {
         // Recognition memory is an optional enhancement; OCR must still work if local storage is unavailable.
       }
       const { createWorker } = await import('tesseract.js')
@@ -89,51 +176,116 @@ export default function CardScanner({
           if (message.status) setStatus(message.status)
         },
       })
-      const { data } = await worker.recognize(frontPhoto.file, {}, { blocks: true })
-      const lines =
-        data.lines ||
-        (data.blocks || []).flatMap((block) =>
-          (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
-        )
-      setRawText(data.text || '')
-      const parsed = parseCardDetails(data.text || '', lines, recognitionLanguage)
+      setStatus(scanMode === 'number-only'
+        ? 'Number-only mode: reading the number crop without full-card text OCR…'
+        : 'Finding the card number: checking bottom edges in upright, sideways and rotated orientations…')
+      // Pass null when the crop tool is off. This is the explicit full-photo
+      // path; a non-null crop remains subject to the user's confirmation.
+      const manualCrop = manualCropEnabled
+        ? Object.fromEntries(Object.entries(manualCropPercent).map(([key, value]) => [key, Number(value) / 100]))
+        : null
+      const numberRegions = scanMode === 'number-only' && manualCropEnabled
+        ? [{ label: 'Manual number-area crop', file: await prepareManualCardCropFile(frontPhoto.file, manualCrop, manualCropConfirmed) }]
+        : await prepareCardNumberRegions(frontPhoto.file, manualCrop, manualCropConfirmed)
+      const numberResults = await Promise.all(numberRegions.map(async (region) => {
+        const { data: regionData } = await worker.recognize(region.file, { tessedit_char_whitelist: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-' }, { blocks: true })
+        const lineConfidence = (regionData.lines || [])
+          .map((line) => Number(line.confidence))
+          .filter(Number.isFinite)
+        return {
+          label: region.label,
+          text: regionData.text || '',
+          confidence: Number.isFinite(Number(regionData.confidence))
+            ? Number(regionData.confidence)
+            : lineConfidence.length ? Math.max(...lineConfidence) : 0,
+        }
+      }))
+      setNumberReadings(numberResults)
+      const candidates = extractCardNumberCandidates(numberResults)
+      setNumberCandidates(candidates)
+      const data = scanMode === 'number-only'
+        ? { text: '', lines: [], blocks: [] }
+        : await worker.recognize(await prepareManualCardCropFile(frontPhoto.file, manualCrop, manualCropConfirmed), {}, { blocks: true }).then((result) => result.data)
+      const lines = data.lines || (data.blocks || []).flatMap((block) =>
+        (block.paragraphs || []).flatMap((paragraph) => paragraph.lines || []),
+      )
+      const numberLines = numberResults.flatMap((result) =>
+        result.text.split(/\r?\n/).filter(Boolean).map((text) => ({ text, confidence: result.confidence })),
+      )
+      const numberCandidateText = candidates[0]?.number || ''
+      const combinedText = [numberCandidateText, ...numberResults.map((item) => item.text), data.text || ''].filter(Boolean).join('\n')
+      const combinedLines = [
+        ...(candidates[0] ? [{ text: candidates[0].number, confidence: candidates[0].confidence }] : []),
+        ...numberResults.flatMap((item) => item.text.split(/\r?\n/).filter(Boolean).map((text) => ({ text, confidence: item.confidence }))),
+        ...numberLines,
+        ...lines,
+      ]
+      setRawText(combinedText)
+      const parsed = parseCardDetails(combinedText, combinedLines, recognitionLanguage)
       setFields(parsed)
       setAutoMatches([])
       setRankedAutoMatches([])
       setSelectedAutoMatchId('')
       setMatchConfirmationOpen(false)
       setAutoMatchStatus('')
-      const detectedNumber = parsed.card_number?.value || sharedRememberedImage?.cardNumber || rememberedImage?.cardNumber
-      if (detectedNumber) {
-        setStatus('OCR finished. Checking detected card number against the catalogue…')
+      const detectedNumbers = [...new Set([
+        ...candidates.map((candidate) => candidate.number),
+        parsed.card_number?.value,
+        sharedRememberedImage?.cardNumber,
+        rememberedImage?.cardNumber,
+      ].filter(Boolean))].slice(0, 6)
+      if (detectedNumbers.length) {
+        setStatus('Checking the strongest OCR number readings against the English and Japanese catalogue…')
         try {
-          const matches = await findCatalogueMatches(detectedNumber)
-          setAutoMatches(matches)
-          if (matches.length) {
-            let rememberedId = ''
-            try { rememberedId = window.localStorage.getItem('glaScannerCardMatch:' + detectedNumber) || '' } catch { /* storage may be unavailable */ }
-            if (rememberedImage?.cardNumber === detectedNumber) rememberedId = rememberedImage.printingId
-            if (sharedRememberedImage?.cardNumber === detectedNumber) rememberedId = sharedRememberedImage.printingId
-            const ranked = rankCatalogueMatches(matches, parsed.name?.value, parsed.language?.value, rememberedId)
+          const lookups = await Promise.all(detectedNumbers.map(async (cardNumber) => {
+            try {
+              return { cardNumber, matches: await findCatalogueMatches(cardNumber) }
+            } catch (lookupError) {
+              return { cardNumber, matches: [], error: lookupError.message }
+            }
+          }))
+          const successfulLookups = lookups.filter((lookup) => lookup.matches.length)
+          const allMatches = [...new Map(successfulLookups.flatMap((lookup) => lookup.matches).map((match) => [match.id, match])).values()]
+          setAutoMatches(allMatches)
+          if (allMatches.length) {
+            const candidateByNumber = new Map(candidates.map((candidate) => [candidate.number, candidate]))
+            const topResolvedNumber = successfulLookups[0].cardNumber
+            // Only image-similarity memory may influence ranking. A card-number-only
+            // saved choice can point to the wrong parallel/normal printing.
+            // When both stores have an example for this number, use the stronger
+            // visual match instead of always letting the shared example override local.
+            const rememberedMatch = chooseRememberedImageMatch(rememberedImage, sharedRememberedImage, topResolvedNumber)
+            const rememberedId = rememberedMatch?.image.printingId || ''
+            const numberEvidence = Object.fromEntries(candidates.map((candidate) => [candidate.number, { occurrences: candidate.occurrences, confidence: candidate.confidence, sources: candidate.sources }]))
+            const ranked = rankCatalogueMatches(allMatches, parsed.name?.value, parsed.language?.value || recognitionLanguage, rememberedId, numberEvidence)
             const best = ranked[0]
             setRankedAutoMatches(ranked)
             setSelectedAutoMatchId(best.match.id)
             setMatchConfirmationOpen(true)
-            setAutoMatchStatus((rememberedImage?.printingId === best.match.id || sharedRememberedImage?.printingId === best.match.id)
-              ? (sharedRememberedImage?.printingId === best.match.id ? 'Shared recognition library match' : 'Previously confirmed local image') + ' (' + (sharedRememberedImage?.printingId === best.match.id ? sharedRememberedImage.similarity : rememberedImage.similarity) + '% visual similarity). Please confirm the card and variant.'
-              : best.nameMatch && best.languageMatch
-              ? 'Strong match: card number, name, and language agree.'
-              : best.nameMatch
-                ? 'Possible match: card number and name agree. Confirm language and set.'
-                : 'Possible match found by card number. Compare the name, language, and set manually.')
+            const winningReading = candidateByNumber.get(best.match.cardNumber)
+            const recoveredAlternate = candidates[0]?.number !== best.match.cardNumber
+            setAutoMatchStatus(rememberedMatch?.image.printingId === best.match.id
+              ? (rememberedMatch.source === 'shared' ? 'Shared recognition library match' : 'Previously confirmed local image') + ' (' + rememberedMatch.image.similarity + '% visual similarity). Please confirm the card and variant.'
+              : recoveredAlternate
+                ? 'The first OCR number did not resolve, so the scanner recovered a catalogue match from another number reading. Compare the card number, name, language, set and variant before confirming.'
+                : winningReading?.occurrences > 1
+                  ? 'The card number was read repeatedly and matched the catalogue. Confirm the language, set and printing variant.'
+                  : best.nameMatch && best.languageMatch
+                    ? 'Strong match: card number, name and language agree.'
+                    : best.nameMatch
+                      ? 'Possible match: card number and name agree. Confirm language and set.'
+                      : 'Possible match found by card number. Compare the name, language, set and variant manually.')
           } else {
-            setAutoMatchStatus('No catalogue entry matched the detected card number. Check the OCR number.')
+            const failures = lookups.filter((lookup) => lookup.error)
+            setAutoMatchStatus(failures.length === lookups.length
+              ? 'Catalogue verification was unavailable: ' + failures[0]?.error
+              : 'None of the OCR number readings matched the catalogue. Check the enlarged readings or search by card number manually.')
           }
         } catch (lookupError) {
           setAutoMatchStatus('Catalogue verification was unavailable: ' + lookupError.message)
         }
       }
-      setStatus(data.text?.trim() ? 'Scan complete. Check every field before saving.' : 'No readable text found. Enter details manually or rescan.')
+      setStatus(combinedText.trim() ? 'Scan complete. Check every field before saving.' : 'No readable text found. Enter details manually or rescan.')
       setProgress(100)
     } catch (scanError) {
       setError(`OCR could not read this photograph: ${scanError.message}`)
@@ -196,35 +348,17 @@ export default function CardScanner({
     const values = catalogueMatchToForm(match)
     setFields((current) => ({
       ...current,
-      ...Object.fromEntries(Object.entries({
-        name: values.name,
-        card_number: values.card_number,
-        set_code: values.set_code,
-        rarity: values.rarity,
-        color: values.color,
-        cost: values.cost,
-        power: values.power,
-        card_type: values.card_type,
-        classification: values.classification,
-        language: values.language,
-        effect_text: values.effect_text,
-        variant_label: values.variant_label,
-      }).map(([key, value]) => [
-        key,
-        { value: value || '', confidence: value ? 95 : 0, needsReview: true },
-      ])),
+      ...mergeCatalogueScannerFields(current, values),
     }))
     setStatus('Catalogue details filled in. Check each value against the physical card before saving.')
   }
 
   const selectedAutoMatch = rankedAutoMatches.find((item) => item.match.id === selectedAutoMatchId)?.match
+  const sameNumberVariants = new Set(rankedAutoMatches.map(({ match }) => [match.cardNumber, match.languageCode, match.setCode, match.variantLabel || match.variant || match.rarity].join('|'))).size
 
   const confirmAutoMatch = async () => {
     if (selectedAutoMatch) {
       applyCatalogueMatch(selectedAutoMatch)
-      if (rememberMatch && fields.card_number?.value) {
-        try { window.localStorage.setItem('glaScannerCardMatch:' + fields.card_number.value, selectedAutoMatch.id) } catch { /* storage may be unavailable */ }
-      }
       setMatchConfirmationOpen(false)
       let memoryMessage = ''
       if (frontPhoto?.file) {
@@ -237,7 +371,7 @@ export default function CardScanner({
               : result.shared?.reason
                 ? (result.localError ? ' Recognition memory unavailable: ' + result.localError : ' Saved on this browser only. ' + result.shared.reason)
                 : result.duplicate ? ' Existing reference refreshed.' : ' Reference image added to this browser’s recognition library.'
-        } catch (memoryError) {
+        } catch {
           memoryMessage = ' The card was confirmed, but its reference image could not be saved on this browser.'
         }
       }
@@ -258,6 +392,13 @@ export default function CardScanner({
           <h2>Read the card.<br /><em>Verify every detail.</em></h2>
           <p>OCR runs in your browser using Tesseract.js. Missing or uncertain values stay blank for manual review.</p>
         </div>
+        <label className="form-field scanner-language">
+          <span>Scan mode</span>
+          <select value={scanMode} disabled={scanning} onChange={(event) => setScanMode(event.target.value)}>
+            <option value="full-card">Full card — number + details</option>
+            <option value="number-only">Card number only — faster, less text noise</option>
+          </select>
+        </label>
         <label className="form-field scanner-language">
           <span>Recognition language</span>
           <select value={recognitionLanguage} disabled={scanning} onChange={(event) => setRecognitionLanguage(event.target.value)}>
@@ -280,7 +421,7 @@ export default function CardScanner({
           <p className="eyebrow">01 · SOURCE PHOTOGRAPH</p>
           <h3>Use the clearest front image.</h3>
           <p>Keep the card square to the camera, in focus, and evenly lit. Front/back and detail images remain linked for the stock record.</p>
-          <button className="button button--gold" type="button" disabled={!frontPhoto || scanning} onClick={scanCard}>
+          <button className="button button--gold" type="button" disabled={!frontPhoto || scanning || !manualCropReady} onClick={scanCard}>
             {scanning ? <LoaderCircle className="spin-icon" size={16} /> : <ScanLine size={16} />}
             {scanning ? `Scanning… ${progress}%` : hasReview ? 'Rescan card' : 'Scan card'}
           </button>
@@ -288,6 +429,103 @@ export default function CardScanner({
           {error && <span className="form-error scanner-error" role="alert">{error}</span>}
         </div>
       </div>
+
+      <section className="scanner-manual-crop" aria-labelledby="scanner-manual-crop-title">
+        <div className="scanner-manual-crop__heading">
+          <div>
+            <p className="eyebrow">OPTIONAL SCAN PREPARATION</p>
+            <h3 id="scanner-manual-crop-title">Crop the photo if needed</h3>
+            <p>Use a crop to isolate the card or the card-number area. Full-card mode uses the crop for number regions and supporting text. Number-only mode reads the selected crop directly when cropping is enabled. If cropping is not helping, turn it off and scan the full photo. Values are percentages from the photo's top-left; the original photo is not changed.</p>
+          </div>
+          <label className="scanner-manual-crop__toggle">
+            <input type="checkbox" checked={manualCropEnabled} disabled={scanning || !frontPhoto} onChange={(event) => { setManualCropEnabled(event.target.checked); clearCropConfirmation(); setManualCropSelectionMade(false) }} />
+            <span>Enable manual crop selection</span>
+          </label>
+        </div>
+        {manualCropEnabled && frontPhoto?.previewUrl && (
+          <div className="scanner-manual-crop__preview-instructions">
+            Drag across the photo to select either the whole card (full-card mode) or just the printed card-number area (number-only mode).
+          </div>
+        )}
+        {manualCropEnabled && frontPhoto?.previewUrl && (
+          <div
+            className="scanner-manual-crop__preview"
+            ref={cropPreviewRef}
+            onPointerDown={startCropSelection}
+            onPointerMove={(event) => updateCropFromPointer(event)}
+            onPointerUp={(event) => updateCropFromPointer(event, true)}
+            onPointerCancel={() => { cropDragRef.current = null }}
+            role="group"
+            aria-label="Drag to select the crop area on the card photograph"
+          >
+            <img src={frontPhoto.previewUrl} alt="Photo to crop for OCR" draggable="false" />
+            <div className="scanner-manual-crop__shade scanner-manual-crop__shade--top" style={{ height: manualCropPercent.y + '%' }} />
+            <div className="scanner-manual-crop__shade scanner-manual-crop__shade--left" style={{ top: manualCropPercent.y + '%', height: manualCropPercent.height + '%', width: manualCropPercent.x + '%' }} />
+            <div className="scanner-manual-crop__shade scanner-manual-crop__shade--right" style={{ top: manualCropPercent.y + '%', height: manualCropPercent.height + '%', left: (Number(manualCropPercent.x) + Number(manualCropPercent.width)) + '%', width: (100 - Number(manualCropPercent.x) - Number(manualCropPercent.width)) + '%' }} />
+            <div className="scanner-manual-crop__shade scanner-manual-crop__shade--bottom" style={{ top: (Number(manualCropPercent.y) + Number(manualCropPercent.height)) + '%', height: (100 - Number(manualCropPercent.y) - Number(manualCropPercent.height)) + '%' }} />
+            <div className="scanner-manual-crop__selection" style={{
+              left: manualCropPercent.x + '%',
+              top: manualCropPercent.y + '%',
+              width: manualCropPercent.width + '%',
+              height: manualCropPercent.height + '%',
+            }} />
+          </div>
+        )}
+        {manualCropEnabled && (
+          <div className="scanner-manual-crop__fields">
+            {[
+              ['x', 'Left edge'],
+              ['y', 'Top edge'],
+              ['width', 'Crop width'],
+              ['height', 'Crop height'],
+            ].map(([key, label]) => (
+              <label className="form-field" key={key}>
+                <span>{label} (%)</span>
+                <input type="number" min="0" max="100" step="1" value={manualCropPercent[key]} disabled={scanning} onChange={(event) => {
+                  const value = Math.max(0, Math.min(100, Number(event.target.value) || 0))
+                  setManualCropPercent((current) => {
+                    const next = { ...current, [key]: value }
+                    if (key === 'x') next.width = Math.min(Number(current.width) || 0, 100 - value)
+                    if (key === 'y') next.height = Math.min(Number(current.height) || 0, 100 - value)
+                    if (key === 'width') next.width = Math.min(value, 100 - (Number(current.x) || 0))
+                    if (key === 'height') next.height = Math.min(value, 100 - (Number(current.y) || 0))
+                    return next
+                  })
+                  clearCropConfirmation()
+                  setManualCropSelectionMade(true)
+                }} />
+              </label>
+            ))}
+            <button className="button button--quiet" type="button" disabled={scanning} onClick={() => { setManualCropPercent({ x: 0, y: 0, width: 100, height: 100 }); clearCropConfirmation(); setManualCropSelectionMade(false) }}>Reset full photo</button>
+            <p className="scanner-manual-crop__note">{manualCropGeometryIsValid ? 'Crop dimensions are valid. Visually verify that all card edges are inside this area.' : 'Select a larger area: width and height must each be at least 12%, and the crop must stay within the photo.'}</p>
+            <label className="scanner-manual-crop__confirm"><input type="checkbox" checked={manualCropConfirmed} disabled={scanning || !frontPhoto || !manualCropGeometryIsValid || !manualCropSelectionMade} onChange={(event) => { setManualCropConfirmed(event.target.checked); setManualCropConfirmedForFile(event.target.checked ? frontPhoto.file : null) }} /><span>{scanMode === 'number-only' ? 'I confirm the crop contains the printed card number.' : 'I confirm the crop contains the entire card and avoids unrelated background.'}</span></label>
+          </div>
+        )}
+        {!manualCropEnabled && <p className="scanner-manual-crop__required-note">Manual crop is off. The scanner will use the full original photo.</p>}
+        {manualCropEnabled && !manualCropSelectionMade && <p className="scanner-manual-crop__required-note">Draw a crop rectangle or edit the percentage fields first. The full photo can be selected if it contains only the card.</p>}
+        {manualCropEnabled && manualCropSelectionMade && !manualCropConfirmed && <p className="scanner-manual-crop__required-note">Confirm that the selection includes all card edges before scanning.</p>}
+      </section>
+
+      {numberReadings.length > 0 && (
+        <section className="scanner-number-readings" aria-live="polite">
+          <div>
+            <p className="eyebrow">NUMBER READING · ZOOMED SCAN AREAS</p>
+            <h3>{numberCandidates[0]?.number || 'Card number not confidently read yet'}</h3>
+            <p>{numberCandidates.length
+              ? 'The scanner compares repeated number readings from multiple enlarged areas before searching the catalogue.'
+              : 'No valid card-number pattern was found. Check the enlarged-area OCR below, then enter the number manually if needed.'}</p>
+          </div>
+          <div className="scanner-number-readings__list">
+            {numberReadings.map((reading) => (
+              <div className="scanner-number-readings__item" key={reading.label}>
+                <strong>{reading.label}</strong>
+                <span>{reading.confidence ? Math.round(reading.confidence) + '% OCR confidence' : 'Confidence unavailable'}</span>
+                <code>{reading.text.trim() || 'No text read'}</code>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="scanner-photo-tools">
         <div>
@@ -333,32 +571,44 @@ export default function CardScanner({
             <button className="scanner-match-confirmation__close" type="button" onClick={() => setMatchConfirmationOpen(false)} aria-label="Close card confirmation">×</button>
             <p className="eyebrow">CARD RECOGNITION · PLEASE CONFIRM</p>
             <h3 id="scanner-match-confirmation-title">Is this the card I found?</h3>
-            <p className="scanner-match-confirmation__intro">Check the picture, language and set. If it is wrong or uncertain, choose the correct card below. Your choice fills the form but does not save stock.</p>
+            <p className="scanner-match-confirmation__intro">The number crop finds the candidate. Compare the official catalogue image, rarity, language and set with the physical card. A number match alone is not proof. Your choice fills the form but does not save stock.</p>
             {selectedAutoMatch && (
-              <div className="scanner-match-confirmation__featured">
-                <CatalogueReferenceImage match={selectedAutoMatch} className="scanner-match-confirmation__image" />
-                <div>
-                  <strong>{selectedAutoMatch.name || 'Name unavailable'}</strong>
-                  <span>{selectedAutoMatch.cardNumber} · {selectedAutoMatch.language} · {selectedAutoMatch.setCode || 'Set not listed'}</span>
-                  <span>{selectedAutoMatch.rarity || 'Rarity unknown'} · {selectedAutoMatch.variant || 'Base version'}</span>
-                  <small>{rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.nameMatch ? 'Name agrees with OCR' : 'Name differs from OCR'} · {rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.languageMatch ? 'Language agrees' : 'Language needs checking'}</small>
+              <>
+                <div className="scanner-match-confirmation__comparison">
+                  <div className="scanner-match-confirmation__compare-item">
+                    <span>YOUR CARD PHOTO</span>
+                    {frontPhoto?.previewUrl ? <img src={frontPhoto.previewUrl} alt="Your photographed card for comparison" /> : <div className="scanner-match-confirmation__compare-empty">No card photo</div>}
+                  </div>
+                  <div className="scanner-match-confirmation__compare-item">
+                    <span>CATALOGUE REFERENCE</span>
+                    <CatalogueReferenceImage match={selectedAutoMatch} className="scanner-match-confirmation__compare-image" />
+                  </div>
                 </div>
-              </div>
+                <div className="scanner-match-confirmation__featured">
+                  <div>
+                    <strong>{selectedAutoMatch.name || 'Name unavailable'}</strong>
+                    <span>{selectedAutoMatch.cardNumber} · {selectedAutoMatch.language} · {selectedAutoMatch.setCode || 'Set not listed'}</span>
+                    {selectedAutoMatch.setName && <span>{selectedAutoMatch.setName}</span>}
+                    <span>{selectedAutoMatch.rarity || 'Rarity unknown'} · {selectedAutoMatch.variantLabel || selectedAutoMatch.variant || 'Base version'}</span>
+                    <small>{rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.nameMatch ? 'Name agrees with OCR' : 'Name differs from OCR'} · {rankedAutoMatches.find((item) => item.match.id === selectedAutoMatch.id)?.languageMatch ? 'Language agrees' : 'Language needs checking'}</small>
+                  </div>
+                </div>
+              </>
             )}
             {rankedAutoMatches.length > 1 && (
               <div className="scanner-match-confirmation__options">
-                <strong>Select the card you believe is correct</strong>
+                <strong>Select the card you believe is correct ({rankedAutoMatches.length} catalogue printings)</strong>
+                {sameNumberVariants > 1 && <p className="scanner-match-confirmation__intro">Several printings share this card number. The scanner cannot reliably identify the finish from OCR alone—compare the artwork and variant details before choosing.</p>}
                 <div className="scanner-match-confirmation__list">
                   {rankedAutoMatches.map(({ match, nameMatch, languageMatch }) => (
                     <button className={selectedAutoMatchId === match.id ? 'scanner-match-confirmation__option scanner-match-confirmation__option--selected' : 'scanner-match-confirmation__option'} type="button" key={match.id} onClick={() => setSelectedAutoMatchId(match.id)}>
                       <CatalogueReferenceImage match={match} className="scanner-match-confirmation__thumb" />
-                      <span><b>{match.name || 'Unknown card'}</b><small>{match.cardNumber} · {match.language} · {match.setCode || 'Promo'}</small><small>{nameMatch ? 'Name match' : 'Name differs'} · {languageMatch ? 'Language match' : 'Language differs'}</small></span>
+                      <span><b>{match.name || 'Unknown card'}</b><small>{match.cardNumber} · {match.language} · {match.setCode || 'Set not listed'}</small>{match.setName && <small>{match.setName}</small>}<small>{match.rarity || 'Rarity unknown'} · {match.variantLabel || match.variant || 'Base version'}</small><small>{nameMatch ? 'Name match' : 'Name differs'} · {languageMatch ? 'Language match' : 'Language differs'}</small><small>{rankedAutoMatches.find((item) => item.match.id === match.id)?.numberEvidence ? `OCR number: ${rankedAutoMatches.find((item) => item.match.id === match.id).numberEvidence.occurrences} reading(s), ${rankedAutoMatches.find((item) => item.match.id === match.id).numberEvidence.confidence}% average confidence` : 'Number reading not independently corroborated'}</small></span>
                     </button>
                   ))}
                 </div>
               </div>
             )}
-            <label className="scanner-match-confirmation__remember"><input type="checkbox" checked={rememberMatch} onChange={(event) => setRememberMatch(event.target.checked)} /> Remember my selection on this browser for future scans of this card number</label>
             <div className="scanner-match-confirmation__actions">
               <button className="button button--outline" type="button" onClick={() => setMatchConfirmationOpen(false)}>Not sure / enter manually</button>
               <button className="button button--gold" type="button" onClick={confirmAutoMatch} disabled={!selectedAutoMatch}>Yes, use this card</button>
@@ -384,7 +634,7 @@ export default function CardScanner({
         <div className="scan-review">
           <div className="scan-review__heading">
             <div><p className="eyebrow">02 · SCAN REVIEW</p><h3>Review extracted details</h3></div>
-            <button className="button button--outline" type="button" disabled={!frontPhoto || scanning} onClick={scanCard}><ScanLine size={15} /> Rescan</button>
+            <button className="button button--outline" type="button" disabled={!frontPhoto || scanning || !manualCropReady} onClick={scanCard}><ScanLine size={15} /> Rescan</button>
           </div>
           <label className="form-field extracted-text">
             <span>Recognised text · editable</span>
@@ -435,7 +685,7 @@ export default function CardScanner({
             })}
           </div>
           <div className="scan-review__footer">
-            <p><AlertCircle size={14} /> OCR is a draft only. Check spelling, number, language, and every effect before adding stock.</p>
+            <p><AlertCircle size={14} /> The bottom-right number crop drives catalogue lookup; full-card OCR reads supporting details. Compare the catalogue image and verify rarity, number, language and every effect before adding stock.</p>
             <button className="button button--gold" type="button" onClick={onContinue}>Continue to product form <ArrowRight size={15} /></button>
           </div>
         </div>

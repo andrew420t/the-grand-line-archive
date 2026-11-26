@@ -1,0 +1,330 @@
+-- REVIEW ONLY: atomic order creation and stock reservation proposal.
+-- Not applied to any database.
+-- Confirm the live table/column names, constraints, order lifecycle, triggers,
+-- and RLS/grants before adapting or applying. The existing client checkout
+-- currently inserts orders and order_items separately and does not atomically
+-- decrement stock; this function addresses that race only when the client calls
+-- it and it has been installed in the reviewed database.
+--
+-- Expected current columns based on application code:
+-- public.products(id uuid, name, price numeric, stock_quantity integer, status text)
+-- public.orders(user_id uuid, status text, total_amount numeric)
+-- public.order_items(order_id uuid, product_id uuid, quantity integer, unit_price numeric)
+--
+-- API input: [{"product_id":"<uuid>","quantity":1,"expected_unit_price":2.50}, ...]
+-- Duplicate product IDs are combined. Product rows are locked in UUID order to
+-- prevent concurrent checkouts from selling the same stock and reduce deadlocks.
+-- The whole function executes as one transaction; any exception rolls back the
+-- order, items, and stock decrements together.
+
+BEGIN;
+
+
+-- Read-only preflight/audit: verify the assumed schema and inspect existing
+-- triggers that may already manage inventory or order transitions.
+SELECT
+  event_object_schema,
+  event_object_table,
+  trigger_name,
+  action_timing,
+  event_manipulation,
+  action_statement
+FROM information_schema.triggers
+WHERE event_object_schema = 'public'
+  AND event_object_table IN ('products', 'orders', 'order_items')
+ORDER BY event_object_table, trigger_name, event_manipulation;
+
+DO $atomic_checkout_preflight$
+DECLARE
+  missing_columns text[];
+  admin_function_result text;
+BEGIN
+  IF to_regprocedure('public.is_admin()') IS NULL THEN
+    RAISE EXCEPTION 'Expected public.is_admin() was not found; review the admin RPC security check before applying.';
+  END IF;
+  SELECT pg_get_function_result('public.is_admin()'::regprocedure)
+    INTO admin_function_result;
+  IF admin_function_result IS DISTINCT FROM 'boolean' THEN
+    RAISE EXCEPTION 'public.is_admin() must return boolean; found %.', admin_function_result;
+  END IF;
+
+  SELECT array_agg(required.table_name || '.' || required.column_name ORDER BY required.table_name, required.column_name)
+    INTO missing_columns
+  FROM (VALUES
+    ('products','id'), ('products','name'), ('products','price'), ('products','stock_quantity'), ('products','status'),
+    ('orders','id'), ('orders','user_id'), ('orders','status'), ('orders','total_amount'),
+    ('order_items','order_id'), ('order_items','product_id'), ('order_items','quantity'), ('order_items','unit_price')
+  ) AS required(table_name, column_name)
+  WHERE NOT EXISTS (
+    SELECT 1
+    FROM information_schema.columns AS existing
+    WHERE existing.table_schema = 'public'
+      AND existing.table_name = required.table_name
+      AND existing.column_name = required.column_name
+  );
+
+  IF cardinality(coalesce(missing_columns, ARRAY[]::text[])) > 0 THEN
+    RAISE EXCEPTION 'Atomic checkout proposal requires missing columns: %.', array_to_string(missing_columns, ', ');
+  END IF;
+END
+$atomic_checkout_preflight$;
+
+-- Explicit reservation marker keeps legacy orders (created before this RPC) from being restocked on cancellation.
+ALTER TABLE public.orders
+  ADD COLUMN IF NOT EXISTS stock_reserved boolean NOT NULL DEFAULT false;
+
+DO $reservation_marker_check$
+DECLARE
+  marker_type text;
+  marker_not_null boolean;
+BEGIN
+  SELECT format_type(atttypid, atttypmod), attnotnull
+    INTO marker_type, marker_not_null
+  FROM pg_attribute
+  WHERE attrelid = 'public.orders'::regclass
+    AND attname = 'stock_reserved'
+    AND NOT attisdropped;
+  IF marker_type IS DISTINCT FROM 'boolean' OR marker_not_null IS DISTINCT FROM true THEN
+    RAISE EXCEPTION 'orders.stock_reserved must be boolean NOT NULL; found type %, not-null %. Review manually.', marker_type, marker_not_null;
+  END IF;
+END
+$reservation_marker_check$;
+
+CREATE OR REPLACE FUNCTION public.create_order_atomic(p_items jsonb)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $function$
+DECLARE
+  v_user_id uuid := auth.uid();
+  v_item record;
+  v_product record;
+  v_total numeric := 0;
+  v_order_id uuid;
+  v_updated_count integer;
+BEGIN
+  IF v_user_id IS NULL THEN
+    RAISE EXCEPTION 'Authentication is required to place an order.';
+  END IF;
+
+  IF p_items IS NULL OR jsonb_typeof(p_items) <> 'array'
+     OR jsonb_array_length(p_items) = 0 THEN
+    RAISE EXCEPTION 'Order must contain at least one item.';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1
+    FROM jsonb_to_recordset(p_items) AS input(product_id uuid, quantity integer, expected_unit_price numeric)
+    WHERE product_id IS NULL OR quantity IS NULL OR quantity < 1
+       OR expected_unit_price IS NULL OR expected_unit_price < 0
+  ) THEN
+    RAISE EXCEPTION 'Every order item must have a product ID and positive whole quantity.';
+  END IF;
+
+  -- Lock all distinct product rows in deterministic order, then validate.
+  FOR v_item IN
+    SELECT product_id, SUM(quantity)::integer AS quantity,
+           MIN(expected_unit_price) AS expected_unit_price,
+           MAX(expected_unit_price) AS max_expected_unit_price
+    FROM jsonb_to_recordset(p_items) AS input(product_id uuid, quantity integer, expected_unit_price numeric)
+    GROUP BY product_id
+    ORDER BY product_id
+  LOOP
+    SELECT id, name, price, stock_quantity, status
+      INTO v_product
+    FROM public.products
+    WHERE id = v_item.product_id
+    FOR UPDATE;
+
+    IF NOT FOUND THEN
+      RAISE EXCEPTION 'A product in this basket no longer exists.';
+    END IF;
+    IF lower(coalesce(v_product.status, '')) <> 'active' THEN
+      RAISE EXCEPTION 'Product % is no longer available.', v_product.name;
+    END IF;
+    IF v_product.price IS NULL OR v_product.price < 0 THEN
+      RAISE EXCEPTION 'Product % has an invalid price.', v_product.name;
+    END IF;
+    IF v_item.expected_unit_price IS DISTINCT FROM v_item.max_expected_unit_price THEN
+      RAISE EXCEPTION 'Basket has conflicting prices for product %.', v_product.name;
+    END IF;
+    IF v_product.price IS DISTINCT FROM v_item.expected_unit_price THEN
+      RAISE EXCEPTION 'Price changed for product %. Review the basket and retry.', v_product.name;
+    END IF;
+    IF v_product.stock_quantity IS NULL OR v_product.stock_quantity < v_item.quantity THEN
+      RAISE EXCEPTION 'Insufficient stock for product %.', v_product.name;
+    END IF;
+
+    v_total := v_total + (v_product.price * v_item.quantity);
+  END LOOP;
+
+  INSERT INTO public.orders (user_id, status, total_amount, stock_reserved)
+  VALUES (v_user_id, 'pending', round(v_total, 2), true)
+  RETURNING id INTO v_order_id;
+
+  FOR v_item IN
+    SELECT product_id, SUM(quantity)::integer AS quantity
+    FROM jsonb_to_recordset(p_items) AS input(product_id uuid, quantity integer)
+    GROUP BY product_id
+    ORDER BY product_id
+  LOOP
+    UPDATE public.products
+    SET stock_quantity = stock_quantity - v_item.quantity
+    WHERE id = v_item.product_id
+      AND stock_quantity >= v_item.quantity;
+
+    GET DIAGNOSTICS v_updated_count = ROW_COUNT;
+    IF v_updated_count <> 1 THEN
+      RAISE EXCEPTION 'Stock reservation failed for product %. Retry checkout.', v_item.product_id;
+    END IF;
+
+    SELECT price INTO v_product
+    FROM public.products
+    WHERE id = v_item.product_id;
+
+    INSERT INTO public.order_items (order_id, product_id, quantity, unit_price)
+    VALUES (v_order_id, v_item.product_id, v_item.quantity, v_product.price);
+  END LOOP;
+
+  RETURN v_order_id;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.create_order_atomic(jsonb) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.create_order_atomic(jsonb) FROM anon;
+GRANT EXECUTE ON FUNCTION public.create_order_atomic(jsonb) TO authenticated;
+
+-- IMPORTANT: Before applying, review whether order/order_items policies allow
+-- customers to read their own order and whether direct inserts must be revoked
+-- to prevent bypassing this atomic function. Also inspect triggers that may
+-- adjust stock/order state, as double-decrementing would be harmful.
+-- Apply this proposal only after reviewing all schema, trigger, policy and
+-- lifecycle details in the target staging project.
+
+
+
+-- Admin order-status RPC: cancellation restores stock exactly once.
+-- A cancelled order is terminal; shipped/completed orders cannot be cancelled
+-- through this routine because automatic restocking would be unsafe.
+CREATE OR REPLACE FUNCTION public.update_order_status_atomic(p_order_id uuid, p_new_status text)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $function$
+DECLARE
+  v_current_status text;
+  v_stock_reserved boolean;
+  v_item record;
+BEGIN
+  IF auth.uid() IS NULL OR NOT coalesce(public.is_admin(), false) THEN
+    RAISE EXCEPTION 'Administrator permission is required to update order status.';
+  END IF;
+
+  IF lower(trim(coalesce(p_new_status, ''))) NOT IN ('pending', 'processing', 'shipped', 'completed', 'cancelled') THEN
+    RAISE EXCEPTION 'Invalid order status.';
+  END IF;
+
+  SELECT status, stock_reserved INTO v_current_status, v_stock_reserved
+  FROM public.orders
+  WHERE id = p_order_id
+  FOR UPDATE;
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Order was not found.';
+  END IF;
+
+  IF lower(v_current_status) = lower(trim(p_new_status)) THEN
+    RETURN p_order_id; -- idempotent retry; do not restock twice
+  END IF;
+
+  IF lower(v_current_status) = 'cancelled' THEN
+    RAISE EXCEPTION 'Cancelled orders cannot be reopened through this routine.';
+  END IF;
+
+  IF NOT (
+    (lower(v_current_status) = 'pending' AND lower(trim(p_new_status)) IN ('processing', 'cancelled')) OR
+    (lower(v_current_status) = 'processing' AND lower(trim(p_new_status)) IN ('shipped', 'cancelled')) OR
+    (lower(v_current_status) = 'shipped' AND lower(trim(p_new_status)) = 'completed')
+  ) THEN
+    RAISE EXCEPTION 'Invalid order status transition from % to %.', v_current_status, p_new_status;
+  END IF;
+
+  IF lower(trim(p_new_status)) = 'cancelled' THEN
+
+    IF coalesce(v_stock_reserved, false) THEN
+      FOR v_item IN
+        SELECT product_id, SUM(quantity)::integer AS quantity
+        FROM public.order_items
+        WHERE order_id = p_order_id
+        GROUP BY product_id
+        ORDER BY product_id
+      LOOP
+        UPDATE public.products
+        SET stock_quantity = stock_quantity + v_item.quantity
+        WHERE id = v_item.product_id;
+        IF NOT FOUND THEN
+          RAISE EXCEPTION 'Could not restore stock for product %. Cancellation rolled back.', v_item.product_id;
+        END IF;
+      END LOOP;
+    END IF;
+
+    UPDATE public.orders
+    SET status = 'cancelled', stock_reserved = false
+    WHERE id = p_order_id;
+
+    RETURN p_order_id;
+  END IF;
+
+  UPDATE public.orders SET status = lower(trim(p_new_status)) WHERE id = p_order_id;
+  RETURN p_order_id;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.update_order_status_atomic(uuid, text) FROM PUBLIC;
+REVOKE ALL ON FUNCTION public.update_order_status_atomic(uuid, text) FROM anon;
+GRANT EXECUTE ON FUNCTION public.update_order_status_atomic(uuid, text) TO authenticated;
+
+-- Enforce the atomic RPC as the only authenticated order-write path.
+-- The application has no direct order/order-item update or delete workflow.
+-- Review the grants audit first. Keep SELECT access subject to the existing RLS
+-- policies, but remove every direct client DML route, including DELETE and
+-- TRUNCATE. The SECURITY DEFINER RPCs execute as their owner.
+REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON public.orders FROM PUBLIC, anon, authenticated;
+REVOKE INSERT, UPDATE, DELETE, TRUNCATE ON public.order_items FROM PUBLIC, anon, authenticated;
+
+-- PostgreSQL column-level grants survive table-level REVOKEs. Remove any
+-- existing per-column INSERT/UPDATE grants on every current column too, rather
+-- than assuming only the columns in the original schema snapshot exist.
+DO $revoke_order_column_writes$
+DECLARE
+  v_table text;
+  v_column text;
+BEGIN
+  FOR v_table, v_column IN
+    SELECT c.relname, a.attname
+    FROM pg_class AS c
+    JOIN pg_namespace AS n ON n.oid = c.relnamespace
+    JOIN pg_attribute AS a ON a.attrelid = c.oid
+    WHERE n.nspname = 'public'
+      AND c.relname IN ('orders', 'order_items')
+      AND c.relkind IN ('r', 'p')
+      AND a.attnum > 0
+      AND NOT a.attisdropped
+    ORDER BY c.relname, a.attnum
+  LOOP
+    EXECUTE format(
+      'REVOKE INSERT (%I) ON TABLE public.%I FROM PUBLIC, anon, authenticated',
+      v_column,
+      v_table
+    );
+    EXECUTE format(
+      'REVOKE UPDATE (%I) ON TABLE public.%I FROM PUBLIC, anon, authenticated',
+      v_column,
+      v_table
+    );
+  END LOOP;
+END
+$revoke_order_column_writes$;
+
+COMMIT;

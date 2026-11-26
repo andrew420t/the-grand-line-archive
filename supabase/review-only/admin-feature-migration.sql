@@ -86,15 +86,154 @@ BEGIN
 END
 $preflight$;
 
+-- Validate the product table shape before any DDL is attempted.
+DO $schema_preflight$
+DECLARE
+  product_id_type text;
+  image_product_id_type text;
+  missing_image_columns text[];
+BEGIN
+  IF to_regclass('public.products') IS NULL THEN
+    RAISE EXCEPTION
+      'Expected public.products table was not found. Stop and review the live schema before applying this proposal.';
+  END IF;
+
+  SELECT format_type(atttypid, atttypmod)
+    INTO product_id_type
+  FROM pg_attribute
+  WHERE attrelid = 'public.products'::regclass
+    AND attname = 'id'
+    AND NOT attisdropped;
+
+  IF product_id_type IS DISTINCT FROM 'uuid' THEN
+    RAISE EXCEPTION
+      'public.products.id must be uuid for the proposed product_images foreign key; found %. No schema changes were applied.', COALESCE(product_id_type, 'missing');
+  END IF;
+
+  IF to_regclass('public.product_images') IS NOT NULL THEN
+    SELECT ARRAY(
+      SELECT required.column_name
+      FROM unnest(ARRAY[
+        'id', 'product_id', 'image_url', 'storage_path',
+        'role', 'sort_order', 'uploaded_by', 'created_at'
+      ]) AS required(column_name)
+      WHERE NOT EXISTS (
+        SELECT 1
+        FROM pg_attribute
+        WHERE attrelid = 'public.product_images'::regclass
+          AND attname = required.column_name
+          AND NOT attisdropped
+      )
+    )
+    INTO missing_image_columns;
+
+    IF cardinality(missing_image_columns) > 0 THEN
+      RAISE EXCEPTION
+        'Existing public.product_images table is missing required columns: %. Review its structure before applying this proposal.',
+        array_to_string(missing_image_columns, ', ');
+    END IF;
+
+    SELECT format_type(atttypid, atttypmod)
+      INTO image_product_id_type
+    FROM pg_attribute
+    WHERE attrelid = 'public.product_images'::regclass
+      AND attname = 'product_id'
+      AND NOT attisdropped;
+
+    IF image_product_id_type IS DISTINCT FROM 'uuid' THEN
+      RAISE EXCEPTION
+        'Existing public.product_images.product_id must be uuid; found %. Review the existing table before applying this proposal.', COALESCE(image_product_id_type, 'missing');
+    END IF;
+  END IF;
+END
+$schema_preflight$;
+
+
+-- Validate public.products.status and any pre-existing site_settings table
+-- before CREATE TABLE IF NOT EXISTS would silently preserve an incompatible shape.
+DO $additional_schema_preflight$
+DECLARE
+  missing_site_columns text[];
+  site_id_type text;
+  settings_type text;
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_attribute
+    WHERE attrelid = 'public.products'::regclass
+      AND attname = 'status'
+      AND NOT attisdropped
+  ) THEN
+    RAISE EXCEPTION 'public.products.status is required for the public-active image policy.';
+  END IF;
+
+  IF to_regclass('public.site_settings') IS NOT NULL THEN
+    SELECT ARRAY(
+      SELECT required.column_name
+      FROM unnest(ARRAY['id','settings','updated_at','updated_by']) AS required(column_name)
+      WHERE NOT EXISTS (
+        SELECT 1 FROM pg_attribute
+        WHERE attrelid = 'public.site_settings'::regclass
+          AND attname = required.column_name
+          AND NOT attisdropped
+      )
+    ) INTO missing_site_columns;
+
+    IF cardinality(coalesce(missing_site_columns, ARRAY[]::text[])) > 0 THEN
+      RAISE EXCEPTION 'Existing public.site_settings is missing columns: %.', array_to_string(missing_site_columns, ', ');
+    END IF;
+
+    SELECT format_type(atttypid, atttypmod) INTO site_id_type
+    FROM pg_attribute
+    WHERE attrelid = 'public.site_settings'::regclass
+      AND attname = 'id' AND NOT attisdropped;
+    SELECT format_type(atttypid, atttypmod) INTO settings_type
+    FROM pg_attribute
+    WHERE attrelid = 'public.site_settings'::regclass
+      AND attname = 'settings' AND NOT attisdropped;
+
+    IF site_id_type IS DISTINCT FROM 'text' OR settings_type IS DISTINCT FROM 'jsonb' THEN
+      RAISE EXCEPTION 'Existing public.site_settings must use text id and jsonb settings; found id %, settings %.', site_id_type, settings_type;
+    END IF;
+  END IF;
+END
+$additional_schema_preflight$;
+
+-- Read-only audit: report existing exact-printing identity collisions before
+-- relying on catalogue_printing_key + language for future duplicate protection.
+-- Rows with a blank language are grouped together so ambiguous legacy data is visible.
+SELECT
+  set_id,
+  card_number,
+  catalogue_printing_key,
+  lower(NULLIF(btrim(language), '')) AS normalized_language,
+  count(*) AS matching_products,
+  array_agg(id ORDER BY id) AS product_ids
+FROM public.products
+WHERE NULLIF(btrim(catalogue_printing_key), '') IS NOT NULL
+GROUP BY
+  set_id,
+  card_number,
+  catalogue_printing_key,
+  lower(NULLIF(btrim(language), ''))
+HAVING count(*) > 1
+ORDER BY matching_products DESC, card_number, catalogue_printing_key;
+
 ALTER TABLE public.products
   ADD COLUMN IF NOT EXISTS color text,
   ADD COLUMN IF NOT EXISTS power integer,
   ADD COLUMN IF NOT EXISTS cost integer,
   ADD COLUMN IF NOT EXISTS card_type text,
   ADD COLUMN IF NOT EXISTS effect_text text,
+  ADD COLUMN IF NOT EXISTS counter integer,
+  ADD COLUMN IF NOT EXISTS trigger_text text,
+  ADD COLUMN IF NOT EXISTS attributes text,
   ADD COLUMN IF NOT EXISTS language text,
   ADD COLUMN IF NOT EXISTS classification text,
-  ADD COLUMN IF NOT EXISTS variant_label text;
+  ADD COLUMN IF NOT EXISTS variant_label text,
+  ADD COLUMN IF NOT EXISTS catalogue_match_id text,
+  ADD COLUMN IF NOT EXISTS catalogue_printing_key text,
+  ADD COLUMN IF NOT EXISTS catalogue_reference_image_url text,
+  ADD COLUMN IF NOT EXISTS catalogue_reference_image_source text;
 
 CREATE TABLE IF NOT EXISTS public.product_images (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -188,6 +327,60 @@ BEGIN
       TO authenticated
       USING (public.is_admin());
   END IF;
+
+  -- Restrictive guards ensure existing broad permissive policies cannot OR
+  -- around the intended public-active/admin visibility and admin write rules.
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'product_images'
+      AND policyname = 'gla_product_images_select_guard'
+  ) THEN
+    CREATE POLICY gla_product_images_select_guard
+      ON public.product_images AS RESTRICTIVE
+      FOR SELECT TO public
+      USING (
+        EXISTS (
+          SELECT 1 FROM public.products AS product
+          WHERE product.id = product_images.product_id
+            AND product.status = 'active'
+        ) OR coalesce(public.is_admin(), false)
+      );
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'product_images'
+      AND policyname = 'gla_product_images_insert_guard'
+  ) THEN
+    CREATE POLICY gla_product_images_insert_guard
+      ON public.product_images AS RESTRICTIVE
+      FOR INSERT TO public
+      WITH CHECK (coalesce(public.is_admin(), false));
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'product_images'
+      AND policyname = 'gla_product_images_update_guard'
+  ) THEN
+    CREATE POLICY gla_product_images_update_guard
+      ON public.product_images AS RESTRICTIVE
+      FOR UPDATE TO public
+      USING (coalesce(public.is_admin(), false))
+      WITH CHECK (coalesce(public.is_admin(), false));
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'product_images'
+      AND policyname = 'gla_product_images_delete_guard'
+  ) THEN
+    CREATE POLICY gla_product_images_delete_guard
+      ON public.product_images AS RESTRICTIVE
+      FOR DELETE TO public
+      USING (coalesce(public.is_admin(), false));
+  END IF;
+
 END
 $product_image_policies$;
 
@@ -256,6 +449,43 @@ BEGIN
       USING (public.is_admin())
       WITH CHECK (public.is_admin());
   END IF;
+
+  -- Restrictive site-settings guards prevent older broad policies from
+  -- exposing non-homepage rows or allowing non-admin writes.
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'site_settings'
+      AND policyname = 'gla_site_settings_select_guard'
+  ) THEN
+    CREATE POLICY gla_site_settings_select_guard
+      ON public.site_settings AS RESTRICTIVE
+      FOR SELECT TO public
+      USING (id = 'homepage' OR coalesce(public.is_admin(), false));
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'site_settings'
+      AND policyname = 'gla_site_settings_insert_guard'
+  ) THEN
+    CREATE POLICY gla_site_settings_insert_guard
+      ON public.site_settings AS RESTRICTIVE
+      FOR INSERT TO public
+      WITH CHECK (coalesce(public.is_admin(), false));
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE schemaname = 'public'
+      AND tablename = 'site_settings'
+      AND policyname = 'gla_site_settings_update_guard'
+  ) THEN
+    CREATE POLICY gla_site_settings_update_guard
+      ON public.site_settings AS RESTRICTIVE
+      FOR UPDATE TO public
+      USING (coalesce(public.is_admin(), false))
+      WITH CHECK (coalesce(public.is_admin(), false));
+  END IF;
+
 END
 $site_settings_policies$;
 

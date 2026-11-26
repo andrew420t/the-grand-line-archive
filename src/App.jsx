@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Anchor,
   ArrowRight,
@@ -7,6 +7,9 @@ import {
   Check,
   ChevronDown,
   CircleUserRound,
+  Grid2X2,
+  List,
+  SlidersHorizontal,
   ClipboardList,
   LockKeyhole,
   Mail,
@@ -32,8 +35,12 @@ import {
 } from 'react-router-dom'
 import AdminDashboard from './admin/AdminDashboard'
 import AdminAccess from './admin/AdminAccess'
-import { hasSupabaseConfig, supabase } from './lib/supabase'
+import { findPrimaryCatalogueMatch } from './admin/cardCatalogue'
+import { hasSupabaseConfig, isPreviewBuild, supabase } from './lib/supabase'
 import { DEFAULT_SITE_SETTINGS, normalizeSiteSettings } from './siteSettings'
+import { buildAtomicCheckoutItems, buildCheckoutSnapshot } from './orderCheckout'
+import { getPublicStorefrontProducts } from './publicProducts'
+import { isAllowedOrderStatusTransition, isValidOrderStatus, orderStatusUpdateFailure } from './orderStatus'
 import './App.css'
 
 const CART_KEY = 'grand-line-archive-cart'
@@ -62,8 +69,33 @@ const readCart = () => {
 
 function ProductImage({ product, className = '' }) {
   const [failed, setFailed] = useState(false)
+  const [referenceImage, setReferenceImage] = useState('')
+  const [referenceFailed, setReferenceFailed] = useState(false)
 
-  if (!product.image || failed) {
+  useEffect(() => {
+    let active = true
+    // Reset image error state when the displayed product/identity changes;
+    // otherwise a prior failed image can suppress the next product's image.
+    setFailed(false)
+    setReferenceFailed(false)
+    if (!product.raw?.card_number) {
+      setReferenceImage('')
+      return () => { active = false }
+    }
+    findPrimaryCatalogueMatch(product.raw.card_number, product.raw.language, {
+      printingKey: product.raw.catalogue_printing_key || product.raw.reference_printing_key || '',
+      matchId: product.raw.catalogue_match_id || product.raw.reference_match_id || '',
+      setCode: product.raw.set_code || product.setCode || '',
+      variantLabel: product.raw.variant_label || '',
+    })
+      .then((match) => { if (active) setReferenceImage(match?.imageUrl || '') })
+      .catch(() => { if (active) setReferenceImage('') })
+    return () => { active = false }
+  }, [product.image, product.raw?.card_number, product.raw?.language, product.raw?.catalogue_printing_key, product.raw?.reference_printing_key, product.raw?.catalogue_match_id, product.raw?.reference_match_id, product.raw?.set_code, product.raw?.variant_label, product.setCode])
+
+  const displayImage = product.image && !failed ? product.image
+    : referenceImage && !referenceFailed ? referenceImage : ''
+  if (!displayImage) {
     return (
       <div className={`product-image product-image--empty ${className}`}>
         <Anchor size={27} strokeWidth={1.2} />
@@ -75,21 +107,26 @@ function ProductImage({ product, className = '' }) {
   return (
     <img
       className={`product-image ${className}`}
-      src={product.image}
-      alt={product.name}
+      src={displayImage}
+      alt={product.name + (displayImage === referenceImage ? ' · catalogue reference image' : '')}
       loading="lazy"
-      onError={() => setFailed(true)}
+      referrerPolicy="no-referrer"
+      onError={() => {
+        if (displayImage === product.image) setFailed(true)
+        else setReferenceFailed(true)
+      }}
     />
   )
 }
 
-function ProductCard({ product, onAdd }) {
+function ProductCard({ product, onAdd, viewMode = 'grid' }) {
   return (
-    <article className="product-card">
+    <article className={`product-card ${viewMode === 'list' ? 'product-card--list' : ''}`}>
       <div className="product-card__photo">
         <Link className="product-card__image-link" to={`/product/${encodeURIComponent(product.id)}`} aria-label={`View ${product.name} details`}>
           <ProductImage product={product} />
           <span className="product-card__rarity">{product.rarity || 'Trading card'}</span>
+          {product.raw?.language && <span className="product-card__language">{String(product.raw.language).toLowerCase().startsWith('jp') ? 'JP' : String(product.raw.language).slice(0, 2).toUpperCase()}</span>}
         </Link>
         <button
           className="quick-add"
@@ -102,8 +139,10 @@ function ProductCard({ product, onAdd }) {
         </button>
       </div>
       <Link className="product-card__body product-card__body-link" to={`/product/${encodeURIComponent(product.id)}`}>
-        <p className="eyebrow product-card__set">{product.setName || product.category}</p>
+        <p className="eyebrow product-card__set">{product.setCode ? `${product.setCode} · ` : ''}{product.setName || product.category}</p>
         <h3>{product.name}</h3>
+        {product.raw?.card_number && <span className="product-card__number">{product.raw.card_number}</span>}
+        <div className="product-card__tags">{product.raw?.condition && <span>{product.raw.condition}</span>}{product.raw?.variant_label && <span>{product.raw.variant_label}</span>}</div>
         <div className="product-card__meta">
           <strong>{money(product.price)}</strong>
           <span className={product.stock > 0 ? 'stock' : 'stock stock--empty'}>
@@ -209,12 +248,22 @@ function Storefront() {
   const [setFilter, setSetFilter] = useState('All sets')
   const [minPrice, setMinPrice] = useState('')
   const [maxPrice, setMaxPrice] = useState('')
+  const [languageFilter, setLanguageFilter] = useState('All languages')
+  const [conditionFilter, setConditionFilter] = useState('All conditions')
+  const [variantFilter, setVariantFilter] = useState('All variants')
+  const [availabilityFilter, setAvailabilityFilter] = useState('In stock')
+  const [sortBy, setSortBy] = useState('newest')
+  const [viewMode, setViewMode] = useState('grid')
+  const [pageSize, setPageSize] = useState('24')
+  const [currentPage, setCurrentPage] = useState(1)
   const [orders, setOrders] = useState([])
   const [orderItems, setOrderItems] = useState([])
   const [ordersLoading, setOrdersLoading] = useState(false)
   const [ordersError, setOrdersError] = useState('')
   const [authMessage, setAuthMessage] = useState('')
   const [orderAction, setOrderAction] = useState('')
+  const checkoutLock = useRef(false)
+  const orderStatusLocks = useRef(new Set())
   const [adminAccessGranted, setAdminAccessGranted] = useState(false)
 
   const isAdmin = String(profile?.role || '').toLowerCase() === 'admin'
@@ -223,6 +272,7 @@ function Storefront() {
     if (!hasSupabaseConfig || !supabase) return
     setCatalogLoading(true)
     setCatalogError('')
+    try {
     const [productsResult, categoriesResult, setsResult] = await Promise.all([
       supabase.from('products').select('*'),
       supabase.from('categories').select('*'),
@@ -235,7 +285,10 @@ function Storefront() {
     if (failedResult) {
       setCatalogError(failedResult.error.message)
       setProducts([])
-      setCatalogLoading(false)
+      setCategories([])
+      setSets([])
+      setCategoryNames([])
+      setSetCount(0)
       return
     }
 
@@ -272,11 +325,21 @@ function Storefront() {
       ),
     )
     setSetCount(setRows.length)
-    setCatalogLoading(false)
+    } catch (error) {
+      setCatalogError(`Could not load catalogue: ${error?.message || 'Unexpected error.'}`)
+      setProducts([])
+      setCategories([])
+      setSets([])
+      setCategoryNames([])
+      setSetCount(0)
+    } finally {
+      setCatalogLoading(false)
+    }
   }, [])
 
   const loadSiteSettings = useCallback(async () => {
     if (!supabase) return
+    try {
     const result = await supabase
       .from('site_settings')
       .select('settings')
@@ -288,6 +351,9 @@ function Storefront() {
     }
     setSiteSettings(normalizeSiteSettings(result.data?.settings))
     setSiteSettingsError('')
+    } catch (error) {
+      setSiteSettingsError(`Could not load website settings: ${error?.message || 'Unexpected error.'}`)
+    }
   }, [])
 
   useEffect(() => {
@@ -364,11 +430,7 @@ function Storefront() {
   }, [user])
 
   const storefrontProducts = useMemo(
-    () => products.filter((product) => {
-      // Only products explicitly posted by an administrator appear publicly.
-      const status = String(product.raw?.status || '').trim().toLowerCase()
-      return status === 'active'
-    }),
+    () => getPublicStorefrontProducts(products),
     [products],
   )
 
@@ -377,28 +439,49 @@ function Storefront() {
     return storefrontProducts.filter((product) => {
       const matchesSearch =
         !needle ||
-        [product.name, product.category, product.setName, product.rarity]
+        [product.name, product.category, product.setName, product.setCode, product.rarity, product.raw?.card_number, product.raw?.variant_label]
           .filter(Boolean)
-          .some((value) => value.toLowerCase().includes(needle))
+          .some((value) => String(value).toLowerCase().includes(needle))
       const matchesSet = setFilter === 'All sets' || `${product.setCode} — ${product.setName}` === setFilter
       const matchesCategory =
         categoryFilter === 'All categories' || product.category === categoryFilter
       const matchesRarity =
         rarityFilter === 'All rarities' || product.rarity === rarityFilter
+      const language = String(product.raw?.language || '').toLowerCase()
+      const condition = String(product.raw?.condition || '').trim()
+      const variant = String(product.raw?.variant_label || '').trim()
+      const matchesLanguage = languageFilter === 'All languages' || (languageFilter === 'Japanese' ? language.startsWith('jp') || language.includes('japanese') : language.startsWith('en') || language.includes('english'))
+      const matchesCondition = conditionFilter === 'All conditions' || condition === conditionFilter
+      const matchesVariant = variantFilter === 'All variants' || variant === variantFilter
+      const matchesAvailability = availabilityFilter === 'All stock' || (availabilityFilter === 'In stock' ? product.stock > 0 : product.stock < 1)
       const matchesMin = minPrice === '' || product.price >= Number(minPrice)
       const matchesMax = maxPrice === '' || product.price <= Number(maxPrice)
-      return matchesSearch && matchesSet && matchesCategory && matchesRarity && matchesMin && matchesMax
+      return matchesSearch && matchesSet && matchesCategory && matchesRarity && matchesLanguage && matchesCondition && matchesVariant && matchesAvailability && matchesMin && matchesMax
     })
-  }, [storefrontProducts, search, setFilter, categoryFilter, rarityFilter, minPrice, maxPrice])
+  }, [storefrontProducts, search, setFilter, categoryFilter, rarityFilter, languageFilter, conditionFilter, variantFilter, availabilityFilter, minPrice, maxPrice])
+
+  const sortedProducts = useMemo(() => [...filteredProducts].sort((a, b) => {
+    if (sortBy === 'price-low') return a.price - b.price
+    if (sortBy === 'price-high') return b.price - a.price
+    if (sortBy === 'name') return a.name.localeCompare(b.name)
+    if (sortBy === 'card-number') return String(a.raw?.card_number || '').localeCompare(String(b.raw?.card_number || ''), undefined, { numeric: true })
+    return new Date(b.raw?.created_at || 0) - new Date(a.raw?.created_at || 0)
+  }), [filteredProducts, sortBy])
+  const pageCount = Math.max(1, Math.ceil(sortedProducts.length / Number(pageSize)))
+  const visibleProducts = sortedProducts.slice((currentPage - 1) * Number(pageSize), currentPage * Number(pageSize))
+
+  useEffect(() => { setCurrentPage(1) }, [search, setFilter, categoryFilter, rarityFilter, languageFilter, conditionFilter, variantFilter, availabilityFilter, minPrice, maxPrice, sortBy, pageSize])
 
   const setOptions = useMemo(
     () => [...new Set(storefrontProducts.map((product) => `${product.setCode} — ${product.setName}`.trim()).filter((value) => value !== '—'))].sort((a, b) => a.localeCompare(b)),
     [storefrontProducts],
   )
   const rarities = useMemo(
-    () => [...new Set(products.map((product) => product.rarity).filter(Boolean))].sort(),
-    [products],
+    () => [...new Set(storefrontProducts.map((product) => product.rarity).filter(Boolean))].sort(),
+    [storefrontProducts],
   )
+  const conditions = useMemo(() => [...new Set(storefrontProducts.map((product) => String(product.raw?.condition || '').trim()).filter(Boolean))].sort(), [storefrontProducts])
+  const variants = useMemo(() => [...new Set(storefrontProducts.map((product) => String(product.raw?.variant_label || '').trim()).filter(Boolean))].sort(), [storefrontProducts])
   const cartCount = cart.reduce((total, item) => total + item.quantity, 0)
   const cartTotal = cart.reduce(
     (total, item) => total + item.product.price * item.quantity,
@@ -460,6 +543,7 @@ function Storefront() {
     if (!supabase || !user) return
     setOrdersLoading(true)
     setOrdersError('')
+    try {
     let result
     if (adminView) {
       result = await supabase.from('orders').select('*')
@@ -488,7 +572,6 @@ function Storefront() {
       setOrdersError(result.error.message)
       setOrders([])
       setOrderItems([])
-      setOrdersLoading(false)
       return
     }
 
@@ -511,7 +594,13 @@ function Storefront() {
     } else {
       setOrderItems([])
     }
-    setOrdersLoading(false)
+    } catch (error) {
+      setOrdersError(`Could not load orders: ${error?.message || 'Unexpected error.'}`)
+      setOrders([])
+      setOrderItems([])
+    } finally {
+      setOrdersLoading(false)
+    }
   }, [user])
 
   useEffect(() => {
@@ -524,67 +613,112 @@ function Storefront() {
   }, [location.pathname, user, isAdmin, loadOrders])
 
   const placeOrder = async () => {
+    if (checkoutLock.current) return
     if (!user) {
       setAuthOpen(true)
       setAuthMessage('Sign in to place your order.')
       return
     }
     if (!cart.length || !supabase) return
+    checkoutLock.current = true
     setOrderAction('placing')
     setOrdersError('')
+    try {
 
-    const orderResult = await supabase
-      .from('orders')
-      .insert({
-        user_id: user.id,
-        status: 'pending',
-        total_amount: Number(cartTotal.toFixed(2)),
-      })
-      .select('*')
-      .single()
+    const latestProductsResult = await supabase
+      .from('products')
+      .select('id,name,price,stock_quantity,status')
+      .in('id', cart.map((item) => item.product.id))
+    if (latestProductsResult.error) {
+      setOrdersError(`Could not verify current stock and prices: ${latestProductsResult.error.message}`)
+      setOrderAction('')
+      return
+    }
+    const checkout = buildCheckoutSnapshot(cart, latestProductsResult.data || [])
+    if (!checkout.ok) {
+      setCart(checkout.items)
+      const priceChanged = checkout.issues.some((issue) => issue.reason === 'price-changed')
+      const issueText = checkout.issues.map((issue) => {
+        if (issue.reason === 'unavailable') return `${issue.name} is no longer available`
+        if (issue.reason === 'insufficient-stock') return `${issue.name} only has ${issue.stock} in stock`
+        if (issue.reason === 'price-changed') return `${issue.name} price has changed`
+        return `${issue.name} has an invalid price`
+      }).join('; ')
+      setOrdersError(`Please review your basket before continuing. ${issueText}${priceChanged ? ' Updated prices have been applied to your basket.' : ''}`)
+      setOrderAction('')
+      return
+    }
 
+    const atomicItems = buildAtomicCheckoutItems(checkout.items)
+    if (!atomicItems) {
+      setOrdersError('Your basket contains invalid item quantities. Please review it and try again.')
+      setOrderAction('')
+      return
+    }
+
+    // Order, item rows, and stock reservation must be one database transaction.
+    // Client-side price/stock refresh above is for a friendly review message;
+    // the RPC re-validates and locks rows so concurrent buyers cannot oversell.
+    const orderResult = await supabase.rpc('create_order_atomic', { p_items: atomicItems })
     if (orderResult.error) {
-      setOrdersError(`Could not create the order: ${orderResult.error.message}`)
+      const rpcMissing = orderResult.error.code === '42883' || orderResult.error.code === 'PGRST202' ||
+        String(orderResult.error.message || '').includes('create_order_atomic')
+      setOrdersError(rpcMissing
+        ? 'Atomic checkout is not installed in this database yet. No order was placed. The review-only SQL proposal must be checked and applied to staging first.'
+        : `Could not place the order: ${orderResult.error.message}`)
       setOrderAction('')
       return
     }
-
-    const rows = cart.map((item) => ({
-      order_id: orderResult.data.id,
-      product_id: item.product.id,
-      quantity: item.quantity,
-      unit_price: item.product.price,
-    }))
-    const itemsResult = await supabase.from('order_items').insert(rows)
-    if (itemsResult.error) {
-      setOrdersError(
-        `Order ${orderResult.data.id} was created, but its items could not be saved: ${itemsResult.error.message}`,
-      )
-      setOrderAction('')
-      return
-    }
-
     setCart([])
     setCartOpen(false)
     setOrderAction('')
     notify('Your order has been placed.')
     navigate('/account/orders')
+    } catch (error) {
+      setOrdersError(`Checkout failed unexpectedly: ${error?.message || 'Please try again.'}`)
+    } finally {
+      checkoutLock.current = false
+      setOrderAction('')
+    }
   }
 
   const updateOrderStatus = async (orderId, status) => {
     if (!supabase || !isAdmin) return
-    setOrderAction(orderId)
-    const result = await supabase
-      .from('orders')
-      .update({ status })
-      .eq('id', orderId)
-    if (result.error) {
-      setOrdersError(`Could not update order status: ${result.error.message}`)
-    } else {
-      await loadOrders(true)
-      notify('Order status updated.')
+    if (!isValidOrderStatus(status)) {
+      setOrdersError('Invalid order status. Choose a valid status from the order controls.')
+      return
     }
-    setOrderAction('')
+    const currentOrder = orders.find((order) => String(order.id) === String(orderId))
+    if (currentOrder && !isAllowedOrderStatusTransition(currentOrder.status, status)) {
+      setOrdersError(`Order cannot move from ${currentOrder.status} to ${status}.`)
+      return
+    }
+    const lockKey = String(orderId)
+    if (orderStatusLocks.current.size > 0) return
+    orderStatusLocks.current.add(lockKey)
+    setOrderAction(orderId)
+    try {
+      const result = await supabase.rpc('update_order_status_atomic', {
+        p_order_id: orderId,
+        p_new_status: status,
+      })
+      const updateFailure = orderStatusUpdateFailure(result, orderId)
+      if (updateFailure) {
+        const rpcMissing = result.error?.code === '42883' || result.error?.code === 'PGRST202' ||
+          String(result.error?.message || '').includes('update_order_status_atomic')
+        setOrdersError(rpcMissing
+          ? 'Atomic order-status handling is not installed in this database. No status was changed; review and apply the staging SQL proposal first.'
+          : `Could not update order status: ${updateFailure}`)
+      } else {
+        await loadOrders(true)
+        notify('Order status updated.')
+      }
+    } catch (error) {
+      setOrdersError(`Order status update failed unexpectedly: ${error?.message || 'Please try again.'}`)
+    } finally {
+      orderStatusLocks.current.delete(lockKey)
+      setOrderAction('')
+    }
   }
 
   const signOut = async () => {
@@ -636,6 +770,12 @@ function Storefront() {
     setRarityFilter('All rarities')
     setMinPrice('')
     setMaxPrice('')
+    setLanguageFilter('All languages')
+    setConditionFilter('All conditions')
+    setVariantFilter('All variants')
+    setAvailabilityFilter('In stock')
+    setSortBy('newest')
+    setCurrentPage(1)
   }
 
   const imageFilter = { original:'none', grayscale:'grayscale(1)', sepia:'sepia(.78)', contrast:'contrast(1.3) saturate(.85)', soft:'saturate(.68) brightness(1.08)' }[siteSettings.card_image_filter] || 'none'
@@ -655,6 +795,7 @@ function Storefront() {
   const safeBg = typeof bg === 'string' && /^https:\/\//i.test(bg) ? bg : ''
   return (
     <div className="site-shell" style={storefrontPage ? { ...storefrontStyle, backgroundImage: safeBg ? 'linear-gradient(rgba(17,17,15,.88), rgba(17,17,15,.92)), url("' + safeBg + '")' : undefined, backgroundSize: 'cover', backgroundAttachment: 'fixed' } : undefined}>
+      {isPreviewBuild && <div className="preview-safety-banner" role="status">Cloud preview build: only VITE_PREVIEW_SUPABASE_* variables are exposed. {hasSupabaseConfig ? 'Preview database settings are present—confirm they point to a dedicated staging project before testing.' : 'Supabase is disabled until preview-specific settings are supplied.'}</div>}
       {siteSettings.announcement_enabled !== false && <div className="announcement">
         <span>{siteSettings.announcement_headline}</span>
         <i />
@@ -882,63 +1023,37 @@ function Storefront() {
                 <h1>{siteSettings.archive_heading || 'Every card in the vault.'}</h1>
                 <p>{storefrontProducts.length} cards · {siteSettings.archive_description || 'photographed as found · local pickup in Gibraltar'}</p>
               </div>
-              <div className="shop-toolbar">
-                <label className="search-field">
-                  <Search size={17} />
-                  <input
-                    type="search"
-                    placeholder="Search cards, sets, rarity…"
-                    value={search}
-                    onChange={(event) => setSearch(event.target.value)}
-                  />
+              <div className="shop-search-row">
+                <label className="search-field shop-search-field">
+                  <Search size={18} />
+                  <input type="search" placeholder="Search by card name, number (OP01-001), set or rarity…" value={search} onChange={(event) => setSearch(event.target.value)} />
+                  <span className="search-hint">CARD NO.</span>
                 </label>
-                <label className="select-field">
-                  <span className="sr-only">Set</span>
-                  <select value={setFilter} onChange={(event) => setSetFilter(event.target.value)}>
-                    <option>All sets</option>
-                    {setOptions.map((name) => <option key={name}>{name}</option>)}
-                  </select>
-                  <ChevronDown size={15} />
-                </label>
-                <label className="select-field">
-                  <span className="sr-only">Category</span>
-                  <select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}>
-                    <option>All categories</option>
-                    {categoryNames.map((name) => <option key={name}>{name}</option>)}
-                  </select>
-                  <ChevronDown size={15} />
-                </label>
-                <label className="select-field">
-                  <span className="sr-only">Rarity</span>
-                  <select value={rarityFilter} onChange={(event) => setRarityFilter(event.target.value)}>
-                    <option>All rarities</option>
-                    {rarities.map((rarity) => <option key={rarity}>{rarity}</option>)}
-                  </select>
-                  <ChevronDown size={15} />
-                </label>
-                <div className="price-fields">
-                  <label><span className="sr-only">Minimum price</span><span>£</span><input type="number" min="0" placeholder="Min" value={minPrice} onChange={(event) => setMinPrice(event.target.value)} /></label>
-                  <span>–</span>
-                  <label><span className="sr-only">Maximum price</span><span>£</span><input type="number" min="0" placeholder="Max" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)} /></label>
-                </div>
+                <label className="shop-sort"><span>Sort by</span><select value={sortBy} onChange={(event) => setSortBy(event.target.value)}><option value="newest">Recently added</option><option value="price-low">Price: low to high</option><option value="price-high">Price: high to low</option><option value="name">Card name</option><option value="card-number">Card number</option></select><ChevronDown size={14} /></label>
               </div>
-              <div className="results-row">
-                <span>Showing <strong>{filteredProducts.length}</strong> of {storefrontProducts.length} cards</span>
-                {(search || setFilter !== 'All sets' || categoryFilter !== 'All categories' || rarityFilter !== 'All rarities' || minPrice || maxPrice) && (
-                  <button className="clear-filters" type="button" onClick={resetFilters}>Clear filters <X size={13} /></button>
-                )}
+              <div className="shop-browse-layout">
+                <aside className="shop-filter-panel">
+                  <div className="shop-filter-heading"><div><SlidersHorizontal size={16} /><strong>Refine the archive</strong></div><button type="button" onClick={resetFilters}>Reset</button></div>
+                  <label className="shop-filter-field"><span>Set / expansion</span><select value={setFilter} onChange={(event) => setSetFilter(event.target.value)}><option>All sets</option>{setOptions.map((name) => <option key={name}>{name}</option>)}</select></label>
+                  <label className="shop-filter-field"><span>Card type / category</span><select value={categoryFilter} onChange={(event) => setCategoryFilter(event.target.value)}><option>All categories</option>{categoryNames.map((name) => <option key={name}>{name}</option>)}</select></label>
+                  <label className="shop-filter-field"><span>Rarity</span><select value={rarityFilter} onChange={(event) => setRarityFilter(event.target.value)}><option>All rarities</option>{rarities.map((rarity) => <option key={rarity}>{rarity}</option>)}</select></label>
+                  <label className="shop-filter-field"><span>Language</span><select value={languageFilter} onChange={(event) => setLanguageFilter(event.target.value)}><option>All languages</option><option>English</option><option>Japanese</option></select></label>
+                  <label className="shop-filter-field"><span>Condition</span><select value={conditionFilter} onChange={(event) => setConditionFilter(event.target.value)}><option>All conditions</option>{conditions.map((condition) => <option key={condition}>{condition}</option>)}</select></label>
+                  <label className="shop-filter-field"><span>Printing / variant</span><select value={variantFilter} onChange={(event) => setVariantFilter(event.target.value)}><option>All variants</option>{variants.map((variant) => <option key={variant}>{variant}</option>)}</select></label>
+                  <label className="shop-filter-field"><span>Availability</span><select value={availabilityFilter} onChange={(event) => setAvailabilityFilter(event.target.value)}><option>In stock</option><option>All stock</option><option>Sold out</option></select></label>
+                  <div className="shop-filter-field"><span>Price range</span><div className="price-fields"><label><span className="sr-only">Minimum price</span><span>£</span><input type="number" min="0" placeholder="Min" value={minPrice} onChange={(event) => setMinPrice(event.target.value)} /></label><span>–</span><label><span className="sr-only">Maximum price</span><span>£</span><input type="number" min="0" placeholder="Max" value={maxPrice} onChange={(event) => setMaxPrice(event.target.value)} /></label></div></div>
+                </aside>
+                <section className="shop-results">
+                  <div className="shop-results-toolbar">
+                    <div className="results-row"><span><strong>{sortedProducts.length}</strong> cards found <i>·</i> {storefrontProducts.length} listed</span>{(search || setFilter !== 'All sets' || categoryFilter !== 'All categories' || rarityFilter !== 'All rarities' || languageFilter !== 'All languages' || conditionFilter !== 'All conditions' || variantFilter !== 'All variants' || availabilityFilter !== 'In stock' || minPrice || maxPrice) && <button className="clear-filters" type="button" onClick={resetFilters}>Clear filters <X size={13} /></button>}</div>
+                    <div className="shop-view-controls"><label><span>Show</span><select value={pageSize} onChange={(event) => setPageSize(event.target.value)}><option value="24">24</option><option value="48">48</option><option value="96">96</option></select></label><div className="shop-view-toggle" role="group" aria-label="Product layout"><button type="button" className={viewMode === 'grid' ? 'is-active' : ''} onClick={() => setViewMode('grid')} aria-label="Grid view"><Grid2X2 size={16} /></button><button type="button" className={viewMode === 'list' ? 'is-active' : ''} onClick={() => setViewMode('list')} aria-label="List view"><List size={17} /></button></div></div>
+                  </div>
+                  {catalogLoading ? <div className="loading-state"><span className="loader" />Opening the archive…</div> : visibleProducts.length ? <>
+                    <div className={`product-grid shop-grid ${viewMode === 'list' ? 'shop-grid--list' : ''}`}>{visibleProducts.map((product) => <ProductCard key={product.id} product={product} onAdd={addToCart} viewMode={viewMode} />)}</div>
+                    {pageCount > 1 && <nav className="shop-pagination" aria-label="Product pages"><button type="button" disabled={currentPage === 1} onClick={() => setCurrentPage((page) => page - 1)}>Previous</button><span>Page <strong>{currentPage}</strong> of {pageCount}</span><button type="button" disabled={currentPage === pageCount} onClick={() => setCurrentPage((page) => page + 1)}>Next</button></nav>}
+                  </> : <EmptyCatalogue error={catalogError} />}
+                </section>
               </div>
-              {catalogLoading ? (
-                <div className="loading-state"><span className="loader" />Opening the archive…</div>
-              ) : filteredProducts.length ? (
-                <div className="product-grid shop-grid">
-                  {filteredProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} onAdd={addToCart} />
-                  ))}
-                </div>
-              ) : (
-                <EmptyCatalogue error={catalogError} />
-              )}
             </main>
           }
         />

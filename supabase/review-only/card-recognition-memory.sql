@@ -1,6 +1,8 @@
 -- REVIEW ONLY: shared recognition memory for confirmed One Piece card printings.
 -- Apply in Supabase SQL Editor after reviewing the existing public.is_admin() function.
--- Card reference images are public card artwork; only administrators may contribute or remove examples.
+-- Shared examples are uploaded from the original scan photo, which may include
+-- background or other incidental personal content. Keep image objects private;
+-- only the non-image recognition metadata is readable by the public.
 
 BEGIN;
 
@@ -9,6 +11,16 @@ BEGIN
   IF to_regprocedure('public.is_admin()') IS NULL THEN
     RAISE EXCEPTION 'Expected public.is_admin() function was not found. Stop and review admin authorization.';
   END IF;
+  IF pg_get_function_result('public.is_admin()'::regprocedure) IS DISTINCT FROM 'boolean' THEN
+    RAISE EXCEPTION 'Expected public.is_admin() function must return boolean.';
+  END IF;
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_class
+    WHERE oid = 'storage.objects'::regclass
+      AND relrowsecurity = true
+  ) THEN
+    RAISE EXCEPTION 'RLS must be enabled on storage.objects before configuring shared recognition images.';
+  END IF;
   IF to_regclass('public.card_recognition_examples') IS NOT NULL THEN
     RAISE EXCEPTION 'public.card_recognition_examples already exists. Inspect it before applying this migration.';
   END IF;
@@ -16,8 +28,14 @@ END
 $preflight$;
 
 INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
-VALUES ('card-recognition-references', 'card-recognition-references', true, 10485760, ARRAY['image/jpeg','image/png','image/webp'])
+VALUES ('card-recognition-references', 'card-recognition-references', false, 10485760, ARRAY['image/jpeg'])
 ON CONFLICT (id) DO NOTHING;
+
+-- If this bucket already exists from an earlier setup, make its objects private.
+-- Review existing consumers before applying: public URLs for this bucket will stop working.
+UPDATE storage.buckets
+SET public = false
+WHERE id = 'card-recognition-references';
 
 CREATE TABLE public.card_recognition_examples (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -57,22 +75,56 @@ CREATE POLICY "Admins can delete verified card recognition examples"
   FOR DELETE TO authenticated
   USING (public.is_admin());
 
-GRANT SELECT ON public.card_recognition_examples TO anon, authenticated;
-GRANT INSERT, DELETE ON public.card_recognition_examples TO authenticated;
+-- Start from no direct API-role privileges, then grant only the columns and
+-- operations required by the scanner. This also neutralizes permissive default
+-- table grants that might otherwise expose confirmed_by or allow broad writes.
+REVOKE ALL ON public.card_recognition_examples FROM PUBLIC, anon, authenticated;
 
-CREATE POLICY "Public can view card recognition reference images"
+-- Expose only recognition metadata, not the contributor's auth UUID.
+-- Column-level grants also keep the internal contributor field private.
+GRANT SELECT (id, printing_id, card_number, card_name, language, set_code, rarity, variant, image_hash, storage_path, confirmed_at)
+  ON public.card_recognition_examples TO anon, authenticated;
+REVOKE INSERT ON public.card_recognition_examples FROM PUBLIC, anon, authenticated;
+GRANT INSERT (printing_id, card_number, card_name, language, set_code, rarity, variant, image_hash, storage_path, confirmed_by)
+  ON public.card_recognition_examples TO authenticated;
+GRANT DELETE ON public.card_recognition_examples TO authenticated;
+
+-- The app reads hashes/metadata only; it never downloads the stored reference
+-- photo. Keep the original scan photo private and administrator-only.
+CREATE POLICY "Admins can view card recognition reference images"
   ON storage.objects
-  FOR SELECT TO anon, authenticated
-  USING (bucket_id = 'card-recognition-references');
+  FOR SELECT TO authenticated
+  USING (bucket_id = 'card-recognition-references' AND public.is_admin());
+
+CREATE POLICY "Only admins can view recognition reference images"
+  ON storage.objects AS RESTRICTIVE
+  FOR SELECT TO public
+  USING (bucket_id <> 'card-recognition-references' OR coalesce(public.is_admin(), false));
 
 CREATE POLICY "Admins can upload card recognition reference images"
   ON storage.objects
   FOR INSERT TO authenticated
   WITH CHECK (bucket_id = 'card-recognition-references' AND public.is_admin());
 
+CREATE POLICY "Only admins can upload recognition reference images"
+  ON storage.objects AS RESTRICTIVE
+  FOR INSERT TO public
+  WITH CHECK (bucket_id <> 'card-recognition-references' OR coalesce(public.is_admin(), false));
+
 CREATE POLICY "Admins can delete card recognition reference images"
   ON storage.objects
   FOR DELETE TO authenticated
   USING (bucket_id = 'card-recognition-references' AND public.is_admin());
+
+CREATE POLICY "Only admins can delete recognition reference images"
+  ON storage.objects AS RESTRICTIVE
+  FOR DELETE TO public
+  USING (bucket_id <> 'card-recognition-references' OR coalesce(public.is_admin(), false));
+
+CREATE POLICY "Only admins can update recognition reference images"
+  ON storage.objects AS RESTRICTIVE
+  FOR UPDATE TO public
+  USING (bucket_id <> 'card-recognition-references' OR coalesce(public.is_admin(), false))
+  WITH CHECK (bucket_id <> 'card-recognition-references' OR coalesce(public.is_admin(), false));
 
 COMMIT;

@@ -83,3 +83,30 @@ test('uses selected OCR language when English or Japanese is not explicitly dete
 test('Japanese script takes precedence over English OCR language selection', () => {
   assert.equal(parseCardDetails('OP01-001 ゾロ', [], 'eng').language.value, 'Japanese')
 })
+
+test('extracts and normalizes card numbers across multiple enlarged scan areas', async () => {
+  const { extractCardNumberCandidates } = await import('../src/admin/cardNumberCandidates.js')
+  const candidates = extractCardNumberCandidates([
+    { label: 'Bottom-left', text: 'OP O1-OO1', confidence: 82 },
+    { label: 'Full bottom edge', text: 'OP01-001', confidence: 94 },
+    { label: 'Bottom-right', text: 'copyright 2026', confidence: 99 },
+  ])
+  assert.equal(candidates[0].number, 'OP01-001')
+  assert.equal(candidates[0].occurrences, 2)
+  assert.equal(candidates[0].confidence, 88)
+  assert.deepEqual(candidates[0].sources, ['Bottom-left', 'Full bottom edge'])
+})
+
+test('normalizes common OCR confusions in card-number prefixes', async () => {
+  const { extractCardNumberCandidates } = await import('../src/admin/cardNumberCandidates.js')
+  const cases = [
+    ['0P01-001', 'OP01-001'],
+    ['E801-014', 'EB01-014'],
+    ['5T02-006', 'ST02-006'],
+    ['PR801-001', 'PRB01-001'],
+    ['P-001', 'P-001'],
+  ]
+  for (const [text, expected] of cases) {
+    assert.equal(extractCardNumberCandidates([{ text, confidence: 90 }])[0]?.number, expected)
+  }
+})

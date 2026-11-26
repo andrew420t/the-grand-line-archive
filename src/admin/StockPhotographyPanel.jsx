@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Camera, Check, ShieldAlert, Upload } from 'lucide-react'
 import PhotoStudio from './PhotoStudio'
 import {
@@ -18,9 +18,11 @@ export default function StockPhotographyPanel({
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
+  const uploadLock = useRef(false)
   const selectedProduct = products.find((product) => String(product.id) === productId)
 
   const upload = async () => {
+    if (uploadLock.current) return
     if (!selectedProduct) {
       setError('Choose an existing product. To photograph a new card, use Add Stock.')
       return
@@ -30,6 +32,7 @@ export default function StockPhotographyPanel({
       return
     }
 
+    uploadLock.current = true
     setBusy(true)
     setError('')
     setNotice('')
@@ -41,12 +44,18 @@ export default function StockPhotographyPanel({
         photos,
       })
       await removeLocalPhotos(photos)
-      onPhotosChange([])
+      const uploadedPhotoIds = new Set(photos.map((photo) => photo.id))
+      onPhotosChange((current) => current.filter((photo) => !uploadedPhotoIds.has(photo.id)))
+      // These queued preview URLs are no longer referenced after a successful upload.
+      photos.forEach((photo) => {
+        if (photo.previewUrl) URL.revokeObjectURL(photo.previewUrl)
+      })
       setNotice(`${saved.length} photograph${saved.length === 1 ? '' : 's'} linked to ${selectedProduct.name}.`)
       onSaved()
     } catch (uploadError) {
       setError(uploadError.message)
     } finally {
+      uploadLock.current = false
       setBusy(false)
     }
   }
