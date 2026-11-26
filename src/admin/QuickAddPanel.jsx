@@ -128,23 +128,17 @@ export default function QuickAddPanel({
       saveQuickAddDraft(user.id, { form, partialProductId })
       setDraftStatus('saved')
     }
-    const timeout = window.setTimeout(save, 220)
+    // Write on every committed form change so SPA navigation or a discarded
+    // background tab cannot cancel a pending debounce timer.
+    save()
     const flushWhenHidden = () => {
-      if (document.visibilityState === 'hidden') {
-        window.clearTimeout(timeout)
-        save()
-      }
-    }
-    const flushOnPageHide = () => {
-      window.clearTimeout(timeout)
-      save()
+      if (document.visibilityState === 'hidden') save()
     }
     document.addEventListener('visibilitychange', flushWhenHidden)
-    window.addEventListener('pagehide', flushOnPageHide)
+    window.addEventListener('pagehide', save)
     return () => {
-      window.clearTimeout(timeout)
       document.removeEventListener('visibilitychange', flushWhenHidden)
-      window.removeEventListener('pagehide', flushOnPageHide)
+      window.removeEventListener('pagehide', save)
     }
   }, [form, partialProductId, user?.id, hasMeaningfulDraft])
 
