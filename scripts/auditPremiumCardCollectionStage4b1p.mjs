@@ -468,7 +468,7 @@ if (!stage1oAudit.summary?.passed) throw new Error('Stage 4B-1O exact runtime re
 const applicationMatrix = await getCatalogueReferenceTestMatrix()
 const premiumCollections = await reconcilePremiumCollections(manifest)
 const testingInventory = await reconcileTestingInventory(testingSnapshot, officialMatrix.rows, stage1oAudit, applicationMatrix)
-const languageCodeFor = (language) => language === 'English' ? 'en' : 'jp'
+const languageCodeFor = (language) => language === 'English' ? 'en' : language === 'Japanese' ? 'jp' : language
 const matrixRowKeys = new Set(stage1oAudit.rows.map((row) => row.set + ':' + languageCodeFor(row.language)))
 const setMatrixItems = applicationMatrix.items.filter((item) => matrixRowKeys.has(item.targetSet + ':' + item.language))
 const setAssignmentKeys = new Set(setMatrixItems.map((item) => languageCodeFor(item.language) + ':' + item.targetSet + ':' + item.printingKey))
@@ -487,6 +487,8 @@ const importPlan = {
   officialSetReleaseAssignmentPrintings: stage1oAudit.summary.officialReleaseAssignmentPrintings,
   setAssignmentRows: setAssignmentKeys.size,
   distinctSetMatrixPrintingKeys: setPrintingKeys.size,
+  setMatrixRowsMatchStage1O: setMatrixItems.length === stage1oAudit.summary.officialReleaseAssignmentPrintings
+    && setAssignmentKeys.size === stage1oAudit.summary.officialReleaseAssignmentPrintings,
   distinctLanguageScopedBaseCardNumbers: new Set(setMatrixItems.map((item) => languageCodeFor(item.language) + ':' + item.cardNumber)).size,
   expectedSetPrintingRecords: setMatrixItems.length,
   referencePrintingRecords: setMatrixItems.map((item) => ({
@@ -501,6 +503,7 @@ const importPlan = {
     variant: item.variant,
     imageId: item.imageId || '',
     applicationImageUrl: item.imageUrl || '',
+    officialImageUrl: item.fallbackImageUrl || '',
     exactReferenceImageUrl: item.fallbackImageUrl || item.imageUrl || '',
     source: item.source || '',
   })),
@@ -545,13 +548,15 @@ const report = {
       && testingInventory.summary.expectedSetPrintingAssignments === 7786
       && testingInventory.summary.missingPersistedPrintingKeys === 7786
       && testingInventory.summary.unexpectedPersistedPrintingKeys === 0
+      && importPlan.setMatrixRowsMatchStage1O
       && stage1oAudit.summary.passed,
     premiumCollectionsExactMatch: premiumCollections.exactMatch,
     completeSetImportPlan: importPlan.expectedSetPrintingRecords === 7786
       && importPlan.referencePrintingRecords.length === 7786
       && testingInventory.summary.expectedSetPrintingAssignments === 7786
       && testingInventory.summary.missingPersistedPrintingKeys === 7786
-      && testingInventory.summary.unexpectedPersistedPrintingKeys === 0,
+      && testingInventory.summary.unexpectedPersistedPrintingKeys === 0
+      && importPlan.setMatrixRowsMatchStage1O,
     englishPremiumProducts: premiumCollections.english.namedProductCount,
     englishPremiumPrintings: premiumCollections.english.productPrintingLinks,
     englishRemainingEightPrintings: premiumCollections.english.eightRemainingProducts,
@@ -568,6 +573,8 @@ const report = {
     testingCatalogueReferenceImages: testingInventory.summary.catalogueReferenceImageUrls,
     testingAssignedSetMismatches: testingInventory.summary.assignedSetMismatches,
     all50LanguageSetRowsReconciled: testingInventory.summary.languageSetRows === 50,
+    setMatrixRowsMatchStage1O: importPlan.setMatrixRowsMatchStage1O,
+    distinctCombinedPrintingKeys: importPlan.distinctCombinedPrintingKeys,
     all32InventoryRowsClassified: testingInventory.classificationComplete,
     noDatabaseWrites: testingInventory.noDatabaseWrites && importPlan.noDatabaseWrites,
   },
