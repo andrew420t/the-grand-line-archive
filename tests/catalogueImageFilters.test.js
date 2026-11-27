@@ -179,3 +179,25 @@ test('assigns combined release-product cards only to the set matching their card
   assert.deepEqual(getCatalogueProductSetCodes(combinedProductSets, 'EB04-001'), ['EB-04'])
   assert.deepEqual(getCatalogueProductSetCodes(combinedProductSets, 'ST24-004'), ['EB-04', 'OP-15'])
 })
+
+
+test('clearing all Image Library filters restores every available catalogue entry', () => {
+  const filtered = filterCatalogueImageEntries(entries, {
+    query: 'Whitebeard',
+    cardNumber: 'OP12-010',
+    sortBy: 'card-number-desc',
+    language: 'cn',
+    set: 'OP-12',
+    cardNumberSet: 'OP-12',
+    rarity: 'R',
+    cardType: 'Event',
+    color: 'Blue',
+    variant: 'parallel',
+    imageStatus: 'available',
+  })
+  assert.deepEqual(filtered.map((entry) => entry.id), ['d'])
+  assert.deepEqual(
+    filterCatalogueImageEntries(entries, {}).map((entry) => entry.id),
+    entries.map((entry) => entry.id),
+  )
+})
