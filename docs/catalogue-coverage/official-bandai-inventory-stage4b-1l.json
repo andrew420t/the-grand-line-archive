@@ -44,7 +44,7 @@
     "PRB": "PRB-01: 319 printings / 111 card numbers / 1 PRB01-prefixed number. PRB-02: 316 printings / 173 card numbers / 18 PRB02-prefixed numbers.",
     "PRB-01": "319 official printing entries / 111 distinct original card numbers / 1 PRB01-prefixed product card number. No PRB-01 base-card count is asserted; application identity reconciliation remains blocked by the incomplete Testing dataset.",
     "PRB-02": "316 official printing entries / 173 distinct original card numbers / 18 PRB02-prefixed product card numbers. No PRB-02 base-card count is asserted; application identity reconciliation remains blocked by the incomplete Testing dataset.",
-    "Stage4B1O": "Pinned feed comparison matches all 50 official English/Japanese set rows. 46 rows use upstream printing/product links; OP18 and EB05 use explicit local Bandai supplements with language-scoped generated printing keys. Testing Supabase remains an incomplete 32-product smoke dataset, so all rows remain INCOMPLETE."
+    "Stage4B1O": "Exact-head application runtime reconciliation passed: 50/50 English/Japanese rows, 7,786/7,786 release-assignment printings, zero missing/unexpected/duplicate identities, zero field mismatches, 12/12 named Best Selection Vol.6 printings, OP13-037 English TR confirmed in OP15-EB04 with no Japanese counterpart. Testing Supabase remains an incomplete 32-product smoke dataset; all 50 rows remain INCOMPLETE pending complete persisted catalogue verification."
   },
   "rows": [
     {
@@ -710,6 +710,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 154,
+        "application_reference_printing_count": 154,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -1375,6 +1390,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 154,
+        "application_reference_printing_count": 154,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -2042,6 +2072,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 154,
+        "application_reference_printing_count": 154,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -2709,6 +2754,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 154,
+        "application_reference_printing_count": 154,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -3392,6 +3452,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 154,
+        "application_reference_printing_count": 154,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -4075,6 +4150,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 154,
+        "application_reference_printing_count": 154,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -4743,6 +4833,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 149,
+        "application_reference_printing_count": 149,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -5411,6 +5516,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 149,
+        "application_reference_printing_count": 149,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -6086,6 +6206,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 154,
+        "application_reference_printing_count": 154,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -6761,6 +6896,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 154,
+        "application_reference_printing_count": 154,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -7436,6 +7586,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 151,
+        "application_reference_printing_count": 151,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -8107,6 +8272,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 150,
+        "application_reference_printing_count": 150,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -8782,6 +8962,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 151,
+        "application_reference_printing_count": 151,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -9453,6 +9648,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 150,
+        "application_reference_printing_count": 150,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -10128,6 +10338,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 151,
+        "application_reference_printing_count": 151,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -10799,6 +11024,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 150,
+        "application_reference_printing_count": 150,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -11484,6 +11724,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 159,
+        "application_reference_printing_count": 159,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -12165,6 +12420,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 158,
+        "application_reference_printing_count": 158,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -12840,6 +13110,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 151,
+        "application_reference_printing_count": 151,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -13511,6 +13796,30 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_MATCH_WITH_ACCEPTED_SOURCE_TEXT_VARIATION",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 150,
+        "application_reference_printing_count": 150,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [
+          {
+            "imageId": "EB01-056_p2",
+            "field": "name",
+            "expected": "シャーロット・フランペ",
+            "actual": "シャーロット・フランぺ",
+            "classification": "OFFICIAL_PRODUCT_SPECIFIC_JAPANESE_NAME_VARIANT",
+            "note": "Official EB-01 Japanese page uses hiragana ぺ; official OP-10 Japanese reprint page uses katakana ペ. The upstream card observation is shared across printings; printing identity and release-product assignment are exact."
+          }
+        ],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -14193,6 +14502,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 156,
+        "application_reference_printing_count": 156,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -14871,6 +15195,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 155,
+        "application_reference_printing_count": 155,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -15552,6 +15891,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 155,
+        "application_reference_printing_count": 155,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -16229,6 +16583,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 154,
+        "application_reference_printing_count": 154,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -16935,6 +17304,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 175,
+        "application_reference_printing_count": 175,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -17637,6 +18021,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 174,
+        "application_reference_printing_count": 174,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -18430,6 +18829,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 199,
+        "application_reference_printing_count": 199,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -19110,6 +19524,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 156,
+        "application_reference_printing_count": 156,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -20204,6 +20633,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 196,
+        "application_reference_printing_count": 196,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -20877,6 +21321,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 152,
+        "application_reference_printing_count": 152,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -21554,6 +22013,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 155,
+        "application_reference_printing_count": 155,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -22231,6 +22705,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 155,
+        "application_reference_printing_count": 155,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -22932,6 +23421,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 169,
+        "application_reference_printing_count": 169,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -23633,6 +24137,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 169,
+        "application_reference_printing_count": 169,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -24361,6 +24880,21 @@
           "set_name": "The Dominance of God [OP-18]",
           "upstream_product_key": null
         }
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 159,
+        "application_reference_printing_count": 159,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -25066,6 +25600,21 @@
           "set_name": "The Dominance of God [OP-18]",
           "upstream_product_key": null
         }
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 159,
+        "application_reference_printing_count": 159,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -25477,6 +26026,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 80,
+        "application_reference_printing_count": 80,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -25888,6 +26452,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 80,
+        "application_reference_printing_count": 80,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -26377,6 +26956,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 105,
+        "application_reference_printing_count": 105,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -26866,6 +27460,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 105,
+        "application_reference_printing_count": 105,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -27289,6 +27898,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 90,
+        "application_reference_printing_count": 90,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -27712,6 +28336,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 90,
+        "application_reference_printing_count": 90,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -28139,6 +28778,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 81,
+        "application_reference_printing_count": 81,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -28565,6 +29219,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 85,
+        "application_reference_printing_count": 85,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -29034,6 +29703,21 @@
           "set_name": "ONE PIECE Heroines Edition vol.2 [EB-05]",
           "upstream_product_key": null
         }
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 96,
+        "application_reference_printing_count": 96,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -29503,6 +30187,21 @@
           "set_name": "ONE PIECE Heroines Edition vol.2 [EB-05]",
           "upstream_product_key": null
         }
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 96,
+        "application_reference_printing_count": 96,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -30189,6 +30888,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 319,
+        "application_reference_printing_count": 319,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -30875,6 +31589,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 319,
+        "application_reference_printing_count": 319,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -31699,6 +32428,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 316,
+        "application_reference_printing_count": 316,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     },
     {
@@ -32523,6 +33267,21 @@
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
         "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+      },
+      "application_runtime_reconciliation": {
+        "status": "EXACT_IDENTITY_AND_FIELD_MATCH",
+        "verified_workflow_run_id": 46049546908,
+        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "official_release_assignment_printing_count": 316,
+        "application_reference_printing_count": 316,
+        "exact_identity_match": true,
+        "missing_identity_ids": [],
+        "unexpected_identity_ids": [],
+        "duplicate_identity_ids": [],
+        "field_mismatch_count": 0,
+        "accepted_source_variations": [],
+        "missing_image_slots": 0,
+        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records."
       }
     }
   ],
@@ -32572,7 +33331,7 @@
         }
       },
       "persistence": "Testing Supabase remains a 32-product smoke dataset; feed matches do not establish complete persisted Testing catalogue records.",
-      "runtime_caveat": "cardCatalogue.js fetches raw upstream main dynamically; this audit uses a pinned snapshot for reproducibility. Runtime feed pinning remains a deterministic-parity blocker.",
+      "runtime_caveat": "Resolved: src/admin/cardCatalogue.js now pins the application reference feed to immutable commit 619965ec198047de519dc6eb098c7a56aed9bd58; exact-head runtime parity workflow verifies this commit and manifest.",
       "local_supplement_generated_printing_keys": {
         "OP18": {
           "English": 159,
@@ -32584,6 +33343,47 @@
         }
       },
       "upstream_product_key_coverage": "46 rows use upstream product and printing-product links; OP18/EB05 use explicit local official supplement assignments and generated language-scoped printing keys."
+    },
+    "application_runtime_reconciliation": {
+      "status": "PASSED",
+      "workflow_run_id": 46049546908,
+      "workflow_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46049546908",
+      "verified_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+      "upstream_feed_commit": "619965ec198047de519dc6eb098c7a56aed9bd58",
+      "language_set_rows": 50,
+      "exact_identity_rows": 50,
+      "official_release_assignment_printings": 7786,
+      "application_reference_printings": 7786,
+      "missing_identity_ids": 0,
+      "unexpected_identity_ids": 0,
+      "duplicate_identity_ids": 0,
+      "field_mismatches": 0,
+      "accepted_source_variations": 1,
+      "missing_image_slots": 0,
+      "official_image_http": {
+        "unique_urls": 7798,
+        "loaded": 7798,
+        "missing": 0,
+        "invalid_url": 0,
+        "timeout": 0,
+        "temporary_failure": 0
+      },
+      "premium_collection": {
+        "official_product_card_count": 12,
+        "application_english_product_printings": 12,
+        "application_japanese_product_printings": 0,
+        "generic_placeholder_overlaps": 0,
+        "exact_match": true
+      },
+      "op13_037": {
+        "english_original": true,
+        "japanese_original": true,
+        "english_op15_eb04_treasure_rare": true,
+        "japanese_op15_eb04_treasure_rare": false,
+        "english_best_selection_vol6_printing": true,
+        "exact_match": true
+      },
+      "result": "Application runtime identity, release assignment, language, printing variant and image-reference reconciliation passed. One official product-specific Japanese spelling variation is explicitly recorded."
     }
   },
   "image_http_audit": {
@@ -32753,7 +33553,41 @@
       "loaded": 7798
     },
     "latest_docs_metadata_commit": "4c8f9444e3081779ac2c0d3fde7739591874613c",
-    "note": "The latest docs-only matrix metadata commit records this completed code-bearing CI run; no source URLs changed after the final HTTP audit."
+    "note": "The latest docs-only matrix metadata commit records this completed code-bearing CI run; no source URLs changed after the final HTTP audit.",
+    "stage4b_1o_exact_head": {
+      "workflow_run_id": 46049546908,
+      "workflow_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46049546908",
+      "commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+      "tests": {
+        "passed": 320,
+        "failed": 0,
+        "total": 320
+      },
+      "lint": {
+        "status": "PASSED",
+        "warnings": 17,
+        "errors": 0
+      },
+      "production_build": {
+        "status": "PASSED"
+      },
+      "application_printing_audit": {
+        "status": "PASSED",
+        "exact_rows": 50,
+        "missing": 0,
+        "unexpected": 0,
+        "duplicates": 0,
+        "field_mismatches": 0,
+        "accepted_source_variations": 1
+      },
+      "official_image_http_audit": {
+        "status": "PREVIOUS_VERIFIED_BASELINE_UNCHANGED",
+        "run_id": 46043216009,
+        "unique_urls": 7798,
+        "loaded": 7798
+      },
+      "note": "This workflow run is tied to the exact verified commit shown above; subsequent matrix-only metadata commits must receive their own CI run."
+    }
   },
   "stage4b_1o_reconciliation": {
     "audit_date": "2026-11-27",
@@ -32792,7 +33626,7 @@
         }
       },
       "persistence": "Testing Supabase remains a 32-product smoke dataset; feed matches do not establish complete persisted Testing catalogue records.",
-      "runtime_caveat": "cardCatalogue.js fetches raw upstream main dynamically; this audit uses a pinned snapshot for reproducibility. Runtime feed pinning remains a deterministic-parity blocker.",
+      "runtime_caveat": "Resolved: src/admin/cardCatalogue.js now pins the application reference feed to immutable commit 619965ec198047de519dc6eb098c7a56aed9bd58; exact-head runtime parity workflow verifies this commit and manifest.",
       "local_supplement_generated_printing_keys": {
         "OP18": {
           "English": 159,
@@ -32875,7 +33709,7 @@
         "result": "Twelve separate English product-linked printings retained; not merged into original booster printings."
       }
     },
-    "status_policy": "All 50 official rows match the pinned reference identity sets. OP18/EB05 now have application-generated language-scoped printing keys and explicit local set assignments, but their upstream product keys remain absent. All 50 rows remain INCOMPLETE because the permitted Testing Supabase dataset contains only 32 smoke-test products and does not prove complete persisted catalogue parity or live runtime parity.",
+    "status_policy": "All 50 official rows pass the pinned application runtime identity/release/image audit. All rows remain INCOMPLETE because the permitted Testing Supabase project contains only 32 smoke-test products and cannot prove complete persisted catalogue parity; OP18/EB05 local supplements use application-generated language-scoped keys rather than upstream product keys.",
     "image_http_audit_reference": {
       "status": "COMPLETE",
       "checked_at": "2026-11-27T17:41:41.814Z",
@@ -32938,7 +33772,48 @@
       "alternate_image_fallback": "No fallback was required for official source URLs because all 7,798 returned HTTP 200. Application-level fallback remains unverified because the Testing project has no catalogue reference image URLs.",
       "artifact_retention_expires_at": "2027-02-25T17:36:49Z"
     },
-    "preview": "Not deployed; no preview was required for this read-only data reconciliation."
+    "preview": "Not deployed; no preview was required for this read-only data reconciliation.",
+    "application_runtime_audit": {
+      "status": "PASSED",
+      "workflow_run_id": 46049546908,
+      "workflow_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46049546908",
+      "verified_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+      "upstream_feed_commit": "619965ec198047de519dc6eb098c7a56aed9bd58",
+      "language_set_rows": 50,
+      "exact_identity_rows": 50,
+      "official_release_assignment_printings": 7786,
+      "application_reference_printings": 7786,
+      "missing_identity_ids": 0,
+      "unexpected_identity_ids": 0,
+      "duplicate_identity_ids": 0,
+      "field_mismatches": 0,
+      "accepted_source_variations": 1,
+      "missing_image_slots": 0,
+      "official_image_http": {
+        "unique_urls": 7798,
+        "loaded": 7798,
+        "missing": 0,
+        "invalid_url": 0,
+        "timeout": 0,
+        "temporary_failure": 0
+      },
+      "premium_collection": {
+        "official_product_card_count": 12,
+        "application_english_product_printings": 12,
+        "application_japanese_product_printings": 0,
+        "generic_placeholder_overlaps": 0,
+        "exact_match": true
+      },
+      "op13_037": {
+        "english_original": true,
+        "japanese_original": true,
+        "english_op15_eb04_treasure_rare": true,
+        "japanese_op15_eb04_treasure_rare": false,
+        "english_best_selection_vol6_printing": true,
+        "exact_match": true
+      },
+      "result": "Application runtime identity, release assignment, language, printing variant and image-reference reconciliation passed. One official product-specific Japanese spelling variation is explicitly recorded."
+    }
   },
   "latest_audit_commit_before_stage4b_1o": "23eecbf8376865238ebf7455e4f458c7ce68799d"
 }
