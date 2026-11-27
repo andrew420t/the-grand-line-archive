@@ -249,11 +249,12 @@ Starting commit: current HEAD of the named audit branch (verify the exact SHA be
 Stage 3 baseline: 448bc546c30ad1d7c69481dbdf794711810c5560
 
 Stage 4B-1N completed:
-- All 50 official Bandai language/set rows have full entry-level extraction.
-- All 7,798 unique official image URLs returned HTTP 200.
-- 293/293 tests passed; lint and production build passed.
+- All 50 official Bandai language/set rows have full entry-level extraction and printing/image identity counts.
+- All 7,798 unique official image URLs returned HTTP 200; 0 missing, invalid, timeout or unresolved temporary failures.
+- 306/306 automated tests passed; lint passed with 17 warnings and 0 errors; production build passed.
 - Full per-URL HTTP results are in workflow artifact 15220403661 from run 46043216009.
-- PRB-01/PRB-02 entries and reprints are fully extracted; PRB prefix IDs are separate from original base-card counts.
+- PRB-01/PRB-02 entries and reprints are fully extracted; PRB prefix IDs are separate from original base-card counts. No PRB base-card count is asserted.
+- The one OP-15 cross-prefix non-base product discrepancy is OP13-037 TR Roronoa Zoro (OP13-037_p1), present in English OP15-EB04 but absent from Japanese EB-04. OP11-106 and PRB02-014 have Japanese EB-04 SPカード counterparts and must not be marked missing.
 - OP-18 and EB-05 official source entries/images are complete.
 - The Testing Supabase project has only 32 products, 2 product-linked sets and no catalogue printing keys, match IDs or reference image URLs.
 
@@ -273,19 +274,21 @@ Absolute restrictions:
 
 2. Reconcile all 50 rows against application printing identities, including base, parallel, SP, Treasure Rare, Premium Card Collection, PRB reprints, alternate art and language-specific image IDs. Keep original card-number set separate from release-product assignment. Preserve genuine separate printings and suppress only proven duplicate placeholders.
 
-3. Resolve the 119 English and 119 Japanese OP-18 base-card feed gaps, plus the 61 English and 61 Japanese EB-05 feed gaps, on the audit branch only. Do not alter Production data.
+3. Preserve the OP-15 cross-prefix finding: OP13-037 is the one English-only OP15-EB04 TR printing with no Japanese EB-04 counterpart. OP11-106 and PRB02-014 are present on the Japanese EB-04 page as SPカード printings. Do not invent a Japanese OP13-037_p1 printing.
 
-4. Reconcile the three flagged Stage 3 English OP-18 supplemental image identity differences against the complete application catalogue. Preserve the corrected language-specific OP-18 names, card numbers and image IDs. Preserve the exact Japanese EB-05 SP rarity label SPカード.
+4. Resolve the 119 English and 119 Japanese OP-18 base-card feed gaps, plus the 61 English and 61 Japanese EB-05 feed gaps, on the audit branch only. Do not alter Production data.
 
-5. Preserve the final Stage 4B-1N HTTP audit results. Re-run the image audit only if official URLs or source entries change. If re-run is needed, use the audit workflow's [run-image-audit] commit-message opt-in and record the new artifact.
+5. Reconcile the three flagged Stage 3 English OP-18 supplemental image identity differences against the complete application catalogue. Preserve the corrected language-specific OP-18 names, card numbers and image IDs. Preserve the exact Japanese EB-05 SP rarity label SPカード.
 
-6. Add regression tests for confirmed application mismatches, pagination overlap, all combined Image Library filters, clearing all filters, release set versus original card-number set, OP-15 duplicate placeholders, PRB/Premium Card Collection reprints and English/Japanese separation.
+6. Preserve the final Stage 4B-1N HTTP audit results. Re-run the image audit only if official URLs or source entries change. If re-run is needed, use the audit workflow's [run-image-audit] commit-message opt-in and record the new artifact.
 
-7. Run npm test, npm run lint and npm run build on the audit branch. Check GitHub Actions for the exact final commit.
+7. Add regression tests for confirmed application mismatches, pagination overlap, all combined Image Library filters, clearing all filters, release set versus original card-number set, OP-15 duplicate placeholders, PRB/Premium Card Collection reprints and English/Japanese separation.
 
-8. If Preview is necessary, use only the existing Stage 3 Preview branch and Testing Supabase project ehzqsnfkmwphyllhaqhe. Never deploy Production.
+8. Run npm test, npm run lint and npm run build on the audit branch. Check GitHub Actions for the exact final commit.
 
-9. Update the matrix and Stage 4B-1O handover with exact branch/commit, all 50 application comparisons, remaining feed gaps, duplicate corrections, tests, CI, Preview status and blockers.
+9. If Preview is necessary, use only the existing Stage 3 Preview branch and Testing Supabase project ehzqsnfkmwphyllhaqhe. Never deploy Production.
+
+10. Update the matrix and Stage 4B-1O handover with exact branch/commit, all 50 application comparisons, remaining feed gaps, duplicate corrections, tests, CI, Preview status and blockers.
 
 Continue working on the repository. Do not stop at a plan. Never merge or deploy Production.
 ```
