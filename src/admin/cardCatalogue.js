@@ -724,6 +724,7 @@ export async function getCatalogueImageGallery({
         const colorValues = observation?.colors || card?.colors || []
         entries.push({
           id: printing.key + ':' + siteLanguage + ':' + (product?.key || 'no-product'),
+          cardKey: printing.card_key || card?.key || '',
           printingKey: printing.key,
           cardNumber: card?.number || (isDon ? 'DON!!' : ''),
           name: observation?.name || '',
