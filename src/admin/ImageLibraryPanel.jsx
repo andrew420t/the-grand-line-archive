@@ -335,7 +335,19 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
             <p className="muted-copy">Checks every OP-18 product printing (119 base cards, 33 parallel printings and 7 special printings) in English and Japanese, plus the existing two-card-per-language smoke test for every other tracked set. It tests image loading and same-card fallback, not OCR.</p>
             <button className="button button--outline" type="button" disabled={matrixRunning} onClick={runReferenceMatrixCheck}>{matrixRunning ? 'Checking images…' : 'Run full image audit'}</button>
             {matrixError && <p className="form-error">{matrixError}</p>}
-            {matrixReport && <p className="muted-copy">{matrixResults.filter((item) => item.status === 'loaded').length} exact loaded · {matrixResults.filter((item) => item.status === 'fallback-loaded').length} fallback loaded · {matrixResults.filter((item) => item.status === 'failed').length} failed · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixReport.missingSlots.length} missing from source ({matrixReport.expectedTotal} expected).</p>}
+            {matrixReport && (() => {
+              const summary = buildImageAuditSummary(matrixResults.map((item) => ({
+                status: item.status === 'loaded' ? IMAGE_CHECK_STATUS.EXACT_LOADED
+                  : item.status === 'fallback-loaded' ? IMAGE_CHECK_STATUS.FALLBACK_LOADED
+                    : item.status === 'failed' ? IMAGE_CHECK_STATUS.TEMPORARY_FAILURE
+                      : item.status === 'timeout' ? IMAGE_CHECK_STATUS.TIMEOUT
+                        : item.status === 'missing-url' ? IMAGE_CHECK_STATUS.MISSING
+                          : item.status,
+              })), matrixReport.expectedTotal)
+              return <p className="muted-copy">
+                {matrixResults.filter((item) => item.status === 'loaded').length} exact loaded · {matrixResults.filter((item) => item.status === 'fallback-loaded').length} fallback loaded · {matrixResults.filter((item) => item.status === 'failed' || item.status === 'temporary-failure').length} temporary failures · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixReport.missingSlots.length} missing from catalogue · {summary.remaining} not checked ({matrixReport.expectedTotal} expected).
+              </p>
+            })()}
             {matrixReport && <details className="catalogue-health-missing">
               <summary>View image-by-image results ({matrixResults.length + matrixReport.missingSlots.length})</summary>
               <div className="catalogue-health-table">
