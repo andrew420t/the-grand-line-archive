@@ -59,6 +59,7 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
   const [referenceImageIndexes, setReferenceImageIndexes] = useState({})
   const [matrixRunning, setMatrixRunning] = useState(false)
   const [selectedAuditIds, setSelectedAuditIds] = useState({ en: [], jp: [] })
+  const [auditFilters, setAuditFilters] = useState({ en: {}, jp: {} })
   const [auditSessions, setAuditSessions] = useState(() => readPersistentDraft(user?.id, 'image-audit-sessions', {
     en: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
     jp: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
@@ -389,12 +390,37 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
                 const session = auditSessions[language] || {}
                 const label = language === 'en' ? 'English' : 'Japanese'
                 const counts = buildImageAuditSummary(session.results || [], session.total || 0).counts
+                const filter = auditFilters[language] || {}
+                const valuesFor = (field) => [...new Set((session.results || []).map((item) => item[field]).filter(Boolean))].sort()
+                const visibleRecords = (session.results || []).filter((item) =>
+                  (!filter.set || item.setCode === filter.set) &&
+                  (!filter.rarity || item.rarity === filter.rarity) &&
+                  (!filter.cardType || item.category === filter.cardType) &&
+                  (!filter.variant || item.variant === filter.variant) &&
+                  (!filter.status || item.status === filter.status) &&
+                  (!filter.candidateType || (item.candidateResults || []).some((candidate) => candidate.candidateKind === filter.candidateType))
+                )
                 return <div className="catalogue-health-unassigned" key={language}>
                   <strong>{label} audit · {session.status || 'idle'}</strong>
                   <p className="muted-copy">{session.completed || 0}/{session.total || 0} completed · {Math.max(0, (session.total || 0) - (session.completed || 0))} remaining · {session.retryCount || 0} retries · last run {session.lastRunAt ? new Date(session.lastRunAt).toLocaleString() : 'never'}</p>
                   <p className="muted-copy">Exact {counts[IMAGE_CHECK_STATUS.EXACT_LOADED] || 0} · Alternative {counts[IMAGE_CHECK_STATUS.ALTERNATIVE_LOADED] || 0} · Base fallback {counts[IMAGE_CHECK_STATUS.BASE_FALLBACK_LOADED] || 0} · Missing {counts[IMAGE_CHECK_STATUS.MISSING] || 0} · Temporary {counts[IMAGE_CHECK_STATUS.TEMPORARY_FAILURE] || 0} · Timeouts {counts[IMAGE_CHECK_STATUS.TIMEOUT] || 0} · Invalid {counts[IMAGE_CHECK_STATUS.INVALID_URL] || 0} · No reference {counts[IMAGE_CHECK_STATUS.NO_REFERENCE] || 0}</p>
+                  <div className="catalogue-reference-actions">
+                    {[
+                      ['set', 'Set', valuesFor('setCode')],
+                      ['rarity', 'Rarity', valuesFor('rarity')],
+                      ['cardType', 'Card type', valuesFor('category')],
+                      ['variant', 'Variant', valuesFor('variant')],
+                      ['status', 'Image status', Object.values(IMAGE_CHECK_STATUS)],
+                      ['candidateType', 'Candidate type', ['exact', 'alternative', 'base-fallback']],
+                    ].map(([key, label, options]) => <label key={key}>{label}
+                      <select value={filter[key] || ''} onChange={(event) => setAuditFilters((current) => ({ ...current, [language]: { ...(current[language] || {}), [key]: event.target.value } }))}>
+                        <option value="">All</option>
+                        {options.map((option) => <option key={option} value={option}>{option}</option>)}
+                      </select>
+                    </label>)}
+                  </div>
                   <div className="catalogue-health-table">
-                    {(session.results || []).filter((item) => ([IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT].includes(item.status) || (item.status === IMAGE_CHECK_STATUS.INVALID_URL && item.referenceCorrected))).slice(0, 100).map((item) => <label className="catalogue-health-row" key={item.id}>
+                    {visibleRecords.filter((item) => ([IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT].includes(item.status) || (item.status === IMAGE_CHECK_STATUS.INVALID_URL && item.referenceCorrected))).slice(0, 100).map((item) => <label className="catalogue-health-row" key={item.id}>
                       <input type="checkbox" checked={(selectedAuditIds[language] || []).includes(item.id)} onChange={(event) => setSelectedAuditIds((current) => ({ ...current, [language]: event.target.checked ? [...(current[language] || []), item.id] : (current[language] || []).filter((id) => id !== item.id) }))} />
                       <strong>{item.setCode || 'Unassigned'} · {item.cardNumber || 'No card number'}</strong>
                       <span>{item.status}{item.httpStatus ? ' · HTTP ' + item.httpStatus : ''}{item.upstreamStatus ? ' · upstream ' + item.upstreamStatus : ''}</span>
