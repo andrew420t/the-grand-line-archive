@@ -1294,50 +1294,6 @@ function AuthModal({ onClose, message, onMessage, onForgotPassword, onForgotEmai
   )
 }
 
-function OrdersPage({ user, orders, orderItems, products, loading, error, onSignIn, onSignOut, onReload }) {
-  if (!user) {
-    return <main className="page-width protected-page"><p className="eyebrow">YOUR ACCOUNT</p><h1>Your orders,<br /><em>all in one place.</em></h1><p>Sign in to review the latest dispatches from the archive.</p><button className="button button--gold" type="button" onClick={onSignIn}>Sign in to continue <ArrowRight size={16} /></button></main>
-  }
-  return (
-    <main className="page-width account-page">
-      <div className="account-heading"><div><p className="eyebrow">YOUR ACCOUNT</p><h1>Order <em>log.</em></h1><p>{user.email}</p></div><button className="button button--outline" type="button" onClick={onSignOut}>Sign out</button></div>
-      {error && <ErrorNotice message={error} />}
-      {loading ? <div className="loading-state"><span className="loader" />Loading your orders…</div> : orders.length ? (
-        <div className="order-list">
-          {orders.map((order) => <OrderCard key={order.id} order={order} orderItems={orderItems} products={products} />)}
-        </div>
-      ) : <div className="empty-orders"><ClipboardList size={28} /><h2>No orders just yet.</h2><p>Your next favorite card is out there.</p><Link className="button button--gold" to="/shop">Explore the archive <ArrowRight size={16} /></Link></div>}
-      <button className="subtle-refresh" type="button" onClick={onReload}>Refresh order history</button>
-    </main>
-  )
-}
-
-function OrderCard({ order, orderItems, products }) {
-  const items = orderItems.filter((item) => String(item.order_id) === String(order.id))
-  return (
-    <article className="order-card">
-      <div className="order-card__heading"><div><span className="eyebrow">ORDER #{String(order.id).slice(-8).toUpperCase()}</span><span>{order.created_at ? new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Date not recorded'}</span></div><span className={`status-pill status-pill--${String(order.status || 'pending').toLowerCase()}`}>{order.status || 'Pending'}</span></div>
-      <OrderItems items={items} products={products} />
-      <div className="order-card__total"><span>Order total</span><strong>{money(firstValue(order.total_amount, order.total, order.amount, 0))}</strong></div>
-    </article>
-  )
-}
-
-function OrderItems({ items, products }) {
-  return (
-    <div className="order-lines">
-      {items.length ? items.map((item) => {
-        const product = products.find((entry) => String(entry.id) === String(item.product_id))
-        return <div className="order-line" key={item.id || `${item.order_id}-${item.product_id}`}><span>{product?.name || `Card ${item.product_id}`} <small>× {item.quantity}</small></span><strong>{money(Number(firstValue(item.unit_price, item.price, 0)) * Number(item.quantity || 0))}</strong></div>
-      }) : <p className="order-lines__empty">No line items are available for this order.</p>}
-    </div>
-  )
-}
-
-function ErrorNotice({ message }) {
-  return <div className="error-notice" role="alert"><ShieldCheck size={16} /><span>{message}</span></div>
-}
-
 function App() {
   return (
     <BrowserRouter>
