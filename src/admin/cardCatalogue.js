@@ -8,6 +8,7 @@ import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
 import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMatches } from './op18OfficialCatalogue.js'
 import { EB05_OFFICIAL_PRINTINGS, EB05_BASE_CARD_NUMBERS, getEb05SupplementalMatches } from './eb05OfficialCatalogue.js'
+import { getOfficialSupplementReferenceTestItems } from './officialSupplementReferenceMatrix.js'
 import { applyCatalogueImageCorrections } from './catalogueImageCorrections.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
@@ -1116,59 +1117,11 @@ export async function getCatalogueReferenceTestMatrix() {
     }
   }
 
-  // Include every known official OP-18 printing ID, including parallels.
-  for (const language of REFERENCE_TEST_LANGUAGES) {
-    for (const printing of OP18_OFFICIAL_PRINTINGS) {
-      const exactId = printing.imageId
-      const exactUrl = buildOfficialImageProxyUrl(exactId, language)
-        || (language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(exactId) + '.png'
-      const baseUrl = printing.imageId !== printing.cardNumber
-        ? buildOfficialImageProxyUrl(printing.cardNumber, language)
-        : ''
-      add({
-        id: 'op18-complete:' + language + ':' + printing.imageId,
-        printingKey: 'op18:' + printing.imageId,
-        imageId: printing.imageId,
-        cardNumber: printing.cardNumber,
-        name: language === 'jp' ? printing.japaneseName : printing.name,
-        language,
-        targetSet: 'OP-18',
-        setCode: 'OP-18',
-        setName: 'The Dominance of God [OP-18]',
-        rarity: printing.rarity,
-        variant: printing.variantLabel,
-        imageUrl: exactUrl,
-        fallbackImageUrl: baseUrl,
-        source: 'Bandai official OP-18 ' + printing.variantLabel + ' artwork',
-      })
-    }
-  }
+  // Use language-specific image IDs, card numbers, names, rarity and variant
+  // labels for OP-18/EB-05. In particular, OP-18's English and Japanese TR
+  // printings are different card numbers and must never be shared across sites.
+  for (const item of getOfficialSupplementReferenceTestItems()) add(item)
 
-  // Include all official EB-05 product printing IDs for both languages.
-  for (const language of REFERENCE_TEST_LANGUAGES) {
-    for (const printing of EB05_OFFICIAL_PRINTINGS) {
-      const imageId = language === 'jp' ? printing.imageIdJp : printing.imageIdEn
-      const exactUrl = buildOfficialImageProxyUrl(imageId, language)
-        || (language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(imageId) + '.png'
-      const baseUrl = imageId !== printing.cardNumber ? buildOfficialImageProxyUrl(printing.cardNumber, language) : ''
-      add({
-        id: 'eb05-complete:' + language + ':' + imageId,
-        printingKey: 'eb05:' + imageId,
-        imageId,
-        cardNumber: printing.cardNumber,
-        name: language === 'jp' ? printing.japaneseName : printing.name,
-        language,
-        targetSet: 'EB-05',
-        setCode: 'EB-05',
-        setName: 'ONE PIECE Heroines Edition vol.2 [EB-05]',
-        rarity: printing.rarity,
-        variant: printing.variantLabel,
-        imageUrl: exactUrl,
-        fallbackImageUrl: baseUrl,
-        source: 'Bandai official EB-05 ' + printing.variantLabel + ' artwork',
-      })
-    }
-  }
 
   const items = [...rows.values()].filter((item) => item.imageUrl)
     .sort((a, b) => a.targetSet.localeCompare(b.targetSet) || a.language.localeCompare(b.language)
