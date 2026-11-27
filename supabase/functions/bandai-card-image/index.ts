@@ -45,7 +45,7 @@ Deno.serve(async (request: Request) => {
   const language = (requestUrl.searchParams.get('language') || '').toLowerCase()
   const imageId = (requestUrl.searchParams.get('id') || '').replace(/\.png$/i, '')
 
-  if (!(language in BANDAl_HOSTS)) return errorResponse('Unsupported image language', 400)
+  if (!Object.hasOwn(BANDAl_HOSTS, language)) return errorResponse('Unsupported image language', 400)
   if (!IMAGE_ID_PATTERN.test(imageId)) return errorResponse('Unsupported card image ID', 400)
 
   const host = BANDAl_HOSTS[language as keyof typeof BANDAl_HOSTS]
