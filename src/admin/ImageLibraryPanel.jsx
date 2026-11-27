@@ -325,6 +325,23 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
               <button className="button button--outline" type="button" disabled={matrixRunning} onClick={() => runReferenceMatrixCheck('en')}>{matrixRunning ? 'Auditing…' : 'Run English audit'}</button>
               <button className="button button--outline" type="button" disabled={matrixRunning} onClick={() => runReferenceMatrixCheck('jp')}>{matrixRunning ? 'Auditing…' : 'Run Japanese audit'}</button>
             </div>
+            <div className="catalogue-reference-actions">
+              {['en', 'jp'].map((language) => {
+                const session = auditSessions[language] || {}
+                const label = language === 'en' ? 'English' : 'Japanese'
+                const counts = buildImageAuditSummary(session.results || [], session.total || 0).counts
+                return <div className="catalogue-health-unassigned" key={language}>
+                  <strong>{label} audit · {session.status || 'idle'}</strong>
+                  <p className="muted-copy">{session.completed || 0}/{session.total || 0} completed · {Math.max(0, (session.total || 0) - (session.completed || 0))} remaining · {session.retryCount || 0} retries · last run {session.lastRunAt ? new Date(session.lastRunAt).toLocaleString() : 'never'}</p>
+                  <p className="muted-copy">Exact {counts[IMAGE_CHECK_STATUS.EXACT_LOADED] || 0} · Alternative {counts[IMAGE_CHECK_STATUS.ALTERNATIVE_LOADED] || 0} · Base fallback {counts[IMAGE_CHECK_STATUS.BASE_FALLBACK_LOADED] || 0} · Missing {counts[IMAGE_CHECK_STATUS.MISSING] || 0} · Temporary {counts[IMAGE_CHECK_STATUS.TEMPORARY_FAILURE] || 0} · Timeouts {counts[IMAGE_CHECK_STATUS.TIMEOUT] || 0} · Invalid {counts[IMAGE_CHECK_STATUS.INVALID_URL] || 0} · No reference {counts[IMAGE_CHECK_STATUS.NO_REFERENCE] || 0}</p>
+                  <div className="catalogue-reference-actions">
+                    <button className="button button--outline" type="button" disabled={matrixRunning} onClick={() => runReferenceMatrixCheck(language)}>{session.results?.length ? 'Restart ' + label : 'Start ' + label}</button>
+                    {session.status === 'running' && <button className="button button--outline" type="button" onClick={() => pauseReferenceAudit(language)}>Pause</button>}
+                    {(session.status === 'paused' || session.status === 'error') && <button className="button button--outline" type="button" onClick={() => resumeReferenceAudit(language)}>Resume</button>}
+                  </div>
+                </div>
+              })}
+            </div>
             {matrixError && <p className="form-error">{matrixError}</p>}
             {matrixReport && (() => {
               const summary = buildImageAuditSummary([
