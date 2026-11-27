@@ -17,7 +17,7 @@ GRANT SELECT, INSERT, DELETE ON public.order_archives TO authenticated;
 DROP POLICY IF EXISTS gla_order_archives_read ON public.order_archives;
 CREATE POLICY gla_order_archives_read ON public.order_archives
   FOR SELECT TO authenticated
-  USING (archived_by = auth.uid() OR coalesce(public.is_admin(), false));
+  USING (archived_by = auth.uid() OR archive_scope = 'admin' OR coalesce(public.is_admin(), false));
 DROP POLICY IF EXISTS gla_order_archives_insert ON public.order_archives;
 CREATE POLICY gla_order_archives_insert ON public.order_archives
   FOR INSERT TO authenticated
