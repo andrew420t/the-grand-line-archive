@@ -42,6 +42,8 @@ export default function ImageLibraryPanel({ user }) {
   const [referenceFilterOptions, setReferenceFilterOptions] = useState({ languages: [], sets: [], rarities: [], cardTypes: [], colors: [], variants: [] })
   const [savedLibraryDraft] = useState(() => readPersistentDraft(user?.id, 'image-library', {}))
   const [referenceQuery, setReferenceQuery] = useState(() => savedLibraryDraft.referenceQuery || '')
+  const [referenceCardNumber, setReferenceCardNumber] = useState(() => savedLibraryDraft.referenceCardNumber || '')
+  const [referenceSort, setReferenceSort] = useState(() => savedLibraryDraft.referenceSort || 'card-number-asc')
   const [referenceLanguage, setReferenceLanguage] = useState(() => savedLibraryDraft.referenceLanguage || 'all')
   const [referenceSet, setReferenceSet] = useState(() => savedLibraryDraft.referenceSet || 'all')
   const [referenceRarity, setReferenceRarity] = useState(() => savedLibraryDraft.referenceRarity || 'all')
@@ -117,10 +119,10 @@ export default function ImageLibraryPanel({ user }) {
   useEffect(() => {
     if (!user?.id) return
     savePersistentDraft(user.id, 'image-library', {
-      referenceQuery, referenceLanguage, referenceSet, referenceRarity, referenceCardType,
+      referenceQuery, referenceCardNumber, referenceSort, referenceLanguage, referenceSet, referenceRarity, referenceCardType,
       referenceColor, referenceVariant, referenceImageStatus, donSetSelections, matrixReport, matrixResults,
     })
-  }, [user?.id, referenceQuery, referenceLanguage, referenceSet, referenceRarity, referenceCardType, referenceColor, referenceVariant, referenceImageStatus, donSetSelections, matrixReport, matrixResults])
+  }, [user?.id, referenceQuery, referenceCardNumber, referenceSort, referenceLanguage, referenceSet, referenceRarity, referenceCardType, referenceColor, referenceVariant, referenceImageStatus, donSetSelections, matrixReport, matrixResults])
 
   useEffect(() => {
     loadImages()
@@ -144,8 +146,8 @@ export default function ImageLibraryPanel({ user }) {
     setReferenceLoading(true); setReferenceError('')
     try {
       const page = await getCatalogueImageGallery({
-        offset, limit: 24, query: referenceQuery, language: referenceLanguage,
-        set: referenceSet, rarity: referenceRarity, cardType: referenceCardType,
+        offset, limit: 24, query: referenceQuery, cardNumber: referenceCardNumber, sortBy: referenceSort,
+        language: referenceLanguage, set: referenceSet, rarity: referenceRarity, cardType: referenceCardType,
         color: referenceColor, variant: referenceVariant, imageStatus: referenceImageStatus,
       })
       if (requestId !== referenceRequestId.current) return
@@ -163,7 +165,7 @@ export default function ImageLibraryPanel({ user }) {
     } finally {
       if (requestId === referenceRequestId.current) setReferenceLoading(false)
     }
-  }, [referenceQuery, referenceLanguage, referenceSet, referenceRarity, referenceCardType, referenceColor, referenceVariant, referenceImageStatus])
+  }, [referenceQuery, referenceCardNumber, referenceSort, referenceLanguage, referenceSet, referenceRarity, referenceCardType, referenceColor, referenceVariant, referenceImageStatus])
   useEffect(() => {
     loadReferenceImages(0)
     return () => { referenceRequestId.current += 1 }
@@ -411,8 +413,12 @@ export default function ImageLibraryPanel({ user }) {
           {failedReferenceIds.length > 0 && <button className="button button--outline" type="button" onClick={() => { setFailedReferenceIds([]); setLoadedReferenceIds([]); setReferenceImageIndexes({}) }}>Retry failed reference images</button>}
           <div className="catalogue-reference-filters catalogue-reference-filters--extended">
             <label className="form-field">
-              <span>Search name or card number</span>
-              <input type="search" value={referenceQuery} onChange={(event) => setReferenceQuery(event.target.value)} placeholder="OP12-002 or Edward.Newgate" />
+              <span>Search card name</span>
+              <input type="search" value={referenceQuery} onChange={(event) => setReferenceQuery(event.target.value)} placeholder="Edward.Newgate or Karoo" />
+            </label>
+            <label className="form-field">
+              <span>Card number</span>
+              <input type="search" value={referenceCardNumber} onChange={(event) => setReferenceCardNumber(event.target.value)} placeholder="OP18-001" />
             </label>
             <label className="form-field">
               <span>Set</span>
@@ -457,6 +463,13 @@ export default function ImageLibraryPanel({ user }) {
               </select>
             </label>
             <label className="form-field">
+              <span>Sort by card number</span>
+              <select value={referenceSort} onChange={(event) => setReferenceSort(event.target.value)}>
+                <option value="card-number-asc">Ascending (A–Z / 001–119)</option>
+                <option value="card-number-desc">Descending (Z–A / 119–001)</option>
+              </select>
+            </label>
+            <label className="form-field">
               <span>Image status</span>
               <select value={referenceImageStatus} onChange={(event) => setReferenceImageStatus(event.target.value)}>
                 <option value="all">All image states</option>
@@ -469,6 +482,8 @@ export default function ImageLibraryPanel({ user }) {
           <div className="catalogue-reference-actions">
             <button className="button button--quiet" type="button" onClick={() => {
               setReferenceQuery('')
+              setReferenceCardNumber('')
+              setReferenceSort('card-number-asc')
               setReferenceLanguage('all')
               setReferenceSet('all')
               setReferenceRarity('all')
@@ -511,7 +526,8 @@ export default function ImageLibraryPanel({ user }) {
                   /> : <div className="empty-catalogue"><ImagePlus size={20} /><span>{isFailed ? 'All image sources failed' : 'No image reference yet'}</span></div>}
                 </div>
                 <div className="photo-card__body">
-                  <span className="photo-card__name" title={item.name || item.sourceText}>{item.name || item.sourceText || item.cardNumber || 'Unknown card'}{item.cardNumber && item.cardNumber !== 'DON!!' ? ' · ' + item.cardNumber : ''}</span>
+                  {item.cardNumber && item.cardNumber !== 'DON!!' && <span className="catalogue-card-number">CARD NO. {item.cardNumber}</span>}
+                  <span className="photo-card__name" title={item.name || item.sourceText}>{item.name || item.sourceText || item.cardNumber || 'Unknown card'}</span>
                   <span className="muted-copy">{item.language} · {item.setCode || 'Unassigned'} · {item.rarity || 'Rarity not listed'} · {item.variant || 'Base'}</span>
                   <span className="muted-copy">{item.imageStatus === 'missing' ? 'Missing source image' : item.imageStatus === 'fallback' ? 'Fallback image · confirm exact finish' : item.source || 'Catalogue reference'}</span>
                   {item.officialListUrl && <a className="muted-copy" href={item.officialListUrl} target="_blank" rel="noopener noreferrer">Official card list ↗</a>}
