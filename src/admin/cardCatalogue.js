@@ -3,7 +3,7 @@ import { resolveCatalogueImage, buildCatalogueImageProxyUrl } from './catalogueI
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 import { createOfficialImageOnlyMatch } from './officialImageOnlyFallback.js'
-import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode } from './catalogueImageFilters.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts } from './catalogueImageFilters.js'
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
 import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMatches, getOp18ImageTestItems } from './op18OfficialCatalogue.js'
@@ -667,9 +667,12 @@ export async function getCatalogueImageGallery({
         cardNumber: card?.number || '',
       })
       const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
-      const products = links
+      // Duplicate link rows for the same printing/product must not create
+      // duplicate gallery cards. Distinct product keys remain separate because
+      // they represent genuinely different release products.
+      const products = dedupePrintingProducts(links
         .map((link) => safeMapGet(index.productsByKey, link.product_key))
-        .filter(Boolean)
+        .filter(Boolean))
       const productChoices = products.length ? products : [null]
       const setOverride = isDon ? donOverrides[printing.key + ':' + siteLanguage] : null
       const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null

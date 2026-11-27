@@ -145,6 +145,17 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
   const loadReferenceImages = useCallback(async (offset = 0) => {
     const requestId = ++referenceRequestId.current
     setReferenceLoading(true); setReferenceError('')
+    // Clear the previous result set immediately when filters change. Otherwise
+    // old cards remain visible under the new filter controls while the request
+    // is pending, which looks like a filter mismatch.
+    if (offset === 0) {
+      setReferenceImages([])
+      setReferenceTotal(0)
+      setReferenceNextOffset(0)
+      setFailedReferenceIds([])
+      setLoadedReferenceIds([])
+      setReferenceImageIndexes({})
+    }
     try {
       const page = await getCatalogueImageGallery({
         offset, limit: 24, query: referenceQuery, cardNumber: referenceCardNumber, sortBy: referenceSort,
@@ -152,12 +163,12 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
         color: referenceColor, variant: referenceVariant, imageStatus: referenceImageStatus,
       })
       if (requestId !== referenceRequestId.current) return
-      setReferenceImages((current) => offset === 0 ? page.items : [...current, ...page.items])
-      if (offset === 0) {
-        setFailedReferenceIds([])
-        setLoadedReferenceIds([])
-        setReferenceImageIndexes({})
-      }
+      setReferenceImages((current) => {
+        const combined = offset === 0 ? page.items : [...current, ...page.items]
+        // Pagination can overlap if the underlying catalogue changes between
+        // requests. Keep the first occurrence of each stable gallery entry ID.
+        return [...new Map(combined.map((item) => [item.id, item])).values()]
+      })
       setReferenceFilterOptions(page.filters || { languages: [], sets: [], cardNumberSets: [], rarities: [], cardTypes: [], colors: [], variants: [] })
       setReferenceTotal(page.total)
       setReferenceNextOffset(page.nextOffset)
@@ -489,6 +500,8 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
           </div>
           <div className="catalogue-reference-actions">
             <button className="button button--quiet" type="button" onClick={() => {
+              // Invalidate any in-flight page before resetting every filter.
+              referenceRequestId.current += 1
               setReferenceQuery('')
               setReferenceCardNumber('')
               setReferenceSort('card-number-asc')
@@ -500,6 +513,13 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
               setReferenceColor('all')
               setReferenceVariant('all')
               setReferenceImageStatus('all')
+              setReferenceImages([])
+              setReferenceTotal(0)
+              setReferenceNextOffset(0)
+              setFailedReferenceIds([])
+              setLoadedReferenceIds([])
+              setReferenceImageIndexes({})
+              setReferenceError('')
             }}>Clear all filters</button>
             <a className="muted-copy" href="https://en.onepiece-cardgame.com/cardlist/" target="_blank" rel="noopener noreferrer">Open Bandai’s full official card list ↗</a>
           </div>

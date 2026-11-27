@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode } from '../src/admin/catalogueImageFilters.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts } from '../src/admin/catalogueImageFilters.js'
 
 const entries = [
   { id: 'a', cardNumber: 'OP12-002', name: 'Edward.Newgate', languageCode: 'en', setCode: 'OP-12', setCodes: ['OP-12'], rarity: 'UC', category: 'Character', colorValues: ['Red'], variant: 'base', imageStatus: 'available' },
@@ -61,4 +61,56 @@ test('keeps product release set separate from the original set in the card numbe
     'st24-sp-in-op18',
   ])
   assert.deepEqual(getCatalogueImageFilterOptions(printings).cardNumberSets, ['OP-13', 'OP-18', 'ST-24'])
+})
+
+
+test('card-number filter is exact after normalising spaces and separators', () => {
+  const records = [
+    { id: 'op18', cardNumber: 'OP18-001', languageCode: 'en', setCode: 'OP-18', rarity: 'L' },
+    { id: 'op15', cardNumber: 'OP15-075', languageCode: 'en', setCode: 'OP-15', rarity: 'UC' },
+    { id: 'op18-jp', cardNumber: 'OP-18-001', languageCode: 'jp', setCode: 'OP-18', rarity: 'L' },
+  ]
+  assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: 'OP18-001' }).map((x) => x.id).sort(), ['op18', 'op18-jp'])
+  assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: ' OP 18 001 ' }).map((x) => x.id).sort(), ['op18', 'op18-jp'])
+  assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: 'OP18-001', set: 'OP-15', rarity: 'UC' }), [])
+  assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: 'OP18-001', set: 'OP-18', rarity: 'L' }).map((x) => x.id).sort(), ['op18', 'op18-jp'])
+})
+
+test('all active filters intersect and cannot leak OP15 results into an OP18 card-number search', () => {
+  const records = [
+    { id: 'wrong-op15-uc', cardNumber: 'OP15-075', name: 'Karoo', languageCode: 'en', setCode: 'OP-15', rarity: 'UC', category: 'Character', colorValues: ['Yellow'], variant: 'Parallel', imageStatus: 'available' },
+    { id: 'right-op18', cardNumber: 'OP18-001', name: 'Karoo', languageCode: 'en', setCode: 'OP-18', rarity: 'L', category: 'Leader', colorValues: ['Yellow'], variant: 'Base', imageStatus: 'available' },
+    { id: 'op15-genuine', cardNumber: 'OP13-012', name: 'Nefeltari Vivi', languageCode: 'en', setCode: 'OP-15', setCodes: ['OP-15'], rarity: 'UC', category: 'Character', colorValues: ['Blue'], variant: 'Parallel', imageStatus: 'available' },
+  ]
+  assert.deepEqual(filterCatalogueImageEntries(records, {
+    cardNumber: 'OP18-001', set: 'OP-15', rarity: 'UC', language: 'en',
+  }), [])
+  assert.deepEqual(filterCatalogueImageEntries(records, {
+    set: 'OP-15', cardNumberSet: 'OP-13', rarity: 'UC', cardType: 'Character',
+    language: 'en', variant: 'Parallel',
+  }).map((x) => x.id), ['op15-genuine'])
+  assert.deepEqual(filterCatalogueImageEntries(records, {
+    set: 'OP-15', rarity: 'UC', language: 'en',
+  }).map((x) => x.id), ['op15-genuine', 'wrong-op15-uc'])
+})
+
+test('keeps English and Japanese records and distinct variants/release products separate', () => {
+  const records = [
+    { id: 'en-base-op15', cardNumber: 'OP13-012', languageCode: 'en', setCode: 'OP-15', rarity: 'UC', variant: 'Base' },
+    { id: 'jp-base-op15', cardNumber: 'OP13-012', languageCode: 'jp', setCode: 'OP-15', rarity: 'UC', variant: 'Base' },
+    { id: 'en-parallel-op15', cardNumber: 'OP13-012', languageCode: 'en', setCode: 'OP-15', rarity: 'UC', variant: 'Parallel' },
+    { id: 'en-reprint-prb', cardNumber: 'OP13-012', languageCode: 'en', setCode: 'PRB-01', rarity: 'UC', variant: 'Parallel' },
+  ]
+  assert.deepEqual(filterCatalogueImageEntries(records, { set: 'OP-15', language: 'en' }).map((x) => x.id), ['en-base-op15', 'en-parallel-op15'])
+  assert.deepEqual(filterCatalogueImageEntries(records, { set: 'PRB-01', cardNumberSet: 'OP-13' }).map((x) => x.id), ['en-reprint-prb'])
+})
+
+test('deduplicates repeated links to one product but preserves different release products', () => {
+  const products = [
+    { key: 'op15', code: 'OP15', name: 'OP-15' },
+    { key: 'op15', code: 'OP15', name: 'OP-15 duplicate link' },
+    { key: 'prb1', code: 'PRB01', name: 'PRB-01' },
+  ]
+  assert.deepEqual(dedupePrintingProducts(products), [products[0], products[2]])
+  assert.deepEqual(dedupePrintingProducts([]), [])
 })
