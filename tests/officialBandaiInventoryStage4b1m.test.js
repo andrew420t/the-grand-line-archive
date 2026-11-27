@@ -72,6 +72,31 @@ test('EB-04 Japanese retains the four official non-EB04-numbered inclusions', ()
   assert.deepEqual(row.official_reprint_card_numbers, ['EB01-023', 'OP11-106', 'PRB02-006', 'PRB02-014'])
 })
 
+test('OP15-EB04 has one English-only cross-prefix printing after Japanese EB-04 reconciliation', () => {
+  const englishOp15 = pageFor('OP-15', 'English')
+  const japaneseEb04 = pageFor('EB-04', 'Japanese')
+  const japaneseOp13 = pageFor('OP-13', 'Japanese')
+  const zoroTr = englishOp15.entries.find((entry) => entry.card_number === 'OP13-037')
+  assert.equal(zoroTr.rarity, 'TR')
+  assert.equal(zoroTr.product, "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]")
+  assert.match(zoroTr.image_url, /OP13-037_p1\\.png/)
+  assert.equal(japaneseEb04.entries.some((entry) => entry.card_number === 'OP13-037'), false)
+  assert.ok(japaneseOp13.entries.some((entry) => entry.card_number === 'OP13-037'))
+
+  for (const cardNumber of ['OP11-106', 'PRB02-014']) {
+    const englishEntry = englishOp15.entries.find((entry) => entry.card_number === cardNumber)
+    const japaneseEntry = japaneseEb04.entries.find((entry) => entry.card_number === cardNumber)
+    assert.ok(englishEntry)
+    assert.equal(japaneseEntry.rarity, 'SPカード')
+    assert.match(englishEntry.image_url, new RegExp(cardNumber + '_p2\\\\.png'))
+    assert.match(japaneseEntry.image_url, new RegExp(cardNumber + '_p2\\\\.png'))
+  }
+
+  const reconciliation = rowFor('OP-15', 'English').language_specific_product_reconciliation
+  assert.deepEqual(reconciliation.english_only_non_eb04_card_numbers, ['OP13-037'])
+  assert.deepEqual(reconciliation.japanese_eb04_page_non_eb04_card_numbers_present, ['OP11-106', 'PRB02-014'])
+})
+
 test('PRB inventories preserve every official reprint product entry and distinct card number', () => {
   const prb1 = pageFor('PRB-01', 'English')
   const prb2 = pageFor('PRB-02', 'English')
