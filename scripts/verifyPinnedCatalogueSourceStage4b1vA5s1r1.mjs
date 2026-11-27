@@ -55,6 +55,15 @@ export function verifySource({
     return { ok: false, errors: [...errors, 'Manifest schema is unsupported'], integrity: null, coverage: null };
   }
 
+  const fileSection = manifestBytes.toString('utf8').match(/"files"\\s*:\\s*\\{([\\s\\S]*?)\\n\\s*\\}\\s*\\}/);
+  if (fileSection) {
+    const keyCounts = new Map();
+    for (const match of fileSection[1].matchAll(/"((?:[^"\\\\]|\\\\.)+)"\\s*:\\s*\\{/g)) {
+      const key = JSON.parse('"'+match[1]+'"');
+      keyCounts.set(key, (keyCounts.get(key) || 0) + 1);
+    }
+    for (const [key, count] of keyCounts) if (count > 1) errors.push(`Duplicate manifest path: ${key}`);
+  }
   const entries = Object.entries(manifest.files);
   const paths = entries.map(([p]) => p);
   if (new Set(paths).size !== paths.length) errors.push('Duplicate manifest paths detected');
