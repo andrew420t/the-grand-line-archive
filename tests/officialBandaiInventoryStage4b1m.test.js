@@ -174,3 +174,15 @@ test('EB-05 audit branch preserves eight Japanese SP rarity labels', () => {
     assert.equal(fix.japanese_sp_rarity_labels_corrected, 8)
   }
 })
+
+test('PRB base-prefix numbers are fully represented in the 50-row matrix', () => {
+  for (const language of ['English', 'Japanese']) {
+    assert.equal(rowFor('PRB-01', language).actual_distinct_base_card_count, 1)
+    assert.deepEqual(rowFor('PRB-01', language).official_base_card_numbers, ['PRB01-001'])
+    assert.equal(rowFor('PRB-02', language).actual_distinct_base_card_count, 18)
+    assert.deepEqual(
+      rowFor('PRB-02', language).official_base_card_numbers,
+      Array.from({ length: 18 }, (_, index) => 'PRB02-' + String(index + 1).padStart(3, '0')),
+    )
+  }
+})
