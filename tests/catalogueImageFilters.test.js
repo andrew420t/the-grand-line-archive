@@ -18,6 +18,10 @@ test('filters catalogue rows by set, language, rarity, type, colour, variant and
   assert.deepEqual(filterCatalogueImageEntries(entries, { imageStatus: 'fallback' }).map(x => x.id), ['c'])
   assert.deepEqual(filterCatalogueImageEntries(entries, { imageStatus: 'available' }).map(x => x.id), ['a', 'c', 'd'])
   assert.deepEqual(filterCatalogueImageEntries(entries, { query: 'Whitebeard' }).map(x => x.id), ['d'])
+  assert.deepEqual(filterCatalogueImageEntries(entries, { cardNumber: 'OP12-010' }).map(x => x.id), ['d'])
+  assert.deepEqual(filterCatalogueImageEntries(entries, { cardNumber: 'OP12-002' }).map(x => x.id), ['a', 'b', 'c'])
+  assert.deepEqual(filterCatalogueImageEntries(entries, { sortBy: 'card-number-desc' }).map(x => x.id), ['d', 'a', 'b', 'c'])
+  assert.deepEqual(filterCatalogueImageEntries(entries, { sortBy: 'card-number-asc' }).map(x => x.id), ['a', 'b', 'c', 'd'])
 })
 
 test('exposes only filter values supported by actual catalogue entries', () => {
