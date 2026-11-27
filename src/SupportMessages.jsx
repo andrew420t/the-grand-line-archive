@@ -27,6 +27,7 @@ export default function SupportMessages({
   const [error, setError] = useState('')
   const [notice, setNotice] = useState('')
   const [unreadCount, setUnreadCount] = useState(0)
+  const [unreadConversationIds, setUnreadConversationIds] = useState([])
   const [recoveryBusy, setRecoveryBusy] = useState('')
 
   const loadConversations = useCallback(async () => {
@@ -49,7 +50,9 @@ export default function SupportMessages({
       .neq('sender_id', user.id)
       .is('read_at', null)
     if (result.error) throw new Error(result.error.message)
-    const count = result.data?.length || 0
+    const unreadRows = result.data || []
+    const count = unreadRows.length
+    setUnreadConversationIds([...new Set(unreadRows.map((row) => String(row.conversation_id)))])
     setUnreadCount(count)
     onUnreadCountChange?.(count)
   }, [user?.id, onUnreadCountChange])
@@ -233,7 +236,7 @@ export default function SupportMessages({
             )}
             {loading || opening ? <p className="support-messages__empty">Loading messages…</p> : conversations.length ? conversations.map((conversation) => {
               const active = String(conversation.id) === selectedId
-              const unread = messages.some((message) => message.conversation_id === conversation.id && message.sender_id !== user?.id && !message.read_at)
+              const unread = unreadConversationIds.includes(String(conversation.id))
               const customerLabel = conversation.customer_display_name || `Customer ${String(conversation.customer_id).slice(0, 8)}`
               return (
                 <button key={conversation.id} type="button" className={active ? 'support-thread-preview is-active' : 'support-thread-preview'} onClick={() => openConversation(conversation.id)}>
