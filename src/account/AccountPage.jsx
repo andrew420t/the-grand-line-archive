@@ -25,6 +25,7 @@ export default function AccountPage({
   onReload,
   onProfileUpdated,
   onForgotPassword,
+  onArchiveOrder,
 }) {
   const location = useLocation()
   const navigate = useNavigate()
@@ -100,6 +101,7 @@ export default function AccountPage({
                       })}
                     </div>
                     <div className="order-card__total"><span>Order total</span><strong>{money(order.total_amount ?? order.total ?? order.amount ?? 0)}</strong></div>
+                    {['cancelled','completed','shipped'].includes(String(order.status || '').toLowerCase()) && <button className="subtle-refresh order-archive-button" type="button" onClick={() => onArchiveOrder?.(order.id)}>Remove from order history</button>}
                     <div className="account-order__actions">
                       <button className="button button--gold" type="button" onClick={() => navigate(`/account/messages?orderId=${encodeURIComponent(order.id)}`)}><MessageCircle size={14} /> Message about this order <ArrowRight size={14} /></button>
                     </div>
