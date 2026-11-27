@@ -13,6 +13,8 @@ import {
   ImagePlus,
   Layers,
   LayoutDashboard,
+  Mail,
+  MapPin,
   Package,
   PackagePlus,
   Palette,
