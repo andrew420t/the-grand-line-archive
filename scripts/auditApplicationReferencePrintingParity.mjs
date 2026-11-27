@@ -312,7 +312,7 @@ const passed = summary.languageSetRows === 50
   && summary.duplicateIdentityIds === 0
   && summary.fieldMismatches === 0
   && summary.missingImageSlots === 0
-  && summary.officialImageHttp.status === 'ALL_LOADED'
+  && summary.officialImageHttp.status === 'COMPLETE'
   && summary.officialImageHttp.missing === 0
   && summary.officialImageHttp.invalidUrl === 0
   && summary.officialImageHttp.timeout === 0
