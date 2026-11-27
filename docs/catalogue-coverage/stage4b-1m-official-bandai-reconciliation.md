@@ -106,3 +106,27 @@ The OP-18 and EB-05 supplemental tests cover all base counts, printing counts, p
 - The audit branch's current GitHub Actions lookup returned no workflow runs or check runs. The existing verify workflow did not include this audit branch in its push triggers before this stage's workflow update. A new branch CI run is still required.
 - `npm test`, `npm run lint` and `npm run build` have not been run in a local checkout in this environment. They are NOT RUN, not passed.
 - No Production deployment, Production Supabase operation, merge, branch deletion or credential access occurred.
+
+
+## Source extraction and image-link shortfalls
+
+The image-link counts below are the URLs returned by the page extractor, not a verified count of broken Bandai artwork. Repeated product result rows can share one image identifier, and the extraction service may omit repeated links. These differences are therefore **SOURCE EXTRACTION SHORTFALLS**, not confirmed missing application images:
+
+| Set | Language | Bandai result rows | Parsed card entries | Extracted image URLs |
+|---|---|---:|---:|---:|
+| OP-11 | English | 156 | 156 | 154 |
+| OP-11 | Japanese | 155 | 155 | 153 |
+| OP-12 | English | 155 | 155 | 153 |
+| OP-12 | Japanese | 154 | 154 | 152 |
+| OP-14 | English | 199 | 198 | 199 |
+| OP-15 | English | 196 | 194 | 194 |
+| OP-15 | Japanese | 152 | 151 | 151 |
+| OP-16 | English | 155 | 155 | 154 |
+| OP-16 | Japanese | 155 | 155 | 154 |
+| OP-17 | English | 169 | 167 | 164 |
+| OP-17 | Japanese | 169 | 167 | 164 |
+| EB-04 | Japanese | 85 | 83 | 83 |
+| PRB-01 | English/Japanese | 319 | 305 | 197 |
+| PRB-02 | English/Japanese | 316 | 249 | 109 |
+
+These rows remain INCOMPLETE or SOURCE UNVERIFIED as appropriate. No IMAGE MISSING status is assigned solely from extractor link counts. Actual HTTP response checks for the card image URLs remain outstanding.
