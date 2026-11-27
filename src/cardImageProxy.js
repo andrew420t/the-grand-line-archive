@@ -87,7 +87,8 @@ export async function handleCardImageProxy(request, fetchImpl = fetch) {
             Accept: 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
             Referer: original.referer,
           },
-          cf: { cacheTtl: 86400 },
+          // Cache successful image responses only; never retain upstream errors at the edge.
+          cf: { cacheTtlByStatus: { '200-299': 86400, '400-599': 0 } },
         })
       } finally {
         clearTimeout(timeout)
@@ -118,13 +119,13 @@ export async function handleCardImageProxy(request, fetchImpl = fetch) {
       'Cache-Control': 'no-store',
       'X-Card-Image-Source-Host': original.url.hostname,
       'X-Card-Image-Upstream-Status': String(upstreamStatus || 'unavailable'),
-      'X-Card-Image-Error': upstreamStatus === 404 ? 'upstream-not-found' : 'upstream-http-error',
+      'X-Card-Image-Error': upstreamStatus === 404 ? 'upstream-not-found' : upstreamStatus === 410 ? 'upstream-gone' : 'upstream-http-error',
     })
     const message = upstreamStatus
       ? 'Card image source returned HTTP ' + upstreamStatus
       : 'Card image source did not return a response'
     return new Response(message, {
-      status: upstreamStatus === 404 ? 404 : 502,
+      status: upstreamStatus === 404 || upstreamStatus === 410 ? upstreamStatus : 502,
       headers,
     })
   }
