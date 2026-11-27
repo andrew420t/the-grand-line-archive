@@ -1,8 +1,6 @@
 #!/usr/bin/env node
 import fs from 'node:fs';
 import path from 'node:path';
-import { OP18_OFFICIAL_PRINTINGS } from '../src/admin/op18OfficialCatalogue.js';
-import { EB05_OFFICIAL_PRINTINGS } from '../src/admin/eb05OfficialCatalogue.js';
 
 const TARGET = /^(?:OP-(?:0[1-9]|1[0-8])|EB-0[1-5]|PRB-0[12])$/;
 const PIN = '619965ec198047de519dc6eb098c7a56aed9bd58';
