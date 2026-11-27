@@ -25,6 +25,16 @@ jobs:
         run: npm run lint
       - name: Build production site
         run: npm run build
+      - name: Reconcile application printing identities against official Bandai inventory (audit branch only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/audit/official-bandai-inventory-stage4b-1l-2026-11-27'
+        run: node scripts/auditApplicationReferencePrintingParity.mjs
+      - name: Upload Stage 4B-1O application printing reconciliation
+        if: always() && github.event_name == 'push' && github.ref == 'refs/heads/audit/official-bandai-inventory-stage4b-1l-2026-11-27'
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage4b-1o-application-printing-reconciliation
+          path: artifacts/application-reference-printing-reconciliation-stage4b-1o.json
+          if-no-files-found: warn
       - name: Audit official Bandai image URLs (audit branch only)
         if: github.event_name == 'push' && github.ref == 'refs/heads/audit/official-bandai-inventory-stage4b-1l-2026-11-27' && contains(github.event.head_commit.message, '[run-image-audit]')
         run: node scripts/auditOfficialBandaiImages.mjs
