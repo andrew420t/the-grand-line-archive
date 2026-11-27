@@ -161,6 +161,44 @@ export function buildCatalogueImageCandidates(record) {
   return candidates.map(({ identity, ...candidate }) => candidate)
 }
 
+/**
+ * Apply an administrator-supplied image reference to one audit record.
+ * The corrected URL is deliberately scoped to the record's existing language
+ * and printing identity; it does not mutate the upstream catalogue feed.
+ */
+export function createCorrectedImageAuditRecord(record, correctedUrl, language) {
+  const recordLanguage = record?.languageCode || record?.language || ''
+  const url = String(correctedUrl || '').trim()
+  if (!['en', 'jp'].includes(language) || recordLanguage !== language) {
+    throw new Error('The corrected image language must match the audited record.')
+  }
+  if (!url || (!url.startsWith('https://') && !url.startsWith('/_card-image/')) || url.startsWith('//')) {
+    throw new Error('Enter a valid HTTPS image URL or a same-origin card-image proxy path.')
+  }
+  const candidate = {
+    url,
+    kind: 'exact',
+    language,
+    printingKey: record?.printingKey || '',
+    cardKey: record?.cardKey || '',
+    cardNumber: record?.cardNumber || '',
+    setCode: record?.setCode || '',
+    rarity: record?.rarity || '',
+    variant: record?.variant || '',
+    originalImageUrl: url,
+    source: 'Administrator-corrected image reference',
+  }
+  return {
+    ...record,
+    imageUrl: url,
+    imageUrls: [url],
+    exactImageUrl: url,
+    imageCandidates: [candidate],
+    source: candidate.source,
+    referenceCorrected: true,
+  }
+}
+
 export async function auditCatalogueImageRecord(record, {
   language,
   fetchImpl = fetch,
