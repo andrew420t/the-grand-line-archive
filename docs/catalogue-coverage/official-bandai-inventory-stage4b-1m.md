@@ -92,7 +92,7 @@ The full base-number lists, non-base/reprint lists, printing identity IDs, image
 ### OP-18
 
 - Both languages: 159 entries; 119 base card numbers; 125 distinct product card numbers; 6 additional non-OP18 card numbers.
-- Exactly 33 parallel variants and 7 special printings (6 SP CARD/SPカード plus 1 TR) in each language.
+- Exactly 33 parallel variants and 7 special printings (6 SP plus 1 TR) in each language. The audit branch now preserves English SP CARD and Japanese SPカード labels separately.
 - The Stage 3 supplemental list has three English image-ID mismatches:
   - Official: `OP18-049_p1`, `OP13-012_p1`, `OP17-040_p2`
   - Stage 3 supplemental file instead uses: `OP18-064_p1`, `OP13-012_p2`, `OP17-040_p1`
@@ -146,9 +146,9 @@ Existing Stage 3 code/tests inspected (not modified): `src/admin/catalogueImageF
 
 - The 50-row evidence matrix and all extracted-page invariants were checked in-memory against the committed JSON evidence.
 - **Automated `npm test`, lint and production build are not yet confirmed for the latest audit head.** The audit branch workflow contains a push trigger for this branch, but the GitHub connector currently exposes no completed push-run result or combined check status for the latest commit. The earlier Stage 4B-1N report records a prior 271/271 test, lint and build pass on commit `6f4327a7`; that is not verification of this latest commit.
-- Official image URLs were extracted and count-aligned; full HTTP image loading and application proxy delivery are not yet verified.
+- Official image URLs were extracted and count-aligned. The HTTP audit now covers **7,798 unique URLs**: 7,786 card-list images plus all 12 official Best Selection Vol.6 product-page images. Live HTTP loading and application proxy delivery are not yet verified.
 - Preview was not deployed or verified. No Supabase project was modified. The existing Stage 4B-1N investigation records the Testing project as a small smoke dataset (32 products, 2 product-linked sets and no reference-image records); it was not changed.
-- The OP-18 language-specific image IDs, separate English/Japanese TR card numbers, and Japanese TR name are corrected on the audit branch; CI and live image verification remain pending.
+- The OP-18 language-specific image IDs, separate English/Japanese TR card numbers, Japanese TR name and Japanese SP rarity labels are corrected on the audit branch. EB-05's eight Japanese SP rarity/variant labels are also corrected. CI and live image verification remain pending.
 - Full pagination/filter UI regression, language separation in rendered results, duplicate suppression in actual data, and a live Preview audit remain outstanding.
 
 ## Handover
