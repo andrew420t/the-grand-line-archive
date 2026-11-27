@@ -25,7 +25,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Once Per Turn] If your Character with a base cost of 4 or more would be K.O.'d, you may trash 1 card from your hand instead.\n[Activate: Main] You may rest this Leader: Give up to 1 of your opponent's Characters −2000 power during this turn. Then, up to 1 of your Characters without a [When Attacking] effect gains [Rush] during this turn.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageIdEn": "EB05-001",
@@ -46,7 +50,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] If your Leader has the {Supernovas} type, draw 2 cards and play up to 2 Character cards with 2000 power or less from your hand.\n[Activate: Main] [Once Per Turn] Give up to 1 of your opponent's Leader or Characters with 6000 power or more −1000 power until the end of your opponent's next End Phase.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-001_p1",
@@ -67,7 +75,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] If your Leader has the {Supernovas} type, draw 2 cards and play up to 2 Character cards with 2000 power or less from your hand.\n[Activate: Main] [Once Per Turn] Give up to 1 of your opponent's Leader or Characters with 6000 power or more −1000 power until the end of your opponent's next End Phase.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-002",
@@ -88,7 +100,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to 2 {Navy} type cards with a cost of 2 or more and add them to your hand, then place the rest at the bottom of your deck in any order. Then, trash 1 card from your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-003",
@@ -109,7 +125,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-004",
@@ -130,7 +150,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] You may reveal 2 Event cards from your hand: Draw 2 cards.\n[On K.O.] Play up to 1 Character card with 6000 power or less from your hand rested.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-004_p1",
@@ -151,7 +175,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] You may reveal 2 Event cards from your hand: Draw 2 cards.\n[On K.O.] Play up to 1 Character card with 6000 power or less from your hand rested.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-005",
@@ -172,7 +200,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Up to 3 of your Characters with both the {Revolutionary Army} type and a [Trigger] gain +2000 power during this turn.\n[Activate: Main] You may trash this Character: Give up to 1 of your opponent's Characters −2000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-006",
@@ -193,7 +225,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Activate: Main] [Once Per Turn] You may add 1 card from the top of your Life cards to your hand: Choose one:\n• Give up to 1 Character +3000 power during this turn.\n• Give up to 1 Character −4000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-006_p1",
@@ -214,7 +250,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Activate: Main] [Once Per Turn] You may add 1 card from the top of your Life cards to your hand: Choose one:\n• Give up to 1 Character +3000 power during this turn.\n• Give up to 1 Character −4000 power during this turn.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-007",
@@ -235,7 +275,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] You may reveal a total of 3 Event or {Punk Hazard} type cards from your hand: Draw 1 card.\n[End of Your Turn] This Character gains +5000 power until the end of your opponent's next End Phase.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-008",
@@ -256,7 +300,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Main] You may give 1 active DON!! card to 1 of your Leader and reveal 2 red Event cards from your hand: Give up to 1 of your opponent's rested Characters −7000 power during this turn.\n[Counter] If you have no Characters with a cost of 5 or more, up to 1 of your Leader or up to 1 of your Characters gains +4000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-009",
@@ -277,7 +325,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Main] All of your Characters with 4000 base power or less gain +1000 power until the end of your opponent's next End Phase.\n[Counter] Your Leader gains +3000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-010",
@@ -298,7 +350,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Once Per Turn] When one of your Characters with the <Wisdom> attribute and without [Blocker] is K.O.'d, add up to 1 card from the top of your deck to the top of your Life cards.\n[Activate: Main] [Once Per Turn] Set up to 1 of your Characters with the <Wisdom> attribute and 6000 power or less as active.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-010_p1",
@@ -319,7 +375,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Once Per Turn] When one of your Characters with the <Wisdom> attribute and without [Blocker] is K.O.'d, add up to 1 card from the top of your deck to the top of your Life cards.\n[Activate: Main] [Once Per Turn] Set up to 1 of your Characters with the <Wisdom> attribute and 6000 power or less as active.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-010_p2",
@@ -340,7 +400,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Once Per Turn] When one of your Characters with the <Wisdom> attribute and without [Blocker] is K.O.'d, add up to 1 card from the top of your deck to the top of your Life cards.\n[Activate: Main] [Once Per Turn] Set up to 1 of your Characters with the <Wisdom> attribute and 6000 power or less as active.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageIdEn": "EB05-011",
@@ -361,7 +425,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] If your Leader is [Shirahoshi], you may turn 1 card from the top of your Life cards face-down: Rest up to 1 of your opponent's Characters with a cost of 5 or less.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-012",
@@ -382,7 +450,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Rest up to 1 of your opponent's Characters with a cost of 6 or less.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-013",
@@ -403,7 +475,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Your Opponent's Attack] [Once Per Turn] You may rest 1 of your DON!! cards: Your {Fish-Man} or {Merfolk} type Leader gains +2000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-014",
@@ -424,7 +500,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to a total of 2 [Megalo] or {Neptunian} type cards and add them to your hand. Then, trash the rest.\n[Activate: Main] You may rest this Character: Up to 1 of your {Neptunian} type Characters with 6000 power or less gains [Rush] during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-014_p1",
@@ -445,7 +525,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to a total of 2 [Megalo] or {Neptunian} type cards and add them to your hand. Then, trash the rest.\n[Activate: Main] You may rest this Character: Up to 1 of your {Neptunian} type Characters with 6000 power or less gains [Rush] during this turn.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-014_p2",
@@ -466,7 +550,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to a total of 2 [Megalo] or {Neptunian} type cards and add them to your hand. Then, trash the rest.\n[Activate: Main] You may rest this Character: Up to 1 of your {Neptunian} type Characters with 6000 power or less gains [Rush] during this turn.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageIdEn": "EB05-015",
@@ -487,7 +575,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-016",
@@ -508,7 +600,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Your Turn] [On Play] Play up to 1 Character card with a cost of 5 or less and the <Wisdom> attribute from your hand.",
     "trigger": "[Trigger] Rest up to 1 of your opponent's Characters with a cost of 6 or less.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-016_p1",
@@ -529,7 +625,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Your Turn] [On Play] Play up to 1 Character card with a cost of 5 or less and the <Wisdom> attribute from your hand.",
     "trigger": "[Trigger] Rest up to 1 of your opponent's Characters with a cost of 6 or less.",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-017",
@@ -550,7 +650,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Your Opponent's Attack] You may rest 1 of your DON!! cards and trash this Character: Your {Fish-Man} or {Merfolk} type Leader gains +4000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-018",
@@ -571,7 +675,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Up to 1 of your opponent's rested Characters with a cost of 6 or less will not become active in your opponent's next Refresh Phase.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-018_p1",
@@ -592,7 +700,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Up to 1 of your opponent's rested Characters with a cost of 6 or less will not become active in your opponent's next Refresh Phase.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-019",
@@ -613,7 +725,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Counter] You may rest 1 of your cards: Up to 1 of your {Land of Wano} type Leader or Characters gains +4000 power during this battle.",
     "trigger": "[Trigger] If your opponent has 3 or less Life cards, play up to 1 {Land of Wano} type Character card with 6000 power or less from your hand.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-020",
@@ -634,7 +750,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Main] You may rest your Leader [Shirahoshi]: Draw 2 cards.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-021",
@@ -655,7 +775,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Draw 2 cards and play up to 1 {Cross Guild} type Character card with a cost of 8 or less from your hand. Then, you cannot play Character cards during this turn.\n[When Attacking] Negate the effect of up to 1 of your opponent's Characters during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-021_p1",
@@ -676,7 +800,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Draw 2 cards and play up to 1 {Cross Guild} type Character card with a cost of 8 or less from your hand. Then, you cannot play Character cards during this turn.\n[When Attacking] Negate the effect of up to 1 of your opponent's Characters during this turn.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-022",
@@ -697,7 +825,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On K.O.] Draw 2 cards.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-023",
@@ -718,7 +850,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] You may trash 2 Events from your hand: Draw 3 cards.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-024",
@@ -739,7 +875,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "If your Leader has the {Impel Down} type, this Character gains [Blocker] and +2 cost.\n(After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-025",
@@ -760,7 +900,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Look at 3 cards from the top of your deck; reveal up to 1 {Impel Down} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "[Trigger] Activate this card's [On Play] effect.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-026",
@@ -781,7 +925,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-027",
@@ -802,7 +950,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Draw 3 cards and trash 2 cards from your hand. Then, place up to 1 Character with a cost of 2 or less at the bottom of the owner's deck.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-028",
@@ -823,7 +975,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] If your opponent has 9 or more cards in their hand, they trash 4 cards from their hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-028_p1",
@@ -844,7 +1000,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] If your opponent has 9 or more cards in their hand, they trash 4 cards from their hand.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-029",
@@ -865,7 +1025,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Main] You may trash 1 card from your hand: Negate the effect of up to 1 of your opponent's Characters with a cost of 6 or less during this turn, and return it to the owner's hand.",
     "trigger": "[Trigger] Draw 2 cards and trash 1 card from your hand.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-030",
@@ -886,7 +1050,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Main] If your Leader is [Nami], return up to 1 Character with a cost of 5 or less to the owner's hand.\n[Counter] Draw 1 card, and up to 1 of your Leader or Characters gains +1000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-031",
@@ -907,7 +1075,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] DON!! −1: If your Leader has the {The Vinsmoke Family} type, trash 10 cards from the top of your deck.\n[Activate: Main] You may trash this Character: If your opponent has a Character with 8000 base power or more, add up to 4 DON!! cards as active from your DON!! deck.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-032",
@@ -928,7 +1100,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-033",
@@ -949,7 +1125,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] If your Leader has the {Straw Hat Crew} type and the number of DON!! cards on your field is at least 6 less than the number on your opponent's field, draw 3 cards and trash 2 cards from your hand. Then, add up to 4 DON!! cards as rested from your DON!! deck.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-034",
@@ -970,7 +1150,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] DON!! −2: If you have 7 or more DON!! cards on your field, give up to 1 of your opponent's Characters −4000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-034_p1",
@@ -991,7 +1175,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] DON!! −2: If you have 7 or more DON!! cards on your field, give up to 1 of your opponent's Characters −4000 power during this turn.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-035",
@@ -1012,7 +1200,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] DON!! −1: Look at 5 cards from the top of your deck; reveal up to 2 {SMILE} type cards and add them to your hand, then place the rest at the bottom of your deck in any order. Then, play up to 2 {SMILE} type Character cards with 5000 power or less from your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-036",
@@ -1033,7 +1225,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] If your Leader has the {Navy} type, draw 1 card, and add up to 1 DON!! card as rested from your DON!! deck.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-037",
@@ -1054,7 +1250,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Look at 3 cards from the top of your deck; reveal up to 1 {Animal Kingdom Pirates} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-037_p1",
@@ -1075,7 +1275,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Look at 3 cards from the top of your deck; reveal up to 1 {Animal Kingdom Pirates} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-038",
@@ -1096,7 +1300,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Up to 1 of your [Senor Pink] cards gains +3000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-039",
@@ -1117,7 +1325,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Main] DON!! −1: If your Leader has the {The Vinsmoke Family} type, give up to 1 of your opponent's Characters −4000 power during this turn.\n[Counter] DON!! −1: Your Leader gains +4000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-040",
@@ -1138,7 +1350,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Main] You may return 1 of your active DON!! cards to your DON!! deck: If your Leader has the {Donquixote Pirates} type, draw 3 cards and trash 1 card from your hand.\n[Counter] Your Leader gains +2000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-041",
@@ -1159,7 +1375,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-042",
@@ -1180,7 +1400,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Draw 2 cards and trash 2 cards from your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-043",
@@ -1201,7 +1425,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On K.O.] K.O. or rest up to 1 of your opponent's Characters with a cost of 6 or less.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-043_p1",
@@ -1222,7 +1450,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On K.O.] K.O. or rest up to 1 of your opponent's Characters with a cost of 6 or less.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-044",
@@ -1243,7 +1475,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] If your Leader's type includes \"Baroque Works\" and your opponent has a Character with a cost of 0, give your opponent's Leader −1000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-045",
@@ -1264,7 +1500,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] K.O. up to 1 of your Characters with a type including \"Baroque Works\".\n[On K.O.] Look at 3 cards from the top of your deck; reveal up to 1 card with a type including \"Baroque Works\" and add it to your hand. Then, trash the rest.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-046",
@@ -1285,7 +1525,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "If your opponent has a Character with 8000 base power or more, this Character gains [Blocker] and +3000 power.\n[On Your Opponent's Attack] You may trash 1 card from your hand: If you have 10 or more cards in your trash, your Leader's base power becomes 7000 during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-046_p1",
@@ -1306,7 +1550,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "If your opponent has a Character with 8000 base power or more, this Character gains [Blocker] and +3000 power.\n[On Your Opponent's Attack] You may trash 1 card from your hand: If you have 10 or more cards in your trash, your Leader's base power becomes 7000 during this turn.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-047",
@@ -1327,7 +1575,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "This Character gains +12 cost.\n[On Play] You may trash 1 card from your hand: Play up to 1 Character card with a cost of 2 or less from your trash.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-048",
@@ -1348,7 +1600,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Main] You may rest 1 of your DON!! cards and K.O. 1 of your Characters with a type including \"Baroque Works\": All of your opponent's Characters with a cost of 0 cannot activate [Blocker] during this turn.\n[Counter] Your Leader gains +3000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-049",
@@ -1369,7 +1625,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Main] You may K.O. 1 of your {Thriller Bark Pirates} type Characters: Give up to 1 of your opponent's Characters −3 cost during this turn.\n[Counter] You may K.O. 1 of your {Thriller Bark Pirates} type Characters: Up to 1 of your Leader or Characters gains +4000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-050",
@@ -1390,7 +1650,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Look at 4 cards from the top of your deck; reveal up to 1 card with the <Wisdom> attribute and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "[Trigger] Activate this card's [On Play] effect.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-051",
@@ -1411,7 +1675,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Rest up to 1 of your opponent's Characters with a cost equal to or less than the total of your and your opponent's Life cards.",
     "trigger": "[Trigger] Play this card.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-052",
@@ -1432,7 +1700,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "If you would take damage, you may trash this Character instead.",
     "trigger": "[Trigger] Draw 2 cards and trash 1 card from your hand.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-052_p1",
@@ -1453,7 +1725,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "If you would take damage, you may trash this Character instead.",
     "trigger": "[Trigger] Draw 2 cards and trash 1 card from your hand.",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-053",
@@ -1474,7 +1750,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[When Attacking] [Once Per Turn] If your opponent has 9 or more cards in their hand, add up to 1 card from your hand to the top of your Life cards.",
     "trigger": "[Trigger] You may trash 1 card from your hand: If you have 2 or less Life cards, play this card.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-054",
@@ -1495,7 +1775,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "-",
     "trigger": "[Trigger] Play up to 2 {Big Mom Pirates} type Character cards with 4000 power from your hand.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-055",
@@ -1516,7 +1800,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Your Turn] [On Play] If your Leader has the <Wisdom> attribute, add up to 1 card from the top of your deck to the top of your Life cards.",
     "trigger": "[Trigger] You may trash 1 card from your hand: If you have 2 or less Life cards, play this card.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-055_p1",
@@ -1537,7 +1825,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Your Turn] [On Play] If your Leader has the <Wisdom> attribute, add up to 1 card from the top of your deck to the top of your Life cards.",
     "trigger": "[Trigger] You may trash 1 card from your hand: If you have 2 or less Life cards, play this card.",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-055_p2",
@@ -1558,7 +1850,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Your Turn] [On Play] If your Leader has the <Wisdom> attribute, add up to 1 card from the top of your deck to the top of your Life cards.",
     "trigger": "[Trigger] You may trash 1 card from your hand: If you have 2 or less Life cards, play this card.",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageIdEn": "EB05-055_p3",
@@ -1579,7 +1875,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Your Turn] [On Play] If your Leader has the <Wisdom> attribute, add up to 1 card from the top of your deck to the top of your Life cards.",
     "trigger": "[Trigger] You may trash 1 card from your hand: If you have 2 or less Life cards, play this card.",
     "variant": "Parallel",
-    "variantLabel": "Parallel 3"
+    "variantLabel": "Parallel 3",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 3",
+    "variantLabelJp": "Parallel 3"
   },
   {
     "imageIdEn": "EB05-056",
@@ -1600,7 +1900,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] You may trash 1 card with a [Trigger] from your hand: If your Leader is [Nico Robin], draw 2 cards.",
     "trigger": "[Trigger] Play this card.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-057",
@@ -1621,7 +1925,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Activate: Main] [Once Per Turn] Give up to 1 rested DON!! card to 1 of your Leader or Character cards with the <Special> or <Wisdom> attribute.",
     "trigger": "[Trigger] If you have 2 or less Life cards, play up to 1 Character card with 6000 power or less and a [Trigger] from your hand.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-057_p1",
@@ -1642,7 +1950,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Activate: Main] [Once Per Turn] Give up to 1 rested DON!! card to 1 of your Leader or Character cards with the <Special> or <Wisdom> attribute.",
     "trigger": "[Trigger] If you have 2 or less Life cards, play up to 1 Character card with 6000 power or less and a [Trigger] from your hand.",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "EB05-058",
@@ -1663,7 +1975,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-059",
@@ -1684,7 +2000,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Main] Draw 1 card, and all of your Characters with 4000 base power and the {Big Mom Pirates} type cannot be K.O.'d in battle until the end of your opponent's next End Phase.",
     "trigger": "[Trigger] Draw 1 card, and play up to 1 Character card with 4000 power and a [Trigger] from your hand.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-060",
@@ -1705,7 +2025,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Main] You may trash 1 of your {Egghead} type Characters with a cost of 5 or more: Add up to 1 card from the top of your deck to the top of your Life cards.\n[Counter] You may turn 1 card from the top of your Life cards face-up: Up to 1 of your Leader or Characters gains +4000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-061",
@@ -1726,7 +2050,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Once Per Turn] If one of your Characters with 6000 base power or less would be removed from the field by your opponent, you may add 1 card from the top of your Life cards to your hand instead.\n[On Play] Play up to 1 red Character card with a cost of 2 or less from your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "rarityEn": "SEC",
+    "rarityJp": "SEC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageIdEn": "EB05-061_p1",
@@ -1747,7 +2075,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Once Per Turn] If one of your Characters with 6000 base power or less would be removed from the field by your opponent, you may add 1 card from the top of your Life cards to your hand instead.\n[On Play] Play up to 1 red Character card with a cost of 2 or less from your hand.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "rarityEn": "SEC",
+    "rarityJp": "SEC",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageIdEn": "OP11-022_p2",
@@ -1768,7 +2100,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "This Leader cannot attack.\n[Activate: Main] [Once Per Turn] You may rest 1 of your DON!! cards and turn 1 card from the top of your Life cards face-up: Play up to 1 {Neptunian} type Character card or [Megalo] with a cost equal to or less than the number of DON!! cards on your field from your hand.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageIdEn": "OP11-041_p4",
@@ -1789,7 +2125,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Your Turn] [Once Per Turn] This effect can be activated when a card is removed from your or your opponent's Life cards. If you have 7 or less cards in your hand, draw 1 card.\n[DON!! x1] [On Your Opponent's Attack] [Once Per Turn] You may trash 1 card from your hand: This Leader gains +2000 power during this turn.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 4"
+    "variantLabel": "Parallel 4",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 4",
+    "variantLabelJp": "Parallel 4"
   },
   {
     "imageIdEn": "OP13-100_p2",
@@ -1810,7 +2150,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Your Turn] [Once Per Turn] This effect can be activated when you play a Character with a [Trigger]. Give up to 2 rested DON!! cards to 1 of your Leader or Character cards.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageIdEn": "OP14-041_p3",
@@ -1831,7 +2175,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Opponent's Turn] When you play a Character, draw 1 card.\n[DON!! x1] [Once Per Turn] When one of your {Amazon Lily} or {Kuja Pirates} type Characters with 5000 base power or more is K.O.'d, add up to 1 card from the top of your opponent's Life cards to the owner's hand.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 3"
+    "variantLabel": "Parallel 3",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 3",
+    "variantLabelJp": "Parallel 3"
   },
   {
     "imageIdEn": "OP15-039_p2",
@@ -1852,7 +2200,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "This Leader cannot attack.\n[Activate: Main] You may rest this Leader and return 1 of your {Dressrosa} type Characters to the owner's hand: Play up to 1 {Dressrosa} type Character card with a cost of 3 from your hand.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageIdEn": "EB05-006_p2",
@@ -1873,7 +2225,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Activate: Main] [Once Per Turn] You may add 1 card from the top of your Life cards to your hand: Choose one:\n• Give up to 1 Character +3000 power during this turn.\n• Give up to 1 Character −4000 power during this turn.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageIdEn": "EB05-016_p2",
@@ -1894,7 +2250,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Your Turn] [On Play] Play up to 1 Character card with a cost of 5 or less and the <Wisdom> attribute from your hand.",
     "trigger": "[Trigger] Rest up to 1 of your opponent's Characters with a cost of 6 or less.",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageIdEn": "EB05-031_p1",
@@ -1915,7 +2275,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] DON!! −1: If your Leader has the {The Vinsmoke Family} type, trash 10 cards from the top of your deck.\n[Activate: Main] You may trash this Character: If your opponent has a Character with 8000 base power or more, add up to 4 DON!! cards as active from your DON!! deck.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageIdEn": "OP01-016_p10",
@@ -1936,7 +2300,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 {Straw Hat Crew} type card other than [Nami] and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageIdEn": "OP14-033_p3",
@@ -1957,7 +2325,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] Up to 2 of your opponent's Characters with a cost of 5 or less cannot be rested until the end of your opponent's next End Phase.\n[On K.O.] You may rest 1 of your cards: Play up to 1 green Character card with a cost of 5 or less from your hand.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageIdEn": "OP17-081_p1",
@@ -1978,7 +2350,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "If your Leader has the {Elbaph} type, this Character gains +12 cost.\n[On Play] You may trash 1 card from your hand: Add up to 1 Character card with a cost of 8 or less other than [Gerd] from your trash to your hand.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageIdEn": "OP17-109_p1",
@@ -1999,7 +2375,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[On Play] You may trash 1 card with a [Trigger] from your hand: Draw 3 cards.",
     "trigger": "[Trigger] Look at 5 cards from the top of your deck; reveal up to 1 {Big Mom Pirates} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageIdEn": "ST17-004_p1",
@@ -2020,7 +2400,11 @@ export const EB05_OFFICIAL_PRINTINGS = Object.freeze([
     "effect": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)\n[On Play] Look at 3 cards from the top of your deck and place them at the top or bottom of your deck in any order. Then, give up to 1 rested DON!! card to 1 of your {The Seven Warlords of the Sea} type Leader or Character cards.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   }
 ])
 
@@ -2040,6 +2424,8 @@ function makeSupplementalMatch(printing, language) {
   const baseDirect = officialDirectImageUrl(printing.cardNumber, language)
   const imageUrls = [...new Set([exactProxy, imageId !== printing.cardNumber ? baseProxy : '', exactDirect, baseDirect].filter(Boolean))]
   const isJapanese = language === 'jp'
+  const rarity = isJapanese ? printing.rarityJp : printing.rarityEn
+  const variantLabel = isJapanese ? printing.variantLabelJp : printing.variantLabelEn
   return {
     id: 'supplemental-eb05:' + language + ':' + imageId,
     cardKey: 'eb05:' + printing.cardNumber,
@@ -2058,9 +2444,9 @@ function makeSupplementalMatch(printing, language) {
     traits: printing.types,
     effect: printing.effect,
     trigger: printing.trigger,
-    rarity: printing.rarity,
+    rarity,
     variant: printing.variant,
-    variantLabel: printing.variantLabel,
+    variantLabel,
     imageUrl: exactProxy || exactDirect,
     imageUrls,
     fallbackImageUrl: imageId !== printing.cardNumber ? (baseProxy || baseDirect) : exactDirect,
@@ -2070,7 +2456,7 @@ function makeSupplementalMatch(printing, language) {
     productKind: 'extra booster',
     sourceUrl: isJapanese ? JP_CARDLIST : EN_CARDLIST,
     blockIcon: printing.blockIcon,
-    source: 'Bandai official ' + (isJapanese ? 'Japanese' : 'English') + ' EB-05 ' + printing.variantLabel + ' image via Cloudflare proxy',
+    source: 'Bandai official ' + (isJapanese ? 'Japanese' : 'English') + ' EB-05 ' + variantLabel + ' image via Cloudflare proxy',
     officialCardlistUrl: isJapanese ? JP_CARDLIST : EN_CARDLIST,
     supplementalOfficial: true,
     verificationStatus: 'pending-live-image-check',
@@ -2091,6 +2477,8 @@ export function getEb05ImageTestItems(language = 'en') {
       imageId,
       cardNumber: printing.cardNumber,
       imageUrl: buildOfficialImageProxyUrl(imageId, language) || officialDirectImageUrl(imageId, language),
+      rarity: language === 'jp' ? printing.rarityJp : printing.rarityEn,
+      variant: language === 'jp' ? printing.variantLabelJp : printing.variantLabelEn,
     }
   })
 }
