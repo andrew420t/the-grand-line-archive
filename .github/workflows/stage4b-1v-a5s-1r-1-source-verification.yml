@@ -90,4 +90,4 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
-# Re-run after raw-manifest duplicate-key verifier correction.
+# Re-run after catalogue data-directory scope correction.
