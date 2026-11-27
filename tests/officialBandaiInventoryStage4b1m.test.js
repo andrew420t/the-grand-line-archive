@@ -89,7 +89,7 @@ test('OP15-EB04 has one English-only cross-prefix printing after Japanese EB-04 
     assert.ok(englishEntry)
     assert.equal(japaneseEntry.rarity, 'SPカード')
     assert.match(englishEntry.image_url, new RegExp(cardNumber + '_p2\\.png'))
-    assert.match(japaneseEntry.image_url, new RegExp(cardNumber + '_p2\\\\.png'))
+    assert.match(japaneseEntry.image_url, new RegExp(cardNumber + '_p2\\.png'))
   }
 
   const reconciliation = rowFor('OP-15', 'English').language_specific_product_reconciliation
