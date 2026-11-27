@@ -119,7 +119,7 @@ export function buildCatalogueImageCandidates(record) {
   else if (record.imageUrl && !record.usesBaseImageFallback && !record.usesAlternateOfficialFallback) add(record.imageUrl, 'exact', record.source)
   const candidateLanguage = (candidate) => {
     if (candidate?.language === 'en' || candidate?.language === 'jp') return candidate.language
-    const match = String(candidate?.url || '').match(/\\/_card-image\\/(?:bandai|external)\\/(en|jp)\\//i)
+    const match = String(candidate?.url || '').match(/\/_card-image\/(?:bandai|external)\/(en|jp)\//i)
     return match ? match[1].toLowerCase() : ''
   }
   for (const candidate of record.alternativeImageCandidates || []) {
