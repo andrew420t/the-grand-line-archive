@@ -186,12 +186,7 @@ export async function findCatalogueMatches(cardNumber) {
         const products = linkedProducts.length ? linkedProducts : [null]
 
         for (const product of products) {
-          const observation = applyCatalogueOfficialMetadataCorrection({
-            cardNumber: card.number || requestedNumber,
-            language,
-            productCode: product?.code,
-            observation: rawObservation,
-          })
+          const observation = rawObservation
           const productSetCodes = (safeMapGet(catalogue.productSetsByProductKey, product?.key) || []).map((item) => item.set_key)
           const setCode = formatSetCode(getCatalogueProductSetCode(product, card.number || '', productSetCodes))
           results.push({
@@ -349,13 +344,7 @@ export async function findCatalogueSearchMatches(query, { limit = 12 } = {}) {
       const observations = safeMapGet(index.observationsByCard, card.key) || []
       const nameMatches = observations.some((rawObservation) => {
         if (rawObservation.superseded_at) return false
-        const observation = applyCatalogueOfficialMetadataCorrection({
-          cardNumber: card.number,
-          language,
-          productCode: 'OP-10',
-          observation: rawObservation,
-        })
-        return [rawObservation, observation].some((item) => normalizeSearchText(item?.name).includes(normalized))
+        return normalizeSearchText(rawObservation?.name).includes(normalized)
       })
       if (!nameMatches || !card.number) continue
       const number = baseCardNumber(card.number)
@@ -1090,12 +1079,7 @@ export async function getCatalogueReferenceTestMatrix() {
       const rawObservation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       for (const product of products) {
-        const observation = applyCatalogueOfficialMetadataCorrection({
-          cardNumber,
-          language,
-          productCode: product.code,
-          observation: rawObservation,
-        })
+        const observation = rawObservation
         const rawSet = setFromProduct(product.code, cardNumber)
         if (!expectedSets.includes(rawSet)) continue
         add({
