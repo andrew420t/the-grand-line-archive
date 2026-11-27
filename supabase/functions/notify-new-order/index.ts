@@ -115,8 +115,18 @@ Deno.serve(async (request: Request) => {
       if (!isAdmin) return json({ error: 'You are not allowed to access this order notification.' }, 403)
     }
 
-    if (String(order.admin_email_status || '').toLowerCase() === 'sent') {
+    const currentStatus = String(order.admin_email_status || 'pending').toLowerCase()
+    if (currentStatus === 'sent') {
       return json({ status: 'sent', message: 'The administrator notification has already been sent.' })
+    }
+    if (body.retry && !isAdmin) {
+      return json({ error: 'Only an administrator can retry an order notification.' }, 403)
+    }
+    if (!isAdmin && currentStatus !== 'pending') {
+      return json({ error: 'Only an administrator can retry this order notification.' }, 403)
+    }
+    if (currentStatus === 'sending') {
+      return json({ status: 'sending', message: 'The administrator notification is already being sent.' })
     }
 
     if (!resendKey || !emailFrom) {
@@ -147,15 +157,30 @@ Deno.serve(async (request: Request) => {
       return json({ status: 'failed', message })
     }
 
-    const currentStatus = String(order.admin_email_status || 'pending').toLowerCase()
-    if (currentStatus === 'sending') {
-      return json({ status: 'sending', message: 'The administrator notification is already being sent.' })
+    const claimStatuses = body.retry && isAdmin
+      ? 'pending,failed,not_configured'
+      : 'pending'
+    const claimed = await rest(
+      `orders?id=eq.${orderId}&admin_email_status=in.(${claimStatuses})&select=id`,
+      {
+        method: 'PATCH',
+        headers: { Prefer: 'return=representation' },
+        body: JSON.stringify({
+          admin_email_status: 'sending',
+          admin_email_error: null,
+          admin_email_sent_at: null,
+        }),
+      },
+    ) as Array<{ id: string }>
+    if (!claimed?.length) {
+      const latestRows = await rest(
+        `orders?id=eq.${orderId}&select=admin_email_status`,
+      ) as Array<{ admin_email_status?: string }>
+      return json({
+        status: String(latestRows?.[0]?.admin_email_status || 'pending'),
+        message: 'The notification was not claimed. Refresh the order and check its email status.',
+      })
     }
-    if (body.retry && !isAdmin) {
-      return json({ error: 'Only an administrator can retry an order notification.' }, 403)
-    }
-
-    await patchOrderStatus('sending')
 
     const lineItems = await rest(
       `order_items?order_id=eq.${orderId}&select=product_id,card_id,quantity,unit_price,price_at_purchase`,
@@ -199,7 +224,11 @@ Deno.serve(async (request: Request) => {
     const textLines = lines.map((line) => `• ${line.name} × ${line.quantity}: ${formatMoney(line.lineTotal)}`).join('\n')
     const emailResponse = await fetch('https://api.resend.com/emails', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${resendKey}`, 'Content-Type': 'application/json' },
+      headers: {
+        Authorization: `Bearer ${resendKey}`,
+        'Content-Type': 'application/json',
+        'Idempotency-Key': `grand-line-order-${orderId}`,
+      },
       body: JSON.stringify({
         from: emailFrom,
         to,
