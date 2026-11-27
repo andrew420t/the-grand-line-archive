@@ -117,11 +117,25 @@ export function buildCatalogueImageCandidates(record) {
   // URL position alone is not enough to infer an alternative printing.
   if (record.exactImageUrl) add(record.exactImageUrl, 'exact', record.exactImageSource)
   else if (record.imageUrl && !record.usesBaseImageFallback && !record.usesAlternateOfficialFallback) add(record.imageUrl, 'exact', record.source)
+  const candidateLanguage = (candidate) => {
+    if (candidate?.language === 'en' || candidate?.language === 'jp') return candidate.language
+    const match = String(candidate?.url || '').match(/\\/_card-image\\/(?:bandai|external)\\/(en|jp)\\//i)
+    return match ? match[1].toLowerCase() : ''
+  }
   for (const candidate of record.alternativeImageCandidates || []) {
-    if (candidate?.language === language) add(candidate.url, 'alternative', candidate.source)
+    if (candidateLanguage(candidate) === language) add(candidate.url, 'alternative', candidate.source)
   }
   for (const candidate of record.baseFallbackCandidates || []) {
-    if (candidate?.language === language) add(candidate.url, 'base-fallback', candidate.source)
+    if (candidateLanguage(candidate) === language) add(candidate.url, 'base-fallback', candidate.source)
+  }
+  // Legacy callers already supply explicit candidate type descriptors.
+  // Accept them only when the language is explicitly declared or encoded in
+  // the same-origin image proxy path; never infer type from URL ordering.
+  for (const candidate of record.imageCandidates || []) {
+    if (candidateLanguage(candidate) !== language) continue
+    if (candidate?.kind === 'alternative' || candidate?.kind === 'base-fallback' || candidate?.kind === 'exact') {
+      add(candidate.url, candidate.kind, candidate.source)
+    }
   }
   if (record.usesAlternateOfficialFallback && record.imageUrl) add(record.imageUrl, 'alternative', record.source)
   if (record.usesBaseImageFallback && record.imageUrl) add(record.imageUrl, 'base-fallback', record.source)
