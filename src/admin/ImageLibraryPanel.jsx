@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ImagePlus, PackagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './productStorage'
-import { getCatalogueCoverageReport, getCatalogueImageAuditInventory, getCatalogueImageGallery, saveDonCardSetOverride } from './cardCatalogue'
+import { getCatalogueCoverageReport, getCatalogueImageAuditInventory, getCatalogueImageGallery, saveCatalogueOverride, saveDonCardSetOverride } from './cardCatalogue'
 import { loadAdminLibraryFileDraft, saveAdminLibraryFileDraft } from './adminDraftStorage'
 import { readPersistentDraft, savePersistentDraft } from './persistentDraftStorage'
 import { auditCatalogueImageRecord, buildImageAuditSummary, createCorrectedImageAuditRecord, IMAGE_CHECK_STATUS, runResumableCatalogueAudit } from './imageAuditUtils.js'
@@ -283,6 +283,19 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
         auditCorrectionInputs[record.id],
         language,
       )
+      await saveCatalogueOverride({
+        form: {
+          card_number: record.cardNumber,
+          name: record.name || record.cardNumber,
+          language: language === 'jp' ? 'Japanese' : 'English',
+          set_code: record.setCode || '',
+          variant_label: record.variantLabel || record.variant || '',
+          reference_printing_key: record.printingKey || '',
+          reference_image_url: correctedRecord.imageUrl,
+          reference_image_source: 'Administrator-corrected image reference',
+        },
+        userId: user?.id,
+      })
       setMatrixError('')
       const refreshed = await auditCatalogueImageRecord(correctedRecord, {
         language, attempts: 2, timeoutMs: 10000, retryDelayMs: 400,
