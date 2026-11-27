@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { ArrowRight, ClipboardList, LogOut, MessageCircle, RefreshCw, Settings2 } from 'lucide-react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import AccountSettings from './AccountSettings'
@@ -38,11 +38,6 @@ export default function AccountPage({
     () => new URLSearchParams(location.search).get('orderId') || '',
     [location.search],
   )
-
-  useEffect(() => {
-    if (!user) return
-    if (activeTab === 'orders') onReload?.()
-  }, [user, activeTab, onReload])
 
   if (!user) {
     return (
