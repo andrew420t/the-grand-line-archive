@@ -55,7 +55,8 @@ export async function loadImageWithRetry(url, {
   let lastHttpStatus = 0
   let lastUpstreamStatus = 0
   let lastProxyError = ''
-  const maxAttempts = Math.max(1, Math.min(5, Number.isFinite(Number(attempts)) ? Math.floor(Number(attempts)) : 2))\n  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+  const maxAttempts = Math.max(1, Math.min(5, Number.isFinite(Number(attempts)) ? Math.floor(Number(attempts)) : 2))
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), timeoutMs)
     try {
