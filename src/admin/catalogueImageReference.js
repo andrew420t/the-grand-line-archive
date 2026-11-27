@@ -56,11 +56,11 @@ export function buildOfficialImageProxyUrl(imageId, language = 'en') {
   if (!lang || !BANDAI_IMAGE_ID.test(id)) return ''
   // Branch previews use Testing Supabase to bypass Bandai's same-site CORP
   // header and the Cloudflare Worker-to-Bandai 522 timeout.
-  if (import.meta.env?.VITE_PREVIEW_BUILD === true) {
+  if (typeof import.meta.env !== 'undefined' && import.meta.env.VITE_PREVIEW_BUILD === true) {
     const previewImageUrl = buildPreviewBandaiImageFunctionUrl(
       id,
       lang,
-      import.meta.env?.VITE_PREVIEW_SUPABASE_URL || '',
+      import.meta.env.VITE_PREVIEW_SUPABASE_URL || '',
     )
     if (previewImageUrl) return previewImageUrl
   }
