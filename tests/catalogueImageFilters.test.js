@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { filterCatalogueImageEntries, getCatalogueImageFilterOptions } from '../src/admin/catalogueImageFilters.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode } from '../src/admin/catalogueImageFilters.js'
 
 const entries = [
   { id: 'a', cardNumber: 'OP12-002', name: 'Edward.Newgate', languageCode: 'en', setCode: 'OP-12', setCodes: ['OP-12'], rarity: 'UC', category: 'Character', colorValues: ['Red'], variant: 'base', imageStatus: 'available' },
@@ -32,4 +32,31 @@ test('exposes only filter values supported by actual catalogue entries', () => {
   assert.deepEqual(options.cardTypes, ['Character', 'Event'])
   assert.deepEqual(options.colors, ['Blue', 'Red'])
   assert.deepEqual(options.variants, ['base', 'parallel', 'stamped'])
+})
+
+test('keeps product release set separate from the original set in the card number', () => {
+  const printings = [
+    { id: 'sp-in-op18', cardNumber: 'OP13-012', name: 'Nefeltari Vivi', languageCode: 'en', setCode: 'OP-18', setCodes: ['OP-18'], rarity: 'SP CARD', variant: 'SP CARD' },
+    { id: 'op18-base', cardNumber: 'OP18-001', name: 'Karoo', languageCode: 'en', setCode: 'OP-18', setCodes: ['OP-18'], rarity: 'L', variant: 'Base' },
+    { id: 'op13-original', cardNumber: 'OP13-012', name: 'Nefeltari Vivi', languageCode: 'en', setCode: 'OP-13', setCodes: ['OP-13'], rarity: 'R', variant: 'Base' },
+    { id: 'st24-sp-in-op18', cardNumber: 'ST24-004', name: 'Law & Bepo', languageCode: 'en', setCode: 'OP-18', setCodes: ['OP-18'], rarity: 'SP CARD', variant: 'SP CARD' },
+  ]
+
+  assert.equal(getCardNumberSetCode('OP13-012'), 'OP-13')
+  assert.equal(getCardNumberSetCode('ST24-004'), 'ST-24')
+  assert.equal(getCardNumberSetCode('OP18-001'), 'OP-18')
+  assert.equal(getCardNumberSetCode('DON!!'), '')
+
+  assert.deepEqual(filterCatalogueImageEntries(printings, { set: 'OP-18' }).map((x) => x.id), [
+    'sp-in-op18', 'op18-base', 'st24-sp-in-op18',
+  ])
+  assert.deepEqual(filterCatalogueImageEntries(printings, { cardNumberSet: 'OP-13' }).map((x) => x.id), [
+    'sp-in-op18', 'op13-original',
+  ])
+  assert.deepEqual(filterCatalogueImageEntries(printings, { set: 'OP-18', cardNumberSet: 'OP-13' }).map((x) => x.id), [
+    'sp-in-op18',
+  ])
+  assert.deepEqual(filterCatalogueImageEntries(printings, { set: 'OP-18', cardNumberSet: 'ST-24' }).map((x) => x.id), [
+    'st24-sp-in-op18',
+  ])
 })
