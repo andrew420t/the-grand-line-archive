@@ -158,3 +158,14 @@ test('configures edge caching for successful images only', async () => {
   assert.deepEqual(calledOptions.cf.cacheTtlByStatus, { '200-299': 86400, '400-599': 0 })
   assert.match(response.headers.get('cache-control'), /max-age=86400/)
 })
+
+test('keeps upstream 429 rate limits temporary and exposes diagnostics', async () => {
+  const response = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/en/OP01-036.png'),
+    async () => new Response('Rate limited', { status: 429, headers: { 'Retry-After': '30' } }),
+  )
+  assert.equal(response.status, 502)
+  assert.equal(response.headers.get('x-card-image-upstream-status'), '429')
+  assert.equal(response.headers.get('x-card-image-error'), 'upstream-http-error')
+  assert.equal(response.headers.get('cache-control'), 'no-store')
+})
