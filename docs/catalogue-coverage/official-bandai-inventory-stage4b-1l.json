@@ -17923,7 +17923,11 @@
         "TR": 1,
         "SP CARD": 6
       },
-      "missing_printings": [],
+      "missing_printings": [
+        "OP18-049_p1",
+        "OP13-012_p1",
+        "OP17-040_p2"
+      ],
       "unexpected_printings": [
         "OP18-064_p1",
         "OP13-012_p2",
@@ -18261,7 +18265,22 @@
       },
       "official_printing_identity_source_alignment": "ENTRY_ORDER_MATCH",
       "official_product_prefix_card_numbers": null,
-      "official_product_prefix_card_number_count": null
+      "official_product_prefix_card_number_count": null,
+      "missing_printings_basis": "Stage 3 supplemental English OP-18 image-identity comparison; not a missing official Bandai source image.",
+      "stage3_supplemental_printing_comparison": {
+        "status": "FLAGGED_FOR_APPLICATION_RECONCILIATION",
+        "missing_printing_ids": [
+          "OP18-049_p1",
+          "OP13-012_p1",
+          "OP17-040_p2"
+        ],
+        "unexpected_printing_ids": [
+          "OP18-064_p1",
+          "OP13-012_p2",
+          "OP17-040_p1"
+        ],
+        "note": "Official source image references are present. These are language-specific Stage 3 supplemental identity differences and must not be classified as missing Bandai source images."
+      }
     },
     {
       "set": "OP-18",
