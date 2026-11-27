@@ -79,7 +79,7 @@ test('OP15-EB04 has one English-only cross-prefix printing after Japanese EB-04 
   const zoroTr = englishOp15.entries.find((entry) => entry.card_number === 'OP13-037')
   assert.equal(zoroTr.rarity, 'TR')
   assert.equal(zoroTr.product, "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]")
-  assert.match(zoroTr.image_url, /OP13-037_p1\\.png/)
+  assert.match(zoroTr.image_url, /OP13-037_p1\.png/)
   assert.equal(japaneseEb04.entries.some((entry) => entry.card_number === 'OP13-037'), false)
   assert.ok(japaneseOp13.entries.some((entry) => entry.card_number === 'OP13-037'))
 
@@ -88,7 +88,7 @@ test('OP15-EB04 has one English-only cross-prefix printing after Japanese EB-04 
     const japaneseEntry = japaneseEb04.entries.find((entry) => entry.card_number === cardNumber)
     assert.ok(englishEntry)
     assert.equal(japaneseEntry.rarity, 'SPカード')
-    assert.match(englishEntry.image_url, new RegExp(cardNumber + '_p2\\\\.png'))
+    assert.match(englishEntry.image_url, new RegExp(cardNumber + '_p2\\.png'))
     assert.match(japaneseEntry.image_url, new RegExp(cardNumber + '_p2\\\\.png'))
   }
 
