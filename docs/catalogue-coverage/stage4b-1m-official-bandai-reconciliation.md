@@ -47,16 +47,16 @@ OP/EB base counts are distinct card-number entries with the requested set prefix
 
 | Set | Language | Official source | Status |
 |---|---|---|---|
-| OP-01 | en | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-01 | jp | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-02 | en | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-02 | jp | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-03 | en | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-03 | jp | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-04 | en | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-04 | jp | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-05 | en | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-05 | jp | SOURCE UNVERIFIED | INCOMPLETE |
+| OP-01 | English | SOURCE UNVERIFIED | INCOMPLETE |
+| OP-01 | Japanese | SOURCE UNVERIFIED | INCOMPLETE |
+| OP-02 | English | SOURCE UNVERIFIED | INCOMPLETE |
+| OP-02 | Japanese | SOURCE UNVERIFIED | INCOMPLETE |
+| OP-03 | English | SOURCE UNVERIFIED | INCOMPLETE |
+| OP-03 | Japanese | SOURCE UNVERIFIED | INCOMPLETE |
+| OP-04 | English | SOURCE UNVERIFIED | INCOMPLETE |
+| OP-04 | Japanese | SOURCE UNVERIFIED | INCOMPLETE |
+| OP-05 | English | SOURCE UNVERIFIED | INCOMPLETE |
+| OP-05 | Japanese | SOURCE UNVERIFIED | INCOMPLETE |
 | OP-06 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569106) | INCOMPLETE |
 | OP-06 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550106) | INCOMPLETE |
 | OP-07 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569107) | INCOMPLETE |
@@ -159,3 +159,13 @@ The inspected Image Library code deduplicates overlapping pagination pages by st
 The working audit branch remains based on `448bc546c30ad1d7c69481dbdf794711810c5560`. PR #38 head `64f1203acc94b9409d6a10941aea00c541899ff4` is 10 commits ahead of that baseline and contains the supplemental catalogue code inspected above. The audit branch was not advanced or merged into PR #38.
 
 No Production deployment, Production Supabase operation or Preview deployment was performed. Browser image-load verification and a fresh CI run for the audit branch remain outstanding.
+
+
+## CI, Preview and PR status
+
+- PR #37: **OPEN**, not merged.
+- PR #38: **OPEN / DRAFT**, not merged.
+- The Cloudflare Preview bot recorded a successful build and deployment for Stage 3 Preview commit `957d5eb` at `2026-11-27T15:48:09Z`: [existing Stage 3 Preview](https://fix-card-reference-images-stage3-2026-11-the-grand-line-archive.andrew420-t27.workers.dev). This is not the current PR #38 head (`64f1203`) or the audit branch head; no new Preview was deployed and no manual browser acceptance is claimed.
+- GitHub combined-status and workflow-run lookups returned no checks/runs for audit commit `e67f2ca95134ba48e684584223baac074fc32afa` or Stage 3 PR #38 head `64f1203acc94b9409d6a10941aea00c541899ff4`.
+- Local `git clone` / npm test, lint and build could not be run because the execution environment could not resolve `github.com`. These checks are **NOT RUN**, not passed.
+- No Production deployment, Production Supabase operation, merge, branch deletion or credential access occurred.
