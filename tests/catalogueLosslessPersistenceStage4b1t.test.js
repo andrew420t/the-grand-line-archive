@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 import test from 'node:test'
 
-const migration = await readFile(new URL('../supabase/migrations/20261127200500_catalogue_lossless_source_persistence_stage4b1t.sql', import.meta.url), 'utf8')
+const migration = await readFile(new URL('../supabase/migrations/20261127195100_catalogue_lossless_source_persistence_stage4b1t.sql', import.meta.url), 'utf8')
 
 test('Stage 4B-1T migration is Testing-scoped and additive only', () => {
   assert.match(migration, /ehzqsnfkmwphyllhaqhe/)
