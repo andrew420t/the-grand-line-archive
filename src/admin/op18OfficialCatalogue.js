@@ -3293,8 +3293,13 @@ function makeSupplementalMatch(printing, language) {
 export function getOp18SupplementalMatches(cardNumber = '') {
   const normalized = String(cardNumber || '').toUpperCase().replace(/\s+/g, '').replace(/_/g, '-').replace(/^(OP)-(\d{2})-/, 'OP$2-')
   return OP18_OFFICIAL_PRINTINGS
-    .filter((printing) => !normalized || [printing.cardNumber, printing.localizedEn?.cardNumber, printing.localizedJp?.cardNumber].includes(normalized))
-    .flatMap((printing) => ['en', 'jp'].map((language) => makeSupplementalMatch(printing, language)))
+    .flatMap((printing) => ['en', 'jp']
+      .filter((language) => {
+        if (!normalized) return true
+        const localized = language === 'jp' ? printing.localizedJp : printing.localizedEn
+        return (localized?.cardNumber || printing.cardNumber) === normalized
+      })
+      .map((language) => makeSupplementalMatch(printing, language)))
 }
 
 export function getOp18ImageTestItems(language = 'en') {
