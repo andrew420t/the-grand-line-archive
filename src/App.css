@@ -5233,3 +5233,23 @@ h2 em {
 .product-edit-bulk-notice {
   margin-top: 12px;
 }
+
+
+.account-heading__actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+.account-settings-page { display:grid; gap:22px; }
+.account-settings-page .admin-view { display:grid; gap:13px; }
+.account-settings-page .admin-view h2,
+.account-settings-page .admin-view h3 { margin:0; color:var(--cream); }
+.account-settings-page .form-field { max-width:560px; }
+.account-settings-page .divider { height:1px; width:100%; background:var(--line); margin:12px 0; }
+.account-settings-page .admin-muted { max-width:700px; }
+.account-settings-page .text-link { color:var(--gold-light); background:none; border:0; padding:0; text-decoration:underline; cursor:pointer; }
+.wanted-avatar-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(135px,1fr)); gap:12px; margin:8px 0 12px; }
+.wanted-avatar { min-height:190px; padding:10px 8px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:8px; color:#292319; background:#e4d8b7; border:3px double #8a744a; cursor:pointer; text-align:center; }
+.wanted-avatar.is-selected { outline:3px solid var(--gold); outline-offset:3px; }
+.wanted-avatar__top { font-family:Georgia,serif; font-size:19px; font-weight:900; letter-spacing:2px; }
+.wanted-avatar__portrait { width:76px; height:76px; display:grid; place-items:center; color:#766448; border:2px solid #9a865d; border-radius:50%; background:radial-gradient(circle,#f5edda,#c7b58e); }
+.wanted-avatar strong { font-family:Georgia,serif; font-size:12px; line-height:1.2; }
+.wanted-avatar small { font-family:Georgia,serif; font-size:8px; letter-spacing:1.5px; }
+.order-archive-button { margin-top:10px; }
+@media (max-width:600px) { .account-heading__actions { width:100%; } .account-heading__actions > * { flex:1; justify-content:center; } }
