@@ -49,10 +49,11 @@ async function readJsonLines(path) {
 }
 
 async function loadCatalogue() {
-  const [cards, tcgcsvPrintings, donSetRows, ...languageData] = await Promise.all([
+  const [cards, tcgcsvPrintings, donSetRows, productSetRows, ...languageData] = await Promise.all([
     readJsonLines('cards.jsonl'),
     readJsonLines('printings/tcgcsv.jsonl'),
     readJsonLines('don_sets.jsonl').catch(() => []),
+    readJsonLines('product_sets.jsonl').catch(() => []),
     ...LANGUAGES.flatMap((language) => [
       readJsonLines(`card_observations/${language}.jsonl`),
       readJsonLines(`printings/${language}.jsonl`),
@@ -64,7 +65,7 @@ async function loadCatalogue() {
 
   const languages = {}
   LANGUAGES.forEach((language, index) => {
-    const offset = index * 5
+    const offset = 1 + index * 5
     languages[language] = {
       observations: languageData[offset],
       printings: languageData[offset + 1],
@@ -116,7 +117,13 @@ async function loadCatalogue() {
     const productsByKey = new Map(data.products.map((item) => [item.key, item]))
     indexes[language] = { observationsByCard, printingsByCard, locatorsByPrinting, printingProductsByPrinting, productsByKey }
   }
-  return { cards, languages, cardsByNumber, cardsByKey, indexes, donSetsByPrintingKey: buildDonSetIndex(donSetRows) }
+  const productSetsByProductKey = new Map()
+  for (const item of productSetRows) {
+    const links = safeMapGet(productSetsByProductKey, item.product_key) || []
+    links.push(item)
+    productSetsByProductKey.set(item.product_key, links)
+  }
+  return { cards, languages, cardsByNumber, cardsByKey, indexes, productSetsByProductKey, donSetsByPrintingKey: buildDonSetIndex(donSetRows) }
 }
 
 async function getCatalogue() {
@@ -176,7 +183,8 @@ export async function findCatalogueMatches(cardNumber) {
         const products = linkedProducts.length ? linkedProducts : [null]
 
         for (const product of products) {
-          const setCode = formatSetCode(getCatalogueProductSetCode(product, card.number || ''))
+          const productSetCodes = (safeMapGet(catalogue.productSetsByProductKey, product?.key) || []).map((item) => item.set_key)
+          const setCode = formatSetCode(getCatalogueProductSetCode(product, card.number || '', productSetCodes))
           results.push({
             id: `${printing.key}:${language}:${product?.key || 'no-product'}`,
             cardKey: card.key,
@@ -204,7 +212,7 @@ export async function findCatalogueMatches(cardNumber) {
             usesBaseImageFallback: imageReference.usesBaseImageFallback,
             usesAlternateOfficialFallback: imageReference.usesAlternateOfficialFallback,
             sourceText: value(printing, 'source_text'),
-            setCode: formatSetCode(getCatalogueProductSetCode(product, card.number || '')),
+            setCode,
             setName: value(product, 'name'),
             productKind: value(product, 'kind'),
             releaseDate: value(product, 'release_date'),
@@ -569,16 +577,19 @@ export async function getCatalogueCoverageReport() {
       const imageUrl = imageReference.imageUrl
       const hasImage = Boolean(imageUrl)
       const products = safeMapGet(index.printingProductsByPrinting, printing.key) || []
-      const linkedProducts = products
+      const linkedProducts = dedupePrintingProducts(products
         .map((link) => safeMapGet(index.productsByKey, link.product_key))
-        .filter(Boolean)
+        .filter(Boolean))
       const observations = safeMapGet(index.observationsByCard, printing.card_key) || []
       const observation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       const isDon = isDonCatalogueEntry({ printing, card, observation })
       const donOverride = isDon ? donOverrides[printing.key + ':' + language] : null
       const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
-      const setCodes = donOverride?.set_code ? [donOverride.set_code] : donSourceSet?.set_codes?.length ? donSourceSet.set_codes : donSourceSet?.set_code ? [donSourceSet.set_code] : [...new Set(linkedProducts.map((product) => product.code).filter(Boolean))]
+      const linkedSetCodes = [...new Set(linkedProducts.flatMap((product) =>
+        (safeMapGet(catalogue.productSetsByProductKey, product.key) || []).map((item) => item.set_key),
+      ))]
+      const setCodes = donOverride?.set_code ? [donOverride.set_code] : donSourceSet?.set_codes?.length ? donSourceSet.set_codes : donSourceSet?.set_code ? [donSourceSet.set_code] : linkedSetCodes.length ? linkedSetCodes : [...new Set(linkedProducts.map((product) => product.code || product.name).filter(Boolean))]
       const setLabels = setCodes.length ? setCodes.map(formatSetCode) : ['Unassigned']
       if (isDon) {
         report.donPrintings += 1
@@ -726,16 +737,22 @@ export async function getCatalogueImageGallery({
       const sourceSetCodes = donSourceSet?.set_codes?.length
         ? donSourceSet.set_codes
         : donSourceSet?.set_code ? [donSourceSet.set_code] : []
+      const productSetCodesByKey = new Map(productChoices.filter(Boolean).map((product) => [
+        product.key,
+        [...new Set((safeMapGet(catalogue.productSetsByProductKey, product.key) || []).map((item) => item.set_key))],
+      ]))
 
       for (const product of productChoices) {
         const rawSetCode = setOverride?.set_code
           || (donSourceSet
             ? (sourceSetCodes.length === 1 ? sourceSetCodes[0] : '')
-            : getCatalogueProductSetCode(product, card?.number || ''))
+            : getCatalogueProductSetCode(product, card?.number || '', productSetCodesByKey.get(product?.key) || []))
         const setCode = formatSetCode(rawSetCode || (isDon ? 'DON!!' : ''))
         const displaySetCodes = setOverride?.set_code
           ? [setOverride.set_code]
-          : sourceSetCodes.length ? sourceSetCodes : [getCatalogueProductSetCode(product, card?.number || '')].filter(Boolean)
+          : sourceSetCodes.length ? sourceSetCodes
+            : productSetCodesByKey.get(product?.key)?.length ? productSetCodesByKey.get(product.key)
+              : [getCatalogueProductSetCode(product, card?.number || '')].filter(Boolean)
         const formattedSetCodes = displaySetCodes.map(formatSetCode)
         const setName = setOverride
           ? 'Manually assigned set'
