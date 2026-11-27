@@ -1149,6 +1149,10 @@ function Storefront() {
             setOrderConfirmation(null)
             navigate('/account/orders')
           }}
+          onContinueShopping={() => {
+            setOrderConfirmation(null)
+            navigate('/shop')
+          }}
         />
       )}
 
