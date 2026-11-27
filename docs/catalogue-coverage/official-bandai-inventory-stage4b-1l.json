@@ -12068,7 +12068,7 @@
       "feed_observed_release_printings": 159,
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "verification_status": "INCOMPLETE",
-      "notes": "199/199 official card-list entries parsed; 199 official card-image URLs associated in document order. 120 distinct OP14-prefixed card numbers; 160 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 0 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness.",
+      "notes": "199/199 official card-list entries parsed; 199 official card-image URLs associated in document order. 120 distinct OP14-prefixed card numbers; 160 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 0 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. The official OP14-EB04 page includes 40 EB04-prefixed entries in addition to OP14-prefixed cards; these are retained in this release-product row and separately represented in the EB-04 English cross-product row.",
       "source_image_url_extraction_shortfall": 0,
       "image_reference_verification": "IDENTIFIERS_MATCHED_NOT_HTTP_TESTED",
       "source_availability": "AVAILABLE",
@@ -13104,7 +13104,7 @@
       "feed_observed_release_printings": 155,
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "verification_status": "INCOMPLETE",
-      "notes": "196/196 official card-list entries parsed; 196 official card-image URLs associated in document order. 119 distinct OP15-prefixed card numbers; 158 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 0 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness.",
+      "notes": "196/196 official card-list entries parsed; 196 official card-image URLs associated in document order. 119 distinct OP15-prefixed card numbers; 158 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 0 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. The official OP15-EB04 page includes 41 EB04-prefixed entries in addition to OP15-prefixed cards; these are retained in this release-product row and separately represented in the EB-04 English cross-product row.",
       "source_image_url_extraction_shortfall": 0,
       "image_reference_verification": "IDENTIFIERS_MATCHED_NOT_HTTP_TESTED",
       "source_availability": "AVAILABLE",
@@ -16096,7 +16096,11 @@
       "unparsed_result_rows": 0,
       "expected_printings": 159,
       "actual_distinct_printings": 159,
-      "missing_printings": null,
+      "missing_printings": [
+        "OP18-049_p1",
+        "OP13-012_p1",
+        "OP17-040_p2"
+      ],
       "duplicate_printing_identities": [],
       "missing_image_references": [],
       "feed_observed_prefix_count": 0,
@@ -16523,6 +16527,7 @@
       "application_supplemental_comparison": {
         "source": "PR #38 Stage 3 branch at 64f1203acc94b9409d6a10941aea00c541899ff4",
         "official_printings": 159,
+        "application_printings": 159,
         "missing_official_image_ids": [
           "OP18-049_p1",
           "OP13-012_p1",
@@ -16532,8 +16537,15 @@
           "OP18-064_p1",
           "OP13-012_p2",
           "OP17-040_p1"
-        ]
-      }
+        ],
+        "metadata_differences": [],
+        "note": "Three English image IDs in the Stage 3 supplemental file do not match the official English page. Correct official IDs are OP18-049_p1, OP13-012_p1 and OP17-040_p2; the application file instead uses OP18-064_p1, OP13-012_p2 and OP17-040_p1."
+      },
+      "unexpected_printings": [
+        "OP18-064_p1",
+        "OP13-012_p2",
+        "OP17-040_p1"
+      ]
     },
     {
       "set": "OP-18",
@@ -16693,7 +16705,7 @@
       "unparsed_result_rows": 0,
       "expected_printings": 159,
       "actual_distinct_printings": 159,
-      "missing_printings": null,
+      "missing_printings": [],
       "duplicate_printing_identities": [],
       "missing_image_references": [],
       "feed_observed_prefix_count": 0,
@@ -17120,9 +17132,56 @@
       "application_supplemental_comparison": {
         "source": "PR #38 Stage 3 branch at 64f1203acc94b9409d6a10941aea00c541899ff4",
         "official_printings": 159,
+        "application_printings": 159,
         "missing_official_image_ids": [],
-        "unexpected_application_image_ids": []
-      }
+        "unexpected_application_image_ids": [],
+        "metadata_differences": [
+          {
+            "image_id": "OP18-064_p1",
+            "field": "name",
+            "official": "キリンガム聖",
+            "application": "TRSaint Killinghamキリンガム聖"
+          },
+          {
+            "image_id": "OP13-012_p2",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "OP13-113_p2",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "OP17-040_p1",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "OP18-084_p2",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "ST24-004_p1",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "ST34-004_p1",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          }
+        ],
+        "note": "All 159 Japanese image IDs match. One Japanese TR name is incorrect/concatenated; six SP labels are normalized to English 'SP CARD' rather than official Japanese 'SPカード'."
+      },
+      "unexpected_printings": []
     },
     {
       "set": "EB-01",
@@ -18857,7 +18916,7 @@
         "L": 1,
         "SEC": 1
       },
-      "official_page_result_count": 81,
+      "official_page_result_count": null,
       "official_page_entry_count": 81,
       "official_source_image_url_count": 81,
       "unparsed_result_rows": 0,
@@ -18870,7 +18929,7 @@
       "feed_observed_release_printings": 100,
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "verification_status": "INCOMPLETE",
-      "notes": "Latest direct retrieval still failed to render the official EB-04 English card list (generic Bandai 'Failed to display the card list' message). No result count, entries or card image URLs were returned. This is a source retrieval/render failure, not an empty inventory; no feed count substituted.",
+      "notes": "Latest direct retrieval still failed to render the official EB-04 English card list (generic Bandai 'Failed to display the card list' message). No result count, entries or card image URLs were returned. This is a source retrieval/render failure, not an empty inventory; no feed count substituted. English has no standalone EB-04 series page; 40 EB04 entries were extracted from OP14-EB04 and 41 from OP15-EB04, together covering EB04-001 through EB04-061 with 81 official image-backed printings.",
       "source_image_url_extraction_shortfall": 0,
       "image_reference_verification": "IDENTIFIERS_MATCHED_NOT_HTTP_TESTED",
       "source_availability": "AVAILABLE VIA OP14-EB04 + OP15-EB04",
@@ -19098,7 +19157,19 @@
         "image_urls": 0,
         "classification": "OFFICIAL_PAGE_CARD_LIST_FAILED_TO_RENDER",
         "note": "This confirms a retrieval/render failure for this attempt, not that EB-04 English has zero cards or zero official images. Keep SOURCE UNVERIFIED."
-      }
+      },
+      "source_result_counts": [
+        {
+          "url": "https://en.onepiece-cardgame.com/cardlist/?series=569114",
+          "page_result_count": 199,
+          "matching_eb04_entries": 40
+        },
+        {
+          "url": "https://en.onepiece-cardgame.com/cardlist/?series=569115",
+          "page_result_count": 196,
+          "matching_eb04_entries": 41
+        }
+      ]
     },
     {
       "set": "EB-04",
@@ -19142,7 +19213,7 @@
       "feed_observed_release_printings": 85,
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "verification_status": "INCOMPLETE",
-      "notes": "85/85 official card-list entries parsed; 85 official card-image URLs associated in document order. 61 distinct EB04-prefixed card numbers; 65 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 0 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness.",
+      "notes": "85/85 official card-list entries parsed; 85 official card-image URLs associated in document order. 61 distinct EB04-prefixed card numbers; 65 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 0 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. Official Japanese page contains 4 additional non-EB04-numbered inclusions: EB01-023, OP11-106, PRB02-006, PRB02-014.",
       "source_image_url_extraction_shortfall": 0,
       "image_reference_verification": "IDENTIFIERS_MATCHED_NOT_HTTP_TESTED",
       "source_availability": "AVAILABLE",
@@ -19472,7 +19543,7 @@
       "unparsed_result_rows": 0,
       "expected_printings": 96,
       "actual_distinct_printings": 96,
-      "missing_printings": null,
+      "missing_printings": [],
       "duplicate_printing_identities": [],
       "missing_image_references": [],
       "feed_observed_prefix_count": 0,
@@ -19725,9 +19796,13 @@
       "application_supplemental_comparison": {
         "source": "PR #38 Stage 3 branch at 64f1203acc94b9409d6a10941aea00c541899ff4",
         "official_printings": 96,
+        "application_printings": 96,
         "missing_official_image_ids": [],
-        "unexpected_application_image_ids": []
-      }
+        "unexpected_application_image_ids": [],
+        "metadata_differences": [],
+        "note": "All 96 English official image IDs, card numbers, names and rarity match the supplemental catalogue."
+      },
+      "unexpected_printings": []
     },
     {
       "set": "EB-05",
@@ -19832,7 +19907,7 @@
       "unparsed_result_rows": 0,
       "expected_printings": 96,
       "actual_distinct_printings": 96,
-      "missing_printings": null,
+      "missing_printings": [],
       "duplicate_printing_identities": [],
       "missing_image_references": [],
       "feed_observed_prefix_count": 0,
@@ -20085,9 +20160,62 @@
       "application_supplemental_comparison": {
         "source": "PR #38 Stage 3 branch at 64f1203acc94b9409d6a10941aea00c541899ff4",
         "official_printings": 96,
+        "application_printings": 96,
         "missing_official_image_ids": [],
-        "unexpected_application_image_ids": []
-      }
+        "unexpected_application_image_ids": [],
+        "metadata_differences": [
+          {
+            "image_id": "EB05-006_p2",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "EB05-016_p2",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "EB05-031_p1",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "OP01-016_p9",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "OP14-033_p3",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "OP17-081_p1",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "OP17-109_p1",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          },
+          {
+            "image_id": "ST17-004_p3",
+            "field": "rarity",
+            "official": "SPカード",
+            "application": "SP CARD"
+          }
+        ],
+        "note": "All 96 Japanese official image IDs and names match. Eight SP labels are normalized to English 'SP CARD' rather than official Japanese 'SPカード'."
+      },
+      "unexpected_printings": []
     },
     {
       "set": "PRB-01",
@@ -23305,11 +23433,12 @@
     "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json"
   ],
   "application_reconciliation_summary": {
-    "OP-18 English": "3 official image IDs differ from the Stage 3 supplemental file; see row-level missing/unexpected IDs.",
-    "OP-18 Japanese": "All image IDs match; one Japanese TR name mismatch and six localized SP rarity labels.",
+    "OP-18 English": "159 official printings; three incorrect English image IDs in PR #38 supplemental source, recorded in missing_printings/unexpected_printings.",
+    "OP-18 Japanese": "159/159 image IDs match; one Japanese TR name mismatch and six localized SP rarity labels require correction/normalization.",
     "EB-05 English": "96/96 official image IDs and card metadata match Stage 3 supplemental catalogue.",
-    "EB-05 Japanese": "96/96 image IDs and names match; eight SP rarity labels normalized from SPカード to SP CARD.",
-    "OP-15": "Base card-list entries verified. Best Selection Vol.6 has separate alternate-art printings for OP15-075 and OP15-108; official product-page identity and image crosswalk still require final evidence."
+    "EB-05 Japanese": "96/96 image IDs and names match; eight SP rarity labels are localized as SPカード in Bandai and normalized as SP CARD in the supplemental catalogue.",
+    "OP-15": "Base card-list entries verified. Best Selection Vol.6 has separate alternate-art printings for OP15-075 and OP15-108; official product-page identity and image crosswalk still require final evidence.",
+    "EB-04 English": "No standalone English EB-04 page. Official English EB04 numbers are split 31 on OP14-EB04 and 30 on OP15-EB04; combined 81 printing entries."
   },
   "last_updated": "2026-11-27"
 }
