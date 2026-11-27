@@ -80,3 +80,7 @@ test('audit summary makes unchecked and not-yet-processed references visible', (
   assert.equal(summary.counts[IMAGE_CHECK_STATUS.TIMEOUT], 1)
   assert.equal(summary.counts[IMAGE_CHECK_STATUS.MISSING], 1)
 })
+
+test('deduplicates candidate URLs without changing their priority', () => {
+  assert.deepEqual(dedupeImageCandidates(['/proxy/card.png', '/proxy/card.png', 'https://cdn.example/card.png', '']), ['/proxy/card.png', 'https://cdn.example/card.png'])
+})
