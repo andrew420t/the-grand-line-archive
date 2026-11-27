@@ -1,0 +1,91 @@
+name: Stage 4B-1V A5S-1R-1 pinned source verification
+
+on:
+  push:
+    branches:
+      - audit/official-bandai-inventory-stage4b-1l-2026-11-27
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-pinned-catalogue-source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out application repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Confirm required audit branch and starting commit ancestry
+        shell: bash
+        run: |
+          test "${GITHUB_REF}" = "refs/heads/audit/official-bandai-inventory-stage4b-1l-2026-11-27"
+          git merge-base --is-ancestor b24b6aae10b26aede3af4ebaf094d5688d9e4f0f HEAD
+          echo "Application HEAD: $(git rev-parse HEAD)"
+          echo "Required starting commit is an ancestor."
+
+      - name: Check out exact upstream catalogue source
+        uses: actions/checkout@v4
+        with:
+          repository: hotavocado/koala-kollect-data
+          ref: 619965ec198047de519dc6eb098c7a56aed9bd58
+          path: .source/koala-kollect-data
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify upstream commit, tree and manifest Git blob
+        id: source_identity
+        shell: bash
+        run: |
+          cd .source/koala-kollect-data
+          actual_commit="$(git rev-parse HEAD)"
+          actual_tree="$(git rev-parse HEAD^{tree})"
+          manifest_blob="$(git hash-object manifest.json)"
+          test "$actual_commit" = "619965ec198047de519dc6eb098c7a56aed9bd58"
+          test "$actual_tree" = "d0059fd77462cf377b9dfd65d87a6afabc76077f"
+          test "$manifest_blob" = "5b76b3f0ceb268d1bf43bff7c5dd54ab438076e7"
+          echo "commit=$actual_commit" >> "$GITHUB_OUTPUT"
+          echo "tree=$actual_tree" >> "$GITHUB_OUTPUT"
+          echo "manifest_blob=$manifest_blob" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install application dependencies
+        run: npm ci
+
+      - name: Run offline source-verifier tests
+        run: node --test test/catalogue-source-integrity-stage4b1vA5s1r1.test.mjs
+
+      - name: Independently verify all pinned source files and emit five reports
+        run: |
+          node scripts/verifyPinnedCatalogueSourceStage4b1vA5s1r1.mjs \
+            --source-dir .source/koala-kollect-data \
+            --actual-commit "${{ steps.source_identity.outputs.commit }}" \
+            --actual-tree "${{ steps.source_identity.outputs.tree }}" \
+            --output-dir artifacts
+
+      - name: Run complete application test suite
+        run: npm test
+
+      - name: Run application lint
+        run: npm run lint
+
+      - name: Build production application
+        run: npm run build
+
+      - name: Upload source verification and reconciliation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage4b-1v-a5s-1r-1-source-verification
+          path: artifacts/*.json
+          if-no-files-found: warn
+          retention-days: 30
