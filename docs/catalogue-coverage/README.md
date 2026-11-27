@@ -82,3 +82,18 @@ The extracted Japanese pages did not expose the same visible “N Results” lab
 - EB-05's official page includes 61 EB05-prefixed card numbers plus reprint/inclusion entries. The 61 is the base-prefix inventory, not the total printing inventory.
 - The other 22 set/language combinations have not yet been independently enumerated in this stage. They remain `SOURCE UNVERIFIED` in the audit matrix.
 - No catalogue entries were added from these page counts alone. No artwork was copied, substituted or re-hosted.
+
+
+## Stage 4B-1M — Official Bandai extraction and reconciliation
+
+Retrieved 2026-11-27. The machine-readable 50-row bilingual matrix is `official-bandai-inventory-stage4b-1l.json`; the full source list and reconciliation report is `stage4b-1m-official-bandai-reconciliation.md`. Raw page extracts are stored in the `bandai-extraction-*.json` files.
+
+Official Bandai pages returned usable result lists for 43 of the 44 language/set pages in the 22 previously outstanding sets. The English EB-04 page returned only the filter shell and remains `SOURCE UNVERIFIED`. PRB-01 and PRB-02 result totals were captured, but the structured text parser did not capture every row (14 and 67 row shortfalls respectively), so their distinct card-number inventories remain `SOURCE UNVERIFIED`.
+
+For all OP/EB sets with usable pages, the distinct set-prefixed base-card numbers matched the observed feed/supplement list; the matrix records zero missing and zero unexpected base numbers. This is not a full printing or image completeness claim. The Koala feed snapshot was generated 2026-10-22 and is 36 days old at retrieval.
+
+OP-18 supplemental data was compared with both Bandai language pages: 159/159 metadata entries and 159/159 image IDs matched in each language. EB-05: 96/96 metadata entries and 96/96 image IDs matched in each language. These are identifier checks, not live HTTP/browser image-load tests.
+
+OP-15 has 119 OP15-prefixed base numbers in each language. Its English/Japanese product result counts are 196/152; product-page rows include other-prefix reprints/inclusions. OP15-075 and OP15-108 each have one Premium Card Collection - Best Selection Vol.6 printing key also linked to the generic `Other Product Card` placeholder. The Stage 3 gallery deduplication logic suppresses only the generic link when the named product is present, and tests cover the case.
+
+No set is marked `COMPLETE` in this stage. Printing identity reconciliation, full live image verification, and a fresh CI run for the audit branch remain outstanding. PR #37 and PR #38 remain open and unmerged; no Production deployment or Supabase operation was performed.
