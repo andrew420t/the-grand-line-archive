@@ -149,3 +149,14 @@ test('upstream product-link counts match every standalone official product page'
     }
   }
 })
+
+test('OP-18 audit branch fix records language-specific card numbers and image IDs', () => {
+  for (const language of ['English', 'Japanese']) {
+    const fix = rowFor('OP-18', language).application_supplemental_comparison.audit_branch_fix
+    assert.equal(fix.status, 'IMPLEMENTED; CI AND LIVE IMAGE AUDIT PENDING')
+    assert.equal(fix.union_printing_records, 160)
+    assert.equal(fix.english_printings, 159)
+    assert.equal(fix.japanese_printings, 159)
+    assert.ok(fix.changes.some((change) => change.includes('cardNumberEn/cardNumberJp')))
+  }
+})
