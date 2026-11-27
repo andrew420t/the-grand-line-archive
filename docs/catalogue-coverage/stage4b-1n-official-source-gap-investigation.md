@@ -1,6 +1,6 @@
-# Stage 4B-1N — Official source gaps and image verification
+# Stage 4B-1N — Official source gaps and printing/image verification
 
-**Retrieved:** 2026-11-27  
+**Audit date:** 2026-11-27  
 **Repository:** `andrew420t/the-grand-line-archive`  
 **Working branch:** `audit/official-bandai-inventory-stage4b-1l-2026-11-27`  
 **Starting commit:** `6e39eb3a34639127ccfe1c404c5db8d6d429e54a`  
@@ -9,146 +9,214 @@
 
 ## Executive result
 
-The official source inventory now has a source locator and extraction evidence for all 50 language/set rows. The standalone English EB-04 URL still fails to render, but its full inventory was recovered from the two official combined product pages:
+The full entry-level Bandai inventory now covers **all 50 language/set rows**. Each row has a source result count, parsed entry count, official image URL count and distinct image identity count. The detailed source records preserve card number, rarity, type, name, product/release label, reprint flag, exact image URL and entry-to-image alignment.
 
-- OP14-EB04: 40 EB-04 entries, 31 distinct EB04 card numbers, 40 official image IDs.
-- OP15-EB04: 41 EB-04 entries, 30 distinct EB04 card numbers, 41 official image IDs.
-- Combined: 61 distinct card numbers (EB04-001 through EB04-061), 81 distinct official image IDs/URLs, all paired to a parsed card entry. Two SP CARD printings (EB04-003 and EB04-039) remain separate identities. No image HTTP status has yet been checked.
+- Full official product entries: **7,867** across the 50 matrix rows.
+- Unique official image URLs: **7,786**. The 81 English EB-04 entries are a filtered subset of OP14-EB04 and OP15-EB04 product pages and are not double-counted as new URLs.
+- All 50 rows: result count = parsed entries = image URL count; zero unparsed official rows; zero source image omissions in the detailed extraction; zero URL extraction shortfall.
+- Official printing IDs are unique within each language/set row and match the recorded printing count.
+- No row is marked COMPLETE because live HTTP image responses and full application printing-identity reconciliation have not yet passed.
 
-The matrix is conservatively **50 INCOMPLETE, 0 COMPLETE, 0 IMAGE MISSING, 0 DUPLICATE, 0 SOURCE UNVERIFIED**. All 50 rows have source evidence, but no row is marked complete because HTTP image loading and several printing/parser reconciliations remain unfinished. Extraction shortfalls are not classified as missing images.
+<badge color="warning">50 INCOMPLETE</badge> 0 COMPLETE · 0 IMAGE MISSING · 0 DUPLICATE · 0 SOURCE UNVERIFIED
 
-## All 50 language/set rows
+## All 50 language/set results
 
-Counts are **official page result rows / parsed product entries / extracted image URLs**. A base count is shown only for OP/EB base-number prefixes. PRB base counts are deliberately blank; PRB parsed card-number observations are reported separately below.
+Counts are **official result rows / parsed entries / official image URLs**. Base count refers only to the original OP/EB card-number prefix. PRB prefix counts are shown separately and are not represented as original base-card counts.
 
-| Set | Language | Base numbers | Results | Parsed | Image URLs | Unparsed | Image URL shortfall | Status |
+| Set | Language | Base numbers | Distinct product numbers | PRB product-prefix numbers | Results / entries / images | Distinct printings | Feed-missing base numbers | Status |
 |---|---|---:|---:|---:|---:|---:|---:|---|
-| OP-01 | English | 121 | 154 | 154 | 154 | 0 | 0 | INCOMPLETE |
-| OP-01 | Japanese | 121 | 154 | 154 | 154 | 0 | 0 | INCOMPLETE |
-| OP-02 | English | 121 | 154 | 154 | 154 | 0 | 0 | INCOMPLETE |
-| OP-02 | Japanese | 121 | 154 | 154 | 154 | 0 | 0 | INCOMPLETE |
-| OP-03 | English | 123 | 154 | 154 | 154 | 0 | 0 | INCOMPLETE |
-| OP-03 | Japanese | 123 | 154 | 154 | 154 | 0 | 0 | INCOMPLETE |
-| OP-04 | English | 119 | 149 | 149 | 149 | 0 | 0 | INCOMPLETE |
-| OP-04 | Japanese | 119 | 149 | 149 | 149 | 0 | 0 | INCOMPLETE |
-| OP-05 | English | 119 | 154 | 154 | 154 | 0 | 0 | INCOMPLETE |
-| OP-05 | Japanese | 119 | 154 | 154 | 154 | 0 | 0 | INCOMPLETE |
-| OP-06 | English | 119 | 151 | 151 | 151 | 0 | 0 | INCOMPLETE |
-| OP-06 | Japanese | 119 | 150 | 150 | 150 | 0 | 0 | INCOMPLETE |
-| OP-07 | English | 119 | 151 | 151 | 151 | 0 | 0 | INCOMPLETE |
-| OP-07 | Japanese | 119 | 150 | 150 | 150 | 0 | 0 | INCOMPLETE |
-| OP-08 | English | 119 | 151 | 151 | 151 | 0 | 0 | INCOMPLETE |
-| OP-08 | Japanese | 119 | 150 | 150 | 150 | 0 | 0 | INCOMPLETE |
-| OP-09 | English | 119 | 159 | 159 | 159 | 0 | 0 | INCOMPLETE |
-| OP-09 | Japanese | 119 | 158 | 158 | 158 | 0 | 0 | INCOMPLETE |
-| OP-10 | English | 119 | 151 | 151 | 151 | 0 | 0 | INCOMPLETE |
-| OP-10 | Japanese | 119 | 150 | 150 | 150 | 0 | 0 | INCOMPLETE |
-| OP-11 | English | 119 | 156 | 156 | 154 | 0 | 2 | INCOMPLETE |
-| OP-11 | Japanese | 119 | 155 | 155 | 153 | 0 | 2 | INCOMPLETE |
-| OP-12 | English | 119 | 155 | 155 | 153 | 0 | 2 | INCOMPLETE |
-| OP-12 | Japanese | 119 | 154 | 154 | 152 | 0 | 2 | INCOMPLETE |
-| OP-13 | English | 120 | 175 | 175 | 175 | 0 | 0 | INCOMPLETE |
-| OP-13 | Japanese | 120 | 174 | 174 | 174 | 0 | 0 | INCOMPLETE |
-| OP-14 | English | 120 | 199 | 198 | 199 | 1 | 0 | INCOMPLETE |
-| OP-14 | Japanese | 120 | 156 | 156 | 156 | 0 | 0 | INCOMPLETE |
-| OP-15 | English | 119 | 196 | 194 | 194 | 2 | 2 | INCOMPLETE |
-| OP-15 | Japanese | 119 | 152 | 151 | 151 | 1 | 1 | INCOMPLETE |
-| OP-16 | English | 119 | 155 | 155 | 154 | 0 | 1 | INCOMPLETE |
-| OP-16 | Japanese | 119 | 155 | 155 | 154 | 0 | 1 | INCOMPLETE |
-| OP-17 | English | 119 | 169 | 167 | 164 | 2 | 5 | INCOMPLETE |
-| OP-17 | Japanese | 119 | 169 | 167 | 164 | 2 | 5 | INCOMPLETE |
-| OP-18 | English | 119 | 159 | 159 | 159 | 0 | 0 | INCOMPLETE |
-| OP-18 | Japanese | 119 | 159 | 159 | 159 | 0 | 0 | INCOMPLETE |
-| EB-01 | English | 61 | 80 | 80 | 80 | 0 | 0 | INCOMPLETE |
-| EB-01 | Japanese | 61 | 80 | 80 | 80 | 0 | 0 | INCOMPLETE |
-| EB-02 | English | 61 | 105 | 105 | 105 | 0 | 0 | INCOMPLETE |
-| EB-02 | Japanese | 61 | 105 | 105 | 105 | 0 | 0 | INCOMPLETE |
-| EB-03 | English | 62 | 90 | 90 | 90 | 0 | 0 | INCOMPLETE |
-| EB-03 | Japanese | 62 | 90 | 90 | 90 | 0 | 0 | INCOMPLETE |
-| EB-04 | English | 61 | 81 | 81 | 81 | 0 | 0 | INCOMPLETE |
-| EB-04 | Japanese | 61 | 85 | 83 | 83 | 2 | 2 | INCOMPLETE |
-| EB-05 | English | 61 | 96 | 96 | 96 | 0 | 0 | INCOMPLETE |
-| EB-05 | Japanese | 61 | 96 | 96 | 96 | 0 | 0 | INCOMPLETE |
-| PRB-01 | English | — | 319 | 305 | 197 | 14 | 122 | INCOMPLETE |
-| PRB-01 | Japanese | — | 319 | 305 | 197 | 14 | 122 | INCOMPLETE |
-| PRB-02 | English | — | 316 | 249 | 109 | 67 | 207 | INCOMPLETE |
-| PRB-02 | Japanese | — | 316 | 249 | 109 | 67 | 207 | INCOMPLETE |
+| OP-01 | English | 121 | 121 | — | 154/154/154 | 154 | 0 | INCOMPLETE |
+| OP-01 | Japanese | 121 | 121 | — | 154/154/154 | 154 | 0 | INCOMPLETE |
+| OP-02 | English | 121 | 121 | — | 154/154/154 | 154 | 0 | INCOMPLETE |
+| OP-02 | Japanese | 121 | 121 | — | 154/154/154 | 154 | 0 | INCOMPLETE |
+| OP-03 | English | 123 | 127 | — | 154/154/154 | 154 | 0 | INCOMPLETE |
+| OP-03 | Japanese | 123 | 127 | — | 154/154/154 | 154 | 0 | INCOMPLETE |
+| OP-04 | English | 119 | 124 | — | 149/149/149 | 149 | 0 | INCOMPLETE |
+| OP-04 | Japanese | 119 | 124 | — | 149/149/149 | 149 | 0 | INCOMPLETE |
+| OP-05 | English | 119 | 125 | — | 154/154/154 | 154 | 0 | INCOMPLETE |
+| OP-05 | Japanese | 119 | 125 | — | 154/154/154 | 154 | 0 | INCOMPLETE |
+| OP-06 | English | 119 | 126 | — | 151/151/151 | 151 | 0 | INCOMPLETE |
+| OP-06 | Japanese | 119 | 125 | — | 150/150/150 | 150 | 0 | INCOMPLETE |
+| OP-07 | English | 119 | 126 | — | 151/151/151 | 151 | 0 | INCOMPLETE |
+| OP-07 | Japanese | 119 | 125 | — | 150/150/150 | 150 | 0 | INCOMPLETE |
+| OP-08 | English | 119 | 126 | — | 151/151/151 | 151 | 0 | INCOMPLETE |
+| OP-08 | Japanese | 119 | 125 | — | 150/150/150 | 150 | 0 | INCOMPLETE |
+| OP-09 | English | 119 | 127 | — | 159/159/159 | 159 | 0 | INCOMPLETE |
+| OP-09 | Japanese | 119 | 126 | — | 158/158/158 | 158 | 0 | INCOMPLETE |
+| OP-10 | English | 119 | 126 | — | 151/151/151 | 151 | 0 | INCOMPLETE |
+| OP-10 | Japanese | 119 | 125 | — | 150/150/150 | 150 | 0 | INCOMPLETE |
+| OP-11 | English | 119 | 127 | — | 156/156/156 | 156 | 0 | INCOMPLETE |
+| OP-11 | Japanese | 119 | 126 | — | 155/155/155 | 155 | 0 | INCOMPLETE |
+| OP-12 | English | 119 | 127 | — | 155/155/155 | 155 | 0 | INCOMPLETE |
+| OP-12 | Japanese | 119 | 126 | — | 154/154/154 | 154 | 0 | INCOMPLETE |
+| OP-13 | English | 120 | 129 | — | 175/175/175 | 175 | 0 | INCOMPLETE |
+| OP-13 | Japanese | 120 | 128 | — | 174/174/174 | 174 | 0 | INCOMPLETE |
+| OP-14 | English | 120 | 160 | — | 199/199/199 | 199 | 0 | INCOMPLETE |
+| OP-14 | Japanese | 120 | 126 | — | 156/156/156 | 156 | 0 | INCOMPLETE |
+| OP-15 | English | 119 | 158 | — | 196/196/196 | 196 | 0 | INCOMPLETE |
+| OP-15 | Japanese | 119 | 125 | — | 152/152/152 | 152 | 0 | INCOMPLETE |
+| OP-16 | English | 119 | 125 | — | 155/155/155 | 155 | 0 | INCOMPLETE |
+| OP-16 | Japanese | 119 | 125 | — | 155/155/155 | 155 | 0 | INCOMPLETE |
+| OP-17 | English | 119 | 130 | — | 169/169/169 | 169 | 0 | INCOMPLETE |
+| OP-17 | Japanese | 119 | 130 | — | 169/169/169 | 169 | 0 | INCOMPLETE |
+| OP-18 | English | 119 | 125 | — | 159/159/159 | 159 | 119 | INCOMPLETE |
+| OP-18 | Japanese | 119 | 125 | — | 159/159/159 | 159 | 119 | INCOMPLETE |
+| EB-01 | English | 61 | 61 | — | 80/80/80 | 80 | 0 | INCOMPLETE |
+| EB-01 | Japanese | 61 | 61 | — | 80/80/80 | 80 | 0 | INCOMPLETE |
+| EB-02 | English | 61 | 87 | — | 105/105/105 | 105 | 0 | INCOMPLETE |
+| EB-02 | Japanese | 61 | 87 | — | 105/105/105 | 105 | 0 | INCOMPLETE |
+| EB-03 | English | 62 | 62 | — | 90/90/90 | 90 | 0 | INCOMPLETE |
+| EB-03 | Japanese | 62 | 62 | — | 90/90/90 | 90 | 0 | INCOMPLETE |
+| EB-04 | English | 61 | 61 | — | 81/81/81 | 81 | 0 | INCOMPLETE |
+| EB-04 | Japanese | 61 | 65 | — | 85/85/85 | 85 | 0 | INCOMPLETE |
+| EB-05 | English | 61 | 72 | — | 96/96/96 | 96 | 61 | INCOMPLETE |
+| EB-05 | Japanese | 61 | 72 | — | 96/96/96 | 96 | 61 | INCOMPLETE |
+| PRB-01 | English | — | 111 | 1 | 319/319/319 | 319 | — | INCOMPLETE |
+| PRB-01 | Japanese | — | 111 | 1 | 319/319/319 | 319 | — | INCOMPLETE |
+| PRB-02 | English | — | 173 | 18 | 316/316/316 | 316 | — | INCOMPLETE |
+| PRB-02 | Japanese | — | 173 | 18 | 316/316/316 | 316 | — | INCOMPLETE |
 
-## Confirmed extraction gaps and classification
+## EB-04 English — standalone page resolved through combined products
 
-| Source | English | Japanese | Current interpretation |
+The standalone English EB-04 page still returns Bandai's generic card-list display failure. Its inventory is fully recovered from the official combined product pages:
+
+- [OP14-EB04 official page](https://en.onepiece-cardgame.com/cardlist/?series=569114): 40 EB-04 entries, 31 distinct EB04 card numbers, 40 image IDs.
+- [OP15-EB04 official page](https://en.onepiece-cardgame.com/cardlist/?series=569115): 41 EB-04 entries, 30 distinct EB04 card numbers, 41 image IDs.
+- Combined: **81 entries, 61 distinct card numbers (EB04-001 through EB04-061), 81 unique printing/image identities**.
+- EB04-003 and EB04-039 each have a separate SP CARD printing; those are preserved as separate identities.
+- The EB-04 English matrix row records the two source URLs and the combined product-page result counts (199 and 196). The 81 filtered EB-04 entries remain part of the OP14/OP15 release-product rows as well.
+
+## PRB-01 and PRB-02 — complete entry extraction
+
+The more complete Stage 4B-1M entry-level inventories supersede the weaker secondary parser. Every result row has an exact card number, rarity, type, name, release-product label, reprint flag and official image URL.
+
+| Product | Language | Result / parsed / images | Distinct product card numbers | PRB-prefixed product numbers | Reprint card numbers | Printing identities |
+|---|---|---:|---:|---:|---:|---:|
+| PRB-01 | English | 319 / 319 / 319 | 111 | 1 | 110 | 319 |
+| PRB-01 | Japanese | 319 / 319 / 319 | 111 | 1 | 110 | 319 |
+| PRB-02 | English | 316 / 316 / 316 | 173 | 18 | 155 | 316 |
+| PRB-02 | Japanese | 316 / 316 / 316 | 173 | 18 | 155 | 316 |
+
+The 1 and 18 PRB-prefixed values are recorded as **release-product prefix numbers**, not asserted as original base-card counts. The original OP/EB/ST card numbers remain separately recorded as reprints. No PRB base-card count is invented.
+
+### Secondary parser shortfalls — resolved
+
+The earlier secondary parser reported the following incomplete results. The full entry-level inventories recover all of these rows and image URLs:
+
+| Source | Secondary parser | Full entry-level extraction | Finding |
 |---|---:|---:|---|
-| OP-11 | 156 / 156 / 154 | 155 / 155 / 153 | No unparsed card rows; 2 image URLs short of page rows per language. Extraction gap only. |
-| OP-12 | 155 / 155 / 153 | 154 / 154 / 152 | No unparsed card rows; 2 image URLs short per language. Extraction gap only. |
-| OP-14 | 199 / 198 / 199 | 156 / 156 / 156 | English has one unparsed product row but no image URL count shortfall. The product page includes EB-04 and other release inclusions; release product is not the original card-number set. |
-| OP-15 | 196 / 194 / 194 | 152 / 151 / 151 | English: 2 unparsed rows and 2 image URL shortfall. Japanese: 1 unparsed row and 1 image URL shortfall. Base prefix numbers remain 119 per language. |
-| OP-16 | 155 / 155 / 154 | 155 / 155 / 154 | One image URL short per language; no unparsed card rows. |
-| OP-17 | 169 / 167 / 164 | 169 / 167 / 164 | Two unparsed rows and five image URLs short per language. |
-| EB-04 | 81 / 81 / 81 via combined pages | 85 / 83 / 83 | English fully extracted from OP14-EB04 and OP15-EB04; Japanese has two unparsed rows and two image URL extraction shortfall. |
-| PRB-01 | 319 / 305 / 197 | 319 / 305 / 197 | 14 unparsed rows per language; 122 image URL extraction shortfall per language. |
-| PRB-02 | 316 / 249 / 109 | 316 / 249 / 109 | 67 unparsed rows per language; 207 image URL extraction shortfall per language. |
+| OP-11 EN | 156 / 156 / 154 | 156 / 156 / 156 | 2 image URLs omitted by secondary parser |
+| OP-11 JP | 155 / 155 / 153 | 155 / 155 / 155 | 2 omitted |
+| OP-12 EN | 155 / 155 / 153 | 155 / 155 / 155 | 2 omitted |
+| OP-12 JP | 154 / 154 / 152 | 154 / 154 / 154 | 2 omitted |
+| OP-14 EN | 199 / 198 / 199 | 199 / 199 / 199 | 1 entry omitted by secondary parser; image URL existed |
+| OP-15 EN | 196 / 194 / 194 | 196 / 196 / 196 | 2 entries and 2 image URLs omitted by secondary parser |
+| OP-15 JP | 152 / 151 / 151 | 152 / 152 / 152 | 1 entry and image URL omitted |
+| OP-16 EN | 155 / 155 / 154 | 155 / 155 / 155 | 1 image URL omitted |
+| OP-16 JP | 155 / 155 / 154 | 155 / 155 / 155 | 1 image URL omitted |
+| OP-17 EN | 169 / 167 / 164 | 169 / 169 / 169 | 2 entries and 5 image URLs omitted |
+| OP-17 JP | 169 / 167 / 164 | 169 / 169 / 169 | 2 entries and 5 image URLs omitted |
+| EB-04 JP | 85 / 83 / 83 | 85 / 85 / 85 | 2 entries and 2 image URLs omitted |
+| PRB-01 EN/JP | 319 / 305 / 197 | 319 / 319 / 319 | 14 entries and 122 image URLs omitted per language |
+| PRB-02 EN/JP | 316 / 249 / 109 | 316 / 316 / 316 | 67 entries and 207 image URLs omitted per language |
 
-An image URL extraction shortfall is a difference between the page result count and the extracted URL count. It is **not** evidence that Bandai's image is broken or missing. Likewise, an unparsed result row is not automatically a missing card or a separate printing.
+These are confirmed secondary-parser omissions, **not missing Bandai card entries or missing source images**. The complete entry-level extraction reports `ENTRY_ORDER_MATCH` and zero missing source-image entries for these rows.
 
-## PRB-01 and PRB-02 — what is actually established
+## OP-15 non-base product-number reconciliation
 
-The extracted rows provide these partial, language-specific card-number observations:
+Both languages contain all 119 OP15-prefixed base card numbers. English has 39 reprint card numbers and Japanese has 6 because the English OP15 page combines the OP15-EB04 product assignment while Japanese EB-04 is listed separately.
 
-- PRB-01: 305 parsed entries and 106 distinct original OP/EB/ST card numbers in each language; 14 result rows remain unparsed.
-- PRB-02: 249 parsed entries and 140 distinct original OP/EB/ST card numbers in each language; 67 result rows remain unparsed.
+The 33 English-only reprint card numbers consist of 30 EB04-prefixed numbers plus three additional official non-EB04 printings:
 
-The source data does not yet associate every result row with an exact image ID, rarity/type/name tuple and release printing identity. Repeated card-number/name/rarity/type signatures are retained as candidate separate printings, not discarded as duplicates. No PRB base-card count, complete reprint list, or complete printing total is asserted. The matrix stores parsed card-number lists separately from the unknown complete product inventory. Feed-side PRB prefix observations are retained only as feed metadata and are not official PRB base-card counts.
+- **OP11-106** — Zeus, SP CARD, image ID `OP11-106_p2`.
+- **OP13-037** — Roronoa Zoro, Treasure Rare, image ID `OP13-037_p1`.
+- **PRB02-014** — Sabo, SP CARD, image ID `PRB02-014_p2`.
 
-## Other reconciliation observations
+All three entries carry the official product label `-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]`. PRB02-014 is a distinct OP15-EB04 printing of the original PRB02-014 card, not an OP15 base card. The matrix preserves the original card number and release-product assignment separately.
 
-- OP-14 and OP-15 English official product pages contain EB-04 entries. The EB-04 English matrix row now records the 61 EB04-prefix card numbers and 81 printings from these two official product pages. The same entries remain part of their release-product rows.
-- OP-15 generic Other Product Card placeholders remain distinct from named Premium Card Collection - Best Selection Vol.6 product links only when official/catalogue evidence supports a distinct printing. Existing Stage 3 duplicate suppression is not changed.
-- OP-18 and EB-05 base counts and supplemental printing identities are carried forward. The language-specific OP-18 Treasure Rare identities remain separate.
-- Original card-number prefix and release-product assignment remain separate dimensions.
-- No image is marked IMAGE MISSING from a parser shortfall alone.
+## Feed comparison: OP-18 and EB-05
 
-## HTTP image verification implementation
+The official Bandai entries are complete, but the 22/10/2026 upstream feed snapshot contains no base-prefix numbers for OP-18 or EB-05:
 
-Added `scripts/auditOfficialBandaiImages.mjs`, with tests in `tests/officialImageHttpAudit.test.js`. The audit script gathers unique official image URLs from all six extraction datasets and the EB-04 combined-page entries, validates that English and Japanese image hosts remain language-specific, and performs GET requests. It classifies each reference as:
+- OP-18: **119 missing feed base numbers in English and 119 in Japanese**.
+- EB-05: **61 missing feed base numbers in English and 61 in Japanese**.
+- No unexpected feed base numbers were found in the comparison.
 
-- LOADED (2xx image content)
-- MISSING (404/410)
-- INVALID_URL (malformed, wrong-language host, non-image response or invalid request)
-- TIMEOUT
-- TEMPORARY_FAILURE (access restriction, rate limit, network/server failure)
+These are confirmed feed-coverage gaps, not missing official Bandai cards. The official card numbers, product numbers, reprints and image references remain in the matrix.
 
-The script is configured for the audit branch's Verify workflow only and uploads a per-URL JSON artifact. The source snapshot contains **7,103 unique official image URLs** before any future source updates. This count is a workload count, not a claim that all images load. The script has not yet executed in GitHub Actions, so there are no actual HTTP result counts to publish in this report. Application fallback behavior is not changed; the existing same-language fallback restriction is preserved.
+## Image verification implementation and current status
 
-## Regression coverage and verification
+Added:
 
-- Added unit coverage for HTTP response classification, wrong-language host rejection, English/Japanese host aliases, 404/410, non-image responses and temporary failures.
-- Existing repository regression tests for Image Library filter intersection/clearing, pagination deduplication, release set versus original card-number set, language separation, OP-15 placeholder handling, PRB/Premium Card Collection product identities and image fallback remain in the working tree.
-- No application scanner, Image Library, catalogue filter, or OP-15 production logic was changed in this stage.
-- `npm test`, `npm run lint` and `npm run build` have **not** been run in a local checkout in this environment.
-- GitHub Actions lookup for the latest audit commit returned no workflow runs and no combined status checks. CI is therefore **NOT RUN / UNVERIFIED**, not passed. The workflow now includes the audit-only image HTTP step, but the exact latest commit still needs a real Actions run.
-- No Preview deployment was initiated. The existing Stage 3 Preview branch was not changed or redeployed.
+- `scripts/auditOfficialBandaiImages.mjs`
+- `tests/officialImageHttpAudit.test.js`
+- Audit-only step and JSON artifact upload in `.github/workflows/verify.yml`
 
-## Pull requests and safety
+The script reads all five full entry-level inventory files plus the English EB-04 subset from OP14/OP15. It checks **7,786 unique official image URLs** using GET requests and records status code, content type, final URL, latency, error and source-language associations.
 
-- PR #37: **OPEN**, not merged.
-- PR #38: **OPEN / DRAFT**, not merged.
-- No PR was merged, no branch or commit was deleted, no Production deployment occurred, and no Production Supabase project was accessed or modified.
-- The audit branch remains separate from `main`/`master`.
+Classifications: LOADED, MISSING (404/410), INVALID_URL, TIMEOUT and TEMPORARY_FAILURE. English URLs must remain on `en.onepiece-cardgame.com`; Japanese URLs must remain on `www.onepiece-cardgame.com`. No cross-language fallback is allowed.
+
+**No HTTP audit has run yet.** The 7,786 URLs are source references, not verified successful loads. Therefore no image is classified IMAGE MISSING or LOADED based solely on the extraction data.
+
+## Application printing identity comparison — blocked by Testing data
+
+A read-only check was made against the explicitly permitted Testing Supabase project `ehzqsnfkmwphyllhaqhe` (`Grand Line Archive Testing`). It is ACTIVE_HEALTHY, but its application dataset is only a smoke dataset:
+
+- 32 products.
+- 25 sets defined, but only 2 sets linked to products.
+- 2 languages represented.
+- 0 products with `catalogue_printing_key`.
+- 0 products with `catalogue_match_id`.
+- 0 products with `catalogue_reference_image_url`.
+
+This dataset cannot support a full application-to-Bandai printing reconciliation. Each matrix row records this limitation. No Production Supabase project was accessed or modified.
+
+## Regression coverage
+
+The working tree retains existing coverage for:
+
+- Image Library filter intersection and clearing.
+- Pagination overlap and duplicate suppression.
+- Release set versus original card-number set.
+- English/Japanese separation and same-language image fallback.
+- OP-15 generic placeholder versus named Premium Card Collection product handling.
+- OP-18 and EB-05 official catalogue corrections.
+
+Added HTTP audit unit tests for English/Japanese host restrictions, aliases, loaded image responses, missing responses, malformed/wrong-host/non-image URLs and temporary failures.
+
+Test files present:
+- `tests/catalogueImageFilters.test.js`
+- `tests/storagePagination.test.js`
+- `tests/officialImageOnlyFallback.test.js`
+- `tests/catalogueImageCorrections.test.js`
+- `tests/eb05OfficialCatalogue.test.js`
+- `tests/op18OfficialCatalogue.test.js`
+- `tests/officialImageHttpAudit.test.js`
+
+**Execution status:** `npm test`, `npm run lint` and `npm run build` have not run in a local checkout. GitHub Actions has no run or combined status associated with the latest audit commit. CI is NOT RUN / UNVERIFIED, not passed.
+
+## Safety, PR and Preview status
+
+- PR #37: OPEN, not merged.
+- PR #38: OPEN / DRAFT, not merged.
+- No PR merge, no main/master merge, no branch or commit deletion.
+- No Production deployment.
+- No Production Supabase access or modification.
+- No Preview deployment or refresh in this stage. The existing Stage 3 Preview branch was not changed.
 - No credentials were read, copied or exposed.
+- Scanner, Image Library, filters and OP-15 duplicate corrections were not changed.
 
 ## Remaining blockers
 
-1. Complete independent PRB-01/PRB-02 product-entry extraction, including the currently unparsed rows and exact image-to-printing associations.
-2. Resolve the OP-11, OP-12, OP-14, OP-15, OP-16, OP-17 and EB-04 Japanese parser/image URL shortfalls against actual Bandai page DOM entries.
-3. Run the 7,103-reference HTTP audit and store actual per-URL outcomes in the matrix. Do not promote extraction shortfalls to IMAGE MISSING without HTTP evidence.
-4. Reconcile all official image IDs to application printing identity IDs for all 50 rows, including Premium Card Collection and PRB.
-5. Obtain a successful CI run for the exact latest audit commit and confirm tests, lint and build.
-6. Perform Preview verification only through the existing Stage 3 Preview branch and Testing Supabase project if a Preview is required.
+1. Execute the 7,786-URL HTTP audit and record actual results for every unique official image reference.
+2. Obtain a complete, read-only application catalogue dataset in the permitted Testing environment (or another explicitly approved non-production snapshot) to compare all official printing identities, including Premium Card Collection and PRB variants. The current 32-product Testing dataset is insufficient.
+3. Run tests, lint and build, then obtain GitHub Actions status for the exact final commit.
+4. Only then promote rows to COMPLETE. No row is COMPLETE at this stage.
 
 ## Exact next prompt — Stage 4B-1O
 
 ```text
-The Grand Line Archive — Stage 4B-1O: Complete PRB Printing Extraction, Resolve Remaining Parser Gaps and Verify All Official Images
+The Grand Line Archive — Stage 4B-1O: Execute Full Official Image HTTP Audit and Complete Application Printing Identity Reconciliation
 
 Continue directly from Stage 4B-1N.
 
@@ -160,28 +228,30 @@ Stage 3 baseline: 448bc546c30ad1d7c69481dbdf794711810c5560
 Absolute restrictions:
 - Never merge PR #37 or PR #38.
 - Never merge into main/master.
-- Never deploy Production or modify Production Supabase.
-- Never delete branches or commits.
+- Never deploy Production.
+- Never modify Production Supabase.
+- Never delete existing branches or commits.
 - Keep PR #37 and PR #38 open.
 - Preserve scanner, Image Library, filters and OP-15 duplicate corrections.
 - Never expose credentials.
 - Never invent card numbers, printing identities or image references.
+- Use only read-only access to the permitted Testing Supabase project unless an explicit safe test-data operation is requested.
 
-1. Finish PRB-01 and PRB-02 independently in English and Japanese. Parse every official product result row, including the 14 PRB-01 and 67 PRB-02 unparsed rows per language. Associate each row with its exact official image ID, rarity, type, name, release-product assignment and printing identity. Do not infer a PRB base-card count from page totals or image IDs.
+1. Run scripts/auditOfficialBandaiImages.mjs against all 7,786 unique official Bandai image URLs. Capture actual HTTP status, content type, final URL, latency and classification for every URL. Distinguish LOADED, MISSING, INVALID_URL, TIMEOUT and TEMPORARY_FAILURE. Retry only temporary failures with a documented retry policy. Preserve English/Japanese host restrictions and prohibit cross-language fallback.
 
-2. Resolve the remaining OP-11, OP-12, OP-14, OP-15, OP-16, OP-17 and EB-04 Japanese extraction shortfalls. Distinguish repeated page entries, separate printings, parser failures and source image references.
+2. Update docs/catalogue-coverage/official-bandai-inventory-stage4b-1l.json with the actual HTTP results for all 50 language/set rows. Do not mark extraction shortfalls as missing images. Preserve all 7,867 official product-entry records, release-product assignments, printing IDs and separate variants.
 
-3. Execute scripts/auditOfficialBandaiImages.mjs on the audit branch. Record the actual HTTP status, content type, final URL, latency and classification for every official image URL. Include loaded, missing, invalid URL, timeout and temporary failure. Preserve English/Japanese host restrictions and do not use cross-language fallback.
+3. Complete application printing identity reconciliation. The Testing project ehzqsnfkmwphyllhaqhe currently has only 32 products, 2 product-linked sets, and zero catalogue printing keys, match IDs or reference image URLs. Do not claim full reconciliation from that dataset. Determine whether a complete safe test-only catalogue snapshot is available; do not query or modify Production.
 
-4. Reconcile all 50 language/set rows against application printing identities, including base, parallel, SP, Treasure Rare, Premium Card Collection and PRB printings. Keep original card-number set separate from release-product assignment. Preserve genuine separate printings and suppress only proven duplicate placeholders.
+4. Reconcile Premium Card Collection, PRB reprints, SP cards, Treasure Rare, parallel printings, alternate art and language-specific identities against the complete application dataset. Preserve genuine separate printings and suppress only proven duplicate placeholders. Keep original card-number set separate from release-product assignment.
 
-5. Update docs/catalogue-coverage/official-bandai-inventory-stage4b-1l.json with exact source evidence, complete card-number lists, printing identities, image HTTP results, missing/unexpected entries, retrieval dates and honest classifications. COMPLETE requires all verification layers to pass.
+5. Add regression tests for any confirmed application defects, including pagination overlap, all combined Image Library filters, clearing all filters, release set versus original card-number set, OP-15 duplicate placeholder handling, PRB/Premium Card Collection reprints and English/Japanese separation.
 
-6. Add regression tests for any newly confirmed defects. Run npm test, npm run lint and npm run build. Check GitHub Actions for the exact final commit. If Actions do not trigger, report that honestly; do not merge or create a PR merely to force CI.
+6. Run npm test, npm run lint and npm run build on the audit branch. Check GitHub Actions for the exact latest commit. Report failures honestly; do not call checks passed without actual successful runs.
 
-7. If Preview is required, use only the existing Stage 3 Preview branch and Testing Supabase project ehzqsnfkmwphyllhaqhe. Never deploy Production.
+7. If Preview is necessary, use only the existing Stage 3 Preview branch and Testing Supabase project ehzqsnfkmwphyllhaqhe. Never deploy Production.
 
-8. Report exact branch/commit, all 50 rows, remaining card/printing gaps, actual image HTTP results, duplicate corrections, regression tests, CI/lint/build, PR #37/#38 status, Preview status and remaining blockers.
+8. Update the matrix and Stage 4B-1O handover with exact branch/commit, all 50 rows, all HTTP outcomes, missing/unexpected cards and printings, duplicate corrections, regression tests, CI/lint/build, PR #37/#38 status, Preview status and remaining blockers.
 
-Do not stop at a plan. Continue working on the repository and never merge or deploy Production.
+Continue working on the repository. Do not stop at a plan. Never merge or deploy Production.
 ```
