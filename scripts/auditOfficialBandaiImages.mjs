@@ -64,14 +64,10 @@ function collectUrls() {
           ? (entry.image_url.match(/\/([^/?#]+)\.(?:png|webp|jpg|jpeg)(?:[?#]|$)/i) || [])[1] || null
           : null;
         addUrl(urls, entry.image_url, page.set, page.language, imageId);
+        if (page.language === "English" && (page.set === "OP-14" || page.set === "OP-15") && entry.card_number?.startsWith("EB04-")) {
+          addUrl(urls, entry.image_url, "EB-04", "English", imageId);
+        }
       }
-    }
-  }
-  const matrix = JSON.parse(readFileSync(resolve(ROOT, MATRIX), "utf8"));
-  for (const row of matrix.rows || []) {
-    if (row.set !== "EB-04" || row.language !== "English") continue;
-    for (const entry of row.official_printing_entries || []) {
-      addUrl(urls, entry.official_image_url, row.set, row.language, entry.official_image_id);
     }
   }
   return [...urls.values()].sort((a, b) => a.url.localeCompare(b.url));
