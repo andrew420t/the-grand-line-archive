@@ -90,10 +90,14 @@ test("OP-18 language-specific Treasure Rare identities remain distinct", () => {
   assert.ok(!japanese.includes("OP18-049_p1"));
 });
 
-test("no row is COMPLETE while application printing parity remains unverified", () => {
+test("keeps overall rows INCOMPLETE while persisted Testing inventory linkage remains unverified", () => {
   assert.equal(matrix.application_comparison_evidence.project_id, "ehzqsnfkmwphyllhaqhe");
   assert.equal(matrix.application_comparison_evidence.products, 32);
   assert.equal(matrix.application_comparison_evidence.products_with_catalogue_printing_key, 0);
+  assert.equal(matrix.stage4b_1o_reconciliation.application_runtime_audit.status, "PASSED");
+  assert.equal(matrix.stage4b_1o_reconciliation.application_runtime_audit.exact_identity_rows, 50);
+  assert.equal(matrix.stage4b_1o_reconciliation.application_runtime_audit.application_reference_printings, 7786);
+  assert.equal(matrix.stage4b_1o_reconciliation.application_runtime_audit.field_mismatches, 0);
   assert.equal(matrix.rows.filter((row) => row.verification_status === "COMPLETE").length, 0);
   assert.equal(matrix.status_summary.COMPLETE, 0);
   assert.equal(matrix.status_summary.INCOMPLETE, 50);
@@ -111,4 +115,15 @@ test("OP-15 English OP13-037 is retained as a language-specific cross-prefix rep
     englishOp15.cross_language_product_number_discrepancies[0].classification,
     "ENGLISH_SOURCE_ONLY_CROSS_PREFIX_REPRINT",
   );
+});
+
+
+test("OP-10 Japanese EB01-056 records the official product-specific name variation", () => {
+  const row = rowFor("OP-10", "Japanese");
+  const variation = row.official_source_name_variations[0];
+  assert.equal(variation.card_number, "EB01-056");
+  assert.equal(variation.printing_identity_id, "EB01-056_p2");
+  assert.equal(variation.original_eb01_official_name, "シャーロット・フランぺ");
+  assert.equal(variation.official_op10_printing_name, "シャーロット・フランペ");
+  assert.equal(variation.classification, "BANDAI_RELEASE_PAGE_SPELLING_VARIATION");
 });
