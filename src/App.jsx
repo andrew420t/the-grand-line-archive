@@ -265,7 +265,6 @@ function Storefront() {
   const [pageSize, setPageSize] = useState('24')
   const [currentPage, setCurrentPage] = useState(1)
   const [orders, setOrders] = useState([])
-  const [archivedOrderIds, setArchivedOrderIds] = useState([])
   const [orderItems, setOrderItems] = useState([])
   const [ordersLoading, setOrdersLoading] = useState(false)
   const [ordersError, setOrdersError] = useState('')
@@ -561,7 +560,6 @@ function Storefront() {
       setOrdersError(`Could not archive this order: ${result.error.message}`)
       return
     }
-    setArchivedOrderIds((current) => [...new Set([...current, String(orderId)])])
     setOrders((current) => current.filter((order) => String(order.id) !== String(orderId)))
   }, [user])
 
@@ -608,7 +606,6 @@ function Storefront() {
     const hiddenIds = (archiveResult.error ? [] : (archiveResult.data || []))
       .filter((row) => adminView || row.archive_scope === 'admin' || row.archived_by === user.id)
       .map((row) => String(row.order_id))
-    setArchivedOrderIds(hiddenIds)
     const orderRows = (result.data || [])
       .filter((order) => !hiddenIds.includes(String(order.id)))
       .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
