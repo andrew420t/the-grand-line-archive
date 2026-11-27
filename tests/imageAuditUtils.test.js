@@ -84,3 +84,16 @@ test('audit summary makes unchecked and not-yet-processed references visible', (
 test('deduplicates candidate URLs without changing their priority', () => {
   assert.deepEqual(dedupeImageCandidates(['/proxy/card.png', '/proxy/card.png', 'https://cdn.example/card.png', '']), ['/proxy/card.png', 'https://cdn.example/card.png'])
 })
+
+test('probes same-origin Cloudflare proxy paths without treating them as invalid URLs', async () => {
+  let requested
+  const result = await loadImageWithRetry('/_card-image/bandai/en/OP18-001.png', {
+    attempts: 1,
+    fetchImpl: async (url) => {
+      requested = url
+      return new Response(new Blob(['image']), { status: 200, headers: { 'content-type': 'image/png' } })
+    },
+  })
+  assert.equal(requested, '/_card-image/bandai/en/OP18-001.png')
+  assert.equal(result.status, IMAGE_CHECK_STATUS.EXACT_LOADED)
+})
