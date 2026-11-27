@@ -202,7 +202,7 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
         for (let index = 0; index < candidates.length; index += 1) {
           const result = await loadImageWithRetry(candidates[index], { attempts: 2, timeoutMs: 10000, retryDelayMs: 400 })
           if (result.status === IMAGE_CHECK_STATUS.EXACT_LOADED) {
-            outcome = { ...item, status: index === 0 ? 'loaded' : 'fallback-loaded', checkedUrl: result.url, httpStatus: result.httpStatus, attempts: result.attempts, candidateIndex: index }
+            outcome = { ...item, status: index === 0 ? 'loaded' : 'fallback-loaded', checkedUrl: result.url, httpStatus: result.httpStatus, upstreamStatus: result.upstreamStatus || 0, proxyError: result.proxyError || '', attempts: result.attempts, candidateIndex: index }
             break
           }
           outcome = { ...item, status: result.status, checkedUrl: result.url, httpStatus: result.httpStatus, upstreamStatus: result.upstreamStatus || 0, proxyError: result.proxyError || '', attempts: result.attempts, candidateIndex: index }
