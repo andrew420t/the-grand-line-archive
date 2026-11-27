@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { classifyImageHttpResult, expectedHostForLanguage } from "../scripts/auditOfficialBandaiImages.mjs";
+import { classifyImageHttpResult, collectUrls, expectedHostForLanguage } from "../scripts/auditOfficialBandaiImages.mjs";
 
 const en = "https://en.onepiece-cardgame.com/images/cardlist/card/OP01-001.png?261124";
 const jp = "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-001.png?261124";
@@ -34,3 +34,16 @@ test("rate limits, access restrictions and server errors remain temporary failur
     assert.equal(classifyImageHttpResult({ status, contentType: "text/html", language: "English", url: en }), "TEMPORARY_FAILURE");
   }
 });
+
+test("the audit includes all twelve official Best Selection Vol.6 product images", () => {
+  const urls = collectUrls()
+  const productImages = urls.filter((item) =>
+    item.associations.some((association) => association.set === "Best Selection Vol.6"),
+  )
+  assert.equal(productImages.length, 12)
+  assert.equal(urls.length, 7798)
+  assert.ok(productImages.some((item) => item.url.endsWith("/img_item11.webp")))
+  assert.ok(productImages.some((item) => item.url.endsWith("/img_item12.webp")))
+  assert.ok(productImages.every((item) => item.associations.every((association) => association.language === "English")))
+  assert.ok(productImages.every((item) => new URL(item.url).hostname === "en.onepiece-cardgame.com"))
+})
