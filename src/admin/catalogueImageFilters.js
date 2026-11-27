@@ -1,7 +1,7 @@
 export function getCardNumberSetCode(cardNumber = '') {
-  const match = String(cardNumber || '').trim().toUpperCase().match(/^((?:OP|EB|ST|PRB)\\d{2}|P)-\\d{3}/)
+  const match = String(cardNumber || '').trim().toUpperCase().match(/^((?:OP|EB|ST|PRB)\d{2}|P)-\d{3}/)
   if (!match) return ''
-  return match[1].replace(/^(OP|EB|ST|PRB)(\\d{2})$/, '$1-$2')
+  return match[1].replace(/^(OP|EB|ST|PRB)(\d{2})$/, '$1-$2')
 }
 
 const normalizeCardNumber = (value = '') => String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '')
