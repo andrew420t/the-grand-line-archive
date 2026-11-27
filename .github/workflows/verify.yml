@@ -35,6 +35,16 @@ jobs:
           name: stage4b-1o-application-printing-reconciliation
           path: artifacts/application-reference-printing-reconciliation-stage4b-1o.json
           if-no-files-found: warn
+      - name: Reconcile Stage 4B-1P Premium Card Collection identities and Testing inventory persistence (audit branch only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/audit/official-bandai-inventory-stage4b-1l-2026-11-27'
+        run: node scripts/auditPremiumCardCollectionStage4b1p.mjs
+      - name: Upload Stage 4B-1P Premium Card Collection and Testing persistence audit
+        if: always() && github.event_name == 'push' && github.ref == 'refs/heads/audit/official-bandai-inventory-stage4b-1l-2026-11-27'
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage4b-1p-premium-card-collection-persistence
+          path: artifacts/premium-card-collection-persistence-reconciliation-stage4b-1p.json
+          if-no-files-found: warn
       - name: Audit official Bandai image URLs (audit branch only)
         if: github.event_name == 'push' && github.ref == 'refs/heads/audit/official-bandai-inventory-stage4b-1l-2026-11-27' && contains(github.event.head_commit.message, '[run-image-audit]')
         run: node scripts/auditOfficialBandaiImages.mjs

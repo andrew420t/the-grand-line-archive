@@ -1,0 +1,375 @@
+{
+  "audit": "Stage 4B-1P Testing Supabase read-only inventory snapshot",
+  "project_id": "ehzqsnfkmwphyllhaqhe",
+  "retrieval_date": "2026-11-27",
+  "read_only": true,
+  "no_database_writes": true,
+  "counts": {
+    "sets": 25,
+    "cards": 0,
+    "products": 32,
+    "match_ids": 0,
+    "linked_sets": 2,
+    "printing_keys": 0,
+    "product_images": 9,
+    "linked_products": 2,
+    "reference_images": 0,
+    "unassigned_products": 30,
+    "with_uploaded_image": 5
+  },
+  "duplicate_card_number_groups": [
+    {
+      "rows": 2,
+      "language": "Japanese",
+      "card_number": "OP17-119",
+      "product_names": [
+        "Loki",
+        "Loki"
+      ]
+    }
+  ],
+  "products": [
+    {
+      "name": "Brook",
+      "language": "English",
+      "set_name": "Adventure on Kami's Island",
+      "card_number": "OP15-032",
+      "uploaded_image_present": true,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Mr. 2 Bon Kurei (Bentham)",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "EB01-061",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Enel",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "EB02-052",
+      "uploaded_image_present": true,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Jewelry Bonney",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "EB04-002",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Roronoa Zoro",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "EB04-007",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Nefeltari Vivi",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "EB04-025",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Rosinante & Law",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "EB04-038",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Sanji",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP06-119",
+      "uploaded_image_present": true,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Tony Tony Chopper",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP10-011",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Donquixote Rosinante",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP12-061",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Trafalgar Law",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP14-009",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Monkey D. Luffy",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP14-024",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Pirates Docking Six",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP15-088",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Monkey D. Luffy",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP15-119",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Edward Newgate",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP16-003",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Emporio Ivankov",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP16-026",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Monkey D. Luffy",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP16-034",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Buggy",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP16-041",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Yamato",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP16-098",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Portgas D. Ace",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP16-118",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Marshall D. Teach",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP16-119",
+      "uploaded_image_present": true,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Shanks",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP17-022",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Lead Performers",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP17-061",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Charlotte Pudding",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP17-109",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Rocks D. Xebec",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP17-118",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Loki",
+      "language": "Japanese",
+      "set_name": "The World's Strongest Warriors",
+      "card_number": "OP17-119",
+      "uploaded_image_present": true,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Loki",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "OP17-119",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Monkey D. Luffy [Jump]",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "P-159",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Nami",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "PRB02-012",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Edward Newgate",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "ST15-002",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "Uso-Hachi",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": "ST18-001",
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    },
+    {
+      "name": "DON!! Card (Jinbe)",
+      "language": "Japanese",
+      "set_name": null,
+      "card_number": null,
+      "uploaded_image_present": false,
+      "catalogue_match_id_present": false,
+      "catalogue_printing_key_present": false,
+      "catalogue_reference_image_present": false
+    }
+  ],
+  "schema_assessment": {
+    "dedicated_reference_catalogue_table_present": false,
+    "public_cards": {
+      "rows": 0,
+      "usable_for_full_catalogue": false,
+      "reason": "The table has no card_number, language, printing_key, release_product_key or catalogue image-reference columns; it is a legacy stock-card table."
+    },
+    "public_products": {
+      "rows": 32,
+      "is_inventory_table": true,
+      "reason": "Contains price, stock_quantity, condition, status and uploaded-image fields; catalogue_match_id, catalogue_printing_key and catalogue_reference_image_url are optional inventory-to-reference links, not a catalogue store."
+    },
+    "public_sets": {
+      "rows": 25,
+      "existing_set_definitions": true
+    },
+    "public_card_catalogue_overrides": {
+      "purpose": "Manual overrides only; not a complete official reference catalogue."
+    },
+    "recommendation": "Do not seed public.products or public.cards with thousands of reference printings. Persist the official reference catalogue in dedicated normalized catalogue tables, then link inventory rows through catalogue_match_id and catalogue_printing_key."
+  },
+  "interpretation": "public.products is stock/inventory, not the application reference catalogue. Uploaded image URLs and product_images are separate from catalogue_reference_image_url. All 32 products lack catalogue_match_id, catalogue_printing_key and catalogue_reference_image_url."
+}
