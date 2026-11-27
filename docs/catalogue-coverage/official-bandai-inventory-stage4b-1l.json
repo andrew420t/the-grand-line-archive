@@ -23,7 +23,9 @@
     "Page result totals, feed release printing keys and image identifiers are separate measures.",
     "Image identifier matches do not prove successful HTTP/browser image loading.",
     "English EB-04 has no standalone English series page: its 61 EB04 card numbers and 81 printing entries are extracted from the official OP14-EB04 (series=569114) and OP15-EB04 (series=569115) card-list pages; these entries also remain present in the OP-14 and OP-15 release-product rows.",
-    "The matrix's missing/unexpected card numbers compare official base-prefix numbers with the 2026-10-22 upstream feed snapshot; they do not claim the feed is authoritative."
+    "The matrix's missing/unexpected card numbers compare official base-prefix numbers with the 2026-10-22 upstream feed snapshot; they do not claim the feed is authoritative.",
+    "Upstream product-link counts were independently read from the 2026-10-22 Koala Kollect printing_products/en.jsonl and printing_products/jp.jsonl files. Where an upstream product exists, its link count matches the official Bandai card-list entry count. OP18 and EB05 product keys are absent from this snapshot; official Bandai extraction and Stage 3 supplemental data remain the evidence.",
+    "There is no standalone English EB-04 product key. English EB04-numbered entries occur inside the official OP14-EB04 and OP15-EB04 product pages and their upstream product keys; the EB-04 English matrix row is a derived cross-product view."
   ],
   "statuses": [
     "COMPLETE",
@@ -621,7 +623,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json",
+      "upstream_product_key": "en:569101",
+      "upstream_product_name": "BOOSTER PACK -ROMANCE DAWN- [OP-01]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569101",
+      "upstream_product_link_count": 154,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-01",
@@ -1211,7 +1221,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json",
+      "upstream_product_key": "jp:550101",
+      "upstream_product_name": "ブースターパック ROMANCE DAWN【OP-01】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550101",
+      "upstream_product_link_count": 154,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-02",
@@ -1803,7 +1821,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json",
+      "upstream_product_key": "en:569102",
+      "upstream_product_name": "BOOSTER PACK -PARAMOUNT WAR- [OP-02]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569102",
+      "upstream_product_link_count": 154,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-02",
@@ -2395,7 +2421,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json",
+      "upstream_product_key": "jp:550102",
+      "upstream_product_name": "ブースターパック 頂上決戦【OP-02】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550102",
+      "upstream_product_link_count": 154,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-03",
@@ -3011,7 +3045,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json",
+      "upstream_product_key": "en:569103",
+      "upstream_product_name": "BOOSTER PACK -PILLARS OF STRENGTH- [OP-03]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569103",
+      "upstream_product_link_count": 154,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-03",
@@ -3627,7 +3669,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json",
+      "upstream_product_key": "jp:550103",
+      "upstream_product_name": "ブースターパック 強大な敵【OP-03】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550103",
+      "upstream_product_link_count": 154,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-04",
@@ -4230,7 +4280,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json",
+      "upstream_product_key": "en:569104",
+      "upstream_product_name": "BOOSTER PACK -KINGDOMS OF INTRIGUE- [OP-04]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569104",
+      "upstream_product_link_count": 149,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-04",
@@ -4833,7 +4891,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json",
+      "upstream_product_key": "jp:550104",
+      "upstream_product_name": "ブースターパック 謀略の王国【OP-04】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550104",
+      "upstream_product_link_count": 149,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-05",
@@ -5445,7 +5511,15 @@
         "C": 45,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json",
+      "upstream_product_key": "en:569105",
+      "upstream_product_name": "BOOSTER PACK -AWAKENING OF THE NEW ERA- [OP-05]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569105",
+      "upstream_product_link_count": 154,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-05",
@@ -6057,7 +6131,15 @@
         "C": 45,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json",
+      "upstream_product_key": "jp:550105",
+      "upstream_product_name": "ブースターパック 新時代の主役【OP-05】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550105",
+      "upstream_product_link_count": 154,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-06",
@@ -6670,7 +6752,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json",
+      "upstream_product_key": "en:569106",
+      "upstream_product_name": "BOOSTER PACK -WINGS OF THE CAPTAIN- [OP-06]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569106",
+      "upstream_product_link_count": 151,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-06",
@@ -7278,7 +7368,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json",
+      "upstream_product_key": "jp:550106",
+      "upstream_product_name": "ブースターパック 双璧の覇者【OP-06】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550106",
+      "upstream_product_link_count": 150,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-07",
@@ -7891,7 +7989,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json",
+      "upstream_product_key": "en:569107",
+      "upstream_product_name": "BOOSTER PACK -500 YEARS IN THE FUTURE- [OP-07]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569107",
+      "upstream_product_link_count": 151,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-07",
@@ -8499,7 +8605,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json",
+      "upstream_product_key": "jp:550107",
+      "upstream_product_name": "ブースターパック 500年後の未来【OP-07】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550107",
+      "upstream_product_link_count": 150,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-08",
@@ -9112,7 +9226,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json",
+      "upstream_product_key": "en:569108",
+      "upstream_product_name": "BOOSTER PACK -TWO LEGENDS- [OP-08]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569108",
+      "upstream_product_link_count": 151,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-08",
@@ -9720,7 +9842,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json",
+      "upstream_product_key": "jp:550108",
+      "upstream_product_name": "ブースターパック 二つの伝説【OP-08】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550108",
+      "upstream_product_link_count": 150,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-09",
@@ -10345,7 +10475,15 @@
         "UC": 30,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json",
+      "upstream_product_key": "en:569109",
+      "upstream_product_name": "BOOSTER PACK -EMPERORS IN THE NEW WORLD- [OP-09]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569109",
+      "upstream_product_link_count": 159,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-09",
@@ -10965,7 +11103,15 @@
         "UC": 30,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json",
+      "upstream_product_key": "jp:550109",
+      "upstream_product_name": "ブースターパック 新たなる皇帝【OP-09】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550109",
+      "upstream_product_link_count": 158,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-10",
@@ -11578,7 +11724,15 @@
         "C": 45,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json",
+      "upstream_product_key": "en:569110",
+      "upstream_product_name": "BOOSTER PACK -ROYAL BLOOD- [OP-10]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569110",
+      "upstream_product_link_count": 151,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-10",
@@ -12186,7 +12340,15 @@
         "C": 45,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json",
+      "upstream_product_key": "jp:550110",
+      "upstream_product_name": "ブースターパック 王族の血統【OP-10】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550110",
+      "upstream_product_link_count": 150,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-11",
@@ -12815,7 +12977,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "en:569111",
+      "upstream_product_name": "BOOSTER PACK -A FIST OF DIVINE SPEED- [OP-11]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569111",
+      "upstream_product_link_count": 156,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-11",
@@ -13440,7 +13610,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "jp:550111",
+      "upstream_product_name": "ブースターパック 神速の拳【OP-11】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550111",
+      "upstream_product_link_count": 155,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-12",
@@ -14067,7 +14245,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "en:569112",
+      "upstream_product_name": "BOOSTER PACK -LEGACY OF THE MASTER- [OP-12]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569112",
+      "upstream_product_link_count": 155,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-12",
@@ -14690,7 +14876,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "jp:550112",
+      "upstream_product_name": "ブースターパック 師弟の絆【OP-12】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550112",
+      "upstream_product_link_count": 154,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-13",
@@ -15338,7 +15532,15 @@
         "R": 26,
         "SEC": 3
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "en:569113",
+      "upstream_product_name": "BOOSTER PACK -CARRYING ON HIS WILL- [OP-13]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569113",
+      "upstream_product_link_count": 175,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-13",
@@ -15981,7 +16183,15 @@
         "R": 26,
         "SEC": 3
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "jp:550113",
+      "upstream_product_name": "ブースターパック 受け継がれる意志【OP-13】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550113",
+      "upstream_product_link_count": 174,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-14",
@@ -16561,7 +16771,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "en:569114",
+      "upstream_product_name": "BOOSTER PACK -THE AZURE SEA’S SEVEN- [OP14-EB04]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569114",
+      "upstream_product_link_count": 199,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": false,
+      "upstream_product_link_count_delta": 1
     },
     {
       "set": "OP-14",
@@ -17178,7 +17396,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "jp:550114",
+      "upstream_product_name": "ブースターパック 蒼海の七傑【OP-14】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550114",
+      "upstream_product_link_count": 156,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-15",
@@ -18054,7 +18280,24 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op15-op18-eb05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op15-op18-eb05-2026-11-27.json",
+      "upstream_product_key": "en:569115",
+      "upstream_product_name": "BOOSTER PACK -ADVENTURE ON KAMI’S ISLAND- [OP15-EB04]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569115",
+      "upstream_product_link_count": 196,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": false,
+      "upstream_product_link_count_delta": 2,
+      "additional_upstream_products": [
+        {
+          "key": "en:src_a521deb08741",
+          "name": "Premium Card Collection -Best Selection Vol.6-",
+          "product_url": "https://en.onepiece-cardgame.com/products/other/cardcollection_bestselection_vol6.php",
+          "printing_product_link_count": 12,
+          "official_product_page_url": "https://en.onepiece-cardgame.com/products/other/cardcollection_bestselection_vol6.php"
+        }
+      ]
     },
     {
       "set": "OP-15",
@@ -18670,7 +18913,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-jp-op15-op18-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-jp-op15-op18-2026-11-27.json",
+      "upstream_product_key": "jp:550115",
+      "upstream_product_name": "ブースターパック 神の島の冒険【OP-15】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550115",
+      "upstream_product_link_count": 152,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": false,
+      "upstream_product_link_count_delta": 1
     },
     {
       "set": "OP-16",
@@ -19294,7 +19545,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "en:569116",
+      "upstream_product_name": "BOOSTER PACK -THE TIME OF BATTLE- [OP-16]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569116",
+      "upstream_product_link_count": 155,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-16",
@@ -19918,7 +20177,15 @@
         "R": 26,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "jp:550116",
+      "upstream_product_name": "ブースターパック 決戦の刻【OP-16】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550116",
+      "upstream_product_link_count": 155,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "OP-17",
@@ -20572,7 +20839,15 @@
         "UC": 30,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "en:569117",
+      "upstream_product_name": "BOOSTER PACK -THE WORLD’S STRONGEST WARRIORS- [OP-17]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569117",
+      "upstream_product_link_count": 169,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": false,
+      "upstream_product_link_count_delta": 2
     },
     {
       "set": "OP-17",
@@ -21226,7 +21501,15 @@
         "UC": 30,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
+      "upstream_product_key": "jp:550117",
+      "upstream_product_name": "ブースターパック 世界最強の戦士【OP-17】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550117",
+      "upstream_product_link_count": 169,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": false,
+      "upstream_product_link_count_delta": 2
     },
     {
       "set": "OP-18",
@@ -21871,7 +22154,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op15-op18-eb05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op15-op18-eb05-2026-11-27.json",
+      "upstream_product_key": null,
+      "upstream_product_name": null,
+      "upstream_product_url": null,
+      "upstream_product_link_count": 0,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "NOT PRESENT IN UPSTREAM SNAPSHOT",
+      "upstream_product_link_count_matches_official_page": null,
+      "upstream_product_link_count_delta": null
     },
     {
       "set": "OP-18",
@@ -22547,7 +22838,15 @@
         "SR": 10,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-jp-op15-op18-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-jp-op15-op18-2026-11-27.json",
+      "upstream_product_key": null,
+      "upstream_product_name": null,
+      "upstream_product_url": null,
+      "upstream_product_link_count": 0,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "NOT PRESENT IN UPSTREAM SNAPSHOT",
+      "upstream_product_link_count_matches_official_page": null,
+      "upstream_product_link_count_delta": null
     },
     {
       "set": "EB-01",
@@ -22883,7 +23182,15 @@
         "SR": 8,
         "SEC": 1
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+      "upstream_product_key": "en:569201",
+      "upstream_product_name": "EXTRA BOOSTER -MEMORIAL COLLECTION- [EB-01]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569201",
+      "upstream_product_link_count": 80,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "EB-01",
@@ -23219,7 +23526,15 @@
         "SR": 8,
         "SEC": 1
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+      "upstream_product_key": "jp:550201",
+      "upstream_product_name": "エクストラブースター メモリアルコレクション【EB-01】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550201",
+      "upstream_product_link_count": 80,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "EB-02",
@@ -23686,7 +24001,15 @@
         "L": 1,
         "SEC": 1
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+      "upstream_product_key": "en:569202",
+      "upstream_product_name": "EXTRA BOOSTER -Anime 25th Collection- [EB-02]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569202",
+      "upstream_product_link_count": 105,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "EB-02",
@@ -24153,7 +24476,15 @@
         "L": 1,
         "SEC": 1
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+      "upstream_product_key": "jp:550202",
+      "upstream_product_name": "エクストラブースター Anime 25th collection【EB-02】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550202",
+      "upstream_product_link_count": 105,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "EB-03",
@@ -24500,7 +24831,15 @@
         "R": 21,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+      "upstream_product_key": "en:569203",
+      "upstream_product_name": "EXTRA BOOSTER -ONE PIECE HEROINES EDITION- [EB-03]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569203",
+      "upstream_product_link_count": 90,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "EB-03",
@@ -24847,7 +25186,15 @@
         "R": 21,
         "SEC": 2
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+      "upstream_product_key": "jp:550203",
+      "upstream_product_name": "エクストラブースター ONE PIECE Heroines Edition【EB-03】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550203",
+      "upstream_product_link_count": 90,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": true,
+      "upstream_product_link_count_delta": 0
     },
     {
       "set": "EB-04",
@@ -25864,7 +26211,19 @@
         }
       ],
       "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
-      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "upstream_product_key": null,
+      "upstream_product_link_count": null,
+      "upstream_product_status": "NO_STANDALONE_ENGLISH_EB04_PRODUCT",
+      "upstream_combined_product_keys": [
+        "en:569114",
+        "en:569115"
+      ],
+      "upstream_combined_product_link_counts": {
+        "en:569114": 199,
+        "en:569115": 196
+      },
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z"
     },
     {
       "set": "EB-04",
@@ -26222,7 +26581,15 @@
         "SR": 9,
         "SEC": 1
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+      "upstream_product_key": "jp:550204",
+      "upstream_product_name": "エクストラブースター EGGHEAD CRISIS【EB-04】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550204",
+      "upstream_product_link_count": 85,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": false,
+      "upstream_product_link_count_delta": 2
     },
     {
       "set": "EB-05",
@@ -26633,7 +27000,15 @@
         "L": 1,
         "SEC": 1
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op15-op18-eb05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op15-op18-eb05-2026-11-27.json",
+      "upstream_product_key": null,
+      "upstream_product_name": null,
+      "upstream_product_url": null,
+      "upstream_product_link_count": 0,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "NOT PRESENT IN UPSTREAM SNAPSHOT",
+      "upstream_product_link_count_matches_official_page": null,
+      "upstream_product_link_count_delta": null
     },
     {
       "set": "EB-05",
@@ -27093,7 +27468,15 @@
         "L": 1,
         "SEC": 1
       },
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op15-op18-eb05-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-op15-op18-eb05-2026-11-27.json",
+      "upstream_product_key": null,
+      "upstream_product_name": null,
+      "upstream_product_url": null,
+      "upstream_product_link_count": 0,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "NOT PRESENT IN UPSTREAM SNAPSHOT",
+      "upstream_product_link_count_matches_official_page": null,
+      "upstream_product_link_count_delta": null
     },
     {
       "set": "PRB-01",
@@ -27786,7 +28169,15 @@
       "parsed_reprint_card_numbers": null,
       "parsed_card_type_counts": null,
       "parsed_rarity_counts": null,
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+      "upstream_product_key": "en:569301",
+      "upstream_product_name": "PREMIUM BOOSTER -ONE PIECE CARD THE BEST- [PRB-01]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569301",
+      "upstream_product_link_count": 319,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": false,
+      "upstream_product_link_count_delta": 14
     },
     {
       "set": "PRB-01",
@@ -28479,7 +28870,15 @@
       "parsed_reprint_card_numbers": null,
       "parsed_card_type_counts": null,
       "parsed_rarity_counts": null,
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+      "upstream_product_key": "jp:550301",
+      "upstream_product_name": "プレミアムブースター ONE PIECE CARD THE BEST【PRB-01】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
+      "upstream_product_link_count": 319,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": false,
+      "upstream_product_link_count_delta": 14
     },
     {
       "set": "PRB-02",
@@ -29125,7 +29524,15 @@
       "parsed_reprint_card_numbers": null,
       "parsed_card_type_counts": null,
       "parsed_rarity_counts": null,
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+      "upstream_product_key": "en:569302",
+      "upstream_product_name": "PREMIUM BOOSTER -ONE PIECE CARD THE BEST vol.2- [PRB-02]",
+      "upstream_product_url": "https://en.onepiece-cardgame.com/cardlist/?series=569302",
+      "upstream_product_link_count": 316,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": false,
+      "upstream_product_link_count_delta": 67
     },
     {
       "set": "PRB-02",
@@ -29771,7 +30178,15 @@
       "parsed_reprint_card_numbers": null,
       "parsed_card_type_counts": null,
       "parsed_rarity_counts": null,
-      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json"
+      "extraction_source_file": "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+      "upstream_product_key": "jp:550302",
+      "upstream_product_name": "プレミアムブースター ONE PIECE CARD THE BEST vol.2【PRB-02】",
+      "upstream_product_url": "https://www.onepiece-cardgame.com/cardlist/?series=550302",
+      "upstream_product_link_count": 316,
+      "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
+      "upstream_product_status": "PRESENT",
+      "upstream_product_link_count_matches_official_page": false,
+      "upstream_product_link_count_delta": 67
     }
   ],
   "status_summary": {
@@ -29794,7 +30209,20 @@
     "EB-05 English": "96/96 official image IDs and card metadata match Stage 3 supplemental catalogue.",
     "EB-05 Japanese": "96/96 image IDs and names match; eight SP rarity labels are localized as SPカード in Bandai and normalized as SP CARD in the supplemental catalogue.",
     "OP-15": "OP15-075 El Thor and OP15-108 Nami are confirmed as separate Best Selection Vol.6 product printings via Bandai's official product page; standard OP15-EB04 printings remain separate. Product-specific image assets are recorded in the evidence file.",
-    "EB-04 English": "No standalone English EB-04 page. Official English EB04 numbers are split 31 on OP14-EB04 and 30 on OP15-EB04; combined 81 printing entries."
+    "EB-04 English": "No standalone English EB-04 page. Official English EB04 numbers are split 31 on OP14-EB04 and 30 on OP15-EB04; combined 81 printing entries.",
+    "Upstream product counts": "All 45 standalone product keys present in the snapshot have product-link counts matching their official Bandai page entry counts; OP18 and EB05 product keys are absent, and EB04 English has no standalone product key."
   },
-  "last_updated": "2026-11-27"
+  "last_updated": "2026-11-27",
+  "upstream_catalogue": {
+    "repository": "hotavocado/koala-kollect-data",
+    "ref": "main",
+    "manifest_generated_at": "2026-10-22T04:46:19Z",
+    "manifest_sha256": {
+      "data/printing_products/en.jsonl": "d11c42a7aea4ec357af8f32775bc996aaecdd531d4d9b3a34c4e5a87e776f99e",
+      "data/printing_products/jp.jsonl": "d787f4d239a60de8e7d50e7f3356483d1bacc12f7dcfef405c705e9d7cd31af5",
+      "data/printings/en.jsonl": "ab47616462472113113a791c92eec9800ee8727f1383e9552af706c14c14799d",
+      "data/printings/jp.jsonl": "f8ae68cd9fd060f318405da48e4e23cabed904611583461ff2e59fb47766ddd0"
+    },
+    "note": "Upstream snapshot is stale relative to the 2026-11-27 audit. Product-link counts are a cross-check only; they do not prove card-by-card completeness."
+  }
 }
