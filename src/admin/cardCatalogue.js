@@ -10,6 +10,7 @@ import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMat
 import { EB05_OFFICIAL_PRINTINGS, EB05_BASE_CARD_NUMBERS, getEb05SupplementalMatches } from './eb05OfficialCatalogue.js'
 import { getOfficialSupplementReferenceTestItems } from './officialSupplementReferenceMatrix.js'
 import { applyCatalogueImageCorrections } from './catalogueImageCorrections.js'
+import { applyCatalogueOfficialMetadataCorrection } from './catalogueOfficialMetadataCorrections.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
@@ -171,9 +172,14 @@ export async function findCatalogueMatches(cardNumber) {
       const data = catalogue.languages[language]
       const index = catalogue.indexes?.[language] || {}
       const observations = safeMapGet(index.observationsByCard, card.key) || []
-      const observation = observations.reduce((latest, item) =>
+      const rawObservation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest,
       null)
+      const observation = applyCatalogueOfficialMetadataCorrection({
+        cardNumber: card.number || requestedNumber,
+        language,
+        observation: rawObservation,
+      })
       const printings = safeMapGet(index.printingsByCard, card.key) || []
 
       for (const printing of printings) {
@@ -215,6 +221,9 @@ export async function findCatalogueMatches(cardNumber) {
             usesAlternateOfficialFallback: imageReference.usesAlternateOfficialFallback,
             sourceText: value(printing, 'source_text'),
             setCode,
+            productCode: value(product, 'code'),
+            productKey: value(product, 'key'),
+            productSetCodes,
             setName: value(product, 'name'),
             productKind: value(product, 'kind'),
             releaseDate: value(product, 'release_date'),
@@ -337,9 +346,15 @@ export async function findCatalogueSearchMatches(query, { limit = 12 } = {}) {
     const index = catalogue.indexes?.[language] || {}
     for (const card of catalogue.cards || []) {
       const observations = safeMapGet(index.observationsByCard, card.key) || []
-      const nameMatches = observations.some((observation) =>
-        !observation.superseded_at && normalizeSearchText(observation.name).includes(normalized),
-      )
+      const nameMatches = observations.some((rawObservation) => {
+        if (rawObservation.superseded_at) return false
+        const observation = applyCatalogueOfficialMetadataCorrection({
+          cardNumber: card.number,
+          language,
+          observation: rawObservation,
+        })
+        return normalizeSearchText(observation?.name).includes(normalized)
+      })
       if (!nameMatches || !card.number) continue
       const number = baseCardNumber(card.number)
       if (number && !matchedNumbers.has(number)) matchedNumbers.set(number, card)
@@ -1070,8 +1085,13 @@ export async function getCatalogueReferenceTestMatrix() {
         .filter(Boolean)
         .map((product) => [product.key, product])).values()]
       const observations = (safeMapGet(index.observationsByCard, printing.card_key) || []).filter((item) => !item.superseded_at)
-      const observation = observations.reduce((latest, item) =>
+      const rawObservation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
+      const observation = applyCatalogueOfficialMetadataCorrection({
+        cardNumber,
+        language,
+        observation: rawObservation,
+      })
       for (const product of products) {
         const rawSet = setFromProduct(product.code, cardNumber)
         if (!expectedSets.includes(rawSet)) continue
@@ -1087,6 +1107,7 @@ export async function getCatalogueReferenceTestMatrix() {
           setName: product.name || '',
           productCode: product.code || '',
           productKey: product.key || '',
+          productSetCodes: (safeMapGet(catalogue.productSetsByProductKey, product.key) || []).map((item) => item.set_key),
           sourceText: printing.source_text || '',
           rarity: printing.rarity || '',
           variant: printing.variant || '',
