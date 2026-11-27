@@ -4,6 +4,7 @@ import {
   IMAGE_CHECK_STATUS,
   buildImageAuditSummary,
   classifyImageResponse,
+  dedupeImageCandidates,
   loadImageWithRetry,
   mapWithConcurrency,
 } from '../src/admin/imageAuditUtils.js'
