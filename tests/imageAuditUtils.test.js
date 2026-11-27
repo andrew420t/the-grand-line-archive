@@ -3,6 +3,7 @@ import test from 'node:test'
 import {
   IMAGE_CHECK_STATUS,
   auditCatalogueImageRecord,
+  createCorrectedImageAuditRecord,
   buildCatalogueImageCandidates,
   runResumableCatalogueAudit,
   dedupeCatalogueAuditRecords,
@@ -265,6 +266,43 @@ test('rejects candidate descriptors without verifiable language or matching iden
   assert.equal(result.status, IMAGE_CHECK_STATUS.INVALID_URL)
   assert.equal(result.diagnostic, 'candidate-language-or-identity-unverified')
   assert.equal(calls, 0)
+})
+
+test('corrected invalid image references can be retried without changing printing or language identity', async () => {
+  const original = {
+    id: 'en-printing:en:product',
+    printingKey: 'en-printing',
+    cardKey: 'card-1',
+    cardNumber: 'OP18-001',
+    setCode: 'OP-18',
+    languageCode: 'en',
+    status: IMAGE_CHECK_STATUS.INVALID_URL,
+    imageUrl: 'http://invalid.example/card.png',
+  }
+  assert.throws(
+    () => createCorrectedImageAuditRecord(original, 'https://images.example/card.png', 'jp'),
+    /language must match/,
+  )
+  assert.throws(
+    () => createCorrectedImageAuditRecord(original, 'http://images.example/card.png', 'en'),
+    /valid HTTPS image URL/,
+  )
+  const corrected = createCorrectedImageAuditRecord(original, 'https://images.example/card.png', 'en')
+  const result = await auditCatalogueImageRecord(corrected, {
+    language: 'en',
+    attempts: 1,
+    fetchImpl: async () => new Response(new Blob(['image']), {
+      status: 200,
+      headers: { 'content-type': 'image/png' },
+    }),
+  })
+  assert.equal(result.status, IMAGE_CHECK_STATUS.EXACT_LOADED)
+  assert.equal(result.referenceCorrected, true)
+  assert.equal(result.printingKey, 'en-printing')
+  assert.equal(result.cardKey, 'card-1')
+  assert.equal(result.cardNumber, 'OP18-001')
+  assert.equal(result.setCode, 'OP-18')
+  assert.equal(result.candidateResults[0].candidateSource, 'Administrator-corrected image reference')
 })
 
 test('caps requested retry attempts at five', async () => {
