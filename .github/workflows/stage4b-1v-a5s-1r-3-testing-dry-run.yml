@@ -1,0 +1,89 @@
+name: Stage 4B-1V-A5S-1R-3 Testing-only dry-run review
+
+on:
+  push:
+    branches:
+      - audit/official-bandai-inventory-stage4b-1l-2026-11-27
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  testing-only-catalogue-dry-run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out application repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Verify exact audit branch and starting commit ancestry
+        shell: bash
+        run: |
+          test "${GITHUB_REF}" = "refs/heads/audit/official-bandai-inventory-stage4b-1l-2026-11-27"
+          git merge-base --is-ancestor 6849be5523f1e2139418b8cab2a2f008ef6b91b1 HEAD
+          echo "Application HEAD: $(git rev-parse HEAD)"
+          echo "Stage 1R-2 starting commit is an ancestor."
+
+      - name: Check out exact pinned upstream source
+        uses: actions/checkout@v4
+        with:
+          repository: hotavocado/koala-kollect-data
+          ref: 619965ec198047de519dc6eb098c7a56aed9bd58
+          path: .source/koala-kollect-data
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify upstream commit, tree and manifest identity
+        shell: bash
+        run: |
+          cd .source/koala-kollect-data
+          test "$(git rev-parse HEAD)" = "619965ec198047de519dc6eb098c7a56aed9bd58"
+          test "$(git rev-parse HEAD^{tree})" = "d0059fd77462cf377b9dfd65d87a6afabc76077f"
+          test "$(git hash-object manifest.json)" = "5b76b3f0ceb268d1bf43bff7c5dd54ab438076e7"
+          test "$(find data -name '*.jsonl' -type f | wc -l | tr -d ' ')" = "27"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run guarded offline catalogue dry-run
+        shell: bash
+        run: |
+          mkdir -p artifacts-stage4b1r3
+          node scripts/catalogue-importer-stage4b1va.mjs \
+            --dry-run \
+            --source-dir .source/koala-kollect-data \
+            --output artifacts-stage4b1r3/importer-dry-run.json
+          node -e "const r=require('./artifacts-stage4b1r3/importer-dry-run.json'); console.log(JSON.stringify({status:r.status,sourceCommit:r.sourceCommit,sourceFiles:Object.keys(r.sourceFiles||{}).length,sourceRows:r.sourceRows,plannedDestinationRows:r.plannedDestinationRows,unsupportedFiles:r.unsupportedFiles,writesPerformed:r.writesPerformed},null,2))"
+
+      - name: Run full application test suite
+        run: npm test
+
+      - name: Run application lint
+        run: npm run lint
+
+      - name: Build production application
+        run: npm run build
+
+      - name: Upload dry-run evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage4b-1v-a5s-1r-3-testing-dry-run
+          path: artifacts-stage4b1r3/*.json
+          if-no-files-found: warn
+          retention-days: 30
+
+# This workflow has no Supabase credentials or database connection. It cannot write to Testing or Production.
+# Schema and inventory inspection is performed separately through read-only queries against the verified Testing project.
+# OP18/EB05 local supplements and database-aware insert/update/no-op planning remain separate blockers.
