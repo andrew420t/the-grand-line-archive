@@ -51,7 +51,7 @@ test('keeps product release set separate from the original set in the card numbe
     'sp-in-op18', 'op18-base', 'st24-sp-in-op18',
   ])
   assert.deepEqual(filterCatalogueImageEntries(printings, { cardNumberSet: 'OP-13' }).map((x) => x.id), [
-    'sp-in-op18', 'op13-original',
+    'op13-original', 'sp-in-op18',
   ])
   assert.deepEqual(filterCatalogueImageEntries(printings, { set: 'OP-18', cardNumberSet: 'OP-13' }).map((x) => x.id), [
     'sp-in-op18',
@@ -59,4 +59,5 @@ test('keeps product release set separate from the original set in the card numbe
   assert.deepEqual(filterCatalogueImageEntries(printings, { set: 'OP-18', cardNumberSet: 'ST-24' }).map((x) => x.id), [
     'st24-sp-in-op18',
   ])
+  assert.deepEqual(getCatalogueImageFilterOptions(printings).cardNumberSets, ['OP-13', 'OP-18', 'ST-24'])
 })
