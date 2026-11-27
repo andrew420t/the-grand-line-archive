@@ -174,6 +174,46 @@ CREATE TABLE IF NOT EXISTS public.catalogue_inventory_links (
     ON DELETE RESTRICT
 );
 
+-- Enforce that an inventory row and its reference printing use the same language.
+-- The existing inventory schema stores language as a display label (English/Japanese).
+CREATE OR REPLACE FUNCTION public.guard_catalogue_inventory_link_language()
+RETURNS trigger
+LANGUAGE plpgsql
+AS $function$
+DECLARE
+  inventory_language text;
+  normalized_inventory_language text;
+BEGIN
+  SELECT lower(trim(language))
+    INTO inventory_language
+  FROM public.products
+  WHERE id = NEW.inventory_product_id;
+
+  normalized_inventory_language := CASE
+    WHEN inventory_language IN ('en', 'eng', 'english') THEN 'en'
+    WHEN inventory_language IN ('jp', 'ja', 'jpn', 'japanese') THEN 'jp'
+    ELSE NULL
+  END;
+
+  IF normalized_inventory_language IS NULL
+     OR normalized_inventory_language <> NEW.language THEN
+    RAISE EXCEPTION
+      'Inventory/reference language mismatch for product % (inventory %, reference %).',
+      NEW.inventory_product_id, COALESCE(inventory_language, 'missing'), NEW.language;
+  END IF;
+
+  RETURN NEW;
+END
+$function$;
+
+DROP TRIGGER IF EXISTS catalogue_inventory_link_language_guard
+  ON public.catalogue_inventory_links;
+CREATE TRIGGER catalogue_inventory_link_language_guard
+  BEFORE INSERT OR UPDATE OF inventory_product_id, language, printing_id
+  ON public.catalogue_inventory_links
+  FOR EACH ROW
+  EXECUTE FUNCTION public.guard_catalogue_inventory_link_language();
+
 CREATE INDEX IF NOT EXISTS catalogue_cards_number_lookup_idx
   ON public.catalogue_cards (language, upper(card_number));
 CREATE INDEX IF NOT EXISTS catalogue_printings_card_lookup_idx
