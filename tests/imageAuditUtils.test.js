@@ -301,3 +301,24 @@ test('retains printing provenance and candidate types from catalogue descriptors
   assert.equal(candidates[0].rarity, 'SEC')
   assert.equal(candidates[0].variant, 'Parallel')
 })
+
+test('audit retains seller photo references without mutating seller-owned fields', async () => {
+  const record = {
+    id: 'catalogue-printing',
+    languageCode: 'en',
+    imageCandidates: [{ url: '/_card-image/bandai/en/OP01-001.png', kind: 'exact', language: 'en' }],
+    sellerPhotoUrl: 'https://seller-storage.example/private/product-front.jpg',
+    sellerUploadQueueId: 'seller-queue-123',
+  }
+  const before = { ...record }
+  const result = await auditCatalogueImageRecord(record, {
+    language: 'en',
+    attempts: 1,
+    fetchImpl: async () => new Response(new Blob(['image']), { status: 200, headers: { 'content-type': 'image/png' } }),
+  })
+  assert.equal(result.status, IMAGE_CHECK_STATUS.EXACT_LOADED)
+  assert.equal(record.sellerPhotoUrl, before.sellerPhotoUrl)
+  assert.equal(record.sellerUploadQueueId, before.sellerUploadQueueId)
+  assert.equal(result.sellerPhotoUrl, before.sellerPhotoUrl)
+  assert.equal(result.sellerUploadQueueId, before.sellerUploadQueueId)
+})
