@@ -20,12 +20,52 @@ export function buildOfficialBaseImageUrl(cardNumber, language = 'en') {
 
 const BANDAI_IMAGE_ID = /^(?:(?:OP|EB|ST|PRB)\d{2}|P)-\d{3}(?:_[a-z]\d+)?$/i
 
+const PREVIEW_SUPABASE_IMAGE_PROJECT = 'ehzqsnfkmwphyllhaqhe.supabase.co'
+
+export function buildPreviewBandaiImageFunctionUrl(imageId, language = 'en', supabaseUrl = '') {
+  const id = String(imageId || '').trim()
+  const text = String(language || '').toLowerCase()
+  const lang = text.startsWith('jp') || text.includes('japanese') ? 'jp'
+    : text.startsWith('en') || text.includes('english') ? 'en' : ''
+  if (!lang || !BANDAI_IMAGE_ID.test(id)) return ''
+  let projectUrl
+  try {
+    projectUrl = new URL(String(supabaseUrl || ''))
+  } catch {
+    return ''
+  }
+  if (
+    projectUrl.protocol !== 'https:' ||
+    projectUrl.hostname !== PREVIEW_SUPABASE_IMAGE_PROJECT ||
+    projectUrl.username ||
+    projectUrl.password ||
+    projectUrl.port ||
+    projectUrl.pathname !== '/'
+  ) return ''
+  const endpoint = new URL('/functions/v1/bandai-card-image', projectUrl.origin)
+  endpoint.searchParams.set('language', lang)
+  endpoint.searchParams.set('id', id)
+  return endpoint.toString()
+}
+
 export function buildOfficialImageProxyUrl(imageId, language = 'en') {
   const id = String(imageId || '').trim()
   const text = String(language || '').toLowerCase()
   const lang = text.startsWith('jp') || text.includes('japanese') ? 'jp'
     : text.startsWith('en') || text.includes('english') ? 'en' : ''
   if (!lang || !BANDAI_IMAGE_ID.test(id)) return ''
+  // Branch previews use Testing Supabase to bypass Bandai's same-site CORP
+  // header and the Cloudflare Worker-to-Bandai 522 timeout.
+  if (import.meta.env?.VITE_PREVIEW_BUILD === true) {
+    const previewImageUrl = buildPreviewBandaiImageFunctionUrl(
+      id,
+      lang,
+      import.meta.env?.VITE_PREVIEW_SUPABASE_URL || '',
+    )
+    if (previewImageUrl) return previewImageUrl
+  }
+  // Production keeps the existing same-origin Worker route until its image
+  // endpoint is separately approved and deployed to the Production project.
   return '/_card-image/bandai/' + lang + '/' + encodeURIComponent(id) + '.png'
 }
 
