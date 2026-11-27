@@ -186,11 +186,11 @@ async function reconcilePremiumCollections(manifest) {
           && match.printingKey === card.printing_key,
         )
         const match = exactMatches.length === 1 ? exactMatches[0] : null
-        const runtimeImageId = imageIdFromUrl(match?.imageUrl)
+        const runtimeImageId = imageIdFromUrl(match?.imageUrl || match?.fallbackImageUrl)
         let imageHost = ''
         let imagePath = ''
         try {
-          const parsed = new URL(match?.imageUrl || '')
+          const parsed = new URL(match?.fallbackImageUrl || match?.imageUrl || '')
           imageHost = parsed.hostname
           imagePath = parsed.pathname
         } catch {
@@ -222,6 +222,7 @@ async function reconcilePremiumCollections(manifest) {
           rarity: match?.rarity || '', applicationVariant: match?.variant || '',
           applicationVariantLabel: match?.variantLabel || '', applicationImageUrl: match?.imageUrl || '',
           applicationFallbackImageUrl: match?.fallbackImageUrl || '',
+          officialImageUrl: match?.fallbackImageUrl || '',
           usesBaseImageFallback: Boolean(match?.usesBaseImageFallback),
           usesAlternateOfficialFallback: Boolean(match?.usesAlternateOfficialFallback),
           applicationSourceText: match?.sourceText || '', applicationMatchCount: exactMatches.length,
@@ -270,7 +271,7 @@ async function reconcilePremiumCollections(manifest) {
   const jpFestPresent = japaneseProducts.some((product) => /BANDAI CARD GAMES Fest\.? 23-24/i.test(product.productName))
   const japaneseFestNotListed = !jpFestPresent
     && manifest.japanese_counterpart_audit.BANDAI_CARD_GAMES_Fest_23_24.status === 'NO_MATCHING_NAMED_JAPANESE_PRODUCT_IN_PINNED_JAPANESE_PRODUCT_FEED'
-  const uniqueImageUrls = [...new Set(allCardResults.map((card) => card.applicationImageUrl).filter(Boolean))]
+  const uniqueImageUrls = [...new Set(allCardResults.map((card) => card.officialImageUrl).filter(Boolean))]
   const imageHttpResults = await mapConcurrent(uniqueImageUrls, 8, checkImageUrl)
   const imageHttpSummary = {
     uniqueUrlsChecked: imageHttpResults.length,
@@ -423,7 +424,7 @@ async function reconcileTestingInventory(snapshot, matrixRows, stage1oAudit, app
       rowsWithApplicationCardNumberMatch: cardNumbered.filter((product) => product.applicationMatchCount > 0).length,
       rowsWithoutApplicationCardNumberMatch: unmatchedCardNumbers.length,
       assignedSetMismatches: assignedSetMismatches.length,
-      uploadedImageRows: products.filter((product) => product.uploadedImagePresent).length,
+      uploadedImageRows: products.filter((product) => product.uploaded_image_present).length,
       catalogueMatchIds: products.filter((product) => product.catalogueMatchIdPresent).length,
       cataloguePrintingKeys: products.filter((product) => product.cataloguePrintingKeyPresent).length,
       catalogueReferenceImageUrls: products.filter((product) => product.catalogueReferenceImagePresent).length,
@@ -451,21 +452,26 @@ if (!stage1oAudit.summary?.passed) throw new Error('Stage 4B-1O exact runtime re
 const applicationMatrix = await getCatalogueReferenceTestMatrix()
 const premiumCollections = await reconcilePremiumCollections(manifest)
 const testingInventory = await reconcileTestingInventory(testingSnapshot, officialMatrix.rows, stage1oAudit, applicationMatrix)
-const setPrintingKeys = new Set(applicationMatrix.items.map((item) => item.language + ':' + item.printingKey))
+const matrixRowKeys = new Set(stage1oAudit.rows.map((row) => row.set + ':' + row.language))
+const setMatrixItems = applicationMatrix.items.filter((item) => matrixRowKeys.has(item.targetSet + ':' + item.language))
+const languageCodeFor = (language) => language === 'English' ? 'en' : 'jp'
+const setAssignmentKeys = new Set(setMatrixItems.map((item) => languageCodeFor(item.language) + ':' + item.targetSet + ':' + item.printingKey))
+const setPrintingKeys = new Set(setMatrixItems.map((item) => languageCodeFor(item.language) + ':' + item.printingKey))
 const premiumPrintingKeys = new Set(premiumCollections.cards.map((card) => card.language + ':' + card.printingKey))
 const premiumKeysAlreadyInSetMatrix = [...premiumPrintingKeys].filter((key) => setPrintingKeys.has(key)).length
 const combinedPrintingKeys = new Set([...setPrintingKeys, ...premiumPrintingKeys])
 const combinedImageUrls = new Set([
-  ...applicationMatrix.items.map((item) => item.imageUrl).filter(Boolean),
-  ...premiumCollections.cards.map((card) => card.applicationImageUrl).filter(Boolean),
+  ...setMatrixItems.map((item) => item.fallbackImageUrl).filter(Boolean),
+  ...premiumCollections.cards.map((card) => card.officialImageUrl).filter(Boolean),
 ])
 const importPlan = {
   sourceRepository: UPSTREAM_REPOSITORY,
   sourceCommit: UPSTREAM_COMMIT,
   officialLanguageSetRows: stage1oAudit.summary.languageSetRows,
   officialSetReleaseAssignmentPrintings: stage1oAudit.summary.officialReleaseAssignmentPrintings,
+  setAssignmentRows: setAssignmentKeys.size,
   distinctSetMatrixPrintingKeys: setPrintingKeys.size,
-  distinctLanguageScopedBaseCardNumbers: new Set(applicationMatrix.items.map((item) => item.language + ':' + item.cardNumber)).size,
+  distinctLanguageScopedBaseCardNumbers: new Set(setMatrixItems.map((item) => languageCodeFor(item.language) + ':' + item.cardNumber)).size,
   localOfficialSupplements: {
     OP18: { English: 159, Japanese: 159, total: 318, keyPrefix: 'op18:<language>:<imageId>' },
     EB05: { English: 96, Japanese: 96, total: 192, keyPrefix: 'eb05:<language>:<imageId>' },
