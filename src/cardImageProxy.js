@@ -65,7 +65,7 @@ function isAllowedRedirect(url, originalTarget) {
   return isAllowedExternalImageUrl(url)
 }
 
-export export async function handleCardImageProxy(request, fetchImpl = fetch) {
+export async function handleCardImageProxy(request, fetchImpl = fetch) {
   if (request.method !== 'GET' && request.method !== 'HEAD') {
     return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET, HEAD', 'Cache-Control': 'no-store' } })
   }
