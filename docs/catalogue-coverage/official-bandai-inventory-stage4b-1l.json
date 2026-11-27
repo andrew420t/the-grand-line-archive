@@ -25040,7 +25040,23 @@
         "status": "REFERENCE_FEED_PARITY_VERIFIED_TESTING_INVENTORY_LINKAGE_UNVERIFIED",
         "project_id": "ehzqsnfkmwphyllhaqhe",
         "evidence": "The reference catalogue is supplied by the pinned external feed plus local official OP-18/EB-05 supplements. Testing Supabase public.products is a stock/inventory table, not the reference catalogue.",
-        "note": "Reference printing identities match; persisted stock-item-to-printing linkage remains unverified, so overall row status remains INCOMPLETE."
+        "note": "Reference printing identities match; persisted stock-item-to-printing linkage remains unverified, so overall row status remains INCOMPLETE.",
+        "audit_branch_fix": {
+          "status": "IMPLEMENTED; REFERENCE IDENTITY AND HTTP IMAGE AUDIT PASSED",
+          "source_file": "src/admin/op18OfficialCatalogue.js",
+          "test_file": "tests/op18OfficialCatalogue.test.js",
+          "union_printing_records": 160,
+          "english_printings": 159,
+          "japanese_printings": 159,
+          "changes": [
+            "Separate imageIdEn/imageIdJp, cardNumberEn/cardNumberJp and nameEn/nameJp for each printing.",
+            "English OP18-049 TR is represented as its own printing using OP18-049_p1 and Mr.2.Bon.Kurei(Bentham).",
+            "Japanese OP18-064 TR remains separate using OP18-064_p1 and the corrected name キリンガム聖.",
+            "OP13-012 uses English _p1 and Japanese _p2; OP17-040 uses English _p2 and Japanese _p1.",
+            "The image audit emits 159 language-correct printings per language.",
+            "Preserve Bandai's language-specific rarity/variant labels: English SP CARD and Japanese SPカード."
+          ]
+        }
       },
       "official_printing_identity_ids": [
         "OP17-119_p2",
@@ -25780,7 +25796,23 @@
         "status": "REFERENCE_FEED_PARITY_VERIFIED_TESTING_INVENTORY_LINKAGE_UNVERIFIED",
         "project_id": "ehzqsnfkmwphyllhaqhe",
         "evidence": "The reference catalogue is supplied by the pinned external feed plus local official OP-18/EB-05 supplements. Testing Supabase public.products is a stock/inventory table, not the reference catalogue.",
-        "note": "Reference printing identities match; persisted stock-item-to-printing linkage remains unverified, so overall row status remains INCOMPLETE."
+        "note": "Reference printing identities match; persisted stock-item-to-printing linkage remains unverified, so overall row status remains INCOMPLETE.",
+        "audit_branch_fix": {
+          "status": "IMPLEMENTED; REFERENCE IDENTITY AND HTTP IMAGE AUDIT PASSED",
+          "source_file": "src/admin/op18OfficialCatalogue.js",
+          "test_file": "tests/op18OfficialCatalogue.test.js",
+          "union_printing_records": 160,
+          "english_printings": 159,
+          "japanese_printings": 159,
+          "changes": [
+            "Separate imageIdEn/imageIdJp, cardNumberEn/cardNumberJp and nameEn/nameJp for each printing.",
+            "English OP18-049 TR is represented as its own printing using OP18-049_p1 and Mr.2.Bon.Kurei(Bentham).",
+            "Japanese OP18-064 TR remains separate using OP18-064_p1 and the corrected name キリンガム聖.",
+            "OP13-012 uses English _p1 and Japanese _p2; OP17-040 uses English _p2 and Japanese _p1.",
+            "The image audit emits 159 language-correct printings per language.",
+            "Preserve Bandai's language-specific rarity/variant labels: English SP CARD and Japanese SPカード."
+          ]
+        }
       },
       "official_printing_identity_ids": [
         "OP17-119_p2",
@@ -30186,7 +30218,20 @@
         "status": "REFERENCE_FEED_PARITY_VERIFIED_TESTING_INVENTORY_LINKAGE_UNVERIFIED",
         "project_id": "ehzqsnfkmwphyllhaqhe",
         "evidence": "The reference catalogue is supplied by the pinned external feed plus local official OP-18/EB-05 supplements. Testing Supabase public.products is a stock/inventory table, not the reference catalogue.",
-        "note": "Reference printing identities match; persisted stock-item-to-printing linkage remains unverified, so overall row status remains INCOMPLETE."
+        "note": "Reference printing identities match; persisted stock-item-to-printing linkage remains unverified, so overall row status remains INCOMPLETE.",
+        "audit_branch_fix": {
+          "status": "IMPLEMENTED; REFERENCE IDENTITY AND HTTP IMAGE AUDIT PASSED",
+          "source_file": "src/admin/eb05OfficialCatalogue.js",
+          "test_file": "tests/eb05OfficialCatalogue.test.js",
+          "english_printings": 96,
+          "japanese_printings": 96,
+          "japanese_sp_rarity_labels_corrected": 8,
+          "changes": [
+            "Preserve English SP CARD and Japanese SPカード as language-specific official rarity and variant labels.",
+            "Keep English and Japanese image IDs separate for every EB-05 printing.",
+            "Retain the 96 official printings per language and all 11 additional reprint card numbers."
+          ]
+        }
       },
       "official_printing_identity_ids": [
         "EB03-001_p2",
@@ -30678,7 +30723,20 @@
         "status": "REFERENCE_FEED_PARITY_VERIFIED_TESTING_INVENTORY_LINKAGE_UNVERIFIED",
         "project_id": "ehzqsnfkmwphyllhaqhe",
         "evidence": "The reference catalogue is supplied by the pinned external feed plus local official OP-18/EB-05 supplements. Testing Supabase public.products is a stock/inventory table, not the reference catalogue.",
-        "note": "Reference printing identities match; persisted stock-item-to-printing linkage remains unverified, so overall row status remains INCOMPLETE."
+        "note": "Reference printing identities match; persisted stock-item-to-printing linkage remains unverified, so overall row status remains INCOMPLETE.",
+        "audit_branch_fix": {
+          "status": "IMPLEMENTED; REFERENCE IDENTITY AND HTTP IMAGE AUDIT PASSED",
+          "source_file": "src/admin/eb05OfficialCatalogue.js",
+          "test_file": "tests/eb05OfficialCatalogue.test.js",
+          "english_printings": 96,
+          "japanese_printings": 96,
+          "japanese_sp_rarity_labels_corrected": 8,
+          "changes": [
+            "Preserve English SP CARD and Japanese SPカード as language-specific official rarity and variant labels.",
+            "Keep English and Japanese image IDs separate for every EB-05 printing.",
+            "Retain the 96 official printings per language and all 11 additional reprint card numbers."
+          ]
+        }
       },
       "official_printing_identity_ids": [
         "EB03-001_p2",
