@@ -146,14 +146,14 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
   const normalizedNumber = String(cardNumber || '').toUpperCase().replace(/^(OP|EB|ST|PRB)-(\d{2})-/, '$1$2-')
   const baseDirectUrl = canUseSameLanguageFallback ? buildOfficialBaseImageUrl(cardNumber, language) : ''
   const baseProxyUrl = canUseSameLanguageFallback ? buildOfficialImageProxyUrl(normalizedNumber, language) : ''
-  const candidateMeta = (candidate, candidateLanguage, kind, url, source) => ({
+  const candidateMeta = (candidate, candidateLanguage, kind, url, source, originalUrl = '') => ({
     url,
     kind,
     printingKey: candidate?.key || '',
     cardKey: candidate?.card_key || '',
     cardNumber: String(cardNumber || ''),
     language: candidateLanguage,
-    originalImageUrl: String(candidate?.image_url || ''),
+    originalImageUrl: String(originalUrl || candidate?.image_url || url),
     source,
   })
   const imageCandidates = []
@@ -165,6 +165,7 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
       'exact',
       url,
       exactOfficial ? 'Bandai official printing locator' : exactProductPhoto ? 'TCGCSV product image' : 'Catalogue printing image',
+      exactOfficial?.directUrl || directProductUrl || url,
     ))
   }
   const alternativePrintings = (printings || []).filter((candidate) =>
@@ -177,7 +178,7 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
     const official = officialImageFor(candidate, locatorFor(candidate))
     const urls = official ? [official.proxyUrl, official.directUrl] : sourceImageCandidates(candidate.image_url)
     for (const url of urls) {
-      imageCandidates.push(candidateMeta(candidate, candidate.site, 'alternative', url, official ? 'Bandai alternate printing locator' : 'Same-language alternate catalogue printing'))
+      imageCandidates.push(candidateMeta(candidate, candidate.site, 'alternative', url, official ? 'Bandai alternate printing locator' : 'Same-language alternate catalogue printing', official?.directUrl || candidate.image_url || url))
     }
   }
   if (canUseSameLanguageFallback) {
