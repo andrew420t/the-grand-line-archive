@@ -39,7 +39,7 @@ import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
 import { buildProductEditPayload, parseInventoryStockUpdate, productDeleteFailure, productUpdateFailure } from './productEditPayload'
-import { findSetCodeMatches } from './productSchema'
+import { buildReferenceLibraryScanFields, findSetCodeMatches } from './productSchema'
 
 const blankScanFields = () =>
   Object.fromEntries(
@@ -97,6 +97,17 @@ export default function AdminDashboard({
   const [scanFields, setScanFields] = useState(blankScanFields)
   const [scanVersion, setScanVersion] = useState(0)
   const [rawText, setRawText] = useState('')
+
+  const addReferenceCardToStock = (referenceCard) => {
+    const preparedFields = buildReferenceLibraryScanFields(referenceCard)
+    setScanFields({
+      ...blankScanFields(),
+      ...preparedFields,
+    })
+    setRawText('')
+    setScanVersion((current) => current + 1)
+    setActiveSection('add-stock')
+  }
 
   const customerSummary = useMemo(() => {
     const customers = new Map()
@@ -254,7 +265,7 @@ export default function AdminDashboard({
       </div>
 
       <div className="admin-hidden-panel" hidden={activeSection !== 'image-library'}>
-        <ImageLibraryPanel user={user} />
+        <ImageLibraryPanel user={user} onAddCard={addReferenceCardToStock} />
       </div>
 
       {activeSection === 'collections' && (
