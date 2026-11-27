@@ -158,7 +158,7 @@ export function buildCatalogueImageCandidates(record) {
     const proxyLanguage = String(record.imageUrl).match(/^\/_card-image\/(?:bandai|external)\/(en|jp)\//i)?.[1]?.toLowerCase() || ''
     add({ url: record.imageUrl, kind: 'alternative', language: proxyLanguage, cardKey: record.cardKey, cardNumber: record.cardNumber, source: record.source })
   }
-  return candidates.map(({ identity, ...candidate }) => candidate)
+  return candidates.map(({ identity: _identity, ...candidate }) => candidate)
 }
 
 /**
