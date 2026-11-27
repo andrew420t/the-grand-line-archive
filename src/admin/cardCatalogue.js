@@ -175,11 +175,6 @@ export async function findCatalogueMatches(cardNumber) {
       const rawObservation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest,
       null)
-      const observation = applyCatalogueOfficialMetadataCorrection({
-        cardNumber: card.number || requestedNumber,
-        language,
-        observation: rawObservation,
-      })
       const printings = safeMapGet(index.printingsByCard, card.key) || []
 
       for (const printing of printings) {
@@ -191,6 +186,12 @@ export async function findCatalogueMatches(cardNumber) {
         const products = linkedProducts.length ? linkedProducts : [null]
 
         for (const product of products) {
+          const observation = applyCatalogueOfficialMetadataCorrection({
+            cardNumber: card.number || requestedNumber,
+            language,
+            productCode: product?.code,
+            observation: rawObservation,
+          })
           const productSetCodes = (safeMapGet(catalogue.productSetsByProductKey, product?.key) || []).map((item) => item.set_key)
           const setCode = formatSetCode(getCatalogueProductSetCode(product, card.number || '', productSetCodes))
           results.push({
@@ -351,9 +352,10 @@ export async function findCatalogueSearchMatches(query, { limit = 12 } = {}) {
         const observation = applyCatalogueOfficialMetadataCorrection({
           cardNumber: card.number,
           language,
+          productCode: 'OP-10',
           observation: rawObservation,
         })
-        return normalizeSearchText(observation?.name).includes(normalized)
+        return [rawObservation, observation].some((item) => normalizeSearchText(item?.name).includes(normalized))
       })
       if (!nameMatches || !card.number) continue
       const number = baseCardNumber(card.number)
@@ -1087,12 +1089,13 @@ export async function getCatalogueReferenceTestMatrix() {
       const observations = (safeMapGet(index.observationsByCard, printing.card_key) || []).filter((item) => !item.superseded_at)
       const rawObservation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
-      const observation = applyCatalogueOfficialMetadataCorrection({
-        cardNumber,
-        language,
-        observation: rawObservation,
-      })
       for (const product of products) {
+        const observation = applyCatalogueOfficialMetadataCorrection({
+          cardNumber,
+          language,
+          productCode: product.code,
+          observation: rawObservation,
+        })
         const rawSet = setFromProduct(product.code, cardNumber)
         if (!expectedSets.includes(rawSet)) continue
         add({
