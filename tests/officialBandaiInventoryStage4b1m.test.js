@@ -133,3 +133,19 @@ test('Stage 3 supplemental OP-18 English image identifiers remain explicitly fla
     'OP17-040_p1',
   ])
 })
+
+test('upstream product-link counts match every standalone official product page', () => {
+  const linkedRows = matrix.rows.filter((row) => row.upstream_product_key)
+  assert.equal(linkedRows.length, 45)
+  for (const row of linkedRows) {
+    assert.equal(row.upstream_product_link_count, row.official_page_entry_count, `${row.set} ${row.language} upstream product links`)
+    assert.equal(row.upstream_product_link_count_matches_official_page, true)
+    assert.equal(row.upstream_product_link_count_delta, 0)
+  }
+  for (const set of ['OP-18', 'EB-05']) {
+    for (const language of ['English', 'Japanese']) {
+      assert.equal(rowFor(set, language).upstream_product_link_count, 0)
+      assert.equal(rowFor(set, language).upstream_product_key, null)
+    }
+  }
+})
