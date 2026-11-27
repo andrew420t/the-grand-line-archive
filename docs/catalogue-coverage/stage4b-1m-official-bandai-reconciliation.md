@@ -108,7 +108,7 @@ The Stage 3 branch's `catalogueImageFilters.js` and tests cover:
 - OP-18 119 base numbers, 159 printings and language-specific TR identities.
 - EB-05 61 base numbers, 96 printings, language-specific image IDs and reprint identities.
 
-A fresh audit-branch CI run exposed one real defect: the EB-05 card-number normalizer had double-escaped regular-expression tokens, so `EB-05-001` did not normalize to `EB05-001`. The implementation has been corrected to use the same single-escape normalization as OP-18. The existing regression was expanded to cover hyphenated, spaced and underscored EB-05 numbers. The first CI run had 270/271 tests passing and failed this EB-05 normalization test; the corrected code/test are now awaiting the new CI result.
+A fresh audit-branch CI run exposed one real defect: the EB-05 card-number normalizer had double-escaped regular-expression tokens, so `EB-05-001` did not normalize to `EB05-001`. The implementation has been corrected to use the same single-escape normalization as OP-18. The existing regression was expanded to cover hyphenated, spaced and underscored EB-05 numbers. The first CI run had 270/271 tests passing and failed this EB-05 normalization test. After correcting the regex and expanding the tests, CI passed on code/test commit `6f4327a7e75721f114a78b4f749bc596e179fdad`: **271/271 tests passed, lint passed, and the production build passed**. The build emitted the existing Vite chunk-size warning (one JS chunk is approximately 1,005 kB); it did not fail.
 
 The Image Library code deduplicates overlapping pagination pages by stable gallery entry ID. Existing tests cover storage pagination, exact page multiples and storage errors; no new pagination code change was justified by the audit. No other catalogue code correction was made because no additional independently proven defect was established.
 
@@ -118,5 +118,5 @@ The Image Library code deduplicates overlapping pagination pages by stable galle
 - PR #38: **OPEN**, not merged.
 - The audit branch is isolated; it is not merged into main/master and does not change either PR.
 - The existing Stage 3 Preview URL remains `https://fix-card-reference-images-stage3-2026-11-the-grand-line-archive.andrew420-t27.workers.dev`. Its previously recorded successful build was for Stage 3 commit `957d5eb`, not this audit branch. No Preview deployment or manual browser acceptance was performed.
-- The audit branch verify workflow runs `npm ci`, `npm test`, `npm run lint` and `npm run build`. The first CI run failed 1 of 271 tests; a corrected normalizer and expanded regression test have been pushed, and the latest run is pending.
+- The audit branch verify workflow runs `npm ci`, `npm test`, `npm run lint` and `npm run build`. The successful CI run on `6f4327a7e75721f114a78b4f749bc596e179fdad` completed all four stages: 271/271 tests passed, lint passed, and build passed. A documentation-only update follows this run and will receive its own branch CI check.
 - No Production deployment, Production Supabase operation, merge, branch deletion or credential access occurred.
