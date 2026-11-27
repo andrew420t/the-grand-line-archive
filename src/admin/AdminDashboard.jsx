@@ -13,6 +13,8 @@ import {
   ImagePlus,
   Layers,
   LayoutDashboard,
+  Mail,
+  MapPin,
   Package,
   PackagePlus,
   Palette,
@@ -35,6 +37,7 @@ import QuickAddPanel from './QuickAddPanel'
 import StockPhotographyPanel from './StockPhotographyPanel'
 import ImageLibraryPanel from './ImageLibraryPanel'
 import BulkImportPanel from './BulkImportPanel'
+import OrderConversation from '../OrderConversation'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
@@ -107,6 +110,16 @@ export default function AdminDashboard({
     setRawText('')
     setScanVersion((current) => current + 1)
     setActiveSection('add-stock')
+  }
+
+  const retryOrderEmail = async (orderId) => {
+    if (!supabase) throw new Error('Supabase is not configured.')
+    const result = await supabase.functions.invoke('notify-new-order', {
+      body: { orderId: String(orderId), retry: true },
+    })
+    if (result.error) throw new Error(result.error.message || 'The order email could not be sent.')
+    await onReload()
+    return result.data
   }
 
   const customerSummary = useMemo(() => {
@@ -277,11 +290,13 @@ export default function AdminDashboard({
           orders={orders}
           orderItems={orderItems}
           products={products}
+          user={user}
           loading={loading}
           error={error}
           action={action}
           onReload={onReload}
           onUpdateStatus={onUpdateStatus}
+          onRetryEmail={retryOrderEmail}
         />
       )}
 
@@ -1005,29 +1020,68 @@ function CollectionsSection({ categories, sets, onRefresh }) {
   )
 }
 
-function OrdersSection({ orders, orderItems, products, loading, error, action, onReload, onUpdateStatus }) {
+function OrdersSection({ orders, orderItems, products, user, loading, error, action, onReload, onUpdateStatus, onRetryEmail }) {
   const pendingCount = orders.filter((order) => ['pending', 'processing'].includes(String(order.status).toLowerCase())).length
+  const [emailBusy, setEmailBusy] = useState('')
+  const [emailError, setEmailError] = useState('')
+  const [emailNotice, setEmailNotice] = useState('')
+
+  const retryEmail = async (orderId) => {
+    setEmailBusy(String(orderId))
+    setEmailError('')
+    setEmailNotice('')
+    try {
+      const result = await onRetryEmail(orderId)
+      setEmailNotice(result?.status === 'sent' ? 'Admin notification email sent.' : result?.message || 'Email notification status refreshed.')
+    } catch (failure) {
+      setEmailError(failure.message || 'The email notification could not be retried.')
+    } finally {
+      setEmailBusy('')
+    }
+  }
+
   return (
     <section className="admin-view">
-      <div className="admin-view-heading"><div><p className="eyebrow">ORDERS</p><h2>Dispatch control</h2></div><button className="button button--outline" type="button" onClick={onReload}>Refresh orders</button></div>
+      <div className="admin-view-heading"><div><p className="eyebrow">ORDERS</p><h2>Dispatch control</h2><p>Customer orders, pickup arrangements and private order messages.</p></div><button className="button button--outline" type="button" onClick={onReload}>Refresh orders</button></div>
       <div className="overview-metrics overview-metrics--compact">
         <Metric icon={ClipboardList} label="All orders" value={orders.length} />
         <Metric icon={AlertCircle} label="Needs attention" value={pendingCount} />
         <Metric icon={Check} label="Completed / picked up" value={orders.filter((order) => ['completed', 'shipped'].includes(String(order.status).toLowerCase())).length} />
       </div>
       {error && <div className="error-notice"><ShieldAlert size={15} /><span>{error}</span></div>}
+      {emailError && <div className="error-notice"><ShieldAlert size={15} /><span>{emailError}</span></div>}
+      {emailNotice && <div className="success-notice"><Check size={15} /><span>{emailNotice}</span></div>}
       {loading ? <div className="loading-state"><span className="loader" />Loading order book…</div> : orders.length ? (
         <div className="admin-order-list">
           {orders.map((order) => {
             const items = orderItems.filter((item) => String(item.order_id) === String(order.id))
+            const emailStatus = String(order.admin_email_status || 'pending').toLowerCase()
             return (
               <article className="admin-order" key={order.id}>
-                <div className="admin-order__top"><div><span className="eyebrow">ORDER #{String(order.id).slice(-8).toUpperCase()}</span><strong>{formatMoney(order.total_amount ?? order.total ?? order.amount)}</strong></div><label className="select-field status-select"><span className="sr-only">Update order status</span><select value={order.status || 'pending'} disabled={action === order.id} onChange={(event) => onUpdateStatus(order.id, event.target.value)}><option value="pending">Pending</option><option value="processing">Processing</option><option value="shipped">Ready for pickup</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><ChevronDown size={15} /></label></div>
-                <div className="admin-order__meta"><span>{order.created_at ? new Date(order.created_at).toLocaleString('en-GB') : 'Date not recorded'}</span><span>Customer: {order.user_id || order.customer_id || 'Not recorded'}</span><span>{items.length} line items</span></div>
+                <div className="admin-order__top">
+                  <div><span className="eyebrow">ORDER #{String(order.id).replace(/-/g, '').slice(-8).toUpperCase()}</span><strong>{formatMoney(order.total_amount ?? order.total ?? order.amount)}</strong></div>
+                  <label className="select-field status-select"><span className="sr-only">Update order status</span><select value={order.status || 'pending'} disabled={action === order.id} onChange={(event) => onUpdateStatus(order.id, event.target.value)}><option value="pending">Pending</option><option value="processing">Processing</option><option value="shipped">Ready for pickup</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><ChevronDown size={15} /></label>
+                </div>
+                <div className="admin-order__meta">
+                  <span>{order.created_at ? new Date(order.created_at).toLocaleString('en-GB') : 'Date not recorded'}</span>
+                  <span>Customer: {order.customer_name || 'Archive customer'}</span>
+                  {order.customer_email && <span><Mail size={13} /> {order.customer_email}</span>}
+                  <span>{items.length} line items</span>
+                  <span><MapPin size={13} /> Gibraltar local pickup</span>
+                </div>
+                <div className="admin-order__email">
+                  <div><strong>Admin email notification</strong><span className={emailStatus === 'sent' ? 'is-email-sent' : 'is-email-pending'}>{emailStatus === 'sent' ? 'Sent' : emailStatus === 'not_configured' ? 'Not configured' : emailStatus === 'failed' ? 'Failed' : emailStatus === 'sending' ? 'Sending…' : 'Pending'}</span></div>
+                  {order.admin_email_sent_at && <small>Sent {new Date(order.admin_email_sent_at).toLocaleString('en-GB')}</small>}
+                  {order.admin_email_error && <small className="form-error">{order.admin_email_error}</small>}
+                  {emailStatus !== 'sent' && !['completed', 'cancelled'].includes(String(order.status).toLowerCase()) && (
+                    <button className="button button--outline" type="button" disabled={emailBusy === String(order.id)} onClick={() => retryEmail(order.id)}>{emailBusy === String(order.id) ? 'Sending…' : 'Retry email notification'}</button>
+                  )}
+                </div>
                 <div className="order-lines">{items.length ? items.map((item) => {
-                  const product = products.find((entry) => String(entry.id) === String(item.product_id))
-                  return <div className="order-line" key={item.id || `${item.order_id}-${item.product_id}`}><span>{product?.name || `Card ${item.product_id}`} <small>× {item.quantity}</small></span><strong>{formatMoney(Number(item.unit_price ?? item.price ?? 0) * Number(item.quantity || 0))}</strong></div>
+                  const product = products.find((entry) => String(entry.id) === String(item.product_id || item.card_id))
+                  return <div className="order-line" key={item.id || `${item.order_id}-${item.product_id || item.card_id}`}><span>{product?.name || `Card ${item.product_id || item.card_id}`} <small>× {item.quantity}</small></span><strong>{formatMoney(Number(item.unit_price ?? item.price_at_purchase ?? 0) * Number(item.quantity || 0))}</strong></div>
                 }) : <p className="order-lines__empty">No line items are available.</p>}</div>
+                <OrderConversation order={order} user={user} />
               </article>
             )
           })}
