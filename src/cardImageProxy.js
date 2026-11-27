@@ -101,9 +101,18 @@ export async function handleCardImageProxy(request, fetchImpl = fetch) {
   }
 
   if (!upstream || !upstream.ok) {
-    return new Response('Card image was not found at the source', {
-      status: upstream?.status === 404 ? 404 : 502,
-      headers: { 'Cache-Control': 'public, max-age=60' },
+    const upstreamStatus = upstream?.status || 0
+    const headers = new Headers({
+      'Cache-Control': 'no-store',
+      'X-Card-Image-Source-Host': original.url.hostname,
+      'X-Card-Image-Upstream-Status': String(upstreamStatus || 'unavailable'),
+    })
+    const message = upstreamStatus
+      ? 'Card image source returned HTTP ' + upstreamStatus
+      : 'Card image source did not return a response'
+    return new Response(message, {
+      status: upstreamStatus === 404 ? 404 : 502,
+      headers,
     })
   }
   const contentType = upstream.headers.get('content-type') || ''
