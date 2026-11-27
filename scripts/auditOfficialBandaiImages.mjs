@@ -61,7 +61,7 @@ function collectUrls() {
     for (const page of data.pages || []) {
       for (const entry of page.entries || []) {
         const imageId = typeof entry.image_url === "string"
-          ? (entry.image_url.match(/\\/([^/?#]+)\\.(?:png|webp|jpg|jpeg)(?:[?#]|$)/i) || [])[1] || null
+          ? (entry.image_url.match(/\/([^/?#]+)\.(?:png|webp|jpg|jpeg)(?:[?#]|$)/i) || [])[1] || null
           : null;
         addUrl(urls, entry.image_url, page.set, page.language, imageId);
       }
