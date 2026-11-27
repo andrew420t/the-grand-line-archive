@@ -318,3 +318,11 @@ test('hands a reference-library printing into Add New Stock with release set and
   assert.equal(fields.classification.value, 'Alabasta')
   assert.equal(fields.catalogue_match_id.needsReview, true)
 })
+
+test('adds a product to Bulk only when explicitly selected', () => {
+  const regularPayload = buildNewProductPayload({ ...form, is_bulk: false }, 'set-uuid', true)
+  const bulkPayload = buildNewProductPayload({ ...form, is_bulk: true }, 'set-uuid', true)
+
+  assert.equal('is_bulk' in regularPayload, false)
+  assert.equal(bulkPayload.is_bulk, true)
+})

@@ -41,6 +41,12 @@ Camera capture requires browser camera permission and a secure context (HTTPS, o
 
 The scanner extracts additional fields (`color`, `power`, `cost`, `card_type`, `effect_text`, `language`, `classification`, and `variant_label`). Those columns are not in the confirmed `products` schema, so the app preflights them and will not silently discard reviewed OCR values. A reviewed migration is needed to persist those fields. Set codes are matched to `sets.code`; no `set_code` product column is used.
 
+### Bulk inventory category
+
+The Inventory Book supports a separate `products.is_bulk` boolean. Existing products default to regular inventory; administrators can add or remove a product from Bulk in Quick Add, the Inventory Book row, or Edit Card. The Inventory Book defaults to regular inventory and has filters for Regular, Bulk only, and All inventory. This flag does not replace `category_id`, publication `status`, set, or card printing identity.
+
+The reviewed SQL is `supabase/review-only/product-bulk-category.sql`. It has been applied and verified on the Testing Supabase project only. Apply it to Production before enabling Bulk classification there; the UI checks for the column and disables existing-product toggles until it is available.
+
 Photography upload requires a public `product-card-images` Storage bucket and a `product_images` table. Website customisation requires a `site_settings` table. Those objects are not present, and no database or Storage changes have been run. The review-only migration proposal must be checked for compatibility with the actual `public.is_admin()` signature and approved before it is applied. It adds admin-only write policies for the new objects while leaving existing policies untouched; product image URLs are publicly readable for active catalogue products.
 
 OCR is browser-based and free; its worker and language data are downloaded on the first scan, so network access is required. Camera capture requires browser permission and HTTPS (or localhost). The photo studio accepts uploads, supports front/back/detail roles, rotation and card cropping, and compresses images in the browser.

@@ -38,7 +38,7 @@ import BulkImportPanel from './BulkImportPanel'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
-import { buildProductEditPayload, parseInventoryStockUpdate, productDeleteFailure, productUpdateFailure } from './productEditPayload'
+import { buildProductEditPayload, filterInventoryProducts, parseInventoryStockUpdate, productDeleteFailure, productUpdateFailure } from './productEditPayload'
 import { buildReferenceLibraryScanFields, findSetCodeMatches } from './productSchema'
 
 const blankScanFields = () =>
@@ -312,6 +312,7 @@ function Metric({ icon: Icon, label, value }) {
 
 function ProductsSection({ products, categories, sets, onRefresh }) {
   const [query, setQuery] = useState('')
+  const [bulkFilter, setBulkFilter] = useState('regular')
   const [changes, setChanges] = useState({})
   const [busyId, setBusyId] = useState('')
   const [error, setError] = useState('')
@@ -322,11 +323,7 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
   const [lookupBusy, setLookupBusy] = useState(false)
   const [lookupSaving, setLookupSaving] = useState(false)
   const [lookupError, setLookupError] = useState('')
-  const visibleProducts = products.filter((product) =>
-    [product.name, product.setName, product.category, product.rarity, product.raw?.card_number]
-      .filter(Boolean)
-      .some((value) => String(value).toLowerCase().includes(query.toLowerCase())),
-  )
+  const visibleProducts = filterInventoryProducts(products, query, bulkFilter)
 
   const valueFor = (product, field) =>
     changes[product.id]?.[field] ?? String(product.raw?.[field] ?? '')
@@ -448,6 +445,43 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
     }
   }
 
+  const toggleBulkCategory = async (product) => {
+    if (!supabase) {
+      setError('Supabase is not configured.')
+      return
+    }
+    const raw = product.raw || {}
+    if (!('is_bulk' in raw)) {
+      setError('The Bulk category is not enabled in this database yet. Apply supabase/review-only/product-bulk-category.sql first.')
+      return
+    }
+    const nextValue = raw.is_bulk !== true
+    setBusyId(String(product.id))
+    setError('')
+    setNotice('')
+    try {
+      const result = await supabase
+        .from('products')
+        .update({ is_bulk: nextValue, updated_at: new Date().toISOString() })
+        .eq('id', product.id)
+        .select('id')
+        .maybeSingle()
+      const updateFailure = productUpdateFailure(result)
+      if (updateFailure) {
+        setError(`Bulk category was not updated: ${updateFailure}`)
+      } else {
+        setNotice(nextValue
+          ? `${product.name} moved to Bulk inventory.`
+          : `${product.name} removed from Bulk and returned to regular inventory.`)
+        onRefresh()
+      }
+    } catch (bulkError) {
+      setError(`Bulk category was not updated: ${bulkError.message || 'Unexpected error.'}`)
+    } finally {
+      setBusyId('')
+    }
+  }
+
   const toggleArchivePublication = async (product) => {
     if (!supabase) {
       setError('Supabase is not configured.')
@@ -513,7 +547,17 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
   return (
     <section className="admin-view">
       <div className="admin-view-heading"><div><p className="eyebrow">PRODUCTS</p><h2>Inventory book</h2></div><button className="button button--outline" type="button" onClick={onRefresh}>Refresh products</button></div>
-      <label className="search-field admin-product-search"><Search size={16} /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search name, card number, rarity, set…" /></label>
+      <div className="admin-product-toolbar">
+        <label className="search-field admin-product-search"><Search size={16} /><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search name, card number, rarity, set…" /></label>
+        <label className="form-field admin-product-filter">
+          <span>Inventory view</span>
+          <select value={bulkFilter} onChange={(event) => setBulkFilter(event.target.value)}>
+            <option value="regular">Regular inventory ({products.filter((product) => product.raw?.is_bulk !== true).length})</option>
+            <option value="bulk">Bulk only ({products.filter((product) => product.raw?.is_bulk === true).length})</option>
+            <option value="all">All inventory ({products.length})</option>
+          </select>
+        </label>
+      </div>
       {error && <div className="error-notice"><ShieldAlert size={15} /><span>{error}</span></div>}
       {notice && <div className="success-notice"><Check size={15} /><span>{notice}</span></div>}
       {visibleProducts.length ? (
@@ -523,12 +567,22 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
             return (
               <article className="inventory-item" key={product.id}>
                 <div className="inventory-item__photo">{product.image ? <img src={product.image} alt={product.name} /> : <Image size={22} />}</div>
-                <div className="inventory-item__details"><p className="eyebrow">{product.setCode ? `${product.setCode} · ` : ''}{product.setName || product.category || 'CARD'}</p><h3>{product.name}</h3><span>{raw.card_number || 'Card number not recorded'} · {product.rarity || 'Rarity not recorded'}</span><span>{[raw.language, raw.variant_label].filter(Boolean).join(' · ') || 'Language / printing not recorded'}</span>{raw.catalogue_printing_key && <span className="admin-muted">Printing: {raw.catalogue_printing_key}</span>}<span className={String(raw.status || '').toLowerCase() === 'active' ? 'inventory-publication-status is-published' : 'inventory-publication-status'}>{String(raw.status || '').toLowerCase() === 'active' ? 'Published in Archive' : 'Private · Inventory only'}</span></div>
+                <div className="inventory-item__details"><p className="eyebrow">{product.setCode ? `${product.setCode} · ` : ''}{product.setName || product.category || 'CARD'}</p><h3>{product.name}</h3><span>{raw.card_number || 'Card number not recorded'} · {product.rarity || 'Rarity not recorded'}</span><span>{[raw.language, raw.variant_label].filter(Boolean).join(' · ') || 'Language / printing not recorded'}</span>{raw.catalogue_printing_key && <span className="admin-muted">Printing: {raw.catalogue_printing_key}</span>}<span className={String(raw.status || '').toLowerCase() === 'active' ? 'inventory-publication-status is-published' : 'inventory-publication-status'}>{String(raw.status || '').toLowerCase() === 'active' ? 'Published in Archive' : 'Private · Inventory only'}</span>{raw.is_bulk === true && <span className="inventory-bulk-badge">BULK INVENTORY</span>}</div>
                 <label className="form-field inventory-input"><span>GBP price</span><input type="number" min="0" step="0.01" value={valueFor(product, 'price') ?? raw.price ?? ''} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], price: event.target.value } }))} /></label>
                 <label className="form-field inventory-input"><span>Quantity</span><input type="number" min="0" step="1" value={valueFor(product, 'stock') ?? raw.stock_quantity ?? 0} onChange={(event) => setChanges((current) => ({ ...current, [product.id]: { ...current[product.id], stock: event.target.value } }))} /></label>
                 <button className="button button--outline inventory-save" type="button" disabled={busyId === String(product.id)} onClick={() => saveInventory(product)}>{busyId === String(product.id) ? 'Saving…' : 'Update stock'}</button>
                 <div className="inventory-item__actions">
                   <button className={String(raw.status || '').toLowerCase() === 'active' ? 'button button--outline' : 'button button--gold'} type="button" disabled={busyId === String(product.id)} onClick={() => toggleArchivePublication(product)}>{busyId === String(product.id) ? 'Saving…' : String(raw.status || '').toLowerCase() === 'active' ? 'Remove from Archive' : 'Post to Archive'}</button>
+                  <button
+                    className={raw.is_bulk === true ? 'button button--gold' : 'button button--outline'}
+                    type="button"
+                    title={'is_bulk' in raw ? '' : 'Apply the Bulk category database migration to enable this action.'}
+                    disabled={busyId === String(product.id) || !('is_bulk' in raw)}
+                    aria-pressed={raw.is_bulk === true}
+                    onClick={() => toggleBulkCategory(product)}
+                  >
+                    <PackagePlus size={14} /> {raw.is_bulk === true ? 'Remove from bulk' : 'Add to bulk'}
+                  </button>
                   <button className="button button--outline" type="button" onClick={() => setEditingProduct(product)}><Pencil size={14} /> Edit card</button>
                   <button className="button button--outline" type="button" disabled={busyId === String(product.id) || !raw.card_number} onClick={() => lookupProductCard(product)}><Search size={14} /> Look up card</button>
                   <button className="button button--danger" type="button" disabled={busyId === String(product.id)} onClick={() => deleteProduct(product)}><Trash2 size={14} /> Delete</button>
@@ -537,7 +591,17 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
             )
           })}
         </div>
-      ) : <EmptyAdminState icon={Package} heading="No products found." text={query ? 'Try another search.' : 'The products table currently has no visible rows. Add a card to start the inventory.'} />}
+      ) : <EmptyAdminState
+        icon={Package}
+        heading={bulkFilter === 'bulk' ? 'No bulk cards found.' : 'No products found.'}
+        text={query
+          ? 'Try another search or inventory view.'
+          : bulkFilter === 'bulk'
+            ? 'Use Add to bulk on an existing card, or select Add to bulk when creating new stock.'
+            : bulkFilter === 'regular' && products.some((product) => product.raw?.is_bulk === true)
+              ? 'There are no regular cards in this view. Switch to Bulk only or All inventory.'
+              : 'The products table currently has no visible rows. Add a card to start the inventory.'}
+      />}
       {lookupProduct && (
         <div className="modal-backdrop product-edit-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget && !lookupSaving && !lookupBusy) setLookupProduct(null) }}>
           <section className="product-edit-modal catalogue-product-lookup" role="dialog" aria-modal="true" aria-labelledby="catalogue-product-lookup-title">
@@ -593,6 +657,7 @@ const productEditFields = [
   { key: 'category_id', label: 'Category', columns: ['category_id'], select: 'categories' },
   { key: 'set_id', label: 'Set', columns: ['set_id'], select: 'sets' },
   { key: 'featured', label: 'Featured product', columns: ['featured'], checkbox: true },
+  { key: 'is_bulk', label: 'Bulk inventory category', columns: ['is_bulk'], checkbox: true, button: true },
   { key: 'status', label: 'Status', columns: ['status'], options: ['active', 'draft', 'archived'] },
   { key: 'slug', label: 'Slug', columns: ['slug'] },
   { key: 'variant_label', label: 'Variant label', columns: ['variant_label'] },
@@ -649,6 +714,7 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
 
   const renderField = (field) => {
     const value = values[field.key]
+    if (field.button) return null
     if (field.checkbox) {
       return (
         <label className="check-field" key={field.key}>
@@ -712,9 +778,25 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
       <section className="product-edit-modal" role="dialog" aria-modal="true" aria-labelledby="product-edit-title">
         <div className="product-edit-modal__heading">
           <div><p className="eyebrow">PRODUCT MANAGEMENT</p><h2 id="product-edit-title">Edit card details.</h2></div>
-          <button className="icon-button" type="button" aria-label="Close editor" disabled={busy} onClick={onClose}><X size={18} /></button>
+          <div className="product-edit-modal__heading-actions">
+            {fields.some((field) => field.key === 'is_bulk') && (
+              <button
+                className={values.is_bulk ? 'button button--gold' : 'button button--outline'}
+                type="button"
+                aria-pressed={Boolean(values.is_bulk)}
+                disabled={busy}
+                onClick={() => setValues((current) => ({ ...current, is_bulk: !current.is_bulk }))}
+              >
+                <PackagePlus size={14} /> {values.is_bulk ? 'Remove from bulk' : 'Add to bulk'}
+              </button>
+            )}
+            <button className="icon-button" type="button" aria-label="Close editor" disabled={busy} onClick={onClose}><X size={18} /></button>
+          </div>
         </div>
-        <p className="admin-muted">Only fields present in this product row are editable. This uses the table’s returned column names and does not add schema assumptions.</p>
+        {fields.some((field) => field.key === 'is_bulk') && (
+          <p className="admin-muted product-edit-bulk-hint">Bulk classification is separate from the card category. Save changes to apply the selected Bulk setting.</p>
+        )}
+        <p className="admin-muted">Only fields present in this product row are editable. Bulk classification is separate from the card's actual category and publication status.</p>
         <form className="product-edit-form" onSubmit={submit}>
           {fields.map(renderField)}
           {error && <p className="form-error form-field--wide" role="alert">{error}</p>}
