@@ -4227,7 +4227,7 @@ function makeSupplementalMatch(printing, language) {
 }
 
 export function getOp18SupplementalMatches(cardNumber = '') {
-  const normalized = String(cardNumber || '').toUpperCase().replace(/\\s+/g, '').replace(/_/g, '-').replace(/^(OP)-(\\d{2})-/, 'OP$2-')
+  const normalized = String(cardNumber || '').toUpperCase().replace(/\s+/g, '').replace(/_/g, '-').replace(/^(OP)-(\d{2})-/, 'OP$2-')
   return OP18_OFFICIAL_PRINTINGS
     .flatMap((printing) => ['en', 'jp'].map((language) => makeSupplementalMatch(printing, language)).filter(Boolean))
     .filter((printing) => !normalized || printing.cardNumber === normalized)
