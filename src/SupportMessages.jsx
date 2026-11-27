@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Check, ChevronRight, Mail, MessageCircle, Plus, RefreshCw, Send, ShieldAlert } from 'lucide-react'
+import { Check, Mail, MessageCircle, Plus, RefreshCw, Send, ShieldAlert } from 'lucide-react'
 import { supabase } from './lib/supabase'
 
 const formatDate = (value) => value
