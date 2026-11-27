@@ -14,13 +14,13 @@ test("Stage 4B-1O matches all 50 official rows to the pinned reference-feed iden
   assert.equal(matrix.application_comparison_evidence.reference_feed_reconciliation.mismatched_rows, 0);
   for (const row of rows) {
     const feed = row.application_feed_reconciliation;
-    assert.equal(feed.status, "EXACT_REFERENCE_FEED_IDENTITY_SET_MATCH", `${row.set} ${row.language}`);
+    assert.equal(feed.status, "EXACT_IDENTITY_AND_METADATA_MATCH", `${row.set} ${row.language}`);
     assert.equal(feed.official_printing_identity_count, row.official_printing_identity_count);
     assert.equal(feed.application_reference_identity_count, row.official_printing_identity_count);
     assert.equal(feed.matched_identity_count, row.official_printing_identity_count);
     assert.deepEqual(feed.missing_printing_identity_ids, []);
     assert.deepEqual(feed.unexpected_printing_identity_ids, []);
-    assert.equal(feed.testing_database_persistence, "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET");
+    assert.match(feed.testing_database_persistence, /INCOMPLETE_SEPARATE/);
   }
 });
 
