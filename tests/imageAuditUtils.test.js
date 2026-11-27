@@ -2,6 +2,8 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import {
   IMAGE_CHECK_STATUS,
+  auditCatalogueImageRecord,
+  dedupeCatalogueAuditRecords,
   buildImageAuditSummary,
   classifyImageResponse,
   dedupeImageCandidates,
@@ -139,4 +141,53 @@ test('retains upstream 5xx diagnostics after exhausting transient retries', asyn
   assert.equal(result.upstreamStatus, 503)
   assert.equal(result.proxyError, 'upstream-http-error')
   assert.equal(result.attempts, 2)
+})
+
+test('classifies upstream 410 as confirmed missing without retrying', async () => {
+  let calls = 0
+  const result = await loadImageWithRetry('/_card-image/bandai/en/OP01-001.png', {
+    attempts: 3,
+    fetchImpl: async () => { calls += 1; return new Response('Gone', { status: 410, headers: { 'x-card-image-upstream-status': '410' } }) },
+  })
+  assert.equal(result.status, IMAGE_CHECK_STATUS.MISSING)
+  assert.equal(calls, 1)
+})
+
+test('keeps a catalogue record with no image candidates separate from missing', async () => {
+  const result = await auditCatalogueImageRecord({ id: 'en-no-ref', languageCode: 'en', imageCandidates: [] }, { language: 'en' })
+  assert.equal(result.status, IMAGE_CHECK_STATUS.NO_REFERENCE)
+})
+
+test('rejects cross-language candidates before requesting them', async () => {
+  let calls = 0
+  const result = await auditCatalogueImageRecord({
+    id: 'jp-record', languageCode: 'jp',
+    imageCandidates: [{ url: 'https://example.test/en.png', kind: 'exact' }],
+  }, { language: 'en', fetchImpl: async () => { calls += 1; throw new Error('must not fetch') } })
+  assert.equal(result.status, IMAGE_CHECK_STATUS.INVALID_URL)
+  assert.equal(result.diagnostic, 'language-mismatch')
+  assert.equal(calls, 0)
+})
+
+test('distinguishes successfully loaded alternative and base-card fallback artwork', async () => {
+  const fetchImpl = async () => new Response(new Blob(['image']), { status: 200, headers: { 'content-type': 'image/png' } })
+  const alternative = await auditCatalogueImageRecord({
+    id: 'alt', languageCode: 'en',
+    imageCandidates: [{ url: '/_card-image/bandai/en/OP01-001_p1.png', kind: 'alternative' }],
+  }, { language: 'en', fetchImpl, attempts: 1 })
+  const base = await auditCatalogueImageRecord({
+    id: 'base', languageCode: 'jp',
+    imageCandidates: [{ url: '/_card-image/bandai/jp/OP01-001.png', kind: 'base-fallback' }],
+  }, { language: 'jp', fetchImpl, attempts: 1 })
+  assert.equal(alternative.status, IMAGE_CHECK_STATUS.ALTERNATIVE_LOADED)
+  assert.equal(base.status, IMAGE_CHECK_STATUS.BASE_FALLBACK_LOADED)
+  assert.notEqual(alternative.status, IMAGE_CHECK_STATUS.EXACT_LOADED)
+  assert.notEqual(base.status, IMAGE_CHECK_STATUS.EXACT_LOADED)
+})
+
+test('deduplicates catalogue audit entries by stable record identity', () => {
+  const first = { id: 'en:OP01-001:base', languageCode: 'en' }
+  const duplicate = { ...first, label: 'duplicate product link' }
+  const jp = { id: 'jp:OP01-001:base', languageCode: 'jp' }
+  assert.deepEqual(dedupeCatalogueAuditRecords([first, duplicate, jp]), [first, jp])
 })
