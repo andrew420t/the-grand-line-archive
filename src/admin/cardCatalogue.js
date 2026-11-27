@@ -667,9 +667,13 @@ export async function getCatalogueImageGallery({
         cardNumber: card?.number || '',
       })
       const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
-      const products = links
+      // Duplicate link rows for the same printing/product must not create
+      // duplicate gallery cards. Distinct product keys remain separate because
+      // they represent genuinely different release products.
+      const products = [...new Map(links
         .map((link) => safeMapGet(index.productsByKey, link.product_key))
         .filter(Boolean)
+        .map((product) => [product.key, product])).values()]
       const productChoices = products.length ? products : [null]
       const setOverride = isDon ? donOverrides[printing.key + ':' + siteLanguage] : null
       const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
