@@ -24,7 +24,7 @@ All 50 language/set rows now have full entry-level official Bandai extraction, c
 
 ## All 50 language/set results
 
-Counts are **official result rows / parsed entries / image URLs**. Base count refers only to the original OP/EB card-number prefix. PRB product-prefix numbers are shown separately and are not asserted as original base-card counts. HTTP column is **LOADED / total row associations**.
+Counts are **official result rows / parsed entries / image URLs**. Base count refers only to original OP/EB card-number prefixes. PRB product-prefix numbers are shown separately and are not asserted as original base-card counts. HTTP column is **LOADED / total row associations**.
 
 | Set | Language | Base numbers | Distinct product numbers | PRB product-prefix numbers | Results / entries / images | Distinct printings | HTTP loaded / total | Feed-missing base numbers | Overall status |
 |---|---|---:|---:|---:|---:|---:|---:|---:|---|
@@ -74,10 +74,10 @@ Counts are **official result rows / parsed entries / image URLs**. Base count re
 | EB-04 | Japanese | 61 | 65 | — | 85/85/85 | 85 | 85/85 | 0 | INCOMPLETE |
 | EB-05 | English | 61 | 72 | — | 96/96/96 | 96 | 96/96 | 61 | INCOMPLETE |
 | EB-05 | Japanese | 61 | 72 | — | 96/96/96 | 96 | 96/96 | 61 | INCOMPLETE |
-| PRB-01 | English | 1 | 111 | 1 | 319/319/319 | 319 | 319/319 | 0 | INCOMPLETE |
-| PRB-01 | Japanese | 1 | 111 | 1 | 319/319/319 | 319 | 319/319 | 0 | INCOMPLETE |
-| PRB-02 | English | 18 | 173 | 18 | 316/316/316 | 316 | 316/316 | 0 | INCOMPLETE |
-| PRB-02 | Japanese | 18 | 173 | 18 | 316/316/316 | 316 | 316/316 | 0 | INCOMPLETE |
+| PRB-01 | English | — | 111 | 1 | 319/319/319 | 319 | 319/319 | — | INCOMPLETE |
+| PRB-01 | Japanese | — | 111 | 1 | 319/319/319 | 319 | 319/319 | — | INCOMPLETE |
+| PRB-02 | English | — | 173 | 18 | 316/316/316 | 316 | 316/316 | — | INCOMPLETE |
+| PRB-02 | Japanese | — | 173 | 18 | 316/316/316 | 316 | 316/316 | — | INCOMPLETE |
 
 ## EB-04 English — recovered from combined official product pages
 
@@ -101,7 +101,7 @@ The complete Stage 4B-1M entry-level inventories supersede the weaker secondary 
 | PRB-02 | English | 316 / 316 / 316 | 173 | 18 | 155 | 316 | 316/316 LOADED |
 | PRB-02 | Japanese | 316 / 316 / 316 | 173 | 18 | 155 | 316 | 316/316 LOADED |
 
-The PRB-prefixed numbers are recorded separately as release-product prefix identifiers, not as original base-card counts. The detailed source records now set PRB `distinct_base_card_number_count` to null and keep `product_prefix_card_numbers` separate. Original OP/EB/ST card numbers remain separate as reprints. No PRB base-card count is asserted.
+The PRB-prefixed numbers are recorded separately as release-product prefix identifiers. The detailed PRB source pages set `distinct_base_card_number_count` to null and `base_card_numbers` to an empty list. The matrix sets both expected and actual PRB base-card counts to null. Original OP/EB/ST card numbers remain separate as reprints. **No PRB base-card count is asserted.**
 
 ## Secondary parser discrepancies — resolved
 
@@ -124,7 +124,7 @@ The earlier secondary parser omitted entries or image URLs. The fuller entry-lev
 | PRB-01 EN/JP | 319 / 305 / 197 | 319 / 319 / 319 | 14 entries and 122 URLs omitted per language |
 | PRB-02 EN/JP | 316 / 249 / 109 | 316 / 316 / 316 | 67 entries and 207 URLs omitted per language |
 
-All 50 matrix rows now have zero unparsed official rows and zero source image URL extraction shortfall.
+All 50 matrix rows now have zero unparsed official rows and zero source image URL extraction shortfall. The matrix's per-row notes now record the actual distinct image-ID counts rather than the earlier parser's zero-count diagnostic.
 
 ## OP-15 non-base product-number reconciliation
 
@@ -146,11 +146,11 @@ The official Bandai entries and images are complete. The 22/10/2026 upstream fee
 - EB-05: **61 missing feed base numbers in English and 61 in Japanese**.
 - No unexpected feed base numbers were found.
 
-These are confirmed upstream feed-coverage gaps, not missing official Bandai cards. The audit branch also preserves the language-specific OP-18 image identities and the exact EB-05 Japanese SP rarity label `SPカード` rather than normalizing it to English `SP CARD`.
+These are confirmed upstream feed-coverage gaps, not missing official Bandai cards. The audit branch preserves the language-specific OP-18 image identities and the exact EB-05 Japanese SP rarity label `SPカード` rather than normalizing it to English `SP CARD`.
 
 ## HTTP image verification — final run
 
-The final exact-commit audit ran on:
+The final full audit ran on the code-bearing commit:
 
 - Commit: `f13880972eea4ffd4f683f94375dd80b14175734`
 - Workflow run: [46043216009](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46043216009)
@@ -174,7 +174,7 @@ Two earlier transient 502 responses were recorded and retried successfully:
 
 The final run returned 200 for both. No alternate image fallback was required for any official source image. Application-level fallback remains unverified because the Testing catalogue has no reference-image URLs.
 
-The complete per-URL status, content type, final URL and latency records are retained in the workflow artifact linked above. The matrix stores the per-row HTTP totals and artifact reference.
+The complete per-URL status, content type, final URL and latency records are retained in the workflow artifact linked above. The matrix stores per-row HTTP totals and the artifact reference.
 
 ## Application printing identity comparison — Testing data blocker
 
@@ -191,7 +191,7 @@ This is a small smoke dataset, not a complete application catalogue. Full applic
 
 ## Regression tests and verification
 
-The final exact-commit GitHub Actions run completed successfully:
+The final code-bearing GitHub Actions run completed successfully:
 
 - **293 / 293 automated tests passed.**
 - `npm run lint`: passed.
@@ -211,6 +211,8 @@ Regression coverage includes:
 - EB-05 Japanese SP rarity `SPカード`.
 - PRB product-prefix separation and full reprint identity extraction.
 - HTTP image response classification and source-host validation.
+
+The latest matrix/report documentation commits are `e8151a9cbb23cbf6b3eba175ebc5a97226aa59f4` and this handover update. No Actions run is attached to those GitHub App documentation commits; the latest code-bearing commit `f13880972eea4ffd4f683f94375dd80b14175734` has the complete successful test, lint, build and HTTP audit run above.
 
 ## PR, Preview and safety status
 
