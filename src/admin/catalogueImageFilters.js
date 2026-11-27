@@ -74,5 +74,11 @@ export function filterCatalogueImageEntries(entries = [], filters = {}) {
 
 /** Collapse repeated links to the same product without merging distinct releases. */
 export function dedupePrintingProducts(products = []) {
-  return [...new Map(products.filter(Boolean).map((product) => [product.key || product.id, product])).values()]
+  const unique = new Map()
+  for (const product of products) {
+    if (!product) continue
+    const key = product.key || product.id
+    if (!unique.has(key)) unique.set(key, product)
+  }
+  return [...unique.values()]
 }
