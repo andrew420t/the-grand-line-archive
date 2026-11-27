@@ -310,7 +310,34 @@ BEGIN
   IF char_length(v_name) < 2 THEN
     RAISE EXCEPTION 'Enter the name shown on your account.';
   END IF;
-  IF v_email !~ '^[A-Z0-9._%+\-]+@[A-Z0-9.\-]+\.[A-Z]{2,}$' THEN
+  IF v_email !~ '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}
+    RAISE EXCEPTION 'Enter a valid contact email address.';
+  END IF;
+
+  SELECT count(*) INTO v_recent
+  FROM public.account_recovery_requests
+  WHERE lower(contact_email) = v_email
+    AND created_at > now() - interval '24 hours';
+
+  IF v_recent >= 3 THEN
+    RAISE EXCEPTION 'Too many requests have been sent for this contact address. Please try again later.';
+  END IF;
+
+  INSERT INTO public.account_recovery_requests (display_name, contact_email, details)
+  VALUES (v_name, v_email, nullif(v_details, ''))
+  RETURNING id INTO v_id;
+
+  RETURN v_id;
+END;
+$function$;
+
+REVOKE ALL ON FUNCTION public.submit_account_email_recovery(text, text, text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.submit_account_email_recovery(text, text, text) TO anon, authenticated;
+
+GRANT SELECT ON public.support_conversations, public.support_messages, public.account_recovery_requests TO authenticated;
+
+COMMIT;
+ THEN
     RAISE EXCEPTION 'Enter a valid contact email address.';
   END IF;
 
