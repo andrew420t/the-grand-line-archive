@@ -176,7 +176,7 @@ export async function findCatalogueMatches(cardNumber) {
         const products = linkedProducts.length ? linkedProducts : [null]
 
         for (const product of products) {
-          const setCode = formatSetCode(product?.code || '')
+          const setCode = formatSetCode(getCatalogueProductSetCode(product, card.number || ''))
           results.push({
             id: `${printing.key}:${language}:${product?.key || 'no-product'}`,
             cardKey: card.key,
@@ -732,7 +732,7 @@ export async function getCatalogueImageGallery({
           || (donSourceSet
             ? (sourceSetCodes.length === 1 ? sourceSetCodes[0] : '')
             : getCatalogueProductSetCode(product, card?.number || ''))
-          const setCode = formatSetCode(rawSetCode || inferredSetCode || (isDon ? 'DON!!' : ''))
+        const setCode = formatSetCode(rawSetCode || (isDon ? 'DON!!' : ''))
         const displaySetCodes = setOverride?.set_code
           ? [setOverride.set_code]
           : sourceSetCodes.length ? sourceSetCodes : [getCatalogueProductSetCode(product, card?.number || '')].filter(Boolean)
