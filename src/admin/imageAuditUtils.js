@@ -210,14 +210,3 @@ export async function runResumableCatalogueAudit(records, {
   await Promise.all(Array.from({ length: Math.max(1, Math.min(concurrency, queue.length || 1)) }, worker))
   return { language, total: queue.length, completed, results: [...results.values()] }
 }
-
-
-/** Stable identity prevents repeated product links from inflating audit totals. */
-export function dedupeCatalogueAuditRecords(records = []) {
-  const unique = new Map()
-  for (const record of records) {
-    const key = record.id || [record.printingKey, record.languageCode, record.setCode].join(':')
-    if (key && !unique.has(key)) unique.set(key, record)
-  }
-  return [...unique.values()]
-}
