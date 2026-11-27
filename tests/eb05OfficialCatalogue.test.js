@@ -74,3 +74,17 @@ test('hyphenated EB-05 card-number input normalizes to the same printing set', (
   assert.equal(getEb05SupplementalMatches('EB05_001').length, 4)
   assert.equal(getEb05SupplementalMatches('OP-11-022').length, 2)
 })
+
+test('Japanese EB-05 SP rarity labels preserve Bandai source text', () => {
+  const japaneseSpecials = EB05_OFFICIAL_PRINTINGS.filter((printing) => printing.rarityJp === 'SPカード')
+  const englishSpecials = EB05_OFFICIAL_PRINTINGS.filter((printing) => printing.rarityEn === 'SP CARD')
+  assert.equal(japaneseSpecials.length, 8)
+  assert.equal(englishSpecials.length, 8)
+  assert.equal(getEb05ImageTestItems('jp').filter((item) => item.rarity === 'SPカード').length, 8)
+  assert.equal(getEb05ImageTestItems('en').filter((item) => item.rarity === 'SP CARD').length, 8)
+  for (const printing of japaneseSpecials) {
+    const result = getEb05SupplementalMatches(printing.cardNumber).find((item) => item.languageCode === 'jp' && item.imageUrl.includes(printing.imageIdJp))
+    assert.equal(result.rarity, 'SPカード')
+    assert.equal(result.variantLabel, 'SPカード')
+  }
+})
