@@ -1119,27 +1119,28 @@ export async function getCatalogueReferenceTestMatrix() {
   // Include every known official OP-18 printing ID, including parallels.
   for (const language of REFERENCE_TEST_LANGUAGES) {
     for (const printing of OP18_OFFICIAL_PRINTINGS) {
-      const exactId = printing.imageId
+      const isJapanese = language === 'jp'
+      const localized = isJapanese ? (printing.localizedJp || {}) : (printing.localizedEn || {})
+      const exactId = localized.imageId || (isJapanese ? (printing.imageIdJp || printing.imageId) : (printing.imageIdEn || printing.imageId))
+      const cardNumber = localized.cardNumber || printing.cardNumber
       const exactUrl = buildOfficialImageProxyUrl(exactId, language)
         || (language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(exactId) + '.png'
-      const baseUrl = printing.imageId !== printing.cardNumber
-        ? buildOfficialImageProxyUrl(printing.cardNumber, language)
-        : ''
+      const baseUrl = exactId !== cardNumber ? buildOfficialImageProxyUrl(cardNumber, language) : ''
       add({
-        id: 'op18-complete:' + language + ':' + printing.imageId,
-        printingKey: 'op18:' + printing.imageId,
-        imageId: printing.imageId,
-        cardNumber: printing.cardNumber,
-        name: language === 'jp' ? printing.japaneseName : printing.name,
+        id: 'op18-complete:' + language + ':' + exactId,
+        printingKey: 'op18:' + exactId,
+        imageId: exactId,
+        cardNumber,
+        name: localized.name || (isJapanese ? printing.japaneseName : printing.name),
         language,
         targetSet: 'OP-18',
         setCode: 'OP-18',
         setName: 'The Dominance of God [OP-18]',
-        rarity: printing.rarity,
-        variant: printing.variantLabel,
+        rarity: localized.rarity || printing.rarity,
+        variant: localized.variantLabel || printing.variantLabel,
         imageUrl: exactUrl,
         fallbackImageUrl: baseUrl,
-        source: 'Bandai official OP-18 ' + printing.variantLabel + ' artwork',
+        source: 'Bandai official OP-18 language-specific ' + (localized.variantLabel || printing.variantLabel) + ' artwork',
       })
     }
   }
