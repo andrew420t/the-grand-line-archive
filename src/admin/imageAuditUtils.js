@@ -56,9 +56,11 @@ export async function loadImageWithRetry(url, {
       if (response.ok && /^image\/(png|jpeg|webp|gif|avif)$/i.test(contentType)) {
         return { status: IMAGE_CHECK_STATUS.EXACT_LOADED, url, attempts: attempt, httpStatus: response.status, contentType, upstreamStatus: response.headers?.get?.('x-card-image-upstream-status') || '', proxyError: response.headers?.get?.('x-card-image-error') || '' }
       }
-      lastStatus = classifyImageResponse({ status: response.status, contentType })
+      const upstreamStatus = Number(response.headers?.get?.('x-card-image-upstream-status') || 0)
+      const proxyError = response.headers?.get?.('x-card-image-error') || ''
+      lastStatus = classifyImageResponse({ status: response.status, upstreamStatus, contentType })
       if ([IMAGE_CHECK_STATUS.MISSING, IMAGE_CHECK_STATUS.INVALID_URL].includes(lastStatus)) {
-        return { status: lastStatus, url, attempts: attempt, httpStatus: response.status, contentType }
+        return { status: lastStatus, url, attempts: attempt, httpStatus: response.status, upstreamStatus, proxyError, contentType }
       }
     } catch (error) {
       lastStatus = error?.name === 'AbortError' ? IMAGE_CHECK_STATUS.TIMEOUT : IMAGE_CHECK_STATUS.TEMPORARY_FAILURE
