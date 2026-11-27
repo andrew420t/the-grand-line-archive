@@ -151,3 +151,23 @@ test('uses the linked named product as release identity instead of the original 
   assert.deepEqual(filterCatalogueImageEntries([premiumPrinting], { set: 'OP-15' }), [])
   assert.deepEqual(filterCatalogueImageEntries([premiumPrinting], { set: premiumPrinting.setCode }).map((entry) => entry.id), ['op15-075-premium'])
 })
+
+
+test('prefers official product-set relationships when a release product spans sets', () => {
+  const linkedSets = ['EB-04', 'OP-15']
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:569115', code: 'OP15-EB04' },
+    'OP15-075',
+    linkedSets,
+  ), 'OP-15')
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:569115', code: 'OP15-EB04' },
+    'EB04-001',
+    linkedSets,
+  ), 'EB-04')
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:src_a521deb08741', name: 'Premium Card Collection -Best Selection Vol.6-' },
+    'OP15-075',
+    [],
+  ), 'Premium Card Collection -Best Selection Vol.6-')
+})
