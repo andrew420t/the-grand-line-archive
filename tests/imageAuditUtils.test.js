@@ -3,6 +3,8 @@ import test from 'node:test'
 import {
   IMAGE_CHECK_STATUS,
   auditCatalogueImageRecord,
+  buildCatalogueImageCandidates,
+  runResumableCatalogueAudit,
   dedupeCatalogueAuditRecords,
   buildImageAuditSummary,
   classifyImageResponse,
@@ -190,4 +192,65 @@ test('deduplicates catalogue audit entries by stable record identity', () => {
   const duplicate = { ...first, label: 'duplicate product link' }
   const jp = { id: 'jp:OP01-001:base', languageCode: 'jp' }
   assert.deepEqual(dedupeCatalogueAuditRecords([first, duplicate, jp]), [first, jp])
+})
+
+test('classifies HTTP 429 and 5xx as temporary and preserves upstream diagnostics', async () => {
+  for (const status of [429, 503]) {
+    const result = await loadImageWithRetry('/_card-image/bandai/en/OP01-001.png', {
+      attempts: 1,
+      fetchImpl: async () => new Response('Temporary', { status, headers: { 'x-card-image-upstream-status': String(status), 'x-card-image-error': 'upstream-http-error' } }),
+    })
+    assert.equal(result.status, IMAGE_CHECK_STATUS.TEMPORARY_FAILURE)
+    assert.equal(result.upstreamStatus, status)
+    assert.equal(result.proxyError, 'upstream-http-error')
+  }
+})
+
+test('candidate builder uses explicit provenance and does not infer alternate from URL order', () => {
+  const candidates = buildCatalogueImageCandidates({
+    languageCode: 'en',
+    imageUrl: '/_card-image/bandai/en/OP01-001.png',
+    imageUrls: ['/first.png', '/second.png'],
+    source: 'Bandai',
+  })
+  assert.equal(candidates.length, 1)
+  assert.equal(candidates[0].kind, 'exact')
+  const fallback = buildCatalogueImageCandidates({
+    languageCode: 'en',
+    usesBaseImageFallback: true,
+    imageUrl: '/_card-image/bandai/en/OP01-001.png',
+    source: 'Bandai base fallback',
+  })
+  assert.equal(fallback[0].kind, 'base-fallback')
+})
+
+test('audit attempts exact, then explicit same-language alternative and never labels fallback exact', async () => {
+  const record = {
+    id: 'en-printing', printingKey: 'printing-1', languageCode: 'en', setCode: 'OP-01',
+    exactImageUrl: '/_card-image/bandai/en/OP01-001_p1.png',
+    alternativeImageCandidates: [{ url: '/_card-image/bandai/en/OP01-001_p2.png', language: 'en', source: 'Bandai alternative' }],
+    baseFallbackCandidates: [{ url: '/_card-image/bandai/en/OP01-001.png', language: 'en', source: 'Bandai base' }],
+  }
+  const fetchImpl = async (url) => url.includes('_p1')
+    ? new Response('missing', { status: 404 })
+    : new Response(new Blob(['image']), { status: 200, headers: { 'content-type': 'image/png' } })
+  const result = await auditCatalogueImageRecord(record, { language: 'en', fetchImpl, attempts: 1 })
+  assert.equal(result.status, IMAGE_CHECK_STATUS.ALTERNATIVE_LOADED)
+  assert.equal(result.candidateResults.length, 2)
+  assert.equal(result.candidateResults[1].candidateKind, 'alternative')
+})
+
+test('resumable audit queue keeps English and Japanese records separate', async () => {
+  const records = [
+    { id: 'one', printingKey: 'one', languageCode: 'en', setCode: 'OP-01' },
+    { id: 'two', printingKey: 'two', languageCode: 'jp', setCode: 'OP-01' },
+    { id: 'one-duplicate', printingKey: 'one', languageCode: 'en', setCode: 'OP-01' },
+  ]
+  const result = await runResumableCatalogueAudit(records, {
+    language: 'en',
+    auditRecord: async (record) => ({ ...record, status: IMAGE_CHECK_STATUS.NO_REFERENCE }),
+  })
+  assert.equal(result.total, 1)
+  assert.equal(result.completed, 1)
+  assert.equal(result.results[0].languageCode, 'en')
 })
