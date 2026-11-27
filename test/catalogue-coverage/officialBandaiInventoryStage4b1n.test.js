@@ -98,3 +98,17 @@ test("no row is COMPLETE while application printing parity remains unverified", 
   assert.equal(matrix.status_summary.COMPLETE, 0);
   assert.equal(matrix.status_summary.INCOMPLETE, 50);
 });
+
+test("OP-15 English OP13-037 is retained as a language-specific cross-prefix reprint", () => {
+  const englishOp15 = rowFor("OP-15", "English");
+  const japaneseEb04 = rowFor("EB-04", "Japanese");
+  assert.ok(englishOp15.official_reprint_card_numbers.includes("OP13-037"));
+  assert.ok(englishOp15.official_printing_identity_ids.includes("OP13-037_p1"));
+  assert.ok(japaneseEb04.official_product_card_numbers.includes("OP11-106"));
+  assert.ok(japaneseEb04.official_product_card_numbers.includes("PRB02-014"));
+  assert.ok(!japaneseEb04.official_product_card_numbers.includes("OP13-037"));
+  assert.equal(
+    englishOp15.cross_language_product_number_discrepancies[0].classification,
+    "ENGLISH_SOURCE_ONLY_CROSS_PREFIX_REPRINT",
+  );
+});
