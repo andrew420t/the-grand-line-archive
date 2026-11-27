@@ -35,7 +35,6 @@ import {
 } from 'react-router-dom'
 import AdminDashboard from './admin/AdminDashboard'
 import AdminAccess from './admin/AdminAccess'
-import AccountSettingsPage from './AccountSettingsPage'
 import { findPrimaryCatalogueMatch } from './admin/cardCatalogue'
 import { hasSupabaseConfig, isPreviewBuild, supabase } from './lib/supabase'
 import { isDedicatedPreviewSupabaseProject } from './lib/supabaseConfig.js'
@@ -260,6 +259,7 @@ function Storefront() {
   const [pageSize, setPageSize] = useState('24')
   const [currentPage, setCurrentPage] = useState(1)
   const [orders, setOrders] = useState([])
+  const [archivedOrderIds, setArchivedOrderIds] = useState([])
   const [orderItems, setOrderItems] = useState([])
   const [ordersLoading, setOrdersLoading] = useState(false)
   const [ordersError, setOrdersError] = useState('')
@@ -578,9 +578,12 @@ function Storefront() {
       return
     }
 
-    const orderRows = (result.data || []).sort(
-      (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0),
-    )
+    const archiveResult = await supabase.from('order_archives').select('order_id').eq('archived_by', user.id).eq('archive_scope', adminView ? 'admin' : 'customer')
+    const archivedIds = archiveResult.error ? [] : (archiveResult.data || []).map((row) => String(row.order_id))
+    setArchivedOrderIds(archivedIds)
+    const orderRows = (result.data || [])
+      .filter((order) => !archivedIds.includes(String(order.id)))
+      .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
     setOrders(orderRows)
     if (orderRows.length) {
       const ids = orderRows.map((order) => order.id)
@@ -614,6 +617,22 @@ function Storefront() {
       void Promise.resolve().then(() => loadOrders(true))
     }
   }, [location.pathname, user, isAdmin, loadOrders])
+
+  const archiveOrder = async (orderId, scope = isAdmin ? 'admin' : 'customer') => {
+    if (!supabase || !user) return
+    const result = await supabase.from('order_archives').insert({
+      order_id: String(orderId),
+      archived_by: user.id,
+      archive_scope: scope,
+    })
+    if (result.error) {
+      setOrdersError(`Could not archive this order: ${result.error.message}`)
+      return
+    }
+    setArchivedOrderIds((current) => [...new Set([...current, String(orderId)])])
+    setOrders((current) => current.filter((order) => String(order.id) !== String(orderId)))
+    setToast('Order removed from this order list. The original order remains محفوظ.')
+  }
 
   const placeOrder = async () => {
     if (checkoutLock.current) return
@@ -1064,7 +1083,6 @@ function Storefront() {
           path="/product/:productId"
           element={<ProductDetailPage products={storefrontProducts} onAdd={addToCart} />}
         />
-        <Route path="/account/settings" element={<AccountSettingsPage user={user} />} />
         <Route
           path="/account/orders"
           element={
@@ -1078,6 +1096,7 @@ function Storefront() {
               onSignIn={() => setAuthOpen(true)}
               onSignOut={signOut}
               onReload={() => loadOrders(false)}
+              onArchiveOrder={(orderId) => archiveOrder(orderId, 'customer')}
             />
           }
         />
@@ -1102,6 +1121,7 @@ function Storefront() {
                 onSignIn={() => setAuthOpen(true)}
                 onReload={() => loadOrders(true)}
                 onUpdateStatus={updateOrderStatus}
+                onArchiveOrder={(orderId) => archiveOrder(orderId, 'admin')}
                 onRefreshProducts={loadCatalog}
                 onSaveSiteSettings={saveSiteSettings}
               />
@@ -1227,17 +1247,17 @@ function AuthModal({ onClose, message, onMessage }) {
   )
 }
 
-function OrdersPage({ user, orders, orderItems, products, loading, error, onSignIn, onSignOut, onReload }) {
+function OrdersPage({ user, orders, orderItems, products, loading, error, onSignIn, onSignOut, onReload, onArchiveOrder }) {
   if (!user) {
     return <main className="page-width protected-page"><p className="eyebrow">YOUR ACCOUNT</p><h1>Your orders,<br /><em>all in one place.</em></h1><p>Sign in to review the latest dispatches from the archive.</p><button className="button button--gold" type="button" onClick={onSignIn}>Sign in to continue <ArrowRight size={16} /></button></main>
   }
   return (
     <main className="page-width account-page">
-      <div className="account-heading"><div><p className="eyebrow">YOUR ACCOUNT</p><h1>Order <em>log.</em></h1><p>{user.email}</p></div><div className="account-heading__actions"><Link className="button button--outline" to="/account/settings">Account settings</Link><button className="button button--outline" type="button" onClick={onSignOut}>Sign out</button></div></div>
+      <div className="account-heading"><div><p className="eyebrow">YOUR ACCOUNT</p><h1>Order <em>log.</em></h1><p>{user.email}</p></div><button className="button button--outline" type="button" onClick={onSignOut}>Sign out</button></div>
       {error && <ErrorNotice message={error} />}
       {loading ? <div className="loading-state"><span className="loader" />Loading your orders…</div> : orders.length ? (
         <div className="order-list">
-          {orders.map((order) => <OrderCard key={order.id} order={order} orderItems={orderItems} products={products} />)}
+          {orders.map((order) => <OrderCard key={order.id} order={order} orderItems={orderItems} products={products} onArchive={() => onArchiveOrder(order.id)} />)}
         </div>
       ) : <div className="empty-orders"><ClipboardList size={28} /><h2>No orders just yet.</h2><p>Your next favorite card is out there.</p><Link className="button button--gold" to="/shop">Explore the archive <ArrowRight size={16} /></Link></div>}
       <button className="subtle-refresh" type="button" onClick={onReload}>Refresh order history</button>
@@ -1245,13 +1265,13 @@ function OrdersPage({ user, orders, orderItems, products, loading, error, onSign
   )
 }
 
-function OrderCard({ order, orderItems, products }) {
+function OrderCard({ order, orderItems, products, onArchive }) {
   const items = orderItems.filter((item) => String(item.order_id) === String(order.id))
   return (
     <article className="order-card">
       <div className="order-card__heading"><div><span className="eyebrow">ORDER #{String(order.id).slice(-8).toUpperCase()}</span><span>{order.created_at ? new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Date not recorded'}</span></div><span className={`status-pill status-pill--${String(order.status || 'pending').toLowerCase()}`}>{order.status || 'Pending'}</span></div>
       <OrderItems items={items} products={products} />
-      <div className="order-card__total"><span>Order total</span><strong>{money(firstValue(order.total_amount, order.total, order.amount, 0))}</strong></div>
+      <div className="order-card__total"><span>Order total</span><strong>{money(firstValue(order.total_amount, order.total, order.amount, 0))}</strong></div>{['cancelled','completed','shipped'].includes(String(order.status || '').toLowerCase()) && <button className="subtle-refresh order-archive-button" type="button" onClick={onArchive}>Remove from order history</button>}
     </article>
   )
 }
