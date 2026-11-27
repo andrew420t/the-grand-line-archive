@@ -50,7 +50,7 @@ test('product and set relationship lifecycle metadata is preserved', () => {
   assert.match(migration, /release_date_source text/)
   assert.match(migration, /ADD COLUMN IF NOT EXISTS removed_at timestamptz/)
   assert.match(migration, /source_first_seen_at timestamptz/)
-  assert.match(migration, /source_record jsonb NOT NULL DEFAULT '\\{\\}'::jsonb/)
+  assert.match(migration, /source_record jsonb NOT NULL DEFAULT '\{\}'::jsonb/)
 })
 
 test('client roles receive read-only observation access; importer uses service role', () => {
