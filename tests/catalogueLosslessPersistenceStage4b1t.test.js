@@ -3,6 +3,7 @@ import { readFile } from 'node:fs/promises'
 import test from 'node:test'
 
 const migration = await readFile(new URL('../supabase/migrations/20261127195100_catalogue_lossless_source_persistence_stage4b1t.sql', import.meta.url), 'utf8')
+const locatorMigration = await readFile(new URL('../supabase/migrations/20261127195212_catalogue_locator_suffix_provenance_stage4b1t.sql', import.meta.url), 'utf8')
 
 test('Stage 4B-1T migration is Testing-scoped and additive only', () => {
   assert.match(migration, /ehzqsnfkmwphyllhaqhe/)
@@ -36,6 +37,10 @@ test('official URLs and application proxy paths are separate and cannot be alias
   assert.match(migration, /exact_image_url IS NOT NULL AND exact_image_url ~ '\^https:\/\//)
   assert.match(migration, /application_image_path IS NOT NULL AND application_image_path ~ '\^\/_card-image\//)
   assert.match(migration, /exact_image_url <> application_image_path/)
+  assert.match(locatorMigration, /suffix_family text/)
+  assert.match(locatorMigration, /suffix_n integer/)
+  assert.match(locatorMigration, /source_image_url text/)
+  assert.match(locatorMigration, /suffix_family IN \\('p','r'\\)/)
 })
 
 test('product and set relationship lifecycle metadata is preserved', () => {
@@ -45,6 +50,7 @@ test('product and set relationship lifecycle metadata is preserved', () => {
   assert.match(migration, /release_date_source text/)
   assert.match(migration, /ADD COLUMN IF NOT EXISTS removed_at timestamptz/)
   assert.match(migration, /source_first_seen_at timestamptz/)
+  assert.match(migration, /source_record jsonb NOT NULL DEFAULT '\\{\\}'::jsonb/)
 })
 
 test('client roles receive read-only observation access; importer uses service role', () => {
