@@ -631,7 +631,7 @@ function Storefront() {
     }
     setArchivedOrderIds((current) => [...new Set([...current, String(orderId)])])
     setOrders((current) => current.filter((order) => String(order.id) !== String(orderId)))
-    setToast('Order removed from this order list. The original order remains محفوظ.')
+    setToast('Order removed from this order list. The original order remains in the archive.')
   }
 
   const placeOrder = async () => {
