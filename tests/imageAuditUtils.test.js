@@ -118,3 +118,25 @@ test('retains Worker upstream diagnostics and classifies proxied upstream 404 as
   assert.equal(result.upstreamStatus, 404)
   assert.equal(result.proxyError, 'upstream-http-error')
 })
+
+
+test('retains upstream 5xx diagnostics after exhausting transient retries', async () => {
+  const result = await loadImageWithRetry('/_card-image/bandai/jp/OP18-001.png', {
+    attempts: 2,
+    retryDelayMs: 0,
+    sleep: async () => {},
+    fetchImpl: async () => new Response('upstream unavailable', {
+      status: 502,
+      headers: {
+        'content-type': 'text/plain',
+        'x-card-image-upstream-status': '503',
+        'x-card-image-error': 'upstream-http-error',
+      },
+    }),
+  })
+  assert.equal(result.status, IMAGE_CHECK_STATUS.TEMPORARY_FAILURE)
+  assert.equal(result.httpStatus, 502)
+  assert.equal(result.upstreamStatus, 503)
+  assert.equal(result.proxyError, 'upstream-http-error')
+  assert.equal(result.attempts, 2)
+})
