@@ -44,44 +44,14 @@ The source `product_sets.jsonl` maps English product `en:569115` to both `OP-15`
 
 - OP-15 English: 119 distinct OP15-prefixed card numbers; 155 distinct feed printings assigned to OP-15.
 - OP-15 Japanese: 119 distinct OP15-prefixed card numbers; 152 distinct feed printings assigned to OP-15.
-- OP-18 and EB-05 have no records in this upstream snapshot for either language. OP-18 is supplemented separately in the application from a Bandai list; EB-05 still requires an independent official inventory.
+- OP-18 and EB-05 have no records in this upstream snapshot for either language. Stage 4B-1K now adds official Bandai supplements for both sets; live image verification remains pending.
 
 These values are source observations only. They are not official completeness claims and do not replace the remaining 25-set Bandai checklist and live image verification.
 
 
-## Official Bandai card-list cross-check — Stage 4B-1K
+## Stage 4B-1J historical note
 
-Official Bandai card-list pages were retrieved independently for English and Japanese on 2026-11-27. The following are **card-number prefix observations from the official pages**, not a claim that every printing has been independently reconciled to the app's image catalogue.
-
-| Set | Language | Bandai page result count | Distinct card numbers on page | Numbers belonging to this set prefix |
-|---|---|---:|---:|---:|
-| OP-15 | English | 196 | 157 | 119 |
-| OP-15 | Japanese | Not exposed in extracted page text | 124 | 119 |
-| OP-18 | English | 159 | 125 | 119 |
-| OP-18 | Japanese | Not exposed in extracted page text | 125 | 119 |
-| EB-05 | English | 96 | 72 | 61 |
-| EB-05 | Japanese | Not exposed in extracted page text | 72 | 61 |
-
-Official source URLs:
-- OP-15 English: https://en.onepiece-cardgame.com/cardlist/?series=569115
-- OP-15 Japanese: https://www.onepiece-cardgame.com/cardlist/?series=550115
-- OP-18 English: https://en.onepiece-cardgame.com/cardlist/?series=569118
-- OP-18 Japanese: https://www.onepiece-cardgame.com/cardlist/?series=550118
-- EB-05 English: https://en.onepiece-cardgame.com/cardlist/?series=569205
-- EB-05 Japanese: https://www.onepiece-cardgame.com/cardlist/?series=550205
-
-The page result totals include cards with other card-number prefixes that are associated with the selected product, including reprints and special inclusions. Therefore, the result total is not the base-card count. For OP-15 the official pages show 119 OP15-prefixed card numbers in each language; the page also includes EB04 and reprint numbers. OP-18 shows 119 OP18-prefixed numbers and 40 additional records/numbers from other products or reprints in the result set. EB-05 shows 61 EB05-prefixed numbers and 35 other card-number records in its product result set.
-
-The extracted Japanese pages did not expose the same visible “N Results” label, so those page-result counts are deliberately left unreported rather than inferred from the English page. The distinct-number observations were extracted from the page card entries.
-
-### Limits and next reconciliation steps
-
-- These pages establish the official card-number prefix inventory for OP-15 (119), OP-18 (119) and EB-05 (61) in both languages.
-- They do not, by themselves, enumerate a canonical image/printing identifier for every parallel or prove that every image URL loads.
-- OP-18's 159-row supplemental app catalogue is not equivalent to the Bandai page's 159 result cards: the Bandai page contains 119 OP18-prefixed card numbers plus entries with other prefixes. Reconcile by card number, rarity, variant and official product information, not by row totals.
-- EB-05's official page includes 61 EB05-prefixed card numbers plus reprint/inclusion entries. The 61 is the base-prefix inventory, not the total printing inventory.
-- The other 22 set/language combinations have not yet been independently enumerated in this stage. They remain `SOURCE UNVERIFIED` in the audit matrix.
-- No catalogue entries were added from these page counts alone. No artwork was copied, substituted or re-hosted.
+The initial OP-15/OP-18/EB-05 page checks were exploratory and covered only a subset of the requested sets. Their provisional totals and limitations are superseded by the full 25-set extraction documented below. Use the versioned 50-row CSV as the current inventory record.
 
 
 ## Stage 4B-1K — Official Bandai inventory findings (2026-11-27)
