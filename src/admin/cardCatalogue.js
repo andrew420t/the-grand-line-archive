@@ -732,8 +732,7 @@ export async function getCatalogueImageGallery({
           || (donSourceSet
             ? (sourceSetCodes.length === 1 ? sourceSetCodes[0] : '')
             : getCatalogueProductSetCode(product, card?.number || ''))
-        const inferredSetCode = (card?.number || '').match(/^(OP\d{2}|EB\d{2}|ST\d{2}|PRB\d{2})-/)?.[1] || ''
-        const setCode = formatSetCode(rawSetCode || inferredSetCode || (isDon ? 'DON!!' : ''))
+          const setCode = formatSetCode(rawSetCode || inferredSetCode || (isDon ? 'DON!!' : ''))
         const displaySetCodes = setOverride?.set_code
           ? [setOverride.set_code]
           : sourceSetCodes.length ? sourceSetCodes : [getCatalogueProductSetCode(product, card?.number || '')].filter(Boolean)
