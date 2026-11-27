@@ -87,6 +87,7 @@ export default function AdminDashboard({
   onSignIn,
   onReload,
   onUpdateStatus,
+  onArchiveOrder,
   onRefreshProducts,
   onSaveSiteSettings,
 }) {
@@ -309,6 +310,7 @@ export default function AdminDashboard({
           onUpdateStatus={onUpdateStatus}
           onRetryEmail={retryOrderEmail}
           onStartConversation={openCustomerMessages}
+          onArchiveOrder={onArchiveOrder}
         />
       )}
 
@@ -1043,7 +1045,7 @@ function CollectionsSection({ categories, sets, onRefresh }) {
   )
 }
 
-function OrdersSection({ orders, orderItems, products, user, loading, error, action, onReload, onUpdateStatus, onRetryEmail, onStartConversation }) {
+function OrdersSection({ orders, orderItems, products, user, loading, error, action, onReload, onUpdateStatus, onRetryEmail, onStartConversation, onArchiveOrder }) {
   const pendingCount = orders.filter((order) => ['pending', 'processing'].includes(String(order.status).toLowerCase())).length
   const [emailBusy, setEmailBusy] = useState('')
   const [emailError, setEmailError] = useState('')
@@ -1094,6 +1096,7 @@ function OrdersSection({ orders, orderItems, products, user, loading, error, act
                   <button className="button button--outline admin-order__message-button" type="button" disabled={!(order.user_id || order.customer_id || order.profile_id)} title="Open the customer conversation" onClick={() => onStartConversation?.(order.user_id || order.customer_id || order.profile_id, order.id)}>
                     <MessageCircle size={13} /> Message customer
                   </button>
+                  {['cancelled','completed','shipped'].includes(String(order.status || '').toLowerCase()) && <button className="button button--outline order-archive-button" type="button" onClick={() => onArchiveOrder?.(order.id)}>Archive order</button>}
                 </div>
                 <div className="admin-order__email">
                   <div><strong>Admin email notification</strong><span className={emailStatus === 'sent' ? 'is-email-sent' : 'is-email-pending'}>{emailStatus === 'sent' ? 'Sent' : emailStatus === 'not_configured' ? 'Not configured' : emailStatus === 'failed' ? 'Failed' : emailStatus === 'sending' ? 'Sending…' : 'Pending'}</span></div>
