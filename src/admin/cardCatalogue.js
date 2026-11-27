@@ -11,8 +11,9 @@ import { EB05_OFFICIAL_PRINTINGS, EB05_BASE_CARD_NUMBERS, getEb05SupplementalMat
 import { getOfficialSupplementReferenceTestItems } from './officialSupplementReferenceMatrix.js'
 import { applyCatalogueImageCorrections } from './catalogueImageCorrections.js'
 
-const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
-const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
+export const APPLICATION_REFERENCE_FEED_COMMIT = '619965ec198047de519dc6eb098c7a56aed9bd58'
+const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/' + APPLICATION_REFERENCE_FEED_COMMIT + '/data'
+const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/' + APPLICATION_REFERENCE_FEED_COMMIT + '/manifest.json'
 const LANGUAGES = ['en', 'jp', 'cn']
 const REFERENCE_TEST_LANGUAGES = ['en', 'jp']
 const LANGUAGE_LABELS = { en: 'English', jp: 'Japanese', cn: 'Chinese (CN)', tcgcsv: 'English (promo/stamped)' }
