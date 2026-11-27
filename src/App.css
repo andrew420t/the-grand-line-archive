@@ -6660,3 +6660,6 @@ h2 em {
     width: 95%;
   }
 }
+
+.order-archive-button { margin-top: 10px; }
+.admin-navigation__count { margin-left: auto; min-width: 18px; padding: 2px 6px; border-radius: 999px; background: var(--gold); color: #17140e; font-size: 10px; font-weight: 700; text-align: center; }
