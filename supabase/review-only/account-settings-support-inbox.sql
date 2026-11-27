@@ -310,7 +310,7 @@ BEGIN
   IF char_length(v_name) < 2 THEN
     RAISE EXCEPTION 'Enter the name shown on your account.';
   END IF;
-  IF v_email !~ '^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}
+  IF v_email !~ '^[a-z0-9._%+-]+@[a-z0-9.-]+[.][a-z]{2,}$' THEN
     RAISE EXCEPTION 'Enter a valid contact email address.';
   END IF;
 
