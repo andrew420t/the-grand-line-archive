@@ -102,3 +102,27 @@ test('product updates require a confirmed affected row', () => {
   assert.equal(productUpdateFailure({ data: null, error: null }), 'Product was not found or the update was not permitted.')
   assert.equal(productUpdateFailure({ data: null, error: { message: 'RLS denied' } }), 'RLS denied')
 })
+
+test('bulk category can be added and removed through the edit-card checkbox payload', () => {
+  const bulkField = [{ key: 'is_bulk', column: 'is_bulk', checkbox: true }]
+  const addToBulk = buildProductEditPayload(bulkField, { is_bulk: true }, { is_bulk: false })
+  const removeFromBulk = buildProductEditPayload(bulkField, { is_bulk: false }, { is_bulk: true })
+
+  assert.deepEqual(addToBulk, { is_bulk: true })
+  assert.deepEqual(removeFromBulk, { is_bulk: false })
+})
+
+test('inventory filter separates regular cards from bulk and supports all inventory and search', async () => {
+  const { filterInventoryProducts } = await import('../src/admin/productEditPayload.js')
+  const products = [
+    { id: 'regular-1', name: 'Luffy', rarity: 'Leader', raw: { card_number: 'OP01-001', is_bulk: false } },
+    { id: 'bulk-1', name: 'Bulk Luffy', rarity: 'Common', raw: { card_number: 'OP01-002', is_bulk: true } },
+    { id: 'legacy-1', name: 'Zoro', rarity: 'Rare', raw: { card_number: 'OP01-003' } },
+  ]
+
+  assert.deepEqual(filterInventoryProducts(products).map((product) => product.id), ['regular-1', 'legacy-1'])
+  assert.deepEqual(filterInventoryProducts(products, '', 'bulk').map((product) => product.id), ['bulk-1'])
+  assert.deepEqual(filterInventoryProducts(products, '', 'all').map((product) => product.id), ['regular-1', 'bulk-1', 'legacy-1'])
+  assert.deepEqual(filterInventoryProducts(products, 'op01-002', 'all').map((product) => product.id), ['bulk-1'])
+  assert.deepEqual(filterInventoryProducts(products, 'zoro', 'regular').map((product) => product.id), ['legacy-1'])
+})
