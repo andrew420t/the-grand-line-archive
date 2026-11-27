@@ -1,0 +1,96 @@
+name: Stage 4B-1V A5S-1R-2 evidence reconciliation
+
+on:
+  push:
+    branches:
+      - audit/official-bandai-inventory-stage4b-1l-2026-11-27
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  reconcile-historical-catalogue-evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Check out application repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 0
+
+      - name: Confirm audit branch and required starting commit
+        shell: bash
+        run: |
+          test "${GITHUB_REF}" = "refs/heads/audit/official-bandai-inventory-stage4b-1l-2026-11-27"
+          git merge-base --is-ancestor 88309df793445acbccfc5e71f1f77c0aa7b30bf0 HEAD
+          echo "Application HEAD: $(git rev-parse HEAD)"
+          echo "Required Stage 1R-1 commit is an ancestor."
+
+      - name: Check out exact pinned upstream source
+        uses: actions/checkout@v4
+        with:
+          repository: hotavocado/koala-kollect-data
+          ref: 619965ec198047de519dc6eb098c7a56aed9bd58
+          path: .source/koala-kollect-data
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Verify pinned upstream identity
+        shell: bash
+        run: |
+          cd .source/koala-kollect-data
+          test "$(git rev-parse HEAD)" = "619965ec198047de519dc6eb098c7a56aed9bd58"
+          test "$(git rev-parse HEAD^{tree})" = "d0059fd77462cf377b9dfd65d87a6afabc76077f"
+          test "$(git hash-object manifest.json)" = "5b76b3f0ceb268d1bf43bff7c5dd54ab438076e7"
+
+      - name: Download the retained Stage 4B-1P evidence artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: stage4b-1p-premium-card-collection-persistence
+          run-id: 46053970318
+          github-token: ${{ github.token }}
+          path: historical-1p
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run offline reconciliation tests
+        run: node --test test/catalogue-evidence-reconciliation-stage4b1vA5s1r2.test.mjs
+
+      - name: Generate assignment, relationship, coverage, image and 1Q recovery reports
+        shell: bash
+        run: |
+          manifest="$(find historical-1p -maxdepth 2 -type f -name '*.json' -print -quit)"
+          test -n "$manifest"
+          node scripts/reconcileCatalogueEvidenceStage4b1vA5s1r2.mjs \
+            --source-dir .source/koala-kollect-data \
+            --historical-1p "$manifest" \
+            --source-commit 619965ec198047de519dc6eb098c7a56aed9bd58 \
+            --output-dir artifacts-stage4b1r2
+
+      - name: Run full application test suite
+        run: npm test
+
+      - name: Run application lint
+        run: npm run lint
+
+      - name: Build production application
+        run: npm run build
+
+      - name: Upload reconciliation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage4b-1v-a5s-1r-2-evidence-reconciliation
+          path: artifacts-stage4b1r2/*.json
+          if-no-files-found: warn
+          retention-days: 30
