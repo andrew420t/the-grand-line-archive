@@ -70,4 +70,6 @@ test('hyphenated EB-05 card-number input normalizes to the same printing set', (
     getEb05SupplementalMatches('EB-05-001').length,
     getEb05SupplementalMatches('EB05-001').length,
   )
+  assert.equal(getEb05SupplementalMatches('EB 05 001').length, 4)
+  assert.equal(getEb05SupplementalMatches('EB05_001').length, 4)
 })
