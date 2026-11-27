@@ -578,7 +578,8 @@ function Storefront() {
       return
     }
 
-    const archiveResult = await supabase.from('order_archives').select('order_id').in('archive_scope', adminView ? ['admin'] : ['customer','admin']).match(adminView ? {} : { archived_by: user.id })
+    const archiveQuery = supabase.from('order_archives').select('order_id').in('archive_scope', adminView ? ['admin'] : ['customer','admin'])
+    const archiveResult = adminView ? await archiveQuery : await archiveQuery.or(`archived_by.eq.${user.id},archive_scope.eq.admin`)
     const archivedIds = archiveResult.error ? [] : (archiveResult.data || []).map((row) => String(row.order_id))
     setArchivedOrderIds(archivedIds)
     const orderRows = (result.data || [])
