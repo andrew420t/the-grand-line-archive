@@ -38,7 +38,7 @@ import BulkImportPanel from './BulkImportPanel'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
-import { buildProductEditPayload, filterInventoryProducts, parseInventoryStockUpdate, productDeleteFailure, productUpdateFailure } from './productEditPayload'
+import { buildProductEditPayload, filterInventoryProducts, parseInventoryStockUpdate, productDeleteFailure, productUpdateFailure, saveProductBulkCategory } from './productEditPayload'
 import { buildReferenceLibraryScanFields, findSetCodeMatches } from './productSchema'
 
 const blankScanFields = () =>
@@ -446,35 +446,20 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
   }
 
   const toggleBulkCategory = async (product) => {
-    if (!supabase) {
-      setError('Supabase is not configured.')
+    if (!('is_bulk' in (product.raw || {}))) {
+      setError('The live products table is missing the is_bulk field. Refresh the page; if this message remains, apply the product-bulk-category migration.')
       return
     }
-    const raw = product.raw || {}
-    if (!('is_bulk' in raw)) {
-      setError('The Bulk category is not enabled in this database yet. Apply supabase/review-only/product-bulk-category.sql first.')
-      return
-    }
-    const nextValue = raw.is_bulk !== true
+    const nextValue = product.raw.is_bulk !== true
     setBusyId(String(product.id))
     setError('')
     setNotice('')
     try {
-      const result = await supabase
-        .from('products')
-        .update({ is_bulk: nextValue, updated_at: new Date().toISOString() })
-        .eq('id', product.id)
-        .select('id')
-        .maybeSingle()
-      const updateFailure = productUpdateFailure(result)
-      if (updateFailure) {
-        setError(`Bulk category was not updated: ${updateFailure}`)
-      } else {
-        setNotice(nextValue
-          ? `${product.name} moved to Bulk inventory.`
-          : `${product.name} removed from Bulk and returned to regular inventory.`)
-        onRefresh()
-      }
+      await saveProductBulkCategory(supabase, product.id, nextValue)
+      setNotice(nextValue
+        ? `✓ ${product.name} has been added to Bulk inventory. Select “Bulk only” to see it.`
+        : `✓ ${product.name} has been removed from Bulk and returned to regular inventory.`)
+      onRefresh()
     } catch (bulkError) {
       setError(`Bulk category was not updated: ${bulkError.message || 'Unexpected error.'}`)
     } finally {
@@ -574,14 +559,17 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
                 <div className="inventory-item__actions">
                   <button className={String(raw.status || '').toLowerCase() === 'active' ? 'button button--outline' : 'button button--gold'} type="button" disabled={busyId === String(product.id)} onClick={() => toggleArchivePublication(product)}>{busyId === String(product.id) ? 'Saving…' : String(raw.status || '').toLowerCase() === 'active' ? 'Remove from Archive' : 'Post to Archive'}</button>
                   <button
-                    className={raw.is_bulk === true ? 'button button--gold' : 'button button--outline'}
+                    className={raw.is_bulk === true ? 'button button--gold is-bulk-selected' : 'button button--outline'}
                     type="button"
-                    title={'is_bulk' in raw ? '' : 'Apply the Bulk category database migration to enable this action.'}
-                    disabled={busyId === String(product.id) || !('is_bulk' in raw)}
+                    title={raw.is_bulk === true ? 'This card is in Bulk. Click to return it to regular inventory.' : 'Move this card into Bulk inventory.'}
+                    disabled={busyId === String(product.id)}
                     aria-pressed={raw.is_bulk === true}
                     onClick={() => toggleBulkCategory(product)}
                   >
-                    <PackagePlus size={14} /> {raw.is_bulk === true ? 'Remove from bulk' : 'Add to bulk'}
+                    <span className={raw.is_bulk === true ? 'bulk-check-block is-checked' : 'bulk-check-block'} aria-hidden="true">
+                      {raw.is_bulk === true ? <Check size={12} /> : <PackagePlus size={12} />}
+                    </span>
+                    {busyId === String(product.id) ? 'Saving…' : raw.is_bulk === true ? 'In bulk · Remove' : 'Add to bulk'}
                   </button>
                   <button className="button button--outline" type="button" onClick={() => setEditingProduct(product)}><Pencil size={14} /> Edit card</button>
                   <button className="button button--outline" type="button" disabled={busyId === String(product.id) || !raw.card_number} onClick={() => lookupProductCard(product)}><Search size={14} /> Look up card</button>
@@ -630,6 +618,12 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
             setEditingProduct(null)
             onRefresh()
           }}
+          onBulkUpdated={(isBulk) => {
+            setNotice(isBulk
+              ? `✓ ${editingProduct.name} has been added to Bulk inventory.`
+              : `✓ ${editingProduct.name} has been removed from Bulk inventory.`)
+            onRefresh()
+          }}
         />
       )}
     </section>
@@ -663,7 +657,7 @@ const productEditFields = [
   { key: 'variant_label', label: 'Variant label', columns: ['variant_label'] },
 ]
 
-function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
+function ProductEditModal({ product, categories, sets, onClose, onSaved, onBulkUpdated }) {
   const raw = product.raw || {}
   const fields = productEditFields
     .map((field) => ({ ...field, column: field.columns.find((column) => column in raw) }))
@@ -672,7 +666,34 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
     Object.fromEntries(fields.map((field) => [field.key, raw[field.column] ?? ''])),
   )
   const [busy, setBusy] = useState(false)
+  const [bulkBusy, setBulkBusy] = useState(false)
+  const [bulkNotice, setBulkNotice] = useState('')
   const [error, setError] = useState('')
+
+  const toggleBulkImmediately = async () => {
+    const columnAvailable = fields.some((field) => field.key === 'is_bulk')
+    if (!columnAvailable) {
+      setError('Bulk inventory is not enabled in this database. Apply the product-bulk-category migration first.')
+      return
+    }
+    const nextValue = values.is_bulk !== true
+    setBulkBusy(true)
+    setError('')
+    setBulkNotice('')
+    try {
+      await saveProductBulkCategory(supabase, product.id, nextValue)
+      setValues((current) => ({ ...current, is_bulk: nextValue }))
+      const message = nextValue
+        ? '✓ Added to Bulk inventory. Use the Bulk only filter to find this card.'
+        : '✓ Removed from Bulk inventory. This card is back in Regular inventory.'
+      setBulkNotice(message)
+      onBulkUpdated?.(nextValue)
+    } catch (bulkError) {
+      setError(`Bulk category was not updated: ${bulkError.message || 'Unexpected error.'}`)
+    } finally {
+      setBulkBusy(false)
+    }
+  }
 
   const submit = async (event) => {
     event.preventDefault()
@@ -781,21 +802,25 @@ function ProductEditModal({ product, categories, sets, onClose, onSaved }) {
           <div className="product-edit-modal__heading-actions">
             {fields.some((field) => field.key === 'is_bulk') && (
               <button
-                className={values.is_bulk ? 'button button--gold' : 'button button--outline'}
+                className={values.is_bulk ? 'button button--gold is-bulk-selected' : 'button button--outline'}
                 type="button"
                 aria-pressed={Boolean(values.is_bulk)}
-                disabled={busy}
-                onClick={() => setValues((current) => ({ ...current, is_bulk: !current.is_bulk }))}
+                disabled={busy || bulkBusy}
+                onClick={toggleBulkImmediately}
               >
-                <PackagePlus size={14} /> {values.is_bulk ? 'Remove from bulk' : 'Add to bulk'}
+                <span className={values.is_bulk ? 'bulk-check-block is-checked' : 'bulk-check-block'} aria-hidden="true">
+                  {values.is_bulk ? <Check size={12} /> : <PackagePlus size={12} />}
+                </span>
+                {bulkBusy ? 'Saving…' : values.is_bulk ? 'In bulk · Remove' : 'Add to bulk'}
               </button>
             )}
             <button className="icon-button" type="button" aria-label="Close editor" disabled={busy} onClick={onClose}><X size={18} /></button>
           </div>
         </div>
         {fields.some((field) => field.key === 'is_bulk') && (
-          <p className="admin-muted product-edit-bulk-hint">Bulk classification is separate from the card category. Save changes to apply the selected Bulk setting.</p>
+          <p className="admin-muted product-edit-bulk-hint">Bulk classification is separate from the card category. The Bulk button saves immediately; other edits still require Save changes.</p>
         )}
+        {bulkNotice && <div className="success-notice product-edit-bulk-notice" role="status"><Check size={15} /><span>{bulkNotice}</span></div>}
         <p className="admin-muted">Only fields present in this product row are editable. Bulk classification is separate from the card's actual category and publication status.</p>
         <form className="product-edit-form" onSubmit={submit}>
           {fields.map(renderField)}
