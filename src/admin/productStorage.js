@@ -88,7 +88,7 @@ export async function uploadProductPhotos({ productId, userId, photos, supabaseC
 
     const frontImage = imageRecords.find((image) => image.role === 'front')
     if (frontImage) {
-      const currentProduct = await supabase
+      const currentProduct = await supabaseClient
         .from('products')
         .select('id,image_url')
         .eq('id', productId)
@@ -98,7 +98,7 @@ export async function uploadProductPhotos({ productId, userId, photos, supabaseC
       }
       previousProductImageUrl = currentProduct.data.image_url ?? null
       productImageUpdateAttempted = true
-      const productResult = await supabase
+      const productResult = await supabaseClient
         .from('products')
         .update({
           image_url: frontImage.image_url,
@@ -117,7 +117,7 @@ export async function uploadProductPhotos({ productId, userId, photos, supabaseC
     const cleanupMessages = []
     if (productImageUpdateAttempted) {
       try {
-        const restoreResult = await supabase
+        const restoreResult = await supabaseClient
           .from('products')
           .update({
             image_url: previousProductImageUrl,
@@ -137,7 +137,7 @@ export async function uploadProductPhotos({ productId, userId, photos, supabaseC
     }
     if (metadataInserted) {
       try {
-        const deleteResult = await supabase
+        const deleteResult = await supabaseClient
           .from('product_images')
           .delete()
           .in('storage_path', uploadedPaths)
