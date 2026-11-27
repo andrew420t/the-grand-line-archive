@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ImagePlus, PackagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './productStorage'
-import { getCatalogueCoverageReport, getCatalogueImageGallery, getCatalogueReferenceTestMatrix, saveDonCardSetOverride } from './cardCatalogue'
+import { getCatalogueCoverageReport, getCatalogueImageAuditInventory, getCatalogueImageGallery, saveDonCardSetOverride } from './cardCatalogue'
 import { loadAdminLibraryFileDraft, saveAdminLibraryFileDraft } from './adminDraftStorage'
 import { readPersistentDraft, savePersistentDraft } from './persistentDraftStorage'
-import { buildImageAuditSummary, IMAGE_CHECK_STATUS, loadImageWithRetry, mapWithConcurrency } from './imageAuditUtils.js'
+import { auditCatalogueImageRecord, buildImageAuditSummary, IMAGE_CHECK_STATUS, mapWithConcurrency } from './imageAuditUtils.js'
 
 const DON_SET_OPTIONS = [
   ...Array.from({ length: 18 }, (_, index) => 'OP-' + String(index + 1).padStart(2, '0')),
@@ -184,37 +184,20 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
     return () => { referenceRequestId.current += 1 }
   }, [loadReferenceImages])
 
-  const runReferenceMatrixCheck = async () => {
+  const runReferenceMatrixCheck = async (language) => {
     if (matrixCheckLock.current) return
     matrixCheckLock.current = true
     setMatrixRunning(true); setMatrixError(''); setMatrixReport(null); setMatrixResults([])
     try {
-      const matrix = await getCatalogueReferenceTestMatrix()
-      setMatrixReport(matrix)
-      const results = []
-      // Four probes at a time avoid overwhelming Bandai/CDN/browser connection
-      // pools. The probe is deliberately HTTP-status based so 404, 5xx, network
-      // failures and timeouts are not collapsed into a generic image onError.
-      const checked = await mapWithConcurrency(matrix.items, 4, async (item) => {
-        const candidates = dedupeImageCandidates([item.imageUrl, item.fallbackImageUrl])
-        if (!candidates.length) return { ...item, status: 'missing-url', checkedUrl: '' }
-        let outcome = null
-        for (let index = 0; index < candidates.length; index += 1) {
-          const result = await loadImageWithRetry(candidates[index], { attempts: 2, timeoutMs: 10000, retryDelayMs: 400 })
-          if (result.status === IMAGE_CHECK_STATUS.EXACT_LOADED) {
-            outcome = { ...item, status: index === 0 ? 'loaded' : 'fallback-loaded', checkedUrl: result.url, httpStatus: result.httpStatus, upstreamStatus: result.upstreamStatus || 0, proxyError: result.proxyError || '', attempts: result.attempts, candidateIndex: index }
-            break
-          }
-          outcome = { ...item, status: result.status, checkedUrl: result.url, httpStatus: result.httpStatus, upstreamStatus: result.upstreamStatus || 0, proxyError: result.proxyError || '', attempts: result.attempts, candidateIndex: index }
-          // A definitive missing/invalid URL can advance to a same-language
-          // fallback; transient errors/timeouts also try the next candidate.
-        }
-        return outcome
-      })
-      results.push(...checked)
-      setMatrixResults(results)
+      const inventory = await getCatalogueImageAuditInventory(language)
+      setMatrixReport({ ...inventory, expectedTotal: inventory.total, missingSlots: [] })
+      const checked = await mapWithConcurrency(inventory.records, 4, async (item) => auditCatalogueImageRecord({
+        ...item,
+        imageCandidates: item.imageUrl ? [{ url: item.imageUrl, kind: 'exact' }] : [],
+      }, { language, attempts: 2, timeoutMs: 10000, retryDelayMs: 400 }))
+      setMatrixResults(checked)
     } catch (checkError) {
-      setMatrixError(checkError.message || 'Could not build the full image audit.')
+      setMatrixError(checkError.message || 'Could not build the complete catalogue image audit.')
     } finally {
       matrixCheckLock.current = false
       setMatrixRunning(false)
@@ -331,9 +314,12 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
           <div className="photo-studio__heading"><div><p className="eyebrow">REFERENCE CATALOGUE</p><h3>Catalogue source health</h3></div></div>
           <p className="muted-copy">This report describes metadata in the source feed; it is not a live test of every image file. Actual image loading is counted in the reference gallery.</p>
           <div className="catalogue-health-unassigned">
-            <h4>Reference image smoke test</h4>
-            <p className="muted-copy">Checks every OP-18 product printing (119 base cards, 33 parallel printings and 7 special printings) in English and Japanese, plus the existing two-card-per-language smoke test for every other tracked set. It tests image loading and same-card fallback, not OCR.</p>
-            <button className="button button--outline" type="button" disabled={matrixRunning} onClick={runReferenceMatrixCheck}>{matrixRunning ? 'Checking images…' : 'Run full image audit'}</button>
+            <h4>Complete available catalogue image audit</h4>
+            <p className="muted-copy">Runs independently for the selected language across every available gallery catalogue entry, including records without image URLs. These totals describe discovered catalogue records, not authoritative expected set coverage. This first pass verifies each record's primary image reference; alternate/base fallback verification is a separate follow-up.</p>
+            <div className="catalogue-reference-actions">
+              <button className="button button--outline" type="button" disabled={matrixRunning} onClick={() => runReferenceMatrixCheck('en')}>{matrixRunning ? 'Auditing…' : 'Run English audit'}</button>
+              <button className="button button--outline" type="button" disabled={matrixRunning} onClick={() => runReferenceMatrixCheck('jp')}>{matrixRunning ? 'Auditing…' : 'Run Japanese audit'}</button>
+            </div>
             {matrixError && <p className="form-error">{matrixError}</p>}
             {matrixReport && (() => {
               const summary = buildImageAuditSummary([
@@ -347,14 +333,13 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
                 ...matrixReport.missingSlots.map(() => ({ status: IMAGE_CHECK_STATUS.MISSING })),
               ], matrixReport.expectedTotal)
               return <p className="muted-copy">
-                {matrixResults.filter((item) => item.status === 'loaded').length} exact loaded · {matrixResults.filter((item) => item.status === 'fallback-loaded').length} fallback loaded · {matrixResults.filter((item) => item.status === 'missing').length} confirmed missing · {matrixResults.filter((item) => item.status === 'temporary-failure').length} temporary failures · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixResults.filter((item) => item.status === 'invalid-url').length} invalid sources · {matrixReport.missingSlots.length} catalogue entries without image URLs · {summary.remaining} not checked ({matrixReport.expectedTotal} expected).
+                {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.EXACT_LOADED).length} exact loaded · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.ALTERNATIVE_LOADED).length} alternative loaded · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.BASE_FALLBACK_LOADED).length} base fallback loaded · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.MISSING).length} confirmed missing · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.TEMPORARY_FAILURE).length} temporary failures · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.TIMEOUT).length} timed out · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.INVALID_URL).length} invalid URLs · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.NO_REFERENCE).length} no image reference · {summary.remaining} unchecked ({matrixReport.expectedTotal} discovered records; {matrixReport.language.toUpperCase()}).
               </p>
             })()}
             {matrixReport && <details className="catalogue-health-missing">
-              <summary>View image-by-image results ({matrixResults.length + matrixReport.missingSlots.length})</summary>
+              <summary>View image-by-image results ({matrixResults.length})</summary>
               <div className="catalogue-health-table">
-                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}{item.imageId ? ' · ' + item.imageId : ''}</strong><span>{item.language.toUpperCase()}</span><span>{item.status}{item.httpStatus ? ' · HTTP ' + item.httpStatus : ''}{item.upstreamStatus ? ' · upstream ' + item.upstreamStatus : ''}{item.proxyError ? ' · ' + item.proxyError : ''} · {item.source}</span></div>)}
-                {matrixReport.missingSlots.map((item) => <div className="catalogue-health-row" key={item.targetSet + item.language + item.sampleSlot}><strong>{item.targetSet}</strong><span>{item.language.toUpperCase()}</span><span>Missing sample</span></div>)}
+                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.setCode || 'Unassigned'} · {item.cardNumber || 'No card number'}</strong><span>{item.languageCode?.toUpperCase() || matrixReport.language.toUpperCase()}</span><span>{item.status}{item.httpStatus ? ' · HTTP ' + item.httpStatus : ''}{item.upstreamStatus ? ' · upstream ' + item.upstreamStatus : ''}{item.proxyError ? ' · ' + item.proxyError : ''}{item.checkedAt ? ' · checked ' + new Date(item.checkedAt).toLocaleString() : ''} · {item.source || 'No image source'}</span></div>)}
               </div>
             </details>}
           </div>
