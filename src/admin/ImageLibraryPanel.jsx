@@ -370,6 +370,12 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
             </div>
             <p className="muted-copy">Source snapshot: {coverage.sourceGeneratedAt ? new Date(coverage.sourceGeneratedAt).toLocaleDateString() : 'date unavailable'} · {coverage.sourceAgeDays ?? 'unknown'} days old. Feed coverage is not the same as live image availability.</p>
             <p className="muted-copy">Image references in feed: English {coverage.languages.en?.withImage || 0}/{coverage.languages.en?.printings || 0} · Japanese {coverage.languages.jp?.withImage || 0}/{coverage.languages.jp?.printings || 0} · Chinese (CN) {coverage.languages.cn?.withImage || 0}/{coverage.languages.cn?.printings || 0}.</p>
+            <div className="catalogue-health-unassigned">
+              <strong>Catalogue record completeness is not yet proven.</strong>
+              <p className="muted-copy">{coverage.expectedCoverage?.note || 'Set totals below count discovered feed rows only; independent expected-card inventories are required to identify catalogue records missing from the feed.'}</p>
+              <p className="muted-copy">Discovered feed rows: {Object.entries(coverage.expectedCoverage?.availableFeedRecordsBySet || {}).sort(([a], [b]) => a.localeCompare(b)).map(([setCode, count]) => setCode + ' ' + count).join(' · ') || 'Not available'}</p>
+              <p className="muted-copy">Missing catalogue records: not measurable without authoritative expected-card and printing inventories. Missing image references for records found in the feed are counted separately below.</p>
+            </div>
             {coverage.sourceIsStale && <div className="catalogue-health-unassigned"><strong>Metadata feed is stale.</strong><p className="muted-copy">The Koala Kollect snapshot has not refreshed for more than seven days. Bandai's live card list may contain newer entries.</p></div>}
             <details className="catalogue-health-missing">
               <summary>Set-by-set totals ({Object.keys(coverage.sets).length} sets)</summary>
