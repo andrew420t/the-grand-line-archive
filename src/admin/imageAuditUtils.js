@@ -46,6 +46,8 @@ export async function loadImageWithRetry(url, {
   }
   let lastStatus = IMAGE_CHECK_STATUS.TEMPORARY_FAILURE
   let lastHttpStatus = 0
+  let lastUpstreamStatus = 0
+  let lastProxyError = ''
   for (let attempt = 1; attempt <= Math.max(1, attempts); attempt += 1) {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), timeoutMs)
@@ -58,6 +60,8 @@ export async function loadImageWithRetry(url, {
       }
       const upstreamStatus = Number(response.headers?.get?.('x-card-image-upstream-status') || 0)
       const proxyError = response.headers?.get?.('x-card-image-error') || ''
+      lastUpstreamStatus = upstreamStatus
+      lastProxyError = proxyError
       lastStatus = classifyImageResponse({ status: response.status, upstreamStatus, contentType })
       if ([IMAGE_CHECK_STATUS.MISSING, IMAGE_CHECK_STATUS.INVALID_URL].includes(lastStatus)) {
         return { status: lastStatus, url, attempts: attempt, httpStatus: response.status, upstreamStatus, proxyError, contentType }
@@ -69,7 +73,7 @@ export async function loadImageWithRetry(url, {
     }
     if (attempt < attempts) await sleep(retryDelayMs * attempt)
   }
-  return { status: lastStatus, url, attempts: Math.max(1, attempts), httpStatus: lastHttpStatus }
+  return { status: lastStatus, url, attempts: Math.max(1, attempts), httpStatus: lastHttpStatus, upstreamStatus: lastUpstreamStatus, proxyError: lastProxyError }
 }
 
 /** Run bounded concurrent jobs while retaining input order. */
