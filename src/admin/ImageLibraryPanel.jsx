@@ -60,10 +60,16 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
   const [matrixRunning, setMatrixRunning] = useState(false)
   const [selectedAuditIds, setSelectedAuditIds] = useState({ en: [], jp: [] })
   const [auditFilters, setAuditFilters] = useState({ en: {}, jp: {} })
-  const [auditSessions, setAuditSessions] = useState(() => readPersistentDraft(user?.id, 'image-audit-sessions', {
-    en: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
-    jp: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
-  }))
+  const [auditSessions, setAuditSessions] = useState(() => {
+    const saved = readPersistentDraft(user?.id, 'image-audit-sessions', {
+      en: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
+      jp: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
+    })
+    return Object.fromEntries(['en', 'jp'].map((language) => {
+      const session = saved?.[language] || { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null }
+      return [language, { ...session, status: session.status === 'running' ? 'paused' : session.status }]
+    }))
+  })
   const [coverageLoading, setCoverageLoading] = useState(false)
   const [matrixReport, setMatrixReport] = useState(() => savedLibraryDraft.matrixReport || null)
   const [matrixResults, setMatrixResults] = useState(() => savedLibraryDraft.matrixResults || [])
