@@ -591,7 +591,17 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
             )
           })}
         </div>
-      ) : <EmptyAdminState icon={Package} heading="No products found." text={query ? 'Try another search.' : 'The products table currently has no visible rows. Add a card to start the inventory.'} />}
+      ) : <EmptyAdminState
+        icon={Package}
+        heading={bulkFilter === 'bulk' ? 'No bulk cards found.' : 'No products found.'}
+        text={query
+          ? 'Try another search or inventory view.'
+          : bulkFilter === 'bulk'
+            ? 'Use Add to bulk on an existing card, or select Add to bulk when creating new stock.'
+            : bulkFilter === 'regular' && products.some((product) => product.raw?.is_bulk === true)
+              ? 'There are no regular cards in this view. Switch to Bulk only or All inventory.'
+              : 'The products table currently has no visible rows. Add a card to start the inventory.'}
+      />}
       {lookupProduct && (
         <div className="modal-backdrop product-edit-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget && !lookupSaving && !lookupBusy) setLookupProduct(null) }}>
           <section className="product-edit-modal catalogue-product-lookup" role="dialog" aria-modal="true" aria-labelledby="catalogue-product-lookup-title">
