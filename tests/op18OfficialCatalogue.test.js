@@ -113,3 +113,14 @@ test('hyphenated OP-18 card-number input normalizes to the same complete printin
     getOp18SupplementalMatches('OP18-001').length,
   )
 })
+
+test('Japanese OP-18 SP rarity labels preserve Bandai source text', () => {
+  const japaneseSpecials = OP18_OFFICIAL_PRINTINGS.filter((printing) => printing.rarityJp === 'SPカード')
+  const englishSpecials = OP18_OFFICIAL_PRINTINGS.filter((printing) => printing.rarityEn === 'SP CARD')
+  assert.equal(japaneseSpecials.length, 6)
+  assert.equal(englishSpecials.length, 6)
+  const japaneseItems = getOp18ImageTestItems('jp')
+  const englishItems = getOp18ImageTestItems('en')
+  assert.equal(japaneseItems.filter((item) => item.rarity === 'SPカード').length, 6)
+  assert.equal(englishItems.filter((item) => item.rarity === 'SP CARD').length, 6)
+})
