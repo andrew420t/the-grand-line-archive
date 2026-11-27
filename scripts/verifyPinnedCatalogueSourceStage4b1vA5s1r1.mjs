@@ -62,7 +62,7 @@ export function verifySource({
   const entries = Object.entries(manifest.files);
   const paths = entries.map(([p]) => p);
   if (entries.length !== expectedFileCount) errors.push(`Manifest file count mismatch: expected ${expectedFileCount}, got ${entries.length}`);
-  const actualPaths = walkJsonl(sourceDir);
+  const actualPaths = walkJsonl(sourceDir, path.join(sourceDir, 'data'));
   const expectedPaths = [...new Set(paths)].sort();
   const missing = expectedPaths.filter(p => !actualPaths.includes(p));
   const unexpected = actualPaths.filter(p => !expectedPaths.includes(p));
