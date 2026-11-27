@@ -878,6 +878,41 @@ export async function getCatalogueImageGallery({
  * set, plus every OP-18 product printing (119 base, 33 parallel, 7 special)
  * in English and Japanese. This checks image loading, not OCR.
  */
+/**
+ * Return the complete available English or Japanese catalogue inventory for
+ * live image auditing. This deliberately pages through the gallery rather than
+ * using the sample smoke-test matrix. Entries without image URLs are retained.
+ * The result is a discovered-feed inventory, not an authoritative expected-set
+ * inventory; missing catalogue rows still require independent checklists.
+ */
+export async function getCatalogueImageAuditInventory(language) {
+  if (!['en', 'jp'].includes(language)) throw new Error('Choose English (en) or Japanese (jp) for a catalogue image audit.')
+  const pageSize = 120
+  const records = []
+  let offset = 0
+  let total = null
+  do {
+    const page = await getCatalogueImageGallery({ offset, limit: pageSize, language, sortBy: 'card-number-asc' })
+    total = page.total
+    records.push(...(page.items || []))
+    offset += pageSize
+  } while (offset < (total || 0))
+  const unique = new Map()
+  for (const record of records) {
+    if (record.languageCode !== language) continue
+    const identity = [record.printingKey || record.id, record.languageCode, record.setCode || '', record.id].join(':')
+    if (!unique.has(identity)) unique.set(identity, record)
+  }
+  return {
+    language,
+    records: [...unique.values()],
+    total: unique.size,
+    discoveredAt: new Date().toISOString(),
+    inventoryStatus: 'discovered-feed-not-authoritative',
+    scope: 'Every available gallery catalogue entry for this language, including entries without image references and supplemental OP-18 printings.',
+  }
+}
+
 export async function getCatalogueReferenceTestMatrix() {
   const catalogue = await getCatalogue()
   const expectedSets = [
