@@ -7,6 +7,7 @@ const TCGPLAYER_IMAGE_PATH = /^\/product\/\d+_in_\d+x\d+\.(?:jpe?g|png|webp)$/i
 const CHINESE_IMAGE_PATH = /^\/OnePiecePc\/Picture\/[a-z0-9_.-]+\.(?:jpe?g|png|webp)$/i
 const IMAGE_CONTENT_TYPE = /^image\/(?:png|jpeg|webp|gif|avif)$/i
 const MAX_IMAGE_BYTES = 12 * 1024 * 1024
+const UPSTREAM_TIMEOUT_MS = 10000
 
 function isAllowedExternalImageUrl(url) {
   if (url.protocol !== 'https:' || url.username || url.password || url.port) return false
@@ -64,7 +65,7 @@ function isAllowedRedirect(url, originalTarget) {
   return isAllowedExternalImageUrl(url)
 }
 
-export async function handleCardImageProxy(request, fetchImpl = fetch) {
+export export async function handleCardImageProxy(request, fetchImpl = fetch) {
   if (request.method !== 'GET' && request.method !== 'HEAD') {
     return new Response('Method not allowed', { status: 405, headers: { Allow: 'GET, HEAD', 'Cache-Control': 'no-store' } })
   }
@@ -75,17 +76,28 @@ export async function handleCardImageProxy(request, fetchImpl = fetch) {
   let upstream
   for (let redirectCount = 0; redirectCount <= 3; redirectCount += 1) {
     try {
-      upstream = await fetchImpl(target.toString(), {
-        method: request.method,
-        redirect: 'manual',
-        headers: {
-          Accept: 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
-          Referer: original.referer,
-        },
-        cf: { cacheTtl: 86400 },
+      const controller = new AbortController()
+      const timeout = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS)
+      try {
+        upstream = await fetchImpl(target.toString(), {
+          method: request.method,
+          redirect: 'manual',
+          signal: controller.signal,
+          headers: {
+            Accept: 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+            Referer: original.referer,
+          },
+          cf: { cacheTtl: 86400 },
+        })
+      } finally {
+        clearTimeout(timeout)
+      }
+    } catch (error) {
+      const timedOut = error?.name === 'AbortError'
+      return new Response(timedOut ? 'Card image source timed out' : 'Card image source is temporarily unavailable', {
+        status: timedOut ? 504 : 502,
+        headers: { 'Cache-Control': 'no-store', 'X-Card-Image-Error': timedOut ? 'upstream-timeout' : 'upstream-network-error' },
       })
-    } catch {
-      return new Response('Card image source is temporarily unavailable', { status: 502, headers: { 'Cache-Control': 'no-store' } })
     }
     if (!isRedirect(upstream.status)) break
     const location = upstream.headers.get('location')
@@ -106,6 +118,7 @@ export async function handleCardImageProxy(request, fetchImpl = fetch) {
       'Cache-Control': 'no-store',
       'X-Card-Image-Source-Host': original.url.hostname,
       'X-Card-Image-Upstream-Status': String(upstreamStatus || 'unavailable'),
+      'X-Card-Image-Error': upstreamStatus === 404 ? 'upstream-not-found' : 'upstream-http-error',
     })
     const message = upstreamStatus
       ? 'Card image source returned HTTP ' + upstreamStatus
@@ -116,7 +129,7 @@ export async function handleCardImageProxy(request, fetchImpl = fetch) {
     })
   }
   const contentType = upstream.headers.get('content-type') || ''
-  if (!IMAGE_CONTENT_TYPE.test(contentType)) return new Response('Card image source returned a non-image response', { status: 502, headers: { 'Cache-Control': 'no-store' } })
+  if (!IMAGE_CONTENT_TYPE.test(contentType)) return new Response('Card image source returned a non-image response', { status: 502, headers: { 'Cache-Control': 'no-store', 'X-Card-Image-Error': 'invalid-content-type', 'X-Card-Image-Content-Type': contentType || 'missing' } })
   const contentLength = Number(upstream.headers.get('content-length') || 0)
   if (contentLength > MAX_IMAGE_BYTES) return new Response('Card image is larger than the allowed size', { status: 413, headers: { 'Cache-Control': 'no-store' } })
 
