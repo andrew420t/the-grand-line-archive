@@ -56,7 +56,7 @@ export function buildReports({ sourceDir, historicalManifest, sourceCommit = PIN
   const naiveEdges = [];
   const duplicateDerivedEdges = [];
   for (const link of printingProducts) {
-    const assigned = records.find(r => r.productKey === link.product_key && r.printingKey === link.printing_key);
+    const assigned = assignmentByProductPrinting.get(pairKey(link.product_key, link.printing_key));
     for (const setCode of setsByProduct.get(link.product_key)) {
       const edge = { language: productLanguage.get(link.product_key), productKey: link.product_key, printingKey: link.printing_key, derivedSet: setCode };
       naiveEdges.push(edge);
