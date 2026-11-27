@@ -65,7 +65,7 @@ async function loadCatalogue() {
 
   const languages = {}
   LANGUAGES.forEach((language, index) => {
-    const offset = 1 + index * 5
+    const offset = index * 5
     languages[language] = {
       observations: languageData[offset],
       printings: languageData[offset + 1],
