@@ -17,8 +17,9 @@ const CONCURRENCY = Math.max(1, Number(process.env.IMAGE_AUDIT_CONCURRENCY || 8)
 const TIMEOUT_MS = Math.max(1000, Number(process.env.IMAGE_AUDIT_TIMEOUT_MS || 12000));
 
 export function expectedHostForLanguage(language) {
-  if (language === "English") return "en.onepiece-cardgame.com";
-  if (language === "Japanese") return "www.onepiece-cardgame.com";
+  const normalized = language === "en" ? "English" : language === "jp" ? "Japanese" : language;
+  if (normalized === "English") return "en.onepiece-cardgame.com";
+  if (normalized === "Japanese") return "www.onepiece-cardgame.com";
   return null;
 }
 
