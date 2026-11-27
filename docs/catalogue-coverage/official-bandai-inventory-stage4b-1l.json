@@ -35986,6 +35986,170 @@
   },
   "notes": [
     "Stage 4B-1P exact-head CI verified 335 tests, lint, production build, all 50 application-versus-official rows, all 231 English/Japanese Premium Card Collection printing identities and 231 official image URLs. Testing Supabase remains a separate persistence gap: 7,786 official set printing identities are not persisted, so all 50 rows remain INCOMPLETE.",
-    "Testing Supabase public.products and public.cards are stock tables, not a complete official reference-catalogue store. A dedicated normalized reference-catalogue schema is recommended; no database writes or seeding were performed."
-  ]
+    "Testing Supabase public.products and public.cards are stock tables, not a complete official reference-catalogue store. A dedicated normalized reference-catalogue schema is recommended; no database writes or seeding were performed.",
+    "Stage 4B-1Q: normalized Testing reference-catalogue persistence architecture designed and read-only dry-run specification reconciled. No SQL migration, database write or seed was executed. The complete 7,786-row import manifest and 32-row inventory matching detail are retained in the exact-head CI artifact linked from stage4b_1q_reconciliation. All 50 rows remain INCOMPLETE."
+  ],
+  "stage4b_1q_reconciliation": {
+    "audit_date": "2026-11-27",
+    "starting_commit": "d0c478adf17767d0fa441c4483ac42a18a4b089a",
+    "verified_code_commit": "d0c478adf17767d0fa441c4483ac42a18a4b089a",
+    "workflow_run_id": 46053970318,
+    "workflow_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053970318",
+    "status": "DESIGN_AND_READ_ONLY_DRY_RUN_COMPLETE; DATABASE_MIGRATION_AND_IMPORT_NOT_AUTHORIZED",
+    "testing_catalogue_persistence": {
+      "project_id": "ehzqsnfkmwphyllhaqhe",
+      "read_only": true,
+      "no_database_writes": true,
+      "no_seeding": true,
+      "counts": {
+        "sets": 25,
+        "cards": 0,
+        "products": 32,
+        "linked_products": 2,
+        "unassigned_products": 30,
+        "linked_sets": 2,
+        "printing_keys": 0,
+        "match_ids": 0,
+        "reference_images": 0,
+        "product_images": 9,
+        "with_uploaded_image": 5
+      },
+      "inventory_products": 32,
+      "card_numbered_inventory_products": 31,
+      "inventory_products_without_card_number": 1,
+      "inventory_rows_with_application_card_number_match": 31,
+      "inventory_rows_without_application_card_number_match": 0,
+      "assigned_set_mismatches": 0,
+      "duplicate_inventory_group": {
+        "language": "Japanese",
+        "card_number": "OP17-119",
+        "rows": 2,
+        "product_names": [
+          "Loki",
+          "Loki"
+        ]
+      },
+      "automatic_inventory_links_created": 0,
+      "reason": "All rows remain unlinked pending exact printing/variant and provenance review; card-number candidates alone do not authorize a stock-row link."
+    },
+    "import_plan": {
+      "source_repository": "hotavocado/koala-kollect-data",
+      "source_commit": "619965ec198047de519dc6eb098c7a56aed9bd58",
+      "official_language_set_rows": 50,
+      "release_sets": 25,
+      "set_release_assignment_records": 7786,
+      "distinct_language_scoped_set_printing_keys": 7786,
+      "distinct_language_scoped_base_card_numbers": 5123,
+      "local_official_supplements": {
+        "OP18": {
+          "English": 159,
+          "Japanese": 159,
+          "total": 318
+        },
+        "EB05": {
+          "English": 96,
+          "Japanese": 96,
+          "total": 192
+        },
+        "total": 510
+      },
+      "english_premium_named_products": 9,
+      "english_premium_product_printing_assignments": 103,
+      "japanese_premium_named_products": 15,
+      "japanese_premium_product_printing_assignments": 128,
+      "additional_premium_product_printing_assignments": 231,
+      "premium_keys_overlapping_set_matrix": 0,
+      "combined_distinct_language_scoped_printing_keys": 8017,
+      "complete_import_manifest_artifact_id": 15225393084,
+      "complete_import_manifest_artifact_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053970318/artifacts/15225393084",
+      "manifest_fields": [
+        "original_card_number",
+        "language",
+        "release_set_assignment",
+        "named_release_product",
+        "printing_key",
+        "rarity",
+        "variant",
+        "image_id",
+        "application_image_url",
+        "exact_official_image_url"
+      ]
+    },
+    "proposed_normalized_tables": [
+      "catalogue_release_sets",
+      "catalogue_release_products",
+      "catalogue_cards",
+      "catalogue_printings",
+      "catalogue_printing_images",
+      "catalogue_product_sets",
+      "catalogue_product_printings",
+      "catalogue_set_printings",
+      "catalogue_inventory_links"
+    ],
+    "image_http": {
+      "retained_prior_official_reference_audit": {
+        "unique_urls": 7798,
+        "http_200": 7798,
+        "missing": 0,
+        "invalid": 0,
+        "timeouts": 0,
+        "temporary_failures": 0
+      },
+      "premium_collection_recheck": {
+        "unique_urls": 231,
+        "http_200": 231,
+        "failed": 0,
+        "content_type": "image/png"
+      },
+      "same_language_fallback_only": true,
+      "cross_language_fallback": false
+    },
+    "premium_card_collection": {
+      "english": {
+        "named_products": 9,
+        "product_printing_links": 103,
+        "distinct_printing_keys": 103,
+        "remaining_eight_printings": 91
+      },
+      "japanese": {
+        "named_products": 15,
+        "product_printing_links": 128,
+        "distinct_printing_keys": 128,
+        "verified_english_product_counterparts": 8,
+        "counterpart_printing_links": 91
+      },
+      "exact_runtime_matches": 231,
+      "missing_or_mismatched": 0,
+      "japanese_fest_23_24_product": "NOT_PRESENT_IN_PINNED_JAPANESE_FEED"
+    },
+    "all_50_rows": {
+      "official_release_assignment_printings": 7786,
+      "application_runtime_printings": 7786,
+      "exact_application_identity_rows": 50,
+      "persisted_reference_printing_keys": 0,
+      "missing_persisted_reference_printing_keys": 7786,
+      "complete_rows": 0,
+      "incomplete_rows": 50
+    },
+    "exact_head_ci": {
+      "run_id": 46053970318,
+      "commit": "d0c478adf17767d0fa441c4483ac42a18a4b089a",
+      "conclusion": "success",
+      "tests": 337,
+      "lint": "passed",
+      "production_build": "passed",
+      "application_audit": "passed",
+      "premium_reconciliation": "passed"
+    },
+    "safety": {
+      "pr37": "OPEN_UNMERGED",
+      "pr38": "OPEN_UNMERGED",
+      "no_merge": true,
+      "no_production_deployment": true,
+      "no_production_supabase_access": true,
+      "no_testing_database_writes": true,
+      "no_migrations_executed": true
+    },
+    "matrix_policy": "All 50 rows remain INCOMPLETE until official identity, application runtime, Testing persistence and image verification all pass."
+  }
 }
