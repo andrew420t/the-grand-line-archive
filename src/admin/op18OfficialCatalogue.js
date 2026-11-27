@@ -1,9 +1,6 @@
 import { buildOfficialImageProxyUrl } from './catalogueImageReference.js'
 
-// Source: Bandai's official OP-18 product card list (series=569118),
-// cross-checked against the OPBoxIndex OP-18 printing table on 2026-11-26.
-// Bandai card images are referenced through the site's same-origin Cloudflare proxy;
-// card art is not copied into or re-hosted by this repository.
+// Source: Bandai's official English and Japanese OP-18 card-list pages (series=569118), fetched 2026-11-27.\n// English and Japanese printing IDs/card numbers are retained separately where Bandai's official pages differ.\n// Bandai card art is referenced through the site's same-origin Cloudflare proxy; it is not copied into or re-hosted by this repository.
 export const OP18_OFFICIAL_PRINTINGS = [
   {
     "imageId": "OP18-001",
@@ -23,7 +20,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "All of your Characters with both the {Animal} and {Alabasta} types gain [Rush] and +1000 power. [Once Per Turn] When your {Alabasta} type Character is K.O.'d, draw 1 card.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-001",
+    "imageIdJp": "OP18-001",
+    "cardNumberEn": "OP18-001",
+    "cardNumberJp": "OP18-001",
+    "nameEn": "Karoo",
+    "nameJp": "カルー"
   },
   {
     "imageId": "OP18-001_p1",
@@ -43,7 +46,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "All of your Characters with both the {Animal} and {Alabasta} types gain [Rush] and +1000 power. [Once Per Turn] When your {Alabasta} type Character is K.O.'d, draw 1 card.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-001_p1",
+    "imageIdJp": "OP18-001_p1",
+    "cardNumberEn": "OP18-001",
+    "cardNumberJp": "OP18-001",
+    "nameEn": "Karoo",
+    "nameJp": "カルー"
   },
   {
     "imageId": "OP18-002",
@@ -63,7 +72,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] You may trash 1 {Alabasta} type card from your hand: Draw 2 cards.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-002",
+    "imageIdJp": "OP18-002",
+    "cardNumberEn": "OP18-002",
+    "cardNumberJp": "OP18-002",
+    "nameEn": "Igaram",
+    "nameJp": "イガラム"
   },
   {
     "imageId": "OP18-003",
@@ -83,7 +98,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-003",
+    "imageIdJp": "OP18-003",
+    "cardNumberEn": "OP18-003",
+    "cardNumberJp": "OP18-003",
+    "nameEn": "Sea Cat",
+    "nameJp": "海ネコ"
   },
   {
     "imageId": "OP18-004",
@@ -103,7 +124,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "Apply each of the following effects based on this Character's power: • If it has 5000 power or more, this Character gains [Rush]. • If it has 6000 power or more, this Character gains [Banish]. • If it has 7000 power or more, this Character gains [Unblockable].",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-004",
+    "imageIdJp": "OP18-004",
+    "cardNumberEn": "OP18-004",
+    "cardNumberJp": "OP18-004",
+    "nameEn": "Karoo",
+    "nameJp": "カルー"
   },
   {
     "imageId": "OP18-004_p1",
@@ -123,7 +150,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "Apply each of the following effects based on this Character's power: • If it has 5000 power or more, this Character gains [Rush]. • If it has 6000 power or more, this Character gains [Banish]. • If it has 7000 power or more, this Character gains [Unblockable].",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-004_p1",
+    "imageIdJp": "OP18-004_p1",
+    "cardNumberEn": "OP18-004",
+    "cardNumberJp": "OP18-004",
+    "nameEn": "Karoo",
+    "nameJp": "カルー"
   },
   {
     "imageId": "OP18-005",
@@ -143,7 +176,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Your Turn] This Character gains +1000 power for every [Kung Fu Jugon].",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-005",
+    "imageIdJp": "OP18-005",
+    "cardNumberEn": "OP18-005",
+    "cardNumberJp": "OP18-005",
+    "nameEn": "Kung Fu Jugon",
+    "nameJp": "クンフージュゴン"
   },
   {
     "imageId": "OP18-006",
@@ -163,7 +202,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "If you have [Nefeltari Vivi], this Character gains [Rush] and +1000 power. (This card can attack on the turn in which it is played.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-006",
+    "imageIdJp": "OP18-006",
+    "cardNumberEn": "OP18-006",
+    "cardNumberJp": "OP18-006",
+    "nameEn": "Koza",
+    "nameJp": "コーザ"
   },
   {
     "imageId": "OP18-007",
@@ -183,7 +228,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "If your Leader has the {Navy} type, this Character gains [Banish] and +1000 power. (When this card deals damage, the target card is trashed without activating its Trigger.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-007",
+    "imageIdJp": "OP18-007",
+    "cardNumberEn": "OP18-007",
+    "cardNumberJp": "OP18-007",
+    "nameEn": "Smoker",
+    "nameJp": "スモーカー"
   },
   {
     "imageId": "OP18-008",
@@ -203,7 +254,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "If your Leader has the {Alabasta} type, this Character gains [Rush]. [On Play] You may trash 1 Character card with 5000 power or less from your hand: Draw 2 cards and this Character gains [Banish] during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-008",
+    "imageIdJp": "OP18-008",
+    "cardNumberEn": "OP18-008",
+    "cardNumberJp": "OP18-008",
+    "nameEn": "Chaka",
+    "nameJp": "チャカ"
   },
   {
     "imageId": "OP18-009",
@@ -223,7 +280,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Rush] (This card can attack on the turn in which it is played.) [Activate: Main] You may trash this Character: If you have 9 or more DON!! cards on your field, play up to 1 [Karoo] from your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-009",
+    "imageIdJp": "OP18-009",
+    "cardNumberEn": "OP18-009",
+    "cardNumberJp": "OP18-009",
+    "nameEn": "Super Spot-Billed Duck Troops",
+    "nameJp": "超カルガモ部隊"
   },
   {
     "imageId": "OP18-010",
@@ -243,7 +306,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On K.O.] Add up to 1 Character card with 4000 power or less from your trash to your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-010",
+    "imageIdJp": "OP18-010",
+    "cardNumberEn": "OP18-010",
+    "cardNumberJp": "OP18-010",
+    "nameEn": "Tony Tony.Chopper",
+    "nameJp": "トニートニー・チョッパー"
   },
   {
     "imageId": "OP18-011",
@@ -263,7 +332,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "All of your Characters with both the {Animal} and {Alabasta} types gain +1000 power. [Opponent's Turn] This Character gains [Blocker] and +6000 power.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-011",
+    "imageIdJp": "OP18-011",
+    "cardNumberEn": "OP18-011",
+    "cardNumberJp": "OP18-011",
+    "nameEn": "Nefeltari Vivi",
+    "nameJp": "ネフェルタリ・ビビ"
   },
   {
     "imageId": "OP18-011_p1",
@@ -283,7 +358,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "All of your Characters with both the {Animal} and {Alabasta} types gain +1000 power. [Opponent's Turn] This Character gains [Blocker] and +6000 power.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-011_p1",
+    "imageIdJp": "OP18-011_p1",
+    "cardNumberEn": "OP18-011",
+    "cardNumberJp": "OP18-011",
+    "nameEn": "Nefeltari Vivi",
+    "nameJp": "ネフェルタリ・ビビ"
   },
   {
     "imageId": "OP18-012",
@@ -303,7 +384,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[When Attacking] Up to 1 of your Characters with both the {Animal} and {Alabasta} types gains +1000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-012",
+    "imageIdJp": "OP18-012",
+    "cardNumberEn": "OP18-012",
+    "cardNumberJp": "OP18-012",
+    "nameEn": "Pincers",
+    "nameJp": "ハサミ"
   },
   {
     "imageId": "OP18-013",
@@ -323,7 +410,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "If your Leader has the {Alabasta} type, this Character gains [Rush]. [On Play] You may trash 1 Character card with 5000 power or less from your hand: Draw 2 cards and trash up to 1 of your opponent's Characters with 3000 base power or less.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-013",
+    "imageIdJp": "OP18-013",
+    "cardNumberEn": "OP18-013",
+    "cardNumberJp": "OP18-013",
+    "nameEn": "Pell",
+    "nameJp": "ペル"
   },
   {
     "imageId": "OP18-014",
@@ -343,7 +436,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[When Attacking] Up to 1 of your {Alabasta} type Characters gains [Rush] during this turn. (This card can attack on the turn in which it is played.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-014",
+    "imageIdJp": "OP18-014",
+    "cardNumberEn": "OP18-014",
+    "cardNumberJp": "OP18-014",
+    "nameEn": "Portgas.D.Ace",
+    "nameJp": "ポートガス・Ｄ・エース"
   },
   {
     "imageId": "OP18-015",
@@ -363,7 +462,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Your Opponent's Attack] You may trash this Character: If your Leader has the {Alabasta} type, give up to 1 of your opponent's Leader or Characters −3000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-015",
+    "imageIdJp": "OP18-015",
+    "cardNumberEn": "OP18-015",
+    "cardNumberJp": "OP18-015",
+    "nameEn": "Eyelashes",
+    "nameJp": "マツゲ"
   },
   {
     "imageId": "OP18-016",
@@ -383,7 +488,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Banish] [On K.O.] Play up to 1 {Alabasta} type Character card with 6000 power or less from your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-016",
+    "imageIdJp": "OP18-016",
+    "cardNumberEn": "OP18-016",
+    "cardNumberJp": "OP18-016",
+    "nameEn": "Monkey.D.Luffy",
+    "nameJp": "モンキー・Ｄ・ルフィ"
   },
   {
     "imageId": "OP18-017",
@@ -403,7 +514,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Once Per Turn] If your {Alabasta} type Character would be removed from the field by your opponent's effect, you may give your Leader −2000 power during this turn instead. [When Attacking] Up to 1 of your {Alabasta} type Characters gains [Rush] during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-017",
+    "imageIdJp": "OP18-017",
+    "cardNumberEn": "OP18-017",
+    "cardNumberJp": "OP18-017",
+    "nameEn": "Roronoa Zoro",
+    "nameJp": "ロロノア・ゾロ"
   },
   {
     "imageId": "OP18-018",
@@ -423,7 +540,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] All of your {Alabasta} type Characters gain +1000 power during this turn.",
     "trigger": "[Trigger] Up to 1 of your Leader or Characters gains +2000 power during this turn.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-018",
+    "imageIdJp": "OP18-018",
+    "cardNumberEn": "OP18-018",
+    "cardNumberJp": "OP18-018",
+    "nameEn": "Let's Go, Karoo!!",
+    "nameJp": "行くわよ カルー!!!"
   },
   {
     "imageId": "OP18-019",
@@ -443,7 +566,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] If you have no Characters with 7000 base power or more, give up to 1 of your opponent's Characters −3000 power during this turn. [Counter] Your Leader gains +3000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-019",
+    "imageIdJp": "OP18-019",
+    "cardNumberEn": "OP18-019",
+    "cardNumberJp": "OP18-019",
+    "nameEn": "Quack!!!",
+    "nameJp": "クエ～ッ!!!"
   },
   {
     "imageId": "OP18-020",
@@ -463,7 +592,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Counter] You may add all of your Life cards to your hand: If your Leader is [Nefeltari Vivi], give your opponent's Leader and all of their Characters −5000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-020",
+    "imageIdJp": "OP18-020",
+    "cardNumberEn": "OP18-020",
+    "cardNumberJp": "OP18-020",
+    "nameEn": "Stop Fighting!!!",
+    "nameJp": "戦いを!!!やめて下さい!!!"
   },
   {
     "imageId": "OP18-021",
@@ -483,7 +618,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "All Stage cards in your hand have a +3000 Counter. [Activate: Main] [Once Per Turn] DON!! −1: Play up to 1 Stage card with a cost of 5 or less from your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-021",
+    "imageIdJp": "OP18-021",
+    "cardNumberEn": "OP18-021",
+    "cardNumberJp": "OP18-021",
+    "nameEn": "Franky",
+    "nameJp": "フランキー"
   },
   {
     "imageId": "OP18-021_p1",
@@ -503,7 +644,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "All Stage cards in your hand have a +3000 Counter. [Activate: Main] [Once Per Turn] DON!! −1: Play up to 1 Stage card with a cost of 5 or less from your hand.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-021_p1",
+    "imageIdJp": "OP18-021_p1",
+    "cardNumberEn": "OP18-021",
+    "cardNumberJp": "OP18-021",
+    "nameEn": "Franky",
+    "nameJp": "フランキー"
   },
   {
     "imageId": "OP18-022",
@@ -523,7 +670,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[DON!! x3] [When Attacking] [Once Per Turn] You may set this Leader as active. If you do, this Leader will not become active in your next Refresh Phase.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-022",
+    "imageIdJp": "OP18-022",
+    "cardNumberEn": "OP18-022",
+    "cardNumberJp": "OP18-022",
+    "nameEn": "Monkey.D.Luffy",
+    "nameJp": "モンキー・Ｄ・ルフィ"
   },
   {
     "imageId": "OP18-022_p1",
@@ -543,7 +696,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[DON!! x3] [When Attacking] [Once Per Turn] You may set this Leader as active. If you do, this Leader will not become active in your next Refresh Phase.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-022_p1",
+    "imageIdJp": "OP18-022_p1",
+    "cardNumberEn": "OP18-022",
+    "cardNumberJp": "OP18-022",
+    "nameEn": "Monkey.D.Luffy",
+    "nameJp": "モンキー・Ｄ・ルフィ"
   },
   {
     "imageId": "OP18-023",
@@ -563,7 +722,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Up to 1 of your {East Blue} type Leader or Characters gains [Banish] during this turn. (When this card deals damage, the target card is trashed without activating its Trigger.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-023",
+    "imageIdJp": "OP18-023",
+    "cardNumberEn": "OP18-023",
+    "cardNumberJp": "OP18-023",
+    "nameEn": "Gaimon",
+    "nameJp": "ガイモン"
   },
   {
     "imageId": "OP18-024",
@@ -583,7 +748,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.) [End of Your Turn] You may trash this Character: Set your Leader as active.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-024",
+    "imageIdJp": "OP18-024",
+    "cardNumberEn": "OP18-024",
+    "cardNumberJp": "OP18-024",
+    "nameEn": "Kokoro",
+    "nameJp": "ココロ"
   },
   {
     "imageId": "OP18-025",
@@ -603,7 +774,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[End of Your Turn] If this Character is rested, set your Leader as active.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-025",
+    "imageIdJp": "OP18-025",
+    "cardNumberEn": "OP18-025",
+    "cardNumberJp": "OP18-025",
+    "nameEn": "Gonbe",
+    "nameJp": "ゴンベ"
   },
   {
     "imageId": "OP18-026",
@@ -623,7 +800,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "If your {Straw Hat Crew} type Character would be removed from the field by your opponent's effect, you may trash this Character instead.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-026",
+    "imageIdJp": "OP18-026",
+    "cardNumberEn": "OP18-026",
+    "cardNumberJp": "OP18-026",
+    "nameEn": "Sanji",
+    "nameJp": "サンジ"
   },
   {
     "imageId": "OP18-027",
@@ -643,7 +826,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Opponent's Turn] The base power of your active [Monkey.D.Luffy] Leader with 3 or more DON!! cards given becomes 7000. [On Play] Set up to 2 of your DON!! cards as active. Then, up to 1 of your opponent's Characters with a cost of 6 or less cannot be rested until the end of your opponent's next End Phase.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-027",
+    "imageIdJp": "OP18-027",
+    "cardNumberEn": "OP18-027",
+    "cardNumberJp": "OP18-027",
+    "nameEn": "Zoro & Sogeking",
+    "nameJp": "ゾロ＆そげキング"
   },
   {
     "imageId": "OP18-028",
@@ -663,7 +852,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Activate: Main] You may rest 1 of your [Gonbe] and this Character: Set your [Monkey.D.Luffy] Leader as active.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-028",
+    "imageIdJp": "OP18-028",
+    "cardNumberEn": "OP18-028",
+    "cardNumberJp": "OP18-028",
+    "nameEn": "Chimney",
+    "nameJp": "チムニー"
   },
   {
     "imageId": "OP18-029",
@@ -683,7 +878,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Rush] [When Attacking] [Once Per Turn] Give up to 3 rested DON!! cards to your Leader and set this Character as active. Then, this Character will not become active in your next Refresh Phase.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-029",
+    "imageIdJp": "OP18-029",
+    "cardNumberEn": "OP18-029",
+    "cardNumberJp": "OP18-029",
+    "nameEn": "Tony Tony.Chopper",
+    "nameJp": "トニートニー・チョッパー"
   },
   {
     "imageId": "OP18-029_p1",
@@ -703,7 +904,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Rush] [When Attacking] [Once Per Turn] Give up to 3 rested DON!! cards to your Leader and set this Character as active. Then, this Character will not become active in your next Refresh Phase.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-029_p1",
+    "imageIdJp": "OP18-029_p1",
+    "cardNumberEn": "OP18-029",
+    "cardNumberJp": "OP18-029",
+    "nameEn": "Tony Tony.Chopper",
+    "nameJp": "トニートニー・チョッパー"
   },
   {
     "imageId": "OP18-030",
@@ -723,7 +930,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Opponent's Turn] If this Character is rested, give this Character −2000 power.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-030",
+    "imageIdJp": "OP18-030",
+    "cardNumberEn": "OP18-030",
+    "cardNumberJp": "OP18-030",
+    "nameEn": "Nami",
+    "nameJp": "ナミ"
   },
   {
     "imageId": "OP18-031",
@@ -743,7 +956,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Opponent's Turn] If your Character would be removed from the field by your opponent's effect, you may rest this Character instead. [End of Your Turn] Set up to 1 of your {Water Seven} type cards and up to 1 of your DON!! cards as active.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-031",
+    "imageIdJp": "OP18-031",
+    "cardNumberEn": "OP18-031",
+    "cardNumberJp": "OP18-031",
+    "nameEn": "Nico Robin",
+    "nameJp": "ニコ・ロビン"
   },
   {
     "imageId": "OP18-031_p1",
@@ -763,7 +982,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Opponent's Turn] If your Character would be removed from the field by your opponent's effect, you may rest this Character instead. [End of Your Turn] Set up to 1 of your {Water Seven} type cards and up to 1 of your DON!! cards as active.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-031_p1",
+    "imageIdJp": "OP18-031_p1",
+    "cardNumberEn": "OP18-031",
+    "cardNumberJp": "OP18-031",
+    "nameEn": "Nico Robin",
+    "nameJp": "ニコ・ロビン"
   },
   {
     "imageId": "OP18-031_p2",
@@ -783,7 +1008,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Opponent's Turn] If your Character would be removed from the field by your opponent's effect, you may rest this Character instead. [End of Your Turn] Set up to 1 of your {Water Seven} type cards and up to 1 of your DON!! cards as active.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "imageIdEn": "OP18-031_p2",
+    "imageIdJp": "OP18-031_p2",
+    "cardNumberEn": "OP18-031",
+    "cardNumberJp": "OP18-031",
+    "nameEn": "Nico Robin",
+    "nameJp": "ニコ・ロビン"
   },
   {
     "imageId": "OP18-032",
@@ -803,7 +1034,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play]/[On K.O.] Up to 1 of your opponent's rested Characters with 8000 power or less will not become active in your opponent's next Refresh Phase.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-032",
+    "imageIdJp": "OP18-032",
+    "cardNumberEn": "OP18-032",
+    "cardNumberJp": "OP18-032",
+    "nameEn": "Buggy",
+    "nameJp": "バギー"
   },
   {
     "imageId": "OP18-033",
@@ -823,7 +1060,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.) [End of Your Turn] You may trash this Character: Set up to 1 of your Characters as active.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-033",
+    "imageIdJp": "OP18-033",
+    "cardNumberEn": "OP18-033",
+    "cardNumberJp": "OP18-033",
+    "nameEn": "Banban",
+    "nameJp": "バンバン爺"
   },
   {
     "imageId": "OP18-034",
@@ -843,7 +1086,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Play up to 1 {The Franky Family} or {Straw Hat Crew} type card with a cost of 5 or less from your hand. Then, if you have a Stage with a cost of 5 or more, rest up to 1 of your opponent's Characters with a cost of 6 or less.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-034",
+    "imageIdJp": "OP18-034",
+    "cardNumberEn": "OP18-034",
+    "cardNumberJp": "OP18-034",
+    "nameEn": "Franky",
+    "nameJp": "フランキー"
   },
   {
     "imageId": "OP18-034_p1",
@@ -863,7 +1112,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Play up to 1 {The Franky Family} or {Straw Hat Crew} type card with a cost of 5 or less from your hand. Then, if you have a Stage with a cost of 5 or more, rest up to 1 of your opponent's Characters with a cost of 6 or less.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-034_p1",
+    "imageIdJp": "OP18-034_p1",
+    "cardNumberEn": "OP18-034",
+    "cardNumberJp": "OP18-034",
+    "nameEn": "Franky",
+    "nameJp": "フランキー"
   },
   {
     "imageId": "OP18-035",
@@ -883,7 +1138,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-035",
+    "imageIdJp": "OP18-035",
+    "cardNumberEn": "OP18-035",
+    "cardNumberJp": "OP18-035",
+    "nameEn": "Michael & Hoichael",
+    "nameJp": "マイケル＆ホイケル"
   },
   {
     "imageId": "OP18-036",
@@ -903,7 +1164,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[End of Your Turn] You may trash this Character: Draw 1 card and set your Leader as active.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-036",
+    "imageIdJp": "OP18-036",
+    "cardNumberEn": "OP18-036",
+    "cardNumberJp": "OP18-036",
+    "nameEn": "Monkey.D.Luffy",
+    "nameJp": "モンキー・Ｄ・ルフィ"
   },
   {
     "imageId": "OP18-037",
@@ -923,7 +1190,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.) [On K.O.] Rest up to 1 of your opponent's cards.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-037",
+    "imageIdJp": "OP18-037",
+    "cardNumberEn": "OP18-037",
+    "cardNumberJp": "OP18-037",
+    "nameEn": "Yokozuna",
+    "nameJp": "ヨコヅナ"
   },
   {
     "imageId": "OP18-038",
@@ -943,7 +1216,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] Look at 5 cards from the top of your deck; reveal up to 1 [Sogeking] or {Straw Hat Crew} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "[Trigger] Draw 1 card.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-038",
+    "imageIdJp": "OP18-038",
+    "cardNumberEn": "OP18-038",
+    "cardNumberJp": "OP18-038",
+    "nameEn": "Shoot Down That Flag.",
+    "nameJp": "あの旗 撃ち抜け"
   },
   {
     "imageId": "OP18-039",
@@ -963,7 +1242,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Counter] Up to 1 of your [Monkey.D.Luffy] gains +2000 power during this battle. Then, if your Leader is active, draw 1 card.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-039",
+    "imageIdJp": "OP18-039",
+    "cardNumberEn": "OP18-039",
+    "cardNumberJp": "OP18-039",
+    "nameEn": "Gum-Gum Giant Axe",
+    "nameJp": "ゴムゴムの巨人の斧"
   },
   {
     "imageId": "OP18-040",
@@ -983,7 +1268,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] K.O. up to 1 of your opponent's rested Characters with a cost of 7 or less.",
     "trigger": "[Trigger] Rest up to 1 of your opponent's Characters with a cost of 7 or less.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-040",
+    "imageIdJp": "OP18-040",
+    "cardNumberEn": "OP18-040",
+    "cardNumberJp": "OP18-040",
+    "nameEn": "Diable Jambe Flambé Shot",
+    "nameJp": "悪魔風脚 画竜点睛ショット"
   },
   {
     "imageId": "OP18-041",
@@ -1003,7 +1294,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "When your Character with a type including \"Baroque Works\" and 3000 base power or more is K.O.'d, draw 1 card, and your opponent trashes 1 card from their hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-041",
+    "imageIdJp": "OP18-041",
+    "cardNumberEn": "OP18-041",
+    "cardNumberJp": "OP18-041",
+    "nameEn": "Ms. All Sunday",
+    "nameJp": "ミス・オールサンデー"
   },
   {
     "imageId": "OP18-041_p1",
@@ -1023,7 +1320,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "When your Character with a type including \"Baroque Works\" and 3000 base power or more is K.O.'d, draw 1 card, and your opponent trashes 1 card from their hand.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-041_p1",
+    "imageIdJp": "OP18-041_p1",
+    "cardNumberEn": "OP18-041",
+    "cardNumberJp": "OP18-041",
+    "nameEn": "Ms. All Sunday",
+    "nameJp": "ミス・オールサンデー"
   },
   {
     "imageId": "OP18-042",
@@ -1043,7 +1346,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On K.O.] Draw 1 card. [Activate: Main] [Once Per Turn] Give up to 1 rested DON!! card to 1 of your {Dressrosa} type Leader or Characters.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-042",
+    "imageIdJp": "OP18-042",
+    "cardNumberEn": "OP18-042",
+    "cardNumberJp": "OP18-042",
+    "nameEn": "Hack",
+    "nameJp": "ハック"
   },
   {
     "imageId": "OP18-043",
@@ -1063,7 +1372,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-043",
+    "imageIdJp": "OP18-043",
+    "cardNumberEn": "OP18-043",
+    "cardNumberJp": "OP18-043",
+    "nameEn": "Accelegator",
+    "nameJp": "Ｆ-ワニ"
   },
   {
     "imageId": "OP18-044",
@@ -1083,7 +1398,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[DON!! x1] This Character gains +1000 power. [On Play] Draw 1 card and trash 1 card from your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-044",
+    "imageIdJp": "OP18-044",
+    "cardNumberEn": "OP18-044",
+    "cardNumberJp": "OP18-044",
+    "nameEn": "Mr.Beans & Miss.Katherina",
+    "nameJp": "Mr.ビーンズ＆ミス・キャサリーナ"
   },
   {
     "imageId": "OP18-045",
@@ -1103,7 +1424,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "Also treat this card's name as [Sanji] according to the rules. This Character gains +1000 power for every 5 Events in your trash.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-045",
+    "imageIdJp": "OP18-045",
+    "cardNumberEn": "OP18-045",
+    "cardNumberJp": "OP18-045",
+    "nameEn": "Mr.Prince",
+    "nameJp": "Mr.プリンス"
   },
   {
     "imageId": "OP18-046",
@@ -1123,7 +1450,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Draw 2 cards and give your Leader and all of your Characters up to 2 rested DON!! cards each. [On Your Opponent's Attack] You may trash 1 card from your hand: The base power of your Leader with a type including \"Baroque Works\" becomes 7000 during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-046",
+    "imageIdJp": "OP18-046",
+    "cardNumberEn": "OP18-046",
+    "cardNumberJp": "OP18-046",
+    "nameEn": "Mr.0 & Ms. All Sunday",
+    "nameJp": "Mr.0＆ミス・オールサンデー"
   },
   {
     "imageId": "OP18-046_p1",
@@ -1143,7 +1476,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Draw 2 cards and give your Leader and all of your Characters up to 2 rested DON!! cards each. [On Your Opponent's Attack] You may trash 1 card from your hand: The base power of your Leader with a type including \"Baroque Works\" becomes 7000 during this turn.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-046_p1",
+    "imageIdJp": "OP18-046_p1",
+    "cardNumberEn": "OP18-046",
+    "cardNumberJp": "OP18-046",
+    "nameEn": "Mr.0 & Ms. All Sunday",
+    "nameJp": "Mr.0＆ミス・オールサンデー"
   },
   {
     "imageId": "OP18-047",
@@ -1163,7 +1502,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Your Leader with the {Cross Guild} type or a type including \"Baroque Works\" gains [Unblockable] during this turn. (This card cannot be blocked.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-047",
+    "imageIdJp": "OP18-047",
+    "cardNumberEn": "OP18-047",
+    "cardNumberJp": "OP18-047",
+    "nameEn": "Mr.1(Daz.Bonez)",
+    "nameJp": "Mr.1(ダズ・ボーネス)"
   },
   {
     "imageId": "OP18-048",
@@ -1183,7 +1528,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Rush] (This card can attack on the turn in which it is played.) [On Play] Play up to 1 Character card with a type including \"Baroque Works\" and a cost of 5 or less from your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-048",
+    "imageIdJp": "OP18-048",
+    "cardNumberEn": "OP18-048",
+    "cardNumberJp": "OP18-048",
+    "nameEn": "Mr.1 & Miss Doublefinger",
+    "nameJp": "Mr.1＆ミス・ダブルフィンガー"
   },
   {
     "imageId": "OP18-048_p1",
@@ -1203,7 +1554,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Rush] (This card can attack on the turn in which it is played.) [On Play] Play up to 1 Character card with a type including \"Baroque Works\" and a cost of 5 or less from your hand.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-048_p1",
+    "imageIdJp": "OP18-048_p1",
+    "cardNumberEn": "OP18-048",
+    "cardNumberJp": "OP18-048",
+    "nameEn": "Mr.1 & Miss Doublefinger",
+    "nameJp": "Mr.1＆ミス・ダブルフィンガー"
   },
   {
     "imageId": "OP18-049",
@@ -1223,7 +1580,39 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 card with a type including \"Baroque Works\", add it to your hand and place the rest at the bottom of your deck in any order. Then, give up to 1 rested DON!! card to your Leader or 1 of your Characters.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-049",
+    "imageIdJp": "OP18-049",
+    "cardNumberEn": "OP18-049",
+    "cardNumberJp": "OP18-049",
+    "nameEn": "Mr.2.Bon.Kurei(Bentham)",
+    "nameJp": "Mr.2・ボン・クレー(ベンサム)"
+  },
+  {
+    "imageId": "OP18-049_p1",
+    "cardNumber": "OP18-049",
+    "name": "Mr.2.Bon.Kurei(Bentham)",
+    "japaneseName": null,
+    "rarity": "TR",
+    "category": "character",
+    "cost": 5,
+    "life": null,
+    "attribute": "Strike",
+    "power": 6000,
+    "counter": 1000,
+    "color": "Blue",
+    "blockIcon": 5,
+    "types": "Baroque Works",
+    "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 card with a type including \"Baroque Works\", add it to your hand and place the rest at the bottom of your deck in any order. Then, give up to 1 rested DON!! card to your Leader or 1 of your Characters.",
+    "trigger": "",
+    "variant": "TREASURE RARE",
+    "variantLabel": "TREASURE RARE",
+    "imageIdEn": "OP18-049_p1",
+    "imageIdJp": null,
+    "cardNumberEn": "OP18-049",
+    "cardNumberJp": null,
+    "nameEn": "Mr.2.Bon.Kurei(Bentham)",
+    "nameJp": null
   },
   {
     "imageId": "OP18-050",
@@ -1243,7 +1632,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Blocker] [On Play] If your Leader's type includes \"Baroque Works\", up to 1 of your opponent's Characters with a cost of 7 or less cannot attack until the end of your opponent's next End Phase.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-050",
+    "imageIdJp": "OP18-050",
+    "cardNumberEn": "OP18-050",
+    "cardNumberJp": "OP18-050",
+    "nameEn": "Mr.3 & Miss.Goldenweek",
+    "nameJp": "Mr.3＆ミス・ゴールデンウィーク"
   },
   {
     "imageId": "OP18-051",
@@ -1263,7 +1658,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[DON!! x1] This Character gains +1000 power. [On Play] You may rest 5 of your DON!! cards: Place up to 1 Character with a cost of 6 or less and up to 1 Character with a cost of 5 or less at the bottom of the owner's deck in any order of the owner's choosing.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-051",
+    "imageIdJp": "OP18-051",
+    "cardNumberEn": "OP18-051",
+    "cardNumberJp": "OP18-051",
+    "nameEn": "Mr.4 & Miss.MerryChristmas",
+    "nameJp": "Mr.4＆ミス・メリークリスマス"
   },
   {
     "imageId": "OP18-051_p1",
@@ -1283,7 +1684,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[DON!! x1] This Character gains +1000 power. [On Play] You may rest 5 of your DON!! cards: Place up to 1 Character with a cost of 6 or less and up to 1 Character with a cost of 5 or less at the bottom of the owner's deck in any order of the owner's choosing.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-051_p1",
+    "imageIdJp": "OP18-051_p1",
+    "cardNumberEn": "OP18-051",
+    "cardNumberJp": "OP18-051",
+    "nameEn": "Mr.4 & Miss.MerryChristmas",
+    "nameJp": "Mr.4＆ミス・メリークリスマス"
   },
   {
     "imageId": "OP18-052",
@@ -1303,7 +1710,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[DON!! x1] This Character gains +1000 power. [On Play] Play up to 1 Character card with a type including \"Baroque Works\" and a cost of 3 or less from your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-052",
+    "imageIdJp": "OP18-052",
+    "cardNumberEn": "OP18-052",
+    "cardNumberJp": "OP18-052",
+    "nameEn": "Mr.5 & Miss.Valentine",
+    "nameJp": "Mr.5＆ミス・バレンタイン"
   },
   {
     "imageId": "OP18-053",
@@ -1323,7 +1736,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[DON!! x1] This Character gains +1000 power. [On Play] Look at 3 cards from the top of your deck, reorganize them in any order and place them at the top or bottom of your deck.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-053",
+    "imageIdJp": "OP18-053",
+    "cardNumberEn": "OP18-053",
+    "cardNumberJp": "OP18-053",
+    "nameEn": "Mr.7 & Miss.Father'sDay",
+    "nameJp": "Mr.7＆ミス・ファーザーズデー"
   },
   {
     "imageId": "OP18-054",
@@ -1343,7 +1762,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[DON!! x1] This Character gains +1000 power. [Opponent's Turn] [Once Per Turn] If your Character with a type including \"Baroque Works\" would be removed from the field by your opponent's effect, you may trash 1 card from your hand instead.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-054",
+    "imageIdJp": "OP18-054",
+    "cardNumberEn": "OP18-054",
+    "cardNumberJp": "OP18-054",
+    "nameEn": "Mr.8 & Ms. Monday",
+    "nameJp": "Mr.8＆ミス・マンデー"
   },
   {
     "imageId": "OP18-055",
@@ -1363,7 +1788,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[DON!! x1] This Character gains +1000 power. [On Play] Return up to 1 of your opponent's Characters with a cost of 2 or less to the owner's hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-055",
+    "imageIdJp": "OP18-055",
+    "cardNumberEn": "OP18-055",
+    "cardNumberJp": "OP18-055",
+    "nameEn": "Mr.9 & Ms. Wednesday",
+    "nameJp": "Mr.9＆ミス・ウェンズデー"
   },
   {
     "imageId": "OP18-056",
@@ -1383,7 +1814,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[DON!! x1] This Character gains +1000 power. [On Play] You may place 1 of your Characters with a type including \"Baroque Works\" other than this Character at the bottom of your deck: Your opponent trashes 1 card from their hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-056",
+    "imageIdJp": "OP18-056",
+    "cardNumberEn": "OP18-056",
+    "cardNumberJp": "OP18-056",
+    "nameEn": "Mr.13 & Ms.Friday",
+    "nameJp": "Mr.13＆ミス・フライデー"
   },
   {
     "imageId": "OP18-057",
@@ -1403,7 +1840,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] You may rest 3 of your DON!! cards: Return up to 1 Character with a cost of 5 or less to the owner's hand. [Counter] Your Leader gains +3000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-057",
+    "imageIdJp": "OP18-057",
+    "cardNumberEn": "OP18-057",
+    "cardNumberJp": "OP18-057",
+    "nameEn": "Atomic Dicer",
+    "nameJp": "微塵斬"
   },
   {
     "imageId": "OP18-058",
@@ -1423,7 +1866,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] You may return 1 of your Characters to the owner's hand: Place up to 1 Character with a cost of 4 or less at the bottom of the owner's deck.",
     "trigger": "[Trigger] Activate this card's [Main] effect.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-058",
+    "imageIdJp": "OP18-058",
+    "cardNumberEn": "OP18-058",
+    "cardNumberJp": "OP18-058",
+    "nameEn": "This Kingdom is Doomed. You Can't Save It!",
+    "nameJp": "お前に国は救えない"
   },
   {
     "imageId": "OP18-059",
@@ -1443,7 +1892,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] You may rest 1 of your DON!! cards and trash 1 card with a type including \"Baroque Works\" from your hand: Draw 2 cards. [Counter] You may trash 1 card from your hand: Up to 1 of your Leader or Characters gains +3000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-059",
+    "imageIdJp": "OP18-059",
+    "cardNumberEn": "OP18-059",
+    "cardNumberJp": "OP18-059",
+    "nameEn": "I Pray For Your Success.",
+    "nameJp": "武運を祈る"
   },
   {
     "imageId": "OP18-060",
@@ -1463,7 +1918,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Once Per Turn] When a Character is played from your trash, draw 2 cards and trash 1 card from your hand. [Activate: Main] [Once Per Turn] You may trash 1 card from your hand: If you have a Character with 8000 base power or more, add up to 1 DON!! card as active from your DON!! deck.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-060",
+    "imageIdJp": "OP18-060",
+    "cardNumberEn": "OP18-060",
+    "cardNumberJp": "OP18-060",
+    "nameEn": "Saint Gunko",
+    "nameJp": "軍子宮"
   },
   {
     "imageId": "OP18-060_p1",
@@ -1483,7 +1944,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Once Per Turn] When a Character is played from your trash, draw 2 cards and trash 1 card from your hand. [Activate: Main] [Once Per Turn] You may trash 1 card from your hand: If you have a Character with 8000 base power or more, add up to 1 DON!! card as active from your DON!! deck.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-060_p1",
+    "imageIdJp": "OP18-060_p1",
+    "cardNumberEn": "OP18-060",
+    "cardNumberJp": "OP18-060",
+    "nameEn": "Saint Gunko",
+    "nameJp": "軍子宮"
   },
   {
     "imageId": "OP18-060_p2",
@@ -1503,7 +1970,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Once Per Turn] When a Character is played from your trash, draw 2 cards and trash 1 card from your hand. [Activate: Main] [Once Per Turn] You may trash 1 card from your hand: If you have a Character with 8000 base power or more, add up to 1 DON!! card as active from your DON!! deck.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "imageIdEn": "OP18-060_p2",
+    "imageIdJp": "OP18-060_p2",
+    "cardNumberEn": "OP18-060",
+    "cardNumberJp": "OP18-060",
+    "nameEn": "Saint Gunko",
+    "nameJp": "軍子宮"
   },
   {
     "imageId": "OP18-061",
@@ -1523,7 +1996,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to a total of 2 Stage cards or {Water Seven} type cards and add them to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-061",
+    "imageIdJp": "OP18-061",
+    "cardNumberEn": "OP18-061",
+    "cardNumberJp": "OP18-061",
+    "nameEn": "Iceburg",
+    "nameJp": "アイスバーグ"
   },
   {
     "imageId": "OP18-061_p1",
@@ -1543,7 +2022,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to a total of 2 Stage cards or {Water Seven} type cards and add them to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-061_p1",
+    "imageIdJp": "OP18-061_p1",
+    "cardNumberEn": "OP18-061",
+    "cardNumberJp": "OP18-061",
+    "nameEn": "Iceburg",
+    "nameJp": "アイスバーグ"
   },
   {
     "imageId": "OP18-062",
@@ -1563,7 +2048,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-062",
+    "imageIdJp": "OP18-062",
+    "cardNumberEn": "OP18-062",
+    "cardNumberJp": "OP18-062",
+    "nameEn": "Oimo & Kashii",
+    "nameJp": "オイモ＆カーシー"
   },
   {
     "imageId": "OP18-063",
@@ -1583,7 +2074,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] You may K.O. 1 of your Stages with a cost of 5 or less: Add up to 1 DON!! card as rested from your DON!! deck.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-063",
+    "imageIdJp": "OP18-063",
+    "cardNumberEn": "OP18-063",
+    "cardNumberJp": "OP18-063",
+    "nameEn": "Kiwi & Mozu",
+    "nameJp": "キウイ＆モズ"
   },
   {
     "imageId": "OP18-064",
@@ -1603,13 +2100,19 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Your Turn] [On Play] DON!! −1: Up to 1 of your opponent's Characters with 7000 base power or less and up to 1 of your opponent's Characters with 5000 base power or less cannot attack until the end of your opponent's next End Phase. [On K.O.] DON!! −1: Play this Character card from your trash.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-064",
+    "imageIdJp": "OP18-064",
+    "cardNumberEn": "OP18-064",
+    "cardNumberJp": "OP18-064",
+    "nameEn": "Saint Killingham",
+    "nameJp": "キリンガム聖"
   },
   {
     "imageId": "OP18-064_p1",
     "cardNumber": "OP18-064",
     "name": "Saint Killingham",
-    "japaneseName": "TRSaint Killinghamキリンガム聖",
+    "japaneseName": "キリンガム聖",
     "rarity": "TR",
     "category": "character",
     "cost": 5,
@@ -1623,7 +2126,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Your Turn] [On Play] DON!! −1: Up to 1 of your opponent's Characters with 7000 base power or less and up to 1 of your opponent's Characters with 5000 base power or less cannot attack until the end of your opponent's next End Phase. [On K.O.] DON!! −1: Play this Character card from your trash.",
     "trigger": "",
     "variant": "TREASURE RARE",
-    "variantLabel": "TREASURE RARE"
+    "variantLabel": "TREASURE RARE",
+    "imageIdEn": null,
+    "imageIdJp": "OP18-064_p1",
+    "cardNumberEn": null,
+    "cardNumberJp": "OP18-064",
+    "nameEn": null,
+    "nameJp": "キリンガム聖"
   },
   {
     "imageId": "OP18-065",
@@ -1643,7 +2152,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Blocker] [On Play] DON!! −1: Play up to 1 {Celestial Dragons} type Character card with 6000 power or less from your trash.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-065",
+    "imageIdJp": "OP18-065",
+    "cardNumberEn": "OP18-065",
+    "cardNumberJp": "OP18-065",
+    "nameEn": "Saint Gunko",
+    "nameJp": "軍子宮"
   },
   {
     "imageId": "OP18-065_p1",
@@ -1663,7 +2178,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Blocker] [On Play] DON!! −1: Play up to 1 {Celestial Dragons} type Character card with 6000 power or less from your trash.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-065_p1",
+    "imageIdJp": "OP18-065_p1",
+    "cardNumberEn": "OP18-065",
+    "cardNumberJp": "OP18-065",
+    "nameEn": "Saint Gunko",
+    "nameJp": "軍子宮"
   },
   {
     "imageId": "OP18-065_p2",
@@ -1683,7 +2204,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Blocker] [On Play] DON!! −1: Play up to 1 {Celestial Dragons} type Character card with 6000 power or less from your trash.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "imageIdEn": "OP18-065_p2",
+    "imageIdJp": "OP18-065_p2",
+    "cardNumberEn": "OP18-065",
+    "cardNumberJp": "OP18-065",
+    "nameEn": "Saint Gunko",
+    "nameJp": "軍子宮"
   },
   {
     "imageId": "OP18-066",
@@ -1703,7 +2230,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Activate: Main] You may K.O. 1 of your Stages with a cost of 5 or less: This Character gains [Rush] during this turn. (This card can attack on the turn in which it is played.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-066",
+    "imageIdJp": "OP18-066",
+    "cardNumberEn": "OP18-066",
+    "cardNumberJp": "OP18-066",
+    "nameEn": "Zambai",
+    "nameJp": "ザンバイ"
   },
   {
     "imageId": "OP18-067",
@@ -1723,7 +2256,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] You may trash 1 {Big Mom Pirates} type card from your hand: Draw 2 cards.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-067",
+    "imageIdJp": "OP18-067",
+    "cardNumberEn": "OP18-067",
+    "cardNumberJp": "OP18-067",
+    "nameEn": "Charlotte Smoothie",
+    "nameJp": "シャーロット・スムージー"
   },
   {
     "imageId": "OP18-068",
@@ -1743,7 +2282,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Once Per Turn] If this Character would be K.O.'d, you may DON!! −1 instead. [On Play] DON!! −1: Up to 1 of your opponent's Characters with a cost of 7 or less cannot be rested until the end of your opponent's next End Phase.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-068",
+    "imageIdJp": "OP18-068",
+    "cardNumberEn": "OP18-068",
+    "cardNumberJp": "OP18-068",
+    "nameEn": "Senor Pink",
+    "nameJp": "セニョール・ピンク"
   },
   {
     "imageId": "OP18-069",
@@ -1763,7 +2308,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "If your {The Franky Family} type Character would be K.O.'d, you may DON!! −1 and rest this Character instead.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-069",
+    "imageIdJp": "OP18-069",
+    "cardNumberEn": "OP18-069",
+    "cardNumberJp": "OP18-069",
+    "nameEn": "Sodomu & Gomora",
+    "nameJp": "ソドム＆ゴモラ"
   },
   {
     "imageId": "OP18-070",
@@ -1783,7 +2334,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] DON!! −1, you may trash 1 card from your hand: Add up to 2 Stage cards from your trash to your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-070",
+    "imageIdJp": "OP18-070",
+    "cardNumberEn": "OP18-070",
+    "cardNumberJp": "OP18-070",
+    "nameEn": "Tom",
+    "nameJp": "トム"
   },
   {
     "imageId": "OP18-071",
@@ -1803,7 +2360,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Once Per Turn] If your {Donquixote Pirates} type Character would be removed from the field by your opponent's effect, you may DON!! −1 instead. [Opponent's Turn] If your Leader is {Sugar}, this Characters gains [Blocker] and +2000 power.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-071",
+    "imageIdJp": "OP18-071",
+    "cardNumberEn": "OP18-071",
+    "cardNumberJp": "OP18-071",
+    "nameEn": "Trebol",
+    "nameJp": "トレーボル"
   },
   {
     "imageId": "OP18-072",
@@ -1823,7 +2386,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Blocker] [Activate: Main] [Once Per Turn] You may K.O. 1 of your Stages with a cost of 5 or less: If this Character was played on this turn, give up to 1 of your opponent's Characters −3000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-072",
+    "imageIdJp": "OP18-072",
+    "cardNumberEn": "OP18-072",
+    "cardNumberJp": "OP18-072",
+    "nameEn": "The Franky Family",
+    "nameJp": "フランキー一家"
   },
   {
     "imageId": "OP18-073",
@@ -1843,7 +2412,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-073",
+    "imageIdJp": "OP18-073",
+    "cardNumberEn": "OP18-073",
+    "cardNumberJp": "OP18-073",
+    "nameEn": "T-Bone",
+    "nameJp": "Tボーン"
   },
   {
     "imageId": "OP18-074",
@@ -1863,7 +2438,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Counter] If you have a Stage with a cost of 5 or more, up to 1 of your Leader or Characters gains +4000 power during this battle.",
     "trigger": "[Trigger] DON!! −1: Add up to 2 Stage cards from your trash to your hand.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-074",
+    "imageIdJp": "OP18-074",
+    "cardNumberEn": "OP18-074",
+    "cardNumberJp": "OP18-074",
+    "nameEn": "Can You Please Sail on the Ship I Made?!",
+    "nameJp": "おれの造ったその船に乗ってってくれねェか!!!?"
   },
   {
     "imageId": "OP18-075",
@@ -1883,7 +2464,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Draw 1 card, then add up to 1 DON!! card as rested from your DON!! deck. [Activate: Main] DON!! −2, you may rest this Stage: Set up to 1 of your {Straw Hat Crew} type Characters with 7000 power or less as active.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-075",
+    "imageIdJp": "OP18-075",
+    "cardNumberEn": "OP18-075",
+    "cardNumberJp": "OP18-075",
+    "nameEn": "Thousand Sunny",
+    "nameJp": "サウザンド・サニー号"
   },
   {
     "imageId": "OP18-076",
@@ -1903,7 +2490,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Draw 1 card, then add up to 1 DON!! card as rested from your DON!! deck. [On Your Opponent's Attack] You may rest this Stage: Your Leader with 5000 power or less and up to 2 of your Characters gain +1000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-076",
+    "imageIdJp": "OP18-076",
+    "cardNumberEn": "OP18-076",
+    "cardNumberJp": "OP18-076",
+    "nameEn": "Shark Submerge 3",
+    "nameJp": "シャークサブマージ3号"
   },
   {
     "imageId": "OP18-077",
@@ -1923,7 +2516,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Draw 1 card, then add up to 1 DON!! card as rested from your DON!! deck. [Activate: Main] You may rest this Stage: Up to 1 of your {Straw Hat Crew} type Characters gains [Rush: Character] during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-077",
+    "imageIdJp": "OP18-077",
+    "cardNumberEn": "OP18-077",
+    "cardNumberJp": "OP18-077",
+    "nameEn": "White Hobby Horse 1",
+    "nameJp": "シロモクバ1号"
   },
   {
     "imageId": "OP18-078",
@@ -1943,7 +2542,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Draw 1 card, then add up to 1 DON!! card as rested from your DON!! deck. [Activate: Main] You may rest this Stage: Give up to a total of 4 of your Leader or Characters 1 rested DON!! Card each.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-078",
+    "imageIdJp": "OP18-078",
+    "cardNumberEn": "OP18-078",
+    "cardNumberJp": "OP18-078",
+    "nameEn": "Mini-Merry",
+    "nameJp": "ミニメリー2号"
   },
   {
     "imageId": "OP18-079",
@@ -1963,7 +2568,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Activate: Main] You may rest 2 of your DON!! cards and this Leader and trash 1 card with a type including \"CP\" from your hand: Add up to 1 card from the top of your deck to the top of your Life cards.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-079",
+    "imageIdJp": "OP18-079",
+    "cardNumberEn": "OP18-079",
+    "cardNumberJp": "OP18-079",
+    "nameEn": "Spandam",
+    "nameJp": "スパンダム"
   },
   {
     "imageId": "OP18-079_p1",
@@ -1983,7 +2594,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Activate: Main] You may rest 2 of your DON!! cards and this Leader and trash 1 card with a type including \"CP\" from your hand: Add up to 1 card from the top of your deck to the top of your Life cards.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-079_p1",
+    "imageIdJp": "OP18-079_p1",
+    "cardNumberEn": "OP18-079",
+    "cardNumberJp": "OP18-079",
+    "nameEn": "Spandam",
+    "nameJp": "スパンダム"
   },
   {
     "imageId": "OP18-080",
@@ -2003,7 +2620,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Your Turn] [Once Per Turn] When a card is trashed from your hand by your [Marshall.D.Teach] Leader's effect, if you have no other [Van Augur], draw 1 card. [On K.O.] Draw 1 Card.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-080",
+    "imageIdJp": "OP18-080",
+    "cardNumberEn": "OP18-080",
+    "cardNumberJp": "OP18-080",
+    "nameEn": "Van Augur",
+    "nameJp": "ヴァン・オーガー"
   },
   {
     "imageId": "OP18-081",
@@ -2023,7 +2646,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "If you have a [Gecko Moria] Character, this Character gains [Double Attack] and [Blocker].",
     "trigger": "[Trigger] Play up to 1 {Thriller Bark Pirates} type Character card with a cost of 4 or less from your trash rested.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-081",
+    "imageIdJp": "OP18-081",
+    "cardNumberEn": "OP18-081",
+    "cardNumberJp": "OP18-081",
+    "nameEn": "Oars",
+    "nameJp": "オーズ"
   },
   {
     "imageId": "OP18-082",
@@ -2043,7 +2672,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[When Attacking] This Character's base power becomes the same as your opponent's Leader's power during this turn. [On K.O.] You may trash 1 card from your hand: If your Leader has the {Blackbeard Pirates} type, play this Character card from your trash rested.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-082",
+    "imageIdJp": "OP18-082",
+    "cardNumberEn": "OP18-082",
+    "cardNumberJp": "OP18-082",
+    "nameEn": "Catarina Devon",
+    "nameJp": "カタリーナ・デボン"
   },
   {
     "imageId": "OP18-083",
@@ -2063,7 +2698,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Your Turn] [On Play] Play up to 1 [Sleeptids] from your trash. [On K.O.] You may trash 2 cards from your hand: Play this Character card from your trash.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-083",
+    "imageIdJp": "OP18-083",
+    "cardNumberEn": "OP18-083",
+    "cardNumberJp": "OP18-083",
+    "nameEn": "Saint Killingham",
+    "nameJp": "キリンガム聖"
   },
   {
     "imageId": "OP18-083_p1",
@@ -2083,7 +2724,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Your Turn] [On Play] Play up to 1 [Sleeptids] from your trash. [On K.O.] You may trash 2 cards from your hand: Play this Character card from your trash.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-083_p1",
+    "imageIdJp": "OP18-083_p1",
+    "cardNumberEn": "OP18-083",
+    "cardNumberJp": "OP18-083",
+    "nameEn": "Saint Killingham",
+    "nameJp": "キリンガム聖"
   },
   {
     "imageId": "OP18-084",
@@ -2103,7 +2750,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Look at 4 cards from the top of your deck; reveal up to 1 {Holy Knights of God} type card and add it to your hand. Then, trash the rest. [Activate: Main] You may rest 4 of your DON!! cards: Play up to 1 {Holy Knights of God} type Character card with a cost of 6 or less from your trash.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-084",
+    "imageIdJp": "OP18-084",
+    "cardNumberEn": "OP18-084",
+    "cardNumberJp": "OP18-084",
+    "nameEn": "Saint Gunko",
+    "nameJp": "軍子宮"
   },
   {
     "imageId": "OP18-084_p1",
@@ -2123,7 +2776,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Look at 4 cards from the top of your deck; reveal up to 1 {Holy Knights of God} type card and add it to your hand. Then, trash the rest. [Activate: Main] You may rest 4 of your DON!! cards: Play up to 1 {Holy Knights of God} type Character card with a cost of 6 or less from your trash.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-084_p1",
+    "imageIdJp": "OP18-084_p1",
+    "cardNumberEn": "OP18-084",
+    "cardNumberJp": "OP18-084",
+    "nameEn": "Saint Gunko",
+    "nameJp": "軍子宮"
   },
   {
     "imageId": "OP18-085",
@@ -2143,7 +2802,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Activate: Main] You may return this Character to the owner's hand: Up to 1 of your [Saint Shamrock] Characters gains [Rush], [Banish] or [Unblockable] during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-085",
+    "imageIdJp": "OP18-085",
+    "cardNumberEn": "OP18-085",
+    "cardNumberJp": "OP18-085",
+    "nameEn": "Cerberus",
+    "nameJp": "ケルベロス"
   },
   {
     "imageId": "OP18-086",
@@ -2163,7 +2828,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "This Character gains +12 cost. [On K.O.] K.O. up to 1 of your opponent's Characters with a cost of 4 or less.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-086",
+    "imageIdJp": "OP18-086",
+    "cardNumberEn": "OP18-086",
+    "cardNumberJp": "OP18-086",
+    "nameEn": "Goldberg",
+    "nameJp": "ゴールドバーグ"
   },
   {
     "imageId": "OP18-087",
@@ -2183,7 +2854,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "This Character gains +12 cost. If you only have Characters with a cost of 12 or more, this Character gains +2000 power.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-087",
+    "imageIdJp": "OP18-087",
+    "cardNumberEn": "OP18-087",
+    "cardNumberJp": "OP18-087",
+    "nameEn": "Stansen",
+    "nameJp": "スタンセン"
   },
   {
     "imageId": "OP18-088",
@@ -2203,7 +2880,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Your Turn] [On Play] If you have 6 or more DON!! cards on your field, K.O. up to 1 of your opponent's Characters with a base cost of 4 or less. [On K.O.] You may trash 2 cards from your hand: Play this Character card from your trash.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-088",
+    "imageIdJp": "OP18-088",
+    "cardNumberEn": "OP18-088",
+    "cardNumberJp": "OP18-088",
+    "nameEn": "Saint Sommers",
+    "nameJp": "ソマーズ聖"
   },
   {
     "imageId": "OP18-088_p1",
@@ -2223,7 +2906,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Your Turn] [On Play] If you have 6 or more DON!! cards on your field, K.O. up to 1 of your opponent's Characters with a base cost of 4 or less. [On K.O.] You may trash 2 cards from your hand: Play this Character card from your trash.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-088_p1",
+    "imageIdJp": "OP18-088_p1",
+    "cardNumberEn": "OP18-088",
+    "cardNumberJp": "OP18-088",
+    "nameEn": "Saint Sommers",
+    "nameJp": "ソマーズ聖"
   },
   {
     "imageId": "OP18-089",
@@ -2243,7 +2932,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "This Character gains +12 cost. [On Play] You may trash 1 card from your hand: Your opponent trashes 1 card from their hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-089",
+    "imageIdJp": "OP18-089",
+    "cardNumberEn": "OP18-089",
+    "cardNumberJp": "OP18-089",
+    "nameEn": "Dorry",
+    "nameJp": "ドリー"
   },
   {
     "imageId": "OP18-090",
@@ -2263,7 +2958,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-090",
+    "imageIdJp": "OP18-090",
+    "cardNumberEn": "OP18-090",
+    "cardNumberJp": "OP18-090",
+    "nameEn": "Brook",
+    "nameJp": "ブルック"
   },
   {
     "imageId": "OP18-091",
@@ -2283,7 +2984,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "This Character gains +12 cost. [When Attacking] You may trash 1 card from your hand: Add up to 1 of your Character cards with a cost of 2 or less from your trash to your hand.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-091",
+    "imageIdJp": "OP18-091",
+    "cardNumberEn": "OP18-091",
+    "cardNumberJp": "OP18-091",
+    "nameEn": "Brogy",
+    "nameJp": "ブロギー"
   },
   {
     "imageId": "OP18-092",
@@ -2303,7 +3010,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "If there is a Character with a cost of 12 or more, this Character gains +3000 power. If you have 10 or more cards in your trash, this Character gains [Rush]. (This card can attack on the turn in which it is played.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-092",
+    "imageIdJp": "OP18-092",
+    "cardNumberEn": "OP18-092",
+    "cardNumberJp": "OP18-092",
+    "nameEn": "Roronoa Zoro",
+    "nameJp": "ロロノア・ゾロ"
   },
   {
     "imageId": "OP18-093",
@@ -2323,7 +3036,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "Under the rules of this game, you may have any number of this card in your deck. [Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-093",
+    "imageIdJp": "OP18-093",
+    "cardNumberEn": "OP18-093",
+    "cardNumberJp": "OP18-093",
+    "nameEn": "Sleeptids",
+    "nameJp": "MMA"
   },
   {
     "imageId": "OP18-093_p1",
@@ -2343,7 +3062,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "Under the rules of this game, you may have any number of this card in your deck. [Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-093_p1",
+    "imageIdJp": "OP18-093_p1",
+    "cardNumberEn": "OP18-093",
+    "cardNumberJp": "OP18-093",
+    "nameEn": "Sleeptids",
+    "nameJp": "MMA"
   },
   {
     "imageId": "OP18-093_p2",
@@ -2363,7 +3088,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "Under the rules of this game, you may have any number of this card in your deck. [Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "imageIdEn": "OP18-093_p2",
+    "imageIdJp": "OP18-093_p2",
+    "cardNumberEn": "OP18-093",
+    "cardNumberJp": "OP18-093",
+    "nameEn": "Sleeptids",
+    "nameJp": "MMA"
   },
   {
     "imageId": "OP18-094",
@@ -2383,7 +3114,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] Look at 5 cards from the top of your deck; reveal up to 1 {Elbaph} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "[Trigger] Draw 1 card.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-094",
+    "imageIdJp": "OP18-094",
+    "cardNumberEn": "OP18-094",
+    "cardNumberJp": "OP18-094",
+    "nameEn": "Hee Hee Hee!! I Smell Adventure!!",
+    "nameJp": "ししし!!冒険の匂いがプンプンする!!"
   },
   {
     "imageId": "OP18-095",
@@ -2403,7 +3140,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] If your Leader has the {Celestial Dragons} type, look at 5 cards from the top of your deck; reveal up to 1 [Sleeptids] or {Holy Knights of God} type card and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "[Trigger] Activate this card's [Main] effect.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-095",
+    "imageIdJp": "OP18-095",
+    "cardNumberEn": "OP18-095",
+    "cardNumberJp": "OP18-095",
+    "nameEn": "I'm Late, I'm Very Late!!",
+    "nameJp": "遅刻だ遅刻ゥ～!!"
   },
   {
     "imageId": "OP18-096",
@@ -2423,7 +3166,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] You may rest 3 of your DON!! cards: Play up to 1 {Holy Knights of God} type Character card with a cost of 6 or less from your trash. [Counter] If you have 10 or more cards in your trash, up to 1 of your Leader or Characters gains +4000 power during this battle.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-096",
+    "imageIdJp": "OP18-096",
+    "cardNumberEn": "OP18-096",
+    "cardNumberJp": "OP18-096",
+    "nameEn": "I'll Make the Call",
+    "nameJp": "呼ぶぞ"
   },
   {
     "imageId": "OP18-096_p1",
@@ -2443,7 +3192,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] You may rest 3 of your DON!! cards: Play up to 1 {Holy Knights of God} type Character card with a cost of 6 or less from your trash. [Counter] If you have 10 or more cards in your trash, up to 1 of your Leader or Characters gains +4000 power during this battle.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-096_p1",
+    "imageIdJp": "OP18-096_p1",
+    "cardNumberEn": "OP18-096",
+    "cardNumberJp": "OP18-096",
+    "nameEn": "I'll Make the Call",
+    "nameJp": "呼ぶぞ"
   },
   {
     "imageId": "OP18-097",
@@ -2463,7 +3218,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "If your Leader has the {Celestial Dragons} type, the cost of playing {Holy Knights of God} or {Five Elders} type Character cards with a cost of 2 or more from your hand will be reduced by 1. [On Play] Draw 1 card and trash 2 cards from the top of your deck.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-097",
+    "imageIdJp": "OP18-097",
+    "cardNumberEn": "OP18-097",
+    "cardNumberJp": "OP18-097",
+    "nameEn": "Abyss Pentagram",
+    "nameJp": "五芒星"
   },
   {
     "imageId": "OP18-098",
@@ -2483,7 +3244,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Unblockable] (This card cannot be blocked.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-098",
+    "imageIdJp": "OP18-098",
+    "cardNumberEn": "OP18-098",
+    "cardNumberJp": "OP18-098",
+    "nameEn": "Onigumo",
+    "nameJp": "オニグモ"
   },
   {
     "imageId": "OP18-099",
@@ -2503,7 +3270,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Add up to 1 card with a type including \"CP\" from your hand to the top or bottom of your Life cards face-up.",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", draw 1 card and place up to 1 Character with a cost of 8 or less at the bottom of the owner's deck.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-099",
+    "imageIdJp": "OP18-099",
+    "cardNumberEn": "OP18-099",
+    "cardNumberJp": "OP18-099",
+    "nameEn": "Kaku",
+    "nameJp": "カク"
   },
   {
     "imageId": "OP18-099_p1",
@@ -2523,7 +3296,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Add up to 1 card with a type including \"CP\" from your hand to the top or bottom of your Life cards face-up.",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", draw 1 card and place up to 1 Character with a cost of 8 or less at the bottom of the owner's deck.",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-099_p1",
+    "imageIdJp": "OP18-099_p1",
+    "cardNumberEn": "OP18-099",
+    "cardNumberJp": "OP18-099",
+    "nameEn": "Kaku",
+    "nameJp": "カク"
   },
   {
     "imageId": "OP18-100",
@@ -2543,7 +3322,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Draw 1 card, then add up to 1 card with a type including \"CP\" from your hand to the top or bottom of your Life cards face-up.",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", draw 1 card and rest up to 1 of your opponent's Leader or Characters.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-100",
+    "imageIdJp": "OP18-100",
+    "cardNumberEn": "OP18-100",
+    "cardNumberJp": "OP18-100",
+    "nameEn": "Kalifa",
+    "nameJp": "カリファ"
   },
   {
     "imageId": "OP18-100_p1",
@@ -2563,7 +3348,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Draw 1 card, then add up to 1 card with a type including \"CP\" from your hand to the top or bottom of your Life cards face-up.",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", draw 1 card and rest up to 1 of your opponent's Leader or Characters.",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-100_p1",
+    "imageIdJp": "OP18-100_p1",
+    "cardNumberEn": "OP18-100",
+    "cardNumberJp": "OP18-100",
+    "nameEn": "Kalifa",
+    "nameJp": "カリファ"
   },
   {
     "imageId": "OP18-101",
@@ -2583,7 +3374,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On K.O.] Add up to 1 card with a type including \"CP\" from your hand to the top or bottom of your Life cards face-up.",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", K.O. or rest up to 1 of your opponent's Characters with a cost of 6 or less.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-101",
+    "imageIdJp": "OP18-101",
+    "cardNumberEn": "OP18-101",
+    "cardNumberJp": "OP18-101",
+    "nameEn": "Kumadori",
+    "nameJp": "クマドリ"
   },
   {
     "imageId": "OP18-102",
@@ -2603,7 +3400,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "-",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-102",
+    "imageIdJp": "OP18-102",
+    "cardNumberEn": "OP18-102",
+    "cardNumberJp": "OP18-102",
+    "nameEn": "Jerry",
+    "nameJp": "ジェリー"
   },
   {
     "imageId": "OP18-103",
@@ -2623,7 +3426,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On K.O.] Add up to 1 card from the top of your deck to the top of your Life cards. Then, trash up to 1 card from the top of your opponent's Life cards.",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", draw 1 card and place up to 1 Character with a cost of 8 or less at the bottom of the owner's deck.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-103",
+    "imageIdJp": "OP18-103",
+    "cardNumberEn": "OP18-103",
+    "cardNumberJp": "OP18-103",
+    "nameEn": "Jabra",
+    "nameJp": "ジャブラ"
   },
   {
     "imageId": "OP18-104",
@@ -2643,7 +3452,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Banish] (When this card deals damage, the target card is trashed without activating its Trigger.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-104",
+    "imageIdJp": "OP18-104",
+    "cardNumberEn": "OP18-104",
+    "cardNumberJp": "OP18-104",
+    "nameEn": "Strawberry",
+    "nameJp": "ストロベリー"
   },
   {
     "imageId": "OP18-105",
@@ -2663,7 +3478,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "-",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", reveal up to 1 card with a type including \"CP\" other than [Spandam] from your hand. Activate the [Trigger] effect of the revealed card.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-105",
+    "imageIdJp": "OP18-105",
+    "cardNumberEn": "OP18-105",
+    "cardNumberJp": "OP18-105",
+    "nameEn": "Spandam",
+    "nameJp": "スパンダム"
   },
   {
     "imageId": "OP18-106",
@@ -2683,7 +3504,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Double Attack] (This card deals 2 damage.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-106",
+    "imageIdJp": "OP18-106",
+    "cardNumberEn": "OP18-106",
+    "cardNumberJp": "OP18-106",
+    "nameEn": "Doberman",
+    "nameJp": "ドーベルマン"
   },
   {
     "imageId": "OP18-107",
@@ -2703,7 +3530,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Blocker]",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", place up to 1 Character with a cost of 5 or less at the bottom of the owner's deck.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-107",
+    "imageIdJp": "OP18-107",
+    "cardNumberEn": "OP18-107",
+    "cardNumberJp": "OP18-107",
+    "nameEn": "Nero",
+    "nameJp": "ネロ"
   },
   {
     "imageId": "OP18-108",
@@ -2723,7 +3556,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] You may trash 1 card with a type including \"CP\" from your hand: Draw 2 cards. [Activate: Main] You may rest this Character: Up to 1 of your [Spandam] gains +1000 power during this turn.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-108",
+    "imageIdJp": "OP18-108",
+    "cardNumberEn": "OP18-108",
+    "cardNumberJp": "OP18-108",
+    "nameEn": "Funkfreed",
+    "nameJp": "ファンクフリード"
   },
   {
     "imageId": "OP18-109",
@@ -2743,7 +3582,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Blocker]",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", K.O. or rest up to 1 of your opponent's Characters with a cost of 6 or less.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-109",
+    "imageIdJp": "OP18-109",
+    "cardNumberEn": "OP18-109",
+    "cardNumberJp": "OP18-109",
+    "nameEn": "Fukurou",
+    "nameJp": "フクロウ"
   },
   {
     "imageId": "OP18-110",
@@ -2763,7 +3608,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Look at 4 cards from the top of your deck; reveal up to 1 card with a type including \"CP\" other than [Blueno] and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "[Trigger] Draw 1 card and K.O. up to 1 of your opponent's Characters with a cost of 2 or less.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-110",
+    "imageIdJp": "OP18-110",
+    "cardNumberEn": "OP18-110",
+    "cardNumberJp": "OP18-110",
+    "nameEn": "Blueno",
+    "nameJp": "ブルーノ"
   },
   {
     "imageId": "OP18-111",
@@ -2783,7 +3634,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Rush] (This card can attack on the turn in which it is played.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-111",
+    "imageIdJp": "OP18-111",
+    "cardNumberEn": "OP18-111",
+    "cardNumberJp": "OP18-111",
+    "nameEn": "Momonga",
+    "nameJp": "モモンガ"
   },
   {
     "imageId": "OP18-112",
@@ -2803,7 +3660,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Blocker] (After your opponent declares an attack, you may rest this card to make it the new target of the attack.)",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-112",
+    "imageIdJp": "OP18-112",
+    "cardNumberEn": "OP18-112",
+    "cardNumberJp": "OP18-112",
+    "nameEn": "Yamakaji",
+    "nameJp": "ヤマカジ"
   },
   {
     "imageId": "OP18-113",
@@ -2823,7 +3686,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play]/[On K.O.] Trash up to 1 card from the top of your opponent's Life cards.",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", draw 1 card and place up to 1 Character with a cost of 8 or less at the bottom of the owner's deck.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-113",
+    "imageIdJp": "OP18-113",
+    "cardNumberEn": "OP18-113",
+    "cardNumberJp": "OP18-113",
+    "nameEn": "Rob Lucci",
+    "nameJp": "ロブ・ルッチ"
   },
   {
     "imageId": "OP18-113_p1",
@@ -2843,7 +3712,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play]/[On K.O.] Trash up to 1 card from the top of your opponent's Life cards.",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", draw 1 card and place up to 1 Character with a cost of 8 or less at the bottom of the owner's deck.",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-113_p1",
+    "imageIdJp": "OP18-113_p1",
+    "cardNumberEn": "OP18-113",
+    "cardNumberJp": "OP18-113",
+    "nameEn": "Rob Lucci",
+    "nameJp": "ロブ・ルッチ"
   },
   {
     "imageId": "OP18-114",
@@ -2863,7 +3738,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Look at all of your Life cards and place them back in your Life area in any order.",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", place up to 1 Character with a cost of 5 or less at the bottom of the owner's deck.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-114",
+    "imageIdJp": "OP18-114",
+    "cardNumberEn": "OP18-114",
+    "cardNumberJp": "OP18-114",
+    "nameEn": "Wanze",
+    "nameJp": "ワンゼ"
   },
   {
     "imageId": "OP18-115",
@@ -2883,7 +3764,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] K.O. up to 1 of your opponent's Characters with a cost of 5 or less.",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", draw 1 card and place up to 1 Character with a cost of 7 or less at the bottom of the owner's deck.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-115",
+    "imageIdJp": "OP18-115",
+    "cardNumberEn": "OP18-115",
+    "cardNumberJp": "OP18-115",
+    "nameEn": "Ten Finger Pistol",
+    "nameJp": "十指銃"
   },
   {
     "imageId": "OP18-116",
@@ -2903,7 +3790,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Counter] You may trash 1 card from your hand: Up to 1 of your Leader or Characters gains +3000 power during this battle.",
     "trigger": "[Trigger] If your Leader's type includes \"CP\", rest up to 1 of your opponent's Characters.",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-116",
+    "imageIdJp": "OP18-116",
+    "cardNumberEn": "OP18-116",
+    "cardNumberJp": "OP18-116",
+    "nameEn": "Iron Body Empty Tree",
+    "nameJp": "鉄塊 空木"
   },
   {
     "imageId": "OP18-117",
@@ -2923,7 +3816,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Main] You may trash all of your Life cards: If your Leader is [Spandam], trash all Characters and play up to a total of 5 {Vice Admiral} type Character cards with different card names from your deck or trash. Then, shuffle your deck.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-117",
+    "imageIdJp": "OP18-117",
+    "cardNumberEn": "OP18-117",
+    "cardNumberJp": "OP18-117",
+    "nameEn": "Buster Call",
+    "nameJp": "バスターコール"
   },
   {
     "imageId": "OP18-118",
@@ -2943,7 +3842,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Set up to 3 of your DON!! cards as active. Then, up to 1 of your opponent's Characters cannot be rested until the end of your opponent's next End Phase. [End of Your Turn] Set up to 1 of your {Water Seven} type cards as active.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-118",
+    "imageIdJp": "OP18-118",
+    "cardNumberEn": "OP18-118",
+    "cardNumberJp": "OP18-118",
+    "nameEn": "Monkey.D.Luffy",
+    "nameJp": "モンキー・Ｄ・ルフィ"
   },
   {
     "imageId": "OP18-118_p1",
@@ -2963,7 +3868,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Set up to 3 of your DON!! cards as active. Then, up to 1 of your opponent's Characters cannot be rested until the end of your opponent's next End Phase. [End of Your Turn] Set up to 1 of your {Water Seven} type cards as active.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-118_p1",
+    "imageIdJp": "OP18-118_p1",
+    "cardNumberEn": "OP18-118",
+    "cardNumberJp": "OP18-118",
+    "nameEn": "Monkey.D.Luffy",
+    "nameJp": "モンキー・Ｄ・ルフィ"
   },
   {
     "imageId": "OP18-119",
@@ -2983,7 +3894,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On K.O.] You may trash 1 card from your hand: Play this Character card from your trash. [Activate: Main] [Once Per Turn] If this Character was played on this turn, play up to 1 {Holy Knights of God} type Character card with a cost of 6 or less from your trash.",
     "trigger": "",
     "variant": "Base",
-    "variantLabel": "Base"
+    "variantLabel": "Base",
+    "imageIdEn": "OP18-119",
+    "imageIdJp": "OP18-119",
+    "cardNumberEn": "OP18-119",
+    "cardNumberJp": "OP18-119",
+    "nameEn": "Saint Shamrock",
+    "nameJp": "シャムロック聖"
   },
   {
     "imageId": "OP18-119_p1",
@@ -3003,7 +3920,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On K.O.] You may trash 1 card from your hand: Play this Character card from your trash. [Activate: Main] [Once Per Turn] If this Character was played on this turn, play up to 1 {Holy Knights of God} type Character card with a cost of 6 or less from your trash.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 1"
+    "variantLabel": "Parallel 1",
+    "imageIdEn": "OP18-119_p1",
+    "imageIdJp": "OP18-119_p1",
+    "cardNumberEn": "OP18-119",
+    "cardNumberJp": "OP18-119",
+    "nameEn": "Saint Shamrock",
+    "nameJp": "シャムロック聖"
   },
   {
     "imageId": "OP18-119_p2",
@@ -3023,7 +3946,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On K.O.] You may trash 1 card from your hand: Play this Character card from your trash. [Activate: Main] [Once Per Turn] If this Character was played on this turn, play up to 1 {Holy Knights of God} type Character card with a cost of 6 or less from your trash.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "imageIdEn": "OP18-119_p2",
+    "imageIdJp": "OP18-119_p2",
+    "cardNumberEn": "OP18-119",
+    "cardNumberJp": "OP18-119",
+    "nameEn": "Saint Shamrock",
+    "nameJp": "シャムロック聖"
   },
   {
     "imageId": "OP18-084_p2",
@@ -3043,7 +3972,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Look at 4 cards from the top of your deck; reveal up to 1 {Holy Knights of God} type card and add it to your hand. Then, trash the rest. [Activate: Main] You may rest 4 of your DON!! cards: Play up to 1 {Holy Knights of God} type Character card with a cost of 6 or less from your trash.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "imageIdEn": "OP18-084_p2",
+    "imageIdJp": "OP18-084_p2",
+    "cardNumberEn": "OP18-084",
+    "cardNumberJp": "OP18-084",
+    "nameEn": "Saint Gunko",
+    "nameJp": "軍子宮"
   },
   {
     "imageId": "OP17-119_p2",
@@ -3063,7 +3998,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "This Character gains +12 cost, and if it is your opponent's turn, this Character gains +3000 power. [On Play] K.O. your opponent's Characters with a total cost of 4 or less.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 2"
+    "variantLabel": "Parallel 2",
+    "imageIdEn": "OP17-119_p2",
+    "imageIdJp": "OP17-119_p2",
+    "cardNumberEn": "OP17-119",
+    "cardNumberJp": "OP17-119",
+    "nameEn": "Loki",
+    "nameJp": "ロキ"
   },
   {
     "imageId": "OP17-119_p3",
@@ -3083,10 +4024,16 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "This Character gains +12 cost, and if it is your opponent's turn, this Character gains +3000 power. [On Play] K.O. your opponent's Characters with a total cost of 4 or less.",
     "trigger": "",
     "variant": "Parallel",
-    "variantLabel": "Parallel 3"
+    "variantLabel": "Parallel 3",
+    "imageIdEn": "OP17-119_p3",
+    "imageIdJp": "OP17-119_p3",
+    "cardNumberEn": "OP17-119",
+    "cardNumberJp": "OP17-119",
+    "nameEn": "Loki",
+    "nameJp": "ロキ"
   },
   {
-    "imageId": "OP13-012_p2",
+    "imageId": "OP13-012_p1",
     "cardNumber": "OP13-012",
     "name": "Nefeltari Vivi",
     "japaneseName": "ネフェルタリ・ビビ",
@@ -3103,7 +4050,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Look at 4 cards from the top of your deck; reveal up to 1 {Alabasta} or {Straw Hat Crew} type card with a cost of 2 or more and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "imageIdEn": "OP13-012_p1",
+    "imageIdJp": "OP13-012_p2",
+    "cardNumberEn": "OP13-012",
+    "cardNumberJp": "OP13-012",
+    "nameEn": "Nefeltari Vivi",
+    "nameJp": "ネフェルタリ・ビビ"
   },
   {
     "imageId": "OP13-113_p2",
@@ -3123,10 +4076,16 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Look at 4 cards from the top of your deck; reveal up to 1 card with a [Trigger] other than [Lilith] and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "[Trigger] Activate this card's [On Play] effect.",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "imageIdEn": "OP13-113_p2",
+    "imageIdJp": "OP13-113_p2",
+    "cardNumberEn": "OP13-113",
+    "cardNumberJp": "OP13-113",
+    "nameEn": "Lilith",
+    "nameJp": "リリス"
   },
   {
-    "imageId": "OP17-040_p1",
+    "imageId": "OP17-040_p2",
     "cardNumber": "OP17-040",
     "name": "Edward.Newgate",
     "japaneseName": "エドワード・ニューゲート",
@@ -3143,7 +4102,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Draw 1 card. [Once Per Turn] When your Leader with a type including \"Rocks Pirates\" attacks or is attacked, you may trash 1 card from your hand to activate this effect. Your Leader gains +3000 power during this battle.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "imageIdEn": "OP17-040_p2",
+    "imageIdJp": "OP17-040_p1",
+    "cardNumberEn": "OP17-040",
+    "cardNumberJp": "OP17-040",
+    "nameEn": "Edward.Newgate",
+    "nameJp": "エドワード・ニューゲート"
   },
   {
     "imageId": "ST24-004_p1",
@@ -3163,7 +4128,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Rest up to 1 of your opponent's Characters and that Character will not become active in your opponent's next Refresh Phase. Then, if your opponent has 2 or more rested Characters, your Leader gains +2000 power until the end of your opponent's next End Phase.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "imageIdEn": "ST24-004_p1",
+    "imageIdJp": "ST24-004_p1",
+    "cardNumberEn": "ST24-004",
+    "cardNumberJp": "ST24-004",
+    "nameEn": "Law & Bepo",
+    "nameJp": "ロー＆ベポ"
   },
   {
     "imageId": "ST34-004_p1",
@@ -3183,7 +4154,13 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] DON!! −4, you may trash 1 card from your hand: Add up to 1 card from the top of your deck to the top of your Life cards. Then, up to 1 of your opponent's Characters' base power becomes 0 during this turn.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "imageIdEn": "ST34-004_p1",
+    "imageIdJp": "ST34-004_p1",
+    "cardNumberEn": "ST34-004",
+    "cardNumberJp": "ST34-004",
+    "nameEn": "Charlotte Linlin",
+    "nameJp": "シャーロット・リンリン"
   }
 ]
 
@@ -3197,19 +4174,26 @@ function officialDirectImageUrl(imageId, language) {
   return host + '/images/cardlist/card/' + encodeURIComponent(imageId) + '.png'
 }
 
+
 function makeSupplementalMatch(printing, language) {
-  const exactProxy = buildOfficialImageProxyUrl(printing.imageId, language)
-  const baseProxy = buildOfficialImageProxyUrl(printing.cardNumber, language)
-  const exactDirect = officialDirectImageUrl(printing.imageId, language)
-  const baseDirect = officialDirectImageUrl(printing.cardNumber, language)
-  const imageUrls = [...new Set([exactProxy, printing.imageId !== printing.cardNumber ? baseProxy : '', exactDirect, baseDirect].filter(Boolean))]
   const isJapanese = language === 'jp'
+  const imageId = isJapanese ? printing.imageIdJp : printing.imageIdEn
+  const cardNumber = isJapanese ? printing.cardNumberJp : printing.cardNumberEn
+  const name = isJapanese ? printing.nameJp : printing.nameEn
+  if (!imageId || !cardNumber || !name) return null
+
+  const exactProxy = buildOfficialImageProxyUrl(imageId, language)
+  const baseProxy = buildOfficialImageProxyUrl(cardNumber, language)
+  const exactDirect = officialDirectImageUrl(imageId, language)
+  const baseDirect = officialDirectImageUrl(cardNumber, language)
+  const imageUrls = [...new Set([exactProxy, imageId !== cardNumber ? baseProxy : '', exactDirect, baseDirect].filter(Boolean))]
+
   return {
-    id: 'supplemental-op18:' + language + ':' + printing.imageId,
-    cardKey: 'op18:' + printing.cardNumber,
-    printingKey: 'op18:' + printing.imageId,
-    cardNumber: printing.cardNumber,
-    name: isJapanese ? printing.japaneseName : printing.name,
+    id: 'supplemental-op18:' + language + ':' + imageId,
+    cardKey: 'op18:' + language + ':' + cardNumber,
+    printingKey: 'op18:' + language + ':' + imageId,
+    cardNumber,
+    name,
     language: isJapanese ? 'Japanese' : 'English',
     languageCode: language,
     category: printing.category,
@@ -3227,17 +4211,15 @@ function makeSupplementalMatch(printing, language) {
     variantLabel: printing.variantLabel,
     imageUrl: exactProxy || exactDirect,
     imageUrls,
-    fallbackImageUrl: printing.imageId !== printing.cardNumber ? (baseProxy || baseDirect) : exactDirect,
-    sourceText: 'Bandai official OP-18 card-list metadata; parallel image IDs and Japanese names cross-checked against OPBoxIndex (2026-11-26).',
+    fallbackImageUrl: imageId !== cardNumber ? (baseProxy || baseDirect) : exactDirect,
+    sourceText: 'Bandai official English/Japanese OP-18 card-list metadata and language-specific printing identifiers, fetched 2026-11-27.',
     setCode: 'OP-18',
     setName: 'The Dominance of God [OP-18]',
     productKind: 'booster',
     releaseDate: isJapanese ? '2026-11-21' : '2026-11-20',
     sourceUrl: isJapanese ? JP_CARDLIST : EN_CARDLIST,
     blockIcon: printing.blockIcon,
-    source: printing.variant === 'Base'
-      ? 'Bandai official ' + (isJapanese ? 'Japanese' : 'English') + ' OP-18 card image via Cloudflare proxy'
-      : 'Bandai official ' + (isJapanese ? 'Japanese' : 'English') + ' OP-18 ' + printing.variantLabel + ' image via Cloudflare proxy (base image is fallback)',
+    source: 'Bandai official ' + (isJapanese ? 'Japanese' : 'English') + ' OP-18 ' + printing.variantLabel + ' image via Cloudflare proxy',
     officialCardlistUrl: isJapanese ? JP_CARDLIST : EN_CARDLIST,
     supplementalOfficial: true,
     verificationStatus: 'pending-live-image-check',
@@ -3245,26 +4227,35 @@ function makeSupplementalMatch(printing, language) {
 }
 
 export function getOp18SupplementalMatches(cardNumber = '') {
-  const normalized = String(cardNumber || '').toUpperCase().replace(/\s+/g, '').replace(/_/g, '-').replace(/^(OP)-(\d{2})-/, 'OP$2-')
+  const normalized = String(cardNumber || '').toUpperCase().replace(/\\s+/g, '').replace(/_/g, '-').replace(/^(OP)-(\\d{2})-/, 'OP$2-')
   return OP18_OFFICIAL_PRINTINGS
+    .flatMap((printing) => ['en', 'jp'].map((language) => makeSupplementalMatch(printing, language)).filter(Boolean))
     .filter((printing) => !normalized || printing.cardNumber === normalized)
-    .flatMap((printing) => ['en', 'jp'].map((language) => makeSupplementalMatch(printing, language)))
 }
 
 export function getOp18ImageTestItems(language = 'en') {
-  return OP18_OFFICIAL_PRINTINGS.map((printing, index) => ({
-    id: 'op18-image-check:' + language + ':' + printing.imageId,
-    cardNumber: printing.cardNumber,
-    name: language === 'jp' ? printing.japaneseName : printing.name,
-    language,
-    setCode: 'OP-18',
-    setName: 'The Dominance of God [OP-18]',
-    rarity: printing.rarity,
-    variant: printing.variantLabel,
-    imageId: printing.imageId,
-    imageUrl: buildOfficialImageProxyUrl(printing.imageId, language),
-    fallbackImageUrl: printing.imageId !== printing.cardNumber ? buildOfficialImageProxyUrl(printing.cardNumber, language) : '',
-    source: 'Bandai official image via same-origin Cloudflare proxy',
-    sampleSlot: index + 1,
-  }))
+  return OP18_OFFICIAL_PRINTINGS
+    .flatMap((printing) => {
+      const isJapanese = language === 'jp'
+      const imageId = isJapanese ? printing.imageIdJp : printing.imageIdEn
+      const cardNumber = isJapanese ? printing.cardNumberJp : printing.cardNumberEn
+      const name = isJapanese ? printing.nameJp : printing.nameEn
+      if (!imageId || !cardNumber || !name) return []
+      return [{ imageId, cardNumber, name, rarity: printing.rarity, variant: printing.variantLabel }]
+    })
+    .map((printing, index) => ({
+      id: 'op18-image-check:' + language + ':' + printing.imageId,
+      cardNumber: printing.cardNumber,
+      name: printing.name,
+      language,
+      setCode: 'OP-18',
+      setName: 'The Dominance of God [OP-18]',
+      rarity: printing.rarity,
+      variant: printing.variant,
+      imageId: printing.imageId,
+      imageUrl: buildOfficialImageProxyUrl(printing.imageId, language),
+      fallbackImageUrl: printing.imageId !== printing.cardNumber ? buildOfficialImageProxyUrl(printing.cardNumber, language) : '',
+      source: 'Bandai official image via same-origin Cloudflare proxy',
+      sampleSlot: index + 1,
+    }))
 }
