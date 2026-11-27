@@ -35,6 +35,7 @@ import {
 } from 'react-router-dom'
 import AdminDashboard from './admin/AdminDashboard'
 import AdminAccess from './admin/AdminAccess'
+import AccountSettingsPage from './AccountSettingsPage'
 import { findPrimaryCatalogueMatch } from './admin/cardCatalogue'
 import { hasSupabaseConfig, isPreviewBuild, supabase } from './lib/supabase'
 import { isDedicatedPreviewSupabaseProject } from './lib/supabaseConfig.js'
@@ -1063,6 +1064,7 @@ function Storefront() {
           path="/product/:productId"
           element={<ProductDetailPage products={storefrontProducts} onAdd={addToCart} />}
         />
+        <Route path="/account/settings" element={<AccountSettingsPage user={user} />} />
         <Route
           path="/account/orders"
           element={
@@ -1231,7 +1233,7 @@ function OrdersPage({ user, orders, orderItems, products, loading, error, onSign
   }
   return (
     <main className="page-width account-page">
-      <div className="account-heading"><div><p className="eyebrow">YOUR ACCOUNT</p><h1>Order <em>log.</em></h1><p>{user.email}</p></div><button className="button button--outline" type="button" onClick={onSignOut}>Sign out</button></div>
+      <div className="account-heading"><div><p className="eyebrow">YOUR ACCOUNT</p><h1>Order <em>log.</em></h1><p>{user.email}</p></div><div className="account-heading__actions"><Link className="button button--outline" to="/account/settings">Account settings</Link><button className="button button--outline" type="button" onClick={onSignOut}>Sign out</button></div></div>
       {error && <ErrorNotice message={error} />}
       {loading ? <div className="loading-state"><span className="loader" />Loading your orders…</div> : orders.length ? (
         <div className="order-list">
