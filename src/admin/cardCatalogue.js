@@ -10,7 +10,6 @@ import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMat
 import { EB05_OFFICIAL_PRINTINGS, EB05_BASE_CARD_NUMBERS, getEb05SupplementalMatches } from './eb05OfficialCatalogue.js'
 import { getOfficialSupplementReferenceTestItems } from './officialSupplementReferenceMatrix.js'
 import { applyCatalogueImageCorrections } from './catalogueImageCorrections.js'
-import { applyCatalogueOfficialMetadataCorrection } from './catalogueOfficialMetadataCorrections.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
