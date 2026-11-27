@@ -715,8 +715,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -726,7 +726,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -1438,8 +1438,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -1449,7 +1449,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -2163,8 +2163,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -2174,7 +2174,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -2888,8 +2888,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -2899,7 +2899,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -3629,8 +3629,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -3640,7 +3640,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -4370,8 +4370,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -4381,7 +4381,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -5096,8 +5096,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 149,
         "application_reference_printing_count": 149,
         "exact_identity_match": true,
@@ -5107,7 +5107,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -5822,8 +5822,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 149,
         "application_reference_printing_count": 149,
         "exact_identity_match": true,
@@ -5833,7 +5833,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -6555,8 +6555,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -6566,7 +6566,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -7288,8 +7288,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -7299,7 +7299,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -8021,8 +8021,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 151,
         "application_reference_printing_count": 151,
         "exact_identity_match": true,
@@ -8032,7 +8032,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -8750,8 +8750,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 150,
         "application_reference_printing_count": 150,
         "exact_identity_match": true,
@@ -8761,7 +8761,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -9483,8 +9483,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 151,
         "application_reference_printing_count": 151,
         "exact_identity_match": true,
@@ -9494,7 +9494,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -10212,8 +10212,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 150,
         "application_reference_printing_count": 150,
         "exact_identity_match": true,
@@ -10223,7 +10223,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -10945,8 +10945,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 151,
         "application_reference_printing_count": 151,
         "exact_identity_match": true,
@@ -10956,7 +10956,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -11674,8 +11674,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 150,
         "application_reference_printing_count": 150,
         "exact_identity_match": true,
@@ -11685,7 +11685,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -12417,8 +12417,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 159,
         "application_reference_printing_count": 159,
         "exact_identity_match": true,
@@ -12428,7 +12428,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -13156,8 +13156,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 158,
         "application_reference_printing_count": 158,
         "exact_identity_match": true,
@@ -13167,7 +13167,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -13889,8 +13889,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 151,
         "application_reference_printing_count": 151,
         "exact_identity_match": true,
@@ -13900,7 +13900,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -14618,8 +14618,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 150,
         "application_reference_printing_count": 150,
         "exact_identity_match": true,
@@ -14638,7 +14638,7 @@
           }
         ],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -15378,8 +15378,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 156,
         "application_reference_printing_count": 156,
         "exact_identity_match": true,
@@ -15389,7 +15389,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -16114,8 +16114,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 155,
         "application_reference_printing_count": 155,
         "exact_identity_match": true,
@@ -16125,7 +16125,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -16853,8 +16853,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 155,
         "application_reference_printing_count": 155,
         "exact_identity_match": true,
@@ -16864,7 +16864,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -17588,8 +17588,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -17599,7 +17599,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -18352,8 +18352,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 175,
         "application_reference_printing_count": 175,
         "exact_identity_match": true,
@@ -18363,7 +18363,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -19112,8 +19112,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 174,
         "application_reference_printing_count": 174,
         "exact_identity_match": true,
@@ -19123,7 +19123,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -19864,8 +19864,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 159,
         "application_reference_printing_count": 159,
         "exact_identity_match": true,
@@ -19875,7 +19875,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "source_page_raw_entry_count": 199,
@@ -20604,8 +20604,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 156,
         "application_reference_printing_count": 156,
         "exact_identity_match": true,
@@ -20615,7 +20615,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -21658,8 +21658,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 155,
         "application_reference_printing_count": 155,
         "exact_identity_match": true,
@@ -21669,7 +21669,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "source_page_raw_entry_count": 196,
@@ -22391,8 +22391,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 152,
         "application_reference_printing_count": 152,
         "exact_identity_match": true,
@@ -22402,7 +22402,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -23126,8 +23126,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 155,
         "application_reference_printing_count": 155,
         "exact_identity_match": true,
@@ -23137,7 +23137,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -23861,8 +23861,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 155,
         "application_reference_printing_count": 155,
         "exact_identity_match": true,
@@ -23872,7 +23872,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -24620,8 +24620,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 169,
         "application_reference_printing_count": 169,
         "exact_identity_match": true,
@@ -24631,7 +24631,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -25379,8 +25379,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 169,
         "application_reference_printing_count": 169,
         "exact_identity_match": true,
@@ -25390,7 +25390,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -26157,8 +26157,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 159,
         "application_reference_printing_count": 159,
         "exact_identity_match": true,
@@ -26168,7 +26168,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -26919,8 +26919,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 159,
         "application_reference_printing_count": 159,
         "exact_identity_match": true,
@@ -26930,7 +26930,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -27387,8 +27387,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 80,
         "application_reference_printing_count": 80,
         "exact_identity_match": true,
@@ -27398,7 +27398,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -27856,8 +27856,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 80,
         "application_reference_printing_count": 80,
         "exact_identity_match": true,
@@ -27867,7 +27867,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -28403,8 +28403,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 105,
         "application_reference_printing_count": 105,
         "exact_identity_match": true,
@@ -28414,7 +28414,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -28950,8 +28950,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 105,
         "application_reference_printing_count": 105,
         "exact_identity_match": true,
@@ -28961,7 +28961,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -29431,8 +29431,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 90,
         "application_reference_printing_count": 90,
         "exact_identity_match": true,
@@ -29442,7 +29442,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -29912,8 +29912,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 90,
         "application_reference_printing_count": 90,
         "exact_identity_match": true,
@@ -29923,7 +29923,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -30397,8 +30397,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 81,
         "application_reference_printing_count": 81,
         "exact_identity_match": true,
@@ -30408,7 +30408,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -30881,8 +30881,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 85,
         "application_reference_printing_count": 85,
         "exact_identity_match": true,
@@ -30892,7 +30892,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -31408,8 +31408,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 96,
         "application_reference_printing_count": 96,
         "exact_identity_match": true,
@@ -31419,7 +31419,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -31934,8 +31934,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 96,
         "application_reference_printing_count": 96,
         "exact_identity_match": true,
@@ -31945,7 +31945,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -32677,8 +32677,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 319,
         "application_reference_printing_count": 319,
         "exact_identity_match": true,
@@ -32688,7 +32688,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -33421,8 +33421,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 319,
         "application_reference_printing_count": 319,
         "exact_identity_match": true,
@@ -33432,7 +33432,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -34303,8 +34303,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 316,
         "application_reference_printing_count": 316,
         "exact_identity_match": true,
@@ -34314,7 +34314,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -35185,8 +35185,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46053418288,
-        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+        "verified_workflow_run_id": 46053638883,
+        "verified_application_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
         "official_release_assignment_printing_count": 316,
         "application_reference_printing_count": 316,
         "exact_identity_match": true,
@@ -35196,7 +35196,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053638883; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -35522,9 +35522,9 @@
       "note": "This workflow run is tied to the exact verified commit shown above; subsequent matrix-only metadata commits must receive their own CI run."
     },
     "stage4b_1p_exact_head": {
-      "workflow_run_id": 46053418288,
-      "workflow_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053418288",
-      "commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+      "workflow_run_id": 46053638883,
+      "workflow_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053638883",
+      "commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
       "tests": {
         "passed": 335,
         "failed": 0,
@@ -35842,9 +35842,9 @@
   "stage4b_1p_reconciliation": {
     "audit_date": "2026-11-27",
     "starting_commit": "9114a9dbfb8d78a56afe875fce951ae36664bf49",
-    "verified_code_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
-    "workflow_run_id": 46053418288,
-    "workflow_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053418288",
+    "verified_code_commit": "31101fe4c00305dbb833adc3d5e02ea159fd745a",
+    "workflow_run_id": 46053638883,
+    "workflow_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053638883",
     "testing_catalogue_persistence": {
       "status": "INCOMPLETE",
       "project_id": "ehzqsnfkmwphyllhaqhe",
@@ -35890,8 +35890,8 @@
       "language_set_rows": 50,
       "complete_rows": 0,
       "incomplete_rows": 50,
-      "import_plan_artifact_id": 15224643857,
-      "import_plan_artifact_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053418288/artifacts/15224643857",
+      "import_plan_artifact_id": 15224509616,
+      "import_plan_artifact_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053638883/artifacts/15224509616",
       "schema_recommendation": "Use dedicated normalized reference-catalogue tables; do not seed public.products or public.cards with zero-stock catalogue printings."
     },
     "premium_card_collection": {
@@ -35919,7 +35919,7 @@
       "official_image_urls_http_200": 231,
       "official_image_url_failures": 0,
       "manifest_file": "docs/catalogue-coverage/official-premium-card-collection-stage4b-1p.json",
-      "runtime_artifact_id": 15224643857
+      "runtime_artifact_id": 15224509616
     },
     "all_50_rows": {
       "official_release_assignment_printings": 7786,
@@ -35937,7 +35937,7 @@
     "import_plan": {
       "expected_set_release_assignment_records": 7786,
       "distinct_language_scoped_set_printing_keys": 7786,
-      "distinct_language_scoped_base_card_numbers": 2562,
+      "distinct_language_scoped_base_card_numbers": 5123,
       "local_official_supplements": {
         "OP18": {
           "English": 159,
@@ -35959,7 +35959,8 @@
       "premium_keys_already_in_25_set_matrix": 0,
       "combined_distinct_language_scoped_printing_keys": 8017,
       "no_database_writes": true,
-      "full_7786_record_import_plan": "Available in the Stage 4B-1P CI artifact; includes language, release assignment, printing key, card number, image ID and exact application image reference."
+      "full_7786_record_import_plan": "Available in Stage 4B-1P CI artifact 15224509616; includes language, release assignment, printing key, card number, rarity, variant, image ID, application image URL and exact reference image URL.",
+      "set_matrix_rows_match_stage4b_1o": true
     },
     "image_http": {
       "prior_official_reference_audit": {

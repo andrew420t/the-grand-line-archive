@@ -96,8 +96,8 @@ test('Repeated OP17-119 Japanese stock rows remain reported and are not deduplic
 
 test('Stage 4B-1P matrix records exact-head runtime evidence but keeps all 50 rows incomplete for Testing persistence', () => {
   const stage = matrix.stage4b_1p_reconciliation
-  assert.equal(stage.workflow_run_id, 46053418288)
-  assert.equal(stage.verified_code_commit, '68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211')
+  assert.equal(stage.workflow_run_id, 46053638883)
+  assert.equal(stage.verified_code_commit, '31101fe4c00305dbb833adc3d5e02ea159fd745a')
   assert.equal(stage.all_50_rows.official_release_assignment_printings, 7786)
   assert.equal(stage.all_50_rows.application_runtime_printings, 7786)
   assert.equal(stage.all_50_rows.exact_application_identity_rows, 50)

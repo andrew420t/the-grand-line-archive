@@ -2,10 +2,10 @@
 
 **Repository:** `andrew420t/the-grand-line-archive`  
 **Branch:** `audit/official-bandai-inventory-stage4b-1l-2026-11-27`  
-**Verified code commit:** `68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211`  
+**Verified code commit:** `31101fe4c00305dbb833adc3d5e02ea159fd745a`  
 **Starting commit supplied:** `9114a9dbfb8d78a56afe875fce951ae36664bf49`  
 **Stage 3 baseline:** `448bc546c30ad1d7c69481dbdf794711810c5560`  
-**Exact Stage 4B-1P CI:** [Run #46053418288](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053418288)
+**Exact Stage 4B-1P CI:** [Run #46053638883](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053638883)
 
 ## CI result
 
@@ -37,7 +37,7 @@ Project `ehzqsnfkmwphyllhaqhe`:
 
 **Persistence comparison:** all 50 English/Japanese set rows match the pinned official/application runtime exactly, but all remain **INCOMPLETE** because zero of the 7,786 expected set printing identities are persisted in Testing with catalogue printing keys, match IDs or reference-image references. Missing persisted identities: 7,786. Unexpected persisted identities: 0.
 
-The inspected schema has no dedicated reference-catalogue table. `public.products` is stock/inventory and `public.cards` is a legacy stock-card table. Do not seed either with thousands of zero-stock catalogue entries. The CI artifact contains the complete 7,786-record import plan, including language, release assignment, printing key, card number, image ID and application image reference: [download from run #46053418288](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053418288/artifacts/15224643857).
+The inspected schema has no dedicated reference-catalogue table. `public.products` is stock/inventory and `public.cards` is a legacy stock-card table. Do not seed either with thousands of zero-stock catalogue entries. The CI artifact contains the complete 7,786-record import plan, including language, release assignment, printing key, card number, image ID and application image reference: [download from run #46053638883](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053638883/artifacts/15224509616).
 
 Recommended future persistence design: separate normalized tables for named release products, language-scoped cards, language-scoped printings, product-printing links and set-printing assignments. Inventory rows should link to reference records without changing stock, prices, status or uploaded images.
 
