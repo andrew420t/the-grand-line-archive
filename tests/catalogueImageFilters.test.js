@@ -111,6 +111,6 @@ test('deduplicates repeated links to one product but preserves different release
     { key: 'op15', code: 'OP15', name: 'OP-15 duplicate link' },
     { key: 'prb1', code: 'PRB01', name: 'PRB-01' },
   ]
-  assert.deepEqual(dedupePrintingProducts(products), [products[1], products[2]])
+  assert.deepEqual(dedupePrintingProducts(products), [products[0], products[2]])
   assert.deepEqual(dedupePrintingProducts([]), [])
 })
