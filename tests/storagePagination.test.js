@@ -36,3 +36,34 @@ test('propagates storage errors instead of presenting a partial library as compl
 test('rejects invalid page sizes', async () => {
   await assert.rejects(fetchAllPages(async () => ({ data: [] }), 0), /positive integer/)
 })
+
+
+test('suppresses overlapping storage pages by stable object ID or name', async () => {
+  const calls = []
+  const pages = [
+    [{ id: 'a', name: 'photo-a' }, { id: 'b', name: 'photo-b' }],
+    [{ id: 'b', name: 'photo-b' }, { id: 'c', name: 'photo-c' }],
+    [],
+  ]
+  const files = await fetchAllPages(async ({ limit, offset }) => {
+    calls.push(offset)
+    return { data: pages[offset / limit], error: null }
+  }, 2)
+
+  assert.deepEqual(files.map((file) => file.id), ['a', 'b', 'c'])
+  assert.deepEqual(calls, [0, 2, 4])
+})
+
+test('uses storage object name when overlapping rows do not expose an ID', async () => {
+  const pages = [
+    [{ name: 'photo-a' }, { name: 'photo-b' }],
+    [{ name: 'photo-b' }, { name: 'photo-c' }],
+    [],
+  ]
+  const files = await fetchAllPages(async ({ limit, offset }) => ({
+    data: pages[offset / limit],
+    error: null,
+  }), 2)
+
+  assert.deepEqual(files.map((file) => file.name), ['photo-a', 'photo-b', 'photo-c'])
+})
