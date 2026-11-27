@@ -715,8 +715,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -726,7 +726,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -747,7 +747,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 154,
+        "application_runtime_printings": 154,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 154,
+        "missing_persisted_printing_identity_count": 154,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 154,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-01",
@@ -1417,8 +1438,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -1428,7 +1449,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -1449,7 +1470,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 154,
+        "application_runtime_printings": 154,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 154,
+        "missing_persisted_printing_identity_count": 154,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 154,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-02",
@@ -2121,8 +2163,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -2132,7 +2174,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -2153,7 +2195,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 154,
+        "application_runtime_printings": 154,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 154,
+        "missing_persisted_printing_identity_count": 154,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 154,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-02",
@@ -2825,8 +2888,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -2836,7 +2899,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -2857,7 +2920,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 154,
+        "application_runtime_printings": 154,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 154,
+        "missing_persisted_printing_identity_count": 154,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 154,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-03",
@@ -3545,8 +3629,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -3556,7 +3640,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -3577,7 +3661,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 154,
+        "application_runtime_printings": 154,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 154,
+        "missing_persisted_printing_identity_count": 154,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 154,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-03",
@@ -4265,8 +4370,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -4276,7 +4381,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -4297,7 +4402,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 154,
+        "application_runtime_printings": 154,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 154,
+        "missing_persisted_printing_identity_count": 154,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 154,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-04",
@@ -4970,8 +5096,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 149,
         "application_reference_printing_count": 149,
         "exact_identity_match": true,
@@ -4981,7 +5107,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -5002,7 +5128,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 149,
+        "application_runtime_printings": 149,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 149,
+        "missing_persisted_printing_identity_count": 149,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 149,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-04",
@@ -5675,8 +5822,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 149,
         "application_reference_printing_count": 149,
         "exact_identity_match": true,
@@ -5686,7 +5833,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -5707,7 +5854,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 149,
+        "application_runtime_printings": 149,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 149,
+        "missing_persisted_printing_identity_count": 149,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 149,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-05",
@@ -6387,8 +6555,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -6398,7 +6566,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -6419,7 +6587,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 154,
+        "application_runtime_printings": 154,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 154,
+        "missing_persisted_printing_identity_count": 154,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 154,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-05",
@@ -7099,8 +7288,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -7110,7 +7299,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -7131,7 +7320,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 154,
+        "application_runtime_printings": 154,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 154,
+        "missing_persisted_printing_identity_count": 154,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 154,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-06",
@@ -7811,8 +8021,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 151,
         "application_reference_printing_count": 151,
         "exact_identity_match": true,
@@ -7822,7 +8032,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -7843,7 +8053,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 151,
+        "application_runtime_printings": 151,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 151,
+        "missing_persisted_printing_identity_count": 151,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 151,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-06",
@@ -8519,8 +8750,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 150,
         "application_reference_printing_count": 150,
         "exact_identity_match": true,
@@ -8530,7 +8761,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -8551,7 +8782,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 150,
+        "application_runtime_printings": 150,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 150,
+        "missing_persisted_printing_identity_count": 150,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 150,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-07",
@@ -9231,8 +9483,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 151,
         "application_reference_printing_count": 151,
         "exact_identity_match": true,
@@ -9242,7 +9494,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -9263,7 +9515,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 151,
+        "application_runtime_printings": 151,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 151,
+        "missing_persisted_printing_identity_count": 151,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 151,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-07",
@@ -9939,8 +10212,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 150,
         "application_reference_printing_count": 150,
         "exact_identity_match": true,
@@ -9950,7 +10223,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -9971,7 +10244,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 150,
+        "application_runtime_printings": 150,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 150,
+        "missing_persisted_printing_identity_count": 150,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 150,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-08",
@@ -10651,8 +10945,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 151,
         "application_reference_printing_count": 151,
         "exact_identity_match": true,
@@ -10662,7 +10956,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -10683,7 +10977,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 151,
+        "application_runtime_printings": 151,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 151,
+        "missing_persisted_printing_identity_count": 151,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 151,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-08",
@@ -11359,8 +11674,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 150,
         "application_reference_printing_count": 150,
         "exact_identity_match": true,
@@ -11370,7 +11685,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -11391,7 +11706,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 150,
+        "application_runtime_printings": 150,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 150,
+        "missing_persisted_printing_identity_count": 150,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 150,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-09",
@@ -12081,8 +12417,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 159,
         "application_reference_printing_count": 159,
         "exact_identity_match": true,
@@ -12092,7 +12428,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -12113,7 +12449,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 159,
+        "application_runtime_printings": 159,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 159,
+        "missing_persisted_printing_identity_count": 159,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 159,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-09",
@@ -12799,8 +13156,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 158,
         "application_reference_printing_count": 158,
         "exact_identity_match": true,
@@ -12810,7 +13167,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -12831,7 +13188,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 158,
+        "application_runtime_printings": 158,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 158,
+        "missing_persisted_printing_identity_count": 158,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 158,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-10",
@@ -13511,8 +13889,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 151,
         "application_reference_printing_count": 151,
         "exact_identity_match": true,
@@ -13522,7 +13900,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -13543,7 +13921,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 151,
+        "application_runtime_printings": 151,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 151,
+        "missing_persisted_printing_identity_count": 151,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 151,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-10",
@@ -14219,8 +14618,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 150,
         "application_reference_printing_count": 150,
         "exact_identity_match": true,
@@ -14239,7 +14638,7 @@
           }
         ],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -14271,7 +14670,28 @@
           "classification": "BANDAI_RELEASE_PAGE_SPELLING_VARIATION",
           "note": "EB01 original page and OP10 reprint page differ by one Japanese character; app retains original card-level name."
         }
-      ]
+      ],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 150,
+        "application_runtime_printings": 150,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 150,
+        "missing_persisted_printing_identity_count": 150,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 150,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-11",
@@ -14958,8 +15378,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 156,
         "application_reference_printing_count": 156,
         "exact_identity_match": true,
@@ -14969,7 +15389,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -14990,7 +15410,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 156,
+        "application_runtime_printings": 156,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 156,
+        "missing_persisted_printing_identity_count": 156,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 156,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-11",
@@ -15673,8 +16114,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 155,
         "application_reference_printing_count": 155,
         "exact_identity_match": true,
@@ -15684,7 +16125,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -15705,7 +16146,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 155,
+        "application_runtime_printings": 155,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 155,
+        "missing_persisted_printing_identity_count": 155,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 155,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-12",
@@ -16391,8 +16853,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 155,
         "application_reference_printing_count": 155,
         "exact_identity_match": true,
@@ -16402,7 +16864,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -16423,7 +16885,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 155,
+        "application_runtime_printings": 155,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 155,
+        "missing_persisted_printing_identity_count": 155,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 155,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-12",
@@ -17105,8 +17588,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 154,
         "application_reference_printing_count": 154,
         "exact_identity_match": true,
@@ -17116,7 +17599,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -17137,7 +17620,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 154,
+        "application_runtime_printings": 154,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 154,
+        "missing_persisted_printing_identity_count": 154,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 154,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-13",
@@ -17848,8 +18352,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 175,
         "application_reference_printing_count": 175,
         "exact_identity_match": true,
@@ -17859,7 +18363,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -17880,7 +18384,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 175,
+        "application_runtime_printings": 175,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 175,
+        "missing_persisted_printing_identity_count": 175,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 175,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-13",
@@ -18587,8 +19112,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 174,
         "application_reference_printing_count": 174,
         "exact_identity_match": true,
@@ -18598,7 +19123,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -18619,7 +19144,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 174,
+        "application_runtime_printings": 174,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 174,
+        "missing_persisted_printing_identity_count": 174,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 174,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-14",
@@ -19318,8 +19864,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 159,
         "application_reference_printing_count": 159,
         "exact_identity_match": true,
@@ -19329,7 +19875,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "source_page_raw_entry_count": 199,
@@ -19352,7 +19898,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 159,
+        "application_runtime_printings": 159,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 159,
+        "missing_persisted_printing_identity_count": 159,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 159,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-14",
@@ -20037,8 +20604,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 156,
         "application_reference_printing_count": 156,
         "exact_identity_match": true,
@@ -20048,7 +20615,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -20069,7 +20636,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 156,
+        "application_runtime_printings": 156,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 156,
+        "missing_persisted_printing_identity_count": 156,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 156,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-15",
@@ -21070,8 +21658,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 155,
         "application_reference_printing_count": 155,
         "exact_identity_match": true,
@@ -21081,7 +21669,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "source_page_raw_entry_count": 196,
@@ -21104,7 +21692,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 155,
+        "application_runtime_printings": 155,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 1,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 155,
+        "missing_persisted_printing_identity_count": 155,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 155,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-15",
@@ -21782,8 +22391,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 152,
         "application_reference_printing_count": 152,
         "exact_identity_match": true,
@@ -21793,7 +22402,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -21814,7 +22423,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 152,
+        "application_runtime_printings": 152,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 152,
+        "missing_persisted_printing_identity_count": 152,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 152,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-16",
@@ -22496,8 +23126,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 155,
         "application_reference_printing_count": 155,
         "exact_identity_match": true,
@@ -22507,7 +23137,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -22528,7 +23158,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 155,
+        "application_runtime_printings": 155,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 155,
+        "missing_persisted_printing_identity_count": 155,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 155,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-16",
@@ -23210,8 +23861,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 155,
         "application_reference_printing_count": 155,
         "exact_identity_match": true,
@@ -23221,7 +23872,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -23242,7 +23893,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 155,
+        "application_runtime_printings": 155,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 155,
+        "missing_persisted_printing_identity_count": 155,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 155,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-17",
@@ -23948,8 +24620,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 169,
         "application_reference_printing_count": 169,
         "exact_identity_match": true,
@@ -23959,7 +24631,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -23980,7 +24652,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 169,
+        "application_runtime_printings": 169,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 169,
+        "missing_persisted_printing_identity_count": 169,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 169,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-17",
@@ -24686,8 +25379,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 169,
         "application_reference_printing_count": 169,
         "exact_identity_match": true,
@@ -24697,7 +25390,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -24718,7 +25411,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 169,
+        "application_runtime_printings": 169,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 1,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 169,
+        "missing_persisted_printing_identity_count": 169,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 169,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-18",
@@ -25443,8 +26157,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 159,
         "application_reference_printing_count": 159,
         "exact_identity_match": true,
@@ -25454,7 +26168,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -25474,7 +26188,28 @@
       },
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 159,
+        "application_runtime_printings": 159,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 159,
+        "missing_persisted_printing_identity_count": 159,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 159,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "OP-18",
@@ -26184,8 +26919,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 159,
         "application_reference_printing_count": 159,
         "exact_identity_match": true,
@@ -26195,7 +26930,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -26215,7 +26950,28 @@
       },
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 159,
+        "application_runtime_printings": 159,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 159,
+        "missing_persisted_printing_identity_count": 159,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 159,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "EB-01",
@@ -26631,8 +27387,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 80,
         "application_reference_printing_count": 80,
         "exact_identity_match": true,
@@ -26642,7 +27398,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -26663,7 +27419,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 80,
+        "application_runtime_printings": 80,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 80,
+        "missing_persisted_printing_identity_count": 80,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 80,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "EB-01",
@@ -27079,8 +27856,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 80,
         "application_reference_printing_count": 80,
         "exact_identity_match": true,
@@ -27090,7 +27867,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -27111,7 +27888,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 80,
+        "application_runtime_printings": 80,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 80,
+        "missing_persisted_printing_identity_count": 80,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 80,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "EB-02",
@@ -27605,8 +28403,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 105,
         "application_reference_printing_count": 105,
         "exact_identity_match": true,
@@ -27616,7 +28414,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -27637,7 +28435,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 105,
+        "application_runtime_printings": 105,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 105,
+        "missing_persisted_printing_identity_count": 105,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 105,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "EB-02",
@@ -28131,8 +28950,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 105,
         "application_reference_printing_count": 105,
         "exact_identity_match": true,
@@ -28142,7 +28961,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -28163,7 +28982,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 105,
+        "application_runtime_printings": 105,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 105,
+        "missing_persisted_printing_identity_count": 105,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 105,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "EB-03",
@@ -28591,8 +29431,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 90,
         "application_reference_printing_count": 90,
         "exact_identity_match": true,
@@ -28602,7 +29442,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -28623,7 +29463,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 90,
+        "application_runtime_printings": 90,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 90,
+        "missing_persisted_printing_identity_count": 90,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 90,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "EB-03",
@@ -29051,8 +29912,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 90,
         "application_reference_printing_count": 90,
         "exact_identity_match": true,
@@ -29062,7 +29923,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -29083,7 +29944,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 90,
+        "application_runtime_printings": 90,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 90,
+        "missing_persisted_printing_identity_count": 90,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 90,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "EB-04",
@@ -29515,8 +30397,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 81,
         "application_reference_printing_count": 81,
         "exact_identity_match": true,
@@ -29526,7 +30408,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -29547,7 +30429,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 81,
+        "application_runtime_printings": 81,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 81,
+        "missing_persisted_printing_identity_count": 81,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 81,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "EB-04",
@@ -29978,8 +30881,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 85,
         "application_reference_printing_count": 85,
         "exact_identity_match": true,
@@ -29989,7 +30892,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -30010,7 +30913,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 85,
+        "application_runtime_printings": 85,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 85,
+        "missing_persisted_printing_identity_count": 85,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 85,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "EB-05",
@@ -30484,8 +31408,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 96,
         "application_reference_printing_count": 96,
         "exact_identity_match": true,
@@ -30495,7 +31419,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -30515,7 +31439,28 @@
       },
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 96,
+        "application_runtime_printings": 96,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 96,
+        "missing_persisted_printing_identity_count": 96,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 96,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "EB-05",
@@ -30989,8 +31934,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 96,
         "application_reference_printing_count": 96,
         "exact_identity_match": true,
@@ -31000,7 +31945,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -31020,7 +31965,28 @@
       },
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 96,
+        "application_runtime_printings": 96,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 96,
+        "missing_persisted_printing_identity_count": 96,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 96,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "PRB-01",
@@ -31711,8 +32677,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 319,
         "application_reference_printing_count": 319,
         "exact_identity_match": true,
@@ -31722,7 +32688,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -31743,7 +32709,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 319,
+        "application_runtime_printings": 319,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 319,
+        "missing_persisted_printing_identity_count": 319,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 319,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "PRB-01",
@@ -32434,8 +33421,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 319,
         "application_reference_printing_count": 319,
         "exact_identity_match": true,
@@ -32445,7 +33432,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -32466,7 +33453,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 319,
+        "application_runtime_printings": 319,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 319,
+        "missing_persisted_printing_identity_count": 319,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 319,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "PRB-02",
@@ -33295,8 +34303,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 316,
         "application_reference_printing_count": 316,
         "exact_identity_match": true,
@@ -33306,7 +34314,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -33327,7 +34335,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 316,
+        "application_runtime_printings": 316,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 316,
+        "missing_persisted_printing_identity_count": 316,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 316,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     },
     {
       "set": "PRB-02",
@@ -34156,8 +35185,8 @@
       },
       "application_runtime_reconciliation": {
         "status": "EXACT_IDENTITY_AND_FIELD_MATCH; TESTING_INVENTORY_LINKAGE_INCOMPLETE",
-        "verified_workflow_run_id": 46049546908,
-        "verified_application_commit": "162ad1616e2a12ac16bdb2493adc82e01d180cc1",
+        "verified_workflow_run_id": 46053418288,
+        "verified_application_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
         "official_release_assignment_printing_count": 316,
         "application_reference_printing_count": 316,
         "exact_identity_match": true,
@@ -34167,7 +35196,7 @@
         "field_mismatch_count": 0,
         "accepted_source_variations": [],
         "missing_image_slots": 0,
-        "evidence": "Exact-head application audit artifact; 50/50 rows and 7,786/7,786 release-assignment printing records.",
+        "evidence": "Stage 4B-1P exact-head CI run 46053418288; all 50 rows and 7,786 release-assignment printings matched pinned official reference identities and metadata. Testing persistence remains independently incomplete.",
         "testing_inventory_linkage": "INCOMPLETE_SEPARATE"
       },
       "application_reference_identity_reconciliation": {
@@ -34188,7 +35217,28 @@
       "unexpected_printings": [],
       "application_missing_card_numbers": [],
       "application_missing_printings": [],
-      "application_unexpected_printings": []
+      "application_unexpected_printings": [],
+      "stage4b_1p_persistence_reconciliation": {
+        "status": "INCOMPLETE_NO_PERSISTED_REFERENCE_PRINTING_IDENTITY",
+        "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+        "official_release_assignment_printings": 316,
+        "application_runtime_printings": 316,
+        "application_exact_identity_match": true,
+        "application_missing_identity_count": 0,
+        "application_unexpected_identity_count": 0,
+        "application_duplicate_identity_count": 0,
+        "application_field_mismatch_count": 0,
+        "persisted_inventory_product_rows": 0,
+        "persisted_catalogue_match_ids": 0,
+        "persisted_catalogue_printing_keys": 0,
+        "persisted_reference_image_urls": 0,
+        "expected_application_printing_identities": 316,
+        "missing_persisted_printing_identity_count": 316,
+        "unexpected_persisted_printing_identity_count": 0,
+        "missing_persisted_reference_image_count": 316,
+        "persistence_verification": "NOT_PERSISTED",
+        "verification_status": "INCOMPLETE"
+      }
     }
   ],
   "application_comparison_evidence": {
@@ -34470,6 +35520,57 @@
         "loaded": 7798
       },
       "note": "This workflow run is tied to the exact verified commit shown above; subsequent matrix-only metadata commits must receive their own CI run."
+    },
+    "stage4b_1p_exact_head": {
+      "workflow_run_id": 46053418288,
+      "workflow_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053418288",
+      "commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+      "tests": {
+        "passed": 335,
+        "failed": 0,
+        "total": 335
+      },
+      "lint": {
+        "status": "PASSED",
+        "warnings": 17,
+        "errors": 0
+      },
+      "production_build": {
+        "status": "PASSED"
+      },
+      "application_printing_audit": {
+        "status": "PASSED",
+        "exact_rows": 50,
+        "official_release_assignment_printings": 7786,
+        "application_reference_printings": 7786,
+        "missing": 0,
+        "unexpected": 0,
+        "duplicates": 0,
+        "field_mismatches": 0
+      },
+      "premium_collection_audit": {
+        "status": "PASSED",
+        "english_products": 9,
+        "english_printings": 103,
+        "remaining_eight_english_printings": 91,
+        "japanese_products": 15,
+        "japanese_printings": 128,
+        "exact_runtime_identities": 231,
+        "missing_or_mismatched": 0,
+        "image_http_200": 231,
+        "image_http_failures": 0
+      },
+      "testing_inventory_audit": {
+        "status": "PASSED_READ_ONLY",
+        "inventory_rows": 32,
+        "language_set_rows": 50,
+        "missing_persisted_printing_keys": 7786,
+        "persisted_printing_keys": 0,
+        "persisted_match_ids": 0,
+        "persisted_reference_images": 0,
+        "unexpected_persisted_printing_keys": 0
+      },
+      "no_database_writes": true
     }
   },
   "stage4b_1o_reconciliation": {
@@ -34737,5 +35838,153 @@
       "conclusion": "The Testing table is stock/inventory, not the reference catalogue. Persisted inventory-to-printing linkage remains incomplete."
     }
   },
-  "latest_audit_commit_before_stage4b_1o": "23eecbf8376865238ebf7455e4f458c7ce68799d"
+  "latest_audit_commit_before_stage4b_1o": "23eecbf8376865238ebf7455e4f458c7ce68799d",
+  "stage4b_1p_reconciliation": {
+    "audit_date": "2026-11-27",
+    "starting_commit": "9114a9dbfb8d78a56afe875fce951ae36664bf49",
+    "verified_code_commit": "68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211",
+    "workflow_run_id": 46053418288,
+    "workflow_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053418288",
+    "testing_catalogue_persistence": {
+      "status": "INCOMPLETE",
+      "project_id": "ehzqsnfkmwphyllhaqhe",
+      "read_only": true,
+      "no_database_writes": true,
+      "no_seeding": true,
+      "counts": {
+        "sets": 25,
+        "cards": 0,
+        "products": 32,
+        "match_ids": 0,
+        "linked_sets": 2,
+        "printing_keys": 0,
+        "product_images": 9,
+        "linked_products": 2,
+        "reference_images": 0,
+        "unassigned_products": 30,
+        "with_uploaded_image": 5
+      },
+      "duplicate_card_number_groups": [
+        {
+          "rows": 2,
+          "language": "Japanese",
+          "card_number": "OP17-119",
+          "product_names": [
+            "Loki",
+            "Loki"
+          ]
+        }
+      ],
+      "inventory_products": 32,
+      "card_numbered_inventory_products": 31,
+      "inventory_products_without_card_number": 1,
+      "inventory_rows_with_application_card_number_match": 31,
+      "inventory_rows_without_application_card_number_match": 0,
+      "expected_set_printing_assignments": 7786,
+      "persisted_reference_printing_keys": 0,
+      "missing_persisted_reference_printing_keys": 7786,
+      "unexpected_persisted_reference_printing_keys": 0,
+      "persisted_catalogue_match_ids": 0,
+      "persisted_reference_image_urls": 0,
+      "assigned_set_mismatches": 0,
+      "language_set_rows": 50,
+      "complete_rows": 0,
+      "incomplete_rows": 50,
+      "import_plan_artifact_id": 15224643857,
+      "import_plan_artifact_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053418288/artifacts/15224643857",
+      "schema_recommendation": "Use dedicated normalized reference-catalogue tables; do not seed public.products or public.cards with zero-stock catalogue printings."
+    },
+    "premium_card_collection": {
+      "status": "EXACT_APPLICATION_RUNTIME_AND_IMAGE_MATCH",
+      "english": {
+        "named_products": 9,
+        "product_printing_links": 103,
+        "distinct_language_scoped_printing_keys": 103,
+        "remaining_eight_products": 91,
+        "best_selection_vol6": 12,
+        "cross_product_duplicate_keys": 0
+      },
+      "japanese": {
+        "named_products": 15,
+        "product_printing_links": 128,
+        "distinct_language_scoped_printing_keys": 128,
+        "verified_english_product_counterparts": 8,
+        "counterpart_printing_links": 91,
+        "fest_23_24_japanese_named_product": "NOT_FOUND_IN_PINNED_JAPANESE_FEED"
+      },
+      "total_runtime_printing_identities": 231,
+      "exact_runtime_matches": 231,
+      "missing_or_mismatched": 0,
+      "exact_product_key_name_language_printing_key_card_number_rarity_variant_and_image_identity_checks": true,
+      "official_image_urls_http_200": 231,
+      "official_image_url_failures": 0,
+      "manifest_file": "docs/catalogue-coverage/official-premium-card-collection-stage4b-1p.json",
+      "runtime_artifact_id": 15224643857
+    },
+    "all_50_rows": {
+      "official_release_assignment_printings": 7786,
+      "application_runtime_printings": 7786,
+      "exact_application_identity_rows": 50,
+      "missing_application_identities": 0,
+      "unexpected_application_identities": 0,
+      "duplicate_application_identities": 0,
+      "field_mismatches": 0,
+      "persisted_reference_printing_keys": 0,
+      "missing_persisted_reference_printing_keys": 7786,
+      "complete_rows": 0,
+      "incomplete_rows": 50
+    },
+    "import_plan": {
+      "expected_set_release_assignment_records": 7786,
+      "distinct_language_scoped_set_printing_keys": 7786,
+      "distinct_language_scoped_base_card_numbers": 2562,
+      "local_official_supplements": {
+        "OP18": {
+          "English": 159,
+          "Japanese": 159,
+          "total": 318
+        },
+        "EB05": {
+          "English": 96,
+          "Japanese": 96,
+          "total": 192
+        },
+        "total": 510
+      },
+      "english_premium_named_products": 9,
+      "english_premium_product_printing_links": 103,
+      "japanese_premium_named_products": 15,
+      "japanese_premium_product_printing_links": 128,
+      "distinct_premium_printing_keys": 231,
+      "premium_keys_already_in_25_set_matrix": 0,
+      "combined_distinct_language_scoped_printing_keys": 8017,
+      "no_database_writes": true,
+      "full_7786_record_import_plan": "Available in the Stage 4B-1P CI artifact; includes language, release assignment, printing key, card number, image ID and exact application image reference."
+    },
+    "image_http": {
+      "prior_official_reference_audit": {
+        "unique_urls": 7798,
+        "http_200": 7798,
+        "missing": 0,
+        "invalid": 0,
+        "timeouts": 0,
+        "temporary_failures": 0
+      },
+      "premium_collection_recheck": {
+        "unique_urls": 231,
+        "http_200": 231,
+        "failed": 0,
+        "content_type": "image/png"
+      }
+    },
+    "preview": {
+      "status": "NOT_DEPLOYED",
+      "reason": "No preview deployment was requested or required for this read-only reconciliation."
+    },
+    "all_rows_remain_incomplete": true
+  },
+  "notes": [
+    "Stage 4B-1P exact-head CI verified 335 tests, lint, production build, all 50 application-versus-official rows, all 231 English/Japanese Premium Card Collection printing identities and 231 official image URLs. Testing Supabase remains a separate persistence gap: 7,786 official set printing identities are not persisted, so all 50 rows remain INCOMPLETE.",
+    "Testing Supabase public.products and public.cards are stock tables, not a complete official reference-catalogue store. A dedicated normalized reference-catalogue schema is recommended; no database writes or seeding were performed."
+  ]
 }

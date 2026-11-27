@@ -1,79 +1,120 @@
-# Stage 4B-1P — Premium Card Collection and Testing Catalogue Persistence Reconciliation
+# Stage 4B-1P — Testing Catalogue Persistence and Premium Card Collection Reconciliation
 
 **Repository:** `andrew420t/the-grand-line-archive`  
 **Branch:** `audit/official-bandai-inventory-stage4b-1l-2026-11-27`  
-**Starting branch head:** `25ec88ef665dc8715be009ed235385dae7b25eca`  
+**Verified code commit:** `68cd6d0b4ba6cee84bdf77e931beb4c40e7ff211`  
+**Starting commit supplied:** `9114a9dbfb8d78a56afe875fce951ae36664bf49`  
 **Stage 3 baseline:** `448bc546c30ad1d7c69481dbdf794711810c5560`  
-**Pinned application feed:** `619965ec198047de519dc6eb098c7a56aed9bd58`  
-**Testing Supabase project:** `ehzqsnfkmwphyllhaqhe`  
-**Database writes:** None
+**Exact Stage 4B-1P CI:** [Run #46053418288](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053418288)
 
-## Scope and safety
+## CI result
 
-This stage is read-only against Testing Supabase. It does not seed, alter, delete, or migrate database records. No Production project, production database, main/master branch, or deployment target is accessed. PR #37 and PR #38 remain open and untouched.
+- **335/335 tests passed**
+- Lint passed
+- Production build passed
+- Stage 4B-1O application-versus-official audit passed
+- Stage 4B-1P Premium Card Collection and Testing persistence audit passed
+- No Testing database writes or seeds
 
-## Official Premium Card Collection inventory
+## Testing Supabase — read-only result
 
-The pinned English feed contains nine named Premium Card Collection products with 103 distinct product-linked printing keys. The eight products requested for reconciliation account for 91 printings; Best Selection Vol.6 remains 12/12 and is rechecked by the Stage 4B-1P runtime audit.
+Project `ehzqsnfkmwphyllhaqhe`:
 
-| English product | Expected printings |
+| Evidence | Result |
 |---|---:|
-| Premium Card Collection -Live Action Edition- | 9 |
-| Premium Card Collection -FILM RED Edition- | 12 |
-| Premium Card Collection -Best Selection- | 12 |
-| Premium Card Collection -Best Selection Vol.3- | 12 |
-| Premium Card Collection -Best Selection Vol.4- | 12 |
-| Premium Card Collection -Best Selection Vol.5- | 12 |
-| Premium Card Collection -25th Edition- | 10 |
-| Premium Card Collection -BANDAI CARD GAMES Fest. 23-24 Edition- | 12 |
-| Premium Card Collection -Best Selection Vol.6- | 12 |
-| **Total** | **103** |
-
-The manifest records each product key, product page, printing key, original card number, official image ID, image suffix family, language and release-product assignment. The CI audit compares every manifest entry to the pinned product/link/locator feeds and the application runtime, including the exact runtime image URL and image HTTP response. Product identities are not merged into the original booster release product.
-
-## Japanese product coverage
-
-The pinned Japanese feed contains 15 named Premium Card Collection products and 128 distinct linked printing keys. Eight Bandai-listed Japanese product pages correspond to eight of the English product groups (91 printings). The BANDAI CARD GAMES Fest. 23-24 Edition has no matching named Japanese product in the pinned Japanese product feed; no Japanese record is fabricated.
-
-Japanese product names, product keys, official page URLs, printing keys and image IDs remain language-scoped. English image URLs are never substituted into Japanese entries.
-
-## Testing Supabase persistence findings
-
-The read-only Testing snapshot reports:
-
-| Measure | Result |
-|---|---:|
-| `public.products` inventory rows | 32 |
-| `public.sets` definitions | 25 |
-| `public.cards` rows | 0 |
-| Inventory rows assigned to a set | 2 |
-| Inventory rows without a set | 30 |
-| Catalogue match IDs | 0 |
+| Release-set definitions | 25 |
+| Stock/inventory products | 32 |
+| Products assigned to release sets | 2 |
+| Products without a release set | 30 |
+| Legacy `public.cards` rows | 0 |
+| Product image rows | 9 |
+| Inventory rows with uploaded images | 5 |
 | Catalogue printing keys | 0 |
-| Catalogue reference image URLs | 0 |
-| Uploaded product image URLs | 5 |
-| `public.product_images` rows | 9 |
+| Catalogue match IDs | 0 |
+| Catalogue reference-image URLs | 0 |
 
-The two set-assigned stock rows are Brook / OP15-032 / English / Adventure on Kami's Island and Loki / OP17-119 / Japanese / The World's Strongest Warriors. The remaining 30 inventory rows are unassigned. The duplicate OP17-119 Japanese card-number rows are retained as separate stock records; they are not merged or deleted.
+31 inventory rows have card numbers and all 31 have application card-number candidates; one DON!! row has no card number. There are no assigned-set mismatches. The Japanese `OP17-119` inventory card number occurs twice. Both physical inventory rows are preserved; neither was deleted or merged.
 
-The schema inspection found no dedicated reference-catalogue table. `public.cards` lacks card number, language, printing key and release-product identity fields. `public.products` is a stock/inventory table with price, quantity, condition and uploaded-image fields; its catalogue columns are optional links from inventory to reference data. The 9 `product_images` rows and 5 uploaded image URLs are not official catalogue reference URLs.
+**Persistence comparison:** all 50 English/Japanese set rows match the pinned official/application runtime exactly, but all remain **INCOMPLETE** because zero of the 7,786 expected set printing identities are persisted in Testing with catalogue printing keys, match IDs or reference-image references. Missing persisted identities: 7,786. Unexpected persisted identities: 0.
 
-## Safe import plan — no writes performed
+The inspected schema has no dedicated reference-catalogue table. `public.products` is stock/inventory and `public.cards` is a legacy stock-card table. Do not seed either with thousands of zero-stock catalogue entries. The CI artifact contains the complete 7,786-record import plan, including language, release assignment, printing key, card number, image ID and application image reference: [download from run #46053418288](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46053418288/artifacts/15224643857).
 
-Do not insert thousands of reference records into `public.products` or the legacy `public.cards` table. A complete persisted catalogue requires a dedicated normalized reference schema:
+Recommended future persistence design: separate normalized tables for named release products, language-scoped cards, language-scoped printings, product-printing links and set-printing assignments. Inventory rows should link to reference records without changing stock, prices, status or uploaded images.
 
-1. `catalogue_release_products`: language-scoped Bandai product keys and named product metadata.
-2. `catalogue_cards`: language-scoped original card numbers and card-level metadata.
-3. `catalogue_printings`: language-scoped printing keys, original card number, rarity, parallel/special/TR identity, official image ID, exact image URL and fallback metadata.
-4. `catalogue_product_printings`: product-to-printing links, preserving each named Premium Card Collection as a separate product.
-5. `catalogue_set_printings`: all 50 English/Japanese set assignments, including PRB-01/02 and official local OP-18/EB-05 supplements.
+## All 50 official language/set rows
 
-The 25 set definitions already exist in Testing. The pinned feed and local supplements reconstruct all 50 language/set reference rows; OP-18 and EB-05 use generated language-scoped keys (`op18:<language>:<imageId>` and `eb05:<language>:<imageId>`). Existing inventory products should only be linked to a specific catalogue printing after an exact language, card number, release assignment and printing identity match is confirmed.
+The 7,786 official release-assignment printing identities match the application runtime with zero missing, unexpected, duplicate or metadata-mismatched identities. Persisted Testing coverage is zero in every row; therefore none is marked COMPLETE.
 
-All inserts should be idempotent and keyed by language plus official identity. Any migration, schema creation, or seed requires separate explicit authorization.
+| Set | English printings | Japanese printings | Persisted keys EN/JP |
+|---|---:|---:|---:|
+| OP-01 | 154 | 154 | 0 / 0 |
+| OP-02 | 154 | 154 | 0 / 0 |
+| OP-03 | 154 | 154 | 0 / 0 |
+| OP-04 | 149 | 149 | 0 / 0 |
+| OP-05 | 154 | 154 | 0 / 0 |
+| OP-06 | 151 | 150 | 0 / 0 |
+| OP-07 | 151 | 150 | 0 / 0 |
+| OP-08 | 151 | 150 | 0 / 0 |
+| OP-09 | 159 | 158 | 0 / 0 |
+| OP-10 | 151 | 150 | 0 / 0 |
+| OP-11 | 156 | 155 | 0 / 0 |
+| OP-12 | 155 | 154 | 0 / 0 |
+| OP-13 | 175 | 174 | 0 / 0 |
+| OP-14 | 159 | 156 | 0 / 0 |
+| OP-15 | 155 | 152 | 0 / 0 |
+| OP-16 | 155 | 155 | 0 / 0 |
+| OP-17 | 169 | 169 | 0 / 0 |
+| OP-18 | 159 | 159 | 0 / 0 |
+| EB-01 | 80 | 80 | 0 / 0 |
+| EB-02 | 105 | 105 | 0 / 0 |
+| EB-03 | 90 | 90 | 0 / 0 |
+| EB-04 | 81 | 85 | 0 / 0 |
+| EB-05 | 96 | 96 | 0 / 0 |
+| PRB-01 | 319 | 319 | 0 / 0 |
+| PRB-02 | 316 | 316 | 0 / 0 |
 
-## Runtime and image audit
+OP-18 and EB-05 remain sourced from local official supplements with language-scoped generated printing keys: OP-18 159 English + 159 Japanese; EB-05 96 English + 96 Japanese. Both remain incomplete in Testing because none of those identities is persisted.
 
-The Stage 4B-1P CI artifact records all 50 Stage 4B-1O official/application row comparisons, per-row Testing persistence status, all 231 Premium product-printing records, exact runtime image references, image HTTP results, and the complete import counts. The previous 7,798-image official HTTP audit is retained unchanged. Existing same-language fallback, alternate-printing, missing-image, invalid-URL and placeholder-suppression tests remain in the regression suite.
+PRB-01 and PRB-02 counts are release-product printing counts, not assertions about base-card counts. PRB-01 is 319 printings per language; PRB-02 is 316 per language.
 
-**CI runtime result:** Pending the exact Stage 4B-1P commit run.
+The OP13-037 correction is preserved: English OP15-EB04 TR printing `prt_pm4j0pgnb4he` remains distinct; Japanese EB-04 has no OP13-037 TR printing. The Japanese original remains assigned to OP-13.
+
+## Premium Card Collection identities
+
+All nine English named products are separately retained. All 103 English product-printing links have unique language-scoped printing keys and exact application runtime matches. The eight outstanding products account for 91 printings; Best Selection Vol.6 remains 12/12.
+
+| English product | Printings | Runtime match |
+|---|---:|---|
+| Live Action Edition | 9 | Exact |
+| FILM RED Edition | 12 | Exact |
+| Best Selection | 12 | Exact |
+| Best Selection Vol.3 | 12 | Exact |
+| Best Selection Vol.4 | 12 | Exact |
+| Best Selection Vol.5 | 12 | Exact |
+| 25th Edition | 10 | Exact |
+| BANDAI CARD GAMES Fest. 23-24 Edition | 12 | Exact |
+| Best Selection Vol.6 | 12 | Exact |
+
+The pinned Japanese feed is separate: 15 named Japanese Premium Card Collection products and 128 linked printing identities. Eight Japanese product counterparts are matched to the requested English products (91 printing links). No matching Japanese BANDAI CARD GAMES Fest. 23-24 named product exists in the pinned Japanese product feed; no Japanese record was invented.
+
+All 231 English/Japanese Premium Card Collection identities passed exact runtime checks for product assignment, language, original card number, printing key, rarity, variant, image ID and exact image path. All 231 official image URLs returned HTTP 200; zero failed.
+
+## Image and fallback verification
+
+- Previous official image audit: 7,798/7,798 HTTP 200; zero missing, invalid, timeout or final temporary failures.
+- Premium Card Collection recheck: 231/231 HTTP 200, PNG; zero failures.
+- Same-language fallback, alternate-printing fallback and placeholder-suppression regression tests remain in the full suite.
+- No English image is substituted into Japanese printings or vice versa. All exact premium images loaded, so no fallback was needed for these 231 checks.
+
+## PRs, deployment and safety
+
+- PR #37: open, unmerged.
+- PR #38: open, unmerged.
+- Preview: not deployed in this stage.
+- Production: not deployed or modified.
+- Testing Supabase: read-only; no writes or seeding.
+- No branch or commit was deleted. Scanner, Image Library, filters and OP-15 duplicate corrections remain preserved.
+
+## Remaining blocker
+
+The reference catalogue is complete in the pinned application feed plus local supplements and verified against the official matrix, but it is not persisted in Testing. The next stage must design and obtain explicit authorization for a Testing-only normalized reference-catalogue schema and a controlled import/link operation. Until then, all 50 matrix rows must remain INCOMPLETE.
