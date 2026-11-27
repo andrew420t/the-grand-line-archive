@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import {
   buildCatalogueImageProxyUrl,
+  buildPreviewBandaiImageFunctionUrl,
   buildOfficialBaseImageUrl,
   buildOfficialImageProxyUrl,
   resolveCatalogueImage,
@@ -78,4 +79,18 @@ test('does not invent a Bandai base image for numberless DON!! or malformed numb
   assert.equal(buildOfficialBaseImageUrl('DON!!', 'en'), '')
   assert.equal(buildOfficialBaseImageUrl('OP18-1000', 'en'), '')
   assert.equal(buildOfficialBaseImageUrl('OP18-001', 'zh'), '')
+})
+
+test('builds Testing Supabase Bandai image URLs only for the dedicated preview project', () => {
+  assert.equal(
+    buildPreviewBandaiImageFunctionUrl('OP18-002', 'en', 'https://ehzqsnfkmwphyllhaqhe.supabase.co'),
+    'https://ehzqsnfkmwphyllhaqhe.supabase.co/functions/v1/bandai-card-image?language=en&id=OP18-002',
+  )
+  assert.equal(
+    buildPreviewBandaiImageFunctionUrl('OP18-001_p1', 'Japanese', 'https://ehzqsnfkmwphyllhaqhe.supabase.co/'),
+    'https://ehzqsnfkmwphyllhaqhe.supabase.co/functions/v1/bandai-card-image?language=jp&id=OP18-001_p1',
+  )
+  assert.equal(buildPreviewBandaiImageFunctionUrl('DON!!', 'en', 'https://ehzqsnfkmwphyllhaqhe.supabase.co'), '')
+  assert.equal(buildPreviewBandaiImageFunctionUrl('OP18-002', 'en', 'https://production.example.supabase.co'), '')
+  assert.equal(buildPreviewBandaiImageFunctionUrl('OP18-002', 'en', 'http://ehzqsnfkmwphyllhaqhe.supabase.co'), '')
 })
