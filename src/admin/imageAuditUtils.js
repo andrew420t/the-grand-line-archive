@@ -41,7 +41,7 @@ export async function loadImageWithRetry(url, {
   retryDelayMs = 350,
   sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
 } = {}) {
-  if (typeof url !== 'string' || !/^https:\/\//i.test(url)) {
+  if (typeof url !== 'string' || (!/^https:\/\//i.test(url) && !url.startsWith('/_card-image/'))) {
     return { status: IMAGE_CHECK_STATUS.INVALID_URL, url: String(url || ''), attempts: 0 }
   }
   let lastStatus = IMAGE_CHECK_STATUS.TEMPORARY_FAILURE
@@ -54,7 +54,7 @@ export async function loadImageWithRetry(url, {
       const contentType = response.headers?.get?.('content-type') || ''
       lastHttpStatus = response.status
       if (response.ok && /^image\/(png|jpeg|webp|gif|avif)$/i.test(contentType)) {
-        return { status: IMAGE_CHECK_STATUS.EXACT_LOADED, url, attempts: attempt, httpStatus: response.status, contentType }
+        return { status: IMAGE_CHECK_STATUS.EXACT_LOADED, url, attempts: attempt, httpStatus: response.status, contentType, upstreamStatus: response.headers?.get?.('x-card-image-upstream-status') || '', proxyError: response.headers?.get?.('x-card-image-error') || '' }
       }
       lastStatus = classifyImageResponse({ status: response.status, contentType })
       if ([IMAGE_CHECK_STATUS.MISSING, IMAGE_CHECK_STATUS.INVALID_URL].includes(lastStatus)) {
