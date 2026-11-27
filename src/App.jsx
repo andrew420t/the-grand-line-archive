@@ -10,7 +10,6 @@ import {
   Grid2X2,
   List,
   SlidersHorizontal,
-  ClipboardList,
   LockKeyhole,
   Mail,
   Menu,
