@@ -44,7 +44,7 @@
     "PRB": "PRB-01: 319 printings / 111 card numbers / 1 PRB01-prefixed number. PRB-02: 316 printings / 173 card numbers / 18 PRB02-prefixed numbers.",
     "PRB-01": "319 official printing entries / 111 distinct original card numbers / 1 PRB01-prefixed product card number. No PRB-01 base-card count is asserted; application identity reconciliation remains blocked by the incomplete Testing dataset.",
     "PRB-02": "316 official printing entries / 173 distinct original card numbers / 18 PRB02-prefixed product card numbers. No PRB-02 base-card count is asserted; application identity reconciliation remains blocked by the incomplete Testing dataset.",
-    "Stage4B1O": "Pinned Koala Kollect reference-feed snapshot reconciliation: exact identity-ID set match for all 50 official English/Japanese set rows. This is separate from Testing Supabase persistence, which remains incomplete. OP18/EB05 are local supplements without upstream printing/product keys; English OP14/OP15 retain separate OP14-EB04 / OP15-EB04 release products; English EB-04 is a prefix-specific subset. All rows remain INCOMPLETE."
+    "Stage4B1O": "Pinned feed comparison matches all 50 official English/Japanese set rows. 46 rows use upstream printing/product links; OP18 and EB05 use explicit local Bandai supplements with language-scoped generated printing keys. Testing Supabase remains an incomplete 32-product smoke dataset, so all rows remain INCOMPLETE."
   },
   "rows": [
     {
@@ -24348,11 +24348,19 @@
         "unexpected_printing_identity_ids": [],
         "linked_release_products": [],
         "local_official_supplement": true,
-        "printing_key_count": 0,
+        "printing_key_count": 159,
         "duplicate_image_id_to_printing_key_collisions": 0,
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
-        "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+        "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime.",
+        "upstream_printing_key_count": 0,
+        "printing_key_source": "Application-generated language-scoped official supplement key: op18:en:<official image ID>",
+        "product_assignment_status": "LOCAL_OFFICIAL_SUPPLEMENT_SET_ASSIGNMENT",
+        "local_supplement_release_assignment": {
+          "set_code": "OP-18",
+          "set_name": "The Dominance of God [OP-18]",
+          "upstream_product_key": null
+        }
       }
     },
     {
@@ -25045,11 +25053,19 @@
         "unexpected_printing_identity_ids": [],
         "linked_release_products": [],
         "local_official_supplement": true,
-        "printing_key_count": 0,
+        "printing_key_count": 159,
         "duplicate_image_id_to_printing_key_collisions": 0,
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
-        "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+        "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime.",
+        "upstream_printing_key_count": 0,
+        "printing_key_source": "Application-generated language-scoped official supplement key: op18:jp:<official image ID>",
+        "product_assignment_status": "LOCAL_OFFICIAL_SUPPLEMENT_SET_ASSIGNMENT",
+        "local_supplement_release_assignment": {
+          "set_code": "OP-18",
+          "set_name": "The Dominance of God [OP-18]",
+          "upstream_product_key": null
+        }
       }
     },
     {
@@ -29005,11 +29021,19 @@
         "unexpected_printing_identity_ids": [],
         "linked_release_products": [],
         "local_official_supplement": true,
-        "printing_key_count": 0,
+        "printing_key_count": 96,
         "duplicate_image_id_to_printing_key_collisions": 0,
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
-        "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+        "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime.",
+        "upstream_printing_key_count": 0,
+        "printing_key_source": "Application-generated language-scoped official supplement key: eb05:en:<official image ID>",
+        "product_assignment_status": "LOCAL_OFFICIAL_SUPPLEMENT_SET_ASSIGNMENT",
+        "local_supplement_release_assignment": {
+          "set_code": "EB-05",
+          "set_name": "ONE PIECE Heroines Edition vol.2 [EB-05]",
+          "upstream_product_key": null
+        }
       }
     },
     {
@@ -29466,11 +29490,19 @@
         "unexpected_printing_identity_ids": [],
         "linked_release_products": [],
         "local_official_supplement": true,
-        "printing_key_count": 0,
+        "printing_key_count": 96,
         "duplicate_image_id_to_printing_key_collisions": 0,
         "printing_keys_linked_to_multiple_image_ids": 0,
         "testing_database_persistence": "NOT_VERIFIED_INCOMPLETE_TESTING_DATASET",
-        "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime."
+        "runtime_snapshot_caveat": "Application fetches upstream main dynamically; this comparison is pinned to the recorded snapshot and does not prove the live mutable main branch at runtime.",
+        "upstream_printing_key_count": 0,
+        "printing_key_source": "Application-generated language-scoped official supplement key: eb05:jp:<official image ID>",
+        "product_assignment_status": "LOCAL_OFFICIAL_SUPPLEMENT_SET_ASSIGNMENT",
+        "local_supplement_release_assignment": {
+          "set_code": "EB-05",
+          "set_name": "ONE PIECE Heroines Edition vol.2 [EB-05]",
+          "upstream_product_key": null
+        }
       }
     },
     {
@@ -32531,16 +32563,27 @@
         "OP18": {
           "English": 159,
           "Japanese": 159,
-          "source": "Local Bandai supplement; no upstream product/printing-product keys."
+          "source": "Local Bandai official supplement; application helper generates language-scoped printing keys (op18:<language>:<imageId>) and assigns OP-18 locally; no upstream product key."
         },
         "EB05": {
           "English": 96,
           "Japanese": 96,
-          "source": "Local Bandai supplement; no upstream product/printing-product keys."
+          "source": "Local Bandai official supplement; application helper generates language-scoped printing keys (eb05:<language>:<imageId>) and assigns EB-05 locally; no upstream product key."
         }
       },
       "persistence": "Testing Supabase remains a 32-product smoke dataset; feed matches do not establish complete persisted Testing catalogue records.",
-      "runtime_caveat": "cardCatalogue.js fetches raw upstream main dynamically; this audit uses a pinned snapshot for reproducibility. Runtime feed pinning remains a deterministic-parity blocker."
+      "runtime_caveat": "cardCatalogue.js fetches raw upstream main dynamically; this audit uses a pinned snapshot for reproducibility. Runtime feed pinning remains a deterministic-parity blocker.",
+      "local_supplement_generated_printing_keys": {
+        "OP18": {
+          "English": 159,
+          "Japanese": 159
+        },
+        "EB05": {
+          "English": 96,
+          "Japanese": 96
+        }
+      },
+      "upstream_product_key_coverage": "46 rows use upstream product and printing-product links; OP18/EB05 use explicit local official supplement assignments and generated language-scoped printing keys."
     }
   },
   "image_http_audit": {
@@ -32740,16 +32783,27 @@
         "OP18": {
           "English": 159,
           "Japanese": 159,
-          "source": "Local Bandai supplement; no upstream product/printing-product keys."
+          "source": "Local Bandai official supplement; application helper generates language-scoped printing keys (op18:<language>:<imageId>) and assigns OP-18 locally; no upstream product key."
         },
         "EB05": {
           "English": 96,
           "Japanese": 96,
-          "source": "Local Bandai supplement; no upstream product/printing-product keys."
+          "source": "Local Bandai official supplement; application helper generates language-scoped printing keys (eb05:<language>:<imageId>) and assigns EB-05 locally; no upstream product key."
         }
       },
       "persistence": "Testing Supabase remains a 32-product smoke dataset; feed matches do not establish complete persisted Testing catalogue records.",
-      "runtime_caveat": "cardCatalogue.js fetches raw upstream main dynamically; this audit uses a pinned snapshot for reproducibility. Runtime feed pinning remains a deterministic-parity blocker."
+      "runtime_caveat": "cardCatalogue.js fetches raw upstream main dynamically; this audit uses a pinned snapshot for reproducibility. Runtime feed pinning remains a deterministic-parity blocker.",
+      "local_supplement_generated_printing_keys": {
+        "OP18": {
+          "English": 159,
+          "Japanese": 159
+        },
+        "EB05": {
+          "English": 96,
+          "Japanese": 96
+        }
+      },
+      "upstream_product_key_coverage": "46 rows use upstream product and printing-product links; OP18/EB05 use explicit local official supplement assignments and generated language-scoped printing keys."
     },
     "key_discrepancies": {
       "op13_037_english_tr": {
@@ -32821,7 +32875,7 @@
         "result": "Twelve separate English product-linked printings retained; not merged into original booster printings."
       }
     },
-    "status_policy": "All 50 official matrix rows remain INCOMPLETE because Testing Supabase lacks the complete persisted catalogue and OP18/EB05 local supplements lack upstream printing_key/product_key identities. Feed-snapshot matching alone is not sufficient for COMPLETE.",
+    "status_policy": "All 50 official rows match the pinned reference identity sets. OP18/EB05 now have application-generated language-scoped printing keys and explicit local set assignments, but their upstream product keys remain absent. All 50 rows remain INCOMPLETE because the permitted Testing Supabase dataset contains only 32 smoke-test products and does not prove complete persisted catalogue parity or live runtime parity.",
     "image_http_audit_reference": {
       "status": "COMPLETE",
       "checked_at": "2026-11-27T17:41:41.814Z",
