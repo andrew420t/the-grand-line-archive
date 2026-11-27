@@ -31144,7 +31144,7 @@
       "PRB-02": "All 316 English and 316 Japanese product entries independently parsed; 173 distinct original card numbers; 18 PRB02-prefixed product numbers; no base-card count asserted.",
       "OP-11 and OP-12": "Earlier image URL shortfalls resolved in Stage 4B-1M extraction artifacts; all result rows parsed and every entry has an image URL.",
       "OP-14 English": "Earlier unparsed row resolved; 199/199 parsed. The release page contains EB04 entries and other original-number reprints; release assignment is kept separate from original card-number prefix.",
-      "OP-15 English and Japanese": "Earlier unparsed rows resolved; 196/196 and 152/152 parsed respectively. The separate OP15/EB04 page composition is retained; one historical non-base product-number difference is not promoted to a missing card without an authoritative card-by-card identity match.",
+      "OP-15 English and Japanese": "Earlier unparsed rows resolved; 196/196 and 152/152 parsed. The one non-base card-number difference is now identified as OP13-037 (TR, English-only cross-prefix reprint on OP15-EB04); the Japanese EB-04 page has no matching entry. OP11-106 and PRB02-014 are present in both language sources.",
       "OP-16 English and Japanese": "Earlier image URL shortfalls resolved; 155/155 parsed and image references present for each language.",
       "OP-17 English and Japanese": "Earlier unparsed rows and image URL shortfalls resolved; 169/169 parsed and image references present for each language.",
       "EB-04 Japanese": "Earlier unparsed rows resolved; 85/85 parsed and image references present.",
