@@ -37,7 +37,7 @@ function normalizeVariant(value) {
   const normalized = normalizeText(value)
   if (!normalized || normalized === 'base' || normalized === 'normal') return 'base'
   if (normalized.includes('reprint')) return 'reprint'
-  if (normalized.includes('parallel') || normalized.includes('spcard') || normalized.includes('treasurerare')) return 'parallel'
+  if (normalized.includes('parallel') || normalized.includes('spcard') || normalized.includes('spカード') || normalized.includes('treasurerare')) return 'parallel'
   return normalized
 }
 
@@ -138,9 +138,24 @@ function compareRow(row, appItems, pages) {
   const missingIds = [...expectedById.keys()].filter((id) => !actualById.has(id))
   const unexpectedIds = [...actualById.keys()].filter((id) => !expectedById.has(id))
   const fieldMismatches = []
+  const acceptedSourceVariations = []
   const compareField = (imageId, field, expected, actual, normalize = (value) => String(value ?? '')) => {
     if (normalize(expected) !== normalize(actual)) {
-      fieldMismatches.push({ imageId, field, expected: expected ?? null, actual: actual ?? null })
+      // Bandai's EB-01 Japanese page and OP-10 Japanese reprint page use
+      // different official kana spellings for the same EB01-056 card name.
+      // The shared card observation cannot represent both product-specific
+      // spellings, so preserve the difference explicitly without misclassifying
+      // the printing identity or release-product assignment.
+      if (row.set === 'OP-10' && row.language === 'Japanese' && imageId === 'EB01-056_p2'
+        && field === 'name' && expected === 'シャーロット・フランペ' && actual === 'シャーロット・フランぺ') {
+        acceptedSourceVariations.push({
+          imageId, field, expected, actual,
+          classification: 'OFFICIAL_PRODUCT_SPECIFIC_JAPANESE_NAME_VARIANT',
+          note: 'Official EB-01 Japanese page uses hiragana ぺ; official OP-10 Japanese reprint page uses katakana ペ. Application card observation is shared across printings.',
+        })
+      } else {
+        fieldMismatches.push({ imageId, field, expected: expected ?? null, actual: actual ?? null })
+      }
     }
   }
 
@@ -178,6 +193,8 @@ function compareRow(row, appItems, pages) {
     applicationDuplicateIdentityIds: applicationDuplicateIds,
     fieldMismatches,
     fieldMismatchCount: fieldMismatches.length,
+    acceptedSourceVariations,
+    acceptedSourceVariationCount: acceptedSourceVariations.length,
   }
 }
 
@@ -223,8 +240,12 @@ async function reconcileOp13TreasureReprint() {
   const imageId = (match) => imageIdFromUrl(match.imageUrl)
   const englishOriginal = matches.find((match) => match.languageCode === 'en' && match.setCode === 'OP-13' && imageId(match) === 'OP13-037')
   const japaneseOriginal = matches.find((match) => match.languageCode === 'jp' && match.setCode === 'OP-13' && imageId(match) === 'OP13-037')
-  const englishOp15Treasure = matches.find((match) => match.languageCode === 'en' && match.setCode === 'OP-15' && imageId(match) === 'OP13-037_p1')
-  const japaneseOp15Treasure = matches.find((match) => match.languageCode === 'jp' && match.setCode === 'OP-15' && imageId(match) === 'OP13-037_p1')
+  const englishOp15Treasure = matches.find((match) => match.languageCode === 'en'
+    && String(match.sourceUrl || '').includes('series=569115')
+    && imageId(match) === 'OP13-037_p1')
+  const japaneseOp15Treasure = matches.find((match) => match.languageCode === 'jp'
+    && String(match.sourceUrl || '').includes('series=550115')
+    && imageId(match) === 'OP13-037_p1')
   const englishPremium = matches.find((match) => match.languageCode === 'en'
     && match.setName === 'Premium Card Collection -Best Selection Vol.6-'
     && imageId(match) === 'OP13-037_p2')
@@ -238,7 +259,7 @@ async function reconcileOp13TreasureReprint() {
     identities: [
       englishOriginal && { language: 'en', releaseSet: englishOriginal.setCode, imageId: imageId(englishOriginal), rarity: englishOriginal.rarity },
       japaneseOriginal && { language: 'jp', releaseSet: japaneseOriginal.setCode, imageId: imageId(japaneseOriginal), rarity: japaneseOriginal.rarity },
-      englishOp15Treasure && { language: 'en', releaseSet: englishOp15Treasure.setCode, imageId: imageId(englishOp15Treasure), rarity: englishOp15Treasure.rarity },
+      englishOp15Treasure && { language: 'en', releaseSet: englishOp15Treasure.setCode, releaseProduct: englishOp15Treasure.setName, releaseProductUrl: englishOp15Treasure.sourceUrl, imageId: imageId(englishOp15Treasure), rarity: englishOp15Treasure.rarity },
       englishPremium && { language: 'en', releaseSet: englishPremium.setName, imageId: imageId(englishPremium), rarity: englishPremium.rarity },
     ].filter(Boolean),
     exactMatch: Boolean(englishOriginal && japaneseOriginal && englishOp15Treasure
@@ -268,6 +289,7 @@ const summary = {
   unexpectedIdentityIds: rowResults.reduce((sum, row) => sum + row.unexpectedIdentityIds.length, 0),
   duplicateIdentityIds: rowResults.reduce((sum, row) => sum + row.officialDuplicateIdentityIds.length + row.applicationDuplicateIdentityIds.length, 0),
   fieldMismatches: rowResults.reduce((sum, row) => sum + row.fieldMismatchCount, 0),
+  acceptedSourceVariations: rowResults.reduce((sum, row) => sum + row.acceptedSourceVariationCount, 0),
   missingImageSlots: applicationMatrix.missingSlots.filter((item) =>
     targetRows.some((row) => row.set === item.targetSet && (row.language === 'English' ? 'en' : 'jp') === item.language),
   ).length,
@@ -311,6 +333,7 @@ const report = {
     'OP-14 and OP-15 English official source pages are combined OP14-EB04 and OP15-EB04 product groups. Official EB04-prefixed card numbers are assigned to EB-04; other card numbers remain assigned to OP-14 or OP-15.',
     'PRB release assignment is kept separate from the original card-number prefix.',
     'The 12 Premium Card Collection printings are reconciled as a separate named product and are not counted as extra base cards in the 25-set matrix.',
+    'The official Japanese EB-01 and OP-10 pages use different kana spellings for EB01-056; this product-specific source variation is retained explicitly because the upstream card observation is shared across printings.',
   ],
 }
 await mkdir(ARTIFACT_DIR, { recursive: true })
