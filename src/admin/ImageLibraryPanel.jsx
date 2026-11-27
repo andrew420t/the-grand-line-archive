@@ -58,6 +58,7 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
   const [loadedReferenceIds, setLoadedReferenceIds] = useState([])
   const [referenceImageIndexes, setReferenceImageIndexes] = useState({})
   const [matrixRunning, setMatrixRunning] = useState(false)
+  const [selectedAuditIds, setSelectedAuditIds] = useState({ en: [], jp: [] })
   const [auditSessions, setAuditSessions] = useState(() => readPersistentDraft(user?.id, 'image-audit-sessions', {
     en: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
     jp: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
@@ -189,24 +190,82 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
     return () => { referenceRequestId.current += 1 }
   }, [loadReferenceImages])
 
-  const runReferenceMatrixCheck = async (language) => {
-    if (matrixCheckLock.current) return
-    matrixCheckLock.current = true
-    setMatrixRunning(true); setMatrixError(''); setMatrixReport(null); setMatrixResults([])
+  useEffect(() => {
+    savePersistentDraft(user?.id, 'image-audit-sessions', auditSessions)
+  }, [user?.id, auditSessions])
+
+  const runReferenceMatrixCheck = async (language, resume = false) => {
+    if (!['en', 'jp'].includes(language) || matrixCheckLock.current[language]) return
+    matrixCheckLock.current[language] = true
+    auditPauseState.current[language] = false
+    setMatrixRunning(true); setMatrixError('')
     try {
       const inventory = await getCatalogueImageAuditInventory(language)
+      const previous = auditSessions[language] || {}
+      const priorResults = resume ? (previous.results || []) : []
+      const completedIds = new Set(priorResults.map((item) => item.id))
+      const pending = inventory.records.filter((item) => !completedIds.has(item.id))
+      const startedAt = resume ? (previous.startedAt || new Date().toISOString()) : new Date().toISOString()
       setMatrixReport({ ...inventory, expectedTotal: inventory.total, missingSlots: [] })
-      const checked = await mapWithConcurrency(inventory.records, 4, async (item) => auditCatalogueImageRecord({
-        ...item,
-        imageCandidates: item.imageUrl ? [{ url: item.imageUrl, kind: 'exact' }] : [],
-      }, { language, attempts: 2, timeoutMs: 10000, retryDelayMs: 400 }))
-      setMatrixResults(checked)
+      setAuditSessions((current) => ({
+        ...current,
+        [language]: { ...current[language], status: 'running', total: inventory.total, completed: priorResults.length, results: priorResults, startedAt, errorSummary: '' },
+      }))
+      const run = await runResumableCatalogueAudit(pending, {
+        language,
+        concurrency: 4,
+        isPaused: () => auditPauseState.current[language],
+        auditRecord: (item, options) => auditCatalogueImageRecord(item, { ...options, attempts: 2, timeoutMs: 10000, retryDelayMs: 400 }),
+        onResult: (result) => setAuditSessions((current) => {
+          const session = current[language] || {}
+          const results = [...(session.results || []).filter((item) => item.id !== result.id), result]
+          return { ...current, [language]: { ...session, status: auditPauseState.current[language] ? 'paused' : 'running', results, completed: results.length, retryCount: results.reduce((sum, item) => sum + (item.retryCount || 0), 0) } }
+        }),
+      })
+      const results = [...priorResults, ...run.results]
+      const finishedAt = new Date().toISOString()
+      setMatrixResults(results)
+      setAuditSessions((current) => {
+        const session = current[language] || {}
+        const history = resume ? (session.history || []) : [...(session.history || []), { startedAt, finishedAt, total: inventory.total }]
+        return { ...current, [language]: { ...session, status: 'complete', results, total: inventory.total, completed: results.length, retryCount: results.reduce((sum, item) => sum + (item.retryCount || 0), 0), lastRunAt: finishedAt, history } }
+      })
     } catch (checkError) {
       setMatrixError(checkError.message || 'Could not build the complete catalogue image audit.')
+      setAuditSessions((current) => ({ ...current, [language]: { ...current[language], status: 'error', errorSummary: checkError.message || 'Audit failed' } }))
     } finally {
-      matrixCheckLock.current = false
-      setMatrixRunning(false)
+      matrixCheckLock.current[language] = false
+      setMatrixRunning(matrixCheckLock.current.en || matrixCheckLock.current.jp)
     }
+  }
+
+  const pauseReferenceAudit = (language) => {
+    auditPauseState.current[language] = true
+    setAuditSessions((current) => ({ ...current, [language]: { ...current[language], status: 'paused' } }))
+  }
+
+  const resumeReferenceAudit = (language) => {
+    if (matrixCheckLock.current[language]) {
+      auditPauseState.current[language] = false
+      setAuditSessions((current) => ({ ...current, [language]: { ...current[language], status: 'running' } }))
+      return
+    }
+    runReferenceMatrixCheck(language, true)
+  }
+
+  const retryAuditRecords = async (language, records) => {
+    const retryable = records.filter((item) => [
+      IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT, IMAGE_CHECK_STATUS.INVALID_URL,
+    ].includes(item.status))
+    for (const record of retryable) {
+      const refreshed = await auditCatalogueImageRecord(record, { language, attempts: 2, timeoutMs: 10000, retryDelayMs: 400 })
+      setAuditSessions((current) => {
+        const session = current[language] || {}
+        const results = (session.results || []).map((item) => item.id === refreshed.id ? refreshed : item)
+        return { ...current, [language]: { ...session, results, retryCount: results.reduce((sum, item) => sum + (item.retryCount || 0), 0) } }
+      })
+    }
+    setSelectedAuditIds((current) => ({ ...current, [language]: [] }))
   }
 
   const saveDonSet = async (item) => {
