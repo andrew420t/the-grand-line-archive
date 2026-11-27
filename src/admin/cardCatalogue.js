@@ -3,7 +3,7 @@ import { resolveCatalogueImage } from './catalogueImageReference.js'
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 import { createOfficialImageOnlyMatch } from './officialImageOnlyFallback.js'
-import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts } from './catalogueImageFilters.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts, getCatalogueProductSetCode } from './catalogueImageFilters.js'
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
 import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMatches } from './op18OfficialCatalogue.js'
@@ -141,7 +141,12 @@ const value = (item, key) => item?.[key] ?? ''
 const safeMapGet = (map, key) => map instanceof Map ? map.get(key) : undefined
 
 function formatSetCode(code) {
-  return String(code || '').replace(/^(OP|EB|ST|PRB)(\d{2})$/, '$1-$2').replace(/^(OP\d{2})(EB\d{2})$/, '$1-$2').toUpperCase()
+  const value = String(code || '').trim()
+  const normalized = value.toUpperCase()
+  if (/^(OP|EB|ST|PRB)\d{2}$/.test(normalized)) return normalized.replace(/^(OP|EB|ST|PRB)(\d{2})$/, '$1-$2')
+  if (/^OP\d{2}EB\d{2}$/.test(normalized)) return normalized.replace(/^(OP\d{2})(EB\d{2})$/, '$1-$2')
+  if (/^(OP|EB|ST|PRB)\d{2}-/.test(normalized)) return normalized
+  return value
 }
 
 export async function findCatalogueMatches(cardNumber) {
@@ -165,9 +170,9 @@ export async function findCatalogueMatches(cardNumber) {
       for (const printing of printings) {
         const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language, cardNumber: card.number || '' })
         const productLinks = safeMapGet(index.printingProductsByPrinting, printing.key) || []
-        const linkedProducts = productLinks
+        const linkedProducts = dedupePrintingProducts(productLinks
           .map((link) => safeMapGet(index.productsByKey, link.product_key))
-          .filter(Boolean)
+          .filter(Boolean))
         const products = linkedProducts.length ? linkedProducts : [null]
 
         for (const product of products) {
@@ -199,7 +204,7 @@ export async function findCatalogueMatches(cardNumber) {
             usesBaseImageFallback: imageReference.usesBaseImageFallback,
             usesAlternateOfficialFallback: imageReference.usesAlternateOfficialFallback,
             sourceText: value(printing, 'source_text'),
-            setCode,
+            setCode: formatSetCode(getCatalogueProductSetCode(product, card.number || '')),
             setName: value(product, 'name'),
             productKind: value(product, 'kind'),
             releaseDate: value(product, 'release_date'),
@@ -726,12 +731,12 @@ export async function getCatalogueImageGallery({
         const rawSetCode = setOverride?.set_code
           || (donSourceSet
             ? (sourceSetCodes.length === 1 ? sourceSetCodes[0] : '')
-            : product?.code || '')
+            : getCatalogueProductSetCode(product, card?.number || ''))
         const inferredSetCode = (card?.number || '').match(/^(OP\d{2}|EB\d{2}|ST\d{2}|PRB\d{2})-/)?.[1] || ''
         const setCode = formatSetCode(rawSetCode || inferredSetCode || (isDon ? 'DON!!' : ''))
         const displaySetCodes = setOverride?.set_code
           ? [setOverride.set_code]
-          : sourceSetCodes.length ? sourceSetCodes : product?.code ? [product.code] : inferredSetCode ? [inferredSetCode] : []
+          : sourceSetCodes.length ? sourceSetCodes : [getCatalogueProductSetCode(product, card?.number || '')].filter(Boolean)
         const formattedSetCodes = displaySetCodes.map(formatSetCode)
         const setName = setOverride
           ? 'Manually assigned set'
