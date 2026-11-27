@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts } from '../src/admin/catalogueImageFilters.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts, getCatalogueProductSetCode } from '../src/admin/catalogueImageFilters.js'
 
 const entries = [
   { id: 'a', cardNumber: 'OP12-002', name: 'Edward.Newgate', languageCode: 'en', setCode: 'OP-12', setCodes: ['OP-12'], rarity: 'UC', category: 'Character', colorValues: ['Red'], variant: 'base', imageStatus: 'available' },
@@ -139,4 +139,15 @@ test('uses the linked named product as release identity instead of the original 
     { key: 'en:569801', name: 'Other Product Card' },
     'OP15-075',
   ), 'OP-15')
+
+  const premiumPrinting = {
+    id: 'op15-075-premium',
+    cardNumber: 'OP15-075',
+    setCode: getCatalogueProductSetCode(
+      { key: 'en:src_a521deb08741', name: 'Premium Card Collection -Best Selection Vol.6-' },
+      'OP15-075',
+    ),
+  }
+  assert.deepEqual(filterCatalogueImageEntries([premiumPrinting], { set: 'OP-15' }), [])
+  assert.deepEqual(filterCatalogueImageEntries([premiumPrinting], { set: premiumPrinting.setCode }).map((entry) => entry.id), ['op15-075-premium'])
 })
