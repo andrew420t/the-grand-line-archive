@@ -36,8 +36,12 @@ test("OP18 and EB05 supplements do not invent upstream product or printing keys"
   for (const set of ["OP-18", "EB-05"]) for (const language of ["English", "Japanese"]) {
     const feed = rowFor(set, language).application_feed_reconciliation;
     assert.equal(feed.local_official_supplement, true);
-    assert.equal(feed.printing_key_count, 0);
+    assert.equal(feed.printing_key_count, feed.application_reference_identity_count);
+    assert.equal(feed.upstream_printing_key_count, 0);
+    assert.equal(feed.product_assignment_status, "LOCAL_OFFICIAL_SUPPLEMENT_SET_ASSIGNMENT");
+    assert.ok(feed.printing_key_source.includes(set === "OP-18" ? "op18:" : "eb05:"));
     assert.deepEqual(feed.linked_release_products, []);
+    assert.equal(feed.local_supplement_release_assignment.set_code, set);
   }
 });
 
