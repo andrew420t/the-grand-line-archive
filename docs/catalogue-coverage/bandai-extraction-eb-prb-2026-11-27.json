@@ -644,7 +644,7 @@
       "language": "Japanese",
       "official_source_url": "https://www.onepiece-cardgame.com/cardlist/?series=550201",
       "result_count": "80件HIT",
-      "distinct_card_numbers": 61,
+      "distinct_card_numbers": 64,
       "distinct_set_prefix_numbers": 61,
       "card_numbers": [
         "EB01-001",
@@ -659,6 +659,7 @@
         "EB01-010",
         "EB01-011",
         "EB01-012",
+        "OP01-008",
         "EB01-013",
         "EB01-014",
         "EB01-015",
@@ -669,6 +670,7 @@
         "EB01-020",
         "EB01-021",
         "EB01-022",
+        "OP02-049",
         "EB01-023",
         "EB01-024",
         "EB01-025",
@@ -689,6 +691,7 @@
         "EB01-040",
         "EB01-041",
         "EB01-042",
+        "OP04-082",
         "EB01-043",
         "EB01-044",
         "EB01-045",
@@ -2113,6 +2116,854 @@
       ]
     },
     {
+      "set": "EB-02",
+      "language": "Japanese",
+      "official_source_url": "https://www.onepiece-cardgame.com/cardlist/?series=550202",
+      "result_count": "105件HIT",
+      "distinct_card_numbers": 98,
+      "distinct_set_prefix_numbers": 61,
+      "card_numbers": [
+        "EB01-001",
+        "EB01-021",
+        "EB01-040",
+        "EB02-001",
+        "EB02-002",
+        "EB02-003",
+        "EB02-004",
+        "EB02-005",
+        "EB02-006",
+        "EB02-007",
+        "EB02-008",
+        "EB02-009",
+        "EB02-010",
+        "EB02-011",
+        "EB02-012",
+        "EB02-013",
+        "EB02-014",
+        "EB02-015",
+        "OP10-030",
+        "EB02-016",
+        "EB02-017",
+        "EB02-018",
+        "EB02-019",
+        "EB02-020",
+        "EB02-021",
+        "EB02-022",
+        "OP09-004",
+        "EB02-023",
+        "EB02-024",
+        "EB02-025",
+        "EB02-026",
+        "EB02-027",
+        "EB02-028",
+        "EB02-029",
+        "EB02-030",
+        "EB02-031",
+        "EB02-032",
+        "EB02-033",
+        "EB02-034",
+        "EB02-035",
+        "ST18-005",
+        "EB02-036",
+        "EB02-037",
+        "EB02-038",
+        "EB02-039",
+        "EB02-040",
+        "EB02-041",
+        "EB02-042",
+        "EB02-043",
+        "EB02-044",
+        "EB02-045",
+        "EB02-046",
+        "EB02-047",
+        "EB02-048",
+        "EB02-049",
+        "EB02-050",
+        "EB02-051",
+        "EB02-052",
+        "EB02-053",
+        "EB02-054",
+        "EB02-055",
+        "EB02-056",
+        "EB02-057",
+        "EB02-058",
+        "EB02-059",
+        "EB02-060",
+        "EB02-061",
+        "OP05-001",
+        "OP01-094",
+        "OP05-002",
+        "OP05-022",
+        "OP05-060",
+        "OP05-098",
+        "OP03-118",
+        "OP05-107",
+        "OP06-001",
+        "OP06-020",
+        "OP06-021",
+        "OP06-022",
+        "OP06-042",
+        "OP06-068",
+        "OP06-069",
+        "OP06-080",
+        "OP06-094",
+        "OP07-001",
+        "OP07-019",
+        "OP01-060",
+        "OP07-045",
+        "OP07-038",
+        "OP07-059",
+        "OP07-079",
+        "OP07-097",
+        "OP08-001",
+        "OP08-002",
+        "OP08-021",
+        "OP08-057",
+        "OP08-058",
+        "OP08-098"
+      ],
+      "entries": [
+        {
+          "card_number": "EB01-001",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "光月おでん"
+        },
+        {
+          "card_number": "EB01-021",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ハンニャバル"
+        },
+        {
+          "card_number": "EB01-040",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "キュロス"
+        },
+        {
+          "card_number": "EB02-001",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "カルー"
+        },
+        {
+          "card_number": "EB02-002",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "サボ"
+        },
+        {
+          "card_number": "EB02-003",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "トニートニー・チョッパー"
+        },
+        {
+          "card_number": "EB02-003",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "トニートニー・チョッパー"
+        },
+        {
+          "card_number": "EB02-004",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ドン・アッチーノ"
+        },
+        {
+          "card_number": "EB02-005",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ニセ麦わらの一味"
+        },
+        {
+          "card_number": "EB02-006",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ヤマト"
+        },
+        {
+          "card_number": "EB02-006",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ヤマト"
+        },
+        {
+          "card_number": "EB02-007",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "刻蹄・桜吹雪"
+        },
+        {
+          "card_number": "EB02-008",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "最高到達点"
+        },
+        {
+          "card_number": "EB02-009",
+          "rarity": "C",
+          "type": "STAGE",
+          "name": "サウザンド・サニー号"
+        },
+        {
+          "card_number": "EB02-010",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "モンキー・D・ルフィ"
+        },
+        {
+          "card_number": "EB02-010",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "モンキー・D・ルフィ"
+        },
+        {
+          "card_number": "EB02-011",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "アーロン"
+        },
+        {
+          "card_number": "EB02-011",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "アーロン"
+        },
+        {
+          "card_number": "EB02-012",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ガイモン"
+        },
+        {
+          "card_number": "EB02-013",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "キャロット"
+        },
+        {
+          "card_number": "EB02-014",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "サーファンクル"
+        },
+        {
+          "card_number": "EB02-015",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ジュエリー・ボニー"
+        },
+        {
+          "card_number": "EB02-015",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ジュエリー・ボニー"
+        },
+        {
+          "card_number": "EB02-016",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "チョッパーマン"
+        },
+        {
+          "card_number": "EB02-017",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ナミ"
+        },
+        {
+          "card_number": "EB02-017",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ナミ"
+        },
+        {
+          "card_number": "EB02-018",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "バギー"
+        },
+        {
+          "card_number": "EB02-019",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ロロノア・ゾロ"
+        },
+        {
+          "card_number": "EB02-020",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "ウィーアー！"
+        },
+        {
+          "card_number": "EB02-021",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "ゴムゴムの巨人の銃"
+        },
+        {
+          "card_number": "EB02-022",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ウソップ"
+        },
+        {
+          "card_number": "EB02-022",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ウソップ"
+        },
+        {
+          "card_number": "EB02-023",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "クロコダイル"
+        },
+        {
+          "card_number": "EB02-024",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "そげキング"
+        },
+        {
+          "card_number": "EB02-025",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ドンキホーテ・ロシナンテ"
+        },
+        {
+          "card_number": "EB02-026",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ネフェルタリ・ビビ"
+        },
+        {
+          "card_number": "EB02-026",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ネフェルタリ・ビビ"
+        },
+        {
+          "card_number": "EB02-027",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ビスタ"
+        },
+        {
+          "card_number": "EB02-028",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ポートガス・D・エース"
+        },
+        {
+          "card_number": "EB02-029",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "リュウ爺"
+        },
+        {
+          "card_number": "EB02-030",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "仲間の夢を笑われた時だ!!!!"
+        },
+        {
+          "card_number": "EB02-031",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "Hope"
+        },
+        {
+          "card_number": "EB02-032",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "アイスバーグ"
+        },
+        {
+          "card_number": "EB02-033",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "クラバウターマン"
+        },
+        {
+          "card_number": "EB02-034",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "コーメイ"
+        },
+        {
+          "card_number": "EB02-035",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "サンジ&プリン"
+        },
+        {
+          "card_number": "EB02-035",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "サンジ&プリン"
+        },
+        {
+          "card_number": "EB02-036",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ニコ・ロビン"
+        },
+        {
+          "card_number": "EB02-036",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ニコ・ロビン"
+        },
+        {
+          "card_number": "EB02-037",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "フランキー"
+        },
+        {
+          "card_number": "EB02-038",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "マゼラン"
+        },
+        {
+          "card_number": "EB02-039",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "GERMA 66"
+        },
+        {
+          "card_number": "EB02-040",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "BRAND NEW WORLD"
+        },
+        {
+          "card_number": "EB02-041",
+          "rarity": "R",
+          "type": "STAGE",
+          "name": "ゴーイング・メリー号"
+        },
+        {
+          "card_number": "EB02-042",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "オールハント・グラント"
+        },
+        {
+          "card_number": "EB02-043",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ジョナサン"
+        },
+        {
+          "card_number": "EB02-044",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "センゴク"
+        },
+        {
+          "card_number": "EB02-044",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "センゴク"
+        },
+        {
+          "card_number": "EB02-045",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "トラファルガー・ロー"
+        },
+        {
+          "card_number": "EB02-045",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "トラファルガー・ロー"
+        },
+        {
+          "card_number": "EB02-046",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ヒルドン"
+        },
+        {
+          "card_number": "EB02-047",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ブルーノ"
+        },
+        {
+          "card_number": "EB02-048",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ブルック"
+        },
+        {
+          "card_number": "EB02-048",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ブルック"
+        },
+        {
+          "card_number": "EB02-049",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "モンキー・D・ガープ"
+        },
+        {
+          "card_number": "EB02-050",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "ココロのちず"
+        },
+        {
+          "card_number": "EB02-051",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "鼻唄三丁矢筈斬り"
+        },
+        {
+          "card_number": "EB02-052",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "エネル"
+        },
+        {
+          "card_number": "EB02-052",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "エネル"
+        },
+        {
+          "card_number": "EB02-053",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "オルガ・ミスキナ"
+        },
+        {
+          "card_number": "EB02-054",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "サンジ"
+        },
+        {
+          "card_number": "EB02-054",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "サンジ"
+        },
+        {
+          "card_number": "EB02-055",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ジンベエ"
+        },
+        {
+          "card_number": "EB02-056",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ベガパンク"
+        },
+        {
+          "card_number": "EB02-056",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ベガパンク"
+        },
+        {
+          "card_number": "EB02-057",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "マッド・トレジャー"
+        },
+        {
+          "card_number": "EB02-058",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "あーーっす！"
+        },
+        {
+          "card_number": "EB02-059",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "お前がいねェと…!!おれは海賊王になれねェ!!!!"
+        },
+        {
+          "card_number": "EB02-060",
+          "rarity": "C",
+          "type": "STAGE",
+          "name": "ゴーイング・メリー号"
+        },
+        {
+          "card_number": "EB02-061",
+          "rarity": "SEC",
+          "type": "CHARACTER",
+          "name": "モンキー・D・ルフィ"
+        },
+        {
+          "card_number": "EB02-061",
+          "rarity": "SEC",
+          "type": "CHARACTER",
+          "name": "モンキー・D・ルフィ"
+        },
+        {
+          "card_number": "EB02-061",
+          "rarity": "SEC",
+          "type": "CHARACTER",
+          "name": "モンキー・D・ルフィ"
+        },
+        {
+          "card_number": "OP05-001",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "サボ"
+        },
+        {
+          "card_number": "OP05-002",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ベロ・ベティ"
+        },
+        {
+          "card_number": "OP05-022",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ドンキホーテ・ロシナンテ"
+        },
+        {
+          "card_number": "OP05-060",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "モンキー・D・ルフィ"
+        },
+        {
+          "card_number": "OP05-098",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "エネル"
+        },
+        {
+          "card_number": "OP06-001",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ウタ"
+        },
+        {
+          "card_number": "OP06-020",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ホーディ・ジョーンズ"
+        },
+        {
+          "card_number": "OP06-021",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ペローナ"
+        },
+        {
+          "card_number": "OP06-022",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ヤマト"
+        },
+        {
+          "card_number": "OP06-042",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ヴィンスモーク・レイジュ"
+        },
+        {
+          "card_number": "OP06-080",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ゲッコー・モリア"
+        },
+        {
+          "card_number": "OP07-001",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "モンキー・D・ドラゴン"
+        },
+        {
+          "card_number": "OP07-019",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ジュエリー・ボニー"
+        },
+        {
+          "card_number": "OP07-038",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ボア・ハンコック"
+        },
+        {
+          "card_number": "OP07-059",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "フォクシー"
+        },
+        {
+          "card_number": "OP07-079",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ロブ・ルッチ"
+        },
+        {
+          "card_number": "OP07-097",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ベガパンク"
+        },
+        {
+          "card_number": "OP08-001",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "トニートニー・チョッパー"
+        },
+        {
+          "card_number": "OP08-002",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "マルコ"
+        },
+        {
+          "card_number": "OP08-021",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "キャロット"
+        },
+        {
+          "card_number": "OP08-057",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "キング"
+        },
+        {
+          "card_number": "OP08-058",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "シャーロット・プリン"
+        },
+        {
+          "card_number": "OP08-098",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "カルガラ"
+        }
+      ],
+      "record_count": 105,
+      "official_card_image_urls": [
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB01-001_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB01-021_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB01-040_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-001.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-002.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-003.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-003_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-004.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-005.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-006.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-006_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-007.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-008.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-009.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-010.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-010_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-011.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-011_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-012.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-013.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-014.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-015.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-015_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-016.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-017.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-017_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-018.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-019.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-020.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-021.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-022.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-022_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-023.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-024.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-025.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-026.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-026_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-027.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-028.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-029.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-030.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-031.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-032.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-033.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-034.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-035.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-035_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-036.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-036_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-037.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-038.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-039.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-040.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-041.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-042.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-043.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-044.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-044_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-045.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-045_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-046.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-047.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-048.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-048_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-049.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-050.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-051.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-052.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-052_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-053.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-054.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-054_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-055.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-056.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-056_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-057.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-058.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-059.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-060.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-061.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-061_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-061_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP05-001_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP05-002_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP05-022_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP05-060_p4.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP05-098_p3.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP06-001_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP06-020_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP06-021_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP06-022_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP06-042_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP06-080_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP07-001_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP07-019_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP07-038_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP07-059_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP07-079_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP07-097_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP08-001_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP08-002_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP08-021_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP08-057_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP08-058_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP08-098_p2.png?261124"
+      ]
+    },
+    {
       "set": "EB-03",
       "language": "English",
       "official_source_url": "https://en.onepiece-cardgame.com/cardlist/?series=569203",
@@ -2820,16 +3671,714 @@
       ]
     },
     {
-      "set": "EB-02",
-      "language": "Japanese",
-      "official_source_url": "https://www.onepiece-cardgame.com/cardlist/?series=550202",
-      "source_error": "No successful content result returned"
-    },
-    {
       "set": "EB-03",
       "language": "Japanese",
       "official_source_url": "https://www.onepiece-cardgame.com/cardlist/?series=550203",
-      "source_error": "No successful content result returned"
+      "result_count": "90件HIT",
+      "distinct_card_numbers": 65,
+      "distinct_set_prefix_numbers": 62,
+      "card_numbers": [
+        "EB03-001",
+        "EB03-002",
+        "EB03-003",
+        "EB03-004",
+        "OP06-009",
+        "EB03-005",
+        "EB03-006",
+        "EB03-007",
+        "EB03-008",
+        "OP11-001",
+        "EB03-009",
+        "EB03-010",
+        "EB03-011",
+        "EB03-012",
+        "EB03-013",
+        "EB03-014",
+        "EB03-015",
+        "EB03-016",
+        "EB03-017",
+        "EB03-018",
+        "EB03-019",
+        "EB03-020",
+        "EB03-021",
+        "EB03-022",
+        "EB03-023",
+        "EB03-024",
+        "EB03-025",
+        "EB03-026",
+        "EB03-027",
+        "EB03-028",
+        "EB03-029",
+        "EB03-030",
+        "EB03-031",
+        "OP04-053",
+        "EB03-032",
+        "EB03-033",
+        "EB03-034",
+        "EB03-035",
+        "EB03-036",
+        "EB03-037",
+        "EB03-038",
+        "EB03-039",
+        "EB03-040",
+        "EB03-041",
+        "EB03-042",
+        "EB03-043",
+        "EB03-044",
+        "EB03-045",
+        "EB03-046",
+        "EB03-047",
+        "EB03-048",
+        "EB03-049",
+        "EB03-050",
+        "EB03-051",
+        "EB03-052",
+        "EB03-053",
+        "EB03-054",
+        "EB03-055",
+        "EB03-056",
+        "EB03-057",
+        "EB03-058",
+        "EB03-059",
+        "EB03-060",
+        "EB03-061",
+        "EB03-062"
+      ],
+      "entries": [
+        {
+          "card_number": "EB03-001",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ネフェルタリ・ビビ"
+        },
+        {
+          "card_number": "EB03-001",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "ネフェルタリ・ビビ"
+        },
+        {
+          "card_number": "EB03-002",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "アイン"
+        },
+        {
+          "card_number": "EB03-003",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ウタ"
+        },
+        {
+          "card_number": "EB03-003",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ウタ"
+        },
+        {
+          "card_number": "EB03-004",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "カリーナ"
+        },
+        {
+          "card_number": "EB03-005",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "シュガー"
+        },
+        {
+          "card_number": "EB03-006",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ナミ"
+        },
+        {
+          "card_number": "EB03-007",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "バカラ"
+        },
+        {
+          "card_number": "EB03-008",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ひばり"
+        },
+        {
+          "card_number": "EB03-008",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ひばり"
+        },
+        {
+          "card_number": "EB03-009",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "マキノ"
+        },
+        {
+          "card_number": "EB03-010",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "モネ"
+        },
+        {
+          "card_number": "EB03-011",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "いつかまた会えたら!!!もう一度 仲間と呼んでくれますか!!!?"
+        },
+        {
+          "card_number": "EB03-012",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "お玉"
+        },
+        {
+          "card_number": "EB03-013",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "キャロット"
+        },
+        {
+          "card_number": "EB03-013",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "キャロット"
+        },
+        {
+          "card_number": "EB03-014",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "くいな"
+        },
+        {
+          "card_number": "EB03-015",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ケイミー"
+        },
+        {
+          "card_number": "EB03-016",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "光月日和"
+        },
+        {
+          "card_number": "EB03-017",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ジュエリー・ボニー"
+        },
+        {
+          "card_number": "EB03-018",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "たしぎ"
+        },
+        {
+          "card_number": "EB03-018",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "たしぎ"
+        },
+        {
+          "card_number": "EB03-019",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ワンダ"
+        },
+        {
+          "card_number": "EB03-020",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "出た!負け惜しみ～"
+        },
+        {
+          "card_number": "EB03-021",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "アルビダ"
+        },
+        {
+          "card_number": "EB03-022",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "イスカ"
+        },
+        {
+          "card_number": "EB03-023",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "カヤ"
+        },
+        {
+          "card_number": "EB03-024",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ネフェルタリ・ビビ"
+        },
+        {
+          "card_number": "EB03-024",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ネフェルタリ・ビビ"
+        },
+        {
+          "card_number": "EB03-025",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ヒナ"
+        },
+        {
+          "card_number": "EB03-025",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ヒナ"
+        },
+        {
+          "card_number": "EB03-026",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ボア・ハンコック"
+        },
+        {
+          "card_number": "EB03-026",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ボア・ハンコック"
+        },
+        {
+          "card_number": "EB03-027",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "マーガレット"
+        },
+        {
+          "card_number": "EB03-028",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ユウ"
+        },
+        {
+          "card_number": "EB03-029",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "不届き者‼控えよ‼"
+        },
+        {
+          "card_number": "EB03-030",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ヴィオラ"
+        },
+        {
+          "card_number": "EB03-031",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ヴィンスモーク・レイジュ"
+        },
+        {
+          "card_number": "EB03-031",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ヴィンスモーク・レイジュ"
+        },
+        {
+          "card_number": "EB03-032",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "シャーロット・フランペ"
+        },
+        {
+          "card_number": "EB03-033",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "シャーロット・ブリュレ"
+        },
+        {
+          "card_number": "EB03-034",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "シャーロット・リンリン"
+        },
+        {
+          "card_number": "EB03-034",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "シャーロット・リンリン"
+        },
+        {
+          "card_number": "EB03-035",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "シャーロット・プリン"
+        },
+        {
+          "card_number": "EB03-036",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ベビー５"
+        },
+        {
+          "card_number": "EB03-037",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "リム"
+        },
+        {
+          "card_number": "EB03-038",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "ごち♡"
+        },
+        {
+          "card_number": "EB03-039",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "うるティ"
+        },
+        {
+          "card_number": "EB03-040",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "カリファ"
+        },
+        {
+          "card_number": "EB03-041",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "孔雀"
+        },
+        {
+          "card_number": "EB03-041",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "孔雀"
+        },
+        {
+          "card_number": "EB03-042",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "コアラ"
+        },
+        {
+          "card_number": "EB03-042",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "コアラ"
+        },
+        {
+          "card_number": "EB03-043",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ステューシー"
+        },
+        {
+          "card_number": "EB03-044",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ブラックマリア"
+        },
+        {
+          "card_number": "EB03-045",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ペローナ"
+        },
+        {
+          "card_number": "EB03-045",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ペローナ"
+        },
+        {
+          "card_number": "EB03-046",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ミス・ダブルフィンガー(ザラ)"
+        },
+        {
+          "card_number": "EB03-047",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ミス・バレンタイン(ミキータ)"
+        },
+        {
+          "card_number": "EB03-048",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "レベッカ"
+        },
+        {
+          "card_number": "EB03-049",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "やっぱりお前らかこの大騒ぎ"
+        },
+        {
+          "card_number": "EB03-050",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "コニス"
+        },
+        {
+          "card_number": "EB03-051",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "シャーロット・スムージー"
+        },
+        {
+          "card_number": "EB03-052",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "しらほし"
+        },
+        {
+          "card_number": "EB03-053",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ナミ"
+        },
+        {
+          "card_number": "EB03-053",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ナミ"
+        },
+        {
+          "card_number": "EB03-054",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ニコ・ロビン"
+        },
+        {
+          "card_number": "EB03-055",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ニコ・ロビン"
+        },
+        {
+          "card_number": "EB03-055",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "ニコ・ロビン"
+        },
+        {
+          "card_number": "EB03-056",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "ベロ・ベティ"
+        },
+        {
+          "card_number": "EB03-057",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ヤマト"
+        },
+        {
+          "card_number": "EB03-057",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "ヤマト"
+        },
+        {
+          "card_number": "EB03-058",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "リリス"
+        },
+        {
+          "card_number": "EB03-059",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "S-スネーク"
+        },
+        {
+          "card_number": "EB03-060",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "私のしもべになる？"
+        },
+        {
+          "card_number": "EB03-061",
+          "rarity": "SEC",
+          "type": "CHARACTER",
+          "name": "ウタ"
+        },
+        {
+          "card_number": "EB03-061",
+          "rarity": "SEC",
+          "type": "CHARACTER",
+          "name": "ウタ"
+        },
+        {
+          "card_number": "EB03-061",
+          "rarity": "SEC",
+          "type": "CHARACTER",
+          "name": "ウタ"
+        },
+        {
+          "card_number": "EB03-062",
+          "rarity": "SEC",
+          "type": "CHARACTER",
+          "name": "トラファルガー・ロー"
+        },
+        {
+          "card_number": "EB03-062",
+          "rarity": "SEC",
+          "type": "CHARACTER",
+          "name": "トラファルガー・ロー"
+        },
+        {
+          "card_number": "EB03-003",
+          "rarity": "SPカード",
+          "type": "CHARACTER",
+          "name": "ウタ"
+        },
+        {
+          "card_number": "EB03-018",
+          "rarity": "SPカード",
+          "type": "CHARACTER",
+          "name": "たしぎ"
+        },
+        {
+          "card_number": "EB03-024",
+          "rarity": "SPカード",
+          "type": "CHARACTER",
+          "name": "ネフェルタリ・ビビ"
+        },
+        {
+          "card_number": "EB03-026",
+          "rarity": "SPカード",
+          "type": "CHARACTER",
+          "name": "ボア・ハンコック"
+        },
+        {
+          "card_number": "EB03-031",
+          "rarity": "SPカード",
+          "type": "CHARACTER",
+          "name": "ヴィンスモーク・レイジュ"
+        },
+        {
+          "card_number": "EB03-042",
+          "rarity": "SPカード",
+          "type": "CHARACTER",
+          "name": "コアラ"
+        },
+        {
+          "card_number": "EB03-045",
+          "rarity": "SPカード",
+          "type": "CHARACTER",
+          "name": "ペローナ"
+        },
+        {
+          "card_number": "EB03-053",
+          "rarity": "SPカード",
+          "type": "CHARACTER",
+          "name": "ナミ"
+        },
+        {
+          "card_number": "EB03-055",
+          "rarity": "SPカード",
+          "type": "CHARACTER",
+          "name": "ニコ・ロビン"
+        }
+      ],
+      "record_count": 90,
+      "official_card_image_urls": [
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-001.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-001_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-002.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-003.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-003_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-004.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-005.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-006.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-007.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-008.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-008_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-009.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-010.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-011.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-012.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-013.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-013_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-014.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-015.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-016.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-017.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-018.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-018_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-019.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-020.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-021.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-022.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-023.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-024.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-024_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-025.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-025_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-026.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-026_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-027.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-028.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-029.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-030.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-031.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-031_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-032.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-033.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-034.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-034_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-035.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-036.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-037.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-038.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-039.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-040.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-041.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-041_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-042.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-042_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-043.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-044.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-045.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-045_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-046.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-047.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-048.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-049.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-050.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-051.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-052.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-053.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-053_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-054.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-055.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-055_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-056.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-057.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-057_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-058.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-059.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-060.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-061.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-061_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-061_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-062.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-062_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-003_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-018_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-024_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-026_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-031_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-042_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-045_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-053_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/EB03-055_p2.png?261124"
+      ]
     },
     {
       "set": "EB-04",
@@ -2848,7 +4397,7 @@
       "language": "Japanese",
       "official_source_url": "https://www.onepiece-cardgame.com/cardlist/?series=550204",
       "result_count": "85件HIT",
-      "distinct_card_numbers": 63,
+      "distinct_card_numbers": 67,
       "distinct_set_prefix_numbers": 61,
       "card_numbers": [
         "EB04-001",
@@ -2867,6 +4416,7 @@
         "EB04-014",
         "EB04-015",
         "EB04-016",
+        "OP07-021",
         "EB04-017",
         "EB04-018",
         "EB04-019",
@@ -2895,6 +4445,7 @@
         "EB04-042",
         "EB04-043",
         "EB04-044",
+        "OP11-092",
         "EB04-045",
         "EB04-046",
         "EB04-047",
@@ -2913,7 +4464,9 @@
         "EB04-060",
         "EB04-061",
         "EB01-023",
-        "OP11-106"
+        "OP11-106",
+        "OP06-035",
+        "EB01-042"
       ],
       "entries": [
         {
@@ -3499,9 +5052,7 @@
         "https://www.onepiece-cardgame.com/images/cardlist/card/EB01-023_p2.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/EB04-003_p1.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/EB04-039_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/OP11-106_p2.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-006_p2.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-014_p2.png?261124"
+        "https://www.onepiece-cardgame.com/images/cardlist/card/OP11-106_p2.png?261124"
       ]
     },
     {
@@ -5619,8 +7170,37 @@
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP06-110_p4.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP06-114_p2.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP06-114_p3.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB01-001.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB01-001_p1.png?261124"
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-006_p6.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-006_p7.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-006_p8.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-014_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-014_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST02-004_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST02-004_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST02-004_p4.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-005_p4.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-005_p5.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-008_p6.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-008_p7.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-013_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-013_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST03-013_p4.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST04-003_p4.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST04-005_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST04-005_p4.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST04-016_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST04-016_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST06-010_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST06-010_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST06-014_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST06-014_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST07-007_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST07-007_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST09-014_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST09-014_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST10-010_p4.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST12-014_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST12-014_p3.png?261124"
       ]
     },
     {
@@ -5628,12 +7208,13 @@
       "language": "Japanese",
       "official_source_url": "https://www.onepiece-cardgame.com/cardlist/?series=550301",
       "result_count": "319件HIT",
-      "distinct_card_numbers": 106,
+      "distinct_card_numbers": 109,
       "distinct_set_prefix_numbers": 0,
       "card_numbers": [
         "EB01-006",
         "OP01-006",
         "OP01-016",
+        "ST01-007",
         "OP01-024",
         "OP01-029",
         "OP01-033",
@@ -5722,6 +7303,8 @@
         "OP06-110",
         "OP06-114",
         "OP06-118",
+        "OP05-005",
+        "OP09-081",
         "ST01-006",
         "ST01-014",
         "ST02-004",
@@ -7738,8 +9321,37 @@
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP06-110_p2.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP06-114_p1.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP06-114_p2.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB01-001.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB01-001_p1.png?261124"
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST01-006_p8.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST01-006_p9.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST01-006_p10.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST01-014_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST01-014_p3.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST02-004_p3.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST02-004_p4.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST02-004_p5.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST03-005_p4.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST03-005_p5.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST03-008_p7.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST03-008_p8.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST03-013_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST03-013_p3.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST03-013_p4.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST04-003_p4.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST04-005_p4.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST04-005_p5.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST04-016_p3.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST04-016_p4.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST06-010_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST06-010_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST06-014_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST06-014_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST07-007_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST07-007_p3.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST09-014_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST09-014_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST10-010_p3.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST12-014_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST12-014_p2.png?261124"
       ]
     },
     {
@@ -9457,42 +11069,37 @@
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP10-109_p1.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP10-114_p1.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP10-114_p2.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-001.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-001_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-002.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-002_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-003.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-003_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-004.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-004_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-005.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-005_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-006.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-006_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-007.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-007_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-008.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-008_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-009.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-009_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-010.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-010_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-011.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-011_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-012.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-012_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-013.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-013_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-014.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-014_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-015.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-015_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-016.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-016_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-017.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-017_p1.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-018.png?261124",
-        "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-018_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST01-011_p4.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST02-007_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST06-008_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST10-005_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST10-008_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST12-005_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST12-017_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST13-004_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST13-007_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST13-010_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST13-014_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST13-019_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST14-007_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST14-010_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST14-013_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST14-016_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST14-017_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST15-002_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST16-003_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST16-004_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST16-005_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST17-002_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST17-003_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST17-005_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST18-001_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST18-001_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST18-002_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST18-003_p2.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST19-002_p3.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST20-003_p1.png?261124",
+        "https://en.onepiece-cardgame.com/images/cardlist/card/ST21-003_p2.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/EB02-061_p3.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP05-091_p4.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP06-007_p2.png?261124",
@@ -9510,11 +11117,12 @@
       "language": "Japanese",
       "official_source_url": "https://www.onepiece-cardgame.com/cardlist/?series=550302",
       "result_count": "316件HIT",
-      "distinct_card_numbers": 140,
+      "distinct_card_numbers": 153,
       "distinct_set_prefix_numbers": 0,
       "card_numbers": [
         "EB01-009",
         "EB01-012",
+        "OP01-008",
         "EB01-015",
         "EB01-018",
         "EB01-038",
@@ -9541,6 +11149,9 @@
         "OP05-004",
         "OP05-021",
         "OP05-030",
+        "ST02-010",
+        "OP01-094",
+        "OP03-076",
         "OP05-036",
         "OP05-037",
         "OP05-052",
@@ -9550,6 +11161,7 @@
         "OP05-102",
         "OP06-007",
         "OP06-044",
+        "ST03-017",
         "OP06-047",
         "OP06-049",
         "OP06-056",
@@ -9560,6 +11172,7 @@
         "OP06-076",
         "OP06-078",
         "OP06-107",
+        "OP01-041",
         "OP06-115",
         "OP06-118",
         "OP06-119",
@@ -9573,6 +11186,7 @@
         "OP07-040",
         "OP07-056",
         "OP07-064",
+        "ST10-001",
         "OP07-076",
         "OP07-107",
         "OP07-109",
@@ -9608,9 +11222,12 @@
         "OP09-084",
         "OP09-086",
         "OP09-093",
+        "OP03-040",
         "OP09-096",
         "OP09-097",
         "OP09-098",
+        "OP07-096",
+        "OP08-084",
         "OP10-011",
         "OP10-018",
         "OP10-032",
@@ -9623,6 +11240,9 @@
         "OP10-112",
         "OP10-114",
         "OP10-119",
+        "OP07-019",
+        "OP06-035",
+        "EB01-042",
         "ST01-011",
         "ST02-007",
         "ST06-008",
@@ -11220,42 +12840,37 @@
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP10-109_p1.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP10-114_p1.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP10-114_p2.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-001.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-001_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-002.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-002_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-003.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-003_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-004.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-004_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-005.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-005_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-006.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-006_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-007.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-007_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-008.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-008_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-009.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-009_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-010.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-010_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-011.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-011_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-012.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-012_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-013.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-013_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-014.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-014_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-015.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-015_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-016.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-016_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-017.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-017_p1.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-018.png?261124",
-        "https://www.onepiece-cardgame.com/images/cardlist/card/PRB02-018_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST01-011_p5.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST02-007_p4.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST06-008_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST10-005_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST10-008_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST12-005_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST12-017_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST13-004_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST13-007_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST13-010_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST13-014_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST13-019_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST14-007_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST14-010_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST14-013_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST14-016_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST14-017_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST15-002_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST16-003_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST16-004_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST16-005_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST17-002_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST17-003_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST17-005_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST18-001_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST18-001_p3.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST18-002_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST18-003_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST19-002_p2.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST20-003_p1.png?261124",
+        "https://www.onepiece-cardgame.com/images/cardlist/card/ST21-003_p2.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/EB02-061_p3.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP05-091_p4.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP06-007_p2.png?261124",
