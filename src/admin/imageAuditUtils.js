@@ -8,10 +8,14 @@ export const IMAGE_CHECK_STATUS = Object.freeze({
   INVALID_URL: 'invalid-url',
 })
 
-export function classifyImageResponse({ status = 0, contentType = '', timedOut = false, invalidUrl = false } = {}) {
+export function classifyImageResponse({ status = 0, upstreamStatus = 0, contentType = '', timedOut = false, invalidUrl = false } = {}) {
   if (invalidUrl) return IMAGE_CHECK_STATUS.INVALID_URL
   if (timedOut) return IMAGE_CHECK_STATUS.TIMEOUT
-  if (status === 404 || status === 410) return IMAGE_CHECK_STATUS.MISSING
+  // The Worker maps upstream failures to 502; inspect its diagnostic header
+  // before deciding whether the original card image is genuinely missing.
+  const sourceStatus = Number(upstreamStatus) || status
+  if (sourceStatus === 404 || sourceStatus === 410) return IMAGE_CHECK_STATUS.MISSING
+  if (sourceStatus >= 500 || sourceStatus === 408 || sourceStatus === 429 || sourceStatus === 0) return IMAGE_CHECK_STATUS.TEMPORARY_FAILURE
   if (status >= 500 || status === 408 || status === 429 || status === 0) return IMAGE_CHECK_STATUS.TEMPORARY_FAILURE
   if (status >= 200 && status < 300 && /^image\/(png|jpeg|webp|gif|avif)$/i.test(contentType)) return IMAGE_CHECK_STATUS.EXACT_LOADED
   return IMAGE_CHECK_STATUS.INVALID_URL
