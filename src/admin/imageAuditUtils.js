@@ -1,5 +1,8 @@
 export const IMAGE_CHECK_STATUS = Object.freeze({
   UNCHECKED: 'unchecked',
+  NO_REFERENCE: 'no-image-reference',
+  ALTERNATIVE_LOADED: 'alternative-loaded',
+  BASE_FALLBACK_LOADED: 'base-fallback-loaded',
   EXACT_LOADED: 'exact-loaded',
   FALLBACK_LOADED: 'fallback-loaded',
   MISSING: 'missing',
@@ -94,4 +97,59 @@ export async function mapWithConcurrency(items, concurrency, worker) {
   const workers = Array.from({ length: Math.max(1, Math.min(items.length || 1, concurrency || 1)) }, () => run())
   await Promise.all(workers)
   return results
+}
+
+/**
+ * Audit one catalogue record without conflating absent references with broken
+ * URLs. Candidate descriptors are ordered exact -> same-language alternative
+ * -> same-language base fallback. The caller must not mix language pools.
+ */
+export async function auditCatalogueImageRecord(record, {
+  language,
+  fetchImpl = fetch,
+  attempts = 2,
+  timeoutMs = 10000,
+  retryDelayMs = 350,
+  sleep,
+} = {}) {
+  const recordLanguage = record?.languageCode || record?.language || ''
+  if (!['en', 'jp'].includes(language) || recordLanguage !== language) {
+    return { ...record, status: IMAGE_CHECK_STATUS.INVALID_URL, diagnostic: 'language-mismatch', checkedAt: new Date().toISOString() }
+  }
+  const candidates = Array.isArray(record.imageCandidates)
+    ? record.imageCandidates
+    : [
+        ...(record.exactImageUrls || (record.imageUrl ? [{ url: record.imageUrl, kind: 'exact' }] : [])),
+        ...(record.alternativeImageUrls || []).map((url) => ({ url, kind: 'alternative' })),
+        ...(record.baseFallbackImageUrls || []).map((url) => ({ url, kind: 'base-fallback' })),
+      ]
+  const validCandidates = candidates.filter((candidate) => candidate?.url)
+  if (!validCandidates.length) {
+    return { ...record, status: IMAGE_CHECK_STATUS.NO_REFERENCE, checkedUrl: '', checkedAt: new Date().toISOString() }
+  }
+  let lastResult = null
+  for (const candidate of validCandidates) {
+    const result = await loadImageWithRetry(candidate.url, { fetchImpl, attempts, timeoutMs, retryDelayMs, ...(sleep ? { sleep } : {}) })
+    lastResult = { ...result, candidateKind: candidate.kind || 'exact' }
+    if (result.status === IMAGE_CHECK_STATUS.EXACT_LOADED) {
+      const status = candidate.kind === 'base-fallback' ? IMAGE_CHECK_STATUS.BASE_FALLBACK_LOADED
+        : candidate.kind === 'alternative' ? IMAGE_CHECK_STATUS.ALTERNATIVE_LOADED
+          : IMAGE_CHECK_STATUS.EXACT_LOADED
+      return { ...record, ...lastResult, status, checkedAt: new Date().toISOString() }
+    }
+    // Do not turn a transient failure into a missing-image result merely
+    // because a later fallback also failed. Preserve the final diagnostic.
+    if ([IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT].includes(result.status)) continue
+  }
+  return { ...record, ...lastResult, checkedAt: new Date().toISOString() }
+}
+
+/** Stable identity prevents repeated product links from inflating audit totals. */
+export function dedupeCatalogueAuditRecords(records = []) {
+  const unique = new Map()
+  for (const record of records) {
+    const key = record.id || [record.printingKey, record.languageCode, record.setCode].join(':')
+    if (key && !unique.has(key)) unique.set(key, record)
+  }
+  return [...unique.values()]
 }
