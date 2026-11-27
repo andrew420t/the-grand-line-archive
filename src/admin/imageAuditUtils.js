@@ -55,7 +55,7 @@ export async function loadImageWithRetry(url, {
   let lastHttpStatus = 0
   let lastUpstreamStatus = 0
   let lastProxyError = ''
-  for (let attempt = 1; attempt <= Math.max(1, attempts); attempt += 1) {
+  const maxAttempts = Math.max(1, Math.min(5, Number.isFinite(Number(attempts)) ? Math.floor(Number(attempts)) : 2))\n  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), timeoutMs)
     try {
@@ -78,9 +78,9 @@ export async function loadImageWithRetry(url, {
     } finally {
       clearTimeout(timeout)
     }
-    if (attempt < attempts) await sleep(retryDelayMs * attempt)
+    if (attempt < maxAttempts) await sleep(retryDelayMs * attempt)
   }
-  return { status: lastStatus, url, candidateUrl: url, attempts: Math.max(1, attempts), retryCount: Math.max(0, Math.max(1, attempts) - 1), httpStatus: lastHttpStatus, upstreamStatus: lastUpstreamStatus, proxyError: lastProxyError }
+  return { status: lastStatus, url, candidateUrl: url, attempts: maxAttempts, retryCount: Math.max(0, maxAttempts - 1), httpStatus: lastHttpStatus, upstreamStatus: lastUpstreamStatus, proxyError: lastProxyError }
 }
 
 /** Run bounded concurrent jobs while retaining input order. */
