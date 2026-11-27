@@ -11,7 +11,7 @@
 - PR #37 and PR #38 remain open and unmerged.
 - No changes to main/master, Production deployment, or Production Supabase.
 - No branches or commits deleted.
-- This audit stage changes only documentation/evidence and regression tests; it does not replace scanner, Image Library, filters, or OP-15 corrections.
+- This supplemental Stage 4B-1M work adds official evidence, a language-aware OP-18 printing correction, and regression tests. It preserves the scanner, Image Library, filters and OP-15 corrections. The branch already contained earlier Stage 4B-1M/1N artifacts beyond the supplied starting commit; no history was rewritten or deleted.
 
 ## Extraction result
 
@@ -97,7 +97,7 @@ The full base-number lists, non-base/reprint lists, printing identity IDs, image
   - Official: `OP18-049_p1`, `OP13-012_p1`, `OP17-040_p2`
   - Stage 3 supplemental file instead uses: `OP18-064_p1`, `OP13-012_p2`, `OP17-040_p1`
 - Japanese image IDs match. One Japanese TR name is concatenated incorrectly (official: `キリンガム聖`); six SP rarity labels use the normalized English label `SP CARD` instead of Bandai's `SPカード`.
-- These defects are recorded, not silently patched into an unrelated branch.
+- The English/Japanese differences are now corrected on the audit branch in `src/admin/op18OfficialCatalogue.js`: 160 union records produce 159 language-correct printings per language; the English OP18-049 TR and Japanese OP18-064 TR are separate, and the Japanese TR name is corrected. PR #38 itself remains open and unmodified.
 
 ### EB-05
 
@@ -145,12 +145,12 @@ Existing Stage 3 code/tests inspected (not modified): `src/admin/catalogueImageF
 ## Verification and blockers
 
 - The 50-row evidence matrix and all extracted-page invariants were checked in-memory against the committed JSON evidence.
-- **Automated `npm test`, lint and production build were not run.** The audit branch is not included in the repository's existing `.github/workflows/verify.yml` push-branch list; no workflow run or combined status exists for the audit head. No PR was opened merely to trigger CI.
+- **Automated `npm test`, lint and production build are not yet confirmed for the latest audit head.** The audit branch workflow contains a push trigger for this branch, but the GitHub connector currently exposes no completed push-run result or combined check status for the latest commit. The earlier Stage 4B-1N report records a prior 271/271 test, lint and build pass on commit `6f4327a7`; that is not verification of this latest commit.
 - Official image URLs were extracted and count-aligned; full HTTP image loading and application proxy delivery are not yet verified.
-- Preview was not deployed or verified. No Supabase project was modified.
-- The OP-18 English image-ID mismatches and Japanese TR name remain proven application-data defects for the next stage.
+- Preview was not deployed or verified. No Supabase project was modified. The existing Stage 4B-1N investigation records the Testing project as a small smoke dataset (32 products, 2 product-linked sets and no reference-image records); it was not changed.
+- The OP-18 language-specific image IDs, separate English/Japanese TR card numbers, and Japanese TR name are corrected on the audit branch; CI and live image verification remain pending.
 - Full pagination/filter UI regression, language separation in rendered results, duplicate suppression in actual data, and a live Preview audit remain outstanding.
 
 ## Handover
 
-Next stage: **Stage 4B-1N**. Continue on the same audit branch from the exact Stage 4B-1M head reported in the handover message. Correct only the proven OP-18 supplemental IDs/name, add direct regression tests, then complete the remaining catalogue-to-application printing crosswalk and image HTTP verification. Preserve PR #37/#38 as open and unmerged; do not merge into main/master, deploy Production, or modify Production Supabase.
+Next requested stage: **Stage 4B-1N**. A prior 1N investigation document already exists on this branch; its OP-18 image-ID conclusion is superseded by the erratum appended to that document. Continue from the exact head in the handover message, verify the new language-aware OP-18 code with CI, complete the 7,786-image HTTP audit, and finish the remaining catalogue-to-application printing crosswalk. Preserve PR #37/#38 as open and unmerged; do not merge into main/master, deploy Production, or modify Production Supabase.
