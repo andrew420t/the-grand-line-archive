@@ -34,6 +34,9 @@ import {
   useParams,
 } from 'react-router-dom'
 import AdminDashboard from './admin/AdminDashboard'
+import OrderConfirmation from './OrderConfirmation'
+import OrderConversation from './OrderConversation'
+import { buildOrderConfirmation } from './orderConfirmation'
 import AdminAccess from './admin/AdminAccess'
 import { findPrimaryCatalogueMatch } from './admin/cardCatalogue'
 import { hasSupabaseConfig, isPreviewBuild, supabase } from './lib/supabase'
@@ -264,6 +267,7 @@ function Storefront() {
   const [ordersError, setOrdersError] = useState('')
   const [authMessage, setAuthMessage] = useState('')
   const [orderAction, setOrderAction] = useState('')
+  const [orderConfirmation, setOrderConfirmation] = useState(null)
   const checkoutLock = useRef(false)
   const orderStatusLocks = useRef(new Set())
   const [adminAccessGranted, setAdminAccessGranted] = useState(false)
@@ -671,11 +675,27 @@ function Storefront() {
       setOrderAction('')
       return
     }
+    const confirmation = buildOrderConfirmation(orderResult.data, checkout.items, checkout.total)
+    if (!confirmation) {
+      setOrdersError('The order was created, but its confirmation details could not be prepared. Check Your orders for the saved order.')
+      setCart([])
+      setCartOpen(false)
+      await loadOrders(false)
+      navigate('/account/orders')
+      return
+    }
+    setOrderConfirmation(confirmation)
     setCart([])
     setCartOpen(false)
     setOrderAction('')
     notify('Your order has been placed.')
     navigate('/account/orders')
+
+    // Email notification is a separate best-effort task. It must never undo a
+    // confirmed order or make a customer submit the same basket twice.
+    void supabase.functions.invoke('notify-new-order', {
+      body: { orderId: String(orderResult.data) },
+    }).catch(() => {})
     } catch (error) {
       setOrdersError(`Checkout failed unexpectedly: ${error?.message || 'Please try again.'}`)
     } finally {
@@ -1121,6 +1141,17 @@ function Storefront() {
         <div className="footer-bottom page-width"><span>© {currentYear} Grand Line Archive</span><span>ONE PIECE CARD GAME · COLLECTOR INVENTORY</span></div>
       </footer>
 
+      {orderConfirmation && (
+        <OrderConfirmation
+          confirmation={orderConfirmation}
+          onClose={() => setOrderConfirmation(null)}
+          onViewOrder={() => {
+            setOrderConfirmation(null)
+            navigate('/account/orders')
+          }}
+        />
+      )}
+
       {cartOpen && (
         <div className="drawer-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) setCartOpen(false) }}>
           <aside className="cart-drawer" aria-label="Shopping basket">
@@ -1235,7 +1266,7 @@ function OrdersPage({ user, orders, orderItems, products, loading, error, onSign
       {error && <ErrorNotice message={error} />}
       {loading ? <div className="loading-state"><span className="loader" />Loading your orders…</div> : orders.length ? (
         <div className="order-list">
-          {orders.map((order) => <OrderCard key={order.id} order={order} orderItems={orderItems} products={products} />)}
+          {orders.map((order) => <OrderCard key={order.id} order={order} orderItems={orderItems} products={products} user={user} />)}
         </div>
       ) : <div className="empty-orders"><ClipboardList size={28} /><h2>No orders just yet.</h2><p>Your next favorite card is out there.</p><Link className="button button--gold" to="/shop">Explore the archive <ArrowRight size={16} /></Link></div>}
       <button className="subtle-refresh" type="button" onClick={onReload}>Refresh order history</button>
@@ -1243,13 +1274,15 @@ function OrdersPage({ user, orders, orderItems, products, loading, error, onSign
   )
 }
 
-function OrderCard({ order, orderItems, products }) {
+function OrderCard({ order, orderItems, products, user }) {
   const items = orderItems.filter((item) => String(item.order_id) === String(order.id))
   return (
     <article className="order-card">
       <div className="order-card__heading"><div><span className="eyebrow">ORDER #{String(order.id).slice(-8).toUpperCase()}</span><span>{order.created_at ? new Date(order.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'Date not recorded'}</span></div><span className={`status-pill status-pill--${String(order.status || 'pending').toLowerCase()}`}>{order.status || 'Pending'}</span></div>
+      <div className="order-card__pickup"><MapPin size={14} /> Gibraltar local pickup</div>
       <OrderItems items={items} products={products} />
       <div className="order-card__total"><span>Order total</span><strong>{money(firstValue(order.total_amount, order.total, order.amount, 0))}</strong></div>
+      <OrderConversation order={order} user={user} />
     </article>
   )
 }
@@ -1258,8 +1291,8 @@ function OrderItems({ items, products }) {
   return (
     <div className="order-lines">
       {items.length ? items.map((item) => {
-        const product = products.find((entry) => String(entry.id) === String(item.product_id))
-        return <div className="order-line" key={item.id || `${item.order_id}-${item.product_id}`}><span>{product?.name || `Card ${item.product_id}`} <small>× {item.quantity}</small></span><strong>{money(Number(firstValue(item.unit_price, item.price, 0)) * Number(item.quantity || 0))}</strong></div>
+        const product = products.find((entry) => String(entry.id) === String(item.product_id || item.card_id))
+        return <div className="order-line" key={item.id || `${item.order_id}-${item.product_id}`}><span>{product?.name || `Card ${item.product_id}`} <small>× {item.quantity}</small></span><strong>{money(Number(firstValue(item.unit_price, item.price_at_purchase, item.price, 0)) * Number(item.quantity || 0))}</strong></div>
       }) : <p className="order-lines__empty">No line items are available for this order.</p>}
     </div>
   )
