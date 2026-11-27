@@ -14,6 +14,7 @@ import {
   Layers,
   LayoutDashboard,
   Mail,
+  MessageCircle,
   MapPin,
   Package,
   PackagePlus,
@@ -38,6 +39,7 @@ import StockPhotographyPanel from './StockPhotographyPanel'
 import ImageLibraryPanel from './ImageLibraryPanel'
 import BulkImportPanel from './BulkImportPanel'
 import OrderConversation from '../OrderConversation'
+import SupportMessages from '../SupportMessages'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
@@ -62,6 +64,7 @@ const adminSections = [
   { id: 'image-library', label: 'Image Library', icon: ImagePlus },
   { id: 'collections', label: 'Collections and Sets', icon: Layers },
   { id: 'orders', label: 'Orders', icon: ClipboardList },
+  { id: 'messages', label: 'Messages', icon: MessageCircle },
   { id: 'customers', label: 'Customers', icon: Users },
   { id: 'customisation', label: 'Website Customisation', icon: Palette },
   { id: 'settings', label: 'Settings', icon: Settings },
@@ -88,6 +91,8 @@ export default function AdminDashboard({
   onSaveSiteSettings,
 }) {
   const [activeSection, setActiveSection] = useState('overview')
+  const [messageTarget, setMessageTarget] = useState({ customerId: null, orderId: null })
+  const [unreadSupportCount, setUnreadSupportCount] = useState(0)
   const [photos, setPhotos] = useState([])
   const photosRef = useRef(photos)
   photosRef.current = photos
@@ -110,6 +115,12 @@ export default function AdminDashboard({
     setRawText('')
     setScanVersion((current) => current + 1)
     setActiveSection('add-stock')
+  }
+
+  const openCustomerMessages = (customerId, orderId = null) => {
+    if (!customerId) return
+    setMessageTarget({ customerId: String(customerId), orderId: orderId ? String(orderId) : null })
+    setActiveSection('messages')
   }
 
   const retryOrderEmail = async (orderId) => {
@@ -297,6 +308,18 @@ export default function AdminDashboard({
           onReload={onReload}
           onUpdateStatus={onUpdateStatus}
           onRetryEmail={retryOrderEmail}
+          onStartConversation={openCustomerMessages}
+        />
+      )}
+
+      {activeSection === 'messages' && (
+        <SupportMessages
+          key={messageTarget.orderId || messageTarget.customerId || 'admin-inbox'}
+          user={user}
+          isAdmin
+          initialCustomerId={messageTarget.customerId}
+          initialOrderId={messageTarget.orderId}
+          onUnreadCountChange={setUnreadSupportCount}
         />
       )}
 
@@ -1020,7 +1043,7 @@ function CollectionsSection({ categories, sets, onRefresh }) {
   )
 }
 
-function OrdersSection({ orders, orderItems, products, user, loading, error, action, onReload, onUpdateStatus, onRetryEmail }) {
+function OrdersSection({ orders, orderItems, products, user, loading, error, action, onReload, onUpdateStatus, onRetryEmail, onStartConversation }) {
   const pendingCount = orders.filter((order) => ['pending', 'processing'].includes(String(order.status).toLowerCase())).length
   const [emailBusy, setEmailBusy] = useState('')
   const [emailError, setEmailError] = useState('')
@@ -1068,6 +1091,9 @@ function OrdersSection({ orders, orderItems, products, user, loading, error, act
                   {order.customer_email && <span><Mail size={13} /> {order.customer_email}</span>}
                   <span>{items.length} line items</span>
                   <span><MapPin size={13} /> Gibraltar local pickup</span>
+                  <button className="button button--outline admin-order__message-button" type="button" disabled={!(order.user_id || order.customer_id || order.profile_id)} title="Open the customer conversation" onClick={() => onStartConversation?.(order.user_id || order.customer_id || order.profile_id, order.id)}>
+                    <MessageCircle size={13} /> Message customer
+                  </button>
                 </div>
                 <div className="admin-order__email">
                   <div><strong>Admin email notification</strong><span className={emailStatus === 'sent' ? 'is-email-sent' : 'is-email-pending'}>{emailStatus === 'sent' ? 'Sent' : emailStatus === 'not_configured' ? 'Not configured' : emailStatus === 'failed' ? 'Failed' : emailStatus === 'sending' ? 'Sending…' : 'Pending'}</span></div>
