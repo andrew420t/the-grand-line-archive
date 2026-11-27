@@ -225,6 +225,10 @@ export function buildNewProductPayload(form, setId, includeCardDetails) {
     updated_at: timestamp,
   }
 
+  // Keep regular stock compatible with pre-migration databases. Only send
+  // the new column when an administrator explicitly places this item in Bulk.
+  if (form.is_bulk === true) payload.is_bulk = true
+
   if (includeCardDetails) {
     Object.assign(payload, {
       color: form.color.trim() || null,
