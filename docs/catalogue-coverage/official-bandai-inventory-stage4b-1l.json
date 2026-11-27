@@ -36155,7 +36155,7 @@
   "stage4b_1t_schema_persistence": {
     "audit_date": "2026-11-27",
     "starting_commit": "9645e2bfb068c0cd519facad1c185306ad72eb52",
-    "schema_commit": "ace24b15b0f4556663167c61d0fbb274e76c7bc3",
+    "schema_commit": "331d8b5554d09b9257f426f085c0e158dd690036",
     "migration": "20261127200500_catalogue_lossless_source_persistence_stage4b1t",
     "migration_applied_to_testing": true,
     "testing_project_id": "ehzqsnfkmwphyllhaqhe",
@@ -36202,7 +36202,15 @@
       ],
       "separate_official_image_url_and_application_path": true,
       "upstream_and_local_supplement_namespaces": true,
-      "language_scoped_foreign_keys": true
+      "language_scoped_foreign_keys": true,
+      "locator_fields": [
+        "source_locator_key",
+        "source_first_seen_at",
+        "suffix_family",
+        "suffix_n",
+        "source_image_url",
+        "source_record"
+      ]
     },
     "testing_database_verification": {
       "all_catalogue_tables_rls_enabled": true,
@@ -36223,7 +36231,9 @@
       "authenticated_catalogue_write_grants": 0,
       "inventory_products": 32,
       "inventory_hash": "4a7a39bb366cfdedd1e6bf39ea94e493",
-      "inventory_links": 0
+      "inventory_links": 0,
+      "locator_suffix_columns": true,
+      "source_image_url_column": true
     },
     "catalogue_imported": false,
     "main_set_assignments_persisted": 0,
@@ -36240,7 +36250,13 @@
       "no_inventory_changes": true,
       "no_inventory_links": true
     },
-    "ci_pending_exact_commit": true
+    "ci_pending_exact_commit": true,
+    "migrations": [
+      "20261127195100_catalogue_lossless_source_persistence_stage4b1t",
+      "20261127195212_catalogue_locator_suffix_provenance_stage4b1t"
+    ],
+    "status": "SCHEMA_MIGRATED_AND_VERIFIED; CATALOGUE_IMPORT_NOT_RUN",
+    "exact_head_ci": "PENDING_ON_THIS_MATRIX_COMMIT"
   },
-  "matrix_policy": "All 50 rows remain INCOMPLETE until official identity, application runtime, Testing persistence and image verification all pass. Stage 4B-1T schema migration is verified; no catalogue rows have yet been imported."
+  "matrix_policy": "All 50 rows remain INCOMPLETE until official identity, application runtime, Testing persistence and image verification all pass. Stage 4B-1T schema migrations are verified; no catalogue rows have yet been imported."
 }
