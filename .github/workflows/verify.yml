@@ -25,3 +25,13 @@ jobs:
         run: npm run lint
       - name: Build production site
         run: npm run build
+      - name: Audit official Bandai image URLs (audit branch only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/audit/official-bandai-inventory-stage4b-1l-2026-11-27'
+        run: node scripts/auditOfficialBandaiImages.mjs
+      - name: Upload official image HTTP audit
+        if: always() && github.event_name == 'push' && github.ref == 'refs/heads/audit/official-bandai-inventory-stage4b-1l-2026-11-27'
+        uses: actions/upload-artifact@v4
+        with:
+          name: official-bandai-image-http-audit
+          path: artifacts/official-bandai-image-http-audit.json
+          if-no-files-found: warn
