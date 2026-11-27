@@ -96,3 +96,16 @@ test('preserves a genuine upstream 404 as a not-found response', async () => {
   assert.equal(response.headers.get('x-card-image-upstream-status'), '404')
   assert.equal(await response.text(), 'Card image source returned HTTP 404')
 })
+
+
+test('returns a distinct 504 diagnostic when the upstream fetch times out', async () => {
+  const response = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/en/OP01-036.png'),
+    async (_url, options) => new Promise((_resolve, reject) => {
+      options.signal.addEventListener('abort', () => reject(Object.assign(new Error('aborted'), { name: 'AbortError' })))
+    }),
+  )
+  assert.equal(response.status, 504)
+  assert.equal(response.headers.get('x-card-image-error'), 'upstream-timeout')
+  assert.match(await response.text(), /timed out/)
+})
