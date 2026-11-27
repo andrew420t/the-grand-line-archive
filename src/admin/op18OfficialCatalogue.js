@@ -4861,7 +4861,7 @@ function makeSupplementalMatch(printing, language) {
     releaseDate: isJapanese ? '2026-11-21' : '2026-11-20',
     sourceUrl: isJapanese ? JP_CARDLIST : EN_CARDLIST,
     blockIcon: printing.blockIcon,
-    source: 'Bandai official ' + (isJapanese ? 'Japanese' : 'English') + ' OP-18 ' + printing.variantLabel + ' image via Cloudflare proxy',
+    source: 'Bandai official ' + (isJapanese ? 'Japanese' : 'English') + ' OP-18 ' + variantLabel + ' image via Cloudflare proxy',
     officialCardlistUrl: isJapanese ? JP_CARDLIST : EN_CARDLIST,
     supplementalOfficial: true,
     verificationStatus: 'pending-live-image-check',
