@@ -109,7 +109,7 @@ function sourceImageCandidates(url) {
 }
 
 export function resolveCatalogueImage({ printing, index = {}, printings = [], language = 'en', cardNumber = '' } = {}) {
-  if (!printing) return { imageUrl: '', imageUrls: [], fallbackImageUrl: '', source: 'No image reference', usesBaseImageFallback: false }
+  if (!printing) return { imageUrl: '', imageUrls: [], fallbackImageUrl: '', imageCandidates: [], source: 'No image reference', usesBaseImageFallback: false }
   const locatorFor = (candidate) => index.locatorsByPrinting instanceof Map
     ? index.locatorsByPrinting.get(candidate.key + ':' + candidate.site)
     : undefined
@@ -146,6 +146,54 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
   const normalizedNumber = String(cardNumber || '').toUpperCase().replace(/^(OP|EB|ST|PRB)-(\d{2})-/, '$1$2-')
   const baseDirectUrl = canUseSameLanguageFallback ? buildOfficialBaseImageUrl(cardNumber, language) : ''
   const baseProxyUrl = canUseSameLanguageFallback ? buildOfficialImageProxyUrl(normalizedNumber, language) : ''
+  const candidateMeta = (candidate, candidateLanguage, kind, url, source) => ({
+    url,
+    kind,
+    printingKey: candidate?.key || '',
+    cardKey: candidate?.card_key || '',
+    cardNumber: String(cardNumber || ''),
+    language: candidateLanguage,
+    originalImageUrl: String(candidate?.image_url || ''),
+    source,
+  })
+  const imageCandidates = []
+  const exactLanguage = printing.site === 'tcgcsv' ? 'en' : printing.site
+  for (const url of exactUrls) {
+    imageCandidates.push(candidateMeta(
+      printing,
+      exactLanguage,
+      'exact',
+      url,
+      exactOfficial ? 'Bandai official printing locator' : exactProductPhoto ? 'TCGCSV product image' : 'Catalogue printing image',
+    ))
+  }
+  const alternativePrintings = (printings || []).filter((candidate) =>
+    candidate.card_key === printing.card_key &&
+    candidate.site === printing.site &&
+    candidate.key !== printing.key &&
+    ['en', 'jp'].includes(candidate.site),
+  )
+  for (const candidate of alternativePrintings) {
+    const official = officialImageFor(candidate, locatorFor(candidate))
+    const urls = official ? [official.proxyUrl, official.directUrl] : sourceImageCandidates(candidate.image_url)
+    for (const url of urls) {
+      imageCandidates.push(candidateMeta(candidate, candidate.site, 'alternative', url, official ? 'Bandai alternate printing locator' : 'Same-language alternate catalogue printing'))
+    }
+  }
+  if (canUseSameLanguageFallback) {
+    for (const url of uniqueUrls([baseProxyUrl, baseDirectUrl])) {
+      imageCandidates.push({
+        url,
+        kind: 'base-fallback',
+        printingKey: '',
+        cardKey: printing.card_key || '',
+        cardNumber: String(cardNumber || ''),
+        language,
+        originalImageUrl: '',
+        source: 'Bandai official same-language base-card image',
+      })
+    }
+  }
   const imageUrls = uniqueUrls([...exactUrls, ...alternateUrls, baseProxyUrl, baseDirectUrl])
 
   const usesAlternateOfficialFallback = !exactOfficial && !exactProductPhoto && alternateUrls.length > 0
