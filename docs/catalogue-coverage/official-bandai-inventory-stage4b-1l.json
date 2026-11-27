@@ -37,161 +37,9 @@
       "language": "English",
       "official_source_url": null,
       "retrieval_date": "2026-11-27",
-      "official_expected_base_card_count": 0,
-      "actual_distinct_base_card_count": 121,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
-      "official_card_numbers": null,
-      "official_base_card_numbers": [],
-      "missing_card_numbers": [],
-      "unexpected_card_numbers": [
-        "OP01-001",
-        "OP01-002",
-        "OP01-003",
-        "OP01-004",
-        "OP01-005",
-        "OP01-006",
-        "OP01-007",
-        "OP01-008",
-        "OP01-009",
-        "OP01-010",
-        "OP01-011",
-        "OP01-012",
-        "OP01-013",
-        "OP01-014",
-        "OP01-015",
-        "OP01-016",
-        "OP01-017",
-        "OP01-018",
-        "OP01-019",
-        "OP01-020",
-        "OP01-021",
-        "OP01-022",
-        "OP01-023",
-        "OP01-024",
-        "OP01-025",
-        "OP01-026",
-        "OP01-027",
-        "OP01-028",
-        "OP01-029",
-        "OP01-030",
-        "OP01-031",
-        "OP01-032",
-        "OP01-033",
-        "OP01-034",
-        "OP01-035",
-        "OP01-036",
-        "OP01-037",
-        "OP01-038",
-        "OP01-039",
-        "OP01-040",
-        "OP01-041",
-        "OP01-042",
-        "OP01-043",
-        "OP01-044",
-        "OP01-045",
-        "OP01-046",
-        "OP01-047",
-        "OP01-048",
-        "OP01-049",
-        "OP01-050",
-        "OP01-051",
-        "OP01-052",
-        "OP01-053",
-        "OP01-054",
-        "OP01-055",
-        "OP01-056",
-        "OP01-057",
-        "OP01-058",
-        "OP01-059",
-        "OP01-060",
-        "OP01-061",
-        "OP01-062",
-        "OP01-063",
-        "OP01-064",
-        "OP01-065",
-        "OP01-066",
-        "OP01-067",
-        "OP01-068",
-        "OP01-069",
-        "OP01-070",
-        "OP01-071",
-        "OP01-072",
-        "OP01-073",
-        "OP01-074",
-        "OP01-075",
-        "OP01-076",
-        "OP01-077",
-        "OP01-078",
-        "OP01-079",
-        "OP01-080",
-        "OP01-081",
-        "OP01-082",
-        "OP01-083",
-        "OP01-084",
-        "OP01-085",
-        "OP01-086",
-        "OP01-087",
-        "OP01-088",
-        "OP01-089",
-        "OP01-090",
-        "OP01-091",
-        "OP01-092",
-        "OP01-093",
-        "OP01-094",
-        "OP01-095",
-        "OP01-096",
-        "OP01-097",
-        "OP01-098",
-        "OP01-099",
-        "OP01-100",
-        "OP01-101",
-        "OP01-102",
-        "OP01-103",
-        "OP01-104",
-        "OP01-105",
-        "OP01-106",
-        "OP01-107",
-        "OP01-108",
-        "OP01-109",
-        "OP01-110",
-        "OP01-111",
-        "OP01-112",
-        "OP01-113",
-        "OP01-114",
-        "OP01-115",
-        "OP01-116",
-        "OP01-117",
-        "OP01-118",
-        "OP01-119",
-        "OP01-120",
-        "OP01-121"
-      ],
-      "card_type_counts": null,
-      "rarity_counts": null,
-      "reprints_and_additional_inclusions": null,
-      "official_page_result_count": null,
-      "official_page_entry_count": null,
-      "official_source_image_url_count": 0,
-      "unparsed_result_rows": 0,
-      "expected_printings": null,
-      "actual_distinct_printings": 154,
-      "missing_printings": null,
-      "duplicate_printing_identities": null,
-      "missing_image_references": null,
-      "verification_status": "SOURCE UNVERIFIED",
-      "feed_source_generated_at": "2026-10-22T04:46:19Z",
-      "feed_observed_prefix_count": 121,
-      "feed_observed_release_printings": 154,
-      "notes": "Official page returned no usable result set; expected count not inferred."
-    },
-    {
-      "set": "OP-01",
-      "language": "Japanese",
-      "official_source_url": null,
-      "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 121,
       "actual_distinct_base_card_count": 121,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP01-001",
         "OP01-002",
@@ -438,6 +286,294 @@
         "OP01-120",
         "OP01-121"
       ],
+      "partial_product_card_numbers": null,
+      "missing_card_numbers": [],
+      "unexpected_card_numbers": [],
+      "card_type_counts": {
+        "leader": 8,
+        "character": 93,
+        "event": 20,
+        "stage": 0
+      },
+      "rarity_counts": {
+        "L": 8,
+        "R": 26,
+        "UC": 30,
+        "C": 45,
+        "SR": 10,
+        "SEC": 2
+      },
+      "reprints_and_additional_inclusions": [],
+      "official_page_result_count": 154,
+      "official_page_entry_count": 154,
+      "official_source_image_url_count": 154,
+      "unparsed_result_rows": 0,
+      "expected_printings": 154,
+      "actual_distinct_printings": 154,
+      "missing_printings": null,
+      "duplicate_printing_identities": null,
+      "missing_image_references": null,
+      "verification_status": "INCOMPLETE",
+      "feed_source_generated_at": "2026-10-22T04:46:19Z",
+      "feed_observed_prefix_count": 121,
+      "feed_observed_release_printings": 154,
+      "notes": ""
+    },
+    {
+      "set": "OP-01",
+      "language": "Japanese",
+      "official_source_url": null,
+      "retrieval_date": "2026-11-27",
+      "official_expected_base_card_count": 121,
+      "actual_distinct_base_card_count": 121,
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
+      "official_card_numbers": [
+        "OP01-001",
+        "OP01-002",
+        "OP01-003",
+        "OP01-004",
+        "OP01-005",
+        "OP01-006",
+        "OP01-007",
+        "OP01-008",
+        "OP01-009",
+        "OP01-010",
+        "OP01-011",
+        "OP01-012",
+        "OP01-013",
+        "OP01-014",
+        "OP01-015",
+        "OP01-016",
+        "OP01-017",
+        "OP01-018",
+        "OP01-019",
+        "OP01-020",
+        "OP01-021",
+        "OP01-022",
+        "OP01-023",
+        "OP01-024",
+        "OP01-025",
+        "OP01-026",
+        "OP01-027",
+        "OP01-028",
+        "OP01-029",
+        "OP01-030",
+        "OP01-031",
+        "OP01-032",
+        "OP01-033",
+        "OP01-034",
+        "OP01-035",
+        "OP01-036",
+        "OP01-037",
+        "OP01-038",
+        "OP01-039",
+        "OP01-040",
+        "OP01-041",
+        "OP01-042",
+        "OP01-043",
+        "OP01-044",
+        "OP01-045",
+        "OP01-046",
+        "OP01-047",
+        "OP01-048",
+        "OP01-049",
+        "OP01-050",
+        "OP01-051",
+        "OP01-052",
+        "OP01-053",
+        "OP01-054",
+        "OP01-055",
+        "OP01-056",
+        "OP01-057",
+        "OP01-058",
+        "OP01-059",
+        "OP01-060",
+        "OP01-061",
+        "OP01-062",
+        "OP01-063",
+        "OP01-064",
+        "OP01-065",
+        "OP01-066",
+        "OP01-067",
+        "OP01-068",
+        "OP01-069",
+        "OP01-070",
+        "OP01-071",
+        "OP01-072",
+        "OP01-073",
+        "OP01-074",
+        "OP01-075",
+        "OP01-076",
+        "OP01-077",
+        "OP01-078",
+        "OP01-079",
+        "OP01-080",
+        "OP01-081",
+        "OP01-082",
+        "OP01-083",
+        "OP01-084",
+        "OP01-085",
+        "OP01-086",
+        "OP01-087",
+        "OP01-088",
+        "OP01-089",
+        "OP01-090",
+        "OP01-091",
+        "OP01-092",
+        "OP01-093",
+        "OP01-094",
+        "OP01-095",
+        "OP01-096",
+        "OP01-097",
+        "OP01-098",
+        "OP01-099",
+        "OP01-100",
+        "OP01-101",
+        "OP01-102",
+        "OP01-103",
+        "OP01-104",
+        "OP01-105",
+        "OP01-106",
+        "OP01-107",
+        "OP01-108",
+        "OP01-109",
+        "OP01-110",
+        "OP01-111",
+        "OP01-112",
+        "OP01-113",
+        "OP01-114",
+        "OP01-115",
+        "OP01-116",
+        "OP01-117",
+        "OP01-118",
+        "OP01-119",
+        "OP01-120",
+        "OP01-121"
+      ],
+      "official_base_card_numbers": [
+        "OP01-001",
+        "OP01-002",
+        "OP01-003",
+        "OP01-004",
+        "OP01-005",
+        "OP01-006",
+        "OP01-007",
+        "OP01-008",
+        "OP01-009",
+        "OP01-010",
+        "OP01-011",
+        "OP01-012",
+        "OP01-013",
+        "OP01-014",
+        "OP01-015",
+        "OP01-016",
+        "OP01-017",
+        "OP01-018",
+        "OP01-019",
+        "OP01-020",
+        "OP01-021",
+        "OP01-022",
+        "OP01-023",
+        "OP01-024",
+        "OP01-025",
+        "OP01-026",
+        "OP01-027",
+        "OP01-028",
+        "OP01-029",
+        "OP01-030",
+        "OP01-031",
+        "OP01-032",
+        "OP01-033",
+        "OP01-034",
+        "OP01-035",
+        "OP01-036",
+        "OP01-037",
+        "OP01-038",
+        "OP01-039",
+        "OP01-040",
+        "OP01-041",
+        "OP01-042",
+        "OP01-043",
+        "OP01-044",
+        "OP01-045",
+        "OP01-046",
+        "OP01-047",
+        "OP01-048",
+        "OP01-049",
+        "OP01-050",
+        "OP01-051",
+        "OP01-052",
+        "OP01-053",
+        "OP01-054",
+        "OP01-055",
+        "OP01-056",
+        "OP01-057",
+        "OP01-058",
+        "OP01-059",
+        "OP01-060",
+        "OP01-061",
+        "OP01-062",
+        "OP01-063",
+        "OP01-064",
+        "OP01-065",
+        "OP01-066",
+        "OP01-067",
+        "OP01-068",
+        "OP01-069",
+        "OP01-070",
+        "OP01-071",
+        "OP01-072",
+        "OP01-073",
+        "OP01-074",
+        "OP01-075",
+        "OP01-076",
+        "OP01-077",
+        "OP01-078",
+        "OP01-079",
+        "OP01-080",
+        "OP01-081",
+        "OP01-082",
+        "OP01-083",
+        "OP01-084",
+        "OP01-085",
+        "OP01-086",
+        "OP01-087",
+        "OP01-088",
+        "OP01-089",
+        "OP01-090",
+        "OP01-091",
+        "OP01-092",
+        "OP01-093",
+        "OP01-094",
+        "OP01-095",
+        "OP01-096",
+        "OP01-097",
+        "OP01-098",
+        "OP01-099",
+        "OP01-100",
+        "OP01-101",
+        "OP01-102",
+        "OP01-103",
+        "OP01-104",
+        "OP01-105",
+        "OP01-106",
+        "OP01-107",
+        "OP01-108",
+        "OP01-109",
+        "OP01-110",
+        "OP01-111",
+        "OP01-112",
+        "OP01-113",
+        "OP01-114",
+        "OP01-115",
+        "OP01-116",
+        "OP01-117",
+        "OP01-118",
+        "OP01-119",
+        "OP01-120",
+        "OP01-121"
+      ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -475,161 +611,9 @@
       "language": "English",
       "official_source_url": null,
       "retrieval_date": "2026-11-27",
-      "official_expected_base_card_count": 0,
-      "actual_distinct_base_card_count": 121,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
-      "official_card_numbers": null,
-      "official_base_card_numbers": [],
-      "missing_card_numbers": [],
-      "unexpected_card_numbers": [
-        "OP02-001",
-        "OP02-002",
-        "OP02-003",
-        "OP02-004",
-        "OP02-005",
-        "OP02-006",
-        "OP02-007",
-        "OP02-008",
-        "OP02-009",
-        "OP02-010",
-        "OP02-011",
-        "OP02-012",
-        "OP02-013",
-        "OP02-014",
-        "OP02-015",
-        "OP02-016",
-        "OP02-017",
-        "OP02-018",
-        "OP02-019",
-        "OP02-020",
-        "OP02-021",
-        "OP02-022",
-        "OP02-023",
-        "OP02-024",
-        "OP02-025",
-        "OP02-026",
-        "OP02-027",
-        "OP02-028",
-        "OP02-029",
-        "OP02-030",
-        "OP02-031",
-        "OP02-032",
-        "OP02-033",
-        "OP02-034",
-        "OP02-035",
-        "OP02-036",
-        "OP02-037",
-        "OP02-038",
-        "OP02-039",
-        "OP02-040",
-        "OP02-041",
-        "OP02-042",
-        "OP02-043",
-        "OP02-044",
-        "OP02-045",
-        "OP02-046",
-        "OP02-047",
-        "OP02-048",
-        "OP02-049",
-        "OP02-050",
-        "OP02-051",
-        "OP02-052",
-        "OP02-053",
-        "OP02-054",
-        "OP02-055",
-        "OP02-056",
-        "OP02-057",
-        "OP02-058",
-        "OP02-059",
-        "OP02-060",
-        "OP02-061",
-        "OP02-062",
-        "OP02-063",
-        "OP02-064",
-        "OP02-065",
-        "OP02-066",
-        "OP02-067",
-        "OP02-068",
-        "OP02-069",
-        "OP02-070",
-        "OP02-071",
-        "OP02-072",
-        "OP02-073",
-        "OP02-074",
-        "OP02-075",
-        "OP02-076",
-        "OP02-077",
-        "OP02-078",
-        "OP02-079",
-        "OP02-080",
-        "OP02-081",
-        "OP02-082",
-        "OP02-083",
-        "OP02-084",
-        "OP02-085",
-        "OP02-086",
-        "OP02-087",
-        "OP02-088",
-        "OP02-089",
-        "OP02-090",
-        "OP02-091",
-        "OP02-092",
-        "OP02-093",
-        "OP02-094",
-        "OP02-095",
-        "OP02-096",
-        "OP02-097",
-        "OP02-098",
-        "OP02-099",
-        "OP02-100",
-        "OP02-101",
-        "OP02-102",
-        "OP02-103",
-        "OP02-104",
-        "OP02-105",
-        "OP02-106",
-        "OP02-107",
-        "OP02-108",
-        "OP02-109",
-        "OP02-110",
-        "OP02-111",
-        "OP02-112",
-        "OP02-113",
-        "OP02-114",
-        "OP02-115",
-        "OP02-116",
-        "OP02-117",
-        "OP02-118",
-        "OP02-119",
-        "OP02-120",
-        "OP02-121"
-      ],
-      "card_type_counts": null,
-      "rarity_counts": null,
-      "reprints_and_additional_inclusions": null,
-      "official_page_result_count": null,
-      "official_page_entry_count": null,
-      "official_source_image_url_count": 0,
-      "unparsed_result_rows": 0,
-      "expected_printings": null,
-      "actual_distinct_printings": 154,
-      "missing_printings": null,
-      "duplicate_printing_identities": null,
-      "missing_image_references": null,
-      "verification_status": "SOURCE UNVERIFIED",
-      "feed_source_generated_at": "2026-10-22T04:46:19Z",
-      "feed_observed_prefix_count": 121,
-      "feed_observed_release_printings": 154,
-      "notes": "Official page returned no usable result set; expected count not inferred."
-    },
-    {
-      "set": "OP-02",
-      "language": "Japanese",
-      "official_source_url": null,
-      "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 121,
       "actual_distinct_base_card_count": 121,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP02-001",
         "OP02-002",
@@ -876,6 +860,294 @@
         "OP02-120",
         "OP02-121"
       ],
+      "partial_product_card_numbers": null,
+      "missing_card_numbers": [],
+      "unexpected_card_numbers": [],
+      "card_type_counts": {
+        "leader": 8,
+        "character": 93,
+        "event": 16,
+        "stage": 4
+      },
+      "rarity_counts": {
+        "L": 8,
+        "C": 45,
+        "SR": 10,
+        "UC": 30,
+        "R": 26,
+        "SEC": 2
+      },
+      "reprints_and_additional_inclusions": [],
+      "official_page_result_count": 154,
+      "official_page_entry_count": 154,
+      "official_source_image_url_count": 154,
+      "unparsed_result_rows": 0,
+      "expected_printings": 154,
+      "actual_distinct_printings": 154,
+      "missing_printings": null,
+      "duplicate_printing_identities": null,
+      "missing_image_references": null,
+      "verification_status": "INCOMPLETE",
+      "feed_source_generated_at": "2026-10-22T04:46:19Z",
+      "feed_observed_prefix_count": 121,
+      "feed_observed_release_printings": 154,
+      "notes": ""
+    },
+    {
+      "set": "OP-02",
+      "language": "Japanese",
+      "official_source_url": null,
+      "retrieval_date": "2026-11-27",
+      "official_expected_base_card_count": 121,
+      "actual_distinct_base_card_count": 121,
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
+      "official_card_numbers": [
+        "OP02-001",
+        "OP02-002",
+        "OP02-003",
+        "OP02-004",
+        "OP02-005",
+        "OP02-006",
+        "OP02-007",
+        "OP02-008",
+        "OP02-009",
+        "OP02-010",
+        "OP02-011",
+        "OP02-012",
+        "OP02-013",
+        "OP02-014",
+        "OP02-015",
+        "OP02-016",
+        "OP02-017",
+        "OP02-018",
+        "OP02-019",
+        "OP02-020",
+        "OP02-021",
+        "OP02-022",
+        "OP02-023",
+        "OP02-024",
+        "OP02-025",
+        "OP02-026",
+        "OP02-027",
+        "OP02-028",
+        "OP02-029",
+        "OP02-030",
+        "OP02-031",
+        "OP02-032",
+        "OP02-033",
+        "OP02-034",
+        "OP02-035",
+        "OP02-036",
+        "OP02-037",
+        "OP02-038",
+        "OP02-039",
+        "OP02-040",
+        "OP02-041",
+        "OP02-042",
+        "OP02-043",
+        "OP02-044",
+        "OP02-045",
+        "OP02-046",
+        "OP02-047",
+        "OP02-048",
+        "OP02-049",
+        "OP02-050",
+        "OP02-051",
+        "OP02-052",
+        "OP02-053",
+        "OP02-054",
+        "OP02-055",
+        "OP02-056",
+        "OP02-057",
+        "OP02-058",
+        "OP02-059",
+        "OP02-060",
+        "OP02-061",
+        "OP02-062",
+        "OP02-063",
+        "OP02-064",
+        "OP02-065",
+        "OP02-066",
+        "OP02-067",
+        "OP02-068",
+        "OP02-069",
+        "OP02-070",
+        "OP02-071",
+        "OP02-072",
+        "OP02-073",
+        "OP02-074",
+        "OP02-075",
+        "OP02-076",
+        "OP02-077",
+        "OP02-078",
+        "OP02-079",
+        "OP02-080",
+        "OP02-081",
+        "OP02-082",
+        "OP02-083",
+        "OP02-084",
+        "OP02-085",
+        "OP02-086",
+        "OP02-087",
+        "OP02-088",
+        "OP02-089",
+        "OP02-090",
+        "OP02-091",
+        "OP02-092",
+        "OP02-093",
+        "OP02-094",
+        "OP02-095",
+        "OP02-096",
+        "OP02-097",
+        "OP02-098",
+        "OP02-099",
+        "OP02-100",
+        "OP02-101",
+        "OP02-102",
+        "OP02-103",
+        "OP02-104",
+        "OP02-105",
+        "OP02-106",
+        "OP02-107",
+        "OP02-108",
+        "OP02-109",
+        "OP02-110",
+        "OP02-111",
+        "OP02-112",
+        "OP02-113",
+        "OP02-114",
+        "OP02-115",
+        "OP02-116",
+        "OP02-117",
+        "OP02-118",
+        "OP02-119",
+        "OP02-120",
+        "OP02-121"
+      ],
+      "official_base_card_numbers": [
+        "OP02-001",
+        "OP02-002",
+        "OP02-003",
+        "OP02-004",
+        "OP02-005",
+        "OP02-006",
+        "OP02-007",
+        "OP02-008",
+        "OP02-009",
+        "OP02-010",
+        "OP02-011",
+        "OP02-012",
+        "OP02-013",
+        "OP02-014",
+        "OP02-015",
+        "OP02-016",
+        "OP02-017",
+        "OP02-018",
+        "OP02-019",
+        "OP02-020",
+        "OP02-021",
+        "OP02-022",
+        "OP02-023",
+        "OP02-024",
+        "OP02-025",
+        "OP02-026",
+        "OP02-027",
+        "OP02-028",
+        "OP02-029",
+        "OP02-030",
+        "OP02-031",
+        "OP02-032",
+        "OP02-033",
+        "OP02-034",
+        "OP02-035",
+        "OP02-036",
+        "OP02-037",
+        "OP02-038",
+        "OP02-039",
+        "OP02-040",
+        "OP02-041",
+        "OP02-042",
+        "OP02-043",
+        "OP02-044",
+        "OP02-045",
+        "OP02-046",
+        "OP02-047",
+        "OP02-048",
+        "OP02-049",
+        "OP02-050",
+        "OP02-051",
+        "OP02-052",
+        "OP02-053",
+        "OP02-054",
+        "OP02-055",
+        "OP02-056",
+        "OP02-057",
+        "OP02-058",
+        "OP02-059",
+        "OP02-060",
+        "OP02-061",
+        "OP02-062",
+        "OP02-063",
+        "OP02-064",
+        "OP02-065",
+        "OP02-066",
+        "OP02-067",
+        "OP02-068",
+        "OP02-069",
+        "OP02-070",
+        "OP02-071",
+        "OP02-072",
+        "OP02-073",
+        "OP02-074",
+        "OP02-075",
+        "OP02-076",
+        "OP02-077",
+        "OP02-078",
+        "OP02-079",
+        "OP02-080",
+        "OP02-081",
+        "OP02-082",
+        "OP02-083",
+        "OP02-084",
+        "OP02-085",
+        "OP02-086",
+        "OP02-087",
+        "OP02-088",
+        "OP02-089",
+        "OP02-090",
+        "OP02-091",
+        "OP02-092",
+        "OP02-093",
+        "OP02-094",
+        "OP02-095",
+        "OP02-096",
+        "OP02-097",
+        "OP02-098",
+        "OP02-099",
+        "OP02-100",
+        "OP02-101",
+        "OP02-102",
+        "OP02-103",
+        "OP02-104",
+        "OP02-105",
+        "OP02-106",
+        "OP02-107",
+        "OP02-108",
+        "OP02-109",
+        "OP02-110",
+        "OP02-111",
+        "OP02-112",
+        "OP02-113",
+        "OP02-114",
+        "OP02-115",
+        "OP02-116",
+        "OP02-117",
+        "OP02-118",
+        "OP02-119",
+        "OP02-120",
+        "OP02-121"
+      ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -913,163 +1185,9 @@
       "language": "English",
       "official_source_url": null,
       "retrieval_date": "2026-11-27",
-      "official_expected_base_card_count": 0,
-      "actual_distinct_base_card_count": 123,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
-      "official_card_numbers": null,
-      "official_base_card_numbers": [],
-      "missing_card_numbers": [],
-      "unexpected_card_numbers": [
-        "OP03-001",
-        "OP03-002",
-        "OP03-003",
-        "OP03-004",
-        "OP03-005",
-        "OP03-006",
-        "OP03-007",
-        "OP03-008",
-        "OP03-009",
-        "OP03-010",
-        "OP03-011",
-        "OP03-012",
-        "OP03-013",
-        "OP03-014",
-        "OP03-015",
-        "OP03-016",
-        "OP03-017",
-        "OP03-018",
-        "OP03-019",
-        "OP03-020",
-        "OP03-021",
-        "OP03-022",
-        "OP03-023",
-        "OP03-024",
-        "OP03-025",
-        "OP03-026",
-        "OP03-027",
-        "OP03-028",
-        "OP03-029",
-        "OP03-030",
-        "OP03-031",
-        "OP03-032",
-        "OP03-033",
-        "OP03-034",
-        "OP03-035",
-        "OP03-036",
-        "OP03-037",
-        "OP03-038",
-        "OP03-039",
-        "OP03-040",
-        "OP03-041",
-        "OP03-042",
-        "OP03-043",
-        "OP03-044",
-        "OP03-045",
-        "OP03-046",
-        "OP03-047",
-        "OP03-048",
-        "OP03-049",
-        "OP03-050",
-        "OP03-051",
-        "OP03-052",
-        "OP03-053",
-        "OP03-054",
-        "OP03-055",
-        "OP03-056",
-        "OP03-057",
-        "OP03-058",
-        "OP03-059",
-        "OP03-060",
-        "OP03-061",
-        "OP03-062",
-        "OP03-063",
-        "OP03-064",
-        "OP03-065",
-        "OP03-066",
-        "OP03-067",
-        "OP03-068",
-        "OP03-069",
-        "OP03-070",
-        "OP03-071",
-        "OP03-072",
-        "OP03-073",
-        "OP03-074",
-        "OP03-075",
-        "OP03-076",
-        "OP03-077",
-        "OP03-078",
-        "OP03-079",
-        "OP03-080",
-        "OP03-081",
-        "OP03-082",
-        "OP03-083",
-        "OP03-084",
-        "OP03-085",
-        "OP03-086",
-        "OP03-087",
-        "OP03-088",
-        "OP03-089",
-        "OP03-090",
-        "OP03-091",
-        "OP03-092",
-        "OP03-093",
-        "OP03-094",
-        "OP03-095",
-        "OP03-096",
-        "OP03-097",
-        "OP03-098",
-        "OP03-099",
-        "OP03-100",
-        "OP03-101",
-        "OP03-102",
-        "OP03-103",
-        "OP03-104",
-        "OP03-105",
-        "OP03-106",
-        "OP03-107",
-        "OP03-108",
-        "OP03-109",
-        "OP03-110",
-        "OP03-111",
-        "OP03-112",
-        "OP03-113",
-        "OP03-114",
-        "OP03-115",
-        "OP03-116",
-        "OP03-117",
-        "OP03-118",
-        "OP03-119",
-        "OP03-120",
-        "OP03-121",
-        "OP03-122",
-        "OP03-123"
-      ],
-      "card_type_counts": null,
-      "rarity_counts": null,
-      "reprints_and_additional_inclusions": null,
-      "official_page_result_count": null,
-      "official_page_entry_count": null,
-      "official_source_image_url_count": 0,
-      "unparsed_result_rows": 0,
-      "expected_printings": null,
-      "actual_distinct_printings": 154,
-      "missing_printings": null,
-      "duplicate_printing_identities": null,
-      "missing_image_references": null,
-      "verification_status": "SOURCE UNVERIFIED",
-      "feed_source_generated_at": "2026-10-22T04:46:19Z",
-      "feed_observed_prefix_count": 123,
-      "feed_observed_release_printings": 154,
-      "notes": "Official page returned no usable result set; expected count not inferred."
-    },
-    {
-      "set": "OP-03",
-      "language": "Japanese",
-      "official_source_url": null,
-      "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 123,
       "actual_distinct_base_card_count": 123,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP03-001",
         "OP03-002",
@@ -1324,6 +1442,327 @@
         "OP03-122",
         "OP03-123"
       ],
+      "partial_product_card_numbers": null,
+      "missing_card_numbers": [],
+      "unexpected_card_numbers": [],
+      "card_type_counts": {
+        "leader": 8,
+        "character": 89,
+        "event": 23,
+        "stage": 3
+      },
+      "rarity_counts": {
+        "L": 8,
+        "UC": 32,
+        "R": 26,
+        "C": 45,
+        "SR": 10,
+        "SEC": 2
+      },
+      "reprints_and_additional_inclusions": [
+        {
+          "card_number": "OP01-051",
+          "name": "Eustass\"Captain\"Kid",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "ST01-012",
+          "name": "Monkey.D.Luffy",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "ST03-009",
+          "name": "Donquixote Doflamingo",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "ST04-003",
+          "name": "Kaido",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        }
+      ],
+      "official_page_result_count": 154,
+      "official_page_entry_count": 154,
+      "official_source_image_url_count": 154,
+      "unparsed_result_rows": 0,
+      "expected_printings": 154,
+      "actual_distinct_printings": 154,
+      "missing_printings": null,
+      "duplicate_printing_identities": null,
+      "missing_image_references": null,
+      "verification_status": "INCOMPLETE",
+      "feed_source_generated_at": "2026-10-22T04:46:19Z",
+      "feed_observed_prefix_count": 123,
+      "feed_observed_release_printings": 154,
+      "notes": ""
+    },
+    {
+      "set": "OP-03",
+      "language": "Japanese",
+      "official_source_url": null,
+      "retrieval_date": "2026-11-27",
+      "official_expected_base_card_count": 123,
+      "actual_distinct_base_card_count": 123,
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
+      "official_card_numbers": [
+        "OP03-001",
+        "OP03-002",
+        "OP03-003",
+        "OP03-004",
+        "OP03-005",
+        "OP03-006",
+        "OP03-007",
+        "OP03-008",
+        "OP03-009",
+        "OP03-010",
+        "OP03-011",
+        "OP03-012",
+        "OP03-013",
+        "OP03-014",
+        "OP03-015",
+        "OP03-016",
+        "OP03-017",
+        "OP03-018",
+        "OP03-019",
+        "OP03-020",
+        "OP03-021",
+        "OP03-022",
+        "OP03-023",
+        "OP03-024",
+        "OP03-025",
+        "OP03-026",
+        "OP03-027",
+        "OP03-028",
+        "OP03-029",
+        "OP03-030",
+        "OP03-031",
+        "OP03-032",
+        "OP03-033",
+        "OP03-034",
+        "OP03-035",
+        "OP03-036",
+        "OP03-037",
+        "OP03-038",
+        "OP03-039",
+        "OP03-040",
+        "OP03-041",
+        "OP03-042",
+        "OP03-043",
+        "OP03-044",
+        "OP03-045",
+        "OP03-046",
+        "OP03-047",
+        "OP03-048",
+        "OP03-049",
+        "OP03-050",
+        "OP03-051",
+        "OP03-052",
+        "OP03-053",
+        "OP03-054",
+        "OP03-055",
+        "OP03-056",
+        "OP03-057",
+        "OP03-058",
+        "OP03-059",
+        "OP03-060",
+        "OP03-061",
+        "OP03-062",
+        "OP03-063",
+        "OP03-064",
+        "OP03-065",
+        "OP03-066",
+        "OP03-067",
+        "OP03-068",
+        "OP03-069",
+        "OP03-070",
+        "OP03-071",
+        "OP03-072",
+        "OP03-073",
+        "OP03-074",
+        "OP03-075",
+        "OP03-076",
+        "OP03-077",
+        "OP03-078",
+        "OP03-079",
+        "OP03-080",
+        "OP03-081",
+        "OP03-082",
+        "OP03-083",
+        "OP03-084",
+        "OP03-085",
+        "OP03-086",
+        "OP03-087",
+        "OP03-088",
+        "OP03-089",
+        "OP03-090",
+        "OP03-091",
+        "OP03-092",
+        "OP03-093",
+        "OP03-094",
+        "OP03-095",
+        "OP03-096",
+        "OP03-097",
+        "OP03-098",
+        "OP03-099",
+        "OP03-100",
+        "OP03-101",
+        "OP03-102",
+        "OP03-103",
+        "OP03-104",
+        "OP03-105",
+        "OP03-106",
+        "OP03-107",
+        "OP03-108",
+        "OP03-109",
+        "OP03-110",
+        "OP03-111",
+        "OP03-112",
+        "OP03-113",
+        "OP03-114",
+        "OP03-115",
+        "OP03-116",
+        "OP03-117",
+        "OP03-118",
+        "OP03-119",
+        "OP03-120",
+        "OP03-121",
+        "OP03-122",
+        "OP03-123",
+        "OP01-051",
+        "ST01-012",
+        "ST03-009",
+        "ST04-003"
+      ],
+      "official_base_card_numbers": [
+        "OP03-001",
+        "OP03-002",
+        "OP03-003",
+        "OP03-004",
+        "OP03-005",
+        "OP03-006",
+        "OP03-007",
+        "OP03-008",
+        "OP03-009",
+        "OP03-010",
+        "OP03-011",
+        "OP03-012",
+        "OP03-013",
+        "OP03-014",
+        "OP03-015",
+        "OP03-016",
+        "OP03-017",
+        "OP03-018",
+        "OP03-019",
+        "OP03-020",
+        "OP03-021",
+        "OP03-022",
+        "OP03-023",
+        "OP03-024",
+        "OP03-025",
+        "OP03-026",
+        "OP03-027",
+        "OP03-028",
+        "OP03-029",
+        "OP03-030",
+        "OP03-031",
+        "OP03-032",
+        "OP03-033",
+        "OP03-034",
+        "OP03-035",
+        "OP03-036",
+        "OP03-037",
+        "OP03-038",
+        "OP03-039",
+        "OP03-040",
+        "OP03-041",
+        "OP03-042",
+        "OP03-043",
+        "OP03-044",
+        "OP03-045",
+        "OP03-046",
+        "OP03-047",
+        "OP03-048",
+        "OP03-049",
+        "OP03-050",
+        "OP03-051",
+        "OP03-052",
+        "OP03-053",
+        "OP03-054",
+        "OP03-055",
+        "OP03-056",
+        "OP03-057",
+        "OP03-058",
+        "OP03-059",
+        "OP03-060",
+        "OP03-061",
+        "OP03-062",
+        "OP03-063",
+        "OP03-064",
+        "OP03-065",
+        "OP03-066",
+        "OP03-067",
+        "OP03-068",
+        "OP03-069",
+        "OP03-070",
+        "OP03-071",
+        "OP03-072",
+        "OP03-073",
+        "OP03-074",
+        "OP03-075",
+        "OP03-076",
+        "OP03-077",
+        "OP03-078",
+        "OP03-079",
+        "OP03-080",
+        "OP03-081",
+        "OP03-082",
+        "OP03-083",
+        "OP03-084",
+        "OP03-085",
+        "OP03-086",
+        "OP03-087",
+        "OP03-088",
+        "OP03-089",
+        "OP03-090",
+        "OP03-091",
+        "OP03-092",
+        "OP03-093",
+        "OP03-094",
+        "OP03-095",
+        "OP03-096",
+        "OP03-097",
+        "OP03-098",
+        "OP03-099",
+        "OP03-100",
+        "OP03-101",
+        "OP03-102",
+        "OP03-103",
+        "OP03-104",
+        "OP03-105",
+        "OP03-106",
+        "OP03-107",
+        "OP03-108",
+        "OP03-109",
+        "OP03-110",
+        "OP03-111",
+        "OP03-112",
+        "OP03-113",
+        "OP03-114",
+        "OP03-115",
+        "OP03-116",
+        "OP03-117",
+        "OP03-118",
+        "OP03-119",
+        "OP03-120",
+        "OP03-121",
+        "OP03-122",
+        "OP03-123"
+      ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -1386,159 +1825,9 @@
       "language": "English",
       "official_source_url": null,
       "retrieval_date": "2026-11-27",
-      "official_expected_base_card_count": 0,
-      "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
-      "official_card_numbers": null,
-      "official_base_card_numbers": [],
-      "missing_card_numbers": [],
-      "unexpected_card_numbers": [
-        "OP04-001",
-        "OP04-002",
-        "OP04-003",
-        "OP04-004",
-        "OP04-005",
-        "OP04-006",
-        "OP04-007",
-        "OP04-008",
-        "OP04-009",
-        "OP04-010",
-        "OP04-011",
-        "OP04-012",
-        "OP04-013",
-        "OP04-014",
-        "OP04-015",
-        "OP04-016",
-        "OP04-017",
-        "OP04-018",
-        "OP04-019",
-        "OP04-020",
-        "OP04-021",
-        "OP04-022",
-        "OP04-023",
-        "OP04-024",
-        "OP04-025",
-        "OP04-026",
-        "OP04-027",
-        "OP04-028",
-        "OP04-029",
-        "OP04-030",
-        "OP04-031",
-        "OP04-032",
-        "OP04-033",
-        "OP04-034",
-        "OP04-035",
-        "OP04-036",
-        "OP04-037",
-        "OP04-038",
-        "OP04-039",
-        "OP04-040",
-        "OP04-041",
-        "OP04-042",
-        "OP04-043",
-        "OP04-044",
-        "OP04-045",
-        "OP04-046",
-        "OP04-047",
-        "OP04-048",
-        "OP04-049",
-        "OP04-050",
-        "OP04-051",
-        "OP04-052",
-        "OP04-053",
-        "OP04-054",
-        "OP04-055",
-        "OP04-056",
-        "OP04-057",
-        "OP04-058",
-        "OP04-059",
-        "OP04-060",
-        "OP04-061",
-        "OP04-062",
-        "OP04-063",
-        "OP04-064",
-        "OP04-065",
-        "OP04-066",
-        "OP04-067",
-        "OP04-068",
-        "OP04-069",
-        "OP04-070",
-        "OP04-071",
-        "OP04-072",
-        "OP04-073",
-        "OP04-074",
-        "OP04-075",
-        "OP04-076",
-        "OP04-077",
-        "OP04-078",
-        "OP04-079",
-        "OP04-080",
-        "OP04-081",
-        "OP04-082",
-        "OP04-083",
-        "OP04-084",
-        "OP04-085",
-        "OP04-086",
-        "OP04-087",
-        "OP04-088",
-        "OP04-089",
-        "OP04-090",
-        "OP04-091",
-        "OP04-092",
-        "OP04-093",
-        "OP04-094",
-        "OP04-095",
-        "OP04-096",
-        "OP04-097",
-        "OP04-098",
-        "OP04-099",
-        "OP04-100",
-        "OP04-101",
-        "OP04-102",
-        "OP04-103",
-        "OP04-104",
-        "OP04-105",
-        "OP04-106",
-        "OP04-107",
-        "OP04-108",
-        "OP04-109",
-        "OP04-110",
-        "OP04-111",
-        "OP04-112",
-        "OP04-113",
-        "OP04-114",
-        "OP04-115",
-        "OP04-116",
-        "OP04-117",
-        "OP04-118",
-        "OP04-119"
-      ],
-      "card_type_counts": null,
-      "rarity_counts": null,
-      "reprints_and_additional_inclusions": null,
-      "official_page_result_count": null,
-      "official_page_entry_count": null,
-      "official_source_image_url_count": 0,
-      "unparsed_result_rows": 0,
-      "expected_printings": null,
-      "actual_distinct_printings": 149,
-      "missing_printings": null,
-      "duplicate_printing_identities": null,
-      "missing_image_references": null,
-      "verification_status": "SOURCE UNVERIFIED",
-      "feed_source_generated_at": "2026-10-22T04:46:19Z",
-      "feed_observed_prefix_count": 119,
-      "feed_observed_release_printings": 149,
-      "notes": "Official page returned no usable result set; expected count not inferred."
-    },
-    {
-      "set": "OP-04",
-      "language": "Japanese",
-      "official_source_url": null,
-      "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP04-001",
         "OP04-002",
@@ -1786,6 +2075,326 @@
         "OP04-118",
         "OP04-119"
       ],
+      "partial_product_card_numbers": null,
+      "missing_card_numbers": [],
+      "unexpected_card_numbers": [],
+      "card_type_counts": {
+        "leader": 6,
+        "character": 93,
+        "event": 19,
+        "stage": 1
+      },
+      "rarity_counts": {
+        "L": 6,
+        "R": 26,
+        "UC": 30,
+        "C": 45,
+        "SR": 10,
+        "SEC": 2
+      },
+      "reprints_and_additional_inclusions": [
+        {
+          "card_number": "OP01-047",
+          "name": "Trafalgar Law",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "OP01-078",
+          "name": "Boa Hancock",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "OP02-004",
+          "name": "Edward.Newgate",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "OP02-085",
+          "name": "Magellan",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "OP02-099",
+          "name": "Sakazuki",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        }
+      ],
+      "official_page_result_count": 149,
+      "official_page_entry_count": 149,
+      "official_source_image_url_count": 149,
+      "unparsed_result_rows": 0,
+      "expected_printings": 149,
+      "actual_distinct_printings": 149,
+      "missing_printings": null,
+      "duplicate_printing_identities": null,
+      "missing_image_references": null,
+      "verification_status": "INCOMPLETE",
+      "feed_source_generated_at": "2026-10-22T04:46:19Z",
+      "feed_observed_prefix_count": 119,
+      "feed_observed_release_printings": 149,
+      "notes": ""
+    },
+    {
+      "set": "OP-04",
+      "language": "Japanese",
+      "official_source_url": null,
+      "retrieval_date": "2026-11-27",
+      "official_expected_base_card_count": 119,
+      "actual_distinct_base_card_count": 119,
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
+      "official_card_numbers": [
+        "OP04-001",
+        "OP04-002",
+        "OP04-003",
+        "OP04-004",
+        "OP04-005",
+        "OP04-006",
+        "OP04-007",
+        "OP04-008",
+        "OP04-009",
+        "OP04-010",
+        "OP04-011",
+        "OP04-012",
+        "OP04-013",
+        "OP04-014",
+        "OP04-015",
+        "OP04-016",
+        "OP04-017",
+        "OP04-018",
+        "OP04-019",
+        "OP04-020",
+        "OP04-021",
+        "OP04-022",
+        "OP04-023",
+        "OP04-024",
+        "OP04-025",
+        "OP04-026",
+        "OP04-027",
+        "OP04-028",
+        "OP04-029",
+        "OP04-030",
+        "OP04-031",
+        "OP04-032",
+        "OP04-033",
+        "OP04-034",
+        "OP04-035",
+        "OP04-036",
+        "OP04-037",
+        "OP04-038",
+        "OP04-039",
+        "OP04-040",
+        "OP04-041",
+        "OP04-042",
+        "OP04-043",
+        "OP04-044",
+        "OP04-045",
+        "OP04-046",
+        "OP04-047",
+        "OP04-048",
+        "OP04-049",
+        "OP04-050",
+        "OP04-051",
+        "OP04-052",
+        "OP04-053",
+        "OP04-054",
+        "OP04-055",
+        "OP04-056",
+        "OP04-057",
+        "OP04-058",
+        "OP04-059",
+        "OP04-060",
+        "OP04-061",
+        "OP04-062",
+        "OP04-063",
+        "OP04-064",
+        "OP04-065",
+        "OP04-066",
+        "OP04-067",
+        "OP04-068",
+        "OP04-069",
+        "OP04-070",
+        "OP04-071",
+        "OP04-072",
+        "OP04-073",
+        "OP04-074",
+        "OP04-075",
+        "OP04-076",
+        "OP04-077",
+        "OP04-078",
+        "OP04-079",
+        "OP04-080",
+        "OP04-081",
+        "OP04-082",
+        "OP04-083",
+        "OP04-084",
+        "OP04-085",
+        "OP04-086",
+        "OP04-087",
+        "OP04-088",
+        "OP04-089",
+        "OP04-090",
+        "OP04-091",
+        "OP04-092",
+        "OP04-093",
+        "OP04-094",
+        "OP04-095",
+        "OP04-096",
+        "OP04-097",
+        "OP04-098",
+        "OP04-099",
+        "OP04-100",
+        "OP04-101",
+        "OP04-102",
+        "OP04-103",
+        "OP04-104",
+        "OP04-105",
+        "OP04-106",
+        "OP04-107",
+        "OP04-108",
+        "OP04-109",
+        "OP04-110",
+        "OP04-111",
+        "OP04-112",
+        "OP04-113",
+        "OP04-114",
+        "OP04-115",
+        "OP04-116",
+        "OP04-117",
+        "OP04-118",
+        "OP04-119",
+        "OP01-047",
+        "OP01-078",
+        "OP02-004",
+        "OP02-085",
+        "OP02-099"
+      ],
+      "official_base_card_numbers": [
+        "OP04-001",
+        "OP04-002",
+        "OP04-003",
+        "OP04-004",
+        "OP04-005",
+        "OP04-006",
+        "OP04-007",
+        "OP04-008",
+        "OP04-009",
+        "OP04-010",
+        "OP04-011",
+        "OP04-012",
+        "OP04-013",
+        "OP04-014",
+        "OP04-015",
+        "OP04-016",
+        "OP04-017",
+        "OP04-018",
+        "OP04-019",
+        "OP04-020",
+        "OP04-021",
+        "OP04-022",
+        "OP04-023",
+        "OP04-024",
+        "OP04-025",
+        "OP04-026",
+        "OP04-027",
+        "OP04-028",
+        "OP04-029",
+        "OP04-030",
+        "OP04-031",
+        "OP04-032",
+        "OP04-033",
+        "OP04-034",
+        "OP04-035",
+        "OP04-036",
+        "OP04-037",
+        "OP04-038",
+        "OP04-039",
+        "OP04-040",
+        "OP04-041",
+        "OP04-042",
+        "OP04-043",
+        "OP04-044",
+        "OP04-045",
+        "OP04-046",
+        "OP04-047",
+        "OP04-048",
+        "OP04-049",
+        "OP04-050",
+        "OP04-051",
+        "OP04-052",
+        "OP04-053",
+        "OP04-054",
+        "OP04-055",
+        "OP04-056",
+        "OP04-057",
+        "OP04-058",
+        "OP04-059",
+        "OP04-060",
+        "OP04-061",
+        "OP04-062",
+        "OP04-063",
+        "OP04-064",
+        "OP04-065",
+        "OP04-066",
+        "OP04-067",
+        "OP04-068",
+        "OP04-069",
+        "OP04-070",
+        "OP04-071",
+        "OP04-072",
+        "OP04-073",
+        "OP04-074",
+        "OP04-075",
+        "OP04-076",
+        "OP04-077",
+        "OP04-078",
+        "OP04-079",
+        "OP04-080",
+        "OP04-081",
+        "OP04-082",
+        "OP04-083",
+        "OP04-084",
+        "OP04-085",
+        "OP04-086",
+        "OP04-087",
+        "OP04-088",
+        "OP04-089",
+        "OP04-090",
+        "OP04-091",
+        "OP04-092",
+        "OP04-093",
+        "OP04-094",
+        "OP04-095",
+        "OP04-096",
+        "OP04-097",
+        "OP04-098",
+        "OP04-099",
+        "OP04-100",
+        "OP04-101",
+        "OP04-102",
+        "OP04-103",
+        "OP04-104",
+        "OP04-105",
+        "OP04-106",
+        "OP04-107",
+        "OP04-108",
+        "OP04-109",
+        "OP04-110",
+        "OP04-111",
+        "OP04-112",
+        "OP04-113",
+        "OP04-114",
+        "OP04-115",
+        "OP04-116",
+        "OP04-117",
+        "OP04-118",
+        "OP04-119"
+      ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -1854,159 +2463,9 @@
       "language": "English",
       "official_source_url": null,
       "retrieval_date": "2026-11-27",
-      "official_expected_base_card_count": 0,
-      "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
-      "official_card_numbers": null,
-      "official_base_card_numbers": [],
-      "missing_card_numbers": [],
-      "unexpected_card_numbers": [
-        "OP05-001",
-        "OP05-002",
-        "OP05-003",
-        "OP05-004",
-        "OP05-005",
-        "OP05-006",
-        "OP05-007",
-        "OP05-008",
-        "OP05-009",
-        "OP05-010",
-        "OP05-011",
-        "OP05-012",
-        "OP05-013",
-        "OP05-014",
-        "OP05-015",
-        "OP05-016",
-        "OP05-017",
-        "OP05-018",
-        "OP05-019",
-        "OP05-020",
-        "OP05-021",
-        "OP05-022",
-        "OP05-023",
-        "OP05-024",
-        "OP05-025",
-        "OP05-026",
-        "OP05-027",
-        "OP05-028",
-        "OP05-029",
-        "OP05-030",
-        "OP05-031",
-        "OP05-032",
-        "OP05-033",
-        "OP05-034",
-        "OP05-035",
-        "OP05-036",
-        "OP05-037",
-        "OP05-038",
-        "OP05-039",
-        "OP05-040",
-        "OP05-041",
-        "OP05-042",
-        "OP05-043",
-        "OP05-044",
-        "OP05-045",
-        "OP05-046",
-        "OP05-047",
-        "OP05-048",
-        "OP05-049",
-        "OP05-050",
-        "OP05-051",
-        "OP05-052",
-        "OP05-053",
-        "OP05-054",
-        "OP05-055",
-        "OP05-056",
-        "OP05-057",
-        "OP05-058",
-        "OP05-059",
-        "OP05-060",
-        "OP05-061",
-        "OP05-062",
-        "OP05-063",
-        "OP05-064",
-        "OP05-065",
-        "OP05-066",
-        "OP05-067",
-        "OP05-068",
-        "OP05-069",
-        "OP05-070",
-        "OP05-071",
-        "OP05-072",
-        "OP05-073",
-        "OP05-074",
-        "OP05-075",
-        "OP05-076",
-        "OP05-077",
-        "OP05-078",
-        "OP05-079",
-        "OP05-080",
-        "OP05-081",
-        "OP05-082",
-        "OP05-083",
-        "OP05-084",
-        "OP05-085",
-        "OP05-086",
-        "OP05-087",
-        "OP05-088",
-        "OP05-089",
-        "OP05-090",
-        "OP05-091",
-        "OP05-092",
-        "OP05-093",
-        "OP05-094",
-        "OP05-095",
-        "OP05-096",
-        "OP05-097",
-        "OP05-098",
-        "OP05-099",
-        "OP05-100",
-        "OP05-101",
-        "OP05-102",
-        "OP05-103",
-        "OP05-104",
-        "OP05-105",
-        "OP05-106",
-        "OP05-107",
-        "OP05-108",
-        "OP05-109",
-        "OP05-110",
-        "OP05-111",
-        "OP05-112",
-        "OP05-113",
-        "OP05-114",
-        "OP05-115",
-        "OP05-116",
-        "OP05-117",
-        "OP05-118",
-        "OP05-119"
-      ],
-      "card_type_counts": null,
-      "rarity_counts": null,
-      "reprints_and_additional_inclusions": null,
-      "official_page_result_count": null,
-      "official_page_entry_count": null,
-      "official_source_image_url_count": 0,
-      "unparsed_result_rows": 0,
-      "expected_printings": null,
-      "actual_distinct_printings": 154,
-      "missing_printings": null,
-      "duplicate_printing_identities": null,
-      "missing_image_references": null,
-      "verification_status": "SOURCE UNVERIFIED",
-      "feed_source_generated_at": "2026-10-22T04:46:19Z",
-      "feed_observed_prefix_count": 119,
-      "feed_observed_release_printings": 154,
-      "notes": "Official page returned no usable result set; expected count not inferred."
-    },
-    {
-      "set": "OP-05",
-      "language": "Japanese",
-      "official_source_url": null,
-      "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP05-001",
         "OP05-002",
@@ -2255,6 +2714,334 @@
         "OP05-118",
         "OP05-119"
       ],
+      "partial_product_card_numbers": null,
+      "missing_card_numbers": [],
+      "unexpected_card_numbers": [],
+      "card_type_counts": {
+        "leader": 6,
+        "character": 91,
+        "event": 18,
+        "stage": 4
+      },
+      "rarity_counts": {
+        "L": 6,
+        "UC": 30,
+        "R": 26,
+        "SR": 9,
+        "C": 45,
+        "SP CARD": 1,
+        "SEC": 2
+      },
+      "reprints_and_additional_inclusions": [
+        {
+          "card_number": "ST01-012",
+          "name": "Monkey.D.Luffy",
+          "rarity": "SR",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "OP01-016",
+          "name": "Nami",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "OP01-121",
+          "name": "Yamato",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "OP02-120",
+          "name": "Uta",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "OP03-092",
+          "name": "Rob Lucci",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        },
+        {
+          "card_number": "OP04-044",
+          "name": "Kaido",
+          "rarity": "SP CARD",
+          "type": "CHARACTER"
+        }
+      ],
+      "official_page_result_count": 154,
+      "official_page_entry_count": 154,
+      "official_source_image_url_count": 154,
+      "unparsed_result_rows": 0,
+      "expected_printings": 154,
+      "actual_distinct_printings": 154,
+      "missing_printings": null,
+      "duplicate_printing_identities": null,
+      "missing_image_references": null,
+      "verification_status": "INCOMPLETE",
+      "feed_source_generated_at": "2026-10-22T04:46:19Z",
+      "feed_observed_prefix_count": 119,
+      "feed_observed_release_printings": 154,
+      "notes": ""
+    },
+    {
+      "set": "OP-05",
+      "language": "Japanese",
+      "official_source_url": null,
+      "retrieval_date": "2026-11-27",
+      "official_expected_base_card_count": 119,
+      "actual_distinct_base_card_count": 119,
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
+      "official_card_numbers": [
+        "OP05-001",
+        "OP05-002",
+        "OP05-003",
+        "OP05-004",
+        "OP05-005",
+        "OP05-006",
+        "OP05-007",
+        "OP05-008",
+        "OP05-009",
+        "OP05-010",
+        "OP05-011",
+        "OP05-012",
+        "OP05-013",
+        "OP05-014",
+        "OP05-015",
+        "OP05-016",
+        "OP05-017",
+        "OP05-018",
+        "OP05-019",
+        "OP05-020",
+        "OP05-021",
+        "OP05-022",
+        "OP05-023",
+        "OP05-024",
+        "OP05-025",
+        "OP05-026",
+        "OP05-027",
+        "OP05-028",
+        "OP05-029",
+        "OP05-030",
+        "OP05-031",
+        "OP05-032",
+        "OP05-033",
+        "OP05-034",
+        "OP05-035",
+        "OP05-036",
+        "OP05-037",
+        "OP05-038",
+        "OP05-039",
+        "OP05-040",
+        "OP05-041",
+        "OP05-042",
+        "OP05-043",
+        "OP05-044",
+        "OP05-045",
+        "OP05-046",
+        "OP05-047",
+        "OP05-048",
+        "OP05-049",
+        "OP05-050",
+        "OP05-051",
+        "OP05-052",
+        "OP05-053",
+        "OP05-054",
+        "OP05-055",
+        "OP05-056",
+        "OP05-057",
+        "OP05-058",
+        "OP05-059",
+        "OP05-060",
+        "OP05-061",
+        "OP05-062",
+        "OP05-063",
+        "OP05-064",
+        "OP05-065",
+        "OP05-066",
+        "OP05-067",
+        "OP05-068",
+        "OP05-069",
+        "OP05-070",
+        "OP05-071",
+        "OP05-072",
+        "OP05-073",
+        "OP05-074",
+        "OP05-075",
+        "OP05-076",
+        "OP05-077",
+        "OP05-078",
+        "OP05-079",
+        "OP05-080",
+        "OP05-081",
+        "OP05-082",
+        "OP05-083",
+        "OP05-084",
+        "OP05-085",
+        "OP05-086",
+        "OP05-087",
+        "OP05-088",
+        "OP05-089",
+        "OP05-090",
+        "OP05-091",
+        "OP05-092",
+        "OP05-093",
+        "OP05-094",
+        "OP05-095",
+        "OP05-096",
+        "OP05-097",
+        "OP05-098",
+        "OP05-099",
+        "OP05-100",
+        "OP05-101",
+        "OP05-102",
+        "OP05-103",
+        "OP05-104",
+        "OP05-105",
+        "OP05-106",
+        "OP05-107",
+        "OP05-108",
+        "OP05-109",
+        "OP05-110",
+        "OP05-111",
+        "OP05-112",
+        "OP05-113",
+        "OP05-114",
+        "OP05-115",
+        "OP05-116",
+        "OP05-117",
+        "OP05-118",
+        "OP05-119",
+        "ST01-012",
+        "OP01-016",
+        "OP01-121",
+        "OP02-120",
+        "OP03-092",
+        "OP04-044"
+      ],
+      "official_base_card_numbers": [
+        "OP05-001",
+        "OP05-002",
+        "OP05-003",
+        "OP05-004",
+        "OP05-005",
+        "OP05-006",
+        "OP05-007",
+        "OP05-008",
+        "OP05-009",
+        "OP05-010",
+        "OP05-011",
+        "OP05-012",
+        "OP05-013",
+        "OP05-014",
+        "OP05-015",
+        "OP05-016",
+        "OP05-017",
+        "OP05-018",
+        "OP05-019",
+        "OP05-020",
+        "OP05-021",
+        "OP05-022",
+        "OP05-023",
+        "OP05-024",
+        "OP05-025",
+        "OP05-026",
+        "OP05-027",
+        "OP05-028",
+        "OP05-029",
+        "OP05-030",
+        "OP05-031",
+        "OP05-032",
+        "OP05-033",
+        "OP05-034",
+        "OP05-035",
+        "OP05-036",
+        "OP05-037",
+        "OP05-038",
+        "OP05-039",
+        "OP05-040",
+        "OP05-041",
+        "OP05-042",
+        "OP05-043",
+        "OP05-044",
+        "OP05-045",
+        "OP05-046",
+        "OP05-047",
+        "OP05-048",
+        "OP05-049",
+        "OP05-050",
+        "OP05-051",
+        "OP05-052",
+        "OP05-053",
+        "OP05-054",
+        "OP05-055",
+        "OP05-056",
+        "OP05-057",
+        "OP05-058",
+        "OP05-059",
+        "OP05-060",
+        "OP05-061",
+        "OP05-062",
+        "OP05-063",
+        "OP05-064",
+        "OP05-065",
+        "OP05-066",
+        "OP05-067",
+        "OP05-068",
+        "OP05-069",
+        "OP05-070",
+        "OP05-071",
+        "OP05-072",
+        "OP05-073",
+        "OP05-074",
+        "OP05-075",
+        "OP05-076",
+        "OP05-077",
+        "OP05-078",
+        "OP05-079",
+        "OP05-080",
+        "OP05-081",
+        "OP05-082",
+        "OP05-083",
+        "OP05-084",
+        "OP05-085",
+        "OP05-086",
+        "OP05-087",
+        "OP05-088",
+        "OP05-089",
+        "OP05-090",
+        "OP05-091",
+        "OP05-092",
+        "OP05-093",
+        "OP05-094",
+        "OP05-095",
+        "OP05-096",
+        "OP05-097",
+        "OP05-098",
+        "OP05-099",
+        "OP05-100",
+        "OP05-101",
+        "OP05-102",
+        "OP05-103",
+        "OP05-104",
+        "OP05-105",
+        "OP05-106",
+        "OP05-107",
+        "OP05-108",
+        "OP05-109",
+        "OP05-110",
+        "OP05-111",
+        "OP05-112",
+        "OP05-113",
+        "OP05-114",
+        "OP05-115",
+        "OP05-116",
+        "OP05-117",
+        "OP05-118",
+        "OP05-119"
+      ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -2332,7 +3119,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP03-008",
         "OP03-114",
@@ -2582,6 +3369,7 @@
         "OP06-118",
         "OP06-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -2664,7 +3452,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP03-008",
         "OP03-114",
@@ -2913,6 +3701,7 @@
         "OP06-118",
         "OP06-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -2989,7 +3778,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP01-035",
         "OP01-073",
@@ -3239,6 +4028,7 @@
         "OP07-118",
         "OP07-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -3321,7 +4111,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP01-035",
         "OP01-073",
@@ -3570,6 +4360,7 @@
         "OP07-118",
         "OP07-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -3646,7 +4437,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP02-013",
         "OP03-112",
@@ -3896,6 +4687,7 @@
         "OP08-118",
         "OP08-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -3978,7 +4770,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP02-013",
         "OP03-112",
@@ -4227,6 +5019,7 @@
         "OP08-118",
         "OP08-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -4303,7 +5096,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP04-119",
         "OP05-067",
@@ -4554,6 +5347,7 @@
         "OP09-118",
         "OP09-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -4643,7 +5437,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP04-119",
         "OP05-067",
@@ -4893,6 +5687,7 @@
         "OP09-118",
         "OP09-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -4976,7 +5771,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB01-056",
         "OP07-021",
@@ -5226,6 +6021,7 @@
         "OP10-118",
         "OP10-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -5308,7 +6104,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB01-056",
         "OP07-021",
@@ -5557,6 +6353,7 @@
         "OP10-118",
         "OP10-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -5633,7 +6430,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP09-015",
         "OP11-001",
@@ -5884,6 +6681,7 @@
         "OP11-118",
         "OP11-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -5972,7 +6770,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP11-001",
         "OP11-002",
@@ -6222,6 +7020,7 @@
         "OP11-118",
         "OP11-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -6304,7 +7103,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP10-063",
         "OP12-001",
@@ -6555,6 +7354,7 @@
         "OP12-118",
         "OP12-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -6643,7 +7443,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP12-001",
         "OP12-002",
@@ -6893,6 +7693,7 @@
         "OP12-118",
         "OP12-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -6975,7 +7776,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 120,
       "actual_distinct_base_card_count": 120,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP11-058",
         "OP13-001",
@@ -7229,6 +8030,7 @@
         "OP13-119",
         "OP13-120"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -7323,7 +8125,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 120,
       "actual_distinct_base_card_count": 120,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP13-001",
         "OP13-002",
@@ -7576,6 +8378,7 @@
         "OP13-119",
         "OP13-120"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -7664,7 +8467,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 120,
       "actual_distinct_base_card_count": 120,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB04-011",
         "EB04-012",
@@ -7948,6 +8751,7 @@
         "OP14-119",
         "OP14-120"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -8214,7 +9018,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 120,
       "feed_observed_release_printings": 159,
-      "notes": "Bandai product page result count includes EB-04 product entries; release assignment remains distinct from OP14 card-number prefix."
+      "notes": "The 199-result English product page includes EB-04-prefixed entries; release-product membership is not the same as OP14 card-number prefix."
     },
     {
       "set": "OP-14",
@@ -8223,7 +9027,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 120,
       "actual_distinct_base_card_count": 120,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP14-001",
         "OP14-002",
@@ -8474,6 +9278,7 @@
         "OP14-119",
         "OP14-120"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -8551,7 +9356,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB02-052",
         "EB04-001",
@@ -8831,6 +9636,7 @@
         "OP15-118",
         "OP15-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -9101,7 +9907,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 119,
       "feed_observed_release_printings": 155,
-      "notes": "2 Bandai result row(s) were not captured by the text-entry parser; do not treat as missing cards. Generic Other Product Card link and named Premium Card Collection - Best Selection Vol.6 share printing keys for OP15-075 and OP15-108; gallery should retain the named product only when present. Stage 4B-1K recorded 157 distinct page card numbers; current entry parser captured 156. One non-base product number remains unresolved; OP15-prefixed base inventory is 119."
+      "notes": "2 result row(s) were not captured by the structured text parser; no missing-card claim is made from this shortfall. For OP15-075 and OP15-108, the named Premium Card Collection - Best Selection Vol.6 product and generic Other Product Card link share one printing key; suppress only the generic duplicate gallery product, preserving the named printing. Current parser captured 156 distinct product card numbers versus 157 recorded in Stage 4B-1K; the unresolved one is outside the confirmed 119 OP15-prefixed base numbers."
     },
     {
       "set": "OP-15",
@@ -9110,7 +9916,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB02-052",
         "OP12-014",
@@ -9358,6 +10164,7 @@
         "OP15-118",
         "OP15-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -9436,7 +10243,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 119,
       "feed_observed_release_printings": 152,
-      "notes": "1 Bandai result row(s) were not captured by the text-entry parser; do not treat as missing cards. Generic Other Product Card link and named Premium Card Collection - Best Selection Vol.6 share printing keys for OP15-075 and OP15-108; gallery should retain the named product only when present."
+      "notes": "1 result row(s) were not captured by the structured text parser; no missing-card claim is made from this shortfall. For OP15-075 and OP15-108, the named Premium Card Collection - Best Selection Vol.6 product and generic Other Product Card link share one printing key; suppress only the generic duplicate gallery product, preserving the named printing."
     },
     {
       "set": "OP-16",
@@ -9445,7 +10252,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP16-001",
         "OP16-002",
@@ -9694,6 +10501,7 @@
         "OP16-118",
         "OP16-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -9771,7 +10579,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "OP16-001",
         "OP16-002",
@@ -10020,6 +10828,7 @@
         "OP16-118",
         "OP16-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -10097,7 +10906,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB04-061",
         "OP17-001",
@@ -10349,6 +11158,7 @@
         "OP17-118",
         "OP17-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -10444,7 +11254,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB04-061",
         "OP17-001",
@@ -10696,6 +11506,7 @@
         "OP17-118",
         "OP17-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -10791,7 +11602,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Stage 3 supplemental catalogue (PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4)",
+      "actual_count_source": "Stage 3 supplemental catalogue at PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4",
       "official_card_numbers": [
         "OP13-012",
         "OP13-113",
@@ -11040,6 +11851,7 @@
         "OP18-118",
         "OP18-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -11109,7 +11921,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 0,
       "feed_observed_release_printings": 0,
-      "notes": "Supplemental catalogue checked on PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4; 159/159 bilingual metadata entries and image IDs matched. Feed snapshot itself has zero OP-18 rows."
+      "notes": "Supplemental catalogue inspected at PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4: 159/159 English and Japanese metadata entries and image identifiers match the official pages. Live image HTTP/browser verification remains pending."
     },
     {
       "set": "OP-18",
@@ -11118,7 +11930,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 119,
       "actual_distinct_base_card_count": 119,
-      "actual_count_source": "Stage 3 supplemental catalogue (PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4)",
+      "actual_count_source": "Stage 3 supplemental catalogue at PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4",
       "official_card_numbers": [
         "OP13-012",
         "OP13-113",
@@ -11367,6 +12179,7 @@
         "OP18-118",
         "OP18-119"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -11436,7 +12249,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 0,
       "feed_observed_release_printings": 0,
-      "notes": "Supplemental catalogue checked on PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4; 159/159 bilingual metadata entries and image IDs matched. Feed snapshot itself has zero OP-18 rows."
+      "notes": "Supplemental catalogue inspected at PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4: 159/159 English and Japanese metadata entries and image identifiers match the official pages. Live image HTTP/browser verification remains pending."
     },
     {
       "set": "EB-01",
@@ -11445,7 +12258,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 61,
       "actual_distinct_base_card_count": 61,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB01-001",
         "EB01-002",
@@ -11572,6 +12385,7 @@
         "EB01-060",
         "EB01-061"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -11610,7 +12424,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 61,
       "actual_distinct_base_card_count": 61,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB01-001",
         "EB01-002",
@@ -11737,6 +12551,7 @@
         "EB01-060",
         "EB01-061"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -11775,7 +12590,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 61,
       "actual_distinct_base_card_count": 61,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB01-001",
         "EB01-021",
@@ -11928,6 +12743,7 @@
         "EB02-060",
         "EB02-061"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -12123,7 +12939,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 61,
       "actual_distinct_base_card_count": 61,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB01-001",
         "EB01-021",
@@ -12276,6 +13092,7 @@
         "EB02-060",
         "EB02-061"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -12471,7 +13288,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 62,
       "actual_distinct_base_card_count": 62,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB03-001",
         "EB03-002",
@@ -12600,6 +13417,7 @@
         "EB03-061",
         "EB03-062"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -12638,7 +13456,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 62,
       "actual_distinct_base_card_count": 62,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB03-001",
         "EB03-002",
@@ -12767,6 +13585,7 @@
         "EB03-061",
         "EB03-062"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -12803,75 +13622,14 @@
       "language": "English",
       "official_source_url": "https://en.onepiece-cardgame.com/cardlist/?series=569204",
       "retrieval_date": "2026-11-27",
-      "official_expected_base_card_count": 0,
+      "official_expected_base_card_count": null,
       "actual_distinct_base_card_count": 61,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
-      "official_card_numbers": [],
-      "official_base_card_numbers": [],
-      "missing_card_numbers": [],
-      "unexpected_card_numbers": [
-        "EB04-001",
-        "EB04-002",
-        "EB04-003",
-        "EB04-004",
-        "EB04-005",
-        "EB04-006",
-        "EB04-007",
-        "EB04-008",
-        "EB04-009",
-        "EB04-010",
-        "EB04-011",
-        "EB04-012",
-        "EB04-013",
-        "EB04-014",
-        "EB04-015",
-        "EB04-016",
-        "EB04-017",
-        "EB04-018",
-        "EB04-019",
-        "EB04-020",
-        "EB04-021",
-        "EB04-022",
-        "EB04-023",
-        "EB04-024",
-        "EB04-025",
-        "EB04-026",
-        "EB04-027",
-        "EB04-028",
-        "EB04-029",
-        "EB04-030",
-        "EB04-031",
-        "EB04-032",
-        "EB04-033",
-        "EB04-034",
-        "EB04-035",
-        "EB04-036",
-        "EB04-037",
-        "EB04-038",
-        "EB04-039",
-        "EB04-040",
-        "EB04-041",
-        "EB04-042",
-        "EB04-043",
-        "EB04-044",
-        "EB04-045",
-        "EB04-046",
-        "EB04-047",
-        "EB04-048",
-        "EB04-049",
-        "EB04-050",
-        "EB04-051",
-        "EB04-052",
-        "EB04-053",
-        "EB04-054",
-        "EB04-055",
-        "EB04-056",
-        "EB04-057",
-        "EB04-058",
-        "EB04-059",
-        "EB04-060",
-        "EB04-061"
-      ],
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
+      "official_card_numbers": null,
+      "official_base_card_numbers": null,
+      "partial_product_card_numbers": null,
+      "missing_card_numbers": null,
+      "unexpected_card_numbers": null,
       "card_type_counts": null,
       "rarity_counts": null,
       "reprints_and_additional_inclusions": null,
@@ -12888,7 +13646,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 61,
       "feed_observed_release_printings": 100,
-      "notes": "Official page returned no usable result set; expected count not inferred."
+      "notes": "Official page did not return a usable card result list; expected card counts are null, not estimated."
     },
     {
       "set": "EB-04",
@@ -12897,7 +13655,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 61,
       "actual_distinct_base_card_count": 61,
-      "actual_count_source": "Koala Kollect feed snapshot (generated 2026-10-22; observed only)",
+      "actual_count_source": "Koala Kollect feed snapshot generated 2026-10-22 (observed, not completeness proof)",
       "official_card_numbers": [
         "EB01-023",
         "EB04-001",
@@ -13026,6 +13784,7 @@
         "EB04-060",
         "EB04-061"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -13069,7 +13828,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 61,
       "feed_observed_release_printings": 85,
-      "notes": "2 Bandai result row(s) were not captured by the text-entry parser; do not treat as missing cards."
+      "notes": "2 result row(s) were not captured by the structured text parser; no missing-card claim is made from this shortfall."
     },
     {
       "set": "EB-05",
@@ -13078,7 +13837,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 61,
       "actual_distinct_base_card_count": 61,
-      "actual_count_source": "Stage 3 supplemental catalogue (PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4)",
+      "actual_count_source": "Stage 3 supplemental catalogue at PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4",
       "official_card_numbers": [
         "EB03-001",
         "EB05-001",
@@ -13216,6 +13975,7 @@
         "EB05-060",
         "EB05-061"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -13313,7 +14073,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 0,
       "feed_observed_release_printings": 0,
-      "notes": "Supplemental catalogue checked on PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4; 96/96 bilingual metadata entries and image IDs matched. Feed snapshot itself has zero EB-05 rows."
+      "notes": "Supplemental catalogue inspected at PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4: 96/96 English and Japanese metadata entries and image identifiers match the official pages. Live image HTTP/browser verification remains pending."
     },
     {
       "set": "EB-05",
@@ -13322,7 +14082,7 @@
       "retrieval_date": "2026-11-27",
       "official_expected_base_card_count": 61,
       "actual_distinct_base_card_count": 61,
-      "actual_count_source": "Stage 3 supplemental catalogue (PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4)",
+      "actual_count_source": "Stage 3 supplemental catalogue at PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4",
       "official_card_numbers": [
         "EB03-001",
         "EB05-001",
@@ -13460,6 +14220,7 @@
         "EB05-060",
         "EB05-061"
       ],
+      "partial_product_card_numbers": null,
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "card_type_counts": {
@@ -13557,7 +14318,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 0,
       "feed_observed_release_printings": 0,
-      "notes": "Supplemental catalogue checked on PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4; 96/96 bilingual metadata entries and image IDs matched. Feed snapshot itself has zero EB-05 rows."
+      "notes": "Supplemental catalogue inspected at PR #38 head 64f1203acc94b9409d6a10941aea00c541899ff4: 96/96 English and Japanese metadata entries and image identifiers match the official pages. Live image HTTP/browser verification remains pending."
     },
     {
       "set": "PRB-01",
@@ -13567,7 +14328,9 @@
       "official_expected_base_card_count": null,
       "actual_distinct_base_card_count": null,
       "actual_count_source": null,
-      "official_card_numbers": [
+      "official_card_numbers": null,
+      "official_base_card_numbers": null,
+      "partial_product_card_numbers": [
         "EB01-006",
         "OP01-006",
         "OP01-016",
@@ -13675,660 +14438,11 @@
         "ST10-010",
         "ST12-014"
       ],
-      "official_base_card_numbers": null,
       "missing_card_numbers": null,
       "unexpected_card_numbers": null,
-      "card_type_counts": {
-        "leader": 0,
-        "character": 84,
-        "event": 20,
-        "stage": 2
-      },
-      "rarity_counts": {
-        "SR": 29,
-        "UC": 25,
-        "R": 21,
-        "SEC": 8,
-        "C": 23
-      },
-      "reprints_and_additional_inclusions": [
-        {
-          "card_number": "EB01-006",
-          "name": "Tony Tony.Chopper",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-006",
-          "name": "Otama",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-016",
-          "name": "Nami",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-024",
-          "name": "Monkey.D.Luffy",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-029",
-          "name": "Radical Beam!!",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP01-033",
-          "name": "Izo",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-041",
-          "name": "Kouzuki Momonosuke",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-047",
-          "name": "Trafalgar Law",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-051",
-          "name": "Eustass\"Captain\"Kid",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-052",
-          "name": "Raizo",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-070",
-          "name": "Dracule Mihawk",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-078",
-          "name": "Boa Hancock",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-120",
-          "name": "Shanks",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-121",
-          "name": "Yamato",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-004",
-          "name": "Edward.Newgate",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-013",
-          "name": "Portgas.D.Ace",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-015",
-          "name": "Makino",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-018",
-          "name": "Marco",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-089",
-          "name": "Judgment of Hell",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP02-096",
-          "name": "Kuzan",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-099",
-          "name": "Sakazuki",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-106",
-          "name": "Tsuru",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-114",
-          "name": "Borsalino",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-117",
-          "name": "Ice Age",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP02-121",
-          "name": "Kuzan",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-003",
-          "name": "Izo",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-055",
-          "name": "Gum-Gum Giant Gavel",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-056",
-          "name": "Sanji's Pilaf",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-057",
-          "name": "Three Thousand Worlds",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-060",
-          "name": "Kalifa",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-079",
-          "name": "Vergo",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-089",
-          "name": "Brannew",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-094",
-          "name": "Air Door",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-108",
-          "name": "Charlotte Cracker",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-110",
-          "name": "Charlotte Smoothie",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-113",
-          "name": "Charlotte Perospero",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-116",
-          "name": "Shirahoshi",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-121",
-          "name": "Thunder Bolt",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-122",
-          "name": "Sogeking",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-123",
-          "name": "Charlotte Katakuri",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-029",
-          "name": "Dellinger",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-031",
-          "name": "Donquixote Doflamingo",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-032",
-          "name": "Baby 5",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-036",
-          "name": "Donquixote Family",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP04-044",
-          "name": "Kaido",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-056",
-          "name": "Gum-Gum Red Roc",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP04-083",
-          "name": "Sabo",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-089",
-          "name": "Bartolomeo",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-095",
-          "name": "Barrier!!",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP04-100",
-          "name": "Capone\"Gang\"Bege",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-104",
-          "name": "Sanji",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-112",
-          "name": "Yamato",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-006",
-          "name": "Koala",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-007",
-          "name": "Sabo",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-010",
-          "name": "Nico Robin",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-015",
-          "name": "Belo Betty",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-034",
-          "name": "Baby 5",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-043",
-          "name": "Ulti",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-057",
-          "name": "Hound Blaze",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP05-069",
-          "name": "Trafalgar Law",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-073",
-          "name": "Miss Doublefinger(Zala)",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-074",
-          "name": "Eustass\"Captain\"Kid",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-081",
-          "name": "One-Legged Toy Soldier",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-082",
-          "name": "Shirahoshi",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-105",
-          "name": "Satori",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-114",
-          "name": "El Thor",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP05-115",
-          "name": "Two-Hundred Million Volts Amaru",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP05-117",
-          "name": "Upper Yard",
-          "rarity": "UC",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "OP05-118",
-          "name": "Kaido",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-119",
-          "name": "Monkey.D.Luffy",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-003",
-          "name": "Emporio.Ivankov",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-023",
-          "name": "Arlong",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-035",
-          "name": "Hody Jones",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-036",
-          "name": "Ryuma",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-038",
-          "name": "The Billion-fold World Trichiliocosm",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-056",
-          "name": "Ama no Murakumo Sword",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-060",
-          "name": "Vinsmoke Ichiji",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-064",
-          "name": "Vinsmoke Niji",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-065",
-          "name": "Vinsmoke Niji",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-066",
-          "name": "Vinsmoke Yonji",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-067",
-          "name": "Vinsmoke Yonji",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-068",
-          "name": "Vinsmoke Reiju",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-069",
-          "name": "Vinsmoke Reiju",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-079",
-          "name": "Kingdom of GERMA",
-          "rarity": "C",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "OP06-086",
-          "name": "Gecko Moria",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-091",
-          "name": "Victoria Cindry",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-100",
-          "name": "Inuarashi",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-106",
-          "name": "Kouzuki Hiyori",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-110",
-          "name": "Nekomamushi",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-114",
-          "name": "Wyper",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-118",
-          "name": "Roronoa Zoro",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST01-006",
-          "name": "Tony Tony.Chopper",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST01-014",
-          "name": "Guard Point",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST02-004",
-          "name": "Capone\"Gang\"Bege",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST03-005",
-          "name": "Dracule Mihawk",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST03-008",
-          "name": "Trafalgar Law",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST03-013",
-          "name": "Boa Hancock",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST04-003",
-          "name": "Kaido",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST04-005",
-          "name": "Queen",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST04-016",
-          "name": "Blast Breath",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST06-010",
-          "name": "Helmeppo",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST06-014",
-          "name": "Shockwave",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST07-007",
-          "name": "Charlotte Brulee",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST09-014",
-          "name": "Narikabura Arrow",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST10-010",
-          "name": "Trafalgar Law",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST12-014",
-          "name": "Duval",
-          "rarity": "C",
-          "type": "CHARACTER"
-        }
-      ],
+      "card_type_counts": null,
+      "rarity_counts": null,
+      "reprints_and_additional_inclusions": null,
       "official_page_result_count": 319,
       "official_page_entry_count": 305,
       "official_source_image_url_count": 197,
@@ -14342,7 +14456,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 1,
       "feed_observed_release_printings": 319,
-      "notes": "14 Bandai result row(s) were not captured by the text-entry parser; do not treat as missing cards. PRB product pages contain original OP/EB/ST card numbers; text parser did not capture all result rows. Treat product-card-number inventory as SOURCE UNVERIFIED; these are reprint/inclusion identities, not new PRB-prefixed base cards."
+      "notes": "14 result row(s) were not captured by the structured text parser; no missing-card claim is made from this shortfall. Product results consist of reprints carrying original OP/EB/ST card numbers; structured parser did not capture every page row, so distinct product card-number inventory remains SOURCE UNVERIFIED."
     },
     {
       "set": "PRB-01",
@@ -14352,7 +14466,9 @@
       "official_expected_base_card_count": null,
       "actual_distinct_base_card_count": null,
       "actual_count_source": null,
-      "official_card_numbers": [
+      "official_card_numbers": null,
+      "official_base_card_numbers": null,
+      "partial_product_card_numbers": [
         "EB01-006",
         "OP01-006",
         "OP01-016",
@@ -14460,660 +14576,11 @@
         "ST10-010",
         "ST12-014"
       ],
-      "official_base_card_numbers": null,
       "missing_card_numbers": null,
       "unexpected_card_numbers": null,
-      "card_type_counts": {
-        "leader": 0,
-        "character": 84,
-        "event": 20,
-        "stage": 2
-      },
-      "rarity_counts": {
-        "SR": 29,
-        "UC": 25,
-        "R": 21,
-        "SEC": 8,
-        "C": 23
-      },
-      "reprints_and_additional_inclusions": [
-        {
-          "card_number": "EB01-006",
-          "name": "トニートニー・チョッパー",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-006",
-          "name": "お玉",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-016",
-          "name": "ナミ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-024",
-          "name": "モンキー・D・ルフィ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-029",
-          "name": "ラディカルビ～～～ム‼‼",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP01-033",
-          "name": "イゾウ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-041",
-          "name": "光月モモの助",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-047",
-          "name": "トラファルガー・ロー",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-051",
-          "name": "ユースタス・キッド",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-052",
-          "name": "雷ぞう",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-070",
-          "name": "ジュラキュール・ミホーク",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-078",
-          "name": "ボア・ハンコック",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-120",
-          "name": "シャンクス",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-121",
-          "name": "ヤマト",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-004",
-          "name": "エドワード・ニューゲート",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-013",
-          "name": "ポートガス・D・エース",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-015",
-          "name": "マキノ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-018",
-          "name": "マルコ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-089",
-          "name": "地獄の審判",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP02-096",
-          "name": "クザン",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-099",
-          "name": "サカズキ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-106",
-          "name": "つる",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-114",
-          "name": "ボルサリーノ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-117",
-          "name": "氷河時代",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP02-121",
-          "name": "クザン",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-003",
-          "name": "イゾウ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-055",
-          "name": "ゴムゴムの大槌",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-056",
-          "name": "サンジのピラフ",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-057",
-          "name": "三・千・世・界",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-060",
-          "name": "カリファ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-079",
-          "name": "ヴェルゴ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-089",
-          "name": "ブランニュー",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-094",
-          "name": "空気開扉",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-108",
-          "name": "シャーロット・クラッカー",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-110",
-          "name": "シャーロット・スムージー",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-113",
-          "name": "シャーロット・ペロスペロー",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-116",
-          "name": "しらほし",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-121",
-          "name": "雷霆",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-122",
-          "name": "そげキング",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-123",
-          "name": "シャーロット・カタクリ",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-029",
-          "name": "デリンジャー",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-031",
-          "name": "ドンキホーテ・ドフラミンゴ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-032",
-          "name": "ベビー5",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-036",
-          "name": "ドンキホーテファミリー",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP04-044",
-          "name": "カイドウ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-056",
-          "name": "ゴムゴムの業火拳銃",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP04-083",
-          "name": "サボ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-089",
-          "name": "バルトロメオ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-095",
-          "name": "バ～～～～リアッ!!",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP04-100",
-          "name": "カポネ・ベッジ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-104",
-          "name": "サンジ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-112",
-          "name": "ヤマト",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-006",
-          "name": "コアラ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-007",
-          "name": "サボ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-010",
-          "name": "ニコ・ロビン",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-015",
-          "name": "ベロ・ベティ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-034",
-          "name": "ベビー５",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-043",
-          "name": "うるティ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-057",
-          "name": "犬噛紅蓮",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP05-069",
-          "name": "トラファルガー・ロー",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-073",
-          "name": "ミス・ダブルフィンガー(ザラ)",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-074",
-          "name": "ユースタス・キッド",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-081",
-          "name": "片足の兵隊",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-082",
-          "name": "しらほし",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-105",
-          "name": "サトリ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-114",
-          "name": "神の裁き",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP05-115",
-          "name": "2億V雷神",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP05-117",
-          "name": "アッパーヤード",
-          "rarity": "UC",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "OP05-118",
-          "name": "カイドウ",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-119",
-          "name": "モンキー・D・ルフィ",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-003",
-          "name": "エンポリオ・イワンコフ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-023",
-          "name": "アーロン",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-035",
-          "name": "ホーディ・ジョーンズ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-036",
-          "name": "リューマ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-038",
-          "name": "一大・三千・大千・世界",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-056",
-          "name": "天叢雲剣",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-060",
-          "name": "ヴィンスモーク・イチジ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-064",
-          "name": "ヴィンスモーク・ニジ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-065",
-          "name": "ヴィンスモーク・ニジ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-066",
-          "name": "ヴィンスモーク・ヨンジ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-067",
-          "name": "ヴィンスモーク・ヨンジ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-068",
-          "name": "ヴィンスモーク・レイジュ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-069",
-          "name": "ヴィンスモーク・レイジュ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-079",
-          "name": "ジェルマ王国",
-          "rarity": "C",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "OP06-086",
-          "name": "ゲッコー・モリア",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-091",
-          "name": "ビクトリア・シンドリー",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-100",
-          "name": "イヌアラシ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-106",
-          "name": "光月日和",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-110",
-          "name": "ネコマムシ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-114",
-          "name": "ワイパー",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-118",
-          "name": "ロロノア・ゾロ",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST01-006",
-          "name": "トニートニー・チョッパー",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST01-014",
-          "name": "毛皮強化",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST02-004",
-          "name": "カポネ・ベッジ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST03-005",
-          "name": "ジュラキュール・ミホーク",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST03-008",
-          "name": "トラファルガー・ロー",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST03-013",
-          "name": "ボア・ハンコック",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST04-003",
-          "name": "カイドウ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST04-005",
-          "name": "クイーン",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST04-016",
-          "name": "熱息",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST06-010",
-          "name": "ヘルメッポ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST06-014",
-          "name": "衝撃波",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST07-007",
-          "name": "シャーロット・ブリュレ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST09-014",
-          "name": "鳴鏑",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST10-010",
-          "name": "トラファルガー・ロー",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST12-014",
-          "name": "デュバル",
-          "rarity": "C",
-          "type": "CHARACTER"
-        }
-      ],
+      "card_type_counts": null,
+      "rarity_counts": null,
+      "reprints_and_additional_inclusions": null,
       "official_page_result_count": 319,
       "official_page_entry_count": 305,
       "official_source_image_url_count": 197,
@@ -15127,7 +14594,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 1,
       "feed_observed_release_printings": 319,
-      "notes": "14 Bandai result row(s) were not captured by the text-entry parser; do not treat as missing cards. PRB product pages contain original OP/EB/ST card numbers; text parser did not capture all result rows. Treat product-card-number inventory as SOURCE UNVERIFIED; these are reprint/inclusion identities, not new PRB-prefixed base cards."
+      "notes": "14 result row(s) were not captured by the structured text parser; no missing-card claim is made from this shortfall. Product results consist of reprints carrying original OP/EB/ST card numbers; structured parser did not capture every page row, so distinct product card-number inventory remains SOURCE UNVERIFIED."
     },
     {
       "set": "PRB-02",
@@ -15137,7 +14604,9 @@
       "official_expected_base_card_count": null,
       "actual_distinct_base_card_count": null,
       "actual_count_source": null,
-      "official_card_numbers": [
+      "official_card_numbers": null,
+      "official_base_card_numbers": null,
+      "partial_product_card_numbers": [
         "EB01-009",
         "EB01-012",
         "EB01-015",
@@ -15279,865 +14748,11 @@
         "ST20-003",
         "ST21-003"
       ],
-      "official_base_card_numbers": null,
       "missing_card_numbers": null,
       "unexpected_card_numbers": null,
-      "card_type_counts": {
-        "leader": 0,
-        "character": 102,
-        "event": 34,
-        "stage": 4
-      },
-      "rarity_counts": {
-        "C": 46,
-        "SR": 25,
-        "R": 24,
-        "SEC": 6,
-        "SP CARD": 10,
-        "UC": 29
-      },
-      "reprints_and_additional_inclusions": [
-        {
-          "card_number": "EB01-009",
-          "name": "Just Shut Up and Come with Us!!!!",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "EB01-012",
-          "name": "Cavendish",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-015",
-          "name": "Scratchmen Apoo",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-018",
-          "name": "Mountain God",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-038",
-          "name": "Oh Come My Way",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "EB01-046",
-          "name": "Brook",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-048",
-          "name": "Laboon",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-051",
-          "name": "Finger Pistol",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "EB01-057",
-          "name": "Shirahoshi",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-060",
-          "name": "Did Someone Say...Kami?",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "EB01-061",
-          "name": "Mr.2.Bon.Kurei(Bentham)",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB02-061",
-          "name": "Monkey.D.Luffy",
-          "rarity": "SP CARD",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-039",
-          "name": "Killer",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-055",
-          "name": "You Can Be My Samurai!!",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP02-005",
-          "name": "Curly.Dadan",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-068",
-          "name": "Gum-Gum Rain",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-008",
-          "name": "Buggy",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-044",
-          "name": "Kaya",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-048",
-          "name": "Nojiko",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-072",
-          "name": "Gum-Gum Jet Gatling",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-097",
-          "name": "Six King Pistol",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP04-016",
-          "name": "Bad Manners Kick Course",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP04-077",
-          "name": "Ideo",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-083",
-          "name": "Sabo",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-096",
-          "name": "Corrida Coliseum",
-          "rarity": "C",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "OP05-004",
-          "name": "Emporio.Ivankov",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-021",
-          "name": "Revolutionary Army HQ",
-          "rarity": "UC",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "OP05-030",
-          "name": "Donquixote Rosinante",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-036",
-          "name": "Monet",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-037",
-          "name": "Because the Side of Justice Will Be Whichever Side Wins!!",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP05-052",
-          "name": "Maynard",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-077",
-          "name": "Gamma Knife",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP05-091",
-          "name": "Rebecca",
-          "rarity": "SP CARD",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-097",
-          "name": "Mary Geoise",
-          "rarity": "C",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "OP05-102",
-          "name": "Gedatsu",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-007",
-          "name": "Shanks",
-          "rarity": "SP CARD",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-044",
-          "name": "Gion",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-047",
-          "name": "Charlotte Pudding",
-          "rarity": "SP CARD",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-049",
-          "name": "Sengoku",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-056",
-          "name": "Ama no Murakumo Sword",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-058",
-          "name": "Gravity Blade Raging Tiger",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-059",
-          "name": "White Snake",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-063",
-          "name": "Vinsmoke Sora",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-073",
-          "name": "Shiki",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-076",
-          "name": "Hitokiri Kamazo",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-078",
-          "name": "GERMA 66",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-107",
-          "name": "Kouzuki Momonosuke",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-115",
-          "name": "You're the One Who Should Disappear.",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-118",
-          "name": "Roronoa Zoro",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-119",
-          "name": "Sanji",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-014",
-          "name": "Moda",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-015",
-          "name": "Monkey.D.Dragon",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-017",
-          "name": "Dragon Breath",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP07-021",
-          "name": "Urouge",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-026",
-          "name": "Jewelry Bonney",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-029",
-          "name": "Basil Hawkins",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-031",
-          "name": "Bartolomeo",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-040",
-          "name": "Crocodile",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-056",
-          "name": "Slave Arrow",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP07-064",
-          "name": "Sanji",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-076",
-          "name": "Slow-Slow Beam Sword",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP07-107",
-          "name": "Franky",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-109",
-          "name": "Monkey.D.Luffy",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-114",
-          "name": "He Possesses the World's Most Brilliant Mind",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP07-118",
-          "name": "Sabo",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-119",
-          "name": "Portgas.D.Ace",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-023",
-          "name": "Carrot",
-          "rarity": "SP CARD",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-067",
-          "name": "Charlotte Pudding",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-074",
-          "name": "Black Maria",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-076",
-          "name": "It's to Die For...",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP08-087",
-          "name": "Scratchmen Apoo",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-099",
-          "name": "Kalgara",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-118",
-          "name": "Silvers Rayleigh",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-002",
-          "name": "Uta",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-004",
-          "name": "Shanks",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-005",
-          "name": "Silvers Rayleigh",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-009",
-          "name": "Benn.Beckman",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-014",
-          "name": "Limejuice",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-020",
-          "name": "Come On!! We'll Fight You!!",
-          "rarity": "SP CARD",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-027",
-          "name": "Sabo",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-033",
-          "name": "Nico Robin",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-046",
-          "name": "Crocodile",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-048",
-          "name": "Dracule Mihawk",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-056",
-          "name": "Mr.3(Galdino)",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-057",
-          "name": "Cross Guild",
-          "rarity": "SP CARD",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-065",
-          "name": "Sanji",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-069",
-          "name": "Trafalgar Law",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-072",
-          "name": "Franky",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-076",
-          "name": "Roronoa Zoro",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-077",
-          "name": "Gum-Gum Lightning",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-078",
-          "name": "Gum-Gum Giant",
-          "rarity": "SP CARD",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-079",
-          "name": "Gum-Gum Jump Rope",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-084",
-          "name": "Catarina Devon",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-086",
-          "name": "Jesus Burgess",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-093",
-          "name": "Marshall.D.Teach",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-096",
-          "name": "My Era...Begins!!",
-          "rarity": "SP CARD",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-097",
-          "name": "Black Vortex",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-098",
-          "name": "Black Hole",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP10-011",
-          "name": "Tony Tony.Chopper",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-018",
-          "name": "Ten-Layer Igloo",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP10-032",
-          "name": "Tashigi",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-046",
-          "name": "Kyros",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-079",
-          "name": "God Thread",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP10-095",
-          "name": "Roronoa Zoro",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-105",
-          "name": "Cavendish",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-108",
-          "name": "Scratchmen Apoo",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-109",
-          "name": "Basil Hawkins",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-112",
-          "name": "Eustass\"Captain\"Kid",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-114",
-          "name": "X.Drake",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-119",
-          "name": "Trafalgar Law",
-          "rarity": "SP CARD",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST01-011",
-          "name": "Brook",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST02-007",
-          "name": "Jewelry Bonney",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST06-008",
-          "name": "Hina",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST10-005",
-          "name": "Jinbe",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST10-008",
-          "name": "Shachi & Penguin",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST12-005",
-          "name": "Perona",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST12-017",
-          "name": "Plastic Surgery Shot",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST13-004",
-          "name": "Edward.Newgate",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST13-007",
-          "name": "Sabo",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST13-010",
-          "name": "Portgas.D.Ace",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST13-014",
-          "name": "Monkey.D.Luffy",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST13-019",
-          "name": "The Three Brothers' Bond",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST14-007",
-          "name": "Nico Robin",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST14-010",
-          "name": "Brook",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST14-013",
-          "name": "Roronoa Zoro",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST14-016",
-          "name": "I Have My Crew!!",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST14-017",
-          "name": "Thousand Sunny",
-          "rarity": "C",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "ST15-002",
-          "name": "Edward.Newgate",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST16-003",
-          "name": "Charlotte Katakuri",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST16-004",
-          "name": "Shanks",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST16-005",
-          "name": "Monkey.D.Luffy",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST17-002",
-          "name": "Trafalgar Law",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST17-003",
-          "name": "Buggy",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST17-005",
-          "name": "Marshall.D.Teach",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST18-001",
-          "name": "Uso-Hachi",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST18-002",
-          "name": "O-Nami",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST18-003",
-          "name": "San-Gorou",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST19-002",
-          "name": "Sengoku",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST20-003",
-          "name": "Charlotte Brulee",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST21-003",
-          "name": "Sanji",
-          "rarity": "C",
-          "type": "CHARACTER"
-        }
-      ],
+      "card_type_counts": null,
+      "rarity_counts": null,
+      "reprints_and_additional_inclusions": null,
       "official_page_result_count": 316,
       "official_page_entry_count": 249,
       "official_source_image_url_count": 109,
@@ -16151,7 +14766,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 18,
       "feed_observed_release_printings": 316,
-      "notes": "67 Bandai result row(s) were not captured by the text-entry parser; do not treat as missing cards. PRB product pages contain original OP/EB/ST card numbers; text parser did not capture all result rows. Treat product-card-number inventory as SOURCE UNVERIFIED; these are reprint/inclusion identities, not new PRB-prefixed base cards."
+      "notes": "67 result row(s) were not captured by the structured text parser; no missing-card claim is made from this shortfall. Product results consist of reprints carrying original OP/EB/ST card numbers; structured parser did not capture every page row, so distinct product card-number inventory remains SOURCE UNVERIFIED."
     },
     {
       "set": "PRB-02",
@@ -16161,7 +14776,9 @@
       "official_expected_base_card_count": null,
       "actual_distinct_base_card_count": null,
       "actual_count_source": null,
-      "official_card_numbers": [
+      "official_card_numbers": null,
+      "official_base_card_numbers": null,
+      "partial_product_card_numbers": [
         "EB01-009",
         "EB01-012",
         "EB01-015",
@@ -16303,865 +14920,11 @@
         "ST20-003",
         "ST21-003"
       ],
-      "official_base_card_numbers": null,
       "missing_card_numbers": null,
       "unexpected_card_numbers": null,
-      "card_type_counts": {
-        "leader": 0,
-        "character": 102,
-        "event": 34,
-        "stage": 4
-      },
-      "rarity_counts": {
-        "C": 46,
-        "SR": 25,
-        "R": 24,
-        "SEC": 6,
-        "SP CARD": 10,
-        "UC": 29
-      },
-      "reprints_and_additional_inclusions": [
-        {
-          "card_number": "EB01-009",
-          "name": "うるせェ!!!いこう!!!!",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "EB01-012",
-          "name": "キャベンディッシュ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-015",
-          "name": "スクラッチメン・アプー",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-018",
-          "name": "山さん",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-038",
-          "name": "オカマ道",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "EB01-046",
-          "name": "ブルック",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-048",
-          "name": "ラブーン",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-051",
-          "name": "指銃",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "EB01-057",
-          "name": "しらほし",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB01-060",
-          "name": "我が神なり",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "EB01-061",
-          "name": "Mr.2・ボン・クレー(ベンサム)",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "EB02-061",
-          "name": "モンキー・Ｄ・ルフィ",
-          "rarity": "SPカード",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-039",
-          "name": "キラー",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP01-055",
-          "name": "おれの”侍”になれ‼!",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP02-005",
-          "name": "カーリー・ダダン",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP02-068",
-          "name": "ゴムゴムの雨",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-008",
-          "name": "バギー",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-044",
-          "name": "カヤ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-048",
-          "name": "ノジコ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP03-072",
-          "name": "ゴムゴムのJET銃乱打",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP03-097",
-          "name": "六王銃",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP04-016",
-          "name": "反行儀キックコース",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP04-077",
-          "name": "イデオ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-083",
-          "name": "サボ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP04-096",
-          "name": "コリーダコロシアム",
-          "rarity": "C",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "OP05-004",
-          "name": "エンポリオ・イワンコフ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-021",
-          "name": "革命軍総本部",
-          "rarity": "UC",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "OP05-030",
-          "name": "ドンキホーテ・ロシナンテ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-036",
-          "name": "モネ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-037",
-          "name": "勝者だけが正義だ!!!!",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP05-052",
-          "name": "メイナード",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-077",
-          "name": "ガンマナイフ",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP05-091",
-          "name": "レベッカ",
-          "rarity": "SPカード",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP05-097",
-          "name": "聖地マリージョア",
-          "rarity": "C",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "OP05-102",
-          "name": "ゲダツ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-007",
-          "name": "シャンクス",
-          "rarity": "SPカード",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-044",
-          "name": "ギオン",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-047",
-          "name": "シャーロット・プリン",
-          "rarity": "SPカード",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-049",
-          "name": "センゴク",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-056",
-          "name": "天叢雲剣",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-058",
-          "name": "重力刀　猛虎",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-059",
-          "name": "ホワイトスネーク",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-063",
-          "name": "ヴィンスモーク・ソラ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-073",
-          "name": "シキ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-076",
-          "name": "人斬り鎌ぞう",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-078",
-          "name": "GERMA 66",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-107",
-          "name": "光月モモの助",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-115",
-          "name": "お前が消えろ",
-          "rarity": "R",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP06-118",
-          "name": "ロロノア・ゾロ",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP06-119",
-          "name": "サンジ",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-014",
-          "name": "モーダ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-015",
-          "name": "モンキー・D・ドラゴン",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-017",
-          "name": "竜の息吹",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP07-021",
-          "name": "ウルージ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-026",
-          "name": "ジュエリー・ボニー",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-029",
-          "name": "バジル・ホーキンス",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-031",
-          "name": "バルトロメオ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-040",
-          "name": "クロコダイル",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-056",
-          "name": "虜の矢",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP07-064",
-          "name": "サンジ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-076",
-          "name": "ノロノロビームソード",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP07-107",
-          "name": "フランキー",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-109",
-          "name": "モンキー・Ｄ・ルフィ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-114",
-          "name": "世界最大の頭脳を持つ男",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP07-118",
-          "name": "サボ",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP07-119",
-          "name": "ポートガス・D・エース",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-023",
-          "name": "キャロット",
-          "rarity": "SPカード",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-067",
-          "name": "シャーロット・プリン",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-074",
-          "name": "ブラックマリア",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-076",
-          "name": "しぬほど…おいしい♡",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP08-087",
-          "name": "スクラッチメン・アプー",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-099",
-          "name": "カルガラ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP08-118",
-          "name": "シルバーズ･レイリー",
-          "rarity": "SEC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-002",
-          "name": "ウタ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-004",
-          "name": "シャンクス",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-005",
-          "name": "シルバーズ・レイリー",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-009",
-          "name": "ベン・ベックマン",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-014",
-          "name": "ライムジュース",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-020",
-          "name": "来い…!!!おれ達が相手をしてやる!!!",
-          "rarity": "SPカード",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-027",
-          "name": "サボ",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-033",
-          "name": "ニコ・ロビン",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-046",
-          "name": "クロコダイル",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-048",
-          "name": "ジュラキュール・ミホーク",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-056",
-          "name": "Mr.3(ギャルディーノ)",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-057",
-          "name": "クロスギルド",
-          "rarity": "SPカード",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-065",
-          "name": "サンジ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-069",
-          "name": "トラファルガー・ロー",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-072",
-          "name": "フランキー",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-076",
-          "name": "ロロノア・ゾロ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-077",
-          "name": "ゴムゴムの雷",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-078",
-          "name": "ゴムゴムの巨人",
-          "rarity": "SPカード",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-079",
-          "name": "ゴムゴムの縄跳び",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-084",
-          "name": "カタリーナ・デボン",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-086",
-          "name": "ジーザス・バージェス",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-093",
-          "name": "マーシャル・Ｄ・ティーチ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP09-096",
-          "name": "おれの時代だァ!!!!",
-          "rarity": "SPカード",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-097",
-          "name": "闇水",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP09-098",
-          "name": "闇穴道",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP10-011",
-          "name": "トニートニー・チョッパー",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-018",
-          "name": "カマクラ十草紙",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP10-032",
-          "name": "たしぎ",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-046",
-          "name": "キュロス",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-079",
-          "name": "神誅殺",
-          "rarity": "UC",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "OP10-095",
-          "name": "ロロノア・ゾロ",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-105",
-          "name": "キャベンディッシュ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-108",
-          "name": "スクラッチメン・アプー",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-109",
-          "name": "バジル・ホーキンス",
-          "rarity": "R",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-112",
-          "name": "ユースタス・キッド",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-114",
-          "name": "X・ドレーク",
-          "rarity": "UC",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "OP10-119",
-          "name": "トラファルガー・ロー",
-          "rarity": "SPカード",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST01-011",
-          "name": "ブルック",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST02-007",
-          "name": "ジュエリー・ボニー",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST06-008",
-          "name": "ヒナ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST10-005",
-          "name": "ジンベエ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST10-008",
-          "name": "シャチ＆ペンギン",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST12-005",
-          "name": "ペローナ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST12-017",
-          "name": "整形ショット",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST13-004",
-          "name": "エドワード・ニューゲート",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST13-007",
-          "name": "サボ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST13-010",
-          "name": "ポートガス・D・エース",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST13-014",
-          "name": "モンキー・Ｄ・ルフィ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST13-019",
-          "name": "3兄弟の絆",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST14-007",
-          "name": "ニコ・ロビン",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST14-010",
-          "name": "ブルック",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST14-013",
-          "name": "ロロノア・ゾロ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST14-016",
-          "name": "仲間がいる゛よ!!!!",
-          "rarity": "C",
-          "type": "EVENT"
-        },
-        {
-          "card_number": "ST14-017",
-          "name": "サウザンド・サニー号",
-          "rarity": "C",
-          "type": "STAGE"
-        },
-        {
-          "card_number": "ST15-002",
-          "name": "エドワード・ニューゲート",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST16-003",
-          "name": "シャーロット・カタクリ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST16-004",
-          "name": "シャンクス",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST16-005",
-          "name": "モンキー・Ｄ・ルフィ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST17-002",
-          "name": "トラファルガー・ロー",
-          "rarity": "SR",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST17-003",
-          "name": "バギー",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST17-005",
-          "name": "マーシャル・Ｄ・ティーチ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST18-001",
-          "name": "ウソ八",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST18-002",
-          "name": "おナミ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST18-003",
-          "name": "サン五郎",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST19-002",
-          "name": "センゴク",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST20-003",
-          "name": "シャーロット・ブリュレ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        },
-        {
-          "card_number": "ST21-003",
-          "name": "サンジ",
-          "rarity": "C",
-          "type": "CHARACTER"
-        }
-      ],
+      "card_type_counts": null,
+      "rarity_counts": null,
+      "reprints_and_additional_inclusions": null,
       "official_page_result_count": 316,
       "official_page_entry_count": 249,
       "official_source_image_url_count": 109,
@@ -17175,7 +14938,7 @@
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "feed_observed_prefix_count": 18,
       "feed_observed_release_printings": 316,
-      "notes": "67 Bandai result row(s) were not captured by the text-entry parser; do not treat as missing cards. PRB product pages contain original OP/EB/ST card numbers; text parser did not capture all result rows. Treat product-card-number inventory as SOURCE UNVERIFIED; these are reprint/inclusion identities, not new PRB-prefixed base cards."
+      "notes": "67 result row(s) were not captured by the structured text parser; no missing-card claim is made from this shortfall. Product results consist of reprints carrying original OP/EB/ST card numbers; structured parser did not capture every page row, so distinct product card-number inventory remains SOURCE UNVERIFIED."
     }
   ]
 }
