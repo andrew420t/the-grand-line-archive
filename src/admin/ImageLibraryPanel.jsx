@@ -39,7 +39,7 @@ export default function ImageLibraryPanel({ user }) {
   const [referenceNextOffset, setReferenceNextOffset] = useState(0)
   const [referenceLoading, setReferenceLoading] = useState(false)
   const [referenceError, setReferenceError] = useState('')
-  const [referenceFilterOptions, setReferenceFilterOptions] = useState({ languages: [], sets: [], rarities: [], cardTypes: [], colors: [], variants: [] })
+  const [referenceFilterOptions, setReferenceFilterOptions] = useState({ languages: [], sets: [], cardNumberSets: [], rarities: [], cardTypes: [], colors: [], variants: [] })
   const [savedLibraryDraft] = useState(() => readPersistentDraft(user?.id, 'image-library', {}))
   const [referenceQuery, setReferenceQuery] = useState(() => savedLibraryDraft.referenceQuery || '')
   const [referenceCardNumber, setReferenceCardNumber] = useState(() => savedLibraryDraft.referenceCardNumber || '')
