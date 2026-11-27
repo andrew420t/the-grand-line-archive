@@ -1,6 +1,6 @@
-import { supabase } from '../lib/supabase'
-import { makePhotoFile, prepareCardImage } from './imageTools'
-import { fetchAllPages } from './storagePagination'
+import { supabase } from '../lib/supabase.js'
+import { makePhotoFile, prepareCardImage } from './imageTools.js'
+import { fetchAllPages } from './storagePagination.js'
 
 export const CARD_IMAGE_BUCKET = 'product-card-images'
 
