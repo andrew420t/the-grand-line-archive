@@ -149,6 +149,14 @@ export function buildCatalogueImageCandidates(record) {
       !record.usesBaseImageFallback && !record.usesAlternateOfficialFallback) {
     add({ url: record.imageUrl, kind: 'exact', language, printingKey: record.printingKey, cardKey: record.cardKey, cardNumber: record.cardNumber, source: record.source })
   }
+  if (record?.usesBaseImageFallback && record?.imageUrl) {
+    const proxyLanguage = String(record.imageUrl).match(/^\/_card-image\/(?:bandai|external)\/(en|jp)\//i)?.[1]?.toLowerCase() || ''
+    add({ url: record.imageUrl, kind: 'base-fallback', language: proxyLanguage, cardKey: record.cardKey, cardNumber: record.cardNumber, source: record.source })
+  }
+  if (record?.usesAlternateOfficialFallback && record?.imageUrl) {
+    const proxyLanguage = String(record.imageUrl).match(/^\/_card-image\/(?:bandai|external)\/(en|jp)\//i)?.[1]?.toLowerCase() || ''
+    add({ url: record.imageUrl, kind: 'alternative', language: proxyLanguage, cardKey: record.cardKey, cardNumber: record.cardNumber, source: record.source })
+  }
   return candidates.map(({ identity, ...candidate }) => candidate)
 }
 
