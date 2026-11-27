@@ -101,9 +101,9 @@ The OP-18 and EB-05 supplemental tests cover all base counts, printing counts, p
 ## CI, Preview and safety
 
 - PR #37: **OPEN**, not merged.
-- PR #38: **OPEN**, not merged. Its head is the Stage 3 branch; the audit branch remains separate.
+- PR #38: **OPEN / DRAFT**, not merged. Its head is the Stage 3 branch; the audit branch remains separate.
 - The latest Stage 3 Preview evidence is a successful build/deployment of commit `957d5eb` on 2026-11-27. It is not the audit branch commit and does not verify the Stage 4B-1M data changes. No Preview deployment was initiated in this stage.
-- The audit branch's current GitHub Actions lookup returned no workflow runs or check runs. The existing verify workflow did not include this audit branch in its push triggers before this stage's workflow update. A new branch CI run is still required.
+- The audit branch's current GitHub Actions lookup returned no workflow runs or check runs. The current verify workflow did not trigger for this audit branch, and no workflow-trigger change was made in this stage. A CI run for the audit branch is still required.
 - `npm test`, `npm run lint` and `npm run build` have not been run in a local checkout in this environment. They are NOT RUN, not passed.
 - No Production deployment, Production Supabase operation, merge, branch deletion or credential access occurred.
 
