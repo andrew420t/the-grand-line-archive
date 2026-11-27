@@ -89,12 +89,21 @@ export default function QuickAddPanel({
     const matchingSet = sets.find(
       (set) => String(set.code || '').toUpperCase() === String(extracted.set_code || '').toUpperCase(),
     )
+    const matchingCategory = categories.find(
+      (category) => String(category.name || '').trim().toLowerCase() === String(extracted.card_type || '').trim().toLowerCase(),
+    )
     return {
       ...initialProduct(),
       ...extracted,
+      category_id: matchingCategory?.id || '',
       set_id: matchingSet?.id || resolveSetIdForCode(sets, extracted.set_code),
     }
   })
+  const hasCatalogueReferenceImage = Boolean(form.catalogue_reference_image_url || form.reference_image_url)
+  const catalogueReferenceImageUrl = form.catalogue_reference_image_url || form.reference_image_url || ''
+  const [imageChoice, setImageChoice] = useState(() => (
+    scanFields?.catalogue_reference_image_url?.value || scanFields?.reference_image_url?.value ? 'sample' : 'own'
+  ))
   const [busy, setBusy] = useState(false)
   const submitLock = useRef(false)
   const [error, setError] = useState('')
@@ -115,6 +124,7 @@ export default function QuickAddPanel({
     setDuplicateMatches([])
     setError('')
     setSuccess('')
+    if (['card_number', 'set_code', 'language', 'variant_label'].includes(field)) setImageChoice('own')
   }
 
   const lookupCard = async () => {
@@ -167,6 +177,7 @@ export default function QuickAddPanel({
     setAllowVariant(false)
     setDuplicateMatches([])
     setCatalogueMatches([])
+    setImageChoice(details.catalogue_reference_image_url || details.reference_image_url ? 'sample' : 'own')
     setSuccess('Reference details filled in. Check the information against your physical card.')
   }
 
@@ -226,12 +237,12 @@ export default function QuickAddPanel({
     }))
   }
 
-  const savePhotosForProduct = async (productId) => {
-    if (!photos.length) return
+  const savePhotosForProduct = async (productId, photoBatch = photos) => {
+    if (!photoBatch.length) return
     await uploadProductPhotos({
       productId,
       userId: user.id,
-      photos,
+      photos: photoBatch,
     })
   }
 
@@ -254,6 +265,17 @@ export default function QuickAddPanel({
       return
     }
 
+    const usesOwnPhotographs = !hasCatalogueReferenceImage || imageChoice === 'own'
+    const photosForThisProduct = usesOwnPhotographs ? photos : []
+    if (hasCatalogueReferenceImage && imageChoice === 'sample' && photos.length > 0) {
+      setError('Your own photographs are still queued. Remove them in Photo Review or choose “My own card photo” before saving with the SAMPLE reference image.')
+      return
+    }
+    if (hasCatalogueReferenceImage && imageChoice === 'own' && !photos.some((photo) => photo.role === 'front')) {
+      setError('Choose “My own card photo” only after adding a Card front photograph. You can switch back to the SAMPLE reference image instead.')
+      return
+    }
+
     if (submitLock.current) return
     submitLock.current = true
     setBusy(true)
@@ -261,13 +283,16 @@ export default function QuickAddPanel({
     setSuccess('')
     try {
       if (partialProductId) {
-        await savePhotosForProduct(partialProductId)
+        if (!photosForThisProduct.length) {
+          throw new Error('The product was already created. Choose “My own card photo” and keep the front photograph queued to retry its upload.')
+        }
+        await savePhotosForProduct(partialProductId, photosForThisProduct)
         setSuccess(`Photographs linked to the saved product ${partialProductId}. The form is reset to prevent creating a duplicate product.`)
         setPartialProductId('')
         setForm(initialProduct())
         setDuplicateMatches([])
         setAllowVariant(false)
-        onSaved({ uploadedPhotoIds: photos.map((photo) => photo.id) })
+        onSaved({ uploadedPhotoIds: photosForThisProduct.map((photo) => photo.id) })
         return
       }
 
@@ -342,7 +367,7 @@ export default function QuickAddPanel({
         extendedColumnsReady = true
       }
 
-      if (photos.length) await ensurePhotoStorageReady()
+      if (photosForThisProduct.length) await ensurePhotoStorageReady()
       const payload = buildNewProductPayload(form, resolvedSetId, extendedColumnsReady)
       const result = await supabase
         .from('products')
@@ -353,9 +378,9 @@ export default function QuickAddPanel({
         throw new Error(`Product was not saved: ${result.error.message}`)
       }
 
-      if (photos.length) {
+      if (photosForThisProduct.length) {
         try {
-          await savePhotosForProduct(result.data.id)
+          await savePhotosForProduct(result.data.id, photosForThisProduct)
         } catch (photoError) {
           setPartialProductId(result.data.id)
           setError(`Product ${result.data.id} was saved, but its photographs were not fully linked: ${photoError.message}. Keep this form open and retry the photo upload to avoid creating a duplicate product.`)
@@ -367,7 +392,7 @@ export default function QuickAddPanel({
       setDuplicateMatches([])
       setAllowVariant(false)
       setSuccess('Product and stock saved.')
-      onSaved({ uploadedPhotoIds: photos.map((photo) => photo.id) })
+      onSaved({ uploadedPhotoIds: photosForThisProduct.map((photo) => photo.id) })
     } catch (saveError) {
       setError(saveError.message)
     } finally {
@@ -383,6 +408,7 @@ export default function QuickAddPanel({
     setDuplicateMatches([])
     setAllowVariant(false)
     setPartialProductId('')
+    setImageChoice('own')
     onResetScan()
   }
 
