@@ -480,7 +480,9 @@
         "OP01-121",
         "OP01-121_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-01",
@@ -929,7 +931,9 @@
         "OP01-121",
         "OP01-121_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-02",
@@ -1379,7 +1383,9 @@
         "OP02-121",
         "OP02-121_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-02",
@@ -1829,7 +1835,9 @@
         "OP02-121",
         "OP02-121_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-03",
@@ -2292,7 +2300,9 @@
         "ST03-009_p1",
         "ST04-003_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-03",
@@ -2755,7 +2765,9 @@
         "ST03-009_p1",
         "ST04-003_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-04",
@@ -3207,7 +3219,9 @@
         "OP02-085_p2",
         "OP02-099_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-04",
@@ -3659,7 +3673,9 @@
         "OP02-085_p2",
         "OP02-099_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-05",
@@ -4118,7 +4134,9 @@
         "OP04-044_p2",
         "OP05-100_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-05",
@@ -4577,7 +4595,9 @@
         "OP04-044_p2",
         "OP05-100_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-06",
@@ -5035,7 +5055,9 @@
         "OP05-051_p2",
         "OP05-091_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-06",
@@ -5490,7 +5512,9 @@
         "OP05-051_p2",
         "OP05-091_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-07",
@@ -5948,7 +5972,9 @@
         "OP05-074_p3",
         "OP06-101_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-07",
@@ -6403,7 +6429,9 @@
         "OP05-074_p3",
         "OP06-101_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-08",
@@ -6861,7 +6889,9 @@
         "ST04-005_p1",
         "ST06-006_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-08",
@@ -7316,7 +7346,9 @@
         "ST04-005_p3",
         "ST06-006_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-09",
@@ -7784,7 +7816,9 @@
         "OP09-051_p3",
         "OP09-093_p3"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-09",
@@ -8249,7 +8283,9 @@
         "OP09-051_p3",
         "OP09-093_p3"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-10",
@@ -8707,7 +8743,9 @@
         "ST15-002_p1",
         "ST18-001_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-10",
@@ -9162,7 +9200,9 @@
         "ST15-002_p1",
         "ST18-001_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-11",
@@ -9627,7 +9667,9 @@
         "ST16-004_p1",
         "ST18-005_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-11",
@@ -10089,7 +10131,9 @@
         "ST16-004_p1",
         "ST18-005_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-12",
@@ -10553,7 +10597,9 @@
         "ST13-011_p2",
         "ST18-004_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-12",
@@ -11014,7 +11060,9 @@
         "ST13-011_p2",
         "ST18-004_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-13",
@@ -11502,7 +11550,9 @@
         "OP13-119_p4",
         "OP13-120_p4"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-13",
@@ -11987,7 +12037,9 @@
         "OP09-119_p3",
         "OP10-030_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-14",
@@ -12561,7 +12613,9 @@
         "OP14-112_p2",
         "PRB02-006_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-14",
@@ -13024,7 +13078,9 @@
         "OP12-030_p2",
         "OP14-112_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-15",
@@ -13104,7 +13160,7 @@
       "feed_observed_release_printings": 155,
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "verification_status": "INCOMPLETE",
-      "notes": "196/196 official card-list entries parsed; 196 official card-image URLs associated in document order. 119 distinct OP15-prefixed card numbers; 158 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 0 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. The official OP15-EB04 page includes 41 EB04-prefixed entries in addition to OP15-prefixed cards; these are retained in this release-product row and separately represented in the EB-04 English cross-product row.",
+      "notes": "196/196 official card-list entries parsed; 196 official card-image URLs associated in document order. 119 distinct OP15-prefixed card numbers; 158 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 0 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. The official OP15-EB04 page includes 41 EB04-prefixed entries in addition to OP15-prefixed cards; these are retained in this release-product row and separately represented in the EB-04 English cross-product row. Official Bandai Premium Card Collection -Best Selection Vol.6- page independently confirms 12 product-specific card images; OP15-075 El Thor (img_item11.webp) and OP15-108 Nami (img_item12.webp) are separate printings from the OP15-EB04 base entries. Product image references are recorded in the linked evidence file; no unverified OP15-075 _p suffix is assumed.",
       "source_image_url_extraction_shortfall": 0,
       "image_reference_verification": "IDENTIFIERS_MATCHED_NOT_HTTP_TESTED",
       "source_availability": "AVAILABLE",
@@ -13591,7 +13647,118 @@
         "PRB02-014_p2",
         "ST26-005_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "official_product_collection_page_url": "https://en.onepiece-cardgame.com/products/other/cardcollection_bestselection_vol6.php",
+      "official_product_collection_evidence_file": "docs/catalogue-coverage/official-premium-card-collection-best-selection-vol6.json",
+      "official_product_collection_printings": [
+        {
+          "card_number": "EB04-028",
+          "name": "Ice Time",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item02.webp",
+          "printing_identity": "EB04-028|Premium Card Collection -Best Selection Vol.6-|img_item02.webp"
+        },
+        {
+          "card_number": "OP10-108",
+          "name": "Scratchmen Apoo",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item03.webp",
+          "printing_identity": "OP10-108|Premium Card Collection -Best Selection Vol.6-|img_item03.webp"
+        },
+        {
+          "card_number": "OP13-037",
+          "name": "Roronoa Zoro",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item04.webp",
+          "printing_identity": "OP13-037|Premium Card Collection -Best Selection Vol.6-|img_item04.webp"
+        },
+        {
+          "card_number": "OP13-043",
+          "name": "Otama",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item05.webp",
+          "printing_identity": "OP13-043|Premium Card Collection -Best Selection Vol.6-|img_item05.webp"
+        },
+        {
+          "card_number": "OP13-072",
+          "name": "Buggy",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item06.webp",
+          "printing_identity": "OP13-072|Premium Card Collection -Best Selection Vol.6-|img_item06.webp"
+        },
+        {
+          "card_number": "OP13-092",
+          "name": "Saint Mjosgard",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item07.webp",
+          "printing_identity": "OP13-092|Premium Card Collection -Best Selection Vol.6-|img_item07.webp"
+        },
+        {
+          "card_number": "OP14-014",
+          "name": "Eustass\"Captain\"Kid",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item08.webp",
+          "printing_identity": "OP14-014|Premium Card Collection -Best Selection Vol.6-|img_item08.webp"
+        },
+        {
+          "card_number": "OP14-037",
+          "name": "For Fun",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item09.webp",
+          "printing_identity": "OP14-037|Premium Card Collection -Best Selection Vol.6-|img_item09.webp"
+        },
+        {
+          "card_number": "OP14-099",
+          "name": "Disappointed?",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item10.webp",
+          "printing_identity": "OP14-099|Premium Card Collection -Best Selection Vol.6-|img_item10.webp"
+        },
+        {
+          "card_number": "OP15-075",
+          "name": "El Thor",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item11.webp",
+          "printing_identity": "OP15-075|Premium Card Collection -Best Selection Vol.6-|img_item11.webp",
+          "official_cardlist_base_printing": {
+            "rarity": "UC",
+            "type": "EVENT",
+            "product": "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]",
+            "image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/OP15-075.png?261124",
+            "cardlist_url": "https://en.onepiece-cardgame.com/cardlist/?series=569115"
+          }
+        },
+        {
+          "card_number": "OP15-108",
+          "name": "Nami",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item12.webp",
+          "printing_identity": "OP15-108|Premium Card Collection -Best Selection Vol.6-|img_item12.webp",
+          "official_cardlist_base_printing": {
+            "rarity": "R",
+            "type": "CHARACTER",
+            "product": "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]",
+            "image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/OP15-108.png?261124",
+            "cardlist_url": "https://en.onepiece-cardgame.com/cardlist/?series=569115"
+          },
+          "upstream_catalogue_image_reference": {
+            "image_id": "OP15-108_p1",
+            "image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/OP15-108_p1.png",
+            "source_text": "Premium Card Collection -Best Selection Vol.6-",
+            "source_snapshot": "hotavocado/koala-kollect-data main manifest 2026-10-22"
+          }
+        },
+        {
+          "card_number": "ST21-003",
+          "name": "Sanji",
+          "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+          "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item13.webp",
+          "printing_identity": "ST21-003|Premium Card Collection -Best Selection Vol.6-|img_item13.webp"
+        }
+      ],
+      "official_product_collection_printing_count": 12,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-15",
@@ -14048,7 +14215,9 @@
         "P-105_p2",
         "ST26-005_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-16",
@@ -14508,7 +14677,9 @@
         "OP14-084_p2",
         "ST15-005_p5"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-16",
@@ -14968,7 +15139,9 @@
         "OP14-084_p2",
         "ST15-005_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-17",
@@ -15452,7 +15625,9 @@
         "ST31-004_p1",
         "ST32-002_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-17",
@@ -15936,7 +16111,9 @@
         "ST31-004_p1",
         "ST32-002_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-18",
@@ -16545,7 +16722,9 @@
         "OP18-064_p1",
         "OP13-012_p2",
         "OP17-040_p1"
-      ]
+      ],
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "OP-18",
@@ -17181,7 +17360,9 @@
         ],
         "note": "All 159 Japanese image IDs match. One Japanese TR name is incorrect/concatenated; six SP labels are normalized to English 'SP CARD' rather than official Japanese 'SPカード'."
       },
-      "unexpected_printings": []
+      "unexpected_printings": [],
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "EB-01",
@@ -17436,7 +17617,9 @@
         "EB01-061",
         "EB01-061_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "EB-01",
@@ -17691,7 +17874,9 @@
         "EB01-061",
         "EB01-061_p1"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "EB-02",
@@ -18024,7 +18209,9 @@
         "OP08-058_p2",
         "OP08-098_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "EB-02",
@@ -18357,7 +18544,9 @@
         "OP08-058_p2",
         "OP08-098_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "EB-03",
@@ -18623,7 +18812,9 @@
         "EB03-053_p2",
         "EB03-055_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "EB-03",
@@ -18889,7 +19080,9 @@
         "EB03-053_p2",
         "EB03-055_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "EB-04",
@@ -19904,7 +20097,9 @@
           "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-003_p1.png?261124",
           "release_product": "OP15-EB04"
         }
-      ]
+      ],
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "EB-04",
@@ -20173,7 +20368,9 @@
         "PRB02-006_p2",
         "PRB02-014_p2"
       ],
-      "application_supplemental_comparison": null
+      "application_supplemental_comparison": null,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "EB-05",
@@ -20537,7 +20734,9 @@
         "metadata_differences": [],
         "note": "All 96 English official image IDs, card numbers, names and rarity match the supplemental catalogue."
       },
-      "unexpected_printings": []
+      "unexpected_printings": [],
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "EB-05",
@@ -20950,7 +21149,9 @@
         ],
         "note": "All 96 Japanese official image IDs and names match. Eight SP labels are normalized to English 'SP CARD' rather than official Japanese 'SPカード'."
       },
-      "unexpected_printings": []
+      "unexpected_printings": [],
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "PRB-01",
@@ -21667,7 +21868,9 @@
         "ST12": 1
       },
       "parsed_printing_entry_identity_status": "CARD_NUMBER_NAME_RARITY_TYPE_ONLY; VARIANT AND PRINTING IDENTITY NOT ESTABLISHED",
-      "parsed_repeated_entry_excess": 199
+      "parsed_repeated_entry_excess": 199,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "PRB-01",
@@ -22384,7 +22587,9 @@
         "ST12": 1
       },
       "parsed_printing_entry_identity_status": "CARD_NUMBER_NAME_RARITY_TYPE_ONLY; VARIANT AND PRINTING IDENTITY NOT ESTABLISHED",
-      "parsed_repeated_entry_excess": 199
+      "parsed_repeated_entry_excess": 199,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "PRB-02",
@@ -23267,7 +23472,9 @@
         "ST21": 1
       },
       "parsed_printing_entry_identity_status": "CARD_NUMBER_NAME_RARITY_TYPE_ONLY; VARIANT AND PRINTING IDENTITY NOT ESTABLISHED",
-      "parsed_repeated_entry_excess": 99
+      "parsed_repeated_entry_excess": 99,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     },
     {
       "set": "PRB-02",
@@ -24150,7 +24357,9 @@
         "ST21": 1
       },
       "parsed_printing_entry_identity_status": "CARD_NUMBER_NAME_RARITY_TYPE_ONLY; VARIANT AND PRINTING IDENTITY NOT ESTABLISHED",
-      "parsed_repeated_entry_excess": 99
+      "parsed_repeated_entry_excess": 99,
+      "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
     }
   ],
   "status_summary": {
@@ -24172,7 +24381,7 @@
     "OP-18 Japanese": "159/159 image IDs match; one Japanese TR name mismatch and six localized SP rarity labels require correction/normalization.",
     "EB-05 English": "96/96 official image IDs and card metadata match Stage 3 supplemental catalogue.",
     "EB-05 Japanese": "96/96 image IDs and names match; eight SP rarity labels are localized as SPカード in Bandai and normalized as SP CARD in the supplemental catalogue.",
-    "OP-15": "Base card-list entries verified. Best Selection Vol.6 has separate alternate-art printings for OP15-075 and OP15-108; official product-page identity and image crosswalk still require final evidence.",
+    "OP-15": "OP15-075 El Thor and OP15-108 Nami are confirmed as separate Best Selection Vol.6 product printings via Bandai's official product page; standard OP15-EB04 printings remain separate. Product-specific image assets are recorded in the evidence file.",
     "EB-04 English": "No standalone English EB-04 page. Official English EB04 numbers are split 31 on OP14-EB04 and 30 on OP15-EB04; combined 81 printing entries."
   },
   "last_updated": "2026-11-27"
