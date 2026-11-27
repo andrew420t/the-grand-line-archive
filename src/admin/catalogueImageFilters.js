@@ -1,8 +1,11 @@
 export function getCardNumberSetCode(cardNumber = '') {
-  const match = String(cardNumber || '').trim().toUpperCase().match(/^((?:OP|EB|ST|PRB)\d{2}|P)-\d{3}/)
+  const match = String(cardNumber || '').trim().toUpperCase().match(/^((?:OP|EB|ST|PRB)\\d{2}|P)-\\d{3}/)
   if (!match) return ''
-  return match[1].replace(/^(OP|EB|ST|PRB)(\d{2})$/, '$1-$2')
+  return match[1].replace(/^(OP|EB|ST|PRB)(\\d{2})$/, '$1-$2')
 }
+
+const normalizeCardNumber = (value = '') => String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]/g, '')
+const normalizeText = (value = '') => String(value || '').toLocaleLowerCase().trim()
 
 export function getCatalogueImageFilterOptions(entries = []) {
   const unique = (values) => [...new Set(values.filter(Boolean))].sort((a, b) => String(a).localeCompare(String(b)))
@@ -31,28 +34,29 @@ export function filterCatalogueImageEntries(entries = [], filters = {}) {
     variant = 'all',
     imageStatus = 'all',
   } = filters
-  const normalize = (value) => String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
-  const normalizedQuery = normalize(query)
-  const normalizedCardNumber = normalize(cardNumber)
+  const normalizedQuery = normalizeText(query)
+  const normalizedCardNumber = normalizeCardNumber(cardNumber)
   const filtered = entries.filter((entry) => {
-    if (normalizedCardNumber && !normalize(entry.cardNumber).includes(normalizedCardNumber)) return false
+    // A dedicated card-number field is an exact identifier lookup. Do not let
+    // a partial or similar number leak unrelated printings into the result.
+    if (normalizedCardNumber && normalizeCardNumber(entry.cardNumber) !== normalizedCardNumber) return false
     if (language !== 'all' && entry.languageCode !== language) return false
     if (set !== 'all' && entry.setCode !== set && !(entry.setCodes || []).includes(set)) return false
     if (cardNumberSet !== 'all' && (entry.cardNumberSet || getCardNumberSetCode(entry.cardNumber)) !== cardNumberSet) return false
     if (rarity !== 'all' && entry.rarity !== rarity) return false
     if (cardType !== 'all' && entry.category !== cardType) return false
-    if (color !== 'all' && !(entry.colorValues || []).some((value) => String(value).toLowerCase() === String(color).toLowerCase())) return false
+    if (color !== 'all' && !(entry.colorValues || []).some((value) => normalizeText(value) === normalizeText(color))) return false
     if (variant !== 'all' && entry.variant !== variant) return false
     if (imageStatus === 'missing' && entry.imageStatus !== 'missing') return false
-    if (imageStatus === 'available' && entry.imageStatus === 'missing') return false
+    if (imageStatus === 'available' && !['available', 'fallback'].includes(entry.imageStatus)) return false
     if (imageStatus === 'fallback' && entry.imageStatus !== 'fallback') return false
     if (!normalizedQuery) return true
-    return normalize(entry.cardNumber).includes(normalizedQuery)
-      || normalize(entry.name).includes(normalizedQuery)
-      || normalize(entry.setCode).includes(normalizedQuery)
-      || normalize(entry.setName).includes(normalizedQuery)
-      || (entry.setCodes || []).some((value) => normalize(value).includes(normalizedQuery))
-      || normalize(entry.sourceText).includes(normalizedQuery)
+    return normalizeText(entry.cardNumber).includes(normalizedQuery)
+      || normalizeText(entry.name).includes(normalizedQuery)
+      || normalizeText(entry.setCode).includes(normalizedQuery)
+      || normalizeText(entry.setName).includes(normalizedQuery)
+      || (entry.setCodes || []).some((value) => normalizeText(value).includes(normalizedQuery))
+      || normalizeText(entry.sourceText).includes(normalizedQuery)
   })
   if (sortBy === 'card-number-asc' || sortBy === 'card-number-desc') {
     const direction = sortBy === 'card-number-desc' ? -1 : 1
@@ -61,6 +65,7 @@ export function filterCatalogueImageEntries(entries = [], filters = {}) {
       if (numberOrder) return numberOrder * direction
       return String(a.languageCode || '').localeCompare(String(b.languageCode || ''))
         || String(a.variant || '').localeCompare(String(b.variant || ''))
+        || String(a.setCode || '').localeCompare(String(b.setCode || ''))
         || String(a.id || '').localeCompare(String(b.id || ''))
     })
   }
