@@ -192,7 +192,7 @@ export default function AdminDashboard({
               onClick={() => setActiveSection(id)}
             >
               <Icon size={15} strokeWidth={1.7} />
-              <span>{label}</span>
+              <span>{label}</span>{id === 'messages' && unreadSupportCount > 0 && <span className="admin-navigation__count">{unreadSupportCount}</span>}
             </button>
           ))}
         </nav>
