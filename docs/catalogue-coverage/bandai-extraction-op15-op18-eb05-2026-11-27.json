@@ -11,6 +11,7 @@
       "distinct_card_numbers": 156,
       "distinct_set_prefix_numbers": 119,
       "card_numbers": [
+        "EB02-052",
         "EB04-001",
         "EB04-002",
         "EB04-003",
@@ -41,7 +42,11 @@
         "EB04-059",
         "EB04-060",
         "EB04-061",
+        "OP11-106",
+        "OP12-014",
+        "OP13-031",
         "OP13-037",
+        "OP13-042",
         "OP15-001",
         "OP15-002",
         "OP15-003",
@@ -161,11 +166,6 @@
         "OP15-117",
         "OP15-118",
         "OP15-119",
-        "EB02-052",
-        "OP11-106",
-        "OP12-014",
-        "OP13-031",
-        "OP13-042",
         "ST26-005"
       ],
       "entries": [
@@ -1530,16 +1530,22 @@
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP13-031_p1.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP13-042_p2.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/ST26-005_p1.png?261124"
-      ]
+      ],
+      "unparsed_result_rows": 2,
+      "source_status": "INCOMPLETE"
     },
     {
       "set": "OP-15",
       "language": "Japanese",
       "official_source_url": "https://www.onepiece-cardgame.com/cardlist/?series=550115",
       "result_count": "152件HIT",
-      "distinct_card_numbers": 128,
+      "distinct_card_numbers": 124,
       "distinct_set_prefix_numbers": 119,
       "card_numbers": [
+        "EB02-052",
+        "OP12-014",
+        "OP13-031",
+        "OP13-042",
         "OP15-001",
         "OP15-002",
         "OP15-003",
@@ -1552,8 +1558,6 @@
         "OP15-010",
         "OP15-011",
         "OP15-012",
-        "OP01-078",
-        "OP11-041",
         "OP15-013",
         "OP15-014",
         "OP15-015",
@@ -1564,7 +1568,6 @@
         "OP15-020",
         "OP15-021",
         "OP15-022",
-        "OP09-097",
         "OP15-023",
         "OP15-024",
         "OP15-025",
@@ -1662,11 +1665,6 @@
         "OP15-117",
         "OP15-118",
         "OP15-119",
-        "EB03-031",
-        "EB02-052",
-        "OP12-014",
-        "OP13-031",
-        "OP13-042",
         "ST26-005"
       ],
       "entries": [
@@ -2730,7 +2728,9 @@
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP13-031_p1.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP13-042_p2.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/ST26-005_p1.png?261124"
-      ]
+      ],
+      "unparsed_result_rows": 1,
+      "source_status": "INCOMPLETE"
     },
     {
       "set": "OP-18",
@@ -2740,6 +2740,9 @@
       "distinct_card_numbers": 125,
       "distinct_set_prefix_numbers": 119,
       "card_numbers": [
+        "OP13-012",
+        "OP13-113",
+        "OP17-040",
         "OP17-119",
         "OP18-001",
         "OP18-002",
@@ -2860,9 +2863,6 @@
         "OP18-117",
         "OP18-118",
         "OP18-119",
-        "OP13-012",
-        "OP13-113",
-        "OP17-040",
         "ST24-004",
         "ST34-004"
       ],
@@ -3983,18 +3983,22 @@
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP18-084_p2.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/ST24-004_p1.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/ST34-004_p1.png?261124"
-      ]
+      ],
+      "unparsed_result_rows": 0,
+      "source_status": "INCOMPLETE"
     },
     {
       "set": "OP-18",
       "language": "Japanese",
       "official_source_url": "https://www.onepiece-cardgame.com/cardlist/?series=550118",
       "result_count": "159件HIT",
-      "distinct_card_numbers": 126,
+      "distinct_card_numbers": 125,
       "distinct_set_prefix_numbers": 119,
       "card_numbers": [
+        "OP13-012",
+        "OP13-113",
+        "OP17-040",
         "OP17-119",
-        "OP07-096",
         "OP18-001",
         "OP18-002",
         "OP18-003",
@@ -4114,9 +4118,6 @@
         "OP18-117",
         "OP18-118",
         "OP18-119",
-        "OP13-012",
-        "OP13-113",
-        "OP17-040",
         "ST24-004",
         "ST34-004"
       ],
@@ -5237,7 +5238,9 @@
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP18-084_p2.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/ST24-004_p1.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/ST34-004_p1.png?261124"
-      ]
+      ],
+      "unparsed_result_rows": 0,
+      "source_status": "INCOMPLETE"
     },
     {
       "set": "EB-05",
@@ -5309,13 +5312,13 @@
         "EB05-059",
         "EB05-060",
         "EB05-061",
+        "OP01-016",
         "OP11-022",
         "OP11-041",
         "OP13-100",
+        "OP14-033",
         "OP14-041",
         "OP15-039",
-        "OP01-016",
-        "OP14-033",
         "OP17-081",
         "OP17-109",
         "ST17-004"
@@ -5996,14 +5999,16 @@
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP17-081_p1.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/OP17-109_p1.png?261124",
         "https://en.onepiece-cardgame.com/images/cardlist/card/ST17-004_p1.png?261124"
-      ]
+      ],
+      "unparsed_result_rows": 0,
+      "source_status": "INCOMPLETE"
     },
     {
       "set": "EB-05",
       "language": "Japanese",
       "official_source_url": "https://www.onepiece-cardgame.com/cardlist/?series=550205",
       "result_count": "96件HIT",
-      "distinct_card_numbers": 85,
+      "distinct_card_numbers": 72,
       "distinct_set_prefix_numbers": 61,
       "card_numbers": [
         "EB03-001",
@@ -6017,10 +6022,6 @@
         "EB05-008",
         "EB05-009",
         "EB05-010",
-        "EB01-057",
-        "OP09-098",
-        "EB04-057",
-        "OP07-103",
         "EB05-011",
         "EB05-012",
         "EB05-013",
@@ -6032,7 +6033,6 @@
         "EB05-019",
         "EB05-020",
         "EB05-021",
-        "ST25-003",
         "EB05-022",
         "EB05-023",
         "EB05-024",
@@ -6064,7 +6064,6 @@
         "EB05-050",
         "EB05-051",
         "EB05-052",
-        "EB03-055",
         "EB05-053",
         "EB05-054",
         "EB05-055",
@@ -6072,25 +6071,18 @@
         "EB05-057",
         "EB05-058",
         "EB05-059",
-        "OP17-107",
-        "OP17-112",
         "EB05-060",
         "EB05-061",
+        "OP01-016",
         "OP11-022",
         "OP11-041",
-        "OP06-106",
-        "EB01-052",
         "OP13-100",
-        "OP14-041",
-        "OP16-105",
-        "OP15-039",
-        "OP01-016",
-        "ST01-007",
         "OP14-033",
+        "OP14-041",
+        "OP15-039",
         "OP17-081",
         "OP17-109",
-        "ST17-004",
-        "OP01-060"
+        "ST17-004"
       ],
       "entries": [
         {
@@ -6768,7 +6760,9 @@
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP17-081_p1.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/OP17-109_p1.png?261124",
         "https://www.onepiece-cardgame.com/images/cardlist/card/ST17-004_p3.png?261124"
-      ]
+      ],
+      "unparsed_result_rows": 0,
+      "source_status": "INCOMPLETE"
     }
   ]
 }
