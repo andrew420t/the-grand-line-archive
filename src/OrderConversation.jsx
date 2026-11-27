@@ -6,7 +6,7 @@ const formatDate = (value) => value
   ? new Date(value).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
   : 'Just now'
 
-export default function OrderConversation({ order, user, isAdmin = false }) {
+export default function OrderConversation({ order, user }) {
   const [messages, setMessages] = useState([])
   const [draft, setDraft] = useState('')
   const [loading, setLoading] = useState(true)
