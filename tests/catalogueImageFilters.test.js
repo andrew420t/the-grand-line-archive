@@ -28,6 +28,7 @@ test('exposes only filter values supported by actual catalogue entries', () => {
   const options = getCatalogueImageFilterOptions(entries)
   assert.deepEqual(options.languages, ['cn', 'en', 'jp', 'tcgcsv'])
   assert.deepEqual(options.sets, ['OP-12', 'PRB-01'])
+  assert.deepEqual(options.cardNumberSets, ['OP-12'])
   assert.deepEqual(options.rarities, ['P', 'R', 'UC'])
   assert.deepEqual(options.cardTypes, ['Character', 'Event'])
   assert.deepEqual(options.colors, ['Blue', 'Red'])
