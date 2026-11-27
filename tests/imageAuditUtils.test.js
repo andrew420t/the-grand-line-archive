@@ -254,3 +254,50 @@ test('resumable audit queue keeps English and Japanese records separate', async 
   assert.equal(result.completed, 1)
   assert.equal(result.results[0].languageCode, 'en')
 })
+
+
+test('rejects candidate descriptors without verifiable language or matching identity', async () => {
+  let calls = 0
+  const result = await auditCatalogueImageRecord({
+    id: 'unknown-lang', languageCode: 'en', printingKey: 'print-1', cardKey: 'card-1',
+    imageCandidates: [{ url: 'https://images.example/card.png', kind: 'exact', printingKey: 'print-1', cardKey: 'card-2' }],
+  }, { language: 'en', fetchImpl: async () => { calls += 1; throw new Error('must not fetch') } })
+  assert.equal(result.status, IMAGE_CHECK_STATUS.INVALID_URL)
+  assert.equal(result.diagnostic, 'candidate-language-or-identity-unverified')
+  assert.equal(calls, 0)
+})
+
+test('caps requested retry attempts at five', async () => {
+  let calls = 0
+  const result = await loadImageWithRetry('https://images.example/card.png', {
+    attempts: 99, retryDelayMs: 0, sleep: async () => {},
+    fetchImpl: async () => { calls += 1; return new Response('busy', { status: 503 }) },
+  })
+  assert.equal(result.status, IMAGE_CHECK_STATUS.TEMPORARY_FAILURE)
+  assert.equal(result.attempts, 5)
+  assert.equal(calls, 5)
+})
+
+test('retains printing provenance and candidate types from catalogue descriptors', () => {
+  const candidates = buildCatalogueImageCandidates({
+    id: 'print-1:en:product',
+    printingKey: 'print-1',
+    cardKey: 'card-1',
+    cardNumber: 'OP01-001',
+    languageCode: 'en',
+    setCode: 'OP-01',
+    rarity: 'SEC',
+    variant: 'Parallel',
+    imageCandidates: [
+      { url: '/_card-image/bandai/en/OP01-001_p1.png', kind: 'exact', language: 'en', printingKey: 'print-1', cardKey: 'card-1', cardNumber: 'OP01-001', setCode: 'OP-01', rarity: 'SEC', variant: 'Parallel', originalImageUrl: 'https://en.onepiece-cardgame.com/source.png', source: 'Bandai locator' },
+      { url: '/_card-image/bandai/en/OP01-001_p2.png', kind: 'alternative', language: 'en', printingKey: 'print-2', cardKey: 'card-1', cardNumber: 'OP01-001', source: 'Bandai alternate locator' },
+      { url: '/_card-image/bandai/en/OP01-001.png', kind: 'base-fallback', language: 'en', cardKey: 'card-1', cardNumber: 'OP01-001', source: 'Bandai base image' },
+    ],
+  })
+  assert.deepEqual(candidates.map((item) => item.kind), ['exact', 'alternative', 'base-fallback'])
+  assert.equal(candidates[0].printingKey, 'print-1')
+  assert.equal(candidates[1].printingKey, 'print-2')
+  assert.equal(candidates[0].originalImageUrl, 'https://en.onepiece-cardgame.com/source.png')
+  assert.equal(candidates[0].rarity, 'SEC')
+  assert.equal(candidates[0].variant, 'Parallel')
+})
