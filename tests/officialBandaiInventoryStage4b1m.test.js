@@ -164,3 +164,13 @@ test('OP-18 audit branch fix records language-specific card numbers and image ID
     assert.ok(fix.changes.some((change) => change.includes('cardNumberEn/cardNumberJp')))
   }
 })
+
+test('EB-05 audit branch preserves eight Japanese SP rarity labels', () => {
+  for (const language of ['English', 'Japanese']) {
+    const fix = rowFor('EB-05', language).application_supplemental_comparison.audit_branch_fix
+    assert.equal(fix.status, 'IMPLEMENTED; CI AND LIVE IMAGE AUDIT PENDING')
+    assert.equal(fix.english_printings, 96)
+    assert.equal(fix.japanese_printings, 96)
+    assert.equal(fix.japanese_sp_rarity_labels_corrected, 8)
+  }
+})
