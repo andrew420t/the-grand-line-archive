@@ -36151,5 +36151,96 @@
       "no_migrations_executed": true
     },
     "matrix_policy": "All 50 rows remain INCOMPLETE until official identity, application runtime, Testing persistence and image verification all pass."
-  }
+  },
+  "stage4b_1t_schema_persistence": {
+    "audit_date": "2026-11-27",
+    "starting_commit": "9645e2bfb068c0cd519facad1c185306ad72eb52",
+    "schema_commit": "ace24b15b0f4556663167c61d0fbb274e76c7bc3",
+    "migration": "20261127200500_catalogue_lossless_source_persistence_stage4b1t",
+    "migration_applied_to_testing": true,
+    "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+    "pinned_source_repository": "hotavocado/koala-kollect-data",
+    "pinned_source_commit": "619965ec198047de519dc6eb098c7a56aed9bd58",
+    "source_contract_preservation": {
+      "raw_source_record_jsonb": true,
+      "source_printing_fields": [
+        "source_namespace",
+        "source_site",
+        "source_text",
+        "block_icon",
+        "provenance_url",
+        "number_token",
+        "image_token",
+        "image_hash",
+        "first_seen_at"
+      ],
+      "versioned_card_observations": true,
+      "observation_fields": [
+        "source_observation_key",
+        "source_site",
+        "source_language",
+        "observation_hash",
+        "original_name",
+        "category",
+        "colors",
+        "cost",
+        "life",
+        "power",
+        "counter",
+        "attributes",
+        "types",
+        "effect",
+        "trigger_text",
+        "first_seen_at",
+        "superseded_at",
+        "source_record"
+      ],
+      "product_source_metadata": true,
+      "product_printing_lifecycle": [
+        "source_first_seen_at",
+        "removed_at"
+      ],
+      "separate_official_image_url_and_application_path": true,
+      "upstream_and_local_supplement_namespaces": true,
+      "language_scoped_foreign_keys": true
+    },
+    "testing_database_verification": {
+      "all_catalogue_tables_rls_enabled": true,
+      "catalogue_table_names": [
+        "catalogue_release_sets",
+        "catalogue_release_products",
+        "catalogue_cards",
+        "catalogue_printings",
+        "catalogue_printing_images",
+        "catalogue_product_sets",
+        "catalogue_product_printings",
+        "catalogue_set_printings",
+        "catalogue_inventory_links",
+        "catalogue_card_observations"
+      ],
+      "all_catalogue_row_counts_zero": true,
+      "anon_catalogue_write_grants": 0,
+      "authenticated_catalogue_write_grants": 0,
+      "inventory_products": 32,
+      "inventory_hash": "4a7a39bb366cfdedd1e6bf39ea94e493",
+      "inventory_links": 0
+    },
+    "catalogue_imported": false,
+    "main_set_assignments_persisted": 0,
+    "premium_assignments_persisted": 0,
+    "combined_printing_identities_persisted": 0,
+    "matrix_rows_complete": 0,
+    "matrix_rows_incomplete": 50,
+    "safety": {
+      "pr37": "OPEN_UNMERGED",
+      "pr38": "OPEN_UNMERGED",
+      "no_production_access": true,
+      "no_merge": true,
+      "no_deployment": true,
+      "no_inventory_changes": true,
+      "no_inventory_links": true
+    },
+    "ci_pending_exact_commit": true
+  },
+  "matrix_policy": "All 50 rows remain INCOMPLETE until official identity, application runtime, Testing persistence and image verification all pass. Stage 4B-1T schema migration is verified; no catalogue rows have yet been imported."
 }
