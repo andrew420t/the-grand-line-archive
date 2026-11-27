@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Check, ImagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
+import { Check, ImagePlus, PackagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './productStorage'
 import { getCatalogueCoverageReport, getCatalogueImageGallery, getCatalogueReferenceTestMatrix, saveDonCardSetOverride } from './cardCatalogue'
 import { loadAdminLibraryFileDraft, saveAdminLibraryFileDraft } from './adminDraftStorage'
@@ -14,7 +14,7 @@ const DON_SET_OPTIONS = [
   'PROMO', 'Other Product',
 ]
 
-export default function ImageLibraryPanel({ user }) {
+export default function ImageLibraryPanel({ user, onAddCard }) {
   const inputRef = useRef(null)
   const uploadLock = useRef(false)
   const deleteLock = useRef(false)
@@ -540,6 +540,18 @@ export default function ImageLibraryPanel({ user }) {
                   <span className="muted-copy">{item.language} · Release set {item.setCode || 'Unassigned'} · {item.rarity || 'Rarity not listed'} · {item.variant || 'Base'}</span>
                   {item.cardNumberSet && <span className="muted-copy">Card-number set {item.cardNumberSet}{item.cardNumberSet !== item.setCode ? ' · reprint / cross-set printing' : ''}</span>}
                   <span className="muted-copy">{item.imageStatus === 'missing' ? 'Missing source image' : item.imageStatus === 'fallback' ? 'Fallback image · confirm exact finish' : item.source || 'Catalogue reference'}</span>
+                  <button
+                    className="button button--outline catalogue-reference-add"
+                    type="button"
+                    disabled={!onAddCard || !item.cardNumber}
+                    onClick={() => onAddCard({
+                      ...item,
+                      imageUrl: currentImage || item.imageUrl,
+                      imageUrls: candidates,
+                    })}
+                  >
+                    <PackagePlus size={14} /> Add card
+                  </button>
                   {item.officialListUrl && <a className="muted-copy" href={item.officialListUrl} target="_blank" rel="noopener noreferrer">Official card list ↗</a>}
                   {item.isDon && <div className="catalogue-don-set-assignment">
                     <label className="form-field"><span>DON!! source set</span><select value={donSetSelections[item.id] ?? (item.setCode !== 'DON!!' ? item.setCode : '')} onChange={(event) => setDonSetSelections((current) => ({ ...current, [item.id]: event.target.value }))}><option value="">Choose source set…</option>{DON_SET_OPTIONS.map((code) => <option key={code} value={code}>{code}</option>)}</select></label>
