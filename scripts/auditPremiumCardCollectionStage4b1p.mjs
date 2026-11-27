@@ -380,8 +380,21 @@ async function reconcileTestingInventory(snapshot, matrixRows, stage1oAudit, app
     const runtime = stage1oAudit.rows.find((item) => item.set === row.set && item.language === row.language)
     const languageCode = row.language === 'English' ? 'en' : 'jp'
     const coverage = applicationMatrix.coverageBySetLanguage[row.set + ':' + languageCode]
+    const expectedRecords = applicationMatrix.items.filter((item) => item.targetSet === row.set && item.language === languageCode)
+    const persistedKeys = new Set(assigned.map((product) => product.catalogue_printing_key).filter(Boolean))
+    const missingRecords = expectedRecords.filter((item) => !persistedKeys.has(item.printingKey))
+    const unexpectedPersistedKeys = [...persistedKeys].filter((key) => !expectedRecords.some((item) => item.printingKey === key))
     return {
       set: row.set, language: row.language,
+      expectedApplicationPrintingKeys: expectedRecords.map((item) => item.printingKey),
+      missingPersistedPrintingKeys: missingRecords.map((item) => item.printingKey),
+      missingPersistedMatchIds: missingRecords.map((item) => item.id),
+      missingPersistedImageReferences: missingRecords.map((item) => ({
+        printingKey: item.printingKey, imageId: item.imageId || '',
+        imageUrl: item.fallbackImageUrl || item.imageUrl || '',
+      })),
+      unexpectedPersistedPrintingKeys: unexpectedPersistedKeys,
+      missingPersistedPrintingIdentityCount: missingRecords.length,
       officialReleaseAssignmentPrintings: runtime?.releaseAssignmentOfficialCount ?? 0,
       applicationRuntimePrintings: runtime?.applicationPrintingCount ?? 0,
       applicationExactIdentityMatch: Boolean(runtime?.exactIdentityMatch),
@@ -433,6 +446,9 @@ async function reconcileTestingInventory(snapshot, matrixRows, stage1oAudit, app
       languageSetRows: persistenceRows.length,
       rowsWithPersistedInventoryProducts: persistenceRows.filter((row) => row.persistedInventoryProductRows > 0).length,
       rowsWithPersistedCataloguePrintingIdentity: persistenceRows.filter((row) => row.persistedCataloguePrintingKeys > 0).length,
+      expectedSetPrintingAssignments: persistenceRows.reduce((sum, row) => sum + row.expectedApplicationPrintingKeys.length, 0),
+      missingPersistedPrintingKeys: persistenceRows.reduce((sum, row) => sum + row.missingPersistedPrintingIdentityCount, 0),
+      unexpectedPersistedPrintingKeys: persistenceRows.reduce((sum, row) => sum + row.unexpectedPersistedPrintingKeys.length, 0),
     },
     unmatchedCardNumbers, assignedSetMismatchRows: assignedSetMismatches,
     unassignedCardNumberPrefixCandidates: prefixCandidates,
@@ -452,9 +468,9 @@ if (!stage1oAudit.summary?.passed) throw new Error('Stage 4B-1O exact runtime re
 const applicationMatrix = await getCatalogueReferenceTestMatrix()
 const premiumCollections = await reconcilePremiumCollections(manifest)
 const testingInventory = await reconcileTestingInventory(testingSnapshot, officialMatrix.rows, stage1oAudit, applicationMatrix)
-const matrixRowKeys = new Set(stage1oAudit.rows.map((row) => row.set + ':' + row.language))
-const setMatrixItems = applicationMatrix.items.filter((item) => matrixRowKeys.has(item.targetSet + ':' + item.language))
 const languageCodeFor = (language) => language === 'English' ? 'en' : 'jp'
+const matrixRowKeys = new Set(stage1oAudit.rows.map((row) => row.set + ':' + languageCodeFor(row.language)))
+const setMatrixItems = applicationMatrix.items.filter((item) => matrixRowKeys.has(item.targetSet + ':' + item.language))
 const setAssignmentKeys = new Set(setMatrixItems.map((item) => languageCodeFor(item.language) + ':' + item.targetSet + ':' + item.printingKey))
 const setPrintingKeys = new Set(setMatrixItems.map((item) => languageCodeFor(item.language) + ':' + item.printingKey))
 const premiumPrintingKeys = new Set(premiumCollections.cards.map((card) => card.language + ':' + card.printingKey))
@@ -472,6 +488,22 @@ const importPlan = {
   setAssignmentRows: setAssignmentKeys.size,
   distinctSetMatrixPrintingKeys: setPrintingKeys.size,
   distinctLanguageScopedBaseCardNumbers: new Set(setMatrixItems.map((item) => languageCodeFor(item.language) + ':' + item.cardNumber)).size,
+  expectedSetPrintingRecords: setMatrixItems.length,
+  referencePrintingRecords: setMatrixItems.map((item) => ({
+    printingKey: item.printingKey,
+    cardNumber: item.cardNumber,
+    language: item.language,
+    releaseSet: item.targetSet,
+    releaseProduct: item.setName,
+    productKey: item.productKey,
+    productCode: item.productCode,
+    rarity: item.rarity,
+    variant: item.variant,
+    imageId: item.imageId || '',
+    applicationImageUrl: item.imageUrl || '',
+    exactReferenceImageUrl: item.fallbackImageUrl || item.imageUrl || '',
+    source: item.source || '',
+  })),
   localOfficialSupplements: {
     OP18: { English: 159, Japanese: 159, total: 318, keyPrefix: 'op18:<language>:<imageId>' },
     EB05: { English: 96, Japanese: 96, total: 192, keyPrefix: 'eb05:<language>:<imageId>' },
@@ -507,8 +539,19 @@ const report = {
   premiumCollections, testingInventory, importPlan,
   summary: {
     passed: premiumCollections.exactMatch && testingInventory.classificationComplete
-      && testingInventory.summary.assignedSetMismatches === 0 && stage1oAudit.summary.passed,
+      && testingInventory.summary.assignedSetMismatches === 0
+      && importPlan.expectedSetPrintingRecords === 7786
+      && importPlan.referencePrintingRecords.length === 7786
+      && testingInventory.summary.expectedSetPrintingAssignments === 7786
+      && testingInventory.summary.missingPersistedPrintingKeys === 7786
+      && testingInventory.summary.unexpectedPersistedPrintingKeys === 0
+      && stage1oAudit.summary.passed,
     premiumCollectionsExactMatch: premiumCollections.exactMatch,
+    completeSetImportPlan: importPlan.expectedSetPrintingRecords === 7786
+      && importPlan.referencePrintingRecords.length === 7786
+      && testingInventory.summary.expectedSetPrintingAssignments === 7786
+      && testingInventory.summary.missingPersistedPrintingKeys === 7786
+      && testingInventory.summary.unexpectedPersistedPrintingKeys === 0,
     englishPremiumProducts: premiumCollections.english.namedProductCount,
     englishPremiumPrintings: premiumCollections.english.productPrintingLinks,
     englishRemainingEightPrintings: premiumCollections.english.eightRemainingProducts,
