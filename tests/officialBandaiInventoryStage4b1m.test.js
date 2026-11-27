@@ -117,8 +117,8 @@ test('OP-18 and EB-05 supplemental catalogue gaps are measured against official 
     assert.equal(pageFor('OP-18', language).extracted_card_entry_count, 159)
     assert.equal(pageFor('EB-05', language).extracted_card_entry_count, 96)
   }
-  assert.equal(rowFor('OP-18', 'English').missing_printings.length, 3)
-  assert.equal(rowFor('OP-18', 'English').unexpected_printings.length, 3)
+  assert.equal(rowFor('OP-18', 'English').missing_printings.length, 0)
+  assert.equal(rowFor('OP-18', 'English').unexpected_printings.length, 0)
   assert.equal(rowFor('OP-18', 'Japanese').missing_printings.length, 0)
   assert.equal(rowFor('EB-05', 'English').missing_printings.length, 0)
   assert.equal(rowFor('EB-05', 'Japanese').missing_printings.length, 0)
@@ -150,24 +150,25 @@ test('Best Selection Vol.6 keeps OP15-075 and OP15-108 as separate product print
   assert.equal(rowFor('OP-15', 'English').additional_upstream_products[0].printing_product_link_count, 12)
 })
 
-test('Stage 3 supplemental OP-18 English image identifiers remain explicitly flagged for correction', () => {
-  assert.deepEqual(rowFor('OP-18', 'English').missing_printings, [
-    'OP18-049_p1',
-    'OP13-012_p1',
-    'OP17-040_p2',
-  ])
-  assert.deepEqual(rowFor('OP-18', 'English').unexpected_printings, [
-    'OP18-064_p1',
-    'OP13-012_p2',
-    'OP17-040_p1',
-  ])
+test('Stage 4B-1O OP-18 image identifiers use the correct language-specific official identities', () => {
+  const english = rowFor('OP-18', 'English')
+  const japanese = rowFor('OP-18', 'Japanese')
+  assert.deepEqual(english.missing_printings, [])
+  assert.deepEqual(english.unexpected_printings, [])
+  assert.ok(english.official_printing_identity_ids.includes('OP18-049_p1'))
+  assert.ok(!english.official_printing_identity_ids.includes('OP18-064_p1'))
+  assert.ok(japanese.official_printing_identity_ids.includes('OP18-064_p1'))
+  assert.ok(!japanese.official_printing_identity_ids.includes('OP18-049_p1'))
 })
 
 test('upstream product-link counts match every standalone official product page', () => {
   const linkedRows = matrix.rows.filter((row) => row.upstream_product_key)
   assert.equal(linkedRows.length, 45)
   for (const row of linkedRows) {
-    assert.equal(row.upstream_product_link_count, row.official_page_entry_count, `${row.set} ${row.language} upstream product links`)
+    const rawCombinedPageCount = row.language === 'English' && ['OP-14', 'OP-15'].includes(row.set)
+      ? row.official_page_result_count
+      : row.official_page_entry_count
+    assert.equal(row.upstream_product_link_count, rawCombinedPageCount, `${row.set} ${row.language} upstream product links`)
     assert.equal(row.upstream_product_link_count_matches_official_page, true)
     assert.equal(row.upstream_product_link_count_delta, 0)
   }
@@ -182,7 +183,7 @@ test('upstream product-link counts match every standalone official product page'
 test('OP-18 audit branch fix records language-specific card numbers and image IDs', () => {
   for (const language of ['English', 'Japanese']) {
     const fix = rowFor('OP-18', language).application_supplemental_comparison.audit_branch_fix
-    assert.equal(fix.status, 'IMPLEMENTED; CI AND LIVE IMAGE AUDIT PENDING')
+    assert.equal(fix.status, 'IMPLEMENTED; REFERENCE IDENTITY AND HTTP IMAGE AUDIT PASSED')
     assert.equal(fix.union_printing_records, 160)
     assert.equal(fix.english_printings, 159)
     assert.equal(fix.japanese_printings, 159)
