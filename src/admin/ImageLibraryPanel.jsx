@@ -429,7 +429,17 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
             {matrixReport && <details className="catalogue-health-missing">
               <summary>View image-by-image results ({matrixResults.length})</summary>
               <div className="catalogue-health-table">
-                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.setCode || 'Unassigned'} · {item.cardNumber || 'No card number'}</strong><span>{item.languageCode?.toUpperCase() || matrixReport.language.toUpperCase()}</span><span>{item.status}{item.httpStatus ? ' · HTTP ' + item.httpStatus : ''}{item.upstreamStatus ? ' · upstream ' + item.upstreamStatus : ''}{item.proxyError ? ' · ' + item.proxyError : ''}{item.checkedAt ? ' · checked ' + new Date(item.checkedAt).toLocaleString() : ''} · {item.source || 'No image source'}</span></div>)}
+                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}>
+                  <strong>{item.setCode || 'Unassigned'} · {item.cardNumber || 'No card number'}</strong>
+                  <span>{item.languageCode?.toUpperCase() || matrixReport.language.toUpperCase()}</span>
+                  <span>{item.status}{item.httpStatus ? ' · HTTP ' + item.httpStatus : ''}{item.upstreamStatus ? ' · upstream ' + item.upstreamStatus : ''}{item.proxyError ? ' · ' + item.proxyError : ''}{item.checkedAt ? ' · checked ' + new Date(item.checkedAt).toLocaleString() : ''} · {item.source || 'No image source'}</span>
+                  <details><summary>Candidate provenance ({item.candidateResults?.length || 0})</summary>
+                    {(item.candidateResults || []).map((candidate, index) => <p key={candidate.candidateUrl + index} className="muted-copy">
+                      {candidate.candidateKind || 'unknown'} · {candidate.candidateSource || 'unknown source'} · {candidate.candidateUrl}
+                      {candidate.httpStatus ? ' · HTTP ' + candidate.httpStatus : ''}{candidate.upstreamStatus ? ' · upstream ' + candidate.upstreamStatus : ''}{candidate.proxyError ? ' · ' + candidate.proxyError : ''}{candidate.checkedAt ? ' · ' + new Date(candidate.checkedAt).toLocaleString() : ''}
+                    </p>)}
+                  </details>
+                </div>)}
               </div>
             </details>}
           </div>
