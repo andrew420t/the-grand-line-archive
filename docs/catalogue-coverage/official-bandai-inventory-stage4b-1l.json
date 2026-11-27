@@ -18916,23 +18916,23 @@
         "L": 1,
         "SEC": 1
       },
-      "official_page_result_count": null,
+      "official_page_result_count": 81,
       "official_page_entry_count": 81,
       "official_source_image_url_count": 81,
       "unparsed_result_rows": 0,
       "expected_printings": 81,
       "actual_distinct_printings": 81,
-      "missing_printings": null,
+      "missing_printings": [],
       "duplicate_printing_identities": [],
       "missing_image_references": [],
       "feed_observed_prefix_count": 61,
       "feed_observed_release_printings": 100,
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "verification_status": "INCOMPLETE",
-      "notes": "Latest direct retrieval still failed to render the official EB-04 English card list (generic Bandai 'Failed to display the card list' message). No result count, entries or card image URLs were returned. This is a source retrieval/render failure, not an empty inventory; no feed count substituted. English has no standalone EB-04 series page; 40 EB04 entries were extracted from OP14-EB04 and 41 from OP15-EB04, together covering EB04-001 through EB04-061 with 81 official image-backed printings.",
+      "notes": "Official English EB-04 inventory recovered from Bandai combined release-product pages: OP14-EB04 (199 total page results; 40 EB04 entries, 31 distinct EB04 card numbers, 40 EB04 image URLs) and OP15-EB04 (196 total page results; 41 EB04 entries, 30 distinct EB04 card numbers, 41 EB04 image URLs). Combined: all 61 card numbers EB04-001 through EB04-061; 81 independently listed printing/image identities, each paired to a unique official image ID and URL. Two SP CARD entries are distinct printings of EB04-003 and EB04-039; remaining alternate-art image IDs are preserved separately. No missing card numbers, missing source image references, or duplicate image-ID identities in this extracted subset. Live HTTP image loading is not yet verified, so status remains INCOMPLETE. Standalone EB-04 page failure is superseded by these two official source pages for inventory extraction.",
       "source_image_url_extraction_shortfall": 0,
       "image_reference_verification": "IDENTIFIERS_MATCHED_NOT_HTTP_TESTED",
-      "source_availability": "AVAILABLE VIA OP14-EB04 + OP15-EB04",
+      "source_availability": "AVAILABLE_VIA_OP14_EB04_AND_OP15_EB04",
       "parsed_official_printing_entries": 81,
       "official_source_urls": [
         "https://en.onepiece-cardgame.com/cardlist/?series=569114",
@@ -19168,6 +19168,741 @@
           "url": "https://en.onepiece-cardgame.com/cardlist/?series=569115",
           "page_result_count": 196,
           "matching_eb04_entries": 41
+        }
+      ],
+      "source_page_total_result_counts": {
+        "OP14-EB04": 199,
+        "OP15-EB04": 196
+      },
+      "official_printing_entries": [
+        {
+          "card_number": "EB04-011",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Scaled Neptunian",
+          "official_image_id": "EB04-011",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-011.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-012",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Kikunojo",
+          "official_image_id": "EB04-012",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-012.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-012",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Kikunojo",
+          "official_image_id": "EB04-012_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-012_p1.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-013",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Carrot",
+          "official_image_id": "EB04-013",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-013.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-013",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Carrot",
+          "official_image_id": "EB04-013_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-013_p1.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-014",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Kozuki Sukiyaki",
+          "official_image_id": "EB04-014",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-014.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-015",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Jinbe",
+          "official_image_id": "EB04-015",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-015.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-016",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Bird Neptunian",
+          "official_image_id": "EB04-016",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-016.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-017",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Mystoms",
+          "official_image_id": "EB04-017",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-017.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-018",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Megalo",
+          "official_image_id": "EB04-018",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-018.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-018",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Megalo",
+          "official_image_id": "EB04-018_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-018_p1.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-019",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "Eleclaw",
+          "official_image_id": "EB04-019",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-019.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-020",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "Shark Brick Fist",
+          "official_image_id": "EB04-020",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-020.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-021",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Igaram",
+          "official_image_id": "EB04-021",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-021.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-022",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Issho",
+          "official_image_id": "EB04-022",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-022.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-022",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Issho",
+          "official_image_id": "EB04-022_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-022_p1.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-023",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Chaka & Pell",
+          "official_image_id": "EB04-023",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-023.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-024",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Terracotta",
+          "official_image_id": "EB04-024",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-024.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-025",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Nefeltari Vivi",
+          "official_image_id": "EB04-025",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-025.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-025",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Nefeltari Vivi",
+          "official_image_id": "EB04-025_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-025_p1.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-026",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Bluegrass",
+          "official_image_id": "EB04-026",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-026.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-027",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Boa Hancock",
+          "official_image_id": "EB04-027",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-027.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-028",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "Ice Time",
+          "official_image_id": "EB04-028",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-028.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-029",
+          "rarity": "UC",
+          "type": "EVENT",
+          "name": "I Heard the Sound...of a Lady's Teardrops Falling",
+          "official_image_id": "EB04-029",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-029.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-030",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Kaido",
+          "official_image_id": "EB04-030",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-030.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-031",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "King",
+          "official_image_id": "EB04-031",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-031.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-031",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "King",
+          "official_image_id": "EB04-031_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-031_p1.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-032",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Queen",
+          "official_image_id": "EB04-032",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-032.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-033",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Groggy Monsters",
+          "official_image_id": "EB04-033",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-033.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-034",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Charlotte Pudding",
+          "official_image_id": "EB04-034",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-034.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-035",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Hitokiri Kamazo",
+          "official_image_id": "EB04-035",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-035.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-036",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Foxy",
+          "official_image_id": "EB04-036",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-036.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-036",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Foxy",
+          "official_image_id": "EB04-036_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-036_p1.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-037",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Porche",
+          "official_image_id": "EB04-037",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-037.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-038",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Rosinante & Law",
+          "official_image_id": "EB04-038",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-038.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-038",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Rosinante & Law",
+          "official_image_id": "EB04-038_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-038_p1.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-039",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Eustass\"Captain\"Kid",
+          "official_image_id": "EB04-039",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-039.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-040",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "Flame Dragon Torch",
+          "official_image_id": "EB04-040",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-040.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-041",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "Stealth Black",
+          "official_image_id": "EB04-041",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-041.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-039",
+          "rarity": "SP CARD",
+          "type": "CHARACTER",
+          "name": "Eustass\"Captain\"Kid",
+          "official_image_id": "EB04-039_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-039_p1.png?261124",
+          "release_product": "OP14-EB04"
+        },
+        {
+          "card_number": "EB04-001",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "Jewelry Bonney",
+          "official_image_id": "EB04-001",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-001.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-001",
+          "rarity": "L",
+          "type": "LEADER",
+          "name": "Jewelry Bonney",
+          "official_image_id": "EB04-001_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-001_p1.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-002",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Jewelry Bonney",
+          "official_image_id": "EB04-002",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-002.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-002",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Jewelry Bonney",
+          "official_image_id": "EB04-002_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-002_p1.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-003",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Smoker & Tashigi",
+          "official_image_id": "EB04-003",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-003.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-004",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Zeff",
+          "official_image_id": "EB04-004",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-004.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-005",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Trafalgar Law",
+          "official_image_id": "EB04-005",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-005.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-006",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Moda",
+          "official_image_id": "EB04-006",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-006.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-007",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Roronoa Zoro",
+          "official_image_id": "EB04-007",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-007.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-007",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Roronoa Zoro",
+          "official_image_id": "EB04-007_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-007_p1.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-008",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "Distorted Future",
+          "official_image_id": "EB04-008",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-008.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-009",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "It's My Student's Farewell. I Want It to Be Proper.",
+          "official_image_id": "EB04-009",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-009.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-010",
+          "rarity": "C",
+          "type": "STAGE",
+          "name": "Lulucia Kingdom",
+          "official_image_id": "EB04-010",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-010.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-042",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Alpha",
+          "official_image_id": "EB04-042",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-042.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-043",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Kaku",
+          "official_image_id": "EB04-043",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-043.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-043",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Kaku",
+          "official_image_id": "EB04-043_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-043_p1.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-044",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Koby",
+          "official_image_id": "EB04-044",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-044.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-044",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Koby",
+          "official_image_id": "EB04-044_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-044_p1.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-044",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Koby",
+          "official_image_id": "EB04-044_p2",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-044_p2.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-045",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Ginny",
+          "official_image_id": "EB04-045",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-045.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-046",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Doll",
+          "official_image_id": "EB04-046",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-046.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-047",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Helmeppo",
+          "official_image_id": "EB04-047",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-047.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-048",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Rob Lucci",
+          "official_image_id": "EB04-048",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-048.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-048",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Rob Lucci",
+          "official_image_id": "EB04-048_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-048_p1.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-049",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "Finger Pistol Yellow Lotus",
+          "official_image_id": "EB04-049",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-049.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-050",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "I'll Whip You Into Shape. ♡",
+          "official_image_id": "EB04-050",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-050.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-051",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Emet",
+          "official_image_id": "EB04-051",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-051.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-052",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Sanji",
+          "official_image_id": "EB04-052",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-052.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-052",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Sanji",
+          "official_image_id": "EB04-052_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-052_p1.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-053",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Sentomaru",
+          "official_image_id": "EB04-053",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-053.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-054",
+          "rarity": "R",
+          "type": "CHARACTER",
+          "name": "Bartholomew Kuma",
+          "official_image_id": "EB04-054",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-054.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-055",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Bartholomew Kuma",
+          "official_image_id": "EB04-055",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-055.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-056",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Pacifista",
+          "official_image_id": "EB04-056",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-056.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-057",
+          "rarity": "C",
+          "type": "CHARACTER",
+          "name": "Vegapunk",
+          "official_image_id": "EB04-057",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-057.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-058",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Borsalino",
+          "official_image_id": "EB04-058",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-058.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-058",
+          "rarity": "SR",
+          "type": "CHARACTER",
+          "name": "Borsalino",
+          "official_image_id": "EB04-058_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-058_p1.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-059",
+          "rarity": "R",
+          "type": "EVENT",
+          "name": "Black Rope Dragon Twister",
+          "official_image_id": "EB04-059",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-059.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-060",
+          "rarity": "C",
+          "type": "EVENT",
+          "name": "Gum-Gum Hawk Gatling",
+          "official_image_id": "EB04-060",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-060.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-061",
+          "rarity": "SEC",
+          "type": "CHARACTER",
+          "name": "Monkey.D.Luffy",
+          "official_image_id": "EB04-061",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-061.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-061",
+          "rarity": "SEC",
+          "type": "CHARACTER",
+          "name": "Monkey.D.Luffy",
+          "official_image_id": "EB04-061_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-061_p1.png?261124",
+          "release_product": "OP15-EB04"
+        },
+        {
+          "card_number": "EB04-003",
+          "rarity": "SP CARD",
+          "type": "CHARACTER",
+          "name": "Smoker & Tashigi",
+          "official_image_id": "EB04-003_p1",
+          "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/EB04-003_p1.png?261124",
+          "release_product": "OP15-EB04"
         }
       ]
     },
