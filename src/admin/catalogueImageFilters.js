@@ -94,10 +94,17 @@ export function dedupePrintingProducts(products = []) {
 }
 
 /** Resolve a release-product identity without confusing it with the card-number set. */
-export function getCatalogueProductSetCode(product, cardNumber = '') {
+export function getCatalogueProductSetCode(product, cardNumber = '', productSetCodes = []) {
+  const linkedSetCodes = [...new Set((productSetCodes || []).map((code) => String(code || '').trim()).filter(Boolean))]
+  const cardNumberSet = getCardNumberSetCode(cardNumber)
+  // A product may officially belong to multiple sets (for example, a combined
+  // OP-15 / EB-04 product). Prefer the card-number set when it is one of those
+  // official product-set relationships; retain all linked sets in the gallery.
+  if (cardNumberSet && linkedSetCodes.includes(cardNumberSet)) return cardNumberSet
+  if (linkedSetCodes.length) return linkedSetCodes[0]
   const code = String(product?.code || '').trim()
   if (code) return code
   const name = String(product?.name || '').trim()
   if (name && name.toLowerCase() !== 'other product card') return name
-  return getCardNumberSetCode(cardNumber)
+  return cardNumberSet
 }
