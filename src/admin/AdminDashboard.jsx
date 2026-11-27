@@ -81,6 +81,7 @@ export default function AdminDashboard({
   onSignIn,
   onReload,
   onUpdateStatus,
+  onArchiveOrder,
   onRefreshProducts,
   onSaveSiteSettings,
 }) {
@@ -282,6 +283,7 @@ export default function AdminDashboard({
           action={action}
           onReload={onReload}
           onUpdateStatus={onUpdateStatus}
+          onArchiveOrder={onArchiveOrder}
         />
       )}
 
@@ -1005,7 +1007,7 @@ function CollectionsSection({ categories, sets, onRefresh }) {
   )
 }
 
-function OrdersSection({ orders, orderItems, products, loading, error, action, onReload, onUpdateStatus }) {
+function OrdersSection({ orders, orderItems, products, loading, error, action, onReload, onUpdateStatus, onArchiveOrder }) {
   const pendingCount = orders.filter((order) => ['pending', 'processing'].includes(String(order.status).toLowerCase())).length
   return (
     <section className="admin-view">
@@ -1023,7 +1025,7 @@ function OrdersSection({ orders, orderItems, products, loading, error, action, o
             return (
               <article className="admin-order" key={order.id}>
                 <div className="admin-order__top"><div><span className="eyebrow">ORDER #{String(order.id).slice(-8).toUpperCase()}</span><strong>{formatMoney(order.total_amount ?? order.total ?? order.amount)}</strong></div><label className="select-field status-select"><span className="sr-only">Update order status</span><select value={order.status || 'pending'} disabled={action === order.id} onChange={(event) => onUpdateStatus(order.id, event.target.value)}><option value="pending">Pending</option><option value="processing">Processing</option><option value="shipped">Ready for pickup</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><ChevronDown size={15} /></label></div>
-                <div className="admin-order__meta"><span>{order.created_at ? new Date(order.created_at).toLocaleString('en-GB') : 'Date not recorded'}</span><span>Customer: {order.user_id || order.customer_id || 'Not recorded'}</span><span>{items.length} line items</span></div>
+                <div className="admin-order__meta"><span>{order.created_at ? new Date(order.created_at).toLocaleString('en-GB') : 'Date not recorded'}</span><span>Customer: {order.user_id || order.customer_id || 'Not recorded'}</span><span>{items.length} line items</span></div>{['cancelled','completed','shipped'].includes(String(order.status || '').toLowerCase()) && <button className="subtle-refresh order-archive-button" type="button" onClick={() => onArchiveOrder(order.id)}>Archive order from admin list</button>}
                 <div className="order-lines">{items.length ? items.map((item) => {
                   const product = products.find((entry) => String(entry.id) === String(item.product_id))
                   return <div className="order-line" key={item.id || `${item.order_id}-${item.product_id}`}><span>{product?.name || `Card ${item.product_id}`} <small>× {item.quantity}</small></span><strong>{formatMoney(Number(item.unit_price ?? item.price ?? 0) * Number(item.quantity || 0))}</strong></div>
