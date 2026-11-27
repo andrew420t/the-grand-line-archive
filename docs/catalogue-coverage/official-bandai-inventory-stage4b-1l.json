@@ -31257,13 +31257,44 @@
       "image_status": "HTTP 200 in official image audit"
     },
     "regression_tests": {
-      "new_audit_matrix_tests": "test/catalogue-coverage/officialBandaiInventoryStage4b1n.test.js: 8 assertions groups for 50 rows, extraction/image alignment, HTTP outcomes, PRB count semantics, EB-04 English source composition, OP-18 language-specific TR identities, OP13-037 discrepancy and honest INCOMPLETE status.",
-      "image_library_filter_tests": "tests/catalogueImageFilters.test.js: existing combined filter intersection, exact card-number matching, original card-number set versus release set, language/variant separation, named Premium Card Collection product preference, and duplicate product-link suppression; added clear-all-filters restoration test.",
-      "official_inventory_tests": "tests/officialBandaiInventoryStage4b1m.test.js: PRB printing/product-prefix handling, EB-04 Japanese cross-prefix inclusions, Best Selection Vol.6 printings, OP-18 and EB-05 language-specific metadata.",
+      "new_audit_matrix_tests": "test/catalogue-coverage/officialBandaiInventoryStage4b1n.test.js: passed in the full suite; 50-row coverage, extraction/image alignment, HTTP outcomes, PRB count semantics, EB-04 English source composition, OP-18 language-specific TR identities, OP13-037 discrepancy and honest INCOMPLETE status.",
+      "image_library_filter_tests": "tests/catalogueImageFilters.test.js: combined filter intersection, exact card-number matching, original card-number set versus release set, language/variant separation, named Premium Card Collection product preference, duplicate product-link suppression and clear-all-filters restoration.",
+      "official_inventory_tests": "tests/officialBandaiInventoryStage4b1m.test.js: PRB product-prefix/base-count separation, Japanese EB-04 cross-prefix inclusions, Best Selection Vol.6 printings, OP-18/EB-05 language-specific metadata and the single OP13-037 discrepancy.",
       "pagination_tests": "tests/storagePagination.test.js: 137-object multi-page load, exact page multiple, storage error propagation, invalid page size, overlapping page suppression by stable object ID and fallback name.",
-      "pagination_fix": "src/admin/storagePagination.js now suppresses duplicate objects across overlapping Storage pages while preserving first-seen order.",
+      "pagination_fix": "src/admin/storagePagination.js suppresses duplicate objects across overlapping Storage pages while preserving first-seen order.",
       "targeted_execution": "Node built-in test runner executed the updated storagePagination helper/test fixture: 6/6 passed.",
-      "full_suite_lint_build": "NOT_RUN: repository checkout could not be cloned in the execution environment (DNS resolution for github.com unavailable); exact-head GitHub Actions checks were not returned. Do not claim full suite, lint or build passed."
+      "full_suite_lint_build": "GitHub Actions run 46044786850 on code-bearing commit f7f510802036960a50e1f377c20d389836db303c: 306/306 tests passed; npm run lint passed with 17 warnings and 0 errors; npm run build passed. Image HTTP audit remains verified by run 46043216009 on f13880972eea4ffd4f683f94375dd80b14175734."
     }
+  },
+  "ci_verification": {
+    "latest_code_commit": "f7f510802036960a50e1f377c20d389836db303c",
+    "workflow_run_id": 46044786850,
+    "workflow_url": "https://github.com/andrew420t/the-grand-line-archive/actions/runs/46044786850",
+    "automated_tests": {
+      "passed": 306,
+      "failed": 0,
+      "total": 306
+    },
+    "lint": {
+      "status": "PASSED",
+      "warnings": 17,
+      "errors": 0
+    },
+    "production_build": {
+      "status": "PASSED",
+      "warnings": [
+        "Vite chunk-size advisory",
+        "Node punycode deprecation warning"
+      ]
+    },
+    "image_http_audit": {
+      "status": "PASSED",
+      "run_id": 46043216009,
+      "commit": "f13880972eea4ffd4f683f94375dd80b14175734",
+      "unique_urls": 7798,
+      "loaded": 7798
+    },
+    "latest_docs_metadata_commit": "4c8f9444e3081779ac2c0d3fde7739591874613c",
+    "note": "The latest docs-only matrix metadata commit records this completed code-bearing CI run; no source URLs changed after the final HTTP audit."
   }
 }
