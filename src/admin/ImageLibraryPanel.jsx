@@ -406,7 +406,7 @@ export default function ImageLibraryPanel({ user }) {
             <div>
               <p className="eyebrow">SEARCH AND BROWSE</p>
               <h3>{referenceImages.length.toLocaleString()} of {referenceTotal.toLocaleString()} matching printings</h3>
-              <p className="muted-copy">Filter by set, language, rarity, card type, colour, variant and image status. Missing-image rows remain visible so they can be identified and fixed.</p>
+              <p className="muted-copy">Filter by card number, name, set, language, rarity, card type, colour, variant and image status, then sort by card number. The card number is shown clearly on each tile. Missing-image rows remain visible so they can be identified and fixed.</p>
             </div>
           </div>
           <p className="muted-copy">Displayed in this page: {loadedReferenceIds.length} images loaded · {failedReferenceIds.length} image URLs failed.</p>
