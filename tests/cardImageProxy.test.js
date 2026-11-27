@@ -109,3 +109,52 @@ test('returns a distinct 504 diagnostic when the upstream fetch times out', asyn
   assert.equal(response.headers.get('x-card-image-error'), 'upstream-timeout')
   assert.match(await response.text(), /timed out/)
 })
+
+
+test('preserves a genuine upstream 410 as a gone response and marks it missing', async () => {
+  const response = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/en/ST04-008_p1.png'),
+    async () => new Response('Gone', { status: 410 }),
+  )
+  assert.equal(response.status, 410)
+  assert.equal(response.headers.get('x-card-image-upstream-status'), '410')
+  assert.equal(response.headers.get('x-card-image-error'), 'upstream-gone')
+  assert.equal(response.headers.get('cache-control'), 'no-store')
+})
+
+test('keeps upstream 5xx distinct from confirmed missing images', async () => {
+  for (const status of [500, 503]) {
+    const response = await handleCardImageProxy(
+      new Request('https://archive.example/_card-image/bandai/en/OP01-036.png'),
+      async () => new Response('Unavailable', { status }),
+    )
+    assert.equal(response.status, 502)
+    assert.equal(response.headers.get('x-card-image-upstream-status'), String(status))
+    assert.equal(response.headers.get('x-card-image-error'), 'upstream-http-error')
+    assert.equal(response.headers.get('cache-control'), 'no-store')
+  }
+})
+
+test('marks network failures temporary and never caches them', async () => {
+  const response = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/en/OP01-036.png'),
+    async () => { throw new TypeError('network unavailable') },
+  )
+  assert.equal(response.status, 502)
+  assert.equal(response.headers.get('x-card-image-error'), 'upstream-network-error')
+  assert.equal(response.headers.get('cache-control'), 'no-store')
+})
+
+test('configures edge caching for successful images only', async () => {
+  let calledOptions
+  const response = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/jp/OP18-001.png'),
+    async (_url, options) => {
+      calledOptions = options
+      return new Response(new Uint8Array([137, 80, 78, 71]), { status: 200, headers: { 'Content-Type': 'image/png' } })
+    },
+  )
+  assert.equal(response.status, 200)
+  assert.deepEqual(calledOptions.cf.cacheTtlByStatus, { '200-299': 86400, '400-599': 0 })
+  assert.match(response.headers.get('cache-control'), /max-age=86400/)
+})
