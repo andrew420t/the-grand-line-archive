@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { buildCatalogueScannerFields, buildNewProductPayload, classifyPrintingDuplicate, mergeCatalogueScannerFields } from '../src/admin/productSchema.js'
+import { buildCatalogueScannerFields, buildNewProductPayload, buildReferenceLibraryScanFields, classifyPrintingDuplicate, mergeCatalogueScannerFields } from '../src/admin/productSchema.js'
 
 const form = {
   name: 'Monkey D. Luffy',
@@ -277,4 +277,44 @@ test('catalogue confirmation clears stale identity when the selected match has n
   assert.equal(merged.catalogue_printing_key.value, '')
   assert.equal(merged.catalogue_reference_image_url.value, '')
   assert.equal(merged.effect_text.value, 'OCR effect')
+})
+
+test('hands a reference-library printing into Add New Stock with release set and image identity intact', () => {
+  const fields = buildReferenceLibraryScanFields({
+    id: 'op18:OP13-012:en:OP18',
+    printingKey: 'op18:OP13-012',
+    cardNumber: 'OP13-012',
+    name: 'Nefeltari Vivi',
+    language: 'English',
+    category: 'character',
+    colors: 'Red',
+    cost: 4,
+    power: 5000,
+    counter: 1000,
+    attributes: 'Wisdom',
+    traits: 'Alabasta',
+    effect: 'On Play: Draw 1 card.',
+    trigger: '',
+    rarity: 'SP CARD',
+    variant: 'SP CARD',
+    variantLabel: 'SP CARD',
+    setCode: 'OP-18',
+    imageUrl: 'https://ehzqsnfkmwphyllhaqhe.supabase.co/functions/v1/bandai-card-image?language=en&id=OP13-012',
+    source: 'Bandai official English OP-18 SP CARD image',
+  })
+
+  assert.equal(fields.name.value, 'Nefeltari Vivi')
+  assert.equal(fields.card_number.value, 'OP13-012')
+  assert.equal(fields.set_code.value, 'OP-18')
+  assert.equal(fields.card_type.value, 'Character')
+  assert.equal(fields.language.value, 'English')
+  assert.equal(fields.variant_label.value, 'SP CARD')
+  assert.equal(fields.catalogue_match_id.value, 'op18:OP13-012:en:OP18')
+  assert.equal(fields.catalogue_printing_key.value, 'op18:OP13-012')
+  assert.equal(fields.catalogue_reference_image_url.value, 'https://ehzqsnfkmwphyllhaqhe.supabase.co/functions/v1/bandai-card-image?language=en&id=OP13-012')
+  assert.equal(fields.effect_text.value, 'On Play: Draw 1 card.')
+  assert.equal(fields.counter.value, '1000')
+  assert.equal(fields.attributes.value, 'Wisdom')
+  assert.equal(fields.classification.value, 'Alabasta')
+  assert.equal(fields.catalogue_match_id.needsReview, true)
 })
