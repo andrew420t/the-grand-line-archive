@@ -97,7 +97,7 @@ The extracted rows provide these partial, language-specific card-number observat
 - PRB-01: 305 parsed entries and 106 distinct original OP/EB/ST card numbers in each language; 14 result rows remain unparsed.
 - PRB-02: 249 parsed entries and 140 distinct original OP/EB/ST card numbers in each language; 67 result rows remain unparsed.
 
-The source data does not yet associate every result row with an exact image ID, rarity/type/name tuple and release printing identity. Repeated card-number/name/rarity/type signatures are retained as candidate separate printings, not discarded as duplicates. No PRB base-card count, complete reprint list, or complete printing total is asserted. The matrix stores parsed card-number lists separately from the unknown complete product inventory.
+The source data does not yet associate every result row with an exact image ID, rarity/type/name tuple and release printing identity. Repeated card-number/name/rarity/type signatures are retained as candidate separate printings, not discarded as duplicates. No PRB base-card count, complete reprint list, or complete printing total is asserted. The matrix stores parsed card-number lists separately from the unknown complete product inventory. Feed-side PRB prefix observations are retained only as feed metadata and are not official PRB base-card counts.
 
 ## Other reconciliation observations
 
@@ -154,7 +154,7 @@ Continue directly from Stage 4B-1N.
 
 Repository: andrew420t/the-grand-line-archive
 Working branch: audit/official-bandai-inventory-stage4b-1l-2026-11-27
-Starting commit: 2e2a7b0f41dcbc987e8ac91a5e9fc8ee57c35fca
+Starting commit: current HEAD of the named audit branch (verify the exact SHA before edits)
 Stage 3 baseline: 448bc546c30ad1d7c69481dbdf794711810c5560
 
 Absolute restrictions:
