@@ -336,14 +336,16 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
             <button className="button button--outline" type="button" disabled={matrixRunning} onClick={runReferenceMatrixCheck}>{matrixRunning ? 'Checking images…' : 'Run full image audit'}</button>
             {matrixError && <p className="form-error">{matrixError}</p>}
             {matrixReport && (() => {
-              const summary = buildImageAuditSummary(matrixResults.map((item) => ({
-                status: item.status === 'loaded' ? IMAGE_CHECK_STATUS.EXACT_LOADED
-                  : item.status === 'fallback-loaded' ? IMAGE_CHECK_STATUS.FALLBACK_LOADED
-                    : item.status === 'failed' ? IMAGE_CHECK_STATUS.TEMPORARY_FAILURE
-                      : item.status === 'timeout' ? IMAGE_CHECK_STATUS.TIMEOUT
+              const summary = buildImageAuditSummary([
+                ...matrixResults.map((item) => ({
+                  status: item.status === 'loaded' ? IMAGE_CHECK_STATUS.EXACT_LOADED
+                    : item.status === 'fallback-loaded' ? IMAGE_CHECK_STATUS.FALLBACK_LOADED
+                      : item.status === 'failed' ? IMAGE_CHECK_STATUS.TEMPORARY_FAILURE
                         : item.status === 'missing-url' ? IMAGE_CHECK_STATUS.MISSING
                           : item.status,
-              })), matrixReport.expectedTotal)
+                })),
+                ...matrixReport.missingSlots.map(() => ({ status: IMAGE_CHECK_STATUS.MISSING })),
+              ], matrixReport.expectedTotal)
               return <p className="muted-copy">
                 {matrixResults.filter((item) => item.status === 'loaded').length} exact loaded · {matrixResults.filter((item) => item.status === 'fallback-loaded').length} fallback loaded · {matrixResults.filter((item) => item.status === 'missing').length} confirmed missing · {matrixResults.filter((item) => item.status === 'temporary-failure').length} temporary failures · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixResults.filter((item) => item.status === 'invalid-url').length} invalid sources · {matrixReport.missingSlots.length} catalogue entries without image URLs · {summary.remaining} not checked ({matrixReport.expectedTotal} expected).
               </p>
