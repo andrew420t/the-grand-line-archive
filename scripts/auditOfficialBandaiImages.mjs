@@ -10,6 +10,7 @@ const INVENTORIES = [
   "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json",
   "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json",
 ];
+const BEST_SELECTION = "docs/catalogue-coverage/official-premium-card-collection-best-selection-vol6.json";
 const OUTPUT = "artifacts/official-bandai-image-http-audit.json";
 const CONCURRENCY = Math.max(1, Number(process.env.IMAGE_AUDIT_CONCURRENCY || 8));
 const TIMEOUT_MS = Math.max(1000, Number(process.env.IMAGE_AUDIT_TIMEOUT_MS || 12000));
@@ -68,6 +69,13 @@ function collectUrls() {
         }
       }
     }
+  }
+  const bestSelection = JSON.parse(readFileSync(resolve(ROOT, BEST_SELECTION), "utf8"));
+  for (const card of bestSelection.cards || []) {
+    const imageId = typeof card.official_product_image_url === "string"
+      ? (card.official_product_image_url.match(/\/([^/?#]+)\.(?:png|webp|jpg|jpeg)(?:[?#]|$)/i) || [])[1] || null
+      : null;
+    addUrl(urls, card.official_product_image_url, "Best Selection Vol.6", "English", imageId);
   }
   return [...urls.values()].sort((a, b) => a.url.localeCompare(b.url));
 }
