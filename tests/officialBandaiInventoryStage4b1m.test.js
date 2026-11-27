@@ -18,6 +18,11 @@ test('Stage 4B-1M coverage matrix retains all 50 independent language/set rows',
   assert.equal(matrix.rows.length, 50)
   assert.equal(new Set(matrix.rows.map((row) => `${row.set}|${row.language}`)).size, 50)
   assert.ok(matrix.rows.every((row) => ['English', 'Japanese'].includes(row.language)))
+  for (const row of matrix.rows) {
+    assert.equal(row.official_printing_identity_ids.length, row.actual_distinct_printings, `${row.set} ${row.language} printing identities`)
+    assert.equal(row.official_printing_identity_ids_verified_count, row.official_printing_identity_ids.length)
+    assert.equal(new Set(row.official_printing_identity_ids).size, row.official_printing_identity_ids.length)
+  }
 })
 
 test('every extracted Bandai page reconciles result rows, parsed entries and official image references', () => {
@@ -56,6 +61,7 @@ test('English EB-04 is assembled from the official OP14-EB04 and OP15-EB04 pages
   assert.equal(rowFor('EB-04', 'English').expected_printings, 81)
   assert.equal(rowFor('EB-04', 'English').official_page_result_count, null)
   assert.equal(rowFor('EB-04', 'English').source_availability, 'AVAILABLE VIA OP14-EB04 + OP15-EB04')
+  assert.equal(rowFor('EB-04', 'English').official_printing_identity_ids.length, 81)
 })
 
 test('EB-04 Japanese retains the four official non-EB04-numbered inclusions', () => {
@@ -112,6 +118,7 @@ test('Best Selection Vol.6 keeps OP15-075 and OP15-108 as separate product print
   assert.notEqual(elThor.product_printing, elThor.official_cardlist_base_printing.product)
   assert.notEqual(nami.product_printing, nami.official_cardlist_base_printing.product)
   assert.equal(rowFor('OP-15', 'English').official_product_collection_printings.length, 12)
+  assert.equal(rowFor('OP-15', 'English').additional_upstream_products[0].printing_product_link_count, 12)
 })
 
 test('Stage 3 supplemental OP-18 English image identifiers remain explicitly flagged for correction', () => {
