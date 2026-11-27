@@ -420,6 +420,7 @@ export default function QuickAddPanel({
           <p className="eyebrow"><PackagePlus size={14} /> QUICK ADD INVENTORY</p>
           <h2>One card.<br /><em>One clean record.</em></h2>
           <p>Use scanner results or enter a card manually. Every value remains editable before saving.</p>
+          {form.catalogue_match_id && <p className="admin-muted">Prefilled from the Card reference library. Check the language, card number, release set and printing before adding stock.</p>}
         </div>
         <button className="button button--outline" type="button" onClick={resetManual}>
           <RotateCcw size={14} /> Manual entry
