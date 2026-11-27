@@ -13,7 +13,7 @@ export function classifyImageResponse({ status = 0, contentType = '', timedOut =
   if (timedOut) return IMAGE_CHECK_STATUS.TIMEOUT
   if (status === 404 || status === 410) return IMAGE_CHECK_STATUS.MISSING
   if (status >= 500 || status === 408 || status === 429 || status === 0) return IMAGE_CHECK_STATUS.TEMPORARY_FAILURE
-  if (status >= 200 && status < 300 && /^image\\/(png|jpeg|webp|gif|avif)$/i.test(contentType)) return IMAGE_CHECK_STATUS.EXACT_LOADED
+  if (status >= 200 && status < 300 && /^image\/(png|jpeg|webp|gif|avif)$/i.test(contentType)) return IMAGE_CHECK_STATUS.EXACT_LOADED
   return IMAGE_CHECK_STATUS.INVALID_URL
 }
 
@@ -53,7 +53,7 @@ export async function loadImageWithRetry(url, {
       const response = await fetchImpl(url, { method: 'GET', signal: controller.signal, mode: 'cors', cache: 'no-cache' })
       const contentType = response.headers?.get?.('content-type') || ''
       lastHttpStatus = response.status
-      if (response.ok && /^image\\/(png|jpeg|webp|gif|avif)$/i.test(contentType)) {
+      if (response.ok && /^image\/(png|jpeg|webp|gif|avif)$/i.test(contentType)) {
         return { status: IMAGE_CHECK_STATUS.EXACT_LOADED, url, attempts: attempt, httpStatus: response.status, contentType }
       }
       lastStatus = classifyImageResponse({ status: response.status, contentType })
