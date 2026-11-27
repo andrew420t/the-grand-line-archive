@@ -10,6 +10,8 @@ test("Stage 4B-1O matches all 50 official rows to the pinned reference-feed iden
   assert.equal(rows.length, 50);
   assert.equal(matrix.stage4b_1o_reconciliation.application_feed_reconciliation.exact_identity_set_matches, 50);
   assert.equal(matrix.stage4b_1o_reconciliation.application_feed_reconciliation.mismatched_rows, 0);
+  assert.equal(matrix.application_comparison_evidence.reference_feed_reconciliation.exact_identity_set_matches, 50);
+  assert.equal(matrix.application_comparison_evidence.reference_feed_reconciliation.mismatched_rows, 0);
   for (const row of rows) {
     const feed = row.application_feed_reconciliation;
     assert.equal(feed.status, "EXACT_REFERENCE_FEED_IDENTITY_SET_MATCH", `${row.set} ${row.language}`);

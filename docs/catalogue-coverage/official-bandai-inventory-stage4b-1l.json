@@ -32524,8 +32524,8 @@
         "Japanese": 4997
       },
       "official_rows": 50,
-      "exact_identity_set_matches": 6,
-      "mismatched_rows": 44,
+      "exact_identity_set_matches": 50,
+      "mismatched_rows": 0,
       "release_product_assignment": "English OP-14 and OP-15 remain distinct OP14-EB04 and OP15-EB04 products; English EB-04 is the 81-identity prefix-specific subset across those two products. Japanese EB-04 remains its own EB-04 product.",
       "special_sets": {
         "OP18": {
