@@ -38,7 +38,7 @@ import BulkImportPanel from './BulkImportPanel'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
-import { buildProductEditPayload, parseInventoryStockUpdate, productDeleteFailure, productUpdateFailure } from './productEditPayload'
+import { buildProductEditPayload, filterInventoryProducts, parseInventoryStockUpdate, productDeleteFailure, productUpdateFailure } from './productEditPayload'
 import { buildReferenceLibraryScanFields, findSetCodeMatches } from './productSchema'
 
 const blankScanFields = () =>
@@ -323,14 +323,7 @@ function ProductsSection({ products, categories, sets, onRefresh }) {
   const [lookupBusy, setLookupBusy] = useState(false)
   const [lookupSaving, setLookupSaving] = useState(false)
   const [lookupError, setLookupError] = useState('')
-  const visibleProducts = products.filter((product) => {
-    const isBulk = product.raw?.is_bulk === true
-    if (bulkFilter === 'regular' && isBulk) return false
-    if (bulkFilter === 'bulk' && !isBulk) return false
-    return [product.name, product.setName, product.category, product.rarity, product.raw?.card_number]
-      .filter(Boolean)
-      .some((value) => String(value).toLowerCase().includes(query.toLowerCase()))
-  })
+  const visibleProducts = filterInventoryProducts(products, query, bulkFilter)
 
   const valueFor = (product, field) =>
     changes[product.id]?.[field] ?? String(product.raw?.[field] ?? '')
