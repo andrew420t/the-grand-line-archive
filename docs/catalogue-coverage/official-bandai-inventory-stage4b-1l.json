@@ -24,7 +24,8 @@
     "A printing identity is card number + official product/printing label + rarity + type + exact image URL. Repeated card numbers remain separate when their printing identity differs.",
     "English EB-04 has no standalone English series page. Its 61 card numbers and 81 printing entries are assembled from official OP14-EB04 (40 entries) and OP15-EB04 (41 entries) pages.",
     "Missing/unexpected card numbers compare official base-prefix numbers with the 2026-10-22 upstream card-number snapshot. Feed totals are not used as proof of completeness.",
-    "All extracted image URLs are source references; HTTP image loading and app proxy delivery have not yet been tested."
+    "All extracted image URLs are source references; HTTP image loading and app proxy delivery have not yet been tested.",
+    "PRB-01 and PRB-02 are reprint release products: official_expected_base_card_count and actual_distinct_base_card_count are null, and official_base_card_numbers is empty. PRB-prefixed product card numbers are reported separately and must never be described as an original-card/base-card count."
   ],
   "status_summary": {
     "COMPLETE": 0,
@@ -40,7 +41,9 @@
     "EB-05 English": "96 official printings: 61 base, 27 parallel variants, 8 SP printings; 11 additional reprint card numbers. All 96 supplemental image IDs and metadata match.",
     "EB-05 Japanese": "The audit branch now preserves all eight official Japanese SPカード rarity/variant labels; English remains SP CARD. All 96 image IDs and names remain matched.",
     "EB-04 English": "No standalone English EB-04 page/product. 61 base numbers and 81 printings are split across OP14-EB04 and OP15-EB04.",
-    "PRB": "PRB-01: 319 printings / 111 card numbers / 1 PRB01-prefixed number. PRB-02: 316 printings / 173 card numbers / 18 PRB02-prefixed numbers."
+    "PRB": "PRB-01: 319 printings / 111 card numbers / 1 PRB01-prefixed number. PRB-02: 316 printings / 173 card numbers / 18 PRB02-prefixed numbers.",
+    "PRB-01": "319 official printing entries / 111 distinct original card numbers / 1 PRB01-prefixed product card number. No PRB-01 base-card count is asserted; application identity reconciliation remains blocked by the incomplete Testing dataset.",
+    "PRB-02": "316 official printing entries / 173 distinct original card numbers / 18 PRB02-prefixed product card numbers. No PRB-02 base-card count is asserted; application identity reconciliation remains blocked by the incomplete Testing dataset."
   },
   "rows": [
     {
@@ -224,7 +227,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP01-001",
         "OP01-001_p1",
@@ -861,7 +864,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP01-001",
         "OP01-001_p2",
@@ -1499,7 +1502,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP02-001",
         "OP02-001_p1",
@@ -2138,7 +2141,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP02-001",
         "OP02-001_p1",
@@ -2784,7 +2787,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP03-001",
         "OP03-001_p1",
@@ -3439,7 +3442,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP03-001",
         "OP03-001_p1",
@@ -4091,7 +4094,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 149/149 result rows; 149 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 149/149 result rows; 149 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP04-001",
         "OP04-001_p1",
@@ -4731,7 +4734,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 149/149 result rows; 149 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 149/149 result rows; 149 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP04-001",
         "OP04-001_p1",
@@ -5372,7 +5375,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP05-001",
         "OP05-001_p1",
@@ -6019,7 +6022,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP05-001",
         "OP05-001_p1",
@@ -6667,7 +6670,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 151/151 result rows; 151 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 151/151 result rows; 151 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP06-001",
         "OP06-001_p1",
@@ -7313,7 +7316,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 150/150 result rows; 150 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 150/150 result rows; 150 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP06-001",
         "OP06-001_p1",
@@ -7957,7 +7960,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 151/151 result rows; 151 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 151/151 result rows; 151 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP07-001",
         "OP07-001_p1",
@@ -8603,7 +8606,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 150/150 result rows; 150 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 150/150 result rows; 150 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP07-001",
         "OP07-001_p1",
@@ -9247,7 +9250,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 151/151 result rows; 151 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 151/151 result rows; 151 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP07-109_p2",
         "OP08-001",
@@ -9893,7 +9896,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 150/150 result rows; 150 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 150/150 result rows; 150 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP08-001",
         "OP08-001_p1",
@@ -10538,7 +10541,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 159/159 result rows; 159 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 159/159 result rows; 159 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP09-001",
         "OP09-001_p1",
@@ -11194,7 +11197,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 158/158 result rows; 158 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 158/158 result rows; 158 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP09-001",
         "OP09-001_p1",
@@ -11847,7 +11850,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 151/151 result rows; 151 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 151/151 result rows; 151 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP08-052_p2",
         "OP10-001",
@@ -12493,7 +12496,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 150/150 result rows; 150 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 150/150 result rows; 150 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP10-001",
         "OP10-001_p1",
@@ -13138,7 +13141,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 156/156 result rows; 156 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 156/156 result rows; 156 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP09-015_p1",
         "OP11-001",
@@ -13791,7 +13794,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 155/155 result rows; 155 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 155/155 result rows; 155 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP11-001",
         "OP11-001_p1",
@@ -14442,7 +14445,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 155/155 result rows; 155 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 155/155 result rows; 155 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP10-063_p1",
         "OP12-001",
@@ -15094,7 +15097,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 154/154 result rows; 154 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP12-001",
         "OP12-001_p1",
@@ -15746,7 +15749,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 175/175 result rows; 175 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 175/175 result rows; 175 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP11-058_p1",
         "OP13-001",
@@ -16423,7 +16426,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 174/174 result rows; 174 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 174/174 result rows; 174 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP13-001",
         "OP13-001_p2",
@@ -17129,7 +17132,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 199/199 result rows; 199 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 199/199 result rows; 199 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "EB04-011",
         "EB04-012",
@@ -17859,7 +17862,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 156/156 result rows; 156 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 156/156 result rows; 156 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP14-001",
         "OP14-001_p1",
@@ -18543,7 +18546,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 196/196 result rows; 196 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 196/196 result rows; 196 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_product_collection_page_url": "https://en.onepiece-cardgame.com/products/other/cardcollection_bestselection_vol6.php",
       "official_product_collection_evidence_file": "docs/catalogue-coverage/official-premium-card-collection-best-selection-vol6.json",
       "official_product_collection_printings": [
@@ -19480,7 +19483,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 152/152 result rows; 152 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 152/152 result rows; 152 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP15-001",
         "OP15-001_p1",
@@ -20125,7 +20128,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 155/155 result rows; 155 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 155/155 result rows; 155 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP16-001",
         "OP16-001_p1",
@@ -20774,7 +20777,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 155/155 result rows; 155 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 155/155 result rows; 155 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "OP16-001",
         "OP16-001_p1",
@@ -21428,7 +21431,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 169/169 result rows; 169 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 169/169 result rows; 169 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "EB04-061_p2",
         "OP17-001",
@@ -22101,7 +22104,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 169/169 result rows; 169 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 169/169 result rows; 169 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "EB04-061_p3",
         "OP17-001",
@@ -22889,7 +22892,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 159/159 result rows; 159 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 159/159 result rows; 159 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_parallel_variant_count": 33,
       "official_special_printing_count": 7,
       "official_special_printing_rarity_counts": {
@@ -23588,7 +23591,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 159/159 result rows; 159 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 159/159 result rows; 159 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_parallel_variant_count": 33,
       "official_special_printing_count": 7,
       "official_special_printing_rarity_counts": {
@@ -24078,7 +24081,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 80/80 result rows; 80 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 80/80 result rows; 80 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "EB01-001",
         "EB01-001_p1",
@@ -24461,7 +24464,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 80/80 result rows; 80 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 80/80 result rows; 80 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "EB01-001",
         "EB01-001_p1",
@@ -24871,7 +24874,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 105/105 result rows; 105 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 105/105 result rows; 105 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "EB01-001_p2",
         "EB01-021_p2",
@@ -25332,7 +25335,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 105/105 result rows; 105 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 105/105 result rows; 105 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "EB01-001_p2",
         "EB01-021_p2",
@@ -25766,7 +25769,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 90/90 result rows; 90 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 90/90 result rows; 90 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "EB03-001",
         "EB03-001_p1",
@@ -26161,7 +26164,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 90/90 result rows; 90 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 90/90 result rows; 90 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "EB03-001",
         "EB03-001_p1",
@@ -26563,7 +26566,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json; docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json",
       "verification_status": "INCOMPLETE",
-      "notes": "81 official entries; 81 distinct printing identities; 61 base-prefix card numbers; 81 image URLs. Upstream product-link count not available does not independently prove card-by-card completeness. No standalone English EB-04 product/page exists in the upstream product table; official EB04 entries are split 40 on OP14-EB04 and 41 on OP15-EB04.",
+      "notes": "81 official English EB-04 entries extracted from two official Bandai pages: 40 matching entries from OP14-EB04 and 41 from OP15-EB04. 61 distinct EB04-prefixed base card numbers and 81 printing identities are retained. All 81 source image URLs returned HTTP 200 in the recorded audit. This is a combined official-source extraction, not an invented standalone EB-04 English page. Application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "upstream_combined_product_keys": [
         "en:569114",
         "en:569115"
@@ -26950,7 +26953,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 85/85 result rows; 85 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 85/85 result rows; 85 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_printing_identity_ids": [
         "EB04-001",
         "EB04-001_p1",
@@ -27416,7 +27419,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 96/96 result rows; 96 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 96/96 result rows; 96 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_parallel_variant_count": 27,
       "official_special_printing_count": 8,
       "official_special_printing_rarity_counts": {
@@ -27856,7 +27859,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 96/96 result rows; 96 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. HTTP image loading and application printing-identity comparison remain outstanding.",
+      "notes": "Full entry-level official Bandai extraction: 96/96 result rows; 96 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete.",
       "official_parallel_variant_count": 27,
       "official_special_printing_count": 8,
       "official_special_printing_rarity_counts": {
@@ -28124,11 +28127,9 @@
       "expected_printings": 319,
       "actual_distinct_printings": 319,
       "official_printing_identity_count": 319,
-      "official_expected_base_card_count": 1,
-      "actual_distinct_base_card_count": 1,
-      "official_base_card_numbers": [
-        "PRB01-001"
-      ],
+      "official_expected_base_card_count": null,
+      "actual_distinct_base_card_count": null,
+      "official_base_card_numbers": [],
       "official_distinct_product_card_number_count": 111,
       "official_reprint_card_numbers": [
         "EB01-006",
@@ -28255,7 +28256,7 @@
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "missing_card_numbers_basis": "Official base-prefix numbers compared with the Koala Kollect 2026-10-22 card-number snapshot; feed totals are not completeness proof.",
-      "feed_observed_prefix_count": 1,
+      "feed_observed_prefix_count": null,
       "legacy_feed_observed_release_printings_2026_10_22": 319,
       "upstream_product_key": "en:569301",
       "upstream_product_name": "PREMIUM BOOSTER -ONE PIECE CARD THE BEST- [PRB-01]",
@@ -28267,7 +28268,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 319/319 result rows; 319 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. HTTP image loading and application printing-identity comparison remain outstanding. PRB-prefixed IDs are recorded separately as product-prefix numbers; no original PRB base-card count is asserted. Verified 1 official PRB01-prefixed base numbers from the Bandai product page.",
+      "notes": "Full entry-level official Bandai extraction: 319/319 result rows; 319 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete. PRB-prefixed IDs are recorded separately as product-prefix numbers; no original PRB base-card count is asserted. Observed 1 distinct PRB-prefixed product card number(s); this is a product-prefix count, not a base-card count.",
       "official_printing_identity_ids": [
         "EB01-006_r1",
         "OP01-006_p3",
@@ -28784,11 +28785,9 @@
       "expected_printings": 319,
       "actual_distinct_printings": 319,
       "official_printing_identity_count": 319,
-      "official_expected_base_card_count": 1,
-      "actual_distinct_base_card_count": 1,
-      "official_base_card_numbers": [
-        "PRB01-001"
-      ],
+      "official_expected_base_card_count": null,
+      "actual_distinct_base_card_count": null,
+      "official_base_card_numbers": [],
       "official_distinct_product_card_number_count": 111,
       "official_reprint_card_numbers": [
         "EB01-006",
@@ -28915,7 +28914,7 @@
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "missing_card_numbers_basis": "Official base-prefix numbers compared with the Koala Kollect 2026-10-22 card-number snapshot; feed totals are not completeness proof.",
-      "feed_observed_prefix_count": 1,
+      "feed_observed_prefix_count": null,
       "legacy_feed_observed_release_printings_2026_10_22": 319,
       "upstream_product_key": "jp:550301",
       "upstream_product_name": "プレミアムブースター ONE PIECE CARD THE BEST【PRB-01】",
@@ -28927,7 +28926,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 319/319 result rows; 319 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. HTTP image loading and application printing-identity comparison remain outstanding. PRB-prefixed IDs are recorded separately as product-prefix numbers; no original PRB base-card count is asserted. Verified 1 official PRB01-prefixed base numbers from the Bandai product page.",
+      "notes": "Full entry-level official Bandai extraction: 319/319 result rows; 319 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete. PRB-prefixed IDs are recorded separately as product-prefix numbers; no original PRB base-card count is asserted. Observed 1 distinct PRB-prefixed product card number(s); this is a product-prefix count, not a base-card count.",
       "official_printing_identity_ids": [
         "EB01-006_r1",
         "OP01-006_p1",
@@ -29444,28 +29443,9 @@
       "expected_printings": 316,
       "actual_distinct_printings": 316,
       "official_printing_identity_count": 316,
-      "official_expected_base_card_count": 18,
-      "actual_distinct_base_card_count": 18,
-      "official_base_card_numbers": [
-        "PRB02-001",
-        "PRB02-002",
-        "PRB02-003",
-        "PRB02-004",
-        "PRB02-005",
-        "PRB02-006",
-        "PRB02-007",
-        "PRB02-008",
-        "PRB02-009",
-        "PRB02-010",
-        "PRB02-011",
-        "PRB02-012",
-        "PRB02-013",
-        "PRB02-014",
-        "PRB02-015",
-        "PRB02-016",
-        "PRB02-017",
-        "PRB02-018"
-      ],
+      "official_expected_base_card_count": null,
+      "actual_distinct_base_card_count": null,
+      "official_base_card_numbers": [],
       "official_distinct_product_card_number_count": 173,
       "official_reprint_card_numbers": [
         "EB01-009",
@@ -29638,7 +29618,7 @@
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "missing_card_numbers_basis": "Official base-prefix numbers compared with the Koala Kollect 2026-10-22 card-number snapshot; feed totals are not completeness proof.",
-      "feed_observed_prefix_count": 18,
+      "feed_observed_prefix_count": null,
       "legacy_feed_observed_release_printings_2026_10_22": 316,
       "upstream_product_key": "en:569302",
       "upstream_product_name": "PREMIUM BOOSTER -ONE PIECE CARD THE BEST vol.2- [PRB-02]",
@@ -29650,7 +29630,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 316/316 result rows; 316 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. HTTP image loading and application printing-identity comparison remain outstanding. PRB-prefixed IDs are recorded separately as product-prefix numbers; no original PRB base-card count is asserted. Verified 18 official PRB02-prefixed base numbers from the Bandai product page.",
+      "notes": "Full entry-level official Bandai extraction: 316/316 result rows; 316 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete. PRB-prefixed IDs are recorded separately as product-prefix numbers; no original PRB base-card count is asserted. Observed 18 distinct PRB-prefixed product card number(s); this is a product-prefix count, not a base-card count.",
       "official_printing_identity_ids": [
         "EB01-009_p1",
         "EB01-009_r1",
@@ -30259,28 +30239,9 @@
       "expected_printings": 316,
       "actual_distinct_printings": 316,
       "official_printing_identity_count": 316,
-      "official_expected_base_card_count": 18,
-      "actual_distinct_base_card_count": 18,
-      "official_base_card_numbers": [
-        "PRB02-001",
-        "PRB02-002",
-        "PRB02-003",
-        "PRB02-004",
-        "PRB02-005",
-        "PRB02-006",
-        "PRB02-007",
-        "PRB02-008",
-        "PRB02-009",
-        "PRB02-010",
-        "PRB02-011",
-        "PRB02-012",
-        "PRB02-013",
-        "PRB02-014",
-        "PRB02-015",
-        "PRB02-016",
-        "PRB02-017",
-        "PRB02-018"
-      ],
+      "official_expected_base_card_count": null,
+      "actual_distinct_base_card_count": null,
+      "official_base_card_numbers": [],
       "official_distinct_product_card_number_count": 173,
       "official_reprint_card_numbers": [
         "EB01-009",
@@ -30453,7 +30414,7 @@
       "missing_card_numbers": [],
       "unexpected_card_numbers": [],
       "missing_card_numbers_basis": "Official base-prefix numbers compared with the Koala Kollect 2026-10-22 card-number snapshot; feed totals are not completeness proof.",
-      "feed_observed_prefix_count": 18,
+      "feed_observed_prefix_count": null,
       "legacy_feed_observed_release_printings_2026_10_22": 316,
       "upstream_product_key": "jp:550302",
       "upstream_product_name": "プレミアムブースター ONE PIECE CARD THE BEST vol.2【PRB-02】",
@@ -30465,7 +30426,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 316/316 result rows; 316 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. HTTP image loading and application printing-identity comparison remain outstanding. PRB-prefixed IDs are recorded separately as product-prefix numbers; no original PRB base-card count is asserted. Verified 18 official PRB02-prefixed base numbers from the Bandai product page.",
+      "notes": "Full entry-level official Bandai extraction: 316/316 result rows; 316 official image URLs; 0 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. Full per-entry card number, rarity, type, name, release-product, reprint flag and image URL are retained in docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json. The official image URLs were HTTP-verified as loaded in the Stage 4B-1M image audit; application printing-identity comparison remains unverified because the Testing Supabase catalogue is incomplete. PRB-prefixed IDs are recorded separately as product-prefix numbers; no original PRB base-card count is asserted. Observed 18 distinct PRB-prefixed product card number(s); this is a product-prefix count, not a base-card count.",
       "official_printing_identity_ids": [
         "EB01-009_p1",
         "EB01-009_r1",
@@ -31127,5 +31088,52 @@
     ],
     "alternate_image_fallback": "No fallback was required for official source URLs because all 7,798 returned HTTP 200. Application-level fallback remains unverified because the Testing project has no catalogue reference image URLs.",
     "artifact_retention_expires_at": "2027-02-25T17:36:49Z"
+  },
+  "stage4b_1n_reconciliation": {
+    "retrieval_date": "2026-11-27",
+    "source_extraction": {
+      "official_language_set_rows": 50,
+      "result_rows": 7867,
+      "parsed_entries": 7867,
+      "unparsed_result_rows": 0,
+      "source_image_url_extraction_shortfall": 0,
+      "entry_order_alignment": "All extraction artifacts report ENTRY_ORDER_MATCH.",
+      "note": "Earlier Stage 4B-1L shortfall counts are superseded by the Stage 4B-1M entry-level artifacts. Extraction completeness does not establish application catalogue completeness."
+    },
+    "image_http_verification": {
+      "status": "ALL_LOADED",
+      "checked_at": "2026-11-27T17:41:41.814Z",
+      "unique_official_image_urls": 7798,
+      "product_entry_references": 7867,
+      "loaded": 7798,
+      "missing": 0,
+      "invalid_url": 0,
+      "timeout": 0,
+      "temporary_failure": 0,
+      "status_code_counts": {
+        "200": 7798
+      },
+      "note": "All 7,798 unique official URLs returned HTTP 200; the 7,867 entry references include repeated URL associations. No official image is classified IMAGE MISSING."
+    },
+    "discrepancy_resolution": {
+      "EB-04 English": "Resolved by extracting 40 EB04 entries from official OP14-EB04 page and 41 from official OP15-EB04 page; 61 distinct EB04-prefixed base numbers, 81 printings.",
+      "PRB-01": "All 319 English and 319 Japanese product entries independently parsed; 111 distinct original card numbers; 1 PRB01-prefixed product number; no base-card count asserted.",
+      "PRB-02": "All 316 English and 316 Japanese product entries independently parsed; 173 distinct original card numbers; 18 PRB02-prefixed product numbers; no base-card count asserted.",
+      "OP-11 and OP-12": "Earlier image URL shortfalls resolved in Stage 4B-1M extraction artifacts; all result rows parsed and every entry has an image URL.",
+      "OP-14 English": "Earlier unparsed row resolved; 199/199 parsed. The release page contains EB04 entries and other original-number reprints; release assignment is kept separate from original card-number prefix.",
+      "OP-15 English and Japanese": "Earlier unparsed rows resolved; 196/196 and 152/152 parsed respectively. The separate OP15/EB04 page composition is retained; one historical non-base product-number difference is not promoted to a missing card without an authoritative card-by-card identity match.",
+      "OP-16 English and Japanese": "Earlier image URL shortfalls resolved; 155/155 parsed and image references present for each language.",
+      "OP-17 English and Japanese": "Earlier unparsed rows and image URL shortfalls resolved; 169/169 parsed and image references present for each language.",
+      "EB-04 Japanese": "Earlier unparsed rows resolved; 85/85 parsed and image references present."
+    },
+    "application_printing_identity_reconciliation": {
+      "status": "NOT_VERIFIABLE_TESTING_DATASET_INCOMPLETE",
+      "testing_project_id": "ehzqsnfkmwphyllhaqhe",
+      "evidence": "Read-only snapshot: 32 products, only 2 release sets linked, and zero catalogue_printing_key, catalogue_match_id or catalogue_reference_image_url values.",
+      "consequence": "Official printings are enumerated, but application-vs-official identity parity cannot be established for all 25 sets. All 50 rows remain INCOMPLETE; none is marked COMPLETE."
+    },
+    "alternate_image_fallback": "NOT_TESTED_APPLICATION_CATALOGUE_INCOMPLETE",
+    "preview": "No Stage 4B-1N Preview deployment performed. Existing Stage 3 Preview evidence is not evidence for this audit commit.",
+    "safety": "No Production deployment or Production Supabase access; no merges; PR #37 and #38 left open."
   }
 }
