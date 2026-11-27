@@ -36,7 +36,7 @@ test('every OP-18 language-specific printing has a matching card number, name an
     if (printing.imageIdEn) {
       assert.ok(printing.cardNumberEn)
       assert.ok(printing.nameEn)
-      assert.match(printing.imageIdEn, /^(?:OP|EB|ST)\\d{2}-\\d{3}(?:_p\\d+)?$/)
+      assert.match(printing.imageIdEn, /^(?:OP|EB|ST)\d{2}-\\d{3}(?:_p\d+)?$/)
     } else {
       assert.equal(printing.cardNumberEn, null)
       assert.equal(printing.nameEn, null)
@@ -44,7 +44,7 @@ test('every OP-18 language-specific printing has a matching card number, name an
     if (printing.imageIdJp) {
       assert.ok(printing.cardNumberJp)
       assert.ok(printing.nameJp)
-      assert.match(printing.imageIdJp, /^(?:OP|EB|ST)\\d{2}-\\d{3}(?:_p\\d+)?$/)
+      assert.match(printing.imageIdJp, /^(?:OP|EB|ST)\d{2}-\\d{3}(?:_p\d+)?$/)
     } else {
       assert.equal(printing.cardNumberJp, null)
       assert.equal(printing.nameJp, null)
