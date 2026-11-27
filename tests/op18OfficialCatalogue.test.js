@@ -124,3 +124,12 @@ test('Japanese OP-18 SP rarity labels preserve Bandai source text', () => {
   assert.equal(japaneseItems.filter((item) => item.rarity === 'SPカード').length, 6)
   assert.equal(englishItems.filter((item) => item.rarity === 'SP CARD').length, 6)
 })
+
+test('Japanese OP-18 supplemental matches return the official SPカード label', () => {
+  const japaneseSpecial = getOp18SupplementalMatches('OP13-012').find(
+    (item) => item.languageCode === 'jp' && item.variant === 'SP CARD',
+  )
+  assert.ok(japaneseSpecial)
+  assert.equal(japaneseSpecial.rarity, 'SPカード')
+  assert.equal(japaneseSpecial.variantLabel, 'SPカード')
+})
