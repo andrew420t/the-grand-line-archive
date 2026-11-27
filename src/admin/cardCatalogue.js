@@ -7,6 +7,7 @@ import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNum
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
 import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMatches } from './op18OfficialCatalogue.js'
+import { EB05_OFFICIAL_PRINTINGS, EB05_BASE_CARD_NUMBERS, getEb05SupplementalMatches } from './eb05OfficialCatalogue.js'
 import { applyCatalogueImageCorrections } from './catalogueImageCorrections.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
@@ -232,6 +233,11 @@ export async function findCatalogueMatches(cardNumber) {
   for (const sample of getSupplementalSampleMatches(requestedNumber)) {
     const exists = results.some((match) => match.id === sample.id)
     if (!exists) results.push(sample)
+  }
+
+  // Official Bandai supplements fill the OP-18 and EB-05 gaps in the stale feed.
+  for (const match of [...getOp18SupplementalMatches(requestedNumber), ...getEb05SupplementalMatches(requestedNumber)]) {
+    if (!results.some((existing) => existing.id === match.id)) results.push(match)
   }
 
   // Admin-entered corrections and custom cards are layered over the public reference data.
@@ -561,6 +567,16 @@ export async function getCatalogueCoverageReport() {
       source: 'Bandai official product card list; parallel image IDs and Japanese names cross-checked against OPBoxIndex (2026-11-26)',
       liveImageVerification: 'pending full image audit',
     },
+    eb05OfficialImport: {
+      baseCardNumbers: EB05_BASE_CARD_NUMBERS.length,
+      productPrintings: EB05_OFFICIAL_PRINTINGS.length,
+      parallelPrintings: EB05_OFFICIAL_PRINTINGS.filter((printing) => printing.variant === 'Parallel').length,
+      specialPrintings: EB05_OFFICIAL_PRINTINGS.filter((printing) => printing.variant === 'SP CARD').length,
+      imageReferences: EB05_OFFICIAL_PRINTINGS.length * REFERENCE_TEST_LANGUAGES.length,
+      languages: ['English', 'Japanese'],
+      source: 'Bandai official English and Japanese EB-05 card lists, including language-specific image identifiers (2026-11-27)',
+      liveImageVerification: 'pending full image audit',
+    },
   }
   for (const language of LANGUAGES) {
     const data = catalogue.languages?.[language] || { printings: [] }
@@ -863,6 +879,50 @@ export async function getCatalogueImageGallery({
     })
   }
 
+  // EB-05 is also absent from the current upstream feed. Add all 96 official
+  // product printings with language-specific Bandai artwork IDs.
+  for (const match of getEb05SupplementalMatches()) {
+    const exists = entries.some((entry) =>
+      entry.id === match.id ||
+      (entry.cardNumber === match.cardNumber &&
+        entry.languageCode === match.languageCode &&
+        entry.setCode === 'EB-05' &&
+        (entry.imageUrls || [entry.imageUrl]).includes(match.imageUrl)),
+    )
+    if (exists) continue
+    const colorValues = String(match.colors || '').split('/').map((value) => value.trim()).filter(Boolean)
+    entries.push({
+      id: match.id,
+      printingKey: match.printingKey,
+      cardNumber: match.cardNumber,
+      name: match.name,
+      language: match.language,
+      languageCode: match.languageCode,
+      rarity: match.rarity,
+      variant: match.variantLabel,
+      setCode: 'EB-05',
+      setCodes: ['EB-05'],
+      setName: 'ONE PIECE Heroines Edition vol.2 [EB-05]',
+      setAssignmentSource: 'Bandai official EB-05 product card list',
+      sourceText: match.sourceText,
+      isDon: false,
+      category: match.category,
+      colors: colorValues.join(' / '),
+      colorValues,
+      officialListUrl: match.officialCardlistUrl,
+      imageUrl: match.imageUrl,
+      imageUrls: match.imageUrls,
+      fallbackImageUrl: match.fallbackImageUrl,
+      source: match.source,
+      usesBaseImageFallback: false,
+      usesAlternateOfficialFallback: false,
+      hasImage: Boolean(match.imageUrl),
+      imageStatus: 'available',
+      verificationStatus: 'pending-live-image-check',
+      supplementalOfficial: true,
+    })
+  }
+
   // When a typed card number is absent from the feed entirely, try an official
   // English or Japanese base-image reference. Keep the result image-only.
   const normalizedNumber = baseCardNumber(cardNumber || query)
@@ -1080,6 +1140,32 @@ export async function getCatalogueReferenceTestMatrix() {
         imageUrl: exactUrl,
         fallbackImageUrl: baseUrl,
         source: 'Bandai official OP-18 ' + printing.variantLabel + ' artwork',
+      })
+    }
+  }
+
+  // Include all official EB-05 product printing IDs for both languages.
+  for (const language of REFERENCE_TEST_LANGUAGES) {
+    for (const printing of EB05_OFFICIAL_PRINTINGS) {
+      const imageId = language === 'jp' ? printing.imageIdJp : printing.imageIdEn
+      const exactUrl = buildOfficialImageProxyUrl(imageId, language)
+        || (language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(imageId) + '.png'
+      const baseUrl = imageId !== printing.cardNumber ? buildOfficialImageProxyUrl(printing.cardNumber, language) : ''
+      add({
+        id: 'eb05-complete:' + language + ':' + imageId,
+        printingKey: 'eb05:' + imageId,
+        imageId,
+        cardNumber: printing.cardNumber,
+        name: language === 'jp' ? printing.japaneseName : printing.name,
+        language,
+        targetSet: 'EB-05',
+        setCode: 'EB-05',
+        setName: 'ONE PIECE Heroines Edition vol.2 [EB-05]',
+        rarity: printing.rarity,
+        variant: printing.variantLabel,
+        imageUrl: exactUrl,
+        fallbackImageUrl: baseUrl,
+        source: 'Bandai official EB-05 ' + printing.variantLabel + ' artwork',
       })
     }
   }
