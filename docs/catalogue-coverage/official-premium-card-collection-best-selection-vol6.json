@@ -1,0 +1,127 @@
+{
+  "audit": "Official Bandai product-page printing identities for Premium Card Collection -Best Selection Vol.6-",
+  "repository": "andrew420t/the-grand-line-archive",
+  "retrieval_date": "2026-11-27",
+  "official_product_page_url": "https://en.onepiece-cardgame.com/products/other/cardcollection_bestselection_vol6.php",
+  "official_product_title": "Premium Card Collection -Best Selection Vol.6-",
+  "delivery_month": "August 2026",
+  "msrp": "USD $25.00",
+  "contents": [
+    "Card x12",
+    "Card booklet x1"
+  ],
+  "identity_rule": "Each card in this collection is a distinct product printing even when its printed card number matches a booster printing. The product-specific identity is card number + product name + official product-page card image asset URL.",
+  "cards": [
+    {
+      "card_number": "EB04-028",
+      "name": "Ice Time",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item02.webp",
+      "printing_identity": "EB04-028|Premium Card Collection -Best Selection Vol.6-|img_item02.webp"
+    },
+    {
+      "card_number": "OP10-108",
+      "name": "Scratchmen Apoo",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item03.webp",
+      "printing_identity": "OP10-108|Premium Card Collection -Best Selection Vol.6-|img_item03.webp"
+    },
+    {
+      "card_number": "OP13-037",
+      "name": "Roronoa Zoro",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item04.webp",
+      "printing_identity": "OP13-037|Premium Card Collection -Best Selection Vol.6-|img_item04.webp"
+    },
+    {
+      "card_number": "OP13-043",
+      "name": "Otama",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item05.webp",
+      "printing_identity": "OP13-043|Premium Card Collection -Best Selection Vol.6-|img_item05.webp"
+    },
+    {
+      "card_number": "OP13-072",
+      "name": "Buggy",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item06.webp",
+      "printing_identity": "OP13-072|Premium Card Collection -Best Selection Vol.6-|img_item06.webp"
+    },
+    {
+      "card_number": "OP13-092",
+      "name": "Saint Mjosgard",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item07.webp",
+      "printing_identity": "OP13-092|Premium Card Collection -Best Selection Vol.6-|img_item07.webp"
+    },
+    {
+      "card_number": "OP14-014",
+      "name": "Eustass\"Captain\"Kid",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item08.webp",
+      "printing_identity": "OP14-014|Premium Card Collection -Best Selection Vol.6-|img_item08.webp"
+    },
+    {
+      "card_number": "OP14-037",
+      "name": "For Fun",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item09.webp",
+      "printing_identity": "OP14-037|Premium Card Collection -Best Selection Vol.6-|img_item09.webp"
+    },
+    {
+      "card_number": "OP14-099",
+      "name": "Disappointed?",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item10.webp",
+      "printing_identity": "OP14-099|Premium Card Collection -Best Selection Vol.6-|img_item10.webp"
+    },
+    {
+      "card_number": "OP15-075",
+      "name": "El Thor",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item11.webp",
+      "printing_identity": "OP15-075|Premium Card Collection -Best Selection Vol.6-|img_item11.webp",
+      "official_cardlist_base_printing": {
+        "rarity": "UC",
+        "type": "EVENT",
+        "product": "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]",
+        "image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/OP15-075.png?261124",
+        "cardlist_url": "https://en.onepiece-cardgame.com/cardlist/?series=569115"
+      }
+    },
+    {
+      "card_number": "OP15-108",
+      "name": "Nami",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item12.webp",
+      "printing_identity": "OP15-108|Premium Card Collection -Best Selection Vol.6-|img_item12.webp",
+      "official_cardlist_base_printing": {
+        "rarity": "R",
+        "type": "CHARACTER",
+        "product": "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]",
+        "image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/OP15-108.png?261124",
+        "cardlist_url": "https://en.onepiece-cardgame.com/cardlist/?series=569115"
+      },
+      "upstream_catalogue_image_reference": {
+        "image_id": "OP15-108_p1",
+        "image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/OP15-108_p1.png",
+        "source_text": "Premium Card Collection -Best Selection Vol.6-",
+        "source_snapshot": "hotavocado/koala-kollect-data main manifest 2026-10-22"
+      }
+    },
+    {
+      "card_number": "ST21-003",
+      "name": "Sanji",
+      "product_printing": "Premium Card Collection -Best Selection Vol.6-",
+      "official_product_image_url": "https://en.onepiece-cardgame.com/renewal/images/products/other/cardcollection_bestselection_vol6/img_item13.webp",
+      "printing_identity": "ST21-003|Premium Card Collection -Best Selection Vol.6-|img_item13.webp"
+    }
+  ],
+  "findings": [
+    "The official product page explicitly labels the img_item11 asset as 'Card image of OP15-075 El Thor'.",
+    "The official product page explicitly labels the img_item12 asset as 'Card image of OP15-108 Nami'.",
+    "The OP15-EB04 card-list page separately lists the base OP15-075 El Thor and OP15-108 Nami printings. Do not collapse these product-specific Best Selection printings into generic Other Product Card placeholders.",
+    "The official product page's product-image URLs are the verified image references for these collection printings. No unverified _p suffix has been assigned to OP15-075."
+  ],
+  "source_availability": "AVAILABLE"
+}
