@@ -255,3 +255,19 @@ Absolute restrictions:
 
 Continue working on the repository. Do not stop at a plan. Never merge or deploy Production.
 ```
+
+## Erratum — OP-18 language-specific printing identities (2026-11-27)
+
+The earlier statement in this document that OP-18 image identifiers matched 159/159 in both languages is superseded by a new direct, entry-by-entry parse of Bandai's official English and Japanese pages (series=569118).
+
+The official pages do not use one shared image/card-number identity for every special printing:
+
+- **English:** OP18-049 is the TR printing of Mr.2.Bon.Kurei(Bentham), image ID `OP18-049_p1`.
+- **Japanese:** OP18-064 is the TR printing of キリンガム聖, image ID `OP18-064_p1`.
+- **OP13-012:** English `OP13-012_p1`; Japanese `OP13-012_p2`.
+- **OP17-040:** English `OP17-040_p2`; Japanese `OP17-040_p1`.
+
+The previous shared OP-18 supplemental list used the Japanese identifiers for these English printings and concatenated the Japanese TR name. The audit branch now corrects this in `src/admin/op18OfficialCatalogue.js` by storing language-specific image IDs, card numbers and names. It represents 160 union records while preserving exactly 159 official printings per language. Regression coverage is in `tests/op18OfficialCatalogue.test.js`.
+
+This correction is on the audit branch only. PR #38 remains open and unmerged. CI and the 7,786-URL live image audit remain pending; the corrected source is not marked verified until those checks complete.
+
