@@ -5,7 +5,7 @@ const money = (value) => new Intl.NumberFormat('en-GB', {
   currency: 'GBP',
 }).format(Number(value || 0))
 
-export default function OrderConfirmation({ confirmation, onClose, onViewOrder }) {
+export default function OrderConfirmation({ confirmation, onClose, onViewOrder, onContinueShopping }) {
   if (!confirmation) return null
   return (
     <div className="order-confirmation-backdrop" role="presentation" onMouseDown={(event) => {
@@ -38,7 +38,7 @@ export default function OrderConfirmation({ confirmation, onClose, onViewOrder }
         <p className="order-confirmation__payment">No online payment has been taken. This is an order request; payment and collection are arranged directly with the Archive.</p>
         <div className="order-confirmation__actions">
           <button className="button button--gold button--wide" type="button" onClick={onViewOrder}>View order & messages <MessageCircle size={15} /> <ArrowRight size={15} /></button>
-          <button className="button button--outline button--wide" type="button" onClick={onClose}><Anchor size={15} /> Continue browsing</button>
+          <button className="button button--outline button--wide" type="button" onClick={onContinueShopping}><Anchor size={15} /> Continue browsing</button>
         </div>
       </section>
     </div>
