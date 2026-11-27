@@ -49,8 +49,8 @@ test('1. reconciles source product-printing edges to retained 1P manifest', () =
 test('2. identifies extra set edges created by a multi-set product join', () => {
   const f = fixture();
   const r = buildReports({ sourceDir: f.root, historicalManifest: f.historicalManifest });
-  assert.equal(r.relationship.naiveDerivedSetPrintingEdges, 4);
-  assert.equal(r.relationship.naiveJoinExpansion, 2);
+  assert.equal(r.relationship.counts.naiveDerivedSetPrintingEdges, 4);
+  assert.equal(r.relationship.counts.naiveJoinExpansion, 2);
   assert.equal(r.relationship.status, 'PARTIALLY_RECONCILED');
 });
 
