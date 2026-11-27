@@ -51,9 +51,6 @@ CREATE INDEX IF NOT EXISTS orders_user_id_created_at_idx
   ON public.orders (user_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS order_items_order_id_idx
   ON public.order_items (order_id);
-CREATE INDEX IF NOT EXISTS order_messages_order_id_created_at_idx
-  ON public.order_messages (order_id, created_at);
-
 CREATE TABLE IF NOT EXISTS public.order_messages (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   order_id uuid NOT NULL REFERENCES public.orders(id) ON DELETE CASCADE,
@@ -62,6 +59,9 @@ CREATE TABLE IF NOT EXISTS public.order_messages (
   message text NOT NULL CHECK (char_length(btrim(message)) BETWEEN 1 AND 3000),
   created_at timestamptz NOT NULL DEFAULT now()
 );
+
+CREATE INDEX IF NOT EXISTS order_messages_order_id_created_at_idx
+  ON public.order_messages (order_id, created_at);
 
 ALTER TABLE public.order_messages ENABLE ROW LEVEL SECURITY;
 
