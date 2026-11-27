@@ -196,16 +196,16 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
       // pools. The probe is deliberately HTTP-status based so 404, 5xx, network
       // failures and timeouts are not collapsed into a generic image onError.
       const checked = await mapWithConcurrency(matrix.items, 4, async (item) => {
-        const candidates = [...new Set([item.imageUrl, item.fallbackImageUrl].filter(Boolean))]
+        const candidates = dedupeImageCandidates([item.imageUrl, item.fallbackImageUrl])
         if (!candidates.length) return { ...item, status: 'missing-url', checkedUrl: '' }
         let outcome = null
         for (let index = 0; index < candidates.length; index += 1) {
           const result = await loadImageWithRetry(candidates[index], { attempts: 2, timeoutMs: 10000, retryDelayMs: 400 })
           if (result.status === IMAGE_CHECK_STATUS.EXACT_LOADED) {
-            outcome = { ...item, status: index === 0 ? 'loaded' : 'fallback-loaded', checkedUrl: result.url, httpStatus: result.httpStatus, attempts: result.attempts }
+            outcome = { ...item, status: index === 0 ? 'loaded' : 'fallback-loaded', checkedUrl: result.url, httpStatus: result.httpStatus, attempts: result.attempts, candidateIndex: index }
             break
           }
-          outcome = { ...item, status: result.status, checkedUrl: result.url, httpStatus: result.httpStatus, attempts: result.attempts }
+          outcome = { ...item, status: result.status, checkedUrl: result.url, httpStatus: result.httpStatus, attempts: result.attempts, candidateIndex: index }
           // A definitive missing/invalid URL can advance to a same-language
           // fallback; transient errors/timeouts also try the next candidate.
         }
