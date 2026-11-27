@@ -114,19 +114,24 @@ Content types: 7,786 PNG and 12 WebP supplementary Premium Card Collection image
 
 Added `test/catalogue-coverage/officialBandaiInventoryStage4b1n.test.js` to verify:
 - 50 unique language/set rows across 25 sets.
-- parsed rows, printing identity IDs and source image URL counts reconcile exactly.
+- Parsed rows, printing identity IDs and source image URL counts reconcile exactly.
 - HTTP image classifications are all loaded and no false IMAGE MISSING state is introduced.
 - PRB base counts remain null and PRB product-prefix counts are separate.
 - EB-04 English uses the two official combined-source pages.
 - OP-18 English/Japanese TR identities remain distinct.
-- OP13-037 remains an English-only official cross-prefix reprint observation.
-- no row is COMPLETE while the application comparison dataset is incomplete.
+- OP13-037 remains the single English-only official cross-prefix TR printing; OP11-106 and PRB02-014 have Japanese EB-04 SPカード counterparts.
+- No row is COMPLETE while the application comparison dataset is incomplete.
 
-Also updated `src/admin/storagePagination.js` to suppress overlapping Storage pages by stable object ID (falling back to object name) while preserving first-seen order. Added two overlap regression cases to `tests/storagePagination.test.js`. Existing `tests/catalogueImageFilters.test.js` covers intersecting filters, exact card-number matching, original-card-number set versus release set, language/variant separation, named Premium Card Collection product preference and generic-placeholder suppression; a new case verifies that clearing every filter restores the complete result list. Existing `tests/officialBandaiInventoryStage4b1m.test.js` covers PRB and Premium Card Collection printings, EB-04 Japanese cross-prefix entries, and language-specific OP-18 / EB-05 metadata.
+Also updated `src/admin/storagePagination.js` to suppress overlapping Storage pages by stable object ID (falling back to object name) while preserving first-seen order. Added two overlap regression cases to `tests/storagePagination.test.js`. Existing `tests/catalogueImageFilters.test.js` covers intersecting filters, exact card-number matching, original-card-number set versus release set, language/variant separation, named Premium Card Collection product preference and generic-placeholder suppression; a new case verifies that clearing every filter restores the complete result list. Existing `tests/officialBandaiInventoryStage4b1m.test.js` covers PRB product-prefix/base-count separation, Premium Card Collection printings, Japanese EB-04 cross-prefix entries and language-specific OP-18 / EB-05 metadata.
 
-**Targeted execution:** the updated storage-pagination helper and its six tests were run with Node's built-in test runner: **6/6 passed**. This is a focused test, not a full project run.
+**Full exact-code-commit execution:** GitHub Actions run [46044786850](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46044786850) on code-bearing commit `f7f510802036960a50e1f377c20d389836db303c` passed:
+- **306/306 automated tests**.
+- `npm run lint`: passed, 17 warnings and 0 errors.
+- `npm run build`: passed; non-blocking Vite chunk-size and Node `punycode` deprecation warnings only.
 
-Stage 4B-1M's recorded CI run on `6f4327a7e75721f114a78b4f749bc596e179fdad` passed **271/271 tests, lint and production build**. The Stage 4B-1N commits require a fresh exact-head GitHub Actions run. The repository could not be cloned in the execution environment because DNS resolution for github.com failed; no exact-head workflow run or combined status was returned. Full `npm test`, lint and production build are therefore NOT RUN and are not claimed.
+The final official image HTTP audit was run separately on [46043216009](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46043216009), commit `f13880972eea4ffd4f683f94375dd80b14175734`: **7,798/7,798 HTTP 200**. The subsequent code-bearing commit adds regression coverage but does not change official image URLs, so the recorded image audit remains applicable.
+
+The latest metadata/report commits are documentation updates after the successful code-bearing CI run. They do not alter application code or official image source URLs.
 
 ## Branch, PR and deployment safety
 
@@ -135,10 +140,9 @@ Stage 4B-1M's recorded CI run on `6f4327a7e75721f114a78b4f749bc596e179fdad` pass
 - PR #38: OPEN / DRAFT; not merged.
 - No merge to main/master.
 - No Production deployment or Production Supabase access.
-- No Preview deployment was initiated. Existing Stage 3 Preview evidence for commit `957d5eb` is not evidence for this audit branch.
+- No Preview deployment was initiated. Existing Stage 3 Preview evidence is not evidence for this audit branch.
 - No branch or commit was deleted.
 
 ## Next stage blockers
 
-Stage 4B-1O should obtain a complete, non-production Testing catalogue snapshot with all English/Japanese product/printing keys and reference image URLs, then reconcile every one of the 25 release sets against the official matrix. It should also run the exact latest audit-branch CI and verify alternate-image fallback using same-language/same-source candidates only.
-
+Stage 4B-1O should obtain a complete, non-production Testing catalogue snapshot with all English/Japanese product/printing keys and reference image URLs, then reconcile every one of the 25 release sets against the official matrix. It should also resolve the OP-18 / EB-05 upstream feed coverage gaps and verify alternate-image fallback using same-language/same-source candidates only. Preserve the one English-only OP13-037 TR printing without inventing a Japanese EB-04 counterpart.
