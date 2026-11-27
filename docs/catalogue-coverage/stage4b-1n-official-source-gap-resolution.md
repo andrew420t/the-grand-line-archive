@@ -122,7 +122,11 @@ Added `test/catalogue-coverage/officialBandaiInventoryStage4b1n.test.js` to veri
 - OP13-037 remains an English-only official cross-prefix reprint observation.
 - no row is COMPLETE while the application comparison dataset is incomplete.
 
-Stage 4B-1M's recorded CI run on `6f4327a7e75721f114a78b4f749bc596e179fdad` passed **271/271 tests, lint and production build**. The Stage 4B-1N commits require a fresh exact-head GitHub Actions run; no local checkout is available here, so local test/lint/build results are NOT RUN and are not claimed.
+Also updated `src/admin/storagePagination.js` to suppress overlapping Storage pages by stable object ID (falling back to object name) while preserving first-seen order. Added two overlap regression cases to `tests/storagePagination.test.js`. Existing `tests/catalogueImageFilters.test.js` covers intersecting filters, exact card-number matching, original-card-number set versus release set, language/variant separation, named Premium Card Collection product preference and generic-placeholder suppression; a new case verifies that clearing every filter restores the complete result list. Existing `tests/officialBandaiInventoryStage4b1m.test.js` covers PRB and Premium Card Collection printings, EB-04 Japanese cross-prefix entries, and language-specific OP-18 / EB-05 metadata.
+
+**Targeted execution:** the updated storage-pagination helper and its six tests were run with Node's built-in test runner: **6/6 passed**. This is a focused test, not a full project run.
+
+Stage 4B-1M's recorded CI run on `6f4327a7e75721f114a78b4f749bc596e179fdad` passed **271/271 tests, lint and production build**. The Stage 4B-1N commits require a fresh exact-head GitHub Actions run. The repository could not be cloned in the execution environment because DNS resolution for github.com failed; no exact-head workflow run or combined status was returned. Full `npm test`, lint and production build are therefore NOT RUN and are not claimed.
 
 ## Branch, PR and deployment safety
 
