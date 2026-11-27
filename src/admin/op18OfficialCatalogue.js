@@ -1858,9 +1858,9 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "nameEn": "Mr.2.Bon.Kurei(Bentham)",
     "nameJp": null,
     "rarityEn": "TR",
-    "rarityJp": "TR",
+    "rarityJp": null,
     "variantLabelEn": "TREASURE RARE",
-    "variantLabelJp": "TREASURE RARE"
+    "variantLabelJp": null
   },
   {
     "imageId": "OP18-050",
@@ -2457,9 +2457,9 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberJp": "OP18-064",
     "nameEn": null,
     "nameJp": "キリンガム聖",
-    "rarityEn": "TR",
+    "rarityEn": null,
     "rarityJp": "TR",
-    "variantLabelEn": "TREASURE RARE",
+    "variantLabelEn": null,
     "variantLabelJp": "TREASURE RARE"
   },
   {
