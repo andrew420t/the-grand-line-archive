@@ -10,7 +10,6 @@ const INVENTORIES = [
   "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json",
   "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json",
 ];
-const MATRIX = "docs/catalogue-coverage/official-bandai-inventory-stage4b-1l.json";
 const OUTPUT = "artifacts/official-bandai-image-http-audit.json";
 const CONCURRENCY = Math.max(1, Number(process.env.IMAGE_AUDIT_CONCURRENCY || 8));
 const TIMEOUT_MS = Math.max(1000, Number(process.env.IMAGE_AUDIT_TIMEOUT_MS || 12000));
