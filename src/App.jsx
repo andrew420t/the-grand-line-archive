@@ -1171,7 +1171,7 @@ function Storefront() {
                     </div>
                   ))}
                 </div>
-                <div className="cart-summary"><div><span>Subtotal</span><strong>{money(cartTotal)}</strong></div><p>Arrange your local pickup in Gibraltar after placing your order.</p><button className="button button--gold button--wide" type="button" disabled={orderAction === 'placing'} onClick={placeOrder}>{orderAction === 'placing' ? 'Placing order…' : user ? 'Place order' : 'Sign in to place order'} <ArrowRight size={16} /></button>{ordersError && <p className="form-error">{ordersError}</p>}</div>
+                <div className="cart-summary"><div><span>Subtotal</span><strong>{money(cartTotal)}</strong></div><p>This is a local pickup order request for Gibraltar. No online payment is taken here; the Archive team will confirm collection details with you in your order messages.</p><button className="button button--gold button--wide" type="button" disabled={orderAction === 'placing'} onClick={placeOrder}>{orderAction === 'placing' ? 'Submitting order…' : user ? 'Place pickup order' : 'Sign in to place pickup order'} <ArrowRight size={16} /></button>{ordersError && <p className="form-error">{ordersError}</p>}</div>
               </>
             ) : (
               <div className="empty-cart"><ShoppingBag size={30} /><h3>Your basket is waiting.</h3><p>Find a card for the collection.</p><Link className="button button--outline" to="/shop" onClick={() => setCartOpen(false)}>Explore the archive</Link></div>
