@@ -1,0 +1,59 @@
+name: Testing Catalogue Importer Dry Run
+on:
+  workflow_dispatch:
+    inputs:
+      project_ref:
+        description: Exact Testing Supabase project reference
+        required: true
+        type: string
+        default: ehzqsnfkmwphyllhaqhe
+      mode:
+        description: This workflow supports dry-run only
+        required: true
+        type: choice
+        options: [dry-run]
+        default: dry-run
+permissions:
+  contents: read
+env:
+  SOURCE_COMMIT: 619965ec198047de519dc6eb098c7a56aed9bd58
+  TESTING_PROJECT_REF: ehzqsnfkmwphyllhaqhe
+jobs:
+  dry-run:
+    runs-on: ubuntu-latest
+    environment: testing
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/official-bandai-inventory-stage4b-1l-2026-11-27
+      - uses: actions/checkout@v4
+        with:
+          repository: hotavocado/koala-kollect-data
+          ref: 619965ec198047de519dc6eb098c7a56aed9bd58
+          path: .catalogue-source
+          persist-credentials: false
+      - name: Enforce immutable source and Testing-only dry-run
+        env:
+          REQUESTED_PROJECT: ${{ inputs.project_ref }}
+          REQUESTED_MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          test "$REQUESTED_MODE" = dry-run
+          test "$REQUESTED_PROJECT" = "$TESTING_PROJECT_REF"
+          test "$(git -C .catalogue-source rev-parse HEAD)" = "$SOURCE_COMMIT"
+          echo "Pinned source and Testing project guard passed; no DB credentials are used."
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run focused validation tests
+        env:
+          CATALOGUE_SOURCE_DIR: .catalogue-source
+        run: node --test tests/catalogueImporterStage4b1va.test.js
+      - name: Generate dry-run report
+        run: node scripts/catalogue-importer-stage4b1va.mjs --dry-run --source-dir .catalogue-source --output catalogue-import-dry-run.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage4b-1va-catalogue-dry-run
+          path: catalogue-import-dry-run.json
+          if-no-files-found: error
+          retention-days: 30
