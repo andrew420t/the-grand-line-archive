@@ -106,7 +106,17 @@ export function getCatalogueProductSetCodes(productSetCodes = [], cardNumber = '
 /** Resolve a release-product identity without confusing it with the card-number set. */
 export function getCatalogueProductSetCode(product, cardNumber = '', productSetCodes = []) {
   const linkedSetCodes = getCatalogueProductSetCodes(productSetCodes, cardNumber)
-  if (linkedSetCodes.length) return linkedSetCodes[0]
+  if (linkedSetCodes.length === 1) return linkedSetCodes[0]
+  // If a combined product contains this card number but its prefix matches
+  // neither linked set, retain the combined release-product code instead of
+  // arbitrarily assigning the printing to whichever linked set sorts first.
+  if (linkedSetCodes.length > 1) {
+    const code = String(product?.code || '').trim()
+    if (code) return code
+    const name = String(product?.name || '').trim()
+    if (name && name.toLowerCase() !== 'other product card') return name
+    return linkedSetCodes[0]
+  }
   const code = String(product?.code || '').trim()
   if (code) return code
   const name = String(product?.name || '').trim()
