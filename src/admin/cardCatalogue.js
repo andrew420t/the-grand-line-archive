@@ -886,7 +886,7 @@ export async function getCatalogueReferenceTestMatrix() {
     if (normalized === 'OP14EB04' || normalized === 'OP15EB04') {
       return numberPrefix === 'EB04' ? 'EB04' : normalized.slice(0, 4)
     }
-    return normalized.match(/^(OP\\d{2}|EB\\d{2}|PRB\\d{2}|ST\\d{2}|DP\\d{2})/)?.[1] || (normalized === 'PROMO' ? 'PROMO' : '')
+    return normalized.match(/^(OP\d{2}|EB\d{2}|PRB\d{2}|ST\d{2}|DP\d{2})/)?.[1] || (normalized === 'PROMO' ? 'PROMO' : '')
   }
 
   for (const language of REFERENCE_TEST_LANGUAGES) {
