@@ -63,7 +63,7 @@ export async function loadImageWithRetry(url, {
       const contentType = response.headers?.get?.('content-type') || ''
       lastHttpStatus = response.status
       if (response.ok && /^image\/(png|jpeg|webp|gif|avif)$/i.test(contentType)) {
-        return { status: IMAGE_CHECK_STATUS.EXACT_LOADED, url, attempts: attempt, httpStatus: response.status, contentType, upstreamStatus: response.headers?.get?.('x-card-image-upstream-status') || '', proxyError: response.headers?.get?.('x-card-image-error') || '' }
+        return { status: IMAGE_CHECK_STATUS.EXACT_LOADED, url, candidateUrl: url, attempts: attempt, retryCount: attempt - 1, httpStatus: response.status, contentType, upstreamStatus: response.headers?.get?.('x-card-image-upstream-status') || '', proxyError: response.headers?.get?.('x-card-image-error') || '' }
       }
       const upstreamStatus = Number(response.headers?.get?.('x-card-image-upstream-status') || 0)
       const proxyError = response.headers?.get?.('x-card-image-error') || ''
@@ -71,7 +71,7 @@ export async function loadImageWithRetry(url, {
       lastProxyError = proxyError
       lastStatus = classifyImageResponse({ status: response.status, upstreamStatus, contentType })
       if ([IMAGE_CHECK_STATUS.MISSING, IMAGE_CHECK_STATUS.INVALID_URL].includes(lastStatus)) {
-        return { status: lastStatus, url, attempts: attempt, httpStatus: response.status, upstreamStatus, proxyError, contentType }
+        return { status: lastStatus, url, candidateUrl: url, attempts: attempt, retryCount: attempt - 1, httpStatus: response.status, upstreamStatus, proxyError, contentType }
       }
     } catch (error) {
       lastStatus = error?.name === 'AbortError' ? IMAGE_CHECK_STATUS.TIMEOUT : IMAGE_CHECK_STATUS.TEMPORARY_FAILURE
@@ -80,7 +80,7 @@ export async function loadImageWithRetry(url, {
     }
     if (attempt < attempts) await sleep(retryDelayMs * attempt)
   }
-  return { status: lastStatus, url, attempts: Math.max(1, attempts), httpStatus: lastHttpStatus, upstreamStatus: lastUpstreamStatus, proxyError: lastProxyError }
+  return { status: lastStatus, url, candidateUrl: url, attempts: Math.max(1, attempts), retryCount: Math.max(0, Math.max(1, attempts) - 1), httpStatus: lastHttpStatus, upstreamStatus: lastUpstreamStatus, proxyError: lastProxyError }
 }
 
 /** Run bounded concurrent jobs while retaining input order. */
@@ -104,6 +104,30 @@ export async function mapWithConcurrency(items, concurrency, worker) {
  * URLs. Candidate descriptors are ordered exact -> same-language alternative
  * -> same-language base fallback. The caller must not mix language pools.
  */
+export function buildCatalogueImageCandidates(record) {
+  const language = record?.languageCode || record?.language || ''
+  if (!['en', 'jp'].includes(language)) return []
+  const candidates = []
+  const add = (url, kind, source) => {
+    if (typeof url !== 'string' || !url.trim()) return
+    if (candidates.some((item) => item.url === url)) return
+    candidates.push({ url, kind, source: source || record.source || 'catalogue reference' })
+  }
+  // Candidate provenance is taken from explicit catalogue flags/fields only.
+  // URL position alone is not enough to infer an alternative printing.
+  if (record.exactImageUrl) add(record.exactImageUrl, 'exact', record.exactImageSource)
+  else if (record.imageUrl && !record.usesBaseImageFallback && !record.usesAlternateOfficialFallback) add(record.imageUrl, 'exact', record.source)
+  for (const candidate of record.alternativeImageCandidates || []) {
+    if (candidate?.language === language) add(candidate.url, 'alternative', candidate.source)
+  }
+  for (const candidate of record.baseFallbackCandidates || []) {
+    if (candidate?.language === language) add(candidate.url, 'base-fallback', candidate.source)
+  }
+  if (record.usesAlternateOfficialFallback && record.imageUrl) add(record.imageUrl, 'alternative', record.source)
+  if (record.usesBaseImageFallback && record.imageUrl) add(record.imageUrl, 'base-fallback', record.source)
+  return candidates
+}
+
 export async function auditCatalogueImageRecord(record, {
   language,
   fetchImpl = fetch,
@@ -113,36 +137,80 @@ export async function auditCatalogueImageRecord(record, {
   sleep,
 } = {}) {
   const recordLanguage = record?.languageCode || record?.language || ''
+  const checkedAt = () => new Date().toISOString()
   if (!['en', 'jp'].includes(language) || recordLanguage !== language) {
-    return { ...record, status: IMAGE_CHECK_STATUS.INVALID_URL, diagnostic: 'language-mismatch', checkedAt: new Date().toISOString() }
+    return { ...record, status: IMAGE_CHECK_STATUS.INVALID_URL, diagnostic: 'language-mismatch', checkedAt: checkedAt(), candidateResults: [] }
   }
-  const candidates = Array.isArray(record.imageCandidates)
-    ? record.imageCandidates
-    : [
-        ...(record.exactImageUrls || (record.imageUrl ? [{ url: record.imageUrl, kind: 'exact' }] : [])),
-        ...(record.alternativeImageUrls || []).map((url) => ({ url, kind: 'alternative' })),
-        ...(record.baseFallbackImageUrls || []).map((url) => ({ url, kind: 'base-fallback' })),
-      ]
-  const validCandidates = candidates.filter((candidate) => candidate?.url)
-  if (!validCandidates.length) {
-    return { ...record, status: IMAGE_CHECK_STATUS.NO_REFERENCE, checkedUrl: '', checkedAt: new Date().toISOString() }
+  const candidates = buildCatalogueImageCandidates(record)
+  if (!candidates.length) {
+    return { ...record, status: IMAGE_CHECK_STATUS.NO_REFERENCE, checkedUrl: '', checkedAt: checkedAt(), candidateResults: [] }
   }
-  let lastResult = null
-  for (const candidate of validCandidates) {
+  const candidateResults = []
+  let lastDefinitive = null
+  let lastTransient = null
+  for (const candidate of candidates) {
     const result = await loadImageWithRetry(candidate.url, { fetchImpl, attempts, timeoutMs, retryDelayMs, ...(sleep ? { sleep } : {}) })
-    lastResult = { ...result, candidateKind: candidate.kind || 'exact' }
+    const candidateResult = { ...result, candidateUrl: candidate.url, candidateKind: candidate.kind, candidateSource: candidate.source, checkedAt: checkedAt() }
+    candidateResults.push(candidateResult)
     if (result.status === IMAGE_CHECK_STATUS.EXACT_LOADED) {
       const status = candidate.kind === 'base-fallback' ? IMAGE_CHECK_STATUS.BASE_FALLBACK_LOADED
         : candidate.kind === 'alternative' ? IMAGE_CHECK_STATUS.ALTERNATIVE_LOADED
           : IMAGE_CHECK_STATUS.EXACT_LOADED
-      return { ...record, ...lastResult, status, checkedAt: new Date().toISOString() }
+      return { ...record, ...candidateResult, status, candidateResults, checkedAt: checkedAt(), retryCount: candidateResults.reduce((sum, item) => sum + (item.retryCount || 0), 0) }
     }
-    // Do not turn a transient failure into a missing-image result merely
-    // because a later fallback also failed. Preserve the final diagnostic.
-    if ([IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT].includes(result.status)) continue
+    if ([IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT].includes(result.status)) lastTransient = candidateResult
+    else lastDefinitive = candidateResult
   }
-  return { ...record, ...lastResult, checkedAt: new Date().toISOString() }
+  // A transient failure must never be hidden by a later definitive response.
+  const finalResult = lastTransient || lastDefinitive || {}
+  return { ...record, ...finalResult, status: finalResult.status || IMAGE_CHECK_STATUS.UNCHECKED, candidateResults, checkedAt: checkedAt(), retryCount: candidateResults.reduce((sum, item) => sum + (item.retryCount || 0), 0) }
 }
+
+/** Stable identity across product-link rows for a single printing/language/set. */
+export function catalogueAuditIdentity(record) {
+  return [record?.printingKey || record?.id || '', record?.languageCode || record?.language || '', record?.setCode || ''].join(':')
+}
+
+/** Stable identity prevents repeated product links from inflating audit totals. */
+export function dedupeCatalogueAuditRecords(records = []) {
+  const unique = new Map()
+  for (const record of records) {
+    const key = catalogueAuditIdentity(record)
+    if (key.replace(/:/g, '')) {
+      const existing = unique.get(key)
+      if (!existing || (!existing.imageUrl && record.imageUrl)) unique.set(key, record)
+    }
+  }
+  return [...unique.values()]
+}
+
+/** Run a resumable bounded queue; pause is observed between records. */
+export async function runResumableCatalogueAudit(records, {
+  language,
+  concurrency = 4,
+  isPaused = () => false,
+  onResult = () => {},
+  auditRecord = auditCatalogueImageRecord,
+  auditOptions = {},
+} = {}) {
+  const queue = dedupeCatalogueAuditRecords(records).filter((record) => (record.languageCode || record.language) === language)
+  const results = new Map()
+  let cursor = 0
+  let completed = 0
+  const worker = async () => {
+    while (cursor < queue.length) {
+      while (isPaused()) await new Promise((resolve) => setTimeout(resolve, 100))
+      const index = cursor++
+      const result = await auditRecord(queue[index], { language, ...auditOptions })
+      results.set(catalogueAuditIdentity(queue[index]), result)
+      completed += 1
+      onResult(result, { completed, total: queue.length })
+    }
+  }
+  await Promise.all(Array.from({ length: Math.max(1, Math.min(concurrency, queue.length || 1)) }, worker))
+  return { language, total: queue.length, completed, results: [...results.values()] }
+}
+
 
 /** Stable identity prevents repeated product links from inflating audit totals. */
 export function dedupeCatalogueAuditRecords(records = []) {
