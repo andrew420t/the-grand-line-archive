@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts, getCatalogueProductSetCode, getCatalogueProductSetCodes } from '../src/admin/catalogueImageFilters.js'
+import { getEb05SupplementalMatches } from '../src/admin/eb05OfficialCatalogue.js'
 
 const entries = [
   { id: 'a', cardNumber: 'OP12-002', name: 'Edward.Newgate', languageCode: 'en', setCode: 'OP-12', setCodes: ['OP-12'], rarity: 'UC', category: 'Character', colorValues: ['Red'], variant: 'base', imageStatus: 'available' },
@@ -178,4 +179,20 @@ test('assigns combined release-product cards only to the set matching their card
   assert.deepEqual(getCatalogueProductSetCodes(combinedProductSets, 'OP15-075'), ['OP-15'])
   assert.deepEqual(getCatalogueProductSetCodes(combinedProductSets, 'EB04-001'), ['EB-04'])
   assert.deepEqual(getCatalogueProductSetCodes(combinedProductSets, 'ST24-004'), ['EB-04', 'OP-15'])
+})
+
+
+test('clearing every Image Library filter restores all catalogue entries', () => {
+  assert.deepEqual(filterCatalogueImageEntries(entries, {}).map((entry) => entry.id), entries.map((entry) => entry.id))
+})
+
+test('EB-05 reprints retain EB-05 release set and original card-number set independently', () => {
+  const reprint = getEb05SupplementalMatches('EB03-001').find((entry) => entry.languageCode === 'en')
+  assert.ok(reprint)
+  assert.equal(reprint.setCode, 'EB-05')
+  assert.equal(getCardNumberSetCode(reprint.cardNumber), 'EB-03')
+  assert.deepEqual(filterCatalogueImageEntries([reprint], { set: 'EB-05' }).map((entry) => entry.id), [reprint.id])
+  assert.deepEqual(filterCatalogueImageEntries([reprint], { cardNumberSet: 'EB-03' }).map((entry) => entry.id), [reprint.id])
+  assert.deepEqual(filterCatalogueImageEntries([reprint], { set: 'EB-05', cardNumberSet: 'EB-03' }).map((entry) => entry.id), [reprint.id])
+  assert.deepEqual(filterCatalogueImageEntries([reprint], { set: 'EB-03' }), [])
 })
