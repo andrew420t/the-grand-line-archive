@@ -24,8 +24,6 @@
 
 Counts below are independently extracted from official Bandai pages, not inferred from feed totals. “Missing” compares official base-prefix numbers with the 2026-10-22 upstream card-number snapshot.
 
-| Set | Language | Base numbers | Distinct product card numbers | Official entries / printings | Non-base card numbers | Missing from upstream | Missing image refs | Upstream product link count | Status | Official source |
-|---|---:|---:|---:|---:|---:|---:|---:|---|---|---|
 | OP-01 | English | 121 | 121 | 154 | 0 | 0 | 0 | en:569101 (154) | INCOMPLETE | [Bandai EN](https://en.onepiece-cardgame.com/cardlist/?series=569101) |
 | OP-01 | Japanese | 121 | 121 | 154 | 0 | 0 | 0 | jp:550101 (154) | INCOMPLETE | [Bandai JP](https://www.onepiece-cardgame.com/cardlist/?series=550101) |
 | OP-02 | English | 121 | 121 | 154 | 0 | 0 | 0 | en:569102 (154) | INCOMPLETE | [Bandai EN](https://en.onepiece-cardgame.com/cardlist/?series=569102) |
