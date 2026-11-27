@@ -407,7 +407,9 @@ export default function QuickAddPanel({
       setForm(initialProduct())
       setDuplicateMatches([])
       setAllowVariant(false)
-      setSuccess('Product and stock saved.')
+      setSuccess(form.is_bulk
+        ? '✓ Product and stock saved in Bulk inventory. Select “Bulk only” to find it.'
+        : '✓ Product and stock saved in Regular inventory.')
       onSaved({ uploadedPhotoIds: photosForThisProduct.map((photo) => photo.id) })
     } catch (saveError) {
       setError(saveError.message)
@@ -437,6 +439,7 @@ export default function QuickAddPanel({
           <p>Use scanner results or enter a card manually. Every value remains editable before saving.</p>
           {form.catalogue_match_id && <p className="admin-muted">Prefilled from the Card reference library. Check the language, card number, release set and printing before adding stock.</p>}
           {!bulkCategoryReady && <p className="admin-muted">Bulk classification becomes available after the product-bulk-category database migration is applied to this project.</p>}
+          {form.is_bulk && <p className="quick-add-bulk-confirmation" role="status"><Check size={13} /> This new card will be saved in Bulk inventory.</p>}
         </div>
         <div className="quick-add-heading-actions">
           <button
@@ -447,7 +450,10 @@ export default function QuickAddPanel({
             title={bulkCategoryReady ? '' : 'Apply the Bulk category database migration to enable this action.'}
             onClick={() => setForm((current) => ({ ...current, is_bulk: !current.is_bulk }))}
           >
-            <PackagePlus size={14} /> {form.is_bulk ? 'Remove from bulk' : 'Add to bulk'}
+            <span className={form.is_bulk ? 'bulk-check-block is-checked' : 'bulk-check-block'} aria-hidden="true">
+              {form.is_bulk ? <Check size={12} /> : <PackagePlus size={12} />}
+            </span>
+            {form.is_bulk ? 'Added to bulk · Click to remove' : 'Add to bulk'}
           </button>
           <button className="button button--outline" type="button" onClick={resetManual}>
             <RotateCcw size={14} /> Manual entry

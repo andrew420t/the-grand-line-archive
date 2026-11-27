@@ -5180,3 +5180,56 @@ h2 em {
     align-items: flex-end;
   }
 }
+
+
+.bulk-check-block {
+  display: inline-flex;
+  flex: 0 0 17px;
+  width: 17px;
+  height: 17px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(201, 168, 102, 0.55);
+  border-radius: 3px;
+  color: #bba16a;
+  background: rgba(201, 168, 102, 0.06);
+  vertical-align: middle;
+}
+
+.bulk-check-block.is-checked {
+  color: #17140d;
+  background: #d3b36f;
+  border-color: #d3b36f;
+  box-shadow: 0 0 0 2px rgba(211, 179, 111, 0.13);
+}
+
+.button.is-bulk-selected {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-color: #d3b36f;
+}
+
+.quick-add-heading-actions > button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.quick-add-bulk-confirmation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 0;
+  color: #c6d39e;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.quick-add-bulk-confirmation svg {
+  flex: 0 0 auto;
+}
+
+.product-edit-bulk-notice {
+  margin-top: 12px;
+}

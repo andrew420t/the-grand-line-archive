@@ -16,6 +16,27 @@ export function filterInventoryProducts(products = [], query = '', bulkFilter = 
   })
 }
 
+
+export async function saveProductBulkCategory(client, productId, nextValue) {
+  if (!client) throw new Error('Supabase is not configured.')
+  if (!productId) throw new Error('A product ID is required to change its Bulk category.')
+
+  const expectedValue = Boolean(nextValue)
+  const result = await client
+    .from('products')
+    .update({ is_bulk: expectedValue, updated_at: new Date().toISOString() })
+    .eq('id', productId)
+    .select('id,is_bulk')
+    .maybeSingle()
+
+  if (result?.error) throw new Error(result.error.message || 'The database rejected the Bulk category update.')
+  if (!result?.data?.id) throw new Error('The Bulk category was not saved. The product was not returned by the database.')
+  if (result.data.is_bulk !== expectedValue) {
+    throw new Error('The database did not confirm the requested Bulk category. Refresh the inventory and try again.')
+  }
+  return result.data
+}
+
 export function buildProductEditPayload(fields, values, raw = {}, updatedAt = new Date().toISOString()) {
   const payload = {}
   fields.forEach((field) => {
