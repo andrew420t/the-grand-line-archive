@@ -41,6 +41,7 @@ const initialProduct = () => ({
   reference_image_url: '',
   reference_printing_key: '',
   featured: false,
+  is_bulk: false,
 })
 
 const scannedValues = (fields) =>
@@ -422,9 +423,19 @@ export default function QuickAddPanel({
           <p>Use scanner results or enter a card manually. Every value remains editable before saving.</p>
           {form.catalogue_match_id && <p className="admin-muted">Prefilled from the Card reference library. Check the language, card number, release set and printing before adding stock.</p>}
         </div>
-        <button className="button button--outline" type="button" onClick={resetManual}>
-          <RotateCcw size={14} /> Manual entry
-        </button>
+        <div className="quick-add-heading-actions">
+          <button
+            className={form.is_bulk ? 'button button--gold' : 'button button--outline'}
+            type="button"
+            aria-pressed={Boolean(form.is_bulk)}
+            onClick={() => setForm((current) => ({ ...current, is_bulk: !current.is_bulk }))}
+          >
+            <PackagePlus size={14} /> {form.is_bulk ? 'Remove from bulk' : 'Add to bulk'}
+          </button>
+          <button className="button button--outline" type="button" onClick={resetManual}>
+            <RotateCcw size={14} /> Manual entry
+          </button>
+        </div>
       </div>
 
       {error && <div className="error-notice"><AlertCircle size={16} /><span>{error}</span></div>}
