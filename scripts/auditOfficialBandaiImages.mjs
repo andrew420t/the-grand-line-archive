@@ -3,13 +3,12 @@ import { dirname, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 
 const ROOT = process.cwd();
-const INPUTS = [
-  "docs/catalogue-coverage/bandai-extraction-op01-op05-2026-11-27.json",
-  "docs/catalogue-coverage/bandai-extraction-op06-op10-2026-11-27.json",
-  "docs/catalogue-coverage/bandai-extraction-op11-op17-2026-11-27.json",
-  "docs/catalogue-coverage/bandai-extraction-jp-op15-op18-2026-11-27.json",
-  "docs/catalogue-coverage/bandai-extraction-op15-op18-eb05-2026-11-27.json",
-  "docs/catalogue-coverage/bandai-extraction-eb-prb-2026-11-27.json",
+const INVENTORIES = [
+  "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-01.json",
+  "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-02.json",
+  "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-03.json",
+  "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-04.json",
+  "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-05.json",
 ];
 const MATRIX = "docs/catalogue-coverage/official-bandai-inventory-stage4b-1l.json";
 const OUTPUT = "artifacts/official-bandai-image-http-audit.json";
@@ -57,16 +56,20 @@ function addUrl(map, url, set, language, imageId = null) {
 
 function collectUrls() {
   const urls = new Map();
-  for (const relativePath of INPUTS) {
+  for (const relativePath of INVENTORIES) {
     const data = JSON.parse(readFileSync(resolve(ROOT, relativePath), "utf8"));
-    for (const row of data.rows || []) {
-      for (const url of row.official_card_image_urls || []) {
-        addUrl(urls, url, row.set, row.language);
+    for (const page of data.pages || []) {
+      for (const entry of page.entries || []) {
+        const imageId = typeof entry.image_url === "string"
+          ? (entry.image_url.match(/\\/([^/?#]+)\\.(?:png|webp|jpg|jpeg)(?:[?#]|$)/i) || [])[1] || null
+          : null;
+        addUrl(urls, entry.image_url, page.set, page.language, imageId);
       }
     }
   }
   const matrix = JSON.parse(readFileSync(resolve(ROOT, MATRIX), "utf8"));
   for (const row of matrix.rows || []) {
+    if (row.set !== "EB-04" || row.language !== "English") continue;
     for (const entry of row.official_printing_entries || []) {
       addUrl(urls, entry.official_image_url, row.set, row.language, entry.official_image_id);
     }
