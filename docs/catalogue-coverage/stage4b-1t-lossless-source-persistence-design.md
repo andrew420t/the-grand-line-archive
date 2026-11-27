@@ -96,3 +96,16 @@ The next importer must stage and checksum every pinned source file, filter expli
 - No inventory matching or links.
 - No Production access, merge or deployment.
 - No claim that the 8,017 identities are persisted or complete.
+
+## Exact-commit CI verification
+
+- Run: [46059857353](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46059857353)
+- Verified code commit: `ca37f835c656b6819983e90a39ad197e8256f5d1`
+- Tests: 348 passed, 0 failed.
+- Lint: passed.
+- Production build: passed.
+- Stage 4B-1O application printing reconciliation: passed.
+- Stage 4B-1P Premium/persistence reconciliation: passed.
+- Official image HTTP audit: skipped by workflow condition; no new image audit is claimed.
+
+The workflow does not import catalogue rows. The 50 catalogue matrix rows remain INCOMPLETE until the secure Testing importer and image verification have completed.

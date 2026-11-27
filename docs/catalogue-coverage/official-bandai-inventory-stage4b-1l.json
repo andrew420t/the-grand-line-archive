@@ -36250,13 +36250,25 @@
       "no_inventory_changes": true,
       "no_inventory_links": true
     },
-    "ci_pending_exact_commit": true,
+    "ci_pending_exact_commit": false,
     "migrations": [
       "20261127195100_catalogue_lossless_source_persistence_stage4b1t",
       "20261127195212_catalogue_locator_suffix_provenance_stage4b1t"
     ],
     "status": "SCHEMA_MIGRATED_AND_VERIFIED; CATALOGUE_IMPORT_NOT_RUN",
-    "exact_head_ci": "PENDING_ON_THIS_MATRIX_COMMIT"
+    "exact_head_ci": {
+      "run_id": 46059857353,
+      "commit": "ca37f835c656b6819983e90a39ad197e8256f5d1",
+      "conclusion": "success",
+      "tests": 348,
+      "passed": 348,
+      "failed": 0,
+      "lint": "passed",
+      "production_build": "passed",
+      "application_printing_reconciliation": "passed",
+      "premium_reconciliation": "passed",
+      "image_http_audit": "skipped_not_requested"
+    }
   },
   "matrix_policy": "All 50 rows remain INCOMPLETE until official identity, application runtime, Testing persistence and image verification all pass. Stage 4B-1T schema migrations are verified; no catalogue rows have yet been imported."
 }
