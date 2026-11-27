@@ -87,6 +87,12 @@ test('OP-18 and EB-05 supplemental catalogue gaps are measured against official 
   assert.equal(rowFor('OP-18', 'Japanese').missing_printings.length, 0)
   assert.equal(rowFor('EB-05', 'English').missing_printings.length, 0)
   assert.equal(rowFor('EB-05', 'Japanese').missing_printings.length, 0)
+  for (const language of ['English', 'Japanese']) {
+    assert.equal(rowFor('OP-18', language).official_parallel_variant_count, 33)
+    assert.equal(rowFor('OP-18', language).official_special_printing_count, 7)
+    assert.equal(rowFor('EB-05', language).official_parallel_variant_count, 27)
+    assert.equal(rowFor('EB-05', language).official_special_printing_count, 8)
+  }
 })
 
 test('Best Selection Vol.6 keeps OP15-075 and OP15-108 as separate product printings', () => {
@@ -101,6 +107,22 @@ test('Best Selection Vol.6 keeps OP15-075 and OP15-108 as separate product print
   assert.equal(nami.product_printing, 'Premium Card Collection -Best Selection Vol.6-')
   assert.equal(elThor.official_cardlist_base_printing.product, "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]")
   assert.equal(nami.official_cardlist_base_printing.product, "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]")
-  assert.notEqual(elThor.printing_identity, elThor.official_cardlist_base_printing.image_url)
-  assert.notEqual(nami.printing_identity, nami.official_cardlist_base_printing.image_url)
+  assert.ok(elThor.printing_identity.includes(elThor.product_printing))
+  assert.ok(nami.printing_identity.includes(nami.product_printing))
+  assert.notEqual(elThor.product_printing, elThor.official_cardlist_base_printing.product)
+  assert.notEqual(nami.product_printing, nami.official_cardlist_base_printing.product)
+  assert.equal(rowFor('OP-15', 'English').official_product_collection_printings.length, 12)
+})
+
+test('Stage 3 supplemental OP-18 English image identifiers remain explicitly flagged for correction', () => {
+  assert.deepEqual(rowFor('OP-18', 'English').missing_printings, [
+    'OP18-049_p1',
+    'OP13-012_p1',
+    'OP17-040_p2',
+  ])
+  assert.deepEqual(rowFor('OP-18', 'English').unexpected_printings, [
+    'OP18-064_p1',
+    'OP13-012_p2',
+    'OP17-040_p1',
+  ])
 })
