@@ -1,8 +1,9 @@
 import { createClient } from '@supabase/supabase-js'
 import { resolveSupabaseConfig } from './supabaseConfig.js'
 
-export const isPreviewBuild = import.meta.env.VITE_PREVIEW_BUILD === true
-const { url: supabaseUrl, key: supabaseKey } = resolveSupabaseConfig(import.meta.env, isPreviewBuild)
+const runtimeEnv = import.meta.env || {}
+export const isPreviewBuild = runtimeEnv.VITE_PREVIEW_BUILD === true
+const { url: supabaseUrl, key: supabaseKey } = resolveSupabaseConfig(runtimeEnv, isPreviewBuild)
 
 export const hasSupabaseConfig = Boolean(supabaseUrl && supabaseKey)
 

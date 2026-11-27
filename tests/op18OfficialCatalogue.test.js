@@ -64,3 +64,17 @@ test('hyphenated OP-18 card-number input normalizes to the same complete printin
     getOp18SupplementalMatches('OP18-001').length,
   )
 })
+
+
+test('OP-18 retains Bandai language-specific image IDs and localized TR card identities', () => {
+  const english = getOp18SupplementalMatches('OP18-049')
+  const japanese = getOp18SupplementalMatches('OP18-064')
+  assert.ok(english.some((item) => item.languageCode === 'en' && item.rarity === 'TR' && item.name === 'Mr.2.Bon.Kurei(Bentham)' && item.imageUrl.includes('OP18-049_p1')))
+  assert.ok(!english.some((item) => item.languageCode === 'jp' && item.rarity === 'TR'))
+  assert.ok(japanese.some((item) => item.languageCode === 'jp' && item.rarity === 'TR' && item.name === 'キリンガム聖' && item.imageUrl.includes('OP18-064_p1')))
+  assert.ok(!japanese.some((item) => item.languageCode === 'en' && item.rarity === 'TR'))
+  const viviEn = getOp18SupplementalMatches('OP13-012').find((item) => item.languageCode === 'en' && item.variant === 'SP CARD')
+  const viviJp = getOp18SupplementalMatches('OP13-012').find((item) => item.languageCode === 'jp' && item.variant === 'SP CARD')
+  assert.ok(viviEn.imageUrl.includes('OP13-012_p1'))
+  assert.ok(viviJp.imageUrl.includes('OP13-012_p2'))
+})

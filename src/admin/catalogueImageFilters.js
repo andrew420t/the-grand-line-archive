@@ -78,7 +78,38 @@ export function dedupePrintingProducts(products = []) {
   for (const product of products) {
     if (!product) continue
     const key = product.key || product.id
+    if (!key) continue
     if (!unique.has(key)) unique.set(key, product)
   }
-  return [...unique.values()]
+
+  const linkedProducts = [...unique.values()]
+  // Koala Kollect can link one printing to both a generic "Other Product Card"
+  // placeholder and its named product. When a concrete product is present,
+  // keep that identity and suppress only the generic placeholder. If it is the
+  // sole link, retain it so the printing is not lost from the catalogue.
+  const concreteProducts = linkedProducts.filter((product) =>
+    String(product.name || '').trim().toLowerCase() !== 'other product card',
+  )
+  return concreteProducts.length ? concreteProducts : linkedProducts
+}
+
+/** Resolve a release-product identity without confusing it with the card-number set. */
+export function getCatalogueProductSetCodes(productSetCodes = [], cardNumber = '') {
+  const linkedSetCodes = [...new Set((productSetCodes || []).map((code) => String(code || '').trim()).filter(Boolean))]
+  const cardNumberSet = getCardNumberSetCode(cardNumber)
+  // Combined release products can map to more than one set. When the card
+  // number identifies one of those sets, assign this printing only to that set.
+  if (cardNumberSet && linkedSetCodes.includes(cardNumberSet)) return [cardNumberSet]
+  return linkedSetCodes
+}
+
+/** Resolve a release-product identity without confusing it with the card-number set. */
+export function getCatalogueProductSetCode(product, cardNumber = '', productSetCodes = []) {
+  const linkedSetCodes = getCatalogueProductSetCodes(productSetCodes, cardNumber)
+  if (linkedSetCodes.length) return linkedSetCodes[0]
+  const code = String(product?.code || '').trim()
+  if (code) return code
+  const name = String(product?.name || '').trim()
+  if (name && name.toLowerCase() !== 'other product card') return name
+  return getCardNumberSetCode(cardNumber)
 }

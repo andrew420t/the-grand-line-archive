@@ -94,3 +94,24 @@ test('builds Testing Supabase Bandai image URLs only for the dedicated preview p
   assert.equal(buildPreviewBandaiImageFunctionUrl('OP18-002', 'en', 'https://production.example.supabase.co'), '')
   assert.equal(buildPreviewBandaiImageFunctionUrl('OP18-002', 'en', 'http://ehzqsnfkmwphyllhaqhe.supabase.co'), '')
 })
+
+
+test('never substitutes Japanese Bandai artwork into an English printing', () => {
+  const missingEn = { key: 'en-parallel', card_key: 'card', site: 'en', image_url: '' }
+  const japaneseBase = { key: 'jp-base', card_key: 'card', site: 'jp', image_url: '' }
+  const index = { locatorsByPrinting: new Map([['jp-base:jp', { image_id: 'OP18-001' }]]) }
+  const result = resolveCatalogueImage({ printing: missingEn, index, printings: [missingEn, japaneseBase], language: 'en', cardNumber: 'OP18-001' })
+  assert.ok(result.imageUrls.every((url) => !url.includes('www.onepiece-cardgame.com')))
+  assert.ok(result.imageUrls.every((url) => !url.includes('/jp/')))
+})
+
+test('exact official parallel artwork remains ahead of base fallback artwork', () => {
+  const printing = { key: 'parallel', card_key: 'card', site: 'en', image_url: '' }
+  const base = { key: 'base', card_key: 'card', site: 'en', image_url: '' }
+  const index = { locatorsByPrinting: new Map([
+    ['parallel:en', { image_id: 'OP18-001_p1' }],
+    ['base:en', { image_id: 'OP18-001' }],
+  ]) }
+  const result = resolveCatalogueImage({ printing, index, printings: [printing, base], language: 'en', cardNumber: 'OP18-001' })
+  assert.equal(result.imageUrl, '/_card-image/bandai/en/OP18-001_p1.png')
+})

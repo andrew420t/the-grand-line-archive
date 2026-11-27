@@ -1,12 +1,14 @@
 import { supabase } from '../lib/supabase'
-import { resolveCatalogueImage, buildCatalogueImageProxyUrl } from './catalogueImageReference.js'
+import { resolveCatalogueImage } from './catalogueImageReference.js'
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 import { createOfficialImageOnlyMatch } from './officialImageOnlyFallback.js'
-import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts } from './catalogueImageFilters.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts, getCatalogueProductSetCode, getCatalogueProductSetCodes } from './catalogueImageFilters.js'
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
-import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMatches, getOp18ImageTestItems } from './op18OfficialCatalogue.js'
+import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMatches } from './op18OfficialCatalogue.js'
+import { EB05_OFFICIAL_PRINTINGS, EB05_BASE_CARD_NUMBERS, getEb05SupplementalMatches } from './eb05OfficialCatalogue.js'
+import { applyCatalogueImageCorrections } from './catalogueImageCorrections.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
@@ -18,6 +20,8 @@ const CACHE_TTL = 6 * 60 * 60 * 1000
 
 let cataloguePromise
 let loadedAt = 0
+let imageCorrectionsPromise
+let imageCorrectionsLoadedAt = 0
 
 const normalizeCardNumber = (value) =>
   String(value || '')
@@ -46,10 +50,11 @@ async function readJsonLines(path) {
 }
 
 async function loadCatalogue() {
-  const [cards, tcgcsvPrintings, donSetRows, ...languageData] = await Promise.all([
+  const [cards, tcgcsvPrintings, donSetRows, productSetRows, ...languageData] = await Promise.all([
     readJsonLines('cards.jsonl'),
     readJsonLines('printings/tcgcsv.jsonl'),
     readJsonLines('don_sets.jsonl').catch(() => []),
+    readJsonLines('product_sets.jsonl').catch(() => []),
     ...LANGUAGES.flatMap((language) => [
       readJsonLines(`card_observations/${language}.jsonl`),
       readJsonLines(`printings/${language}.jsonl`),
@@ -113,7 +118,13 @@ async function loadCatalogue() {
     const productsByKey = new Map(data.products.map((item) => [item.key, item]))
     indexes[language] = { observationsByCard, printingsByCard, locatorsByPrinting, printingProductsByPrinting, productsByKey }
   }
-  return { cards, languages, cardsByNumber, cardsByKey, indexes, donSetsByPrintingKey: buildDonSetIndex(donSetRows) }
+  const productSetsByProductKey = new Map()
+  for (const item of productSetRows) {
+    const links = safeMapGet(productSetsByProductKey, item.product_key) || []
+    links.push(item)
+    productSetsByProductKey.set(item.product_key, links)
+  }
+  return { cards, languages, cardsByNumber, cardsByKey, indexes, productSetsByProductKey, donSetsByPrintingKey: buildDonSetIndex(donSetRows) }
 }
 
 async function getCatalogue() {
@@ -138,7 +149,12 @@ const value = (item, key) => item?.[key] ?? ''
 const safeMapGet = (map, key) => map instanceof Map ? map.get(key) : undefined
 
 function formatSetCode(code) {
-  return String(code || '').replace(/^(OP|EB|ST|PRB)(\d{2})$/, '$1-$2').replace(/^(OP\d{2})(EB\d{2})$/, '$1-$2').toUpperCase()
+  const value = String(code || '').trim()
+  const normalized = value.toUpperCase()
+  if (/^(OP|EB|ST|PRB)\d{2}$/.test(normalized)) return normalized.replace(/^(OP|EB|ST|PRB)(\d{2})$/, '$1-$2')
+  if (/^OP\d{2}EB\d{2}$/.test(normalized)) return normalized.replace(/^(OP\d{2})(EB\d{2})$/, '$1-$2')
+  if (/^(OP|EB|ST|PRB)\d{2}-/.test(normalized)) return normalized
+  return value
 }
 
 export async function findCatalogueMatches(cardNumber) {
@@ -162,13 +178,14 @@ export async function findCatalogueMatches(cardNumber) {
       for (const printing of printings) {
         const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language, cardNumber: card.number || '' })
         const productLinks = safeMapGet(index.printingProductsByPrinting, printing.key) || []
-        const linkedProducts = productLinks
+        const linkedProducts = dedupePrintingProducts(productLinks
           .map((link) => safeMapGet(index.productsByKey, link.product_key))
-          .filter(Boolean)
+          .filter(Boolean))
         const products = linkedProducts.length ? linkedProducts : [null]
 
         for (const product of products) {
-          const setCode = formatSetCode(product?.code || '')
+          const productSetCodes = (safeMapGet(catalogue.productSetsByProductKey, product?.key) || []).map((item) => item.set_key)
+          const setCode = formatSetCode(getCatalogueProductSetCode(product, card.number || '', productSetCodes))
           results.push({
             id: `${printing.key}:${language}:${product?.key || 'no-product'}`,
             cardKey: card.key,
@@ -216,6 +233,11 @@ export async function findCatalogueMatches(cardNumber) {
   for (const sample of getSupplementalSampleMatches(requestedNumber)) {
     const exists = results.some((match) => match.id === sample.id)
     if (!exists) results.push(sample)
+  }
+
+  // Official Bandai supplements fill the OP-18 and EB-05 gaps in the stale feed.
+  for (const match of [...getOp18SupplementalMatches(requestedNumber), ...getEb05SupplementalMatches(requestedNumber)]) {
+    if (!results.some((existing) => existing.id === match.id)) results.push(match)
   }
 
   // Admin-entered corrections and custom cards are layered over the public reference data.
@@ -390,6 +412,7 @@ export async function saveCatalogueOverride({ form, userId }) {
     variant_label: String(form.variant_label || ''),
     printing_key: String(form.reference_printing_key || ''),
     details,
+    source: form.reference_image_source || 'Administrator-corrected image reference',
     updated_by: userId || null,
     updated_at: new Date().toISOString(),
   }
@@ -402,12 +425,16 @@ export async function saveCatalogueOverride({ form, userId }) {
     }
     throw new Error('Could not save the card library correction: ' + error.message)
   }
+  imageCorrectionsPromise = null
+  imageCorrectionsLoadedAt = 0
   return true
 }
 
 export function clearCatalogueCache() {
   cataloguePromise = null
   loadedAt = 0
+  imageCorrectionsPromise = null
+  imageCorrectionsLoadedAt = 0
 }
 
 async function readDonCardSetOverrides() {
@@ -508,6 +535,13 @@ export async function getCatalogueCoverageReport() {
     languages: {},
     sets: {},
     unassigned: { printings: 0, withImage: 0, withFallbackImage: 0, withoutImage: 0, withoutImageBySite: {} },
+    expectedCoverage: {
+      status: 'not-comparable',
+      note: 'Set-by-set catalogue row totals are discovered feed records, not authoritative expected card/printing counts. Missing records cannot be counted without an independent expected inventory.',
+      availableFeedRecordsBySet: {},
+      authoritativeExpectedCounts: null,
+      missingCatalogueRecords: null,
+    },
     missingImageSamples: [],
     sources: ['Bandai official image URLs where a Bandai locator exists', 'Koala Kollect structured catalogue metadata', 'Bandai official OP-18 card list and OPBoxIndex printing-ID cross-check'],
     checkedAt: new Date().toISOString(),
@@ -533,6 +567,16 @@ export async function getCatalogueCoverageReport() {
       source: 'Bandai official product card list; parallel image IDs and Japanese names cross-checked against OPBoxIndex (2026-11-26)',
       liveImageVerification: 'pending full image audit',
     },
+    eb05OfficialImport: {
+      baseCardNumbers: EB05_BASE_CARD_NUMBERS.length,
+      productPrintings: EB05_OFFICIAL_PRINTINGS.length,
+      parallelPrintings: EB05_OFFICIAL_PRINTINGS.filter((printing) => printing.variant === 'Parallel').length,
+      specialPrintings: EB05_OFFICIAL_PRINTINGS.filter((printing) => printing.variant === 'SP CARD').length,
+      imageReferences: EB05_OFFICIAL_PRINTINGS.length * REFERENCE_TEST_LANGUAGES.length,
+      languages: ['English', 'Japanese'],
+      source: 'Bandai official English and Japanese EB-05 card lists, including language-specific image identifiers (2026-11-27)',
+      liveImageVerification: 'pending full image audit',
+    },
   }
   for (const language of LANGUAGES) {
     const data = catalogue.languages?.[language] || { printings: [] }
@@ -549,16 +593,22 @@ export async function getCatalogueCoverageReport() {
       const imageUrl = imageReference.imageUrl
       const hasImage = Boolean(imageUrl)
       const products = safeMapGet(index.printingProductsByPrinting, printing.key) || []
-      const linkedProducts = products
+      const linkedProducts = dedupePrintingProducts(products
         .map((link) => safeMapGet(index.productsByKey, link.product_key))
-        .filter(Boolean)
+        .filter(Boolean))
       const observations = safeMapGet(index.observationsByCard, printing.card_key) || []
       const observation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       const isDon = isDonCatalogueEntry({ printing, card, observation })
       const donOverride = isDon ? donOverrides[printing.key + ':' + language] : null
       const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
-      const setCodes = donOverride?.set_code ? [donOverride.set_code] : donSourceSet?.set_codes?.length ? donSourceSet.set_codes : donSourceSet?.set_code ? [donSourceSet.set_code] : [...new Set(linkedProducts.map((product) => product.code).filter(Boolean))]
+      const linkedSetCodes = [...new Set(linkedProducts.flatMap((product) =>
+        getCatalogueProductSetCodes(
+          (safeMapGet(catalogue.productSetsByProductKey, product.key) || []).map((item) => item.set_key),
+          cardNumber,
+        ),
+      ))]
+      const setCodes = donOverride?.set_code ? [donOverride.set_code] : donSourceSet?.set_codes?.length ? donSourceSet.set_codes : donSourceSet?.set_code ? [donSourceSet.set_code] : linkedSetCodes.length ? linkedSetCodes : [...new Set(linkedProducts.map((product) => product.code || product.name).filter(Boolean))]
       const setLabels = setCodes.length ? setCodes.map(formatSetCode) : ['Unassigned']
       if (isDon) {
         report.donPrintings += 1
@@ -620,6 +670,13 @@ export async function getCatalogueCoverageReport() {
       }
     }
   }
+  // These are counts discovered from the current metadata feed only. Keep them
+  // explicitly separate from authoritative inventory totals: absence from this
+  // feed is not proof that the corresponding card/printing does not exist.
+  report.expectedCoverage.availableFeedRecordsBySet = Object.fromEntries(
+    Object.entries(report.sets).map(([code, stats]) => [code, stats.printings]),
+  )
+  report.expectedCoverage.note += ' OP-18 official printing inventory is supplied separately; the OP-01–OP-17, EB, PRB, starter and promo sets still require independently sourced checklists.'
   report.missingExpectedSets = ['OP-18', 'EB-05'].filter((code) => !report.sets[code] || report.sets[code].printings === 0)
   report.missingImageSamples.sort((a, b) =>
     a.sourceSite.localeCompare(b.sourceSite) ||
@@ -631,6 +688,26 @@ export async function getCatalogueCoverageReport() {
 
 
 /** Paged view of catalogue image URLs; these remain remote references, not stored uploads. */
+async function getCatalogueImageCorrections() {
+  if (!supabase) return []
+  const ttl = 60 * 1000
+  if (!imageCorrectionsPromise || Date.now() - imageCorrectionsLoadedAt > ttl) {
+    imageCorrectionsPromise = supabase
+      .from('card_catalogue_overrides')
+      .select('card_number,language,set_code,variant_label,printing_key,details,source')
+      .then(({ data, error }) => {
+        if (error) throw error
+        imageCorrectionsLoadedAt = Date.now()
+        return data || []
+      })
+      .catch((error) => {
+        imageCorrectionsPromise = null
+        throw new Error('Could not load saved catalogue image corrections: ' + (error.message || String(error)))
+      })
+  }
+  return imageCorrectionsPromise
+}
+
 export async function getCatalogueImageGallery({
   offset = 0,
   limit = 60,
@@ -647,7 +724,7 @@ export async function getCatalogueImageGallery({
   imageStatus = 'all',
 } = {}) {
   const catalogue = await getCatalogue()
-  const donOverrides = await readDonCardSetOverrides()
+  const [donOverrides, imageCorrections] = await Promise.all([readDonCardSetOverrides(), getCatalogueImageCorrections()])
   const entries = []
 
   for (const siteLanguage of LANGUAGES) {
@@ -679,17 +756,23 @@ export async function getCatalogueImageGallery({
       const sourceSetCodes = donSourceSet?.set_codes?.length
         ? donSourceSet.set_codes
         : donSourceSet?.set_code ? [donSourceSet.set_code] : []
+      const productSetCodesByKey = new Map(productChoices.filter(Boolean).map((product) => [
+        product.key,
+        [...new Set((safeMapGet(catalogue.productSetsByProductKey, product.key) || []).map((item) => item.set_key))],
+      ]))
 
       for (const product of productChoices) {
         const rawSetCode = setOverride?.set_code
           || (donSourceSet
             ? (sourceSetCodes.length === 1 ? sourceSetCodes[0] : '')
-            : product?.code || '')
-        const inferredSetCode = (card?.number || '').match(/^(OP\d{2}|EB\d{2}|ST\d{2}|PRB\d{2})-/)?.[1] || ''
-        const setCode = formatSetCode(rawSetCode || inferredSetCode || (isDon ? 'DON!!' : ''))
+            : getCatalogueProductSetCode(product, card?.number || '', productSetCodesByKey.get(product?.key) || []))
+        const setCode = formatSetCode(rawSetCode || (isDon ? 'DON!!' : ''))
         const displaySetCodes = setOverride?.set_code
           ? [setOverride.set_code]
-          : sourceSetCodes.length ? sourceSetCodes : product?.code ? [product.code] : inferredSetCode ? [inferredSetCode] : []
+          : sourceSetCodes.length ? sourceSetCodes
+            : getCatalogueProductSetCodes(productSetCodesByKey.get(product?.key) || [], card?.number || '').length
+              ? getCatalogueProductSetCodes(productSetCodesByKey.get(product?.key) || [], card?.number || '')
+              : [getCatalogueProductSetCode(product, card?.number || '')].filter(Boolean)
         const formattedSetCodes = displaySetCodes.map(formatSetCode)
         const setName = setOverride
           ? 'Manually assigned set'
@@ -710,6 +793,7 @@ export async function getCatalogueImageGallery({
         const colorValues = observation?.colors || card?.colors || []
         entries.push({
           id: printing.key + ':' + siteLanguage + ':' + (product?.key || 'no-product'),
+          cardKey: printing.card_key || card?.key || '',
           printingKey: printing.key,
           cardNumber: card?.number || (isDon ? 'DON!!' : ''),
           name: observation?.name || '',
@@ -795,6 +879,50 @@ export async function getCatalogueImageGallery({
     })
   }
 
+  // EB-05 is also absent from the current upstream feed. Add all 96 official
+  // product printings with language-specific Bandai artwork IDs.
+  for (const match of getEb05SupplementalMatches()) {
+    const exists = entries.some((entry) =>
+      entry.id === match.id ||
+      (entry.cardNumber === match.cardNumber &&
+        entry.languageCode === match.languageCode &&
+        entry.setCode === 'EB-05' &&
+        (entry.imageUrls || [entry.imageUrl]).includes(match.imageUrl)),
+    )
+    if (exists) continue
+    const colorValues = String(match.colors || '').split('/').map((value) => value.trim()).filter(Boolean)
+    entries.push({
+      id: match.id,
+      printingKey: match.printingKey,
+      cardNumber: match.cardNumber,
+      name: match.name,
+      language: match.language,
+      languageCode: match.languageCode,
+      rarity: match.rarity,
+      variant: match.variantLabel,
+      setCode: 'EB-05',
+      setCodes: ['EB-05'],
+      setName: 'ONE PIECE Heroines Edition vol.2 [EB-05]',
+      setAssignmentSource: 'Bandai official EB-05 product card list',
+      sourceText: match.sourceText,
+      isDon: false,
+      category: match.category,
+      colors: colorValues.join(' / '),
+      colorValues,
+      officialListUrl: match.officialCardlistUrl,
+      imageUrl: match.imageUrl,
+      imageUrls: match.imageUrls,
+      fallbackImageUrl: match.fallbackImageUrl,
+      source: match.source,
+      usesBaseImageFallback: false,
+      usesAlternateOfficialFallback: false,
+      hasImage: Boolean(match.imageUrl),
+      imageStatus: 'available',
+      verificationStatus: 'pending-live-image-check',
+      supplementalOfficial: true,
+    })
+  }
+
   // When a typed card number is absent from the feed entirely, try an official
   // English or Japanese base-image reference. Keep the result image-only.
   const normalizedNumber = baseCardNumber(cardNumber || query)
@@ -836,9 +964,10 @@ export async function getCatalogueImageGallery({
     }
   }
 
-  for (const entry of entries) entry.cardNumberSet = getCardNumberSetCode(entry.cardNumber)
-  const filterEntries = filterCatalogueImageEntries(entries, { query, cardNumber, sortBy, language, set, cardNumberSet, rarity, cardType, color, variant, imageStatus })
-  const rawFilters = getCatalogueImageFilterOptions(entries)
+  const correctedEntries = applyCatalogueImageCorrections(entries, imageCorrections)
+  for (const entry of correctedEntries) entry.cardNumberSet = getCardNumberSetCode(entry.cardNumber)
+  const filterEntries = filterCatalogueImageEntries(correctedEntries, { query, cardNumber, sortBy, language, set, cardNumberSet, rarity, cardType, color, variant, imageStatus })
+  const rawFilters = getCatalogueImageFilterOptions(correctedEntries)
   const filters = {
     languages: rawFilters.languages.map((value) => ({ value, label: LANGUAGE_LABELS[value] || value })),
     sets: rawFilters.sets.map((value) => ({ value, label: value })),
@@ -864,162 +993,206 @@ export async function getCatalogueImageGallery({
  * set, plus every OP-18 product printing (119 base, 33 parallel, 7 special)
  * in English and Japanese. This checks image loading, not OCR.
  */
+/**
+ * Return the complete available English or Japanese catalogue inventory for
+ * live image auditing. This deliberately pages through the gallery rather than
+ * using the sample smoke-test matrix. Entries without image URLs are retained.
+ * The result is a discovered-feed inventory, not an authoritative expected-set
+ * inventory; missing catalogue rows still require independent checklists.
+ */
+export async function getCatalogueImageAuditInventory(language) {
+  if (!['en', 'jp'].includes(language)) throw new Error('Choose English (en) or Japanese (jp) for a catalogue image audit.')
+  const pageSize = 120
+  const records = []
+  let offset = 0
+  let total = null
+  do {
+    const page = await getCatalogueImageGallery({ offset, limit: pageSize, language, sortBy: 'card-number-asc' })
+    total = page.total
+    records.push(...(page.items || []))
+    offset += pageSize
+  } while (offset < (total || 0))
+  const unique = new Map()
+  for (const record of records) {
+    if (record.languageCode !== language) continue
+    const identity = [record.printingKey || record.id, record.languageCode, record.setCode || ''].join(':')
+    if (!unique.has(identity)) unique.set(identity, record)
+  }
+  return {
+    language,
+    records: [...unique.values()],
+    total: unique.size,
+    discoveredAt: new Date().toISOString(),
+    inventoryStatus: 'discovered-feed-not-authoritative',
+    scope: 'Every available gallery catalogue entry for this language, including entries without image references and supplemental OP-18 printings.',
+  }
+}
+
 export async function getCatalogueReferenceTestMatrix() {
   const catalogue = await getCatalogue()
   const expectedSets = [
     ...Array.from({ length: 18 }, (_, index) => 'OP' + String(index + 1).padStart(2, '0')),
     ...Array.from({ length: 5 }, (_, index) => 'EB' + String(index + 1).padStart(2, '0')),
     'PRB01', 'PRB02',
+    ...Array.from({ length: 36 }, (_, index) => 'ST' + String(index + 1).padStart(2, '0')),
+    ...Array.from({ length: 12 }, (_, index) => 'DP' + String(index + 1).padStart(2, '0')),
+    'PROMO',
   ]
-  const bySlot = new Map()
-  const officialFallbackSamples = {
-    OP17: {
-      en: [
-        { cardNumber: 'EB04-007', name: 'Roronoa Zoro', rarity: 'SP CARD', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB04-007_p2.png?261113=', verificationStatus: 'verified-load' },
-        { cardNumber: 'EB04-061', name: 'Monkey.D.Luffy', rarity: 'SEC', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB04-061_p2.png?261113=', verificationStatus: 'verified-load' },
-      ],
-      jp: [
-        { cardNumber: 'EB04-007', name: 'ロロノア・ゾロ', rarity: 'SP CARD', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB04-007_p2.png?261113=', verificationStatus: 'verified-load' },
-        { cardNumber: 'EB04-061', name: 'モンキー・D・ルフィ', rarity: 'SEC', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB04-061_p3.png?261113=', verificationStatus: 'verified-load' },
-      ],
-    },
-    OP18: {
-      en: [
-        { cardNumber: 'OP18-001', name: 'Karoo', rarity: 'L', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-001.png?261016=' },
-        { cardNumber: 'OP18-002', name: 'Igaram', rarity: 'UC', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-002.png?261016=' },
-      ],
-      jp: [
-        { cardNumber: 'OP18-001', name: 'カルー', rarity: 'L', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/OP18-001.png?261113=' },
-        { cardNumber: 'OP18-002', name: 'イガラム', rarity: 'UC', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/OP18-002.png?261113=' },
-      ],
-    },
-    EB05: {
-      en: [
-        { cardNumber: 'EB05-001', name: 'Jewelry Bonney', rarity: 'SR', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB05-001.png?261016=' },
-        { cardNumber: 'EB05-002', name: 'Doll', rarity: 'R', imageUrl: 'https://en.onepiece-cardgame.com/images/cardlist/card/EB05-002.png?261016=' },
-      ],
-      jp: [
-        { cardNumber: 'EB05-001', name: 'ジュエリー・ボニー', rarity: 'SR', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB05-001.png?261113=' },
-        { cardNumber: 'EB05-002', name: 'ドール', rarity: 'R', imageUrl: 'https://www.onepiece-cardgame.com/images/cardlist/card/EB05-002.png?261113=' },
-      ],
-    },
+  const rows = new Map()
+  const add = (item) => {
+    const key = [item.language, item.targetSet, item.cardNumber, item.printingKey || item.id, item.variant || ''].join(':')
+    if (!rows.has(key)) rows.set(key, item)
   }
-  const officialImageOverrides = {
-    EB01: { jp: {
-      'EB01-001': 'https://www.onepiece-cardgame.com/images/cardlist/card/EB01-001.png?261113=',
-      'EB01-002': 'https://www.onepiece-cardgame.com/images/cardlist/card/EB01-002.png?261113=',
-    } },
-    EB02: { jp: {
-      'EB01-001': 'https://www.onepiece-cardgame.com/images/cardlist/card/EB01-001_p2.png?261113=',
-      'EB01-021': 'https://www.onepiece-cardgame.com/images/cardlist/card/EB01-021_p2.png?261113=',
-    } },
-  }
-
-  const targetSetForProduct = (productCode, cardNumber) => {
-    const code = String(productCode || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
-    const prefix = baseCardNumber(cardNumber).split('-')[0]
-    if (code === 'OP14EB04' || code === 'OP15EB04') {
-      if (prefix === 'EB04') return 'EB04'
-      return code.startsWith('OP14') ? 'OP14' : 'OP15'
+  const normalizeCode = (value) => String(value || '').toUpperCase().replace(/[^A-Z0-9]/g, '')
+  const setFromProduct = (code, cardNumber) => {
+    const normalized = normalizeCode(code)
+    const numberPrefix = baseCardNumber(cardNumber).split('-')[0]
+    if (normalized === 'OP14EB04' || normalized === 'OP15EB04') {
+      return numberPrefix === 'EB04' ? 'EB04' : normalized.slice(0, 4)
     }
-    const match = code.match(/^(OP\d{2}|EB\d{2}|PRB\d{2})/)
-    return match?.[1] || ''
+    return normalized.match(/^(OP\d{2}|EB\d{2}|PRB\d{2}|ST\d{2}|DP\d{2})/)?.[1] || (normalized === 'PROMO' ? 'PROMO' : '')
   }
 
   for (const language of REFERENCE_TEST_LANGUAGES) {
     const data = catalogue.languages?.[language] || { printings: [] }
     const index = catalogue.indexes?.[language] || {}
-    for (const printing of data.printings) {
+    for (const printing of data.printings || []) {
       if (printing.site !== language) continue
       const card = safeMapGet(catalogue.cardsByKey, printing.card_key)
       const cardNumber = card?.number || ''
       if (!cardNumber) continue
       const locator = safeMapGet(index.locatorsByPrinting, printing.key + ':' + printing.site)
-      const officialUrl = locator?.image_id
-        ? (language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(locator.image_id) + '.png'
-        : ''
-      const imageReference = resolveCatalogueImage({ printing, index, printings: data.printings, language, cardNumber })
-      const imageUrl = imageReference.imageUrl || printing.image_url || ''
-      if (!imageUrl) continue
-      const links = safeMapGet(index.printingProductsByPrinting, printing.key) || []
-      const products = links.map((link) => safeMapGet(index.productsByKey, link.product_key)).filter(Boolean)
-      const observations = safeMapGet(index.observationsByCard, printing.card_key) || []
+      const reference = resolveCatalogueImage({ printing, index, printings: data.printings, language, cardNumber })
+      const productLinks = safeMapGet(index.printingProductsByPrinting, printing.key) || []
+      const products = [...new Map(productLinks
+        .map((link) => safeMapGet(index.productsByKey, link.product_key))
+        .filter(Boolean)
+        .map((product) => [product.key, product])).values()]
+      const observations = (safeMapGet(index.observationsByCard, printing.card_key) || []).filter((item) => !item.superseded_at)
       const observation = observations.reduce((latest, item) =>
         !latest || String(item.first_seen_at || '') > String(latest.first_seen_at || '') ? item : latest, null)
       for (const product of products) {
-        const set = targetSetForProduct(product.code, cardNumber)
-        if (!expectedSets.includes(set)) continue
-        const key = language + ':' + set
-        const items = bySlot.get(key) || []
-        if (items.some((item) => item.cardNumber === cardNumber)) continue
-        items.push({
-          id: printing.key + ':' + language + ':' + set,
+        const rawSet = setFromProduct(product.code, cardNumber)
+        if (!expectedSets.includes(rawSet)) continue
+        add({
+          id: [printing.key, language, product.key].join(':'),
+          printingKey: printing.key,
           cardNumber,
           name: observation?.name || '',
           language,
-          setCode: formatSetCode(set),
+          targetSet: formatSetCode(rawSet),
+          setCode: formatSetCode(rawSet),
           setName: product.name || '',
           rarity: printing.rarity || '',
           variant: printing.variant || '',
-          imageUrl,
-          source: officialUrl ? 'Bandai official image reference' : 'Koala Kollect image reference',
+          imageUrl: reference.imageUrl || '',
+          fallbackImageUrl: reference.fallbackImageUrl || '',
+          imageId: locator?.image_id || '',
+          source: reference.source,
         })
-        bySlot.set(key, items)
+      }
+      // Unlinked products are still meaningful catalogue printing records. Use
+      // the card-number set as the explicitly qualified inferred release only
+      // when there is no linked product assignment.
+      if (!products.length) {
+        const inferred = setFromProduct(baseCardNumber(cardNumber).split('-')[0], cardNumber)
+        if (expectedSets.includes(inferred)) add({
+          id: [printing.key, language, 'unlinked'].join(':'),
+          printingKey: printing.key,
+          cardNumber,
+          name: observation?.name || '',
+          language,
+          targetSet: formatSetCode(inferred),
+          setCode: formatSetCode(inferred),
+          setName: 'Unlinked catalogue printing',
+          rarity: printing.rarity || '',
+          variant: printing.variant || '',
+          imageUrl: reference.imageUrl || '',
+          fallbackImageUrl: reference.fallbackImageUrl || '',
+          imageId: locator?.image_id || '',
+          source: reference.source,
+        })
       }
     }
   }
 
-  const items = []
-  const missingSlots = []
-  for (const set of expectedSets) {
-    for (const language of REFERENCE_TEST_LANGUAGES) {
-      const candidates = (bySlot.get(language + ':' + set) || [])
-        .sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.id.localeCompare(b.id))
-      const explicitSamples = set === 'OP18' ? getOp18ImageTestItems(language) : (officialFallbackSamples[set]?.[language] || [])
-      // Recent sets and OP17 use exact, set-attributed samples instead of
-      // whichever product links happen to be in the stale upstream feed.
-      const selected = explicitSamples.length
-        ? explicitSamples.map((sample) => ({
-          ...sample,
-          imageUrl: buildCatalogueImageProxyUrl(sample.imageUrl) || sample.imageUrl,
-          language,
-          setCode: formatSetCode(set),
-          setName: sample.setName || 'Official Bandai card-list sample',
-          variant: sample.variant || 'Base/sample printing',
-          source: sample.source || (sample.verificationStatus === 'candidate-unverified'
-            ? 'Bandai official image candidate (load not yet verified)'
-            : 'Bandai official card-list sample (load not yet verified)'),
-        }))
-        : [...candidates]
-      const imageOverrides = officialImageOverrides[set]?.[language] || {}
-      for (const item of selected) {
-        if (imageOverrides[item.cardNumber]) {
-          item.imageUrl = buildCatalogueImageProxyUrl(imageOverrides[item.cardNumber]) || imageOverrides[item.cardNumber]
-          item.source = 'Bandai official image reference (cache-busted retry)'
-        }
-      }
-      for (const sample of officialFallbackSamples[set]?.[language] || []) {
-        if (selected.length >= 2) break
-        if (selected.some((item) => item.cardNumber === sample.cardNumber)) continue
-        selected.push({
-          id: 'bandai-fallback:' + language + ':' + set + ':' + sample.cardNumber,
-          ...sample,
-          imageUrl: buildCatalogueImageProxyUrl(sample.imageUrl, language) || sample.imageUrl,
-          language,
-          setCode: formatSetCode(set),
-          setName: 'Official Bandai card list',
-          variant: 'Base',
-          source: 'Bandai official card-list fallback (not yet in primary feed)',
-        })
-      }
-      const slotsToCheck = set === 'OP18' ? selected.length : 2
-      for (let slot = 0; slot < slotsToCheck; slot += 1) {
-        if (selected[slot]) items.push({ ...selected[slot], targetSet: formatSetCode(set), sampleSlot: slot + 1 })
-        else missingSlots.push({ targetSet: formatSetCode(set), language, sampleSlot: slot + 1 })
-      }
+  // Include every known official OP-18 printing ID, including parallels.
+  for (const language of REFERENCE_TEST_LANGUAGES) {
+    for (const printing of OP18_OFFICIAL_PRINTINGS) {
+      const isJapanese = language === 'jp'
+      const localized = isJapanese ? (printing.localizedJp || {}) : (printing.localizedEn || {})
+      const exactId = localized.imageId || (isJapanese ? (printing.imageIdJp || printing.imageId) : (printing.imageIdEn || printing.imageId))
+      const cardNumber = localized.cardNumber || printing.cardNumber
+      const exactUrl = buildOfficialImageProxyUrl(exactId, language)
+        || (language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(exactId) + '.png'
+      const baseUrl = exactId !== cardNumber ? buildOfficialImageProxyUrl(cardNumber, language) : ''
+      add({
+        id: 'op18-complete:' + language + ':' + exactId,
+        printingKey: 'op18:' + exactId,
+        imageId: exactId,
+        cardNumber,
+        name: localized.name || (isJapanese ? printing.japaneseName : printing.name),
+        language,
+        targetSet: 'OP-18',
+        setCode: 'OP-18',
+        setName: 'The Dominance of God [OP-18]',
+        rarity: localized.rarity || printing.rarity,
+        variant: localized.variantLabel || printing.variantLabel,
+        imageUrl: exactUrl,
+        fallbackImageUrl: baseUrl,
+        source: 'Bandai official OP-18 language-specific ' + (localized.variantLabel || printing.variantLabel) + ' artwork',
+      })
     }
   }
-  return { expectedTotal: items.length + missingSlots.length, items, missingSlots, checkedAt: new Date().toISOString() }
+
+  // Include all official EB-05 product printing IDs for both languages.
+  for (const language of REFERENCE_TEST_LANGUAGES) {
+    for (const printing of EB05_OFFICIAL_PRINTINGS) {
+      const imageId = language === 'jp' ? printing.imageIdJp : printing.imageIdEn
+      const exactUrl = buildOfficialImageProxyUrl(imageId, language)
+        || (language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(imageId) + '.png'
+      const baseUrl = imageId !== printing.cardNumber ? buildOfficialImageProxyUrl(printing.cardNumber, language) : ''
+      add({
+        id: 'eb05-complete:' + language + ':' + imageId,
+        printingKey: 'eb05:' + imageId,
+        imageId,
+        cardNumber: printing.cardNumber,
+        name: language === 'jp' ? printing.japaneseName : printing.name,
+        language,
+        targetSet: 'EB-05',
+        setCode: 'EB-05',
+        setName: 'ONE PIECE Heroines Edition vol.2 [EB-05]',
+        rarity: printing.rarity,
+        variant: printing.variantLabel,
+        imageUrl: exactUrl,
+        fallbackImageUrl: baseUrl,
+        source: 'Bandai official EB-05 ' + printing.variantLabel + ' artwork',
+      })
+    }
+  }
+
+  const items = [...rows.values()].filter((item) => item.imageUrl)
+    .sort((a, b) => a.targetSet.localeCompare(b.targetSet) || a.language.localeCompare(b.language)
+      || a.cardNumber.localeCompare(b.cardNumber, undefined, { numeric: true })
+      || String(a.variant).localeCompare(String(b.variant)))
+  const missingFromCatalogue = [...rows.values()].filter((item) => !item.imageUrl)
+    .map((item) => ({ ...item, status: 'missing-url' }))
+  const coverageBySetLanguage = {}
+  for (const set of expectedSets) {
+    for (const language of REFERENCE_TEST_LANGUAGES) {
+      const key = formatSetCode(set) + ':' + language
+      const matching = [...rows.values()].filter((item) => item.targetSet === formatSetCode(set) && item.language === language)
+      coverageBySetLanguage[key] = { expected: matching.length, withImageUrl: matching.filter((item) => Boolean(item.imageUrl)).length, missingImageUrl: matching.filter((item) => !item.imageUrl).length }
+    }
+  }
+  return {
+    expectedTotal: items.length + missingFromCatalogue.length,
+    items,
+    missingSlots: missingFromCatalogue,
+    coverageBySetLanguage,
+    checkedAt: new Date().toISOString(),
+    auditScope: 'All available catalogue printing/product links in English and Japanese for tracked OP, EB, PRB, ST, DP and promo sets; missing image URLs are reported separately.',
+  }
 }
 
 /** Card-number-first reference lookup shared by search, Quick Add and scanner. */

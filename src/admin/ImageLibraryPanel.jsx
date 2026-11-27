@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Check, ImagePlus, PackagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './productStorage'
-import { getCatalogueCoverageReport, getCatalogueImageGallery, getCatalogueReferenceTestMatrix, saveDonCardSetOverride } from './cardCatalogue'
+import { getCatalogueCoverageReport, getCatalogueImageAuditInventory, getCatalogueImageGallery, saveCatalogueOverride, saveDonCardSetOverride } from './cardCatalogue'
 import { loadAdminLibraryFileDraft, saveAdminLibraryFileDraft } from './adminDraftStorage'
 import { readPersistentDraft, savePersistentDraft } from './persistentDraftStorage'
+import { auditCatalogueImageRecord, buildImageAuditSummary, createCorrectedImageAuditRecord, IMAGE_CHECK_STATUS, runResumableCatalogueAudit } from './imageAuditUtils.js'
 
 const DON_SET_OPTIONS = [
   ...Array.from({ length: 18 }, (_, index) => 'OP-' + String(index + 1).padStart(2, '0')),
@@ -20,7 +21,8 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
   const deleteLock = useRef(false)
   const imageListRequestId = useRef(0)
   const referenceRequestId = useRef(0)
-  const matrixCheckLock = useRef(false)
+  const matrixCheckLock = useRef({ en: false, jp: false })
+  const auditPauseState = useRef({ en: false, jp: false })
   const donSetSaveLock = useRef(false)
   const [files, setFiles] = useState([])
   const [filesRestored, setFilesRestored] = useState(false)
@@ -56,6 +58,19 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
   const [loadedReferenceIds, setLoadedReferenceIds] = useState([])
   const [referenceImageIndexes, setReferenceImageIndexes] = useState({})
   const [matrixRunning, setMatrixRunning] = useState(false)
+  const [selectedAuditIds, setSelectedAuditIds] = useState({ en: [], jp: [] })
+  const [auditCorrectionInputs, setAuditCorrectionInputs] = useState({})
+  const [auditFilters, setAuditFilters] = useState({ en: {}, jp: {} })
+  const [auditSessions, setAuditSessions] = useState(() => {
+    const saved = readPersistentDraft(user?.id, 'image-audit-sessions', {
+      en: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
+      jp: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
+    })
+    return Object.fromEntries(['en', 'jp'].map((language) => {
+      const session = saved?.[language] || { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null }
+      return [language, { ...session, status: session.status === 'running' ? 'paused' : session.status }]
+    }))
+  })
   const [coverageLoading, setCoverageLoading] = useState(false)
   const [matrixReport, setMatrixReport] = useState(() => savedLibraryDraft.matrixReport || null)
   const [matrixResults, setMatrixResults] = useState(() => savedLibraryDraft.matrixResults || [])
@@ -183,65 +198,120 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
     return () => { referenceRequestId.current += 1 }
   }, [loadReferenceImages])
 
-  const runReferenceMatrixCheck = async () => {
-    if (matrixCheckLock.current) return
-    matrixCheckLock.current = true
-    setMatrixRunning(true); setMatrixError(''); setMatrixReport(null); setMatrixResults([])
+  useEffect(() => {
+    savePersistentDraft(user?.id, 'image-audit-sessions', auditSessions)
+  }, [user?.id, auditSessions])
+
+  const runReferenceMatrixCheck = async (language, resume = false) => {
+    if (!['en', 'jp'].includes(language) || matrixCheckLock.current[language]) return
+    matrixCheckLock.current[language] = true
+    auditPauseState.current[language] = false
+    setMatrixRunning(true); setMatrixError('')
     try {
-      const matrix = await getCatalogueReferenceTestMatrix()
-      setMatrixReport(matrix)
-      const results = []
-      // Check up to 20 references at a time; variant checks retry the same-card
-      // base image if the exact parallel/SP artwork is not available in that language.
-      for (let offset = 0; offset < matrix.items.length; offset += 20) {
-        const batch = matrix.items.slice(offset, offset + 20)
-        const checked = await Promise.all(batch.map((item) => new Promise((resolve) => {
-          const image = new window.Image()
-          const candidates = [...new Set([item.imageUrl, item.fallbackImageUrl].filter(Boolean))]
-          let candidateIndex = 0
-          let settled = false
-          let timeout
-          const finish = (status) => {
-            if (settled) return
-            settled = true
-            window.clearTimeout(timeout)
-            resolve({ ...item, status, checkedUrl: candidates[candidateIndex] || '' })
-          }
-          const tryCandidate = () => {
-            window.clearTimeout(timeout)
-            timeout = window.setTimeout(() => {
-              if (candidateIndex + 1 < candidates.length) {
-                candidateIndex += 1
-                tryCandidate()
-              } else {
-                finish('timeout')
-              }
-            }, 12000)
-            image.onload = () => finish(candidateIndex === 0 ? 'loaded' : 'fallback-loaded')
-            image.onerror = () => {
-              if (candidateIndex + 1 < candidates.length) {
-                candidateIndex += 1
-                tryCandidate()
-              } else {
-                finish('failed')
-              }
-            }
-            image.src = candidates[candidateIndex]
-          }
-          if (!candidates.length) {
-            finish('missing-url')
-            return
-          }
-          tryCandidate()
-        })))
-        results.push(...checked)
-        setMatrixResults([...results])
-      }
+      const inventory = await getCatalogueImageAuditInventory(language)
+      const previous = auditSessions[language] || {}
+      const priorResults = resume ? (previous.results || []) : []
+      const completedIds = new Set(priorResults.map((item) => item.id))
+      const pending = inventory.records.filter((item) => !completedIds.has(item.id))
+      const startedAt = resume ? (previous.startedAt || new Date().toISOString()) : new Date().toISOString()
+      setMatrixReport({ ...inventory, expectedTotal: inventory.total, missingSlots: [] })
+      setAuditSessions((current) => ({
+        ...current,
+        [language]: { ...current[language], status: 'running', total: inventory.total, completed: priorResults.length, results: priorResults, startedAt, errorSummary: '' },
+      }))
+      const run = await runResumableCatalogueAudit(pending, {
+        language,
+        concurrency: 4,
+        isPaused: () => auditPauseState.current[language],
+        auditRecord: (item, options) => auditCatalogueImageRecord(item, { ...options, attempts: 2, timeoutMs: 10000, retryDelayMs: 400 }),
+        onResult: (result) => setAuditSessions((current) => {
+          const session = current[language] || {}
+          const results = [...(session.results || []).filter((item) => item.id !== result.id), result]
+          return { ...current, [language]: { ...session, status: auditPauseState.current[language] ? 'paused' : 'running', results, completed: results.length, retryCount: results.reduce((sum, item) => sum + (item.retryCount || 0), 0) } }
+        }),
+      })
+      const results = [...priorResults, ...run.results]
+      const finishedAt = new Date().toISOString()
+      setMatrixResults(results)
+      setAuditSessions((current) => {
+        const session = current[language] || {}
+        const history = resume ? (session.history || []) : [...(session.history || []), { startedAt, finishedAt, total: inventory.total }]
+        return { ...current, [language]: { ...session, status: 'complete', results, total: inventory.total, completed: results.length, retryCount: results.reduce((sum, item) => sum + (item.retryCount || 0), 0), lastRunAt: finishedAt, history } }
+      })
     } catch (checkError) {
-      setMatrixError(checkError.message || 'Could not build the full image audit.')
+      setMatrixError(checkError.message || 'Could not build the complete catalogue image audit.')
+      setAuditSessions((current) => ({ ...current, [language]: { ...current[language], status: 'error', errorSummary: checkError.message || 'Audit failed' } }))
     } finally {
-      matrixCheckLock.current = false
-      setMatrixRunning(false)
+      matrixCheckLock.current[language] = false
+      setMatrixRunning(matrixCheckLock.current.en || matrixCheckLock.current.jp)
+    }
+  }
+
+  const pauseReferenceAudit = (language) => {
+    auditPauseState.current[language] = true
+    setAuditSessions((current) => ({ ...current, [language]: { ...current[language], status: 'paused' } }))
+  }
+
+  const resumeReferenceAudit = (language) => {
+    if (matrixCheckLock.current[language]) {
+      auditPauseState.current[language] = false
+      setAuditSessions((current) => ({ ...current, [language]: { ...current[language], status: 'running' } }))
+      return
+    }
+    runReferenceMatrixCheck(language, true)
+  }
+
+  const retryAuditRecords = async (language, records) => {
+    const retryable = records.filter((item) => [
+      IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT, ...(item.referenceCorrected ? [IMAGE_CHECK_STATUS.INVALID_URL] : []),
+    ].includes(item.status))
+    for (const record of retryable) {
+      const refreshed = await auditCatalogueImageRecord(record, { language, attempts: 2, timeoutMs: 10000, retryDelayMs: 400 })
+      setAuditSessions((current) => {
+        const session = current[language] || {}
+        const results = (session.results || []).map((item) => item.id === refreshed.id ? refreshed : item)
+        return { ...current, [language]: { ...session, results, retryCount: results.reduce((sum, item) => sum + (item.retryCount || 0), 0) } }
+      })
+    }
+    setSelectedAuditIds((current) => ({ ...current, [language]: [] }))
+  }
+
+  const correctAndRetryAuditRecord = async (language, record) => {
+    try {
+      const correctedRecord = createCorrectedImageAuditRecord(
+        record,
+        auditCorrectionInputs[record.id],
+        language,
+      )
+      await saveCatalogueOverride({
+        form: {
+          card_number: record.cardNumber,
+          name: record.name || record.cardNumber,
+          language: language === 'jp' ? 'Japanese' : 'English',
+          set_code: record.setCode || '',
+          variant_label: record.variantLabel || record.variant || '',
+          reference_printing_key: record.printingKey || '',
+          reference_image_url: correctedRecord.imageUrl,
+          reference_image_source: 'Administrator-corrected image reference',
+        },
+        userId: user?.id,
+      })
+      setMatrixError('')
+      const refreshed = await auditCatalogueImageRecord(correctedRecord, {
+        language, attempts: 2, timeoutMs: 10000, retryDelayMs: 400,
+      })
+      setAuditSessions((current) => {
+        const session = current[language] || {}
+        const results = (session.results || []).map((item) => item.id === refreshed.id ? refreshed : item)
+        return { ...current, [language]: { ...session, results, retryCount: results.reduce((sum, item) => sum + (item.retryCount || 0), 0) } }
+      })
+      setAuditCorrectionInputs((current) => {
+        const next = { ...current }
+        delete next[record.id]
+        return next
+      })
+    } catch (correctionError) {
+      setMatrixError(correctionError.message || 'Could not correct and retry this image reference.')
     }
   }
 
@@ -355,16 +425,97 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
           <div className="photo-studio__heading"><div><p className="eyebrow">REFERENCE CATALOGUE</p><h3>Catalogue source health</h3></div></div>
           <p className="muted-copy">This report describes metadata in the source feed; it is not a live test of every image file. Actual image loading is counted in the reference gallery.</p>
           <div className="catalogue-health-unassigned">
-            <h4>Reference image smoke test</h4>
-            <p className="muted-copy">Checks every OP-18 product printing (119 base cards, 33 parallel printings and 7 special printings) in English and Japanese, plus the existing two-card-per-language smoke test for every other tracked set. It tests image loading and same-card fallback, not OCR.</p>
-            <button className="button button--outline" type="button" disabled={matrixRunning} onClick={runReferenceMatrixCheck}>{matrixRunning ? 'Checking images…' : 'Run full image audit'}</button>
+            <h4>Complete available catalogue image audit</h4>
+            <p className="muted-copy">Runs independently for the selected language across every available gallery catalogue entry, including records without image URLs. These totals describe discovered catalogue records, not authoritative expected set coverage. This first pass verifies each record's primary image reference; alternate/base fallback verification is a separate follow-up.</p>
+            <div className="catalogue-reference-actions">
+              <button className="button button--outline" type="button" disabled={matrixRunning} onClick={() => runReferenceMatrixCheck('en')}>{matrixRunning ? 'Auditing…' : 'Run English audit'}</button>
+              <button className="button button--outline" type="button" disabled={matrixRunning} onClick={() => runReferenceMatrixCheck('jp')}>{matrixRunning ? 'Auditing…' : 'Run Japanese audit'}</button>
+            </div>
+            <div className="catalogue-reference-actions">
+              {['en', 'jp'].map((language) => {
+                const session = auditSessions[language] || {}
+                const label = language === 'en' ? 'English' : 'Japanese'
+                const counts = buildImageAuditSummary(session.results || [], session.total || 0).counts
+                const filter = auditFilters[language] || {}
+                const valuesFor = (field) => [...new Set((session.results || []).map((item) => item[field]).filter(Boolean))].sort()
+                const visibleRecords = (session.results || []).filter((item) =>
+                  (!filter.set || item.setCode === filter.set) &&
+                  (!filter.rarity || item.rarity === filter.rarity) &&
+                  (!filter.cardType || item.category === filter.cardType) &&
+                  (!filter.variant || item.variant === filter.variant) &&
+                  (!filter.status || item.status === filter.status) &&
+                  (!filter.candidateType || (item.candidateResults || []).some((candidate) => candidate.candidateKind === filter.candidateType))
+                )
+                return <div className="catalogue-health-unassigned" key={language}>
+                  <strong>{label} audit · {session.status || 'idle'}</strong>
+                  <p className="muted-copy">{session.completed || 0}/{session.total || 0} completed · {Math.max(0, (session.total || 0) - (session.completed || 0))} remaining · {session.retryCount || 0} retries · last run {session.lastRunAt ? new Date(session.lastRunAt).toLocaleString() : 'never'}</p>
+                  <p className="muted-copy">Exact {counts[IMAGE_CHECK_STATUS.EXACT_LOADED] || 0} · Alternative {counts[IMAGE_CHECK_STATUS.ALTERNATIVE_LOADED] || 0} · Base fallback {counts[IMAGE_CHECK_STATUS.BASE_FALLBACK_LOADED] || 0} · Missing {counts[IMAGE_CHECK_STATUS.MISSING] || 0} · Temporary {counts[IMAGE_CHECK_STATUS.TEMPORARY_FAILURE] || 0} · Timeouts {counts[IMAGE_CHECK_STATUS.TIMEOUT] || 0} · Invalid {counts[IMAGE_CHECK_STATUS.INVALID_URL] || 0} · No reference {counts[IMAGE_CHECK_STATUS.NO_REFERENCE] || 0}</p>
+                  <div className="catalogue-reference-actions">
+                    {[
+                      ['set', 'Set', valuesFor('setCode')],
+                      ['rarity', 'Rarity', valuesFor('rarity')],
+                      ['cardType', 'Card type', valuesFor('category')],
+                      ['variant', 'Variant', valuesFor('variant')],
+                      ['status', 'Image status', Object.values(IMAGE_CHECK_STATUS)],
+                      ['candidateType', 'Candidate type', ['exact', 'alternative', 'base-fallback']],
+                    ].map(([key, label, options]) => <label key={key}>{label}
+                      <select value={filter[key] || ''} onChange={(event) => setAuditFilters((current) => ({ ...current, [language]: { ...(current[language] || {}), [key]: event.target.value } }))}>
+                        <option value="">All</option>
+                        {options.map((option) => <option key={option} value={option}>{option}</option>)}
+                      </select>
+                    </label>)}
+                  </div>
+                  <div className="catalogue-health-table">
+                    {visibleRecords.filter((item) => ([IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT, IMAGE_CHECK_STATUS.INVALID_URL].includes(item.status))).slice(0, 100).map((item) => <div className="catalogue-health-row" key={item.id}>
+                      <input aria-label={`Select ${item.cardNumber || item.id} for retry`} type="checkbox" checked={(selectedAuditIds[language] || []).includes(item.id)} onChange={(event) => setSelectedAuditIds((current) => ({ ...current, [language]: event.target.checked ? [...(current[language] || []), item.id] : (current[language] || []).filter((id) => id !== item.id) }))} />
+                      <strong>{item.setCode || 'Unassigned'} · {item.cardNumber || 'No card number'}</strong>
+                      <span>{item.status}{item.httpStatus ? ' · HTTP ' + item.httpStatus : ''}{item.upstreamStatus ? ' · upstream ' + item.upstreamStatus : ''}</span>
+                      {item.status === IMAGE_CHECK_STATUS.INVALID_URL ? <>
+                        <input aria-label={`Corrected image URL for ${item.cardNumber || item.id}`} type="url" value={auditCorrectionInputs[item.id] || ''} onChange={(event) => setAuditCorrectionInputs((current) => ({ ...current, [item.id]: event.target.value }))} placeholder="https://… or /_card-image/…" />
+                        <button className="button button--outline" type="button" disabled={!String(auditCorrectionInputs[item.id] || '').trim()} onClick={() => correctAndRetryAuditRecord(language, item)}>Save correction & retry</button>
+                      </> : <button className="button button--outline" type="button" onClick={() => retryAuditRecords(language, [item])}>Retry</button>}
+                    </div>)}
+                  </div>
+                  <button className="button button--outline" type="button" disabled={!(selectedAuditIds[language] || []).length} onClick={() => retryAuditRecords(language, (session.results || []).filter((item) => (selectedAuditIds[language] || []).includes(item.id)))}>Retry selected ({(selectedAuditIds[language] || []).length})</button>
+                  <button className="button button--outline" type="button" onClick={() => retryAuditRecords(language, (session.results || []).filter((item) => [IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT].includes(item.status)))}>Retry all temporary failures and timeouts</button>
+                  <div className="catalogue-reference-actions">
+                    <button className="button button--outline" type="button" disabled={matrixRunning} onClick={() => runReferenceMatrixCheck(language)}>{session.results?.length ? 'Restart ' + label : 'Start ' + label}</button>
+                    {session.status === 'running' && <button className="button button--outline" type="button" onClick={() => pauseReferenceAudit(language)}>Pause</button>}
+                    {(session.status === 'paused' || session.status === 'error') && <button className="button button--outline" type="button" onClick={() => resumeReferenceAudit(language)}>Resume</button>}
+                  </div>
+                </div>
+              })}
+            </div>
             {matrixError && <p className="form-error">{matrixError}</p>}
-            {matrixReport && <p className="muted-copy">{matrixResults.filter((item) => item.status === 'loaded').length} exact loaded · {matrixResults.filter((item) => item.status === 'fallback-loaded').length} fallback loaded · {matrixResults.filter((item) => item.status === 'failed').length} failed · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixReport.missingSlots.length} missing from source ({matrixReport.expectedTotal} expected).</p>}
+            {matrixReport && (() => {
+              const summary = buildImageAuditSummary([
+                ...matrixResults.map((item) => ({
+                  status: item.status === 'loaded' ? IMAGE_CHECK_STATUS.EXACT_LOADED
+                    : item.status === 'fallback-loaded' ? IMAGE_CHECK_STATUS.FALLBACK_LOADED
+                      : item.status === 'failed' ? IMAGE_CHECK_STATUS.TEMPORARY_FAILURE
+                        : item.status === 'missing-url' ? IMAGE_CHECK_STATUS.MISSING
+                          : item.status,
+                })),
+                ...matrixReport.missingSlots.map(() => ({ status: IMAGE_CHECK_STATUS.MISSING })),
+              ], matrixReport.expectedTotal)
+              return <p className="muted-copy">
+                {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.EXACT_LOADED).length} exact loaded · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.ALTERNATIVE_LOADED).length} alternative loaded · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.BASE_FALLBACK_LOADED).length} base fallback loaded · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.MISSING).length} confirmed missing · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.TEMPORARY_FAILURE).length} temporary failures · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.TIMEOUT).length} timed out · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.INVALID_URL).length} invalid URLs · {matrixResults.filter((item) => item.status === IMAGE_CHECK_STATUS.NO_REFERENCE).length} no image reference · {summary.remaining} unchecked ({matrixReport.expectedTotal} discovered records; {matrixReport.language.toUpperCase()}).
+              </p>
+            })()}
             {matrixReport && <details className="catalogue-health-missing">
-              <summary>View image-by-image results ({matrixResults.length + matrixReport.missingSlots.length})</summary>
+              <summary>View image-by-image results ({matrixResults.length})</summary>
               <div className="catalogue-health-table">
-                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}{item.imageId ? ' · ' + item.imageId : ''}</strong><span>{item.language.toUpperCase()}</span><span>{item.status} · {item.source}</span></div>)}
-                {matrixReport.missingSlots.map((item) => <div className="catalogue-health-row" key={item.targetSet + item.language + item.sampleSlot}><strong>{item.targetSet}</strong><span>{item.language.toUpperCase()}</span><span>Missing sample</span></div>)}
+                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}>
+                  <strong>{item.setCode || 'Unassigned'} · {item.cardNumber || 'No card number'}</strong>
+                  <span>{item.languageCode?.toUpperCase() || matrixReport.language.toUpperCase()}</span>
+                  <span>{item.status}{item.httpStatus ? ' · HTTP ' + item.httpStatus : ''}{item.upstreamStatus ? ' · upstream ' + item.upstreamStatus : ''}{item.proxyError ? ' · ' + item.proxyError : ''}{item.checkedAt ? ' · checked ' + new Date(item.checkedAt).toLocaleString() : ''} · {item.source || 'No image source'}</span>
+                  <details><summary>Candidate provenance ({item.candidateResults?.length || 0})</summary>
+                    {(item.candidateResults || []).map((candidate, index) => <p key={candidate.candidateUrl + index} className="muted-copy">
+                      {candidate.candidateKind || 'unknown'} · {candidate.candidateSource || 'unknown source'} · {candidate.candidateUrl}
+                      {candidate.httpStatus ? ' · HTTP ' + candidate.httpStatus : ''}{candidate.upstreamStatus ? ' · upstream ' + candidate.upstreamStatus : ''}{candidate.proxyError ? ' · ' + candidate.proxyError : ''}{candidate.checkedAt ? ' · ' + new Date(candidate.checkedAt).toLocaleString() : ''}
+                    </p>)}
+                  </details>
+                </div>)}
               </div>
             </details>}
           </div>
@@ -380,6 +531,12 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
             </div>
             <p className="muted-copy">Source snapshot: {coverage.sourceGeneratedAt ? new Date(coverage.sourceGeneratedAt).toLocaleDateString() : 'date unavailable'} · {coverage.sourceAgeDays ?? 'unknown'} days old. Feed coverage is not the same as live image availability.</p>
             <p className="muted-copy">Image references in feed: English {coverage.languages.en?.withImage || 0}/{coverage.languages.en?.printings || 0} · Japanese {coverage.languages.jp?.withImage || 0}/{coverage.languages.jp?.printings || 0} · Chinese (CN) {coverage.languages.cn?.withImage || 0}/{coverage.languages.cn?.printings || 0}.</p>
+            <div className="catalogue-health-unassigned">
+              <strong>Catalogue record completeness is not yet proven.</strong>
+              <p className="muted-copy">{coverage.expectedCoverage?.note || 'Set totals below count discovered feed rows only; independent expected-card inventories are required to identify catalogue records missing from the feed.'}</p>
+              <p className="muted-copy">Discovered feed rows: {Object.entries(coverage.expectedCoverage?.availableFeedRecordsBySet || {}).sort(([a], [b]) => a.localeCompare(b)).map(([setCode, count]) => setCode + ' ' + count).join(' · ') || 'Not available'}</p>
+              <p className="muted-copy">Missing catalogue records: not measurable without authoritative expected-card and printing inventories. Missing image references for records found in the feed are counted separately below.</p>
+            </div>
             {coverage.sourceIsStale && <div className="catalogue-health-unassigned"><strong>Metadata feed is stale.</strong><p className="muted-copy">The Koala Kollect snapshot has not refreshed for more than seven days. Bandai's live card list may contain newer entries.</p></div>}
             <details className="catalogue-health-missing">
               <summary>Set-by-set totals ({Object.keys(coverage.sets).length} sets)</summary>

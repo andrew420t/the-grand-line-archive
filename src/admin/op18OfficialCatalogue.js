@@ -1,4 +1,4 @@
-import { buildOfficialImageProxyUrl, buildOfficialBaseImageUrl } from './catalogueImageReference.js'
+import { buildOfficialImageProxyUrl } from './catalogueImageReference.js'
 
 // Source: Bandai's official OP-18 product card list (series=569118),
 // cross-checked against the OPBoxIndex OP-18 printing table on 2026-11-26.
@@ -1623,7 +1623,47 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[Your Turn] [On Play] DON!! −1: Up to 1 of your opponent's Characters with 7000 base power or less and up to 1 of your opponent's Characters with 5000 base power or less cannot attack until the end of your opponent's next End Phase. [On K.O.] DON!! −1: Play this Character card from your trash.",
     "trigger": "",
     "variant": "TREASURE RARE",
-    "variantLabel": "TREASURE RARE"
+    "variantLabel": "TREASURE RARE",
+    "imageIdEn": "OP18-049_p1",
+    "imageIdJp": "OP18-064_p1",
+    "localizedEn": {
+      "cardNumber": "OP18-049",
+      "imageId": "OP18-049_p1",
+      "name": "Mr.2.Bon.Kurei(Bentham)",
+      "rarity": "TR",
+      "category": "character",
+      "cost": 5,
+      "life": null,
+      "attribute": "Strike",
+      "power": 6000,
+      "counter": 1000,
+      "color": "Blue",
+      "blockIcon": 5,
+      "types": "Baroque Works",
+      "effect": "[On Play] Look at 5 cards from the top of your deck; reveal up to 1 card with a type including \"Baroque Works\", add it to your hand and place the rest at the bottom of your deck in any order. Then, give up to 1 rested DON!! card to your Leader or 1 of your Characters.",
+      "trigger": "",
+      "variant": "TREASURE RARE",
+      "variantLabel": "TREASURE RARE"
+    },
+    "localizedJp": {
+      "cardNumber": "OP18-064",
+      "imageId": "OP18-064_p1",
+      "name": "キリンガム聖",
+      "rarity": "TR",
+      "category": "character",
+      "cost": 5,
+      "life": null,
+      "attribute": "",
+      "power": 6000,
+      "counter": 1000,
+      "color": "Purple",
+      "blockIcon": 5,
+      "types": "天竜人/神の騎士団",
+      "effect": "【自分のターン中】【登場時】ドン!!-1：相手の元々の、パワー7000以下と5000以下のキャラ1枚ずつまでは、次の相手のエンドフェイズ終了時まで、アタックできない。\\n【KO時】ドン!!-1：このキャラカードをトラッシュから登場させる。",
+      "trigger": "",
+      "variant": "TREASURE RARE",
+      "variantLabel": "TREASURE RARE"
+    }
   },
   {
     "imageId": "OP18-065",
@@ -3103,7 +3143,9 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Look at 4 cards from the top of your deck; reveal up to 1 {Alabasta} or {Straw Hat Crew} type card with a cost of 2 or more and add it to your hand. Then, place the rest at the bottom of your deck in any order.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "imageIdEn": "OP13-012_p1",
+    "imageIdJp": "OP13-012_p2"
   },
   {
     "imageId": "OP13-113_p2",
@@ -3143,7 +3185,9 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "effect": "[On Play] Draw 1 card. [Once Per Turn] When your Leader with a type including \"Rocks Pirates\" attacks or is attacked, you may trash 1 card from your hand to activate this effect. Your Leader gains +3000 power during this battle.",
     "trigger": "",
     "variant": "SP CARD",
-    "variantLabel": "SP CARD"
+    "variantLabel": "SP CARD",
+    "imageIdEn": "OP17-040_p2",
+    "imageIdJp": "OP17-040_p1"
   },
   {
     "imageId": "ST24-004_p1",
@@ -3198,46 +3242,48 @@ function officialDirectImageUrl(imageId, language) {
 }
 
 function makeSupplementalMatch(printing, language) {
-  const exactProxy = buildOfficialImageProxyUrl(printing.imageId, language)
-  const baseProxy = buildOfficialImageProxyUrl(printing.cardNumber, language)
-  const exactDirect = officialDirectImageUrl(printing.imageId, language)
-  const baseDirect = officialDirectImageUrl(printing.cardNumber, language)
-  const imageUrls = [...new Set([exactProxy, printing.imageId !== printing.cardNumber ? baseProxy : '', exactDirect, baseDirect].filter(Boolean))]
   const isJapanese = language === 'jp'
+  const localized = isJapanese ? (printing.localizedJp || {}) : (printing.localizedEn || {})
+  const imageId = localized.imageId || (isJapanese ? (printing.imageIdJp || printing.imageId) : (printing.imageIdEn || printing.imageId))
+  const cardNumber = localized.cardNumber || printing.cardNumber
+  const details = { ...printing, ...localized }
+  const exactProxy = buildOfficialImageProxyUrl(imageId, language)
+  const baseProxy = buildOfficialImageProxyUrl(cardNumber, language)
+  const exactDirect = officialDirectImageUrl(imageId, language)
+  const baseDirect = officialDirectImageUrl(cardNumber, language)
+  const imageUrls = [...new Set([exactProxy, imageId !== cardNumber ? baseProxy : '', exactDirect, baseDirect].filter(Boolean))]
   return {
-    id: 'supplemental-op18:' + language + ':' + printing.imageId,
-    cardKey: 'op18:' + printing.cardNumber,
-    printingKey: 'op18:' + printing.imageId,
-    cardNumber: printing.cardNumber,
-    name: isJapanese ? printing.japaneseName : printing.name,
+    id: 'supplemental-op18:' + language + ':' + imageId,
+    cardKey: 'op18:' + cardNumber,
+    printingKey: 'op18:' + imageId,
+    cardNumber,
+    name: details.name || (isJapanese ? printing.japaneseName : printing.name),
     language: isJapanese ? 'Japanese' : 'English',
     languageCode: language,
-    category: printing.category,
-    colors: printing.color,
-    cost: printing.cost,
-    life: printing.life,
-    power: printing.power,
-    counter: printing.counter,
-    attributes: printing.attribute,
-    traits: printing.types,
-    effect: printing.effect,
-    trigger: printing.trigger,
-    rarity: printing.rarity,
-    variant: printing.variant,
-    variantLabel: printing.variantLabel,
+    category: details.category,
+    colors: details.color,
+    cost: details.cost,
+    life: details.life,
+    power: details.power,
+    counter: details.counter,
+    attributes: details.attribute,
+    traits: details.types,
+    effect: details.effect,
+    trigger: details.trigger,
+    rarity: details.rarity,
+    variant: details.variant,
+    variantLabel: details.variantLabel,
     imageUrl: exactProxy || exactDirect,
     imageUrls,
-    fallbackImageUrl: printing.imageId !== printing.cardNumber ? (baseProxy || baseDirect) : exactDirect,
-    sourceText: 'Bandai official OP-18 card-list metadata; parallel image IDs and Japanese names cross-checked against OPBoxIndex (2026-11-26).',
+    fallbackImageUrl: imageId !== cardNumber ? (baseProxy || baseDirect) : exactDirect,
+    sourceText: 'Bandai official OP-18 language-specific card-list metadata and artwork identifiers, checked 2026-11-27.',
     setCode: 'OP-18',
     setName: 'The Dominance of God [OP-18]',
     productKind: 'booster',
     releaseDate: isJapanese ? '2026-11-21' : '2026-11-20',
     sourceUrl: isJapanese ? JP_CARDLIST : EN_CARDLIST,
-    blockIcon: printing.blockIcon,
-    source: printing.variant === 'Base'
-      ? 'Bandai official ' + (isJapanese ? 'Japanese' : 'English') + ' OP-18 card image via Cloudflare proxy'
-      : 'Bandai official ' + (isJapanese ? 'Japanese' : 'English') + ' OP-18 ' + printing.variantLabel + ' image via Cloudflare proxy (base image is fallback)',
+    blockIcon: details.blockIcon,
+    source: 'Bandai official ' + (isJapanese ? 'Japanese' : 'English') + ' OP-18 ' + details.variantLabel + ' image via Cloudflare proxy',
     officialCardlistUrl: isJapanese ? JP_CARDLIST : EN_CARDLIST,
     supplementalOfficial: true,
     verificationStatus: 'pending-live-image-check',
@@ -3247,24 +3293,35 @@ function makeSupplementalMatch(printing, language) {
 export function getOp18SupplementalMatches(cardNumber = '') {
   const normalized = String(cardNumber || '').toUpperCase().replace(/\s+/g, '').replace(/_/g, '-').replace(/^(OP)-(\d{2})-/, 'OP$2-')
   return OP18_OFFICIAL_PRINTINGS
-    .filter((printing) => !normalized || printing.cardNumber === normalized)
-    .flatMap((printing) => ['en', 'jp'].map((language) => makeSupplementalMatch(printing, language)))
+    .flatMap((printing) => ['en', 'jp']
+      .filter((language) => {
+        if (!normalized) return true
+        const localized = language === 'jp' ? printing.localizedJp : printing.localizedEn
+        return (localized?.cardNumber || printing.cardNumber) === normalized
+      })
+      .map((language) => makeSupplementalMatch(printing, language)))
 }
 
 export function getOp18ImageTestItems(language = 'en') {
-  return OP18_OFFICIAL_PRINTINGS.map((printing, index) => ({
-    id: 'op18-image-check:' + language + ':' + printing.imageId,
-    cardNumber: printing.cardNumber,
-    name: language === 'jp' ? printing.japaneseName : printing.name,
-    language,
-    setCode: 'OP-18',
-    setName: 'The Dominance of God [OP-18]',
-    rarity: printing.rarity,
-    variant: printing.variantLabel,
-    imageId: printing.imageId,
-    imageUrl: buildOfficialImageProxyUrl(printing.imageId, language),
-    fallbackImageUrl: printing.imageId !== printing.cardNumber ? buildOfficialImageProxyUrl(printing.cardNumber, language) : '',
-    source: 'Bandai official image via same-origin Cloudflare proxy',
-    sampleSlot: index + 1,
-  }))
+  return OP18_OFFICIAL_PRINTINGS.map((printing, index) => {
+    const isJapanese = language === 'jp'
+    const localized = isJapanese ? (printing.localizedJp || {}) : (printing.localizedEn || {})
+    const imageId = localized.imageId || (isJapanese ? (printing.imageIdJp || printing.imageId) : (printing.imageIdEn || printing.imageId))
+    const cardNumber = localized.cardNumber || printing.cardNumber
+    return {
+      id: 'op18-image-check:' + language + ':' + imageId,
+      cardNumber,
+      name: localized.name || (isJapanese ? printing.japaneseName : printing.name),
+      language,
+      setCode: 'OP-18',
+      setName: 'The Dominance of God [OP-18]',
+      rarity: localized.rarity || printing.rarity,
+      variant: localized.variantLabel || printing.variantLabel,
+      imageId,
+      imageUrl: buildOfficialImageProxyUrl(imageId, language),
+      fallbackImageUrl: imageId !== cardNumber ? buildOfficialImageProxyUrl(cardNumber, language) : '',
+      source: 'Bandai official language-specific image via same-origin Cloudflare proxy',
+      sampleSlot: index + 1,
+    }
+  })
 }

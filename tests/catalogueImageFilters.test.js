@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts } from '../src/admin/catalogueImageFilters.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts, getCatalogueProductSetCode, getCatalogueProductSetCodes } from '../src/admin/catalogueImageFilters.js'
+import { getEb05SupplementalMatches } from '../src/admin/eb05OfficialCatalogue.js'
 
 const entries = [
   { id: 'a', cardNumber: 'OP12-002', name: 'Edward.Newgate', languageCode: 'en', setCode: 'OP-12', setCodes: ['OP-12'], rarity: 'UC', category: 'Character', colorValues: ['Red'], variant: 'base', imageStatus: 'available' },
@@ -113,4 +114,85 @@ test('deduplicates repeated links to one product but preserves different release
   ]
   assert.deepEqual(dedupePrintingProducts(products), [products[0], products[2]])
   assert.deepEqual(dedupePrintingProducts([]), [])
+})
+
+
+test('prefers a named product over a generic Other Product Card link for one printing', () => {
+  const generic = { key: 'en:569801', name: 'Other Product Card' }
+  const named = { key: 'en:src_a521deb08741', name: 'Premium Card Collection -Best Selection Vol.6-' }
+  const otherRelease = { key: 'en:prb01', code: 'PRB-01', name: 'Premium Booster' }
+
+  assert.deepEqual(dedupePrintingProducts([generic, named]), [named])
+  assert.deepEqual(dedupePrintingProducts([generic]), [generic])
+  assert.deepEqual(dedupePrintingProducts([generic, named, otherRelease]), [named, otherRelease])
+})
+
+test('uses the linked named product as release identity instead of the original card-number set', () => {
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:src_a521deb08741', name: 'Premium Card Collection -Best Selection Vol.6-' },
+    'OP15-075',
+  ), 'Premium Card Collection -Best Selection Vol.6-')
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:569115', code: 'OP15-EB04', name: 'Adventure on Kami’s Island' },
+    'OP15-075',
+  ), 'OP15-EB04')
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:569801', name: 'Other Product Card' },
+    'OP15-075',
+  ), 'OP-15')
+
+  const premiumPrinting = {
+    id: 'op15-075-premium',
+    cardNumber: 'OP15-075',
+    setCode: getCatalogueProductSetCode(
+      { key: 'en:src_a521deb08741', name: 'Premium Card Collection -Best Selection Vol.6-' },
+      'OP15-075',
+    ),
+  }
+  assert.deepEqual(filterCatalogueImageEntries([premiumPrinting], { set: 'OP-15' }), [])
+  assert.deepEqual(filterCatalogueImageEntries([premiumPrinting], { set: premiumPrinting.setCode }).map((entry) => entry.id), ['op15-075-premium'])
+})
+
+
+test('prefers official product-set relationships when a release product spans sets', () => {
+  const linkedSets = ['EB-04', 'OP-15']
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:569115', code: 'OP15-EB04' },
+    'OP15-075',
+    linkedSets,
+  ), 'OP-15')
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:569115', code: 'OP15-EB04' },
+    'EB04-001',
+    linkedSets,
+  ), 'EB-04')
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:src_a521deb08741', name: 'Premium Card Collection -Best Selection Vol.6-' },
+    'OP15-075',
+    [],
+  ), 'Premium Card Collection -Best Selection Vol.6-')
+})
+
+
+test('assigns combined release-product cards only to the set matching their card-number prefix', () => {
+  const combinedProductSets = ['EB-04', 'OP-15']
+  assert.deepEqual(getCatalogueProductSetCodes(combinedProductSets, 'OP15-075'), ['OP-15'])
+  assert.deepEqual(getCatalogueProductSetCodes(combinedProductSets, 'EB04-001'), ['EB-04'])
+  assert.deepEqual(getCatalogueProductSetCodes(combinedProductSets, 'ST24-004'), ['EB-04', 'OP-15'])
+})
+
+
+test('clearing every Image Library filter restores all catalogue entries', () => {
+  assert.deepEqual(filterCatalogueImageEntries(entries, {}).map((entry) => entry.id), entries.map((entry) => entry.id))
+})
+
+test('EB-05 reprints retain EB-05 release set and original card-number set independently', () => {
+  const reprint = getEb05SupplementalMatches('EB03-001').find((entry) => entry.languageCode === 'en')
+  assert.ok(reprint)
+  assert.equal(reprint.setCode, 'EB-05')
+  assert.equal(getCardNumberSetCode(reprint.cardNumber), 'EB-03')
+  assert.deepEqual(filterCatalogueImageEntries([reprint], { set: 'EB-05' }).map((entry) => entry.id), [reprint.id])
+  assert.deepEqual(filterCatalogueImageEntries([reprint], { cardNumberSet: 'EB-03' }).map((entry) => entry.id), [reprint.id])
+  assert.deepEqual(filterCatalogueImageEntries([reprint], { set: 'EB-05', cardNumberSet: 'EB-03' }).map((entry) => entry.id), [reprint.id])
+  assert.deepEqual(filterCatalogueImageEntries([reprint], { set: 'EB-03' }), [])
 })
