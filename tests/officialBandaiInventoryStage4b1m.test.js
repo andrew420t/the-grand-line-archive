@@ -77,10 +77,14 @@ test('PRB inventories preserve every official reprint product entry and distinct
   const prb2 = pageFor('PRB-02', 'English')
   assert.equal(prb1.extracted_card_entry_count, 319)
   assert.equal(prb1.distinct_card_number_count, 111)
-  assert.equal(prb1.distinct_base_card_number_count, 1)
+  assert.equal(prb1.distinct_base_card_number_count, null)
+  assert.equal(prb1.product_prefix_card_number_count, 1)
+  assert.deepEqual(prb1.base_card_numbers, [])
   assert.equal(prb2.extracted_card_entry_count, 316)
   assert.equal(prb2.distinct_card_number_count, 173)
-  assert.equal(prb2.distinct_base_card_number_count, 18)
+  assert.equal(prb2.distinct_base_card_number_count, null)
+  assert.equal(prb2.product_prefix_card_number_count, 18)
+  assert.deepEqual(prb2.base_card_numbers, [])
 })
 
 test('OP-18 and EB-05 supplemental catalogue gaps are measured against official language pages', () => {
