@@ -723,6 +723,14 @@ export async function getCatalogueImageGallery({
           category: observation?.category || card?.category || (isDon ? 'DON!!' : ''),
           colors: Array.isArray(colorValues) ? colorValues.join(' / ') : String(colorValues || ''),
           colorValues: Array.isArray(colorValues) ? colorValues : String(colorValues || '').split('/').map((v) => v.trim()).filter(Boolean),
+          cost: value(observation, 'cost') === '' ? value(card, 'cost') : value(observation, 'cost'),
+          power: value(observation, 'power') === '' ? value(card, 'power') : value(observation, 'power'),
+          counter: value(observation, 'counter') === '' ? value(card, 'counter') : value(observation, 'counter'),
+          attributes: (observation?.attributes || card?.attributes || []).join(' / '),
+          traits: (observation?.types || card?.types || []).join(' / '),
+          effect: value(observation, 'effect'),
+          trigger: value(observation, 'trigger'),
+          variantLabel: value(printing, 'variant'),
           officialListUrl: siteLanguage === 'cn' || printing.site === 'tcgcsv'
             ? ''
             : setCode ? getOfficialCardlistUrl(setCode, siteLanguage, isDon, card?.number || '') : '',
