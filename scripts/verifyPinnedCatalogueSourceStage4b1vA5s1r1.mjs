@@ -62,6 +62,7 @@ export function verifySource({
       const key = JSON.parse('"'+match[1]+'"');
       keyCounts.set(key, (keyCounts.get(key) || 0) + 1);
     }
+    for (const [key, count] of keyCounts) if (count > 1) errors.push('Duplicate manifest path: ' + key);
   }
   const entries = Object.entries(manifest.files);
   const paths = entries.map(([p]) => p);
