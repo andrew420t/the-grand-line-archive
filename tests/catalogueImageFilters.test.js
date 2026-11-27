@@ -201,3 +201,28 @@ test('clearing all Image Library filters restores every available catalogue entr
     entries.map((entry) => entry.id),
   )
 })
+
+
+test('keeps a cross-prefix OP15-EB04 reprint assigned to the combined release product', () => {
+  const combinedProduct = {
+    key: 'en:569115',
+    code: 'OP15-EB04',
+    name: 'BOOSTER PACK -ADVENTURE ON KAMI’S ISLAND- [OP15-EB04]',
+  }
+  assert.deepEqual(
+    getCatalogueProductSetCodes(['EB-04', 'OP-15'], 'OP13-037'),
+    ['EB-04', 'OP-15'],
+  )
+  assert.equal(
+    getCatalogueProductSetCode(combinedProduct, 'OP13-037', ['EB-04', 'OP-15']),
+    'OP15-EB04',
+  )
+  assert.equal(
+    getCatalogueProductSetCode(combinedProduct, 'OP15-075', ['EB-04', 'OP-15']),
+    'OP-15',
+  )
+  assert.equal(
+    getCatalogueProductSetCode(combinedProduct, 'EB04-001', ['EB-04', 'OP-15']),
+    'EB-04',
+  )
+})
