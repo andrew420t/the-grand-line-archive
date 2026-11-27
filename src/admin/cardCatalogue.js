@@ -508,6 +508,13 @@ export async function getCatalogueCoverageReport() {
     languages: {},
     sets: {},
     unassigned: { printings: 0, withImage: 0, withFallbackImage: 0, withoutImage: 0, withoutImageBySite: {} },
+    expectedCoverage: {
+      status: 'not-comparable',
+      note: 'Set-by-set catalogue row totals are discovered feed records, not authoritative expected card/printing counts. Missing records cannot be counted without an independent expected inventory.',
+      availableFeedRecordsBySet: {},
+      authoritativeExpectedCounts: null,
+      missingCatalogueRecords: null,
+    },
     missingImageSamples: [],
     sources: ['Bandai official image URLs where a Bandai locator exists', 'Koala Kollect structured catalogue metadata', 'Bandai official OP-18 card list and OPBoxIndex printing-ID cross-check'],
     checkedAt: new Date().toISOString(),
