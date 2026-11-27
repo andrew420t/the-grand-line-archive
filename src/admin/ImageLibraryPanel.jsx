@@ -345,7 +345,7 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
                           : item.status,
               })), matrixReport.expectedTotal)
               return <p className="muted-copy">
-                {matrixResults.filter((item) => item.status === 'loaded').length} exact loaded · {matrixResults.filter((item) => item.status === 'fallback-loaded').length} fallback loaded · {matrixResults.filter((item) => item.status === 'failed' || item.status === 'temporary-failure').length} temporary failures · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixReport.missingSlots.length} missing from catalogue · {summary.remaining} not checked ({matrixReport.expectedTotal} expected).
+                {matrixResults.filter((item) => item.status === 'loaded').length} exact loaded · {matrixResults.filter((item) => item.status === 'fallback-loaded').length} fallback loaded · {matrixResults.filter((item) => item.status === 'missing').length} confirmed missing · {matrixResults.filter((item) => item.status === 'temporary-failure').length} temporary failures · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixResults.filter((item) => item.status === 'invalid-url').length} invalid sources · {matrixReport.missingSlots.length} catalogue entries without image URLs · {summary.remaining} not checked ({matrixReport.expectedTotal} expected).
               </p>
             })()}
             {matrixReport && <details className="catalogue-health-missing">
