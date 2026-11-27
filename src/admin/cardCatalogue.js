@@ -6,7 +6,7 @@ import { createOfficialImageOnlyMatch } from './officialImageOnlyFallback.js'
 import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts } from './catalogueImageFilters.js'
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
-import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMatches, getOp18ImageTestItems } from './op18OfficialCatalogue.js'
+import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMatches, getOp18ImageTestItems, OP18_OFFICIAL_PRINTINGS } from './op18OfficialCatalogue.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
@@ -952,16 +952,30 @@ export async function getCatalogueReferenceTestMatrix() {
     }
   }
 
-  // Include the complete OP-18 official supplement, rather than sample slots.
+  // Include every known official OP-18 printing ID, including parallels.
   for (const language of REFERENCE_TEST_LANGUAGES) {
-    for (const match of getOp18ImageTestItems(language)) {
+    for (const printing of OP18_OFFICIAL_PRINTINGS) {
+      const exactId = printing.imageId
+      const exactUrl = buildOfficialImageProxyUrl(exactId, language)
+        || (language === 'jp' ? 'https://www.onepiece-cardgame.com' : 'https://en.onepiece-cardgame.com') + '/images/cardlist/card/' + encodeURIComponent(exactId) + '.png'
+      const baseUrl = printing.imageId !== printing.cardNumber
+        ? buildOfficialImageProxyUrl(printing.cardNumber, language)
+        : ''
       add({
-        ...match,
+        id: 'op18-complete:' + language + ':' + printing.imageId,
+        printingKey: 'op18:' + printing.imageId,
+        imageId: printing.imageId,
+        cardNumber: printing.cardNumber,
+        name: language === 'jp' ? printing.japaneseName : printing.name,
         language,
         targetSet: 'OP-18',
         setCode: 'OP-18',
-        printingKey: match.printingKey || match.id,
-        fallbackImageUrl: match.fallbackImageUrl || '',
+        setName: 'The Dominance of God [OP-18]',
+        rarity: printing.rarity,
+        variant: printing.variantLabel,
+        imageUrl: exactUrl,
+        fallbackImageUrl: baseUrl,
+        source: 'Bandai official OP-18 ' + printing.variantLabel + ' artwork',
       })
     }
   }
