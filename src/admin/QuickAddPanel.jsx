@@ -104,6 +104,7 @@ export default function QuickAddPanel({
   const [imageChoice, setImageChoice] = useState(() => (
     scanFields?.catalogue_reference_image_url?.value || scanFields?.reference_image_url?.value ? 'sample' : 'own'
   ))
+  const showOwnPhotoUpload = !hasCatalogueReferenceImage || imageChoice === 'own' || photos.length > 0
   const [busy, setBusy] = useState(false)
   const submitLock = useRef(false)
   const [error, setError] = useState('')
@@ -479,18 +480,66 @@ export default function QuickAddPanel({
           <label className="form-field"><span>Selling price · GBP *</span><div className="price-input"><span>£</span><input required type="number" min="0" step="0.01" value={form.price_gbp} onChange={(event) => setField('price_gbp', event.target.value)} placeholder="0.00" /></div></label>
           <label className="form-field"><span>Quantity *</span><input required type="number" min="0" step="1" value={form.stock_quantity} onChange={(event) => setField('stock_quantity', event.target.value)} /></label>
         </div>
-        <div className="quick-add-photo-section">
-          <div className="admin-view-heading">
-            <div>
-              <p className="eyebrow">CARD PHOTOGRAPHS</p>
-              <h3>Add photos to this stock item</h3>
-              <p className="admin-muted">Upload or take the card photo here. Set the front image as the main catalogue picture; add a back or detail photo if needed.</p>
+        {hasCatalogueReferenceImage && (
+          <section className="quick-add-image-choice" aria-labelledby="quick-add-image-choice-title">
+            <div className="admin-view-heading">
+              <div>
+                <p className="eyebrow">STOCK IMAGE CHOICE</p>
+                <h3 id="quick-add-image-choice-title">Which image should the Archive show?</h3>
+                <p className="admin-muted">Choose the catalogue reference image with its SAMPLE watermark, or add your own photograph of the physical card.</p>
+              </div>
             </div>
+            <div className="quick-add-image-choice__options">
+              <label className={imageChoice === 'sample' ? 'quick-add-image-choice__option is-selected' : 'quick-add-image-choice__option'}>
+                <input
+                  type="radio"
+                  name="quick-add-image-choice"
+                  value="sample"
+                  checked={imageChoice === 'sample'}
+                  disabled={Boolean(partialProductId) || !catalogueReferenceImageUrl}
+                  onChange={() => setImageChoice('sample')}
+                />
+                <span><strong>Use catalogue SAMPLE image</strong><small>Use the reference artwork shown in the library. The SAMPLE watermark stays visible.</small></span>
+              </label>
+              <label className={imageChoice === 'own' ? 'quick-add-image-choice__option is-selected' : 'quick-add-image-choice__option'}>
+                <input
+                  type="radio"
+                  name="quick-add-image-choice"
+                  value="own"
+                  checked={imageChoice === 'own'}
+                  disabled={Boolean(partialProductId)}
+                  onChange={() => setImageChoice('own')}
+                />
+                <span><strong>Use my own card photograph</strong><small>Upload or capture the physical card. Your front photo becomes the stock image.</small></span>
+              </label>
+            </div>
+            {imageChoice === 'sample' && catalogueReferenceImageUrl && (
+              <div className="quick-add-image-choice__preview">
+                <img src={catalogueReferenceImageUrl} alt={form.name + ' catalogue reference with SAMPLE watermark'} loading="lazy" />
+                <p><strong>Catalogue reference selected.</strong> The reference artwork is stored separately from uploaded stock photographs.</p>
+              </div>
+            )}
+            {imageChoice === 'sample' && photos.length > 0 && (
+              <p className="form-error" role="alert">You have {photos.length} own photograph{photos.length === 1 ? '' : 's'} queued. Remove them below or choose “My own card photograph” before saving.</p>
+            )}
+          </section>
+        )}
+        {showOwnPhotoUpload && (
+          <div className="quick-add-photo-section">
+            <div className="admin-view-heading">
+              <div>
+                <p className="eyebrow">CARD PHOTOGRAPHS</p>
+                <h3>Add photos to this stock item</h3>
+                <p className="admin-muted">Upload or take the card photo here. Set the front image as the main catalogue picture; add a back or detail photo if needed.</p>
+              </div>
+            </div>
+            <PhotoStudio photos={photos} onPhotosChange={onPhotosChange} />
           </div>
-          <PhotoStudio photos={photos} onPhotosChange={onPhotosChange} />
-        </div>
+        )}
         <div className="quick-add-form__footer">
-          <p>{photos.length} photograph{photos.length === 1 ? '' : 's'} will be linked to this product. Keep the front photograph in the photo review to show it in the public catalogue.</p>
+          <p>{hasCatalogueReferenceImage && imageChoice === 'sample'
+            ? 'The catalogue SAMPLE image will be used as the reference image. No stock photograph will be uploaded.'
+            : photos.length + ' photograph' + (photos.length === 1 ? '' : 's') + ' will be linked to this product. Keep a Card front photograph in the review to show it in the public catalogue.'}</p>
           <button className="button button--gold" type="submit" disabled={busy}>
             <Save size={15} /> {busy ? 'Saving…' : partialProductId ? 'Retry photo linking' : 'Save product'}
           </button>
