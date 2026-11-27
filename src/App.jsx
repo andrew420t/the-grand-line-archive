@@ -265,6 +265,7 @@ function Storefront() {
   const [pageSize, setPageSize] = useState('24')
   const [currentPage, setCurrentPage] = useState(1)
   const [orders, setOrders] = useState([])
+  const [archivedOrderIds, setArchivedOrderIds] = useState([])
   const [orderItems, setOrderItems] = useState([])
   const [ordersLoading, setOrdersLoading] = useState(false)
   const [ordersError, setOrdersError] = useState('')
@@ -548,6 +549,22 @@ function Storefront() {
     )
   }
 
+  const archiveOrder = useCallback(async (orderId, scope = 'customer') => {
+    if (!supabase || !user) return
+    setOrdersError('')
+    const result = await supabase.from('order_archives').insert({
+      order_id: String(orderId),
+      archived_by: user.id,
+      archive_scope: scope,
+    })
+    if (result.error && result.error.code !== '23505') {
+      setOrdersError(`Could not archive this order: ${result.error.message}`)
+      return
+    }
+    setArchivedOrderIds((current) => [...new Set([...current, String(orderId)])])
+    setOrders((current) => current.filter((order) => String(order.id) !== String(orderId)))
+  }, [user])
+
   const loadOrders = useCallback(async (adminView = false) => {
     if (!supabase || !user) return
     setOrdersLoading(true)
@@ -584,9 +601,17 @@ function Storefront() {
       return
     }
 
-    const orderRows = (result.data || []).sort(
-      (a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0),
-    )
+    const archiveQuery = supabase.from('order_archives').select('order_id').eq('archive_scope', adminView ? 'admin' : 'customer')
+    const archiveResult = adminView
+      ? await archiveQuery
+      : await supabase.from('order_archives').select('order_id, archived_by, archive_scope').or(`archived_by.eq.${user.id},archive_scope.eq.admin`)
+    const hiddenIds = (archiveResult.error ? [] : (archiveResult.data || []))
+      .filter((row) => adminView || row.archive_scope === 'admin' || row.archived_by === user.id)
+      .map((row) => String(row.order_id))
+    setArchivedOrderIds(hiddenIds)
+    const orderRows = (result.data || [])
+      .filter((order) => !hiddenIds.includes(String(order.id)))
+      .sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
     setOrders(orderRows)
     if (orderRows.length) {
       const ids = orderRows.map((order) => order.id)
@@ -1101,6 +1126,7 @@ function Storefront() {
               onSignOut={signOut}
               onReload={() => loadOrders(false)}
               onProfileUpdated={setProfile}
+              onArchiveOrder={(orderId) => archiveOrder(orderId, 'customer')}
               onForgotPassword={() => navigate('/account/forgot-password')}
             />
           }
@@ -1199,6 +1225,7 @@ function Storefront() {
                 onSignIn={() => setAuthOpen(true)}
                 onReload={() => loadOrders(true)}
                 onUpdateStatus={updateOrderStatus}
+                onArchiveOrder={(orderId) => archiveOrder(orderId, 'admin')}
                 onRefreshProducts={loadCatalog}
                 onSaveSiteSettings={saveSiteSettings}
               />
