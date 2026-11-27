@@ -4,7 +4,7 @@ import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './pr
 import { getCatalogueCoverageReport, getCatalogueImageAuditInventory, getCatalogueImageGallery, saveDonCardSetOverride } from './cardCatalogue'
 import { loadAdminLibraryFileDraft, saveAdminLibraryFileDraft } from './adminDraftStorage'
 import { readPersistentDraft, savePersistentDraft } from './persistentDraftStorage'
-import { auditCatalogueImageRecord, buildImageAuditSummary, IMAGE_CHECK_STATUS, runResumableCatalogueAudit } from './imageAuditUtils.js'
+import { auditCatalogueImageRecord, buildImageAuditSummary, createCorrectedImageAuditRecord, IMAGE_CHECK_STATUS, runResumableCatalogueAudit } from './imageAuditUtils.js'
 
 const DON_SET_OPTIONS = [
   ...Array.from({ length: 18 }, (_, index) => 'OP-' + String(index + 1).padStart(2, '0')),
@@ -59,6 +59,7 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
   const [referenceImageIndexes, setReferenceImageIndexes] = useState({})
   const [matrixRunning, setMatrixRunning] = useState(false)
   const [selectedAuditIds, setSelectedAuditIds] = useState({ en: [], jp: [] })
+  const [auditCorrectionInputs, setAuditCorrectionInputs] = useState({})
   const [auditFilters, setAuditFilters] = useState({ en: {}, jp: {} })
   const [auditSessions, setAuditSessions] = useState(() => {
     const saved = readPersistentDraft(user?.id, 'image-audit-sessions', {
@@ -275,6 +276,32 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
     setSelectedAuditIds((current) => ({ ...current, [language]: [] }))
   }
 
+  const correctAndRetryAuditRecord = async (language, record) => {
+    try {
+      const correctedRecord = createCorrectedImageAuditRecord(
+        record,
+        auditCorrectionInputs[record.id],
+        language,
+      )
+      setMatrixError('')
+      const refreshed = await auditCatalogueImageRecord(correctedRecord, {
+        language, attempts: 2, timeoutMs: 10000, retryDelayMs: 400,
+      })
+      setAuditSessions((current) => {
+        const session = current[language] || {}
+        const results = (session.results || []).map((item) => item.id === refreshed.id ? refreshed : item)
+        return { ...current, [language]: { ...session, results, retryCount: results.reduce((sum, item) => sum + (item.retryCount || 0), 0) } }
+      })
+      setAuditCorrectionInputs((current) => {
+        const next = { ...current }
+        delete next[record.id]
+        return next
+      })
+    } catch (correctionError) {
+      setMatrixError(correctionError.message || 'Could not correct and retry this image reference.')
+    }
+  }
+
   const saveDonSet = async (item) => {
     if (donSetSaveLock.current) return
     const setCode = donSetSelections[item.id] || (item.setCode && item.setCode !== 'DON!!' ? item.setCode : '')
@@ -426,12 +453,15 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
                     </label>)}
                   </div>
                   <div className="catalogue-health-table">
-                    {visibleRecords.filter((item) => ([IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT].includes(item.status) || (item.status === IMAGE_CHECK_STATUS.INVALID_URL && item.referenceCorrected))).slice(0, 100).map((item) => <label className="catalogue-health-row" key={item.id}>
-                      <input type="checkbox" checked={(selectedAuditIds[language] || []).includes(item.id)} onChange={(event) => setSelectedAuditIds((current) => ({ ...current, [language]: event.target.checked ? [...(current[language] || []), item.id] : (current[language] || []).filter((id) => id !== item.id) }))} />
+                    {visibleRecords.filter((item) => ([IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT, IMAGE_CHECK_STATUS.INVALID_URL].includes(item.status))).slice(0, 100).map((item) => <div className="catalogue-health-row" key={item.id}>
+                      <input aria-label={`Select ${item.cardNumber || item.id} for retry`} type="checkbox" checked={(selectedAuditIds[language] || []).includes(item.id)} onChange={(event) => setSelectedAuditIds((current) => ({ ...current, [language]: event.target.checked ? [...(current[language] || []), item.id] : (current[language] || []).filter((id) => id !== item.id) }))} />
                       <strong>{item.setCode || 'Unassigned'} · {item.cardNumber || 'No card number'}</strong>
                       <span>{item.status}{item.httpStatus ? ' · HTTP ' + item.httpStatus : ''}{item.upstreamStatus ? ' · upstream ' + item.upstreamStatus : ''}</span>
-                      <button className="button button--outline" type="button" onClick={() => retryAuditRecords(language, [item])}>Retry</button>
-                    </label>)}
+                      {item.status === IMAGE_CHECK_STATUS.INVALID_URL ? <>
+                        <input aria-label={`Corrected image URL for ${item.cardNumber || item.id}`} type="url" value={auditCorrectionInputs[item.id] || ''} onChange={(event) => setAuditCorrectionInputs((current) => ({ ...current, [item.id]: event.target.value }))} placeholder="https://… or /_card-image/…" />
+                        <button className="button button--outline" type="button" disabled={!String(auditCorrectionInputs[item.id] || '').trim()} onClick={() => correctAndRetryAuditRecord(language, item)}>Save correction & retry</button>
+                      </> : <button className="button button--outline" type="button" onClick={() => retryAuditRecords(language, [item])}>Retry</button>}
+                    </div>)}
                   </div>
                   <button className="button button--outline" type="button" disabled={!(selectedAuditIds[language] || []).length} onClick={() => retryAuditRecords(language, (session.results || []).filter((item) => (selectedAuditIds[language] || []).includes(item.id)))}>Retry selected ({(selectedAuditIds[language] || []).length})</button>
                   <button className="button button--outline" type="button" onClick={() => retryAuditRecords(language, (session.results || []).filter((item) => [IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT].includes(item.status)))}>Retry all temporary failures and timeouts</button>
