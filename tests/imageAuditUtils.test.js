@@ -3,6 +3,7 @@ import test from 'node:test'
 import {
   IMAGE_CHECK_STATUS,
   buildImageAuditSummary,
+  dedupeImageCandidates,
   classifyImageResponse,
   dedupeImageCandidates,
   loadImageWithRetry,
