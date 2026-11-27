@@ -205,7 +205,7 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
             outcome = { ...item, status: index === 0 ? 'loaded' : 'fallback-loaded', checkedUrl: result.url, httpStatus: result.httpStatus, attempts: result.attempts, candidateIndex: index }
             break
           }
-          outcome = { ...item, status: result.status, checkedUrl: result.url, httpStatus: result.httpStatus, attempts: result.attempts, candidateIndex: index }
+          outcome = { ...item, status: result.status, checkedUrl: result.url, httpStatus: result.httpStatus, upstreamStatus: result.upstreamStatus || 0, proxyError: result.proxyError || '', attempts: result.attempts, candidateIndex: index }
           // A definitive missing/invalid URL can advance to a same-language
           // fallback; transient errors/timeouts also try the next candidate.
         }
@@ -353,7 +353,7 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
             {matrixReport && <details className="catalogue-health-missing">
               <summary>View image-by-image results ({matrixResults.length + matrixReport.missingSlots.length})</summary>
               <div className="catalogue-health-table">
-                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}{item.imageId ? ' · ' + item.imageId : ''}</strong><span>{item.language.toUpperCase()}</span><span>{item.status} · {item.source}</span></div>)}
+                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}{item.imageId ? ' · ' + item.imageId : ''}</strong><span>{item.language.toUpperCase()}</span><span>{item.status}{item.httpStatus ? ' · HTTP ' + item.httpStatus : ''}{item.upstreamStatus ? ' · upstream ' + item.upstreamStatus : ''}{item.proxyError ? ' · ' + item.proxyError : ''} · {item.source}</span></div>)}
                 {matrixReport.missingSlots.map((item) => <div className="catalogue-health-row" key={item.targetSet + item.language + item.sampleSlot}><strong>{item.targetSet}</strong><span>{item.language.toUpperCase()}</span><span>Missing sample</span></div>)}
               </div>
             </details>}
