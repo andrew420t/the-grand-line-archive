@@ -4,6 +4,7 @@ import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './pr
 import { getCatalogueCoverageReport, getCatalogueImageGallery, getCatalogueReferenceTestMatrix, saveDonCardSetOverride } from './cardCatalogue'
 import { loadAdminLibraryFileDraft, saveAdminLibraryFileDraft } from './adminDraftStorage'
 import { readPersistentDraft, savePersistentDraft } from './persistentDraftStorage'
+import { buildImageAuditSummary, IMAGE_CHECK_STATUS, loadImageWithRetry, mapWithConcurrency } from './imageAuditUtils.js'
 
 const DON_SET_OPTIONS = [
   ...Array.from({ length: 18 }, (_, index) => 'OP-' + String(index + 1).padStart(2, '0')),
@@ -191,52 +192,27 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
       const matrix = await getCatalogueReferenceTestMatrix()
       setMatrixReport(matrix)
       const results = []
-      // Check up to 20 references at a time; variant checks retry the same-card
-      // base image if the exact parallel/SP artwork is not available in that language.
-      for (let offset = 0; offset < matrix.items.length; offset += 20) {
-        const batch = matrix.items.slice(offset, offset + 20)
-        const checked = await Promise.all(batch.map((item) => new Promise((resolve) => {
-          const image = new window.Image()
-          const candidates = [...new Set([item.imageUrl, item.fallbackImageUrl].filter(Boolean))]
-          let candidateIndex = 0
-          let settled = false
-          let timeout
-          const finish = (status) => {
-            if (settled) return
-            settled = true
-            window.clearTimeout(timeout)
-            resolve({ ...item, status, checkedUrl: candidates[candidateIndex] || '' })
+      // Four probes at a time avoid overwhelming Bandai/CDN/browser connection
+      // pools. The probe is deliberately HTTP-status based so 404, 5xx, network
+      // failures and timeouts are not collapsed into a generic image onError.
+      const checked = await mapWithConcurrency(matrix.items, 4, async (item) => {
+        const candidates = [...new Set([item.imageUrl, item.fallbackImageUrl].filter(Boolean))]
+        if (!candidates.length) return { ...item, status: 'missing-url', checkedUrl: '' }
+        let outcome = null
+        for (let index = 0; index < candidates.length; index += 1) {
+          const result = await loadImageWithRetry(candidates[index], { attempts: 2, timeoutMs: 10000, retryDelayMs: 400 })
+          if (result.status === IMAGE_CHECK_STATUS.EXACT_LOADED) {
+            outcome = { ...item, status: index === 0 ? 'loaded' : 'fallback-loaded', checkedUrl: result.url, httpStatus: result.httpStatus, attempts: result.attempts }
+            break
           }
-          const tryCandidate = () => {
-            window.clearTimeout(timeout)
-            timeout = window.setTimeout(() => {
-              if (candidateIndex + 1 < candidates.length) {
-                candidateIndex += 1
-                tryCandidate()
-              } else {
-                finish('timeout')
-              }
-            }, 12000)
-            image.onload = () => finish(candidateIndex === 0 ? 'loaded' : 'fallback-loaded')
-            image.onerror = () => {
-              if (candidateIndex + 1 < candidates.length) {
-                candidateIndex += 1
-                tryCandidate()
-              } else {
-                finish('failed')
-              }
-            }
-            image.src = candidates[candidateIndex]
-          }
-          if (!candidates.length) {
-            finish('missing-url')
-            return
-          }
-          tryCandidate()
-        })))
-        results.push(...checked)
-        setMatrixResults([...results])
-      }
+          outcome = { ...item, status: result.status, checkedUrl: result.url, httpStatus: result.httpStatus, attempts: result.attempts }
+          // A definitive missing/invalid URL can advance to a same-language
+          // fallback; transient errors/timeouts also try the next candidate.
+        }
+        return outcome
+      })
+      results.push(...checked)
+      setMatrixResults(results)
     } catch (checkError) {
       setMatrixError(checkError.message || 'Could not build the full image audit.')
     } finally {
