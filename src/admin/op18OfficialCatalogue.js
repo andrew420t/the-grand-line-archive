@@ -1,4 +1,4 @@
-import { buildOfficialImageProxyUrl, buildOfficialBaseImageUrl } from './catalogueImageReference.js'
+import { buildOfficialImageProxyUrl } from './catalogueImageReference.js'
 
 // Source: Bandai's official OP-18 product card list (series=569118),
 // cross-checked against the OPBoxIndex OP-18 printing table on 2026-11-26.
