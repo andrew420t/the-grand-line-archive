@@ -7,7 +7,7 @@
 - Starting commit: `9645e2bfb068c0cd519facad1c185306ad72eb52`
 - Source: `hotavocado/koala-kollect-data@619965ec198047de519dc6eb098c7a56aed9bd58`
 - Testing project: `ehzqsnfkmwphyllhaqhe`
-- Migration: `20261127200500_catalogue_lossless_source_persistence_stage4b1t`
+- Migrations: `20261127195100_catalogue_lossless_source_persistence_stage4b1t` and `20261127195212_catalogue_locator_suffix_provenance_stage4b1t`
 
 ## Design principles
 
@@ -17,7 +17,7 @@
 4. Card observations are immutable, site-specific versions. A new observation hash creates a new observation row; historical rows are retained and `superseded_at` marks the prior version.
 5. An official source image URL and an application proxy path are different fields. Application paths are never stored as official Bandai URLs.
 6. Language-safe composite foreign keys continue to prevent cross-language card/printing/observation relationships.
-7. The migration is additive and schema-only. It does not import, update or delete catalogue data, inventory products, legacy cards or inventory links.
+7. Both migrations are additive and schema-only. It does not import, update or delete catalogue data, inventory products, legacy cards or inventory links.
 
 ## Schema extensions
 
@@ -59,7 +59,7 @@ It stores source observation key, source site, source language, observation hash
 
 - `exact_image_url` is nullable and restricted to official Bandai HTTPS hosts.
 - `application_image_path` separately stores local app paths such as `/_card-image/bandai/en/...`.
-- `source_namespace`, `source_locator_key`, `source_first_seen_at`, and `source_record` retain locator provenance.
+- `source_namespace`, `source_locator_key`, `source_first_seen_at`, `suffix_family`, `suffix_n`, `source_image_url`, and `source_record` retain locator provenance and the complete locator identity.
 - A constraint requires an official URL or an application path and prevents storing the same value as both.
 
 ### Product/set relationships
@@ -87,7 +87,7 @@ The next importer must stage and checksum every pinned source file, filter expli
 
 ## Tests
 
-`tests/catalogueLosslessPersistenceStage4b1t.test.js` checks the additive Testing-only migration contract, typed and raw source-field retention, observation versioning, official URL/application path separation, lifecycle metadata, namespace distinction and client read-only grants.
+`tests/catalogueLosslessPersistenceStage4b1t.test.js` checks the additive Testing-only migration contract, typed and raw source-field retention, observation versioning, official URL/application path separation, locator suffix and source-image provenance, lifecycle metadata, namespace distinction and client read-only grants.
 
 ## Explicitly not done
 
