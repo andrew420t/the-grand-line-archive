@@ -26,7 +26,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-001",
     "cardNumberJp": "OP18-001",
     "nameEn": "Karoo",
-    "nameJp": "カルー"
+    "nameJp": "カルー",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-001_p1",
@@ -52,7 +56,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-001",
     "cardNumberJp": "OP18-001",
     "nameEn": "Karoo",
-    "nameJp": "カルー"
+    "nameJp": "カルー",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-002",
@@ -78,7 +86,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-002",
     "cardNumberJp": "OP18-002",
     "nameEn": "Igaram",
-    "nameJp": "イガラム"
+    "nameJp": "イガラム",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-003",
@@ -104,7 +116,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-003",
     "cardNumberJp": "OP18-003",
     "nameEn": "Sea Cat",
-    "nameJp": "海ネコ"
+    "nameJp": "海ネコ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-004",
@@ -130,7 +146,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-004",
     "cardNumberJp": "OP18-004",
     "nameEn": "Karoo",
-    "nameJp": "カルー"
+    "nameJp": "カルー",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-004_p1",
@@ -156,7 +176,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-004",
     "cardNumberJp": "OP18-004",
     "nameEn": "Karoo",
-    "nameJp": "カルー"
+    "nameJp": "カルー",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-005",
@@ -182,7 +206,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-005",
     "cardNumberJp": "OP18-005",
     "nameEn": "Kung Fu Jugon",
-    "nameJp": "クンフージュゴン"
+    "nameJp": "クンフージュゴン",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-006",
@@ -208,7 +236,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-006",
     "cardNumberJp": "OP18-006",
     "nameEn": "Koza",
-    "nameJp": "コーザ"
+    "nameJp": "コーザ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-007",
@@ -234,7 +266,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-007",
     "cardNumberJp": "OP18-007",
     "nameEn": "Smoker",
-    "nameJp": "スモーカー"
+    "nameJp": "スモーカー",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-008",
@@ -260,7 +296,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-008",
     "cardNumberJp": "OP18-008",
     "nameEn": "Chaka",
-    "nameJp": "チャカ"
+    "nameJp": "チャカ",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-009",
@@ -286,7 +326,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-009",
     "cardNumberJp": "OP18-009",
     "nameEn": "Super Spot-Billed Duck Troops",
-    "nameJp": "超カルガモ部隊"
+    "nameJp": "超カルガモ部隊",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-010",
@@ -312,7 +356,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-010",
     "cardNumberJp": "OP18-010",
     "nameEn": "Tony Tony.Chopper",
-    "nameJp": "トニートニー・チョッパー"
+    "nameJp": "トニートニー・チョッパー",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-011",
@@ -338,7 +386,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-011",
     "cardNumberJp": "OP18-011",
     "nameEn": "Nefeltari Vivi",
-    "nameJp": "ネフェルタリ・ビビ"
+    "nameJp": "ネフェルタリ・ビビ",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-011_p1",
@@ -364,7 +416,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-011",
     "cardNumberJp": "OP18-011",
     "nameEn": "Nefeltari Vivi",
-    "nameJp": "ネフェルタリ・ビビ"
+    "nameJp": "ネフェルタリ・ビビ",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-012",
@@ -390,7 +446,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-012",
     "cardNumberJp": "OP18-012",
     "nameEn": "Pincers",
-    "nameJp": "ハサミ"
+    "nameJp": "ハサミ",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-013",
@@ -416,7 +476,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-013",
     "cardNumberJp": "OP18-013",
     "nameEn": "Pell",
-    "nameJp": "ペル"
+    "nameJp": "ペル",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-014",
@@ -442,7 +506,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-014",
     "cardNumberJp": "OP18-014",
     "nameEn": "Portgas.D.Ace",
-    "nameJp": "ポートガス・Ｄ・エース"
+    "nameJp": "ポートガス・Ｄ・エース",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-015",
@@ -468,7 +536,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-015",
     "cardNumberJp": "OP18-015",
     "nameEn": "Eyelashes",
-    "nameJp": "マツゲ"
+    "nameJp": "マツゲ",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-016",
@@ -494,7 +566,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-016",
     "cardNumberJp": "OP18-016",
     "nameEn": "Monkey.D.Luffy",
-    "nameJp": "モンキー・Ｄ・ルフィ"
+    "nameJp": "モンキー・Ｄ・ルフィ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-017",
@@ -520,7 +596,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-017",
     "cardNumberJp": "OP18-017",
     "nameEn": "Roronoa Zoro",
-    "nameJp": "ロロノア・ゾロ"
+    "nameJp": "ロロノア・ゾロ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-018",
@@ -546,7 +626,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-018",
     "cardNumberJp": "OP18-018",
     "nameEn": "Let's Go, Karoo!!",
-    "nameJp": "行くわよ カルー!!!"
+    "nameJp": "行くわよ カルー!!!",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-019",
@@ -572,7 +656,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-019",
     "cardNumberJp": "OP18-019",
     "nameEn": "Quack!!!",
-    "nameJp": "クエ～ッ!!!"
+    "nameJp": "クエ～ッ!!!",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-020",
@@ -598,7 +686,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-020",
     "cardNumberJp": "OP18-020",
     "nameEn": "Stop Fighting!!!",
-    "nameJp": "戦いを!!!やめて下さい!!!"
+    "nameJp": "戦いを!!!やめて下さい!!!",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-021",
@@ -624,7 +716,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-021",
     "cardNumberJp": "OP18-021",
     "nameEn": "Franky",
-    "nameJp": "フランキー"
+    "nameJp": "フランキー",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-021_p1",
@@ -650,7 +746,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-021",
     "cardNumberJp": "OP18-021",
     "nameEn": "Franky",
-    "nameJp": "フランキー"
+    "nameJp": "フランキー",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-022",
@@ -676,7 +776,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-022",
     "cardNumberJp": "OP18-022",
     "nameEn": "Monkey.D.Luffy",
-    "nameJp": "モンキー・Ｄ・ルフィ"
+    "nameJp": "モンキー・Ｄ・ルフィ",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-022_p1",
@@ -702,7 +806,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-022",
     "cardNumberJp": "OP18-022",
     "nameEn": "Monkey.D.Luffy",
-    "nameJp": "モンキー・Ｄ・ルフィ"
+    "nameJp": "モンキー・Ｄ・ルフィ",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-023",
@@ -728,7 +836,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-023",
     "cardNumberJp": "OP18-023",
     "nameEn": "Gaimon",
-    "nameJp": "ガイモン"
+    "nameJp": "ガイモン",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-024",
@@ -754,7 +866,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-024",
     "cardNumberJp": "OP18-024",
     "nameEn": "Kokoro",
-    "nameJp": "ココロ"
+    "nameJp": "ココロ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-025",
@@ -780,7 +896,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-025",
     "cardNumberJp": "OP18-025",
     "nameEn": "Gonbe",
-    "nameJp": "ゴンベ"
+    "nameJp": "ゴンベ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-026",
@@ -806,7 +926,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-026",
     "cardNumberJp": "OP18-026",
     "nameEn": "Sanji",
-    "nameJp": "サンジ"
+    "nameJp": "サンジ",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-027",
@@ -832,7 +956,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-027",
     "cardNumberJp": "OP18-027",
     "nameEn": "Zoro & Sogeking",
-    "nameJp": "ゾロ＆そげキング"
+    "nameJp": "ゾロ＆そげキング",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-028",
@@ -858,7 +986,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-028",
     "cardNumberJp": "OP18-028",
     "nameEn": "Chimney",
-    "nameJp": "チムニー"
+    "nameJp": "チムニー",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-029",
@@ -884,7 +1016,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-029",
     "cardNumberJp": "OP18-029",
     "nameEn": "Tony Tony.Chopper",
-    "nameJp": "トニートニー・チョッパー"
+    "nameJp": "トニートニー・チョッパー",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-029_p1",
@@ -910,7 +1046,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-029",
     "cardNumberJp": "OP18-029",
     "nameEn": "Tony Tony.Chopper",
-    "nameJp": "トニートニー・チョッパー"
+    "nameJp": "トニートニー・チョッパー",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-030",
@@ -936,7 +1076,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-030",
     "cardNumberJp": "OP18-030",
     "nameEn": "Nami",
-    "nameJp": "ナミ"
+    "nameJp": "ナミ",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-031",
@@ -962,7 +1106,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-031",
     "cardNumberJp": "OP18-031",
     "nameEn": "Nico Robin",
-    "nameJp": "ニコ・ロビン"
+    "nameJp": "ニコ・ロビン",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-031_p1",
@@ -988,7 +1136,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-031",
     "cardNumberJp": "OP18-031",
     "nameEn": "Nico Robin",
-    "nameJp": "ニコ・ロビン"
+    "nameJp": "ニコ・ロビン",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-031_p2",
@@ -1014,7 +1166,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-031",
     "cardNumberJp": "OP18-031",
     "nameEn": "Nico Robin",
-    "nameJp": "ニコ・ロビン"
+    "nameJp": "ニコ・ロビン",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageId": "OP18-032",
@@ -1040,7 +1196,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-032",
     "cardNumberJp": "OP18-032",
     "nameEn": "Buggy",
-    "nameJp": "バギー"
+    "nameJp": "バギー",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-033",
@@ -1066,7 +1226,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-033",
     "cardNumberJp": "OP18-033",
     "nameEn": "Banban",
-    "nameJp": "バンバン爺"
+    "nameJp": "バンバン爺",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-034",
@@ -1092,7 +1256,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-034",
     "cardNumberJp": "OP18-034",
     "nameEn": "Franky",
-    "nameJp": "フランキー"
+    "nameJp": "フランキー",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-034_p1",
@@ -1118,7 +1286,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-034",
     "cardNumberJp": "OP18-034",
     "nameEn": "Franky",
-    "nameJp": "フランキー"
+    "nameJp": "フランキー",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-035",
@@ -1144,7 +1316,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-035",
     "cardNumberJp": "OP18-035",
     "nameEn": "Michael & Hoichael",
-    "nameJp": "マイケル＆ホイケル"
+    "nameJp": "マイケル＆ホイケル",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-036",
@@ -1170,7 +1346,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-036",
     "cardNumberJp": "OP18-036",
     "nameEn": "Monkey.D.Luffy",
-    "nameJp": "モンキー・Ｄ・ルフィ"
+    "nameJp": "モンキー・Ｄ・ルフィ",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-037",
@@ -1196,7 +1376,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-037",
     "cardNumberJp": "OP18-037",
     "nameEn": "Yokozuna",
-    "nameJp": "ヨコヅナ"
+    "nameJp": "ヨコヅナ",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-038",
@@ -1222,7 +1406,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-038",
     "cardNumberJp": "OP18-038",
     "nameEn": "Shoot Down That Flag.",
-    "nameJp": "あの旗 撃ち抜け"
+    "nameJp": "あの旗 撃ち抜け",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-039",
@@ -1248,7 +1436,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-039",
     "cardNumberJp": "OP18-039",
     "nameEn": "Gum-Gum Giant Axe",
-    "nameJp": "ゴムゴムの巨人の斧"
+    "nameJp": "ゴムゴムの巨人の斧",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-040",
@@ -1274,7 +1466,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-040",
     "cardNumberJp": "OP18-040",
     "nameEn": "Diable Jambe Flambé Shot",
-    "nameJp": "悪魔風脚 画竜点睛ショット"
+    "nameJp": "悪魔風脚 画竜点睛ショット",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-041",
@@ -1300,7 +1496,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-041",
     "cardNumberJp": "OP18-041",
     "nameEn": "Ms. All Sunday",
-    "nameJp": "ミス・オールサンデー"
+    "nameJp": "ミス・オールサンデー",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-041_p1",
@@ -1326,7 +1526,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-041",
     "cardNumberJp": "OP18-041",
     "nameEn": "Ms. All Sunday",
-    "nameJp": "ミス・オールサンデー"
+    "nameJp": "ミス・オールサンデー",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-042",
@@ -1352,7 +1556,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-042",
     "cardNumberJp": "OP18-042",
     "nameEn": "Hack",
-    "nameJp": "ハック"
+    "nameJp": "ハック",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-043",
@@ -1378,7 +1586,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-043",
     "cardNumberJp": "OP18-043",
     "nameEn": "Accelegator",
-    "nameJp": "Ｆ-ワニ"
+    "nameJp": "Ｆ-ワニ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-044",
@@ -1404,7 +1616,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-044",
     "cardNumberJp": "OP18-044",
     "nameEn": "Mr.Beans & Miss.Katherina",
-    "nameJp": "Mr.ビーンズ＆ミス・キャサリーナ"
+    "nameJp": "Mr.ビーンズ＆ミス・キャサリーナ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-045",
@@ -1430,7 +1646,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-045",
     "cardNumberJp": "OP18-045",
     "nameEn": "Mr.Prince",
-    "nameJp": "Mr.プリンス"
+    "nameJp": "Mr.プリンス",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-046",
@@ -1456,7 +1676,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-046",
     "cardNumberJp": "OP18-046",
     "nameEn": "Mr.0 & Ms. All Sunday",
-    "nameJp": "Mr.0＆ミス・オールサンデー"
+    "nameJp": "Mr.0＆ミス・オールサンデー",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-046_p1",
@@ -1482,7 +1706,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-046",
     "cardNumberJp": "OP18-046",
     "nameEn": "Mr.0 & Ms. All Sunday",
-    "nameJp": "Mr.0＆ミス・オールサンデー"
+    "nameJp": "Mr.0＆ミス・オールサンデー",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-047",
@@ -1508,7 +1736,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-047",
     "cardNumberJp": "OP18-047",
     "nameEn": "Mr.1(Daz.Bonez)",
-    "nameJp": "Mr.1(ダズ・ボーネス)"
+    "nameJp": "Mr.1(ダズ・ボーネス)",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-048",
@@ -1534,7 +1766,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-048",
     "cardNumberJp": "OP18-048",
     "nameEn": "Mr.1 & Miss Doublefinger",
-    "nameJp": "Mr.1＆ミス・ダブルフィンガー"
+    "nameJp": "Mr.1＆ミス・ダブルフィンガー",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-048_p1",
@@ -1560,7 +1796,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-048",
     "cardNumberJp": "OP18-048",
     "nameEn": "Mr.1 & Miss Doublefinger",
-    "nameJp": "Mr.1＆ミス・ダブルフィンガー"
+    "nameJp": "Mr.1＆ミス・ダブルフィンガー",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-049",
@@ -1586,7 +1826,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-049",
     "cardNumberJp": "OP18-049",
     "nameEn": "Mr.2.Bon.Kurei(Bentham)",
-    "nameJp": "Mr.2・ボン・クレー(ベンサム)"
+    "nameJp": "Mr.2・ボン・クレー(ベンサム)",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-049_p1",
@@ -1612,7 +1856,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-049",
     "cardNumberJp": null,
     "nameEn": "Mr.2.Bon.Kurei(Bentham)",
-    "nameJp": null
+    "nameJp": null,
+    "rarityEn": "TR",
+    "rarityJp": "TR",
+    "variantLabelEn": "TREASURE RARE",
+    "variantLabelJp": "TREASURE RARE"
   },
   {
     "imageId": "OP18-050",
@@ -1638,7 +1886,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-050",
     "cardNumberJp": "OP18-050",
     "nameEn": "Mr.3 & Miss.Goldenweek",
-    "nameJp": "Mr.3＆ミス・ゴールデンウィーク"
+    "nameJp": "Mr.3＆ミス・ゴールデンウィーク",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-051",
@@ -1664,7 +1916,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-051",
     "cardNumberJp": "OP18-051",
     "nameEn": "Mr.4 & Miss.MerryChristmas",
-    "nameJp": "Mr.4＆ミス・メリークリスマス"
+    "nameJp": "Mr.4＆ミス・メリークリスマス",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-051_p1",
@@ -1690,7 +1946,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-051",
     "cardNumberJp": "OP18-051",
     "nameEn": "Mr.4 & Miss.MerryChristmas",
-    "nameJp": "Mr.4＆ミス・メリークリスマス"
+    "nameJp": "Mr.4＆ミス・メリークリスマス",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-052",
@@ -1716,7 +1976,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-052",
     "cardNumberJp": "OP18-052",
     "nameEn": "Mr.5 & Miss.Valentine",
-    "nameJp": "Mr.5＆ミス・バレンタイン"
+    "nameJp": "Mr.5＆ミス・バレンタイン",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-053",
@@ -1742,7 +2006,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-053",
     "cardNumberJp": "OP18-053",
     "nameEn": "Mr.7 & Miss.Father'sDay",
-    "nameJp": "Mr.7＆ミス・ファーザーズデー"
+    "nameJp": "Mr.7＆ミス・ファーザーズデー",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-054",
@@ -1768,7 +2036,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-054",
     "cardNumberJp": "OP18-054",
     "nameEn": "Mr.8 & Ms. Monday",
-    "nameJp": "Mr.8＆ミス・マンデー"
+    "nameJp": "Mr.8＆ミス・マンデー",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-055",
@@ -1794,7 +2066,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-055",
     "cardNumberJp": "OP18-055",
     "nameEn": "Mr.9 & Ms. Wednesday",
-    "nameJp": "Mr.9＆ミス・ウェンズデー"
+    "nameJp": "Mr.9＆ミス・ウェンズデー",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-056",
@@ -1820,7 +2096,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-056",
     "cardNumberJp": "OP18-056",
     "nameEn": "Mr.13 & Ms.Friday",
-    "nameJp": "Mr.13＆ミス・フライデー"
+    "nameJp": "Mr.13＆ミス・フライデー",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-057",
@@ -1846,7 +2126,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-057",
     "cardNumberJp": "OP18-057",
     "nameEn": "Atomic Dicer",
-    "nameJp": "微塵斬"
+    "nameJp": "微塵斬",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-058",
@@ -1872,7 +2156,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-058",
     "cardNumberJp": "OP18-058",
     "nameEn": "This Kingdom is Doomed. You Can't Save It!",
-    "nameJp": "お前に国は救えない"
+    "nameJp": "お前に国は救えない",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-059",
@@ -1898,7 +2186,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-059",
     "cardNumberJp": "OP18-059",
     "nameEn": "I Pray For Your Success.",
-    "nameJp": "武運を祈る"
+    "nameJp": "武運を祈る",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-060",
@@ -1924,7 +2216,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-060",
     "cardNumberJp": "OP18-060",
     "nameEn": "Saint Gunko",
-    "nameJp": "軍子宮"
+    "nameJp": "軍子宮",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-060_p1",
@@ -1950,7 +2246,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-060",
     "cardNumberJp": "OP18-060",
     "nameEn": "Saint Gunko",
-    "nameJp": "軍子宮"
+    "nameJp": "軍子宮",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-060_p2",
@@ -1976,7 +2276,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-060",
     "cardNumberJp": "OP18-060",
     "nameEn": "Saint Gunko",
-    "nameJp": "軍子宮"
+    "nameJp": "軍子宮",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageId": "OP18-061",
@@ -2002,7 +2306,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-061",
     "cardNumberJp": "OP18-061",
     "nameEn": "Iceburg",
-    "nameJp": "アイスバーグ"
+    "nameJp": "アイスバーグ",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-061_p1",
@@ -2028,7 +2336,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-061",
     "cardNumberJp": "OP18-061",
     "nameEn": "Iceburg",
-    "nameJp": "アイスバーグ"
+    "nameJp": "アイスバーグ",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-062",
@@ -2054,7 +2366,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-062",
     "cardNumberJp": "OP18-062",
     "nameEn": "Oimo & Kashii",
-    "nameJp": "オイモ＆カーシー"
+    "nameJp": "オイモ＆カーシー",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-063",
@@ -2080,7 +2396,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-063",
     "cardNumberJp": "OP18-063",
     "nameEn": "Kiwi & Mozu",
-    "nameJp": "キウイ＆モズ"
+    "nameJp": "キウイ＆モズ",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-064",
@@ -2106,7 +2426,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-064",
     "cardNumberJp": "OP18-064",
     "nameEn": "Saint Killingham",
-    "nameJp": "キリンガム聖"
+    "nameJp": "キリンガム聖",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-064_p1",
@@ -2132,7 +2456,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": null,
     "cardNumberJp": "OP18-064",
     "nameEn": null,
-    "nameJp": "キリンガム聖"
+    "nameJp": "キリンガム聖",
+    "rarityEn": "TR",
+    "rarityJp": "TR",
+    "variantLabelEn": "TREASURE RARE",
+    "variantLabelJp": "TREASURE RARE"
   },
   {
     "imageId": "OP18-065",
@@ -2158,7 +2486,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-065",
     "cardNumberJp": "OP18-065",
     "nameEn": "Saint Gunko",
-    "nameJp": "軍子宮"
+    "nameJp": "軍子宮",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-065_p1",
@@ -2184,7 +2516,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-065",
     "cardNumberJp": "OP18-065",
     "nameEn": "Saint Gunko",
-    "nameJp": "軍子宮"
+    "nameJp": "軍子宮",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-065_p2",
@@ -2210,7 +2546,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-065",
     "cardNumberJp": "OP18-065",
     "nameEn": "Saint Gunko",
-    "nameJp": "軍子宮"
+    "nameJp": "軍子宮",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageId": "OP18-066",
@@ -2236,7 +2576,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-066",
     "cardNumberJp": "OP18-066",
     "nameEn": "Zambai",
-    "nameJp": "ザンバイ"
+    "nameJp": "ザンバイ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-067",
@@ -2262,7 +2606,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-067",
     "cardNumberJp": "OP18-067",
     "nameEn": "Charlotte Smoothie",
-    "nameJp": "シャーロット・スムージー"
+    "nameJp": "シャーロット・スムージー",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-068",
@@ -2288,7 +2636,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-068",
     "cardNumberJp": "OP18-068",
     "nameEn": "Senor Pink",
-    "nameJp": "セニョール・ピンク"
+    "nameJp": "セニョール・ピンク",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-069",
@@ -2314,7 +2666,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-069",
     "cardNumberJp": "OP18-069",
     "nameEn": "Sodomu & Gomora",
-    "nameJp": "ソドム＆ゴモラ"
+    "nameJp": "ソドム＆ゴモラ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-070",
@@ -2340,7 +2696,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-070",
     "cardNumberJp": "OP18-070",
     "nameEn": "Tom",
-    "nameJp": "トム"
+    "nameJp": "トム",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-071",
@@ -2366,7 +2726,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-071",
     "cardNumberJp": "OP18-071",
     "nameEn": "Trebol",
-    "nameJp": "トレーボル"
+    "nameJp": "トレーボル",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-072",
@@ -2392,7 +2756,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-072",
     "cardNumberJp": "OP18-072",
     "nameEn": "The Franky Family",
-    "nameJp": "フランキー一家"
+    "nameJp": "フランキー一家",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-073",
@@ -2418,7 +2786,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-073",
     "cardNumberJp": "OP18-073",
     "nameEn": "T-Bone",
-    "nameJp": "Tボーン"
+    "nameJp": "Tボーン",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-074",
@@ -2444,7 +2816,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-074",
     "cardNumberJp": "OP18-074",
     "nameEn": "Can You Please Sail on the Ship I Made?!",
-    "nameJp": "おれの造ったその船に乗ってってくれねェか!!!?"
+    "nameJp": "おれの造ったその船に乗ってってくれねェか!!!?",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-075",
@@ -2470,7 +2846,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-075",
     "cardNumberJp": "OP18-075",
     "nameEn": "Thousand Sunny",
-    "nameJp": "サウザンド・サニー号"
+    "nameJp": "サウザンド・サニー号",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-076",
@@ -2496,7 +2876,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-076",
     "cardNumberJp": "OP18-076",
     "nameEn": "Shark Submerge 3",
-    "nameJp": "シャークサブマージ3号"
+    "nameJp": "シャークサブマージ3号",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-077",
@@ -2522,7 +2906,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-077",
     "cardNumberJp": "OP18-077",
     "nameEn": "White Hobby Horse 1",
-    "nameJp": "シロモクバ1号"
+    "nameJp": "シロモクバ1号",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-078",
@@ -2548,7 +2936,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-078",
     "cardNumberJp": "OP18-078",
     "nameEn": "Mini-Merry",
-    "nameJp": "ミニメリー2号"
+    "nameJp": "ミニメリー2号",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-079",
@@ -2574,7 +2966,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-079",
     "cardNumberJp": "OP18-079",
     "nameEn": "Spandam",
-    "nameJp": "スパンダム"
+    "nameJp": "スパンダム",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-079_p1",
@@ -2600,7 +2996,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-079",
     "cardNumberJp": "OP18-079",
     "nameEn": "Spandam",
-    "nameJp": "スパンダム"
+    "nameJp": "スパンダム",
+    "rarityEn": "L",
+    "rarityJp": "L",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-080",
@@ -2626,7 +3026,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-080",
     "cardNumberJp": "OP18-080",
     "nameEn": "Van Augur",
-    "nameJp": "ヴァン・オーガー"
+    "nameJp": "ヴァン・オーガー",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-081",
@@ -2652,7 +3056,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-081",
     "cardNumberJp": "OP18-081",
     "nameEn": "Oars",
-    "nameJp": "オーズ"
+    "nameJp": "オーズ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-082",
@@ -2678,7 +3086,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-082",
     "cardNumberJp": "OP18-082",
     "nameEn": "Catarina Devon",
-    "nameJp": "カタリーナ・デボン"
+    "nameJp": "カタリーナ・デボン",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-083",
@@ -2704,7 +3116,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-083",
     "cardNumberJp": "OP18-083",
     "nameEn": "Saint Killingham",
-    "nameJp": "キリンガム聖"
+    "nameJp": "キリンガム聖",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-083_p1",
@@ -2730,7 +3146,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-083",
     "cardNumberJp": "OP18-083",
     "nameEn": "Saint Killingham",
-    "nameJp": "キリンガム聖"
+    "nameJp": "キリンガム聖",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-084",
@@ -2756,7 +3176,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-084",
     "cardNumberJp": "OP18-084",
     "nameEn": "Saint Gunko",
-    "nameJp": "軍子宮"
+    "nameJp": "軍子宮",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-084_p1",
@@ -2782,7 +3206,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-084",
     "cardNumberJp": "OP18-084",
     "nameEn": "Saint Gunko",
-    "nameJp": "軍子宮"
+    "nameJp": "軍子宮",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-085",
@@ -2808,7 +3236,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-085",
     "cardNumberJp": "OP18-085",
     "nameEn": "Cerberus",
-    "nameJp": "ケルベロス"
+    "nameJp": "ケルベロス",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-086",
@@ -2834,7 +3266,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-086",
     "cardNumberJp": "OP18-086",
     "nameEn": "Goldberg",
-    "nameJp": "ゴールドバーグ"
+    "nameJp": "ゴールドバーグ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-087",
@@ -2860,7 +3296,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-087",
     "cardNumberJp": "OP18-087",
     "nameEn": "Stansen",
-    "nameJp": "スタンセン"
+    "nameJp": "スタンセン",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-088",
@@ -2886,7 +3326,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-088",
     "cardNumberJp": "OP18-088",
     "nameEn": "Saint Sommers",
-    "nameJp": "ソマーズ聖"
+    "nameJp": "ソマーズ聖",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-088_p1",
@@ -2912,7 +3356,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-088",
     "cardNumberJp": "OP18-088",
     "nameEn": "Saint Sommers",
-    "nameJp": "ソマーズ聖"
+    "nameJp": "ソマーズ聖",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-089",
@@ -2938,7 +3386,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-089",
     "cardNumberJp": "OP18-089",
     "nameEn": "Dorry",
-    "nameJp": "ドリー"
+    "nameJp": "ドリー",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-090",
@@ -2964,7 +3416,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-090",
     "cardNumberJp": "OP18-090",
     "nameEn": "Brook",
-    "nameJp": "ブルック"
+    "nameJp": "ブルック",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-091",
@@ -2990,7 +3446,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-091",
     "cardNumberJp": "OP18-091",
     "nameEn": "Brogy",
-    "nameJp": "ブロギー"
+    "nameJp": "ブロギー",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-092",
@@ -3016,7 +3476,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-092",
     "cardNumberJp": "OP18-092",
     "nameEn": "Roronoa Zoro",
-    "nameJp": "ロロノア・ゾロ"
+    "nameJp": "ロロノア・ゾロ",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-093",
@@ -3042,7 +3506,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-093",
     "cardNumberJp": "OP18-093",
     "nameEn": "Sleeptids",
-    "nameJp": "MMA"
+    "nameJp": "MMA",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-093_p1",
@@ -3068,7 +3536,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-093",
     "cardNumberJp": "OP18-093",
     "nameEn": "Sleeptids",
-    "nameJp": "MMA"
+    "nameJp": "MMA",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-093_p2",
@@ -3094,7 +3566,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-093",
     "cardNumberJp": "OP18-093",
     "nameEn": "Sleeptids",
-    "nameJp": "MMA"
+    "nameJp": "MMA",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageId": "OP18-094",
@@ -3120,7 +3596,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-094",
     "cardNumberJp": "OP18-094",
     "nameEn": "Hee Hee Hee!! I Smell Adventure!!",
-    "nameJp": "ししし!!冒険の匂いがプンプンする!!"
+    "nameJp": "ししし!!冒険の匂いがプンプンする!!",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-095",
@@ -3146,7 +3626,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-095",
     "cardNumberJp": "OP18-095",
     "nameEn": "I'm Late, I'm Very Late!!",
-    "nameJp": "遅刻だ遅刻ゥ～!!"
+    "nameJp": "遅刻だ遅刻ゥ～!!",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-096",
@@ -3172,7 +3656,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-096",
     "cardNumberJp": "OP18-096",
     "nameEn": "I'll Make the Call",
-    "nameJp": "呼ぶぞ"
+    "nameJp": "呼ぶぞ",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-096_p1",
@@ -3198,7 +3686,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-096",
     "cardNumberJp": "OP18-096",
     "nameEn": "I'll Make the Call",
-    "nameJp": "呼ぶぞ"
+    "nameJp": "呼ぶぞ",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-097",
@@ -3224,7 +3716,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-097",
     "cardNumberJp": "OP18-097",
     "nameEn": "Abyss Pentagram",
-    "nameJp": "五芒星"
+    "nameJp": "五芒星",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-098",
@@ -3250,7 +3746,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-098",
     "cardNumberJp": "OP18-098",
     "nameEn": "Onigumo",
-    "nameJp": "オニグモ"
+    "nameJp": "オニグモ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-099",
@@ -3276,7 +3776,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-099",
     "cardNumberJp": "OP18-099",
     "nameEn": "Kaku",
-    "nameJp": "カク"
+    "nameJp": "カク",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-099_p1",
@@ -3302,7 +3806,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-099",
     "cardNumberJp": "OP18-099",
     "nameEn": "Kaku",
-    "nameJp": "カク"
+    "nameJp": "カク",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-100",
@@ -3328,7 +3836,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-100",
     "cardNumberJp": "OP18-100",
     "nameEn": "Kalifa",
-    "nameJp": "カリファ"
+    "nameJp": "カリファ",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-100_p1",
@@ -3354,7 +3866,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-100",
     "cardNumberJp": "OP18-100",
     "nameEn": "Kalifa",
-    "nameJp": "カリファ"
+    "nameJp": "カリファ",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-101",
@@ -3380,7 +3896,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-101",
     "cardNumberJp": "OP18-101",
     "nameEn": "Kumadori",
-    "nameJp": "クマドリ"
+    "nameJp": "クマドリ",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-102",
@@ -3406,7 +3926,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-102",
     "cardNumberJp": "OP18-102",
     "nameEn": "Jerry",
-    "nameJp": "ジェリー"
+    "nameJp": "ジェリー",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-103",
@@ -3432,7 +3956,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-103",
     "cardNumberJp": "OP18-103",
     "nameEn": "Jabra",
-    "nameJp": "ジャブラ"
+    "nameJp": "ジャブラ",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-104",
@@ -3458,7 +3986,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-104",
     "cardNumberJp": "OP18-104",
     "nameEn": "Strawberry",
-    "nameJp": "ストロベリー"
+    "nameJp": "ストロベリー",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-105",
@@ -3484,7 +4016,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-105",
     "cardNumberJp": "OP18-105",
     "nameEn": "Spandam",
-    "nameJp": "スパンダム"
+    "nameJp": "スパンダム",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-106",
@@ -3510,7 +4046,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-106",
     "cardNumberJp": "OP18-106",
     "nameEn": "Doberman",
-    "nameJp": "ドーベルマン"
+    "nameJp": "ドーベルマン",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-107",
@@ -3536,7 +4076,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-107",
     "cardNumberJp": "OP18-107",
     "nameEn": "Nero",
-    "nameJp": "ネロ"
+    "nameJp": "ネロ",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-108",
@@ -3562,7 +4106,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-108",
     "cardNumberJp": "OP18-108",
     "nameEn": "Funkfreed",
-    "nameJp": "ファンクフリード"
+    "nameJp": "ファンクフリード",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-109",
@@ -3588,7 +4136,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-109",
     "cardNumberJp": "OP18-109",
     "nameEn": "Fukurou",
-    "nameJp": "フクロウ"
+    "nameJp": "フクロウ",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-110",
@@ -3614,7 +4166,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-110",
     "cardNumberJp": "OP18-110",
     "nameEn": "Blueno",
-    "nameJp": "ブルーノ"
+    "nameJp": "ブルーノ",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-111",
@@ -3640,7 +4196,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-111",
     "cardNumberJp": "OP18-111",
     "nameEn": "Momonga",
-    "nameJp": "モモンガ"
+    "nameJp": "モモンガ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-112",
@@ -3666,7 +4226,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-112",
     "cardNumberJp": "OP18-112",
     "nameEn": "Yamakaji",
-    "nameJp": "ヤマカジ"
+    "nameJp": "ヤマカジ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-113",
@@ -3692,7 +4256,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-113",
     "cardNumberJp": "OP18-113",
     "nameEn": "Rob Lucci",
-    "nameJp": "ロブ・ルッチ"
+    "nameJp": "ロブ・ルッチ",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-113_p1",
@@ -3718,7 +4286,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-113",
     "cardNumberJp": "OP18-113",
     "nameEn": "Rob Lucci",
-    "nameJp": "ロブ・ルッチ"
+    "nameJp": "ロブ・ルッチ",
+    "rarityEn": "SR",
+    "rarityJp": "SR",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-114",
@@ -3744,7 +4316,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-114",
     "cardNumberJp": "OP18-114",
     "nameEn": "Wanze",
-    "nameJp": "ワンゼ"
+    "nameJp": "ワンゼ",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-115",
@@ -3770,7 +4346,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-115",
     "cardNumberJp": "OP18-115",
     "nameEn": "Ten Finger Pistol",
-    "nameJp": "十指銃"
+    "nameJp": "十指銃",
+    "rarityEn": "UC",
+    "rarityJp": "UC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-116",
@@ -3796,7 +4376,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-116",
     "cardNumberJp": "OP18-116",
     "nameEn": "Iron Body Empty Tree",
-    "nameJp": "鉄塊 空木"
+    "nameJp": "鉄塊 空木",
+    "rarityEn": "C",
+    "rarityJp": "C",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-117",
@@ -3822,7 +4406,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-117",
     "cardNumberJp": "OP18-117",
     "nameEn": "Buster Call",
-    "nameJp": "バスターコール"
+    "nameJp": "バスターコール",
+    "rarityEn": "R",
+    "rarityJp": "R",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-118",
@@ -3848,7 +4436,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-118",
     "cardNumberJp": "OP18-118",
     "nameEn": "Monkey.D.Luffy",
-    "nameJp": "モンキー・Ｄ・ルフィ"
+    "nameJp": "モンキー・Ｄ・ルフィ",
+    "rarityEn": "SEC",
+    "rarityJp": "SEC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-118_p1",
@@ -3874,7 +4466,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-118",
     "cardNumberJp": "OP18-118",
     "nameEn": "Monkey.D.Luffy",
-    "nameJp": "モンキー・Ｄ・ルフィ"
+    "nameJp": "モンキー・Ｄ・ルフィ",
+    "rarityEn": "SEC",
+    "rarityJp": "SEC",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-119",
@@ -3900,7 +4496,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-119",
     "cardNumberJp": "OP18-119",
     "nameEn": "Saint Shamrock",
-    "nameJp": "シャムロック聖"
+    "nameJp": "シャムロック聖",
+    "rarityEn": "SEC",
+    "rarityJp": "SEC",
+    "variantLabelEn": "Base",
+    "variantLabelJp": "Base"
   },
   {
     "imageId": "OP18-119_p1",
@@ -3926,7 +4526,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-119",
     "cardNumberJp": "OP18-119",
     "nameEn": "Saint Shamrock",
-    "nameJp": "シャムロック聖"
+    "nameJp": "シャムロック聖",
+    "rarityEn": "SEC",
+    "rarityJp": "SEC",
+    "variantLabelEn": "Parallel 1",
+    "variantLabelJp": "Parallel 1"
   },
   {
     "imageId": "OP18-119_p2",
@@ -3952,7 +4556,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-119",
     "cardNumberJp": "OP18-119",
     "nameEn": "Saint Shamrock",
-    "nameJp": "シャムロック聖"
+    "nameJp": "シャムロック聖",
+    "rarityEn": "SEC",
+    "rarityJp": "SEC",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageId": "OP18-084_p2",
@@ -3978,7 +4586,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP18-084",
     "cardNumberJp": "OP18-084",
     "nameEn": "Saint Gunko",
-    "nameJp": "軍子宮"
+    "nameJp": "軍子宮",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageId": "OP17-119_p2",
@@ -4004,7 +4616,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP17-119",
     "cardNumberJp": "OP17-119",
     "nameEn": "Loki",
-    "nameJp": "ロキ"
+    "nameJp": "ロキ",
+    "rarityEn": "SEC",
+    "rarityJp": "SEC",
+    "variantLabelEn": "Parallel 2",
+    "variantLabelJp": "Parallel 2"
   },
   {
     "imageId": "OP17-119_p3",
@@ -4030,7 +4646,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP17-119",
     "cardNumberJp": "OP17-119",
     "nameEn": "Loki",
-    "nameJp": "ロキ"
+    "nameJp": "ロキ",
+    "rarityEn": "SEC",
+    "rarityJp": "SEC",
+    "variantLabelEn": "Parallel 3",
+    "variantLabelJp": "Parallel 3"
   },
   {
     "imageId": "OP13-012_p1",
@@ -4056,7 +4676,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP13-012",
     "cardNumberJp": "OP13-012",
     "nameEn": "Nefeltari Vivi",
-    "nameJp": "ネフェルタリ・ビビ"
+    "nameJp": "ネフェルタリ・ビビ",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageId": "OP13-113_p2",
@@ -4082,7 +4706,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP13-113",
     "cardNumberJp": "OP13-113",
     "nameEn": "Lilith",
-    "nameJp": "リリス"
+    "nameJp": "リリス",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageId": "OP17-040_p2",
@@ -4108,7 +4736,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "OP17-040",
     "cardNumberJp": "OP17-040",
     "nameEn": "Edward.Newgate",
-    "nameJp": "エドワード・ニューゲート"
+    "nameJp": "エドワード・ニューゲート",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageId": "ST24-004_p1",
@@ -4134,7 +4766,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "ST24-004",
     "cardNumberJp": "ST24-004",
     "nameEn": "Law & Bepo",
-    "nameJp": "ロー＆ベポ"
+    "nameJp": "ロー＆ベポ",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   },
   {
     "imageId": "ST34-004_p1",
@@ -4160,7 +4796,11 @@ export const OP18_OFFICIAL_PRINTINGS = [
     "cardNumberEn": "ST34-004",
     "cardNumberJp": "ST34-004",
     "nameEn": "Charlotte Linlin",
-    "nameJp": "シャーロット・リンリン"
+    "nameJp": "シャーロット・リンリン",
+    "rarityEn": "SP CARD",
+    "rarityJp": "SPカード",
+    "variantLabelEn": "SP CARD",
+    "variantLabelJp": "SPカード"
   }
 ]
 
@@ -4180,7 +4820,9 @@ function makeSupplementalMatch(printing, language) {
   const imageId = isJapanese ? printing.imageIdJp : printing.imageIdEn
   const cardNumber = isJapanese ? printing.cardNumberJp : printing.cardNumberEn
   const name = isJapanese ? printing.nameJp : printing.nameEn
-  if (!imageId || !cardNumber || !name) return null
+  const rarity = isJapanese ? printing.rarityJp : printing.rarityEn
+  const variantLabel = isJapanese ? printing.variantLabelJp : printing.variantLabelEn
+  if (!imageId || !cardNumber || !name || !rarity || !variantLabel) return null
 
   const exactProxy = buildOfficialImageProxyUrl(imageId, language)
   const baseProxy = buildOfficialImageProxyUrl(cardNumber, language)
@@ -4206,9 +4848,9 @@ function makeSupplementalMatch(printing, language) {
     traits: printing.types,
     effect: printing.effect,
     trigger: printing.trigger,
-    rarity: printing.rarity,
+    rarity,
     variant: printing.variant,
-    variantLabel: printing.variantLabel,
+    variantLabel,
     imageUrl: exactProxy || exactDirect,
     imageUrls,
     fallbackImageUrl: imageId !== cardNumber ? (baseProxy || baseDirect) : exactDirect,
@@ -4241,7 +4883,10 @@ export function getOp18ImageTestItems(language = 'en') {
       const cardNumber = isJapanese ? printing.cardNumberJp : printing.cardNumberEn
       const name = isJapanese ? printing.nameJp : printing.nameEn
       if (!imageId || !cardNumber || !name) return []
-      return [{ imageId, cardNumber, name, rarity: printing.rarity, variant: printing.variantLabel }]
+      const rarity = isJapanese ? printing.rarityJp : printing.rarityEn
+      const variant = isJapanese ? printing.variantLabelJp : printing.variantLabelEn
+      if (!rarity || !variant) return []
+      return [{ imageId, cardNumber, name, rarity, variant }]
     })
     .map((printing, index) => ({
       id: 'op18-image-check:' + language + ':' + printing.imageId,
