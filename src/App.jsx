@@ -578,7 +578,7 @@ function Storefront() {
       return
     }
 
-    const archiveResult = await supabase.from('order_archives').select('order_id').eq('archived_by', user.id).eq('archive_scope', adminView ? 'admin' : 'customer')
+    const archiveResult = await supabase.from('order_archives').select('order_id').in('archive_scope', adminView ? ['admin'] : ['customer','admin']).match(adminView ? {} : { archived_by: user.id })
     const archivedIds = archiveResult.error ? [] : (archiveResult.data || []).map((row) => String(row.order_id))
     setArchivedOrderIds(archivedIds)
     const orderRows = (result.data || [])
@@ -880,8 +880,8 @@ function Storefront() {
             aria-label={user ? 'View orders' : 'Sign in'}
             onClick={openAccount}
           >
-            <CircleUserRound size={19} />
-            <span>{user ? 'Account' : 'Sign in'}</span>
+            {user?.user_metadata?.avatar_key ? <span className="account-avatar-mini" aria-hidden="true">{user.user_metadata.avatar_key.slice(0, 1).toUpperCase()}</span> : <CircleUserRound size={19} />}
+            <span>{user ? (user.user_metadata?.full_name || user.user_metadata?.name || 'Account') : 'Sign in'}</span>
           </button>
           <button
             className="basket-button"
