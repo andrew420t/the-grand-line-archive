@@ -3,7 +3,7 @@ import { resolveCatalogueImage } from './catalogueImageReference.js'
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 import { createOfficialImageOnlyMatch } from './officialImageOnlyFallback.js'
-import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts, getCatalogueProductSetCode } from './catalogueImageFilters.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts, getCatalogueProductSetCode, getCatalogueProductSetCodes } from './catalogueImageFilters.js'
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
 import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMatches } from './op18OfficialCatalogue.js'
@@ -587,7 +587,10 @@ export async function getCatalogueCoverageReport() {
       const donOverride = isDon ? donOverrides[printing.key + ':' + language] : null
       const donSourceSet = isDon ? catalogue.donSetsByPrintingKey?.[printing.key] : null
       const linkedSetCodes = [...new Set(linkedProducts.flatMap((product) =>
-        (safeMapGet(catalogue.productSetsByProductKey, product.key) || []).map((item) => item.set_key),
+        getCatalogueProductSetCodes(
+          (safeMapGet(catalogue.productSetsByProductKey, product.key) || []).map((item) => item.set_key),
+          cardNumber,
+        ),
       ))]
       const setCodes = donOverride?.set_code ? [donOverride.set_code] : donSourceSet?.set_codes?.length ? donSourceSet.set_codes : donSourceSet?.set_code ? [donSourceSet.set_code] : linkedSetCodes.length ? linkedSetCodes : [...new Set(linkedProducts.map((product) => product.code || product.name).filter(Boolean))]
       const setLabels = setCodes.length ? setCodes.map(formatSetCode) : ['Unassigned']
@@ -751,7 +754,8 @@ export async function getCatalogueImageGallery({
         const displaySetCodes = setOverride?.set_code
           ? [setOverride.set_code]
           : sourceSetCodes.length ? sourceSetCodes
-            : productSetCodesByKey.get(product?.key)?.length ? productSetCodesByKey.get(product.key)
+            : getCatalogueProductSetCodes(productSetCodesByKey.get(product?.key) || [], card?.number || '').length
+              ? getCatalogueProductSetCodes(productSetCodesByKey.get(product?.key) || [], card?.number || '')
               : [getCatalogueProductSetCode(product, card?.number || '')].filter(Boolean)
         const formattedSetCodes = displaySetCodes.map(formatSetCode)
         const setName = setOverride
