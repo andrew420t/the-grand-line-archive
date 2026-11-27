@@ -627,6 +627,13 @@ export async function getCatalogueCoverageReport() {
       }
     }
   }
+  // These are counts discovered from the current metadata feed only. Keep them
+  // explicitly separate from authoritative inventory totals: absence from this
+  // feed is not proof that the corresponding card/printing does not exist.
+  report.expectedCoverage.availableFeedRecordsBySet = Object.fromEntries(
+    Object.entries(report.sets).map(([code, stats]) => [code, stats.printings]),
+  )
+  report.expectedCoverage.note += ' OP-18 official printing inventory is supplied separately; the OP-01–OP-17, EB, PRB, starter and promo sets still require independently sourced checklists.'
   report.missingExpectedSets = ['OP-18', 'EB-05'].filter((code) => !report.sets[code] || report.sets[code].printings === 0)
   report.missingImageSamples.sort((a, b) =>
     a.sourceSite.localeCompare(b.sourceSite) ||
