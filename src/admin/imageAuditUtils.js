@@ -112,7 +112,7 @@ export function buildCatalogueImageCandidates(record) {
     const url = typeof descriptor === 'string' ? descriptor : descriptor?.url
     const kind = typeof descriptor === 'string' ? '' : descriptor?.kind
     const declaredLanguage = typeof descriptor === 'string' ? '' : descriptor?.language
-    const proxyLanguage = String(url || '').match(/^\\/_card-image\\/(?:bandai|external)\\/(en|jp)\\//i)?.[1]?.toLowerCase() || ''
+    const proxyLanguage = String(url || '').match(/^\/_card-image\/(?:bandai|external)\/(en|jp)\//i)?.[1]?.toLowerCase() || ''
     const candidateLanguage = declaredLanguage || proxyLanguage
     if (typeof url !== 'string' || !url.trim()) return
     if (!['exact', 'alternative', 'base-fallback'].includes(kind)) return
