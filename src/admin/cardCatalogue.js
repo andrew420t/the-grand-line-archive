@@ -635,6 +635,8 @@ export async function getCatalogueImageGallery({
   offset = 0,
   limit = 60,
   query = '',
+  cardNumber = '',
+  sortBy = 'card-number-asc',
   language = 'all',
   set = 'all',
   rarity = 'all',
@@ -783,7 +785,7 @@ export async function getCatalogueImageGallery({
 
   // When a typed card number is absent from the feed entirely, try an official
   // English or Japanese base-image reference. Keep the result image-only.
-  const normalizedNumber = baseCardNumber(query)
+  const normalizedNumber = baseCardNumber(cardNumber || query)
   if (normalizedNumber) {
     for (const languageCode of ['en', 'jp']) {
       const exists = entries.some((entry) => entry.cardNumber === normalizedNumber && entry.languageCode === languageCode)
@@ -822,7 +824,7 @@ export async function getCatalogueImageGallery({
     }
   }
 
-  const filterEntries = filterCatalogueImageEntries(entries, { query, language, set, rarity, cardType, color, variant, imageStatus })
+  const filterEntries = filterCatalogueImageEntries(entries, { query, cardNumber, sortBy, language, set, rarity, cardType, color, variant, imageStatus })
   const rawFilters = getCatalogueImageFilterOptions(entries)
   const filters = {
     languages: rawFilters.languages.map((value) => ({ value, label: LANGUAGE_LABELS[value] || value })),
