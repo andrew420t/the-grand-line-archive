@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [master]
   push:
-    branches: [feature/card-identification, feature/scanner-number-first-verification, fix/card-reference-images-stage3-2026-11-27]
+    branches: [feature/card-identification, feature/scanner-number-first-verification, fix/card-reference-images-stage3-2026-11-27, audit/official-bandai-inventory-stage4b-1l-2026-11-27]
 
 jobs:
   build-and-test:
