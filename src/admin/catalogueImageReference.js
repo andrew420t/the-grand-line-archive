@@ -131,7 +131,11 @@ export function resolveCatalogueImage({ printing, index = {}, printings = [], la
     ? uniqueUrls([exactOfficial.proxyUrl, exactOfficial.directUrl, ...sourceImageCandidates(directProductUrl)])
     : sourceImageCandidates(directProductUrl, language)
   const alternateUrls = (printings || [])
-    .filter((candidate) => candidate.card_key === printing.card_key && candidate.site === language && candidate.key !== printing.key)
+    .filter((candidate) =>
+      candidate.card_key === printing.card_key &&
+      candidate.site === printing.site &&
+      candidate.key !== printing.key,
+    )
     .flatMap((candidate) => {
       const official = officialImageFor(candidate, locatorFor(candidate))
       if (official) return [official.proxyUrl, official.directUrl]
