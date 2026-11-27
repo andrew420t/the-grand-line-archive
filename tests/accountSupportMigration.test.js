@@ -30,3 +30,6 @@ test('forgot-email recovery is generic and rate limited', () => {
   assert.match(migration, /IF v_recent >= 3 THEN/)
   assert.match(migration, /GRANT EXECUTE ON FUNCTION public\.submit_account_email_recovery/)
 })
+test('account support migration ends cleanly after its transaction', () => {
+  assert.ok(migration.trimEnd().endsWith('COMMIT;'))
+})
