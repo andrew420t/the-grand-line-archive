@@ -7,6 +7,7 @@ import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNum
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
 import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMatches } from './op18OfficialCatalogue.js'
+import { applyCatalogueImageCorrections } from './catalogueImageCorrections.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
@@ -18,6 +19,8 @@ const CACHE_TTL = 6 * 60 * 60 * 1000
 
 let cataloguePromise
 let loadedAt = 0
+let imageCorrectionsPromise
+let imageCorrectionsLoadedAt = 0
 
 const normalizeCardNumber = (value) =>
   String(value || '')
@@ -390,6 +393,7 @@ export async function saveCatalogueOverride({ form, userId }) {
     variant_label: String(form.variant_label || ''),
     printing_key: String(form.reference_printing_key || ''),
     details,
+    source: form.reference_image_source || 'Administrator-corrected image reference',
     updated_by: userId || null,
     updated_at: new Date().toISOString(),
   }
@@ -402,12 +406,16 @@ export async function saveCatalogueOverride({ form, userId }) {
     }
     throw new Error('Could not save the card library correction: ' + error.message)
   }
+  imageCorrectionsPromise = null
+  imageCorrectionsLoadedAt = 0
   return true
 }
 
 export function clearCatalogueCache() {
   cataloguePromise = null
   loadedAt = 0
+  imageCorrectionsPromise = null
+  imageCorrectionsLoadedAt = 0
 }
 
 async function readDonCardSetOverrides() {
@@ -645,6 +653,26 @@ export async function getCatalogueCoverageReport() {
 
 
 /** Paged view of catalogue image URLs; these remain remote references, not stored uploads. */
+async function getCatalogueImageCorrections() {
+  if (!supabase) return []
+  const ttl = 60 * 1000
+  if (!imageCorrectionsPromise || Date.now() - imageCorrectionsLoadedAt > ttl) {
+    imageCorrectionsPromise = supabase
+      .from('card_catalogue_overrides')
+      .select('card_number,language,set_code,variant_label,printing_key,details,source')
+      .then(({ data, error }) => {
+        if (error) throw error
+        imageCorrectionsLoadedAt = Date.now()
+        return data || []
+      })
+      .catch((error) => {
+        imageCorrectionsPromise = null
+        throw new Error('Could not load saved catalogue image corrections: ' + (error.message || String(error)))
+      })
+  }
+  return imageCorrectionsPromise
+}
+
 export async function getCatalogueImageGallery({
   offset = 0,
   limit = 60,
@@ -661,7 +689,7 @@ export async function getCatalogueImageGallery({
   imageStatus = 'all',
 } = {}) {
   const catalogue = await getCatalogue()
-  const donOverrides = await readDonCardSetOverrides()
+  const [donOverrides, imageCorrections] = await Promise.all([readDonCardSetOverrides(), getCatalogueImageCorrections()])
   const entries = []
 
   for (const siteLanguage of LANGUAGES) {
@@ -851,9 +879,10 @@ export async function getCatalogueImageGallery({
     }
   }
 
-  for (const entry of entries) entry.cardNumberSet = getCardNumberSetCode(entry.cardNumber)
-  const filterEntries = filterCatalogueImageEntries(entries, { query, cardNumber, sortBy, language, set, cardNumberSet, rarity, cardType, color, variant, imageStatus })
-  const rawFilters = getCatalogueImageFilterOptions(entries)
+  const correctedEntries = applyCatalogueImageCorrections(entries, imageCorrections)
+  for (const entry of correctedEntries) entry.cardNumberSet = getCardNumberSetCode(entry.cardNumber)
+  const filterEntries = filterCatalogueImageEntries(correctedEntries, { query, cardNumber, sortBy, language, set, cardNumberSet, rarity, cardType, color, variant, imageStatus })
+  const rawFilters = getCatalogueImageFilterOptions(correctedEntries)
   const filters = {
     languages: rawFilters.languages.map((value) => ({ value, label: LANGUAGE_LABELS[value] || value })),
     sets: rawFilters.sets.map((value) => ({ value, label: value })),
