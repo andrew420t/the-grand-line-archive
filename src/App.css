@@ -5253,3 +5253,5 @@ h2 em {
 .wanted-avatar small { font-family:Georgia,serif; font-size:8px; letter-spacing:1.5px; }
 .order-archive-button { margin-top:10px; }
 @media (max-width:600px) { .account-heading__actions { width:100%; } .account-heading__actions > * { flex:1; justify-content:center; } }
+
+.account-avatar-mini { width:19px; height:19px; display:inline-grid; place-items:center; border:1px solid var(--gold); border-radius:50%; color:var(--gold-light); font-family:Georgia,serif; font-size:11px; font-weight:700; }
