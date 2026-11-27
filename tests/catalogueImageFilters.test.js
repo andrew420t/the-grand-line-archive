@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts, getCatalogueProductSetCode } from '../src/admin/catalogueImageFilters.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode, dedupePrintingProducts, getCatalogueProductSetCode, getCatalogueProductSetCodes } from '../src/admin/catalogueImageFilters.js'
 
 const entries = [
   { id: 'a', cardNumber: 'OP12-002', name: 'Edward.Newgate', languageCode: 'en', setCode: 'OP-12', setCodes: ['OP-12'], rarity: 'UC', category: 'Character', colorValues: ['Red'], variant: 'base', imageStatus: 'available' },
@@ -170,4 +170,12 @@ test('prefers official product-set relationships when a release product spans se
     'OP15-075',
     [],
   ), 'Premium Card Collection -Best Selection Vol.6-')
+})
+
+
+test('assigns combined release-product cards only to the set matching their card-number prefix', () => {
+  const combinedProductSets = ['EB-04', 'OP-15']
+  assert.deepEqual(getCatalogueProductSetCodes(combinedProductSets, 'OP15-075'), ['OP-15'])
+  assert.deepEqual(getCatalogueProductSetCodes(combinedProductSets, 'EB04-001'), ['EB-04'])
+  assert.deepEqual(getCatalogueProductSetCodes(combinedProductSets, 'ST24-004'), ['EB-04', 'OP-15'])
 })
