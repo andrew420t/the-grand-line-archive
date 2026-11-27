@@ -31255,6 +31255,15 @@
       "other_cross_prefix_numbers_present_in_japanese_eb04": true,
       "classification": "ENGLISH_SOURCE_ONLY_CROSS_PREFIX_REPRINT",
       "image_status": "HTTP 200 in official image audit"
+    },
+    "regression_tests": {
+      "new_audit_matrix_tests": "test/catalogue-coverage/officialBandaiInventoryStage4b1n.test.js: 8 assertions groups for 50 rows, extraction/image alignment, HTTP outcomes, PRB count semantics, EB-04 English source composition, OP-18 language-specific TR identities, OP13-037 discrepancy and honest INCOMPLETE status.",
+      "image_library_filter_tests": "tests/catalogueImageFilters.test.js: existing combined filter intersection, exact card-number matching, original card-number set versus release set, language/variant separation, named Premium Card Collection product preference, and duplicate product-link suppression; added clear-all-filters restoration test.",
+      "official_inventory_tests": "tests/officialBandaiInventoryStage4b1m.test.js: PRB printing/product-prefix handling, EB-04 Japanese cross-prefix inclusions, Best Selection Vol.6 printings, OP-18 and EB-05 language-specific metadata.",
+      "pagination_tests": "tests/storagePagination.test.js: 137-object multi-page load, exact page multiple, storage error propagation, invalid page size, overlapping page suppression by stable object ID and fallback name.",
+      "pagination_fix": "src/admin/storagePagination.js now suppresses duplicate objects across overlapping Storage pages while preserving first-seen order.",
+      "targeted_execution": "Node built-in test runner executed the updated storagePagination helper/test fixture: 6/6 passed.",
+      "full_suite_lint_build": "NOT_RUN: repository checkout could not be cloned in the execution environment (DNS resolution for github.com unavailable); exact-head GitHub Actions checks were not returned. Do not claim full suite, lint or build passed."
     }
   }
 }
