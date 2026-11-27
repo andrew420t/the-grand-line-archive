@@ -40,6 +40,8 @@ test('every OP-18 language-specific printing has a matching card number, name an
     } else {
       assert.equal(printing.cardNumberEn, null)
       assert.equal(printing.nameEn, null)
+      assert.equal(printing.rarityEn, null)
+      assert.equal(printing.variantLabelEn, null)
     }
     if (printing.imageIdJp) {
       assert.ok(printing.cardNumberJp)
@@ -48,6 +50,8 @@ test('every OP-18 language-specific printing has a matching card number, name an
     } else {
       assert.equal(printing.cardNumberJp, null)
       assert.equal(printing.nameJp, null)
+      assert.equal(printing.rarityJp, null)
+      assert.equal(printing.variantLabelJp, null)
     }
     assert.ok(printing.rarity)
     assert.ok(printing.category)
