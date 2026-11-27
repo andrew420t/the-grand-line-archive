@@ -130,13 +130,14 @@ All 50 matrix rows now have zero unparsed official rows and zero source image UR
 
 Both languages contain all 119 OP15-prefixed base card numbers. English has 39 reprint card numbers and Japanese has 6 because the English OP15 page combines the OP15-EB04 product assignment while Japanese EB-04 is listed separately.
 
-The 33 English-only reprint card numbers consist of 30 EB04-prefixed numbers plus three additional official non-EB04 printings:
+The English OP15-EB04 page has 33 card numbers not listed on the Japanese OP-15 page: 30 EB04-prefixed numbers and three non-EB04 numbers. Cross-checking those against the Japanese EB-04 page resolves all but one:
 
-- **OP11-106** — Zeus, SP CARD, image ID `OP11-106_p2`.
-- **OP13-037** — Roronoa Zoro, Treasure Rare, image ID `OP13-037_p1`.
-- **PRB02-014** — Sabo, SP CARD, image ID `PRB02-014_p2`.
+- All 30 EB04-prefixed numbers are represented in the Japanese EB-04 product page.
+- **OP11-106** — Zeus, SP CARD, image ID `OP11-106_p2`; the Japanese EB-04 page also contains the corresponding `SPカード` printing.
+- **PRB02-014** — Sabo, SP CARD, image ID `PRB02-014_p2`; the Japanese EB-04 page also contains the corresponding `SPカード` printing.
+- **OP13-037** — Roronoa Zoro, Treasure Rare, image ID `OP13-037_p1`; this is the one genuine English-only cross-prefix non-base product printing. The Japanese EB-04 page has no OP13-037 entry, although the original Japanese OP13-037 card exists in the Japanese OP-13 set.
 
-All three carry the official product label `-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]`. PRB02-014 is a distinct OP15-EB04 printing of the original PRB02-014 card, not an OP15 base card. The matrix preserves original card number and release-product assignment separately.
+Therefore the one non-base product-number discrepancy is **OP13-037 TR in English OP15-EB04**. Do not invent a Japanese EB-04 counterpart. The matrix records the Japanese OP11-106 and PRB02-014 counterparts separately and preserves all genuine printing identities. See the companion [source-gap resolution report](./stage4b-1n-official-source-gap-resolution.md).
 
 ## OP-18 and EB-05 feed coverage gaps
 
@@ -191,28 +192,27 @@ This is a small smoke dataset, not a complete application catalogue. Full applic
 
 ## Regression tests and verification
 
-The final code-bearing GitHub Actions run completed successfully:
+The latest code-bearing GitHub Actions run completed successfully:
 
-- **293 / 293 automated tests passed.**
-- `npm run lint`: passed.
-- `npm run build`: passed.
-- Official image HTTP audit: passed, 7,798 / 7,798 loaded.
-- Workflow run: [46043216009](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46043216009).
-
-The build emitted only the existing non-blocking Vite chunk-size warning.
+- **306 / 306 automated tests passed.**
+- `npm run lint`: passed with 17 warnings and 0 errors.
+- `npm run build`: passed; only non-blocking Vite chunk-size and Node `punycode` deprecation warnings.
+- Workflow run: [46044786850](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46044786850), on code-bearing commit `f7f510802036960a50e1f377c20d389836db303c`.
+- Official image HTTP audit: passed, 7,798 / 7,798 loaded, in [run 46043216009](https://github.com/andrew420t/the-grand-line-archive/actions/runs/46043216009), on source-audit commit `f13880972eea4ffd4f683f94375dd80b14175734`.
 
 Regression coverage includes:
-- Image Library filter intersection and clearing.
-- Pagination overlap and duplicate suppression.
+- Image Library combined filter intersection, exact card-number matching, language/variant separation and clearing all filters.
+- Pagination overlap and duplicate suppression by stable storage object ID or fallback name; 137-object multi-page coverage.
 - Release set versus original card-number set.
 - English/Japanese separation and same-language image fallback.
 - OP-15 generic placeholder versus named Premium Card Collection product handling.
+- The single OP13-037 English-only cross-prefix TR printing and Japanese EB-04 counterparts for OP11-106 and PRB02-014.
 - OP-18 language-specific image IDs and Japanese SP rarity.
 - EB-05 Japanese SP rarity `SPカード`.
-- PRB product-prefix separation and full reprint identity extraction.
+- PRB product-prefix/base-count separation and full reprint identity extraction.
 - HTTP image response classification and source-host validation.
 
-The latest matrix/report documentation commits are `e8151a9cbb23cbf6b3eba175ebc5a97226aa59f4` and this handover update. No Actions run is attached to those GitHub App documentation commits; the latest code-bearing commit `f13880972eea4ffd4f683f94375dd80b14175734` has the complete successful test, lint, build and HTTP audit run above.
+The latest matrix metadata commit records the 306-test CI result. The image audit is not repeated on documentation-only commits; it remains valid because no official image URLs or source entries changed after the final HTTP audit.
 
 ## PR, Preview and safety status
 
@@ -232,6 +232,7 @@ The latest matrix/report documentation commits are `e8151a9cbb23cbf6b3eba175ebc5
 2. Reconcile Premium Card Collection and PRB product identities against that complete application dataset.
 3. Resolve the 119-per-language OP-18 and 61-per-language EB-05 upstream feed gaps without modifying Production.
 4. Preserve the three flagged Stage 3 English OP-18 supplemental identity differences until the complete application comparison confirms their final disposition.
+5. Confirm application treatment of the one English-only OP13-037 TR printing without synthesizing a Japanese EB-04 counterpart.
 
 Official source extraction and HTTP image verification are complete. The matrix remains **50 INCOMPLETE** until application identity reconciliation passes.
 
