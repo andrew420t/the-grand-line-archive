@@ -16284,7 +16284,7 @@
       "feed_observed_release_printings": 0,
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "verification_status": "INCOMPLETE",
-      "notes": "159/159 official card-list entries parsed; 159 official card-image URLs associated in document order. 119 distinct OP18-prefixed card numbers; 125 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 119 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. Stage 3 supplemental list contains three English image-ID mismatches versus Bandai page: official OP18-049_p1, OP13-012_p1 and OP17-040_p2 are absent; app list instead has OP18-064_p1, OP13-012_p2 and OP17-040_p1. Requires correction; no image URL has been substituted.",
+      "notes": "159/159 official card-list entries parsed; 159 official card-image URLs associated in document order. 119 distinct OP18-prefixed card numbers; 125 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 119 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. Stage 3 supplemental list contains three English image-ID mismatches versus Bandai page: official OP18-049_p1, OP13-012_p1 and OP17-040_p2 are absent; app list instead has OP18-064_p1, OP13-012_p2 and OP17-040_p1. Requires correction; no image URL has been substituted. Official printing classes: 33 parallel image variants and 7 special printings (TR 1, SP CARD 6).",
       "source_image_url_extraction_shortfall": 0,
       "image_reference_verification": "IDENTIFIERS_MATCHED_NOT_HTTP_TESTED",
       "source_availability": "AVAILABLE",
@@ -16724,7 +16724,14 @@
         "OP17-040_p1"
       ],
       "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
-      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "official_parallel_variant_count": 33,
+      "official_special_printing_count": 7,
+      "official_special_printing_rarity_counts": {
+        "TR": 1,
+        "SP CARD": 6
+      },
+      "official_image_suffix_variant_count": 40
     },
     {
       "set": "OP-18",
@@ -16891,7 +16898,7 @@
       "feed_observed_release_printings": 0,
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "verification_status": "INCOMPLETE",
-      "notes": "159/159 official card-list entries parsed; 159 official card-image URLs associated in document order. 119 distinct OP18-prefixed card numbers; 125 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 119 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. Stage 3 supplemental list has all 159 Japanese image IDs; Japanese OP18-064_p1 name is concatenated/mismatched (official: キリンガム聖). Six SP rarity labels use normalized English 'SP CARD' rather than official Japanese 'SPカード'.",
+      "notes": "159/159 official card-list entries parsed; 159 official card-image URLs associated in document order. 119 distinct OP18-prefixed card numbers; 125 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 119 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. Stage 3 supplemental list has all 159 Japanese image IDs; Japanese OP18-064_p1 name is concatenated/mismatched (official: キリンガム聖). Six SP rarity labels use normalized English 'SP CARD' rather than official Japanese 'SPカード'. Official printing classes: 33 parallel image variants and 7 special printings (TR 1, SPカード 6).",
       "source_image_url_extraction_shortfall": 0,
       "image_reference_verification": "IDENTIFIERS_MATCHED_NOT_HTTP_TESTED",
       "source_availability": "AVAILABLE",
@@ -17362,7 +17369,14 @@
       },
       "unexpected_printings": [],
       "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
-      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "official_parallel_variant_count": 33,
+      "official_special_printing_count": 7,
+      "official_special_printing_rarity_counts": {
+        "TR": 1,
+        "SPカード": 6
+      },
+      "official_image_suffix_variant_count": 40
     },
     {
       "set": "EB-01",
@@ -20482,7 +20496,7 @@
       "feed_observed_release_printings": 0,
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "verification_status": "INCOMPLETE",
-      "notes": "96/96 official card-list entries parsed; 96 official card-image URLs associated in document order. 61 distinct EB05-prefixed card numbers; 72 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 61 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. Stage 3 supplemental catalogue matches all 96 English official image IDs, card numbers, names and rarity.",
+      "notes": "96/96 official card-list entries parsed; 96 official card-image URLs associated in document order. 61 distinct EB05-prefixed card numbers; 72 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 61 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. Stage 3 supplemental catalogue matches all 96 English official image IDs, card numbers, names and rarity. Official printing classes: 27 parallel image variants and 8 special printings (SP CARD 8).",
       "source_image_url_extraction_shortfall": 0,
       "image_reference_verification": "IDENTIFIERS_MATCHED_NOT_HTTP_TESTED",
       "source_availability": "AVAILABLE",
@@ -20736,7 +20750,13 @@
       },
       "unexpected_printings": [],
       "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
-      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "official_parallel_variant_count": 27,
+      "official_special_printing_count": 8,
+      "official_special_printing_rarity_counts": {
+        "SP CARD": 8
+      },
+      "official_image_suffix_variant_count": 35
     },
     {
       "set": "EB-05",
@@ -20848,7 +20868,7 @@
       "feed_observed_release_printings": 0,
       "feed_source_generated_at": "2026-10-22T04:46:19Z",
       "verification_status": "INCOMPLETE",
-      "notes": "96/96 official card-list entries parsed; 96 official card-image URLs associated in document order. 61 distinct EB05-prefixed card numbers; 72 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 61 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. Stage 3 supplemental catalogue matches all 96 Japanese official image IDs and names; eight SP rarity labels are normalized to 'SP CARD' rather than the official Japanese 'SPカード'.",
+      "notes": "96/96 official card-list entries parsed; 96 official card-image URLs associated in document order. 61 distinct EB05-prefixed card numbers; 72 distinct card numbers across this product page. Upstream feed comparison (619965ec198047de519dc6eb098c7a56aed9bd58): 61 official base number(s) absent and 0 feed-only base number(s). Feed counts are comparison evidence, not proof of official completeness. Stage 3 supplemental catalogue matches all 96 Japanese official image IDs and names; eight SP rarity labels are normalized to 'SP CARD' rather than the official Japanese 'SPカード'. Official printing classes: 27 parallel image variants and 8 special printings (SPカード 8).",
       "source_image_url_extraction_shortfall": 0,
       "image_reference_verification": "IDENTIFIERS_MATCHED_NOT_HTTP_TESTED",
       "source_availability": "AVAILABLE",
@@ -21151,7 +21171,13 @@
       },
       "unexpected_printings": [],
       "missing_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
-      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source."
+      "unexpected_card_numbers_basis": "Official base-prefix numbers compared with the upstream Koala Kollect feed snapshot generated 2026-10-22; this is a catalogue gap comparison, not a completeness source.",
+      "official_parallel_variant_count": 27,
+      "official_special_printing_count": 8,
+      "official_special_printing_rarity_counts": {
+        "SPカード": 8
+      },
+      "official_image_suffix_variant_count": 35
     },
     {
       "set": "PRB-01",
