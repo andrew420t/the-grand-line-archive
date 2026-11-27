@@ -443,6 +443,8 @@ export default function QuickAddPanel({
             className={form.is_bulk ? 'button button--gold' : 'button button--outline'}
             type="button"
             aria-pressed={Boolean(form.is_bulk)}
+            disabled={busy || !bulkCategoryReady}
+            title={bulkCategoryReady ? '' : 'Apply the Bulk category database migration to enable this action.'}
             onClick={() => setForm((current) => ({ ...current, is_bulk: !current.is_bulk }))}
           >
             <PackagePlus size={14} /> {form.is_bulk ? 'Remove from bulk' : 'Add to bulk'}
