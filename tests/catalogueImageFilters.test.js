@@ -73,7 +73,7 @@ test('card-number filter is exact after normalising spaces and separators', () =
   assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: 'OP18-001' }).map((x) => x.id).sort(), ['op18', 'op18-jp'])
   assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: ' OP 18 001 ' }).map((x) => x.id).sort(), ['op18', 'op18-jp'])
   assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: 'OP18-001', set: 'OP-15', rarity: 'UC' }), [])
-  assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: 'OP18-001', set: 'OP-18', rarity: 'L' }).map((x) => x.id), ['op18', 'op18-jp'])
+  assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: 'OP18-001', set: 'OP-18', rarity: 'L' }).map((x) => x.id).sort(), ['op18', 'op18-jp'])
 })
 
 test('all active filters intersect and cannot leak OP15 results into an OP18 card-number search', () => {
