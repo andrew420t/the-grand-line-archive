@@ -1,11 +1,12 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import {
+  APPLICATION_REFERENCE_FEED_COMMIT,
   findCatalogueMatches,
   getCatalogueReferenceTestMatrix,
 } from '../src/admin/cardCatalogue.js'
 
 const UPSTREAM_REPOSITORY = 'hotavocado/koala-kollect-data'
-const UPSTREAM_COMMIT = '619965ec198047de519dc6eb098c7a56aed9bd58'
+const UPSTREAM_COMMIT = APPLICATION_REFERENCE_FEED_COMMIT
 const UPSTREAM_MANIFEST_DATE = '2026-10-22T04:46:19Z'
 const MATRIX_PATH = 'docs/catalogue-coverage/official-bandai-inventory-stage4b-1l.json'
 const ARTIFACT_DIR = 'artifacts'
@@ -63,7 +64,7 @@ async function readJson(path) {
 }
 
 async function verifyUpstreamSnapshot() {
-  const response = await fetch('https://api.github.com/repos/' + UPSTREAM_REPOSITORY + '/commits/main', {
+  const response = await fetch('https://api.github.com/repos/' + UPSTREAM_REPOSITORY + '/commits/' + UPSTREAM_COMMIT, {
     headers: {
       Accept: 'application/vnd.github+json',
       'User-Agent': 'grand-line-archive-stage4b-1o-audit',
@@ -73,10 +74,10 @@ async function verifyUpstreamSnapshot() {
   if (!response.ok) throw new Error('Could not verify upstream main commit: HTTP ' + response.status)
   const commit = await response.json()
   if (commit.sha !== UPSTREAM_COMMIT) {
-    throw new Error('Application runtime feed moved: expected ' + UPSTREAM_COMMIT + ', found ' + commit.sha)
+    throw new Error('Pinned application reference feed commit did not resolve: expected ' + UPSTREAM_COMMIT + ', found ' + commit.sha)
   }
 
-  const manifestResponse = await fetch('https://raw.githubusercontent.com/' + UPSTREAM_REPOSITORY + '/main/manifest.json', {
+  const manifestResponse = await fetch('https://raw.githubusercontent.com/' + UPSTREAM_REPOSITORY + '/' + UPSTREAM_COMMIT + '/manifest.json', {
     signal: AbortSignal.timeout(30000),
   })
   if (!manifestResponse.ok) throw new Error('Could not read upstream manifest: HTTP ' + manifestResponse.status)
@@ -87,6 +88,7 @@ async function verifyUpstreamSnapshot() {
   return {
     repository: UPSTREAM_REPOSITORY,
     commit: commit.sha,
+    runtimeFeedPinned: true,
     manifestGeneratedAt: manifest.generated_at,
     manifestRows: {
       englishPrintings: manifest.files['data/printings/en.jsonl']?.rows,
