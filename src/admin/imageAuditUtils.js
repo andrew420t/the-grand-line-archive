@@ -139,13 +139,13 @@ export function buildCatalogueImageCandidates(record) {
     })
   }
   for (const descriptor of record?.imageCandidates || []) add(descriptor)
+  if (record?.exactImageUrl && !candidates.some((item) => item.kind === 'exact')) {
+    add({ url: record.exactImageUrl, kind: 'exact', language, printingKey: record.printingKey, cardKey: record.cardKey, cardNumber: record.cardNumber, source: record.exactImageSource })
+  }
   // Explicit legacy fields remain supported for callers and tests, but their
   // language and candidate type must be declared rather than inferred by order.
   for (const candidate of record?.alternativeImageCandidates || []) add({ ...candidate, kind: 'alternative' })
   for (const candidate of record?.baseFallbackCandidates || []) add({ ...candidate, kind: 'base-fallback' })
-  if (record?.exactImageUrl && !candidates.some((item) => item.kind === 'exact')) {
-    add({ url: record.exactImageUrl, kind: 'exact', language, printingKey: record.printingKey, cardKey: record.cardKey, cardNumber: record.cardNumber, source: record.exactImageSource })
-  }
   if (!candidates.length && record?.imageUrl && record?.languageCode === language &&
       !record.usesBaseImageFallback && !record.usesAlternateOfficialFallback) {
     add({ url: record.imageUrl, kind: 'exact', language, printingKey: record.printingKey, cardKey: record.cardKey, cardNumber: record.cardNumber, source: record.source })
@@ -176,7 +176,18 @@ export async function auditCatalogueImageRecord(record, {
   }
   const candidates = buildCatalogueImageCandidates(record)
   if (!candidates.length) {
-    return { ...record, status: IMAGE_CHECK_STATUS.NO_REFERENCE, checkedUrl: '', checkedAt: checkedAt(), candidateResults: [] }
+    const hasDeclaredCandidates = (record?.imageCandidates || []).length ||
+      (record?.alternativeImageCandidates || []).length ||
+      (record?.baseFallbackCandidates || []).length ||
+      Boolean(record?.exactImageUrl)
+    return {
+      ...record,
+      status: hasDeclaredCandidates ? IMAGE_CHECK_STATUS.INVALID_URL : IMAGE_CHECK_STATUS.NO_REFERENCE,
+      diagnostic: hasDeclaredCandidates ? 'candidate-language-or-identity-unverified' : 'no-image-reference',
+      checkedUrl: '',
+      checkedAt: checkedAt(),
+      candidateResults: [],
+    }
   }
   const candidateResults = []
   let lastDefinitive = null
