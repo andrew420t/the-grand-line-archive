@@ -2,115 +2,65 @@
 
 **Retrieved:** 2026-11-27  
 **Working branch:** `audit/official-bandai-inventory-stage4b-1l-2026-11-27`  
-**Audit baseline:** `448bc546c30ad1d7c69481dbdf794711810c5560`  
-**Machine-readable matrix:** [official-bandai-inventory-stage4b-1l.json](./official-bandai-inventory-stage4b-1l.json)
+**Baseline:** `448bc546c30ad1d7c69481dbdf794711810c5560`  
+**Current audit matrix:** [official-bandai-inventory-stage4b-1l.json](./official-bandai-inventory-stage4b-1l.json)
 
 ## Executive result
 
-The 25-set matrix contains 50 independent English/Japanese rows. Official Bandai card-list pages returned usable card-list content for 43 of the 44 pages in the 22 previously outstanding sets. The English EB-04 page returned a filter shell without a result count or card entries and remains **SOURCE UNVERIFIED**. PRB-01 and PRB-02 result totals were captured, but the page text parser did not capture every result entry; their card-number inventories remain **SOURCE UNVERIFIED**.
+The machine-readable matrix now contains all **50 language/set rows**. The 44 rows covering the 22 originally outstanding sets were independently queried against Bandai English and Japanese card-list URLs. The focused OP-15, OP-18 and EB-05 sources were also rechecked.
 
-No row is marked COMPLETE. Matching official base-number counts to the older feed snapshot is not a full printing/image completeness certification.
+Current matrix statuses: **33 COMPLETE, 16 INCOMPLETE, 1 SOURCE UNVERIFIED**. A COMPLETE row means the official result count, parsed entry count and extracted image URL count reconcile, and (where comparable) the base-number inventory matches the Stage 3 feed. For OP-18 and EB-05 the separate supplemental image identities were also compared. COMPLETE does not claim browser-level image load testing.
 
-## 25-set coverage
+## 50-row language/set coverage
 
-| Set | EN base | JP base | EN results | JP results | EN printings | JP printings | Status |
-|---|---:|---:|---:|---:|---:|---:|---|
-| OP-01 | 121 | 121 | 154 | 154 | 154 | 154 | INCOMPLETE |
-| OP-02 | 121 | 121 | 154 | 154 | 154 | 154 | INCOMPLETE |
-| OP-03 | 123 | 123 | 154 | 154 | 154 | 154 | INCOMPLETE |
-| OP-04 | 119 | 119 | 149 | 149 | 149 | 149 | INCOMPLETE |
-| OP-05 | 119 | 119 | 154 | 154 | 154 | 154 | INCOMPLETE |
-| OP-06 | 119 | 119 | 151 | 150 | 151 | 150 | INCOMPLETE |
-| OP-07 | 119 | 119 | 151 | 150 | 151 | 150 | INCOMPLETE |
-| OP-08 | 119 | 119 | 151 | 150 | 151 | 150 | INCOMPLETE |
-| OP-09 | 119 | 119 | 159 | 158 | 159 | 158 | INCOMPLETE |
-| OP-10 | 119 | 119 | 151 | 150 | 151 | 150 | INCOMPLETE |
-| OP-11 | 119 | 119 | 156 | 155 | 156 | 155 | INCOMPLETE |
-| OP-12 | 119 | 119 | 155 | 154 | 155 | 154 | INCOMPLETE |
-| OP-13 | 120 | 120 | 175 | 174 | 175 | 174 | INCOMPLETE |
-| OP-14 | 120 | 120 | 199 | 156 | 159 | 156 | INCOMPLETE |
-| OP-15 | 119 | 119 | 196 | 152 | 155 | 152 | INCOMPLETE |
-| OP-16 | 119 | 119 | 155 | 155 | 155 | 155 | INCOMPLETE |
-| OP-17 | 119 | 119 | 169 | 169 | 169 | 169 | INCOMPLETE |
-| OP-18 | 119 | 119 | 159 | 159 | 159 | 159 | INCOMPLETE |
-| EB-01 | 61 | 61 | 80 | 80 | 80 | 80 | INCOMPLETE |
-| EB-02 | 61 | 61 | 105 | 105 | 105 | 105 | INCOMPLETE |
-| EB-03 | 62 | 62 | 90 | 90 | 90 | 90 | INCOMPLETE |
-| EB-04 | 0 | 61 | — | 85 | 100 | 85 | SOURCE UNVERIFIED |
-| EB-05 | 61 | 61 | 96 | 96 | 96 | 96 | INCOMPLETE |
-| PRB-01 | — | — | 319 | 319 | 319 | 319 | SOURCE UNVERIFIED |
-| PRB-02 | — | — | 316 | 316 | 316 | 316 | SOURCE UNVERIFIED |
+| Set | EN base | JP base | EN Bandai results | JP Bandai results | EN status | JP status |
+|---|---:|---:|---:|---:|---|---|
+| OP-01 | 121 | 121 | 154 | 154 | COMPLETE | COMPLETE |
+| OP-02 | 121 | 121 | 154 | 154 | COMPLETE | COMPLETE |
+| OP-03 | 123 | 123 | 154 | 154 | COMPLETE | COMPLETE |
+| OP-04 | 119 | 119 | 149 | 149 | COMPLETE | COMPLETE |
+| OP-05 | 119 | 119 | 154 | 154 | COMPLETE | COMPLETE |
+| OP-06 | 119 | 119 | 151 | 150 | COMPLETE | COMPLETE |
+| OP-07 | 119 | 119 | 151 | 150 | COMPLETE | COMPLETE |
+| OP-08 | 119 | 119 | 151 | 150 | COMPLETE | COMPLETE |
+| OP-09 | 119 | 119 | 159 | 158 | COMPLETE | COMPLETE |
+| OP-10 | 119 | 119 | 151 | 150 | COMPLETE | COMPLETE |
+| OP-11 | 119 | 119 | 156 | 155 | INCOMPLETE | INCOMPLETE |
+| OP-12 | 119 | 119 | 155 | 154 | INCOMPLETE | INCOMPLETE |
+| OP-13 | 120 | 120 | 175 | 174 | COMPLETE | COMPLETE |
+| OP-14 | 120 | 120 | 199 | 156 | INCOMPLETE | COMPLETE |
+| OP-15 | 119 | 119 | 196 | 152 | INCOMPLETE | INCOMPLETE |
+| OP-16 | 119 | 119 | 155 | 155 | INCOMPLETE | INCOMPLETE |
+| OP-17 | 119 | 119 | 169 | 169 | INCOMPLETE | INCOMPLETE |
+| OP-18 | 119 | 119 | 159 | 159 | COMPLETE | COMPLETE |
+| EB-01 | 61 | 61 | 80 | 80 | COMPLETE | COMPLETE |
+| EB-02 | 61 | 61 | 105 | 105 | COMPLETE | COMPLETE |
+| EB-03 | 62 | 62 | 90 | 90 | COMPLETE | COMPLETE |
+| EB-04 | — | 61 | unavailable | 85 | SOURCE UNVERIFIED | INCOMPLETE |
+| EB-05 | 61 | 61 | 96 | 96 | COMPLETE | COMPLETE |
+| PRB-01 | — | — | 319 | 319 | INCOMPLETE | INCOMPLETE |
+| PRB-02 | — | — | 316 | 316 | INCOMPLETE | INCOMPLETE |
 
-OP/EB base counts are distinct card-number entries with the requested set prefix. Reprints with another original card-number prefix do not increase the original set's base count. PRB products are reprint/inclusion products; their original OP/EB/ST card numbers do not establish a PRB base-card count.
+The exact source URLs and retrieved card-number arrays are stored in each row of the JSON matrix. Official page result totals are not treated as base-card counts. OP/EB base counts use the requested card-number prefix; reprints keep their original card-number identity. PRB products are reprint products, so no PRB base-card count is inferred.
 
-## Official sources checked
+## Source extraction gaps and discrepancies
 
-| Set | Language | Official source | Status |
-|---|---|---|---|
-| OP-01 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569101) | INCOMPLETE |
-| OP-01 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550101) | INCOMPLETE |
-| OP-02 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569102) | INCOMPLETE |
-| OP-02 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550102) | INCOMPLETE |
-| OP-03 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569103) | INCOMPLETE |
-| OP-03 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550103) | INCOMPLETE |
-| OP-04 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569104) | INCOMPLETE |
-| OP-04 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550104) | INCOMPLETE |
-| OP-05 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569105) | INCOMPLETE |
-| OP-05 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550105) | INCOMPLETE |
-| OP-06 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569106) | INCOMPLETE |
-| OP-06 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550106) | INCOMPLETE |
-| OP-07 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569107) | INCOMPLETE |
-| OP-07 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550107) | INCOMPLETE |
-| OP-08 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569108) | INCOMPLETE |
-| OP-08 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550108) | INCOMPLETE |
-| OP-09 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569109) | INCOMPLETE |
-| OP-09 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550109) | INCOMPLETE |
-| OP-10 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569110) | INCOMPLETE |
-| OP-10 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550110) | INCOMPLETE |
-| OP-11 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569111) | INCOMPLETE |
-| OP-11 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550111) | INCOMPLETE |
-| OP-12 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569112) | INCOMPLETE |
-| OP-12 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550112) | INCOMPLETE |
-| OP-13 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569113) | INCOMPLETE |
-| OP-13 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550113) | INCOMPLETE |
-| OP-14 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569114) | INCOMPLETE |
-| OP-14 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550114) | INCOMPLETE |
-| OP-15 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569115) | INCOMPLETE |
-| OP-15 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550115) | INCOMPLETE |
-| OP-16 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569116) | INCOMPLETE |
-| OP-16 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550116) | INCOMPLETE |
-| OP-17 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569117) | INCOMPLETE |
-| OP-17 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550117) | INCOMPLETE |
-| OP-18 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569118) | INCOMPLETE |
-| OP-18 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550118) | INCOMPLETE |
-| EB-01 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569201) | INCOMPLETE |
-| EB-01 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550201) | INCOMPLETE |
-| EB-02 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569202) | INCOMPLETE |
-| EB-02 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550202) | INCOMPLETE |
-| EB-03 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569203) | INCOMPLETE |
-| EB-03 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550203) | INCOMPLETE |
-| EB-04 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569204) | SOURCE UNVERIFIED |
-| EB-04 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550204) | INCOMPLETE |
-| EB-05 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569205) | INCOMPLETE |
-| EB-05 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550205) | INCOMPLETE |
-| PRB-01 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569301) | INCOMPLETE |
-| PRB-01 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550301) | INCOMPLETE |
-| PRB-02 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569302) | INCOMPLETE |
-| PRB-02 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550302) | INCOMPLETE |
+- **EB-04 English:** `https://en.onepiece-cardgame.com/cardlist/?series=569204` returned no usable result count or card entries. The row remains SOURCE UNVERIFIED; the older feed's 61 prefix numbers are not substituted for an official extraction.
+- **EB-04 Japanese:** 85 displayed results, 83 parsed entries and 83 extracted official image URLs. Two result rows remain unresolved by the parser; the row is INCOMPLETE.
+- **OP-11:** EN 156 results / 156 parsed entries / 154 extracted image URLs; JP 155 / 155 / 153. The image association extraction is short by two in each language.
+- **OP-12:** EN 155 / 155 / 153; JP 154 / 154 / 152. Two image URL associations per language remain unresolved.
+- **OP-14 English:** 199 results, 198 parsed entries and 199 image URLs. The page includes EB-04-prefixed cards and OP-12 reprint/special entries in addition to OP-14 base numbers. This is a release-product versus original card-number-set distinction; the parser's one-row discrepancy remains open. OP-14 Japanese returned 156 / 156 / 156.
+- **OP-15:** EN 196 results, 194 parsed entries and 194 extracted image URLs; JP 152 / 151 / 151. Both languages contain all 119 OP15-prefixed base numbers and the official card-list records for OP15-075 (UC Event, El Thor / 神の裁き) and OP15-108 (R Character, Nami / ナミ). The two/one parser gaps and independent Premium Card Collection - Best Selection Vol.6 product identity check remain open.
+- **OP-16:** EN and JP each returned 155 results and 155 parsed entries, but 154 image URLs were extracted in each language.
+- **OP-17:** EN and JP each returned 169 results, 167 parsed entries and 164 image URLs. Two result rows and five image associations per language remain unresolved.
+- **PRB-01:** 319 Bandai results; 305 parsed entries; 197 image URLs extracted. Distinct card numbers observed by parser: 106 English and 109 Japanese. The parser did not capture 14 result rows.
+- **PRB-02:** 316 Bandai results; 249 parsed entries; 109 image URLs extracted. Distinct card numbers observed by parser: 140 English and 153 Japanese. The parser did not capture 67 result rows. Neither PRB product is certified complete.
 
-## Card-number coverage and source discrepancies
-
-- For every OP/EB row with a usable official source, the official set-prefixed card-number list matched the observed feed/supplement base-number list: zero missing and zero unexpected base numbers in the recorded comparison.
-- OP-18 has 119 base numbers in each language. Its 159 supplemental printing records comprise 119 Base, 33 Parallel, 1 Treasure Rare and 6 SP Card entries. Both official pages returned 159 product results.
-- EB-05 has 61 base numbers in each language. Its 96 supplemental printing records comprise 61 Base, 27 Parallel and 8 SP Card entries. Both official pages returned 96 product results.
-- OP-15 has 119 OP15-prefixed base numbers in both languages. The English page returned 196 results and the Japanese page 152. Other-prefix reprints and product inclusions are not additional OP-15 base cards. The current structured entry parser captured 156 distinct English product card numbers; Stage 4B-1K recorded 157, so one non-base product number remains unresolved. The 119 OP15-prefixed base inventory is consistent.
-- OP-14 English returned 199 results while the release-assigned feed contains 159 distinct printing keys. The official product page includes EB-04-prefixed entries; this is a release-product versus card-number-prefix distinction, not evidence of 40 missing OP-14 base cards.
-- PRB-01 and PRB-02 returned 319 and 316 results. The parser missed 14 and 67 page rows respectively. Their complete distinct-card inventories remain SOURCE UNVERIFIED.
-- EB-04 English returned no usable result list. The feed has 61 EB04-prefixed numbers and 100 release printing keys, but neither substitutes for the missing official English extraction.
+An extraction shortfall is not proof that Bandai's image is missing from its website. The matrix records the parser/image URL gap separately and does not manufacture missing card numbers or printing identities.
 
 ## OP-15 duplicate printing investigation
 
-For OP15-075 and OP15-108 in both languages, the generic **Other Product Card** product link and the named **Premium Card Collection - Best Selection Vol.6** link refer to the same printing key and image URL. They are not two separate printings.
+The Stage 3 feed/code investigation identified generic **Other Product Card** and named **Premium Card Collection - Best Selection Vol.6** product links that resolve to the same printing key and image for OP15-075 and OP15-108 in each language. These are duplicate product links, not additional distinct printings. Stage 3's `dedupePrintingProducts` keeps the named product when present and retains the generic link only if it is the sole product link.
 
 | Language | Card | Printing key |
 |---|---|---|
@@ -119,53 +69,40 @@ For OP15-075 and OP15-108 in both languages, the generic **Other Product Card** 
 | Japanese | OP15-075 | `prt_k5qg9snrrrr4` |
 | Japanese | OP15-108 | `prt_l7sqc3seymu8` |
 
-Stage 3's `dedupePrintingProducts` keeps the named product when present and suppresses the generic placeholder; it retains the generic link if it is the only product link. Regression coverage is present in the Stage 3 branch's `tests/catalogueImageFilters.test.js`.
+The Bandai OP-15 booster card-list pages show the base card identities and do not by themselves prove the Premium Collection product relationship. The named product relationship above is from the existing upstream catalogue and is covered by `tests/catalogueImageFilters.test.js`. No new printing was added.
 
-## OP-18 and EB-05 supplemental catalogue comparison
+## OP-18 reconciliation
 
-The Stage 3 supplemental modules were inspected on PR #38 head `64f1203acc94b9409d6a10941aea00c541899ff4`:
+Both official Bandai pages returned 159 entries and 159 extracted official image URLs. The Stage 3 supplemental module contains 159 printing records in each language: 119 Base, 33 Parallel, 1 Treasure Rare and 6 SP Card.
 
-| Comparison | English | Japanese |
-|---|---:|---:|
-| OP-18 metadata entries matched | 159/159 | 159/159 |
-| OP-18 image identifiers matched | 159/159 | 159/159 |
-| EB-05 metadata entries matched | 96/96 | 96/96 |
-| EB-05 image identifiers matched | 96/96 | 96/96 |
+The language-specific Treasure Rare identity is intentional:
+- English: **OP18-049**, Mr.2.Bon.Kurei(Bentham), TR, image ID `OP18-049_p1`.
+- Japanese: **OP18-064**, キリンガム聖, TR, image ID `OP18-064_p1`.
 
-Metadata comparison covered card number, name, rarity and type. OP-18 comparison uses `localizedEn` and `localizedJp` for the language-specific Treasure Rare identity: English OP18-049 Mr.2.Bon.Kurei(Bentham), Japanese OP18-064 キリンガム聖. OP18-084 Base, Parallel and SP CARD rows are distinct printings of the same card number.
+This is not a missing-card discrepancy. The localized printing records keep the distinct official number and image ID per language. OP18-084 Base, Parallel and SP CARD are separate printings sharing one card number. Existing tests cover the 119 base numbers, all 159 printings, image audit records, language-specific TR identity and alternate printing lookup.
 
-These image checks compare official image identifiers, not successful HTTP/browser image loads.
+## EB-05 reconciliation
 
-## Feed and printing-count caveats
+Both official Bandai pages returned 96 entries and 96 extracted official image URLs. The supplemental catalogue has 96 printing records in each language: 61 Base, 27 Parallel and 8 SP CARD. The 72 distinct card numbers include reprints retaining their original OP/EB/ST card-number prefixes; those are not additional EB-05 base numbers. Existing tests cover all 61 base numbers, all 96 language-specific image IDs, variants and original card-number-set versus release-set assignment.
 
-The comparison feed is from `hotavocado/koala-kollect-data` commit `619965ec198047de519dc6eb098c7a56aed9bd58`, generated 2026-10-22 (36 days before this audit). Its printing totals are observations, not authoritative expected totals. OP-18 and EB-05 are absent from that feed; their printing counts here come from their separately inspected supplemental catalogues. Bandai result rows, release-assigned printing keys and card-number prefix counts remain separate measures.
+## Catalogue behaviour and regression coverage inspected
 
-## Regression coverage inspected
+The Stage 3 branch's `catalogueImageFilters.js` and `tests/catalogueImageFilters.test.js` cover:
+- Exact card-number filtering after separator normalization and intersection with other filters.
+- Release set versus original card-number set.
+- Combined OP-15/EB-04 release product assignment.
+- Premium Card Collection - Best Selection Vol.6 named-product preference over generic placeholders.
+- Preservation of different release products, languages and variants.
+- Filter options, clearing filters, rarity/type/colour/image-state filtering.
+- EB-05 reprint release identity separate from the original card-number set.
 
-Stage 3 test source includes:
-- Exact card-number matching after separator normalization.
-- Intersecting set, card-number-set, language, rarity, type, colour, variant and image-status filters.
-- English/Japanese and distinct release/variant separation.
-- Generic placeholder suppression while preserving named products and separate releases.
-- Combined product set assignment by card-number prefix.
-- Clearing all Image Library filters.
-- OP-18 119 base numbers, 159 printings and localized Treasure Rare identity.
-- EB-05 61 base numbers, 96 printings, language-specific image IDs and original card-number set versus release set.
+The OP-18 and EB-05 supplemental tests cover all base counts, printing counts, per-language image IDs, metadata and localized printing lookup. The Image Library code deduplicates overlapping pagination pages by stable gallery entry ID; a dedicated pagination-overlap regression test was not found in the inspected test file. No catalogue code correction was made in this audit because no additional independently proven catalogue defect was established. The parser/extraction gaps above are audit evidence gaps, not catalogue changes.
 
-The inspected Image Library code deduplicates overlapping pagination pages by stable gallery entry ID. A dedicated pagination-overlap test was not found in the inspected filter test file.
-
-## Branch and environment safety
-
-The working audit branch remains based on `448bc546c30ad1d7c69481dbdf794711810c5560`. PR #38 head `64f1203acc94b9409d6a10941aea00c541899ff4` is 10 commits ahead of that baseline and contains the supplemental catalogue code inspected above. The audit branch was not advanced or merged into PR #38.
-
-No Production deployment, Production Supabase operation or Preview deployment was performed. Browser image-load verification and a fresh CI run for the audit branch remain outstanding.
-
-
-## CI, Preview and PR status
+## CI, Preview and safety
 
 - PR #37: **OPEN**, not merged.
-- PR #38: **OPEN / DRAFT**, not merged.
-- The Cloudflare Preview bot recorded a successful build and deployment for Stage 3 Preview commit `957d5eb` at `2026-11-27T15:48:09Z`: [existing Stage 3 Preview](https://fix-card-reference-images-stage3-2026-11-the-grand-line-archive.andrew420-t27.workers.dev). This is not the current PR #38 head (`64f1203`) or the audit branch head; no new Preview was deployed and no manual browser acceptance is claimed.
-- GitHub combined-status and workflow-run lookups returned no checks/runs for audit commit `e67f2ca95134ba48e684584223baac074fc32afa` or Stage 3 PR #38 head `64f1203acc94b9409d6a10941aea00c541899ff4`.
-- Local `git clone` / npm test, lint and build could not be run because the execution environment could not resolve `github.com`. These checks are **NOT RUN**, not passed.
+- PR #38: **OPEN**, not merged. Its head is the Stage 3 branch; the audit branch remains separate.
+- The latest Stage 3 Preview evidence is a successful build/deployment of commit `957d5eb` on 2026-11-27. It is not the audit branch commit and does not verify the Stage 4B-1M data changes. No Preview deployment was initiated in this stage.
+- The audit branch's current GitHub Actions lookup returned no workflow runs or check runs. The existing verify workflow did not include this audit branch in its push triggers before this stage's workflow update. A new branch CI run is still required.
+- `npm test`, `npm run lint` and `npm run build` have not been run in a local checkout in this environment. They are NOT RUN, not passed.
 - No Production deployment, Production Supabase operation, merge, branch deletion or credential access occurred.
