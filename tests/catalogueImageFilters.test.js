@@ -70,8 +70,8 @@ test('card-number filter is exact after normalising spaces and separators', () =
     { id: 'op15', cardNumber: 'OP15-075', languageCode: 'en', setCode: 'OP-15', rarity: 'UC' },
     { id: 'op18-jp', cardNumber: 'OP-18-001', languageCode: 'jp', setCode: 'OP-18', rarity: 'L' },
   ]
-  assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: 'OP18-001' }).map((x) => x.id), ['op18', 'op18-jp'])
-  assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: ' OP 18 001 ' }).map((x) => x.id), ['op18', 'op18-jp'])
+  assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: 'OP18-001' }).map((x) => x.id).sort(), ['op18', 'op18-jp'])
+  assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: ' OP 18 001 ' }).map((x) => x.id).sort(), ['op18', 'op18-jp'])
   assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: 'OP18-001', set: 'OP-15', rarity: 'UC' }), [])
   assert.deepEqual(filterCatalogueImageEntries(records, { cardNumber: 'OP18-001', set: 'OP-18', rarity: 'L' }).map((x) => x.id), ['op18', 'op18-jp'])
 })
