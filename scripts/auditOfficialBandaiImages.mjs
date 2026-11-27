@@ -54,7 +54,7 @@ function addUrl(map, url, set, language, imageId = null) {
   map.set(url, item);
 }
 
-function collectUrls() {
+export function collectUrls() {
   const urls = new Map();
   for (const relativePath of INVENTORIES) {
     const data = JSON.parse(readFileSync(resolve(ROOT, relativePath), "utf8"));
