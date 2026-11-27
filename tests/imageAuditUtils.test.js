@@ -11,6 +11,8 @@ import {
 
 test('classifies missing, temporary, timeout, invalid and successful image responses separately', () => {
   assert.equal(classifyImageResponse({ status: 404 }), IMAGE_CHECK_STATUS.MISSING)
+  assert.equal(classifyImageResponse({ status: 502, upstreamStatus: 404 }), IMAGE_CHECK_STATUS.MISSING)
+  assert.equal(classifyImageResponse({ status: 502, upstreamStatus: 503 }), IMAGE_CHECK_STATUS.TEMPORARY_FAILURE)
   assert.equal(classifyImageResponse({ status: 503 }), IMAGE_CHECK_STATUS.TEMPORARY_FAILURE)
   assert.equal(classifyImageResponse({ timedOut: true }), IMAGE_CHECK_STATUS.TIMEOUT)
   assert.equal(classifyImageResponse({ invalidUrl: true }), IMAGE_CHECK_STATUS.INVALID_URL)
@@ -96,4 +98,23 @@ test('probes same-origin Cloudflare proxy paths without treating them as invalid
   })
   assert.equal(requested, '/_card-image/bandai/en/OP18-001.png')
   assert.equal(result.status, IMAGE_CHECK_STATUS.EXACT_LOADED)
+})
+
+
+test('retains Worker upstream diagnostics and classifies proxied upstream 404 as missing', async () => {
+  const result = await loadImageWithRetry('/_card-image/bandai/en/OP18-001.png', {
+    attempts: 1,
+    fetchImpl: async () => new Response('Card image source returned HTTP 404', {
+      status: 502,
+      headers: {
+        'content-type': 'text/plain',
+        'x-card-image-upstream-status': '404',
+        'x-card-image-error': 'upstream-http-error',
+      },
+    }),
+  })
+  assert.equal(result.status, IMAGE_CHECK_STATUS.MISSING)
+  assert.equal(result.httpStatus, 502)
+  assert.equal(result.upstreamStatus, 404)
+  assert.equal(result.proxyError, 'upstream-http-error')
 })
