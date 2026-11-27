@@ -114,3 +114,29 @@ test('deduplicates repeated links to one product but preserves different release
   assert.deepEqual(dedupePrintingProducts(products), [products[0], products[2]])
   assert.deepEqual(dedupePrintingProducts([]), [])
 })
+
+
+test('prefers a named product over a generic Other Product Card link for one printing', () => {
+  const generic = { key: 'en:569801', name: 'Other Product Card' }
+  const named = { key: 'en:src_a521deb08741', name: 'Premium Card Collection -Best Selection Vol.6-' }
+  const otherRelease = { key: 'en:prb01', code: 'PRB-01', name: 'Premium Booster' }
+
+  assert.deepEqual(dedupePrintingProducts([generic, named]), [named])
+  assert.deepEqual(dedupePrintingProducts([generic]), [generic])
+  assert.deepEqual(dedupePrintingProducts([generic, named, otherRelease]), [named, otherRelease])
+})
+
+test('uses the linked named product as release identity instead of the original card-number set', () => {
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:src_a521deb08741', name: 'Premium Card Collection -Best Selection Vol.6-' },
+    'OP15-075',
+  ), 'Premium Card Collection -Best Selection Vol.6-')
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:569115', code: 'OP15-EB04', name: 'Adventure on Kami’s Island' },
+    'OP15-075',
+  ), 'OP15-EB04')
+  assert.equal(getCatalogueProductSetCode(
+    { key: 'en:569801', name: 'Other Product Card' },
+    'OP15-075',
+  ), 'OP-15')
+})
