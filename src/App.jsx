@@ -1143,6 +1143,7 @@ function Storefront() {
               onSignOut={signOut}
               onReload={() => loadOrders(false)}
               onProfileUpdated={setProfile}
+              onArchiveOrder={(orderId) => archiveOrder(orderId, 'customer')}
               onForgotPassword={() => navigate('/account/forgot-password')}
             />
           }
@@ -1162,6 +1163,7 @@ function Storefront() {
               onSignOut={signOut}
               onReload={() => loadOrders(false)}
               onProfileUpdated={setProfile}
+              onArchiveOrder={(orderId) => archiveOrder(orderId, 'customer')}
               onForgotPassword={() => navigate('/account/forgot-password')}
             />
           }
@@ -1181,6 +1183,7 @@ function Storefront() {
               onSignOut={signOut}
               onReload={() => loadOrders(false)}
               onProfileUpdated={setProfile}
+              onArchiveOrder={(orderId) => archiveOrder(orderId, 'customer')}
               onForgotPassword={() => navigate('/account/forgot-password')}
             />
           }
@@ -1188,19 +1191,6 @@ function Storefront() {
         <Route path="/account/recover-email" element={<ForgotEmailPage />} />
         <Route path="/account/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/account/reset-password" element={<ResetPasswordPage />} />
-
-              user={user}
-              orders={orders}
-              orderItems={orderItems}
-              products={products}
-              loading={ordersLoading}
-              error={ordersError}
-              onSignIn={() => setAuthOpen(true)}
-              onSignOut={signOut}
-              onReload={() => loadOrders(false)}
-            />
-          }
-        />
         <Route
           path="/admin"
           element={
