@@ -8,6 +8,8 @@ const jp = "https://www.onepiece-cardgame.com/images/cardlist/card/OP01-001.png?
 test("official source host remains language-specific", () => {
   assert.equal(expectedHostForLanguage("English"), "en.onepiece-cardgame.com");
   assert.equal(expectedHostForLanguage("Japanese"), "www.onepiece-cardgame.com");
+  assert.equal(expectedHostForLanguage("en"), "en.onepiece-cardgame.com");
+  assert.equal(expectedHostForLanguage("jp"), "www.onepiece-cardgame.com");
 });
 
 test("successful image GET is classified as loaded", () => {
