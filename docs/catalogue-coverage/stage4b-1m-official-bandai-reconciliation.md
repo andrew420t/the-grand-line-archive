@@ -103,7 +103,7 @@ The OP-18 and EB-05 supplemental tests cover all base counts, printing counts, p
 - PR #37: **OPEN**, not merged.
 - PR #38: **OPEN / DRAFT**, not merged. Its head is the Stage 3 branch; the audit branch remains separate.
 - The latest Stage 3 Preview evidence is a successful build/deployment of commit `957d5eb` on 2026-11-27. It is not the audit branch commit and does not verify the Stage 4B-1M data changes. No Preview deployment was initiated in this stage.
-- The audit branch's current GitHub Actions lookup returned no workflow runs or check runs. The current verify workflow did not trigger for this audit branch, and no workflow-trigger change was made in this stage. A CI run for the audit branch is still required.
+- The audit branch's current GitHub Actions lookup returned no workflow runs or check runs. The branch's existing `verify.yml` includes a push trigger for `audit/official-bandai-inventory-stage4b-1l-2026-11-27`, but GitHub workflow-run and combined-status lookups for the latest audit commit returned no runs/checks. No CI result can be claimed; a verified run is still required.
 - `npm test`, `npm run lint` and `npm run build` have not been run in a local checkout in this environment. They are NOT RUN, not passed.
 - No Production deployment, Production Supabase operation, merge, branch deletion or credential access occurred.
 
