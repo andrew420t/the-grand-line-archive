@@ -51,6 +51,7 @@ export function buildReports({ sourceDir, historicalManifest, sourceCommit = PIN
   const missingFromManifest = stable([...sourcePairs].filter(x => !manifestPairs.has(x)));
   const missingFromSource = stable([...manifestPairs].filter(x => !sourcePairs.has(x)));
 
+  const assignmentByProductPrinting = new Map(records.filter(r => r.productKey).map(r => [pairKey(r.productKey, r.printingKey), r]));
   const naiveEdges = [];
   const duplicateDerivedEdges = [];
   for (const link of printingProducts) {
