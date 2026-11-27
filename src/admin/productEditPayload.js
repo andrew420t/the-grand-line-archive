@@ -1,3 +1,21 @@
+
+export function filterInventoryProducts(products = [], query = '', bulkFilter = 'regular') {
+  const normalizedQuery = String(query || '').trim().toLocaleLowerCase()
+  return (products || []).filter((product) => {
+    const isBulk = product?.raw?.is_bulk === true
+    if (bulkFilter === 'regular' && isBulk) return false
+    if (bulkFilter === 'bulk' && !isBulk) return false
+    if (!normalizedQuery) return true
+    return [
+      product?.name,
+      product?.setName,
+      product?.category,
+      product?.rarity,
+      product?.raw?.card_number,
+    ].filter(Boolean).some((value) => String(value).toLocaleLowerCase().includes(normalizedQuery))
+  })
+}
+
 export function buildProductEditPayload(fields, values, raw = {}, updatedAt = new Date().toISOString()) {
   const payload = {}
   fields.forEach((field) => {
