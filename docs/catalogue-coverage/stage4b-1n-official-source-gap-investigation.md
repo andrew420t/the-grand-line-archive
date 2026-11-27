@@ -271,3 +271,10 @@ The previous shared OP-18 supplemental list used the Japanese identifiers for th
 
 This correction is on the audit branch only. PR #38 remains open and unmerged. CI and the 7,786-URL live image audit remain pending; the corrected source is not marked verified until those checks complete.
 
+
+## Erratum — EB-05 Japanese SP rarity labels and expanded image audit (2026-11-27)
+
+The earlier Stage 4B-1N comparison recorded eight Japanese EB-05 SP labels as normalized to the English string `SP CARD`. The audit branch now preserves the exact language-specific official labels in `src/admin/eb05OfficialCatalogue.js`: English `SP CARD`, Japanese `SPカード`, with regression coverage in `tests/eb05OfficialCatalogue.test.js`.
+
+The HTTP audit source now includes all 12 official Best Selection Vol.6 product-page card images in addition to the 7,786 unique card-list image URLs. The expected audit scope is therefore 7,798 unique URLs. The workflow still needs to report the actual HTTP results for the latest commit.
+
