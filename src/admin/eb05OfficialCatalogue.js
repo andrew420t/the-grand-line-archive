@@ -2078,7 +2078,7 @@ function makeSupplementalMatch(printing, language) {
 }
 
 export function getEb05SupplementalMatches(cardNumber = '') {
-  const normalized = String(cardNumber || '').toUpperCase().replace(/\\s+/g, '').replace(/_/g, '-').replace(/^(EB)-(\\d{2})-/, 'EB$2-')
+  const normalized = String(cardNumber || '').toUpperCase().replace(/\s+/g, '').replace(/_/g, '-').replace(/^(EB)-(\d{2})-/, 'EB$2-')
   return EB05_OFFICIAL_PRINTINGS
     .filter((printing) => !normalized || printing.cardNumber === normalized)
     .flatMap((printing) => ['en', 'jp'].map((language) => makeSupplementalMatch(printing, language)))
