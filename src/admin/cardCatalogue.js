@@ -3,9 +3,10 @@ import { resolveCatalogueImage, buildCatalogueImageProxyUrl } from './catalogueI
 import { isDonCatalogueEntry, buildDonSetIndex } from './catalogueDonMetadata.js'
 import { getOfficialCardlistUrl } from './officialCardlistUrl.js'
 import { createOfficialImageOnlyMatch } from './officialImageOnlyFallback.js'
-import { filterCatalogueImageEntries, getCatalogueImageFilterOptions } from './catalogueImageFilters.js'
+import { filterCatalogueImageEntries, getCatalogueImageFilterOptions, getCardNumberSetCode } from './catalogueImageFilters.js'
 import { selectPrimaryCatalogueMatch } from './cataloguePrimaryMatch.js'
 import { SUPPLEMENTAL_SAMPLE_CARDS, getSupplementalSampleMatches } from './catalogueSupplementalSamples.js'
+import { OP18_OFFICIAL_PRINTINGS, OP18_BASE_CARD_NUMBERS, getOp18SupplementalMatches, getOp18ImageTestItems } from './op18OfficialCatalogue.js'
 
 const DATA_ROOT = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/data'
 const MANIFEST_URL = 'https://raw.githubusercontent.com/hotavocado/koala-kollect-data/main/manifest.json'
@@ -213,11 +214,7 @@ export async function findCatalogueMatches(cardNumber) {
   // feed has not supplied the exact card/set/language identity. These are clearly
   // labelled samples, not a claim that the complete set has been imported.
   for (const sample of getSupplementalSampleMatches(requestedNumber)) {
-    const exists = results.some((match) =>
-      match.cardNumber === sample.cardNumber &&
-      match.languageCode === sample.languageCode &&
-      String(match.setCode || '').replace(/[^A-Z0-9]/g, '') === String(sample.setCode || '').replace(/[^A-Z0-9]/g, ''),
-    )
+    const exists = results.some((match) => match.id === sample.id)
     if (!exists) results.push(sample)
   }
 
@@ -512,7 +509,7 @@ export async function getCatalogueCoverageReport() {
     sets: {},
     unassigned: { printings: 0, withImage: 0, withFallbackImage: 0, withoutImage: 0, withoutImageBySite: {} },
     missingImageSamples: [],
-    sources: ['Bandai official image URLs where a Bandai locator exists', 'Koala Kollect structured catalogue metadata'],
+    sources: ['Bandai official image URLs where a Bandai locator exists', 'Koala Kollect structured catalogue metadata', 'Bandai official OP-18 card list and OPBoxIndex printing-ID cross-check'],
     checkedAt: new Date().toISOString(),
     sourceGeneratedAt,
     sourceAgeDays,
@@ -524,7 +521,17 @@ export async function getCatalogueCoverageReport() {
         setCode,
         SUPPLEMENTAL_SAMPLE_CARDS.filter((sample) => sample.setCode === setCode).length,
       ])),
-      scope: 'sample cards only; not complete set imports',
+      scope: 'legacy sample supplements; complete OP-18 import is reported separately',
+    },
+    op18OfficialImport: {
+      baseCardNumbers: OP18_BASE_CARD_NUMBERS.length,
+      productPrintings: OP18_OFFICIAL_PRINTINGS.length,
+      parallelPrintings: OP18_OFFICIAL_PRINTINGS.filter((printing) => printing.variant === 'Parallel').length,
+      specialPrintings: OP18_OFFICIAL_PRINTINGS.filter((printing) => ['SP CARD', 'TREASURE RARE'].includes(printing.variant)).length,
+      imageReferences: OP18_OFFICIAL_PRINTINGS.length * REFERENCE_TEST_LANGUAGES.length,
+      languages: ['English', 'Japanese'],
+      source: 'Bandai official product card list; parallel image IDs and Japanese names cross-checked against OPBoxIndex (2026-11-26)',
+      liveImageVerification: 'pending full image audit',
     },
   }
   for (const language of LANGUAGES) {
@@ -628,8 +635,11 @@ export async function getCatalogueImageGallery({
   offset = 0,
   limit = 60,
   query = '',
+  cardNumber = '',
+  sortBy = 'card-number-asc',
   language = 'all',
   set = 'all',
+  cardNumberSet = 'all',
   rarity = 'all',
   cardType = 'all',
   color = 'all',
@@ -713,6 +723,14 @@ export async function getCatalogueImageGallery({
           category: observation?.category || card?.category || (isDon ? 'DON!!' : ''),
           colors: Array.isArray(colorValues) ? colorValues.join(' / ') : String(colorValues || ''),
           colorValues: Array.isArray(colorValues) ? colorValues : String(colorValues || '').split('/').map((v) => v.trim()).filter(Boolean),
+          cost: value(observation, 'cost') === '' ? value(card, 'cost') : value(observation, 'cost'),
+          power: value(observation, 'power') === '' ? value(card, 'power') : value(observation, 'power'),
+          counter: value(observation, 'counter') === '' ? value(card, 'counter') : value(observation, 'counter'),
+          attributes: (observation?.attributes || card?.attributes || []).join(' / '),
+          traits: (observation?.types || card?.types || []).join(' / '),
+          effect: value(observation, 'effect'),
+          trigger: value(observation, 'trigger'),
+          variantLabel: value(printing, 'variant'),
           officialListUrl: siteLanguage === 'cn' || printing.site === 'tcgcsv'
             ? ''
             : setCode ? getOfficialCardlistUrl(setCode, siteLanguage, isDon, card?.number || '') : '',
@@ -729,9 +747,54 @@ export async function getCatalogueImageGallery({
     }
   }
 
+  // OP-18 is newer than the upstream Koala Kollect snapshot. Add its complete
+  // Bandai product list (base cards, parallels and special reprints) to the
+  // Image Library gallery using the official English/Japanese image hosts.
+  for (const match of getOp18SupplementalMatches()) {
+    const exists = entries.some((entry) =>
+      entry.id === match.id ||
+      (entry.cardNumber === match.cardNumber &&
+        entry.languageCode === match.languageCode &&
+        entry.setCode === 'OP-18' &&
+        (entry.imageUrls || [entry.imageUrl]).includes(match.imageUrl)),
+    )
+    if (exists) continue
+    const colorValues = String(match.colors || '').split('/').map((value) => value.trim()).filter(Boolean)
+    entries.push({
+      id: match.id,
+      printingKey: match.printingKey,
+      cardNumber: match.cardNumber,
+      name: match.name,
+      language: match.language,
+      languageCode: match.languageCode,
+      rarity: match.rarity,
+      variant: match.variantLabel,
+      setCode: 'OP-18',
+      setCodes: ['OP-18'],
+      setName: 'The Dominance of God [OP-18]',
+      setAssignmentSource: 'Bandai official OP-18 product card list',
+      sourceText: match.sourceText,
+      isDon: false,
+      category: match.category,
+      colors: colorValues.join(' / '),
+      colorValues,
+      officialListUrl: match.officialCardlistUrl,
+      imageUrl: match.imageUrl,
+      imageUrls: match.imageUrls,
+      fallbackImageUrl: match.fallbackImageUrl,
+      source: match.source,
+      usesBaseImageFallback: false,
+      usesAlternateOfficialFallback: false,
+      hasImage: Boolean(match.imageUrl),
+      imageStatus: 'available',
+      verificationStatus: 'pending-live-image-check',
+      supplementalOfficial: true,
+    })
+  }
+
   // When a typed card number is absent from the feed entirely, try an official
   // English or Japanese base-image reference. Keep the result image-only.
-  const normalizedNumber = baseCardNumber(query)
+  const normalizedNumber = baseCardNumber(cardNumber || query)
   if (normalizedNumber) {
     for (const languageCode of ['en', 'jp']) {
       const exists = entries.some((entry) => entry.cardNumber === normalizedNumber && entry.languageCode === languageCode)
@@ -770,11 +833,13 @@ export async function getCatalogueImageGallery({
     }
   }
 
-  const filterEntries = filterCatalogueImageEntries(entries, { query, language, set, rarity, cardType, color, variant, imageStatus })
+  for (const entry of entries) entry.cardNumberSet = getCardNumberSetCode(entry.cardNumber)
+  const filterEntries = filterCatalogueImageEntries(entries, { query, cardNumber, sortBy, language, set, cardNumberSet, rarity, cardType, color, variant, imageStatus })
   const rawFilters = getCatalogueImageFilterOptions(entries)
   const filters = {
     languages: rawFilters.languages.map((value) => ({ value, label: LANGUAGE_LABELS[value] || value })),
     sets: rawFilters.sets.map((value) => ({ value, label: value })),
+    cardNumberSets: (rawFilters.cardNumberSets || []).map((value) => ({ value, label: value })),
     rarities: rawFilters.rarities.map((value) => ({ value, label: value })),
     cardTypes: rawFilters.cardTypes.map((value) => ({ value, label: String(value).replace(/^./, (c) => c.toUpperCase()) })),
     colors: rawFilters.colors.map((value) => ({ value, label: value })),
@@ -792,9 +857,9 @@ export async function getCatalogueImageGallery({
 }
 
 /**
- * Build the requested 100-image smoke-test matrix: two unique card numbers
- * per set and language for OP01–OP18, EB01–EB05 and PRB01/02.
- * This checks source coverage and image URLs; it does not run OCR.
+ * Build the image audit matrix: two sample cards per language for every tracked
+ * set, plus every OP-18 product printing (119 base, 33 parallel, 7 special)
+ * in English and Japanese. This checks image loading, not OCR.
  */
 export async function getCatalogueReferenceTestMatrix() {
   const catalogue = await getCatalogue()
@@ -907,7 +972,7 @@ export async function getCatalogueReferenceTestMatrix() {
     for (const language of REFERENCE_TEST_LANGUAGES) {
       const candidates = (bySlot.get(language + ':' + set) || [])
         .sort((a, b) => a.cardNumber.localeCompare(b.cardNumber) || a.id.localeCompare(b.id))
-      const explicitSamples = officialFallbackSamples[set]?.[language] || []
+      const explicitSamples = set === 'OP18' ? getOp18ImageTestItems(language) : (officialFallbackSamples[set]?.[language] || [])
       // Recent sets and OP17 use exact, set-attributed samples instead of
       // whichever product links happen to be in the stale upstream feed.
       const selected = explicitSamples.length
@@ -916,11 +981,11 @@ export async function getCatalogueReferenceTestMatrix() {
           imageUrl: buildCatalogueImageProxyUrl(sample.imageUrl) || sample.imageUrl,
           language,
           setCode: formatSetCode(set),
-          setName: 'Official Bandai card-list sample',
-          variant: 'Base/sample printing',
-          source: sample.verificationStatus === 'candidate-unverified'
+          setName: sample.setName || 'Official Bandai card-list sample',
+          variant: sample.variant || 'Base/sample printing',
+          source: sample.source || (sample.verificationStatus === 'candidate-unverified'
             ? 'Bandai official image candidate (load not yet verified)'
-            : 'Bandai official card-list sample (visually verified)',
+            : 'Bandai official card-list sample (load not yet verified)'),
         }))
         : [...candidates]
       const imageOverrides = officialImageOverrides[set]?.[language] || {}
@@ -944,13 +1009,14 @@ export async function getCatalogueReferenceTestMatrix() {
           source: 'Bandai official card-list fallback (not yet in primary feed)',
         })
       }
-      for (let slot = 0; slot < 2; slot += 1) {
+      const slotsToCheck = set === 'OP18' ? selected.length : 2
+      for (let slot = 0; slot < slotsToCheck; slot += 1) {
         if (selected[slot]) items.push({ ...selected[slot], targetSet: formatSetCode(set), sampleSlot: slot + 1 })
         else missingSlots.push({ targetSet: formatSetCode(set), language, sampleSlot: slot + 1 })
       }
     }
   }
-  return { expectedTotal: expectedSets.length * REFERENCE_TEST_LANGUAGES.length * 2, items, missingSlots, checkedAt: new Date().toISOString() }
+  return { expectedTotal: items.length + missingSlots.length, items, missingSlots, checkedAt: new Date().toISOString() }
 }
 
 /** Card-number-first reference lookup shared by search, Quick Add and scanner. */

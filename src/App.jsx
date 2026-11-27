@@ -72,6 +72,7 @@ function ProductImage({ product, className = '' }) {
   const [failed, setFailed] = useState(false)
   const [referenceImage, setReferenceImage] = useState('')
   const [referenceFailed, setReferenceFailed] = useState(false)
+  const storedReferenceImage = product.raw?.catalogue_reference_image_url || product.raw?.reference_image_url || ''
 
   useEffect(() => {
     let active = true
@@ -79,8 +80,8 @@ function ProductImage({ product, className = '' }) {
     // otherwise a prior failed image can suppress the next product's image.
     setFailed(false)
     setReferenceFailed(false)
+    setReferenceImage(storedReferenceImage)
     if (!product.raw?.card_number) {
-      setReferenceImage('')
       return () => { active = false }
     }
     findPrimaryCatalogueMatch(product.raw.card_number, product.raw.language, {
@@ -89,10 +90,10 @@ function ProductImage({ product, className = '' }) {
       setCode: product.raw.set_code || product.setCode || '',
       variantLabel: product.raw.variant_label || '',
     })
-      .then((match) => { if (active) setReferenceImage(match?.imageUrl || '') })
-      .catch(() => { if (active) setReferenceImage('') })
+      .then((match) => { if (active) setReferenceImage(match?.imageUrl || storedReferenceImage) })
+      .catch(() => { if (active) setReferenceImage(storedReferenceImage) })
     return () => { active = false }
-  }, [product.image, product.raw?.card_number, product.raw?.language, product.raw?.catalogue_printing_key, product.raw?.reference_printing_key, product.raw?.catalogue_match_id, product.raw?.reference_match_id, product.raw?.set_code, product.raw?.variant_label, product.setCode])
+  }, [product.image, product.raw?.card_number, product.raw?.language, product.raw?.catalogue_printing_key, product.raw?.reference_printing_key, product.raw?.catalogue_match_id, product.raw?.reference_match_id, product.raw?.catalogue_reference_image_url, product.raw?.reference_image_url, product.raw?.set_code, product.raw?.variant_label, product.setCode])
 
   const displayImage = product.image && !failed ? product.image
     : referenceImage && !referenceFailed ? referenceImage : ''

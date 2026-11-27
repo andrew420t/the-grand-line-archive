@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Check, ImagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
+import { Check, ImagePlus, PackagePlus, RefreshCw, ShieldAlert, Trash2, Upload } from 'lucide-react'
 import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './productStorage'
 import { getCatalogueCoverageReport, getCatalogueImageGallery, getCatalogueReferenceTestMatrix, saveDonCardSetOverride } from './cardCatalogue'
 import { loadAdminLibraryFileDraft, saveAdminLibraryFileDraft } from './adminDraftStorage'
@@ -14,7 +14,7 @@ const DON_SET_OPTIONS = [
   'PROMO', 'Other Product',
 ]
 
-export default function ImageLibraryPanel({ user }) {
+export default function ImageLibraryPanel({ user, onAddCard }) {
   const inputRef = useRef(null)
   const uploadLock = useRef(false)
   const deleteLock = useRef(false)
@@ -39,11 +39,14 @@ export default function ImageLibraryPanel({ user }) {
   const [referenceNextOffset, setReferenceNextOffset] = useState(0)
   const [referenceLoading, setReferenceLoading] = useState(false)
   const [referenceError, setReferenceError] = useState('')
-  const [referenceFilterOptions, setReferenceFilterOptions] = useState({ languages: [], sets: [], rarities: [], cardTypes: [], colors: [], variants: [] })
+  const [referenceFilterOptions, setReferenceFilterOptions] = useState({ languages: [], sets: [], cardNumberSets: [], rarities: [], cardTypes: [], colors: [], variants: [] })
   const [savedLibraryDraft] = useState(() => readPersistentDraft(user?.id, 'image-library', {}))
   const [referenceQuery, setReferenceQuery] = useState(() => savedLibraryDraft.referenceQuery || '')
+  const [referenceCardNumber, setReferenceCardNumber] = useState(() => savedLibraryDraft.referenceCardNumber || '')
+  const [referenceSort, setReferenceSort] = useState(() => savedLibraryDraft.referenceSort || 'card-number-asc')
   const [referenceLanguage, setReferenceLanguage] = useState(() => savedLibraryDraft.referenceLanguage || 'all')
   const [referenceSet, setReferenceSet] = useState(() => savedLibraryDraft.referenceSet || 'all')
+  const [referenceCardNumberSet, setReferenceCardNumberSet] = useState(() => savedLibraryDraft.referenceCardNumberSet || 'all')
   const [referenceRarity, setReferenceRarity] = useState(() => savedLibraryDraft.referenceRarity || 'all')
   const [referenceCardType, setReferenceCardType] = useState(() => savedLibraryDraft.referenceCardType || 'all')
   const [referenceColor, setReferenceColor] = useState(() => savedLibraryDraft.referenceColor || 'all')
@@ -117,10 +120,10 @@ export default function ImageLibraryPanel({ user }) {
   useEffect(() => {
     if (!user?.id) return
     savePersistentDraft(user.id, 'image-library', {
-      referenceQuery, referenceLanguage, referenceSet, referenceRarity, referenceCardType,
+      referenceQuery, referenceCardNumber, referenceSort, referenceLanguage, referenceSet, referenceCardNumberSet, referenceRarity, referenceCardType,
       referenceColor, referenceVariant, referenceImageStatus, donSetSelections, matrixReport, matrixResults,
     })
-  }, [user?.id, referenceQuery, referenceLanguage, referenceSet, referenceRarity, referenceCardType, referenceColor, referenceVariant, referenceImageStatus, donSetSelections, matrixReport, matrixResults])
+  }, [user?.id, referenceQuery, referenceCardNumber, referenceSort, referenceLanguage, referenceSet, referenceCardNumberSet, referenceRarity, referenceCardType, referenceColor, referenceVariant, referenceImageStatus, donSetSelections, matrixReport, matrixResults])
 
   useEffect(() => {
     loadImages()
@@ -144,8 +147,8 @@ export default function ImageLibraryPanel({ user }) {
     setReferenceLoading(true); setReferenceError('')
     try {
       const page = await getCatalogueImageGallery({
-        offset, limit: 24, query: referenceQuery, language: referenceLanguage,
-        set: referenceSet, rarity: referenceRarity, cardType: referenceCardType,
+        offset, limit: 24, query: referenceQuery, cardNumber: referenceCardNumber, sortBy: referenceSort,
+        language: referenceLanguage, set: referenceSet, cardNumberSet: referenceCardNumberSet, rarity: referenceRarity, cardType: referenceCardType,
         color: referenceColor, variant: referenceVariant, imageStatus: referenceImageStatus,
       })
       if (requestId !== referenceRequestId.current) return
@@ -155,7 +158,7 @@ export default function ImageLibraryPanel({ user }) {
         setLoadedReferenceIds([])
         setReferenceImageIndexes({})
       }
-      setReferenceFilterOptions(page.filters || { languages: [], sets: [], rarities: [], cardTypes: [], colors: [], variants: [] })
+      setReferenceFilterOptions(page.filters || { languages: [], sets: [], cardNumberSets: [], rarities: [], cardTypes: [], colors: [], variants: [] })
       setReferenceTotal(page.total)
       setReferenceNextOffset(page.nextOffset)
     } catch (loadError) {
@@ -163,7 +166,7 @@ export default function ImageLibraryPanel({ user }) {
     } finally {
       if (requestId === referenceRequestId.current) setReferenceLoading(false)
     }
-  }, [referenceQuery, referenceLanguage, referenceSet, referenceRarity, referenceCardType, referenceColor, referenceVariant, referenceImageStatus])
+  }, [referenceQuery, referenceCardNumber, referenceSort, referenceLanguage, referenceSet, referenceCardNumberSet, referenceRarity, referenceCardType, referenceColor, referenceVariant, referenceImageStatus])
   useEffect(() => {
     loadReferenceImages(0)
     return () => { referenceRequestId.current += 1 }
@@ -177,28 +180,54 @@ export default function ImageLibraryPanel({ user }) {
       const matrix = await getCatalogueReferenceTestMatrix()
       setMatrixReport(matrix)
       const results = []
-      // Check ten official image references at a time to avoid flooding image hosts.
-      for (let offset = 0; offset < matrix.items.length; offset += 10) {
-        const batch = matrix.items.slice(offset, offset + 10)
+      // Check up to 20 references at a time; variant checks retry the same-card
+      // base image if the exact parallel/SP artwork is not available in that language.
+      for (let offset = 0; offset < matrix.items.length; offset += 20) {
+        const batch = matrix.items.slice(offset, offset + 20)
         const checked = await Promise.all(batch.map((item) => new Promise((resolve) => {
           const image = new window.Image()
+          const candidates = [...new Set([item.imageUrl, item.fallbackImageUrl].filter(Boolean))]
+          let candidateIndex = 0
           let settled = false
+          let timeout
           const finish = (status) => {
             if (settled) return
             settled = true
             window.clearTimeout(timeout)
-            resolve({ ...item, status })
+            resolve({ ...item, status, checkedUrl: candidates[candidateIndex] || '' })
           }
-          const timeout = window.setTimeout(() => finish('timeout'), 12000)
-          image.onload = () => finish('loaded')
-          image.onerror = () => finish('failed')
-          image.src = item.imageUrl
+          const tryCandidate = () => {
+            window.clearTimeout(timeout)
+            timeout = window.setTimeout(() => {
+              if (candidateIndex + 1 < candidates.length) {
+                candidateIndex += 1
+                tryCandidate()
+              } else {
+                finish('timeout')
+              }
+            }, 12000)
+            image.onload = () => finish(candidateIndex === 0 ? 'loaded' : 'fallback-loaded')
+            image.onerror = () => {
+              if (candidateIndex + 1 < candidates.length) {
+                candidateIndex += 1
+                tryCandidate()
+              } else {
+                finish('failed')
+              }
+            }
+            image.src = candidates[candidateIndex]
+          }
+          if (!candidates.length) {
+            finish('missing-url')
+            return
+          }
+          tryCandidate()
         })))
         results.push(...checked)
         setMatrixResults([...results])
       }
     } catch (checkError) {
-      setMatrixError(checkError.message || 'Could not build the 100-image reference test.')
+      setMatrixError(checkError.message || 'Could not build the full image audit.')
     } finally {
       matrixCheckLock.current = false
       setMatrixRunning(false)
@@ -316,14 +345,14 @@ export default function ImageLibraryPanel({ user }) {
           <p className="muted-copy">This report describes metadata in the source feed; it is not a live test of every image file. Actual image loading is counted in the reference gallery.</p>
           <div className="catalogue-health-unassigned">
             <h4>Reference image smoke test</h4>
-            <p className="muted-copy">Checks 100 English and Japanese references across OP-01–OP-18, EB-01–EB-05 and PRB-01/02. This tests image loading, not OCR.</p>
-            <button className="button button--outline" type="button" disabled={matrixRunning} onClick={runReferenceMatrixCheck}>{matrixRunning ? 'Checking images…' : 'Run 100-image check'}</button>
+            <p className="muted-copy">Checks every OP-18 product printing (119 base cards, 33 parallel printings and 7 special printings) in English and Japanese, plus the existing two-card-per-language smoke test for every other tracked set. It tests image loading and same-card fallback, not OCR.</p>
+            <button className="button button--outline" type="button" disabled={matrixRunning} onClick={runReferenceMatrixCheck}>{matrixRunning ? 'Checking images…' : 'Run full image audit'}</button>
             {matrixError && <p className="form-error">{matrixError}</p>}
-            {matrixReport && <p className="muted-copy">{matrixResults.filter((item) => item.status === 'loaded').length} loaded · {matrixResults.filter((item) => item.status === 'failed').length} failed · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixReport.missingSlots.length} missing from source (100 expected).</p>}
+            {matrixReport && <p className="muted-copy">{matrixResults.filter((item) => item.status === 'loaded').length} exact loaded · {matrixResults.filter((item) => item.status === 'fallback-loaded').length} fallback loaded · {matrixResults.filter((item) => item.status === 'failed').length} failed · {matrixResults.filter((item) => item.status === 'timeout').length} timed out · {matrixReport.missingSlots.length} missing from source ({matrixReport.expectedTotal} expected).</p>}
             {matrixReport && <details className="catalogue-health-missing">
-              <summary>View sample-by-sample results ({matrixResults.length + matrixReport.missingSlots.length})</summary>
+              <summary>View image-by-image results ({matrixResults.length + matrixReport.missingSlots.length})</summary>
               <div className="catalogue-health-table">
-                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}</strong><span>{item.language.toUpperCase()}</span><span>{item.status} · {item.source}</span></div>)}
+                {matrixResults.map((item) => <div className="catalogue-health-row" key={item.id}><strong>{item.targetSet} · {item.cardNumber}{item.imageId ? ' · ' + item.imageId : ''}</strong><span>{item.language.toUpperCase()}</span><span>{item.status} · {item.source}</span></div>)}
                 {matrixReport.missingSlots.map((item) => <div className="catalogue-health-row" key={item.targetSet + item.language + item.sampleSlot}><strong>{item.targetSet}</strong><span>{item.language.toUpperCase()}</span><span>Missing sample</span></div>)}
               </div>
             </details>}
@@ -378,21 +407,32 @@ export default function ImageLibraryPanel({ user }) {
             <div>
               <p className="eyebrow">SEARCH AND BROWSE</p>
               <h3>{referenceImages.length.toLocaleString()} of {referenceTotal.toLocaleString()} matching printings</h3>
-              <p className="muted-copy">Filter by set, language, rarity, card type, colour, variant and image status. Missing-image rows remain visible so they can be identified and fixed.</p>
+              <p className="muted-copy">The release set identifies the product that contained a printing; the card-number set identifies the original set encoded in its card number. Special and parallel reprints can appear in a newer release while retaining an older card number. Filter both separately.</p>
             </div>
           </div>
           <p className="muted-copy">Displayed in this page: {loadedReferenceIds.length} images loaded · {failedReferenceIds.length} image URLs failed.</p>
           {failedReferenceIds.length > 0 && <button className="button button--outline" type="button" onClick={() => { setFailedReferenceIds([]); setLoadedReferenceIds([]); setReferenceImageIndexes({}) }}>Retry failed reference images</button>}
           <div className="catalogue-reference-filters catalogue-reference-filters--extended">
             <label className="form-field">
-              <span>Search name or card number</span>
-              <input type="search" value={referenceQuery} onChange={(event) => setReferenceQuery(event.target.value)} placeholder="OP12-002 or Edward.Newgate" />
+              <span>Search card name</span>
+              <input type="search" value={referenceQuery} onChange={(event) => setReferenceQuery(event.target.value)} placeholder="Edward.Newgate or Karoo" />
             </label>
             <label className="form-field">
-              <span>Set</span>
+              <span>Card number</span>
+              <input type="search" value={referenceCardNumber} onChange={(event) => setReferenceCardNumber(event.target.value)} placeholder="OP18-001" />
+            </label>
+            <label className="form-field">
+              <span>Release set / product</span>
               <select value={referenceSet} onChange={(event) => setReferenceSet(event.target.value)}>
-                <option value="all">All sets</option>
+                <option value="all">All release sets</option>
                 {referenceFilterOptions.sets.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </label>
+            <label className="form-field">
+              <span>Card-number set</span>
+              <select value={referenceCardNumberSet} onChange={(event) => setReferenceCardNumberSet(event.target.value)}>
+                <option value="all">All card-number sets</option>
+                {(referenceFilterOptions.cardNumberSets || []).map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
               </select>
             </label>
             <label className="form-field">
@@ -431,6 +471,13 @@ export default function ImageLibraryPanel({ user }) {
               </select>
             </label>
             <label className="form-field">
+              <span>Sort by card number</span>
+              <select value={referenceSort} onChange={(event) => setReferenceSort(event.target.value)}>
+                <option value="card-number-asc">Ascending (A–Z / 001–119)</option>
+                <option value="card-number-desc">Descending (Z–A / 119–001)</option>
+              </select>
+            </label>
+            <label className="form-field">
               <span>Image status</span>
               <select value={referenceImageStatus} onChange={(event) => setReferenceImageStatus(event.target.value)}>
                 <option value="all">All image states</option>
@@ -443,8 +490,11 @@ export default function ImageLibraryPanel({ user }) {
           <div className="catalogue-reference-actions">
             <button className="button button--quiet" type="button" onClick={() => {
               setReferenceQuery('')
+              setReferenceCardNumber('')
+              setReferenceSort('card-number-asc')
               setReferenceLanguage('all')
               setReferenceSet('all')
+              setReferenceCardNumberSet('all')
               setReferenceRarity('all')
               setReferenceCardType('all')
               setReferenceColor('all')
@@ -485,9 +535,23 @@ export default function ImageLibraryPanel({ user }) {
                   /> : <div className="empty-catalogue"><ImagePlus size={20} /><span>{isFailed ? 'All image sources failed' : 'No image reference yet'}</span></div>}
                 </div>
                 <div className="photo-card__body">
-                  <span className="photo-card__name" title={item.name || item.sourceText}>{item.name || item.sourceText || item.cardNumber || 'Unknown card'}{item.cardNumber && item.cardNumber !== 'DON!!' ? ' · ' + item.cardNumber : ''}</span>
-                  <span className="muted-copy">{item.language} · {item.setCode || 'Unassigned'} · {item.rarity || 'Rarity not listed'} · {item.variant || 'Base'}</span>
+                  {item.cardNumber && item.cardNumber !== 'DON!!' && <span className="catalogue-card-number">CARD NO. {item.cardNumber}</span>}
+                  <span className="photo-card__name" title={item.name || item.sourceText}>{item.name || item.sourceText || item.cardNumber || 'Unknown card'}</span>
+                  <span className="muted-copy">{item.language} · Release set {item.setCode || 'Unassigned'} · {item.rarity || 'Rarity not listed'} · {item.variant || 'Base'}</span>
+                  {item.cardNumberSet && <span className="muted-copy">Card-number set {item.cardNumberSet}{item.cardNumberSet !== item.setCode ? ' · reprint / cross-set printing' : ''}</span>}
                   <span className="muted-copy">{item.imageStatus === 'missing' ? 'Missing source image' : item.imageStatus === 'fallback' ? 'Fallback image · confirm exact finish' : item.source || 'Catalogue reference'}</span>
+                  <button
+                    className="button button--outline catalogue-reference-add"
+                    type="button"
+                    disabled={!onAddCard || !item.cardNumber}
+                    onClick={() => onAddCard({
+                      ...item,
+                      imageUrl: currentImage || item.imageUrl,
+                      imageUrls: candidates,
+                    })}
+                  >
+                    <PackagePlus size={14} /> Add card
+                  </button>
                   {item.officialListUrl && <a className="muted-copy" href={item.officialListUrl} target="_blank" rel="noopener noreferrer">Official card list ↗</a>}
                   {item.isDon && <div className="catalogue-don-set-assignment">
                     <label className="form-field"><span>DON!! source set</span><select value={donSetSelections[item.id] ?? (item.setCode !== 'DON!!' ? item.setCode : '')} onChange={(event) => setDonSetSelections((current) => ({ ...current, [item.id]: event.target.value }))}><option value="">Choose source set…</option>{DON_SET_OPTIONS.map((code) => <option key={code} value={code}>{code}</option>)}</select></label>

@@ -106,6 +106,56 @@ const slugify = (value) =>
 
 // Keep the catalogue selection fields aligned with the scanner → QuickAdd handoff.
 // Values are copied as reviewed form values, not silently treated as verified facts.
+
+const REFERENCE_LIBRARY_SCAN_FIELDS = [
+  'name', 'card_number', 'set_code', 'rarity', 'color', 'power', 'cost',
+  'card_type', 'effect_text', 'language', 'classification', 'counter',
+  'trigger_text', 'attributes', 'variant_label', 'catalogue_match_id',
+  'catalogue_printing_key', 'catalogue_reference_image_url',
+  'catalogue_reference_image_source', 'reference_image_url',
+  'reference_printing_key', 'reference_match_id', 'reference_image_source',
+]
+
+export function buildReferenceLibraryScanFields(match = {}) {
+  const category = String(match.category || '').trim()
+  const formValues = {
+    name: match.name || '',
+    card_number: match.cardNumber || '',
+    // This is the product/release set, intentionally not inferred from the
+    // card-number prefix: a reprint can belong to a newer release set.
+    set_code: match.setCode || '',
+    rarity: match.rarity || '',
+    color: match.colors || '',
+    power: match.power ?? '',
+    cost: match.cost ?? '',
+    card_type: category ? category[0].toUpperCase() + category.slice(1) : '',
+    effect_text: match.effect || '',
+    language: match.language || '',
+    classification: match.traits || '',
+    counter: match.counter ?? '',
+    trigger_text: match.trigger || '',
+    attributes: match.attributes || '',
+    variant_label: match.variantLabel || match.variant || '',
+    catalogue_match_id: match.id || '',
+    catalogue_printing_key: match.printingKey || '',
+    catalogue_reference_image_url: match.imageUrl || '',
+    catalogue_reference_image_source: match.source || '',
+    reference_image_url: match.imageUrl || '',
+    reference_printing_key: match.printingKey || '',
+    reference_match_id: match.id || '',
+    reference_image_source: match.source || '',
+  }
+
+  return Object.fromEntries(REFERENCE_LIBRARY_SCAN_FIELDS.map((key) => [
+    key,
+    {
+      value: formValues[key] === null || formValues[key] === undefined ? '' : String(formValues[key]),
+      confidence: 100,
+      needsReview: true,
+    },
+  ]))
+}
+
 export function buildCatalogueScannerFields(values) {
   const fieldNames = [
     'name', 'card_number', 'set_code', 'rarity', 'color', 'cost', 'power',

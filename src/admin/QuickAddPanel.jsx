@@ -89,12 +89,22 @@ export default function QuickAddPanel({
     const matchingSet = sets.find(
       (set) => String(set.code || '').toUpperCase() === String(extracted.set_code || '').toUpperCase(),
     )
+    const matchingCategory = categories.find(
+      (category) => String(category.name || '').trim().toLowerCase() === String(extracted.card_type || '').trim().toLowerCase(),
+    )
     return {
       ...initialProduct(),
       ...extracted,
+      category_id: matchingCategory?.id || '',
       set_id: matchingSet?.id || resolveSetIdForCode(sets, extracted.set_code),
     }
   })
+  const hasCatalogueReferenceImage = Boolean(form.catalogue_reference_image_url || form.reference_image_url)
+  const catalogueReferenceImageUrl = form.catalogue_reference_image_url || form.reference_image_url || ''
+  const [imageChoice, setImageChoice] = useState(() => (
+    scanFields?.catalogue_reference_image_url?.value || scanFields?.reference_image_url?.value ? 'sample' : 'own'
+  ))
+  const showOwnPhotoUpload = !hasCatalogueReferenceImage || imageChoice === 'own' || photos.length > 0
   const [busy, setBusy] = useState(false)
   const submitLock = useRef(false)
   const [error, setError] = useState('')
@@ -115,6 +125,7 @@ export default function QuickAddPanel({
     setDuplicateMatches([])
     setError('')
     setSuccess('')
+    if (['card_number', 'set_code', 'language', 'variant_label'].includes(field)) setImageChoice('own')
   }
 
   const lookupCard = async () => {
@@ -167,6 +178,7 @@ export default function QuickAddPanel({
     setAllowVariant(false)
     setDuplicateMatches([])
     setCatalogueMatches([])
+    setImageChoice(details.catalogue_reference_image_url || details.reference_image_url ? 'sample' : 'own')
     setSuccess('Reference details filled in. Check the information against your physical card.')
   }
 
@@ -226,12 +238,12 @@ export default function QuickAddPanel({
     }))
   }
 
-  const savePhotosForProduct = async (productId) => {
-    if (!photos.length) return
+  const savePhotosForProduct = async (productId, photoBatch = photos) => {
+    if (!photoBatch.length) return
     await uploadProductPhotos({
       productId,
       userId: user.id,
-      photos,
+      photos: photoBatch,
     })
   }
 
@@ -254,6 +266,17 @@ export default function QuickAddPanel({
       return
     }
 
+    const usesOwnPhotographs = !hasCatalogueReferenceImage || imageChoice === 'own'
+    const photosForThisProduct = usesOwnPhotographs ? photos : []
+    if (hasCatalogueReferenceImage && imageChoice === 'sample' && photos.length > 0) {
+      setError('Your own photographs are still queued. Remove them in Photo Review or choose “My own card photo” before saving with the SAMPLE reference image.')
+      return
+    }
+    if (hasCatalogueReferenceImage && imageChoice === 'own' && !photos.some((photo) => photo.role === 'front')) {
+      setError('Choose “My own card photo” only after adding a Card front photograph. You can switch back to the SAMPLE reference image instead.')
+      return
+    }
+
     if (submitLock.current) return
     submitLock.current = true
     setBusy(true)
@@ -261,13 +284,16 @@ export default function QuickAddPanel({
     setSuccess('')
     try {
       if (partialProductId) {
-        await savePhotosForProduct(partialProductId)
+        if (!photosForThisProduct.length) {
+          throw new Error('The product was already created. Choose “My own card photo” and keep the front photograph queued to retry its upload.')
+        }
+        await savePhotosForProduct(partialProductId, photosForThisProduct)
         setSuccess(`Photographs linked to the saved product ${partialProductId}. The form is reset to prevent creating a duplicate product.`)
         setPartialProductId('')
         setForm(initialProduct())
         setDuplicateMatches([])
         setAllowVariant(false)
-        onSaved({ uploadedPhotoIds: photos.map((photo) => photo.id) })
+        onSaved({ uploadedPhotoIds: photosForThisProduct.map((photo) => photo.id) })
         return
       }
 
@@ -342,7 +368,7 @@ export default function QuickAddPanel({
         extendedColumnsReady = true
       }
 
-      if (photos.length) await ensurePhotoStorageReady()
+      if (photosForThisProduct.length) await ensurePhotoStorageReady()
       const payload = buildNewProductPayload(form, resolvedSetId, extendedColumnsReady)
       const result = await supabase
         .from('products')
@@ -353,9 +379,9 @@ export default function QuickAddPanel({
         throw new Error(`Product was not saved: ${result.error.message}`)
       }
 
-      if (photos.length) {
+      if (photosForThisProduct.length) {
         try {
-          await savePhotosForProduct(result.data.id)
+          await savePhotosForProduct(result.data.id, photosForThisProduct)
         } catch (photoError) {
           setPartialProductId(result.data.id)
           setError(`Product ${result.data.id} was saved, but its photographs were not fully linked: ${photoError.message}. Keep this form open and retry the photo upload to avoid creating a duplicate product.`)
@@ -367,7 +393,7 @@ export default function QuickAddPanel({
       setDuplicateMatches([])
       setAllowVariant(false)
       setSuccess('Product and stock saved.')
-      onSaved({ uploadedPhotoIds: photos.map((photo) => photo.id) })
+      onSaved({ uploadedPhotoIds: photosForThisProduct.map((photo) => photo.id) })
     } catch (saveError) {
       setError(saveError.message)
     } finally {
@@ -383,6 +409,7 @@ export default function QuickAddPanel({
     setDuplicateMatches([])
     setAllowVariant(false)
     setPartialProductId('')
+    setImageChoice('own')
     onResetScan()
   }
 
@@ -393,6 +420,7 @@ export default function QuickAddPanel({
           <p className="eyebrow"><PackagePlus size={14} /> QUICK ADD INVENTORY</p>
           <h2>One card.<br /><em>One clean record.</em></h2>
           <p>Use scanner results or enter a card manually. Every value remains editable before saving.</p>
+          {form.catalogue_match_id && <p className="admin-muted">Prefilled from the Card reference library. Check the language, card number, release set and printing before adding stock.</p>}
         </div>
         <button className="button button--outline" type="button" onClick={resetManual}>
           <RotateCcw size={14} /> Manual entry
@@ -453,18 +481,66 @@ export default function QuickAddPanel({
           <label className="form-field"><span>Selling price · GBP *</span><div className="price-input"><span>£</span><input required type="number" min="0" step="0.01" value={form.price_gbp} onChange={(event) => setField('price_gbp', event.target.value)} placeholder="0.00" /></div></label>
           <label className="form-field"><span>Quantity *</span><input required type="number" min="0" step="1" value={form.stock_quantity} onChange={(event) => setField('stock_quantity', event.target.value)} /></label>
         </div>
-        <div className="quick-add-photo-section">
-          <div className="admin-view-heading">
-            <div>
-              <p className="eyebrow">CARD PHOTOGRAPHS</p>
-              <h3>Add photos to this stock item</h3>
-              <p className="admin-muted">Upload or take the card photo here. Set the front image as the main catalogue picture; add a back or detail photo if needed.</p>
+        {hasCatalogueReferenceImage && (
+          <section className="quick-add-image-choice" aria-labelledby="quick-add-image-choice-title">
+            <div className="admin-view-heading">
+              <div>
+                <p className="eyebrow">STOCK IMAGE CHOICE</p>
+                <h3 id="quick-add-image-choice-title">Which image should the Archive show?</h3>
+                <p className="admin-muted">Choose the catalogue reference image with its SAMPLE watermark, or add your own photograph of the physical card.</p>
+              </div>
             </div>
+            <div className="quick-add-image-choice__options">
+              <label className={imageChoice === 'sample' ? 'quick-add-image-choice__option is-selected' : 'quick-add-image-choice__option'}>
+                <input
+                  type="radio"
+                  name="quick-add-image-choice"
+                  value="sample"
+                  checked={imageChoice === 'sample'}
+                  disabled={Boolean(partialProductId) || !catalogueReferenceImageUrl}
+                  onChange={() => setImageChoice('sample')}
+                />
+                <span><strong>Use catalogue SAMPLE image</strong><small>Use the reference artwork shown in the library. The SAMPLE watermark stays visible.</small></span>
+              </label>
+              <label className={imageChoice === 'own' ? 'quick-add-image-choice__option is-selected' : 'quick-add-image-choice__option'}>
+                <input
+                  type="radio"
+                  name="quick-add-image-choice"
+                  value="own"
+                  checked={imageChoice === 'own'}
+                  disabled={Boolean(partialProductId)}
+                  onChange={() => setImageChoice('own')}
+                />
+                <span><strong>Use my own card photograph</strong><small>Upload or capture the physical card. Your front photo becomes the stock image.</small></span>
+              </label>
+            </div>
+            {imageChoice === 'sample' && catalogueReferenceImageUrl && (
+              <div className="quick-add-image-choice__preview">
+                <img src={catalogueReferenceImageUrl} alt={form.name + ' catalogue reference with SAMPLE watermark'} loading="lazy" />
+                <p><strong>Catalogue reference selected.</strong> The reference artwork is stored separately from uploaded stock photographs.</p>
+              </div>
+            )}
+            {imageChoice === 'sample' && photos.length > 0 && (
+              <p className="form-error" role="alert">You have {photos.length} own photograph{photos.length === 1 ? '' : 's'} queued. Remove them below or choose “My own card photograph” before saving.</p>
+            )}
+          </section>
+        )}
+        {showOwnPhotoUpload && (
+          <div className="quick-add-photo-section">
+            <div className="admin-view-heading">
+              <div>
+                <p className="eyebrow">CARD PHOTOGRAPHS</p>
+                <h3>Add photos to this stock item</h3>
+                <p className="admin-muted">Upload or take the card photo here. Set the front image as the main catalogue picture; add a back or detail photo if needed.</p>
+              </div>
+            </div>
+            <PhotoStudio photos={photos} onPhotosChange={onPhotosChange} />
           </div>
-          <PhotoStudio photos={photos} onPhotosChange={onPhotosChange} />
-        </div>
+        )}
         <div className="quick-add-form__footer">
-          <p>{photos.length} photograph{photos.length === 1 ? '' : 's'} will be linked to this product. Keep the front photograph in the photo review to show it in the public catalogue.</p>
+          <p>{hasCatalogueReferenceImage && imageChoice === 'sample'
+            ? 'The catalogue SAMPLE image will be used as the reference image. No stock photograph will be uploaded.'
+            : photos.length + ' photograph' + (photos.length === 1 ? '' : 's') + ' will be linked to this product. Keep a Card front photograph in the review to show it in the public catalogue.'}</p>
           <button className="button button--gold" type="submit" disabled={busy}>
             <Save size={15} /> {busy ? 'Saving…' : partialProductId ? 'Retry photo linking' : 'Save product'}
           </button>

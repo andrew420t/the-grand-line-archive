@@ -74,3 +74,25 @@ test('permits HEAD but rejects other methods', async () => {
   assert.equal(head.status, 200)
   assert.equal(post.status, 405)
 })
+
+test('reports upstream denial status without caching generic proxy failures', async () => {
+  const response = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/en/ST04-008_p1.png'),
+    async () => new Response('Forbidden', { status: 403, headers: { 'Content-Type': 'text/plain' } }),
+  )
+  assert.equal(response.status, 502)
+  assert.equal(response.headers.get('x-card-image-source-host'), 'en.onepiece-cardgame.com')
+  assert.equal(response.headers.get('x-card-image-upstream-status'), '403')
+  assert.equal(response.headers.get('cache-control'), 'no-store')
+  assert.equal(await response.text(), 'Card image source returned HTTP 403')
+})
+
+test('preserves a genuine upstream 404 as a not-found response', async () => {
+  const response = await handleCardImageProxy(
+    new Request('https://archive.example/_card-image/bandai/en/ST04-008_p1.png'),
+    async () => new Response('Not found', { status: 404 }),
+  )
+  assert.equal(response.status, 404)
+  assert.equal(response.headers.get('x-card-image-upstream-status'), '404')
+  assert.equal(await response.text(), 'Card image source returned HTTP 404')
+})
