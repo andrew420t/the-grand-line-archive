@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {plan,TESTING_PROJECT_REF,SOURCE_COMMIT,PROTECTED} from '../scripts/catalogue-importer-stage4b1va.mjs';
+const source=process.env.CATALOGUE_SOURCE_DIR;
+test('rejects non-Testing project references',()=>assert.throws(()=>plan('/missing',{projectRef:'production'}),/Wrong project/));
+test('rejects an unpinned source revision',()=>assert.throws(()=>plan('/missing',{sourceCommit:'main'}),/Wrong pinned/));
+test('protected commercial and inventory-link tables are never destinations',()=>{for(const p of ['public.products','public.cards','public.sets','public.product_images','public.catalogue_inventory_links'])assert.ok(PROTECTED.includes(p))});
+test('validates all 27 manifest files and produces zero-write plan',{skip:!source},()=>{const r=plan(source);assert.equal(r.sourceCommit,SOURCE_COMMIT);assert.equal(r.sourceRows,74144);assert.equal(Object.keys(r.sourceFiles).length,27);assert.equal(r.writesPerformed,0);assert.equal(r.mode,'DRY_RUN_ONLY');assert.equal(r.plannedDestinationRows.catalogue_inventory_links,0);assert.ok(r.unsupportedFiles.length>0)});
+test('rejects a modified source file before planning',{skip:!source},()=>{const t=fs.mkdtempSync(path.join(os.tmpdir(),'gla-feed-'));fs.cpSync(source,t,{recursive:true});fs.appendFileSync(path.join(t,'data/cards.jsonl'),'\n{}\n');assert.throws(()=>plan(t),/SHA256 mismatch|Row count mismatch/);fs.rmSync(t,{recursive:true,force:true})});
+test('keeps English and Japanese card identities separately scoped',{skip:!source},()=>{const r=plan(source);assert.ok(r.languageTotals.en.cards>0);assert.ok(r.languageTotals.jp.cards>0);assert.equal(r.languageTotals.en.cards+r.languageTotals.jp.cards,r.plannedDestinationRows.catalogue_cards)});
