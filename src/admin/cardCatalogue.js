@@ -901,7 +901,7 @@ export async function getCatalogueImageAuditInventory(language) {
   const unique = new Map()
   for (const record of records) {
     if (record.languageCode !== language) continue
-    const identity = [record.printingKey || record.id, record.languageCode, record.setCode || '', record.id].join(':')
+    const identity = [record.printingKey || record.id, record.languageCode, record.setCode || ''].join(':')
     if (!unique.has(identity)) unique.set(identity, record)
   }
   return {
