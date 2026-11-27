@@ -175,13 +175,22 @@ test('EB-05 audit branch preserves eight Japanese SP rarity labels', () => {
   }
 })
 
-test('PRB base-prefix numbers are fully represented in the 50-row matrix', () => {
+test('PRB product-prefix numbers are not represented as original base-card counts', () => {
   for (const language of ['English', 'Japanese']) {
-    assert.equal(rowFor('PRB-01', language).actual_distinct_base_card_count, 1)
-    assert.deepEqual(rowFor('PRB-01', language).official_base_card_numbers, ['PRB01-001'])
-    assert.equal(rowFor('PRB-02', language).actual_distinct_base_card_count, 18)
+    const prb1 = rowFor('PRB-01', language)
+    assert.equal(prb1.official_expected_base_card_count, null)
+    assert.equal(prb1.actual_distinct_base_card_count, null)
+    assert.deepEqual(prb1.official_base_card_numbers, [])
+    assert.equal(prb1.official_product_prefix_card_number_count, 1)
+    assert.deepEqual(prb1.official_product_prefix_card_numbers, ['PRB01-001'])
+
+    const prb2 = rowFor('PRB-02', language)
+    assert.equal(prb2.official_expected_base_card_count, null)
+    assert.equal(prb2.actual_distinct_base_card_count, null)
+    assert.deepEqual(prb2.official_base_card_numbers, [])
+    assert.equal(prb2.official_product_prefix_card_number_count, 18)
     assert.deepEqual(
-      rowFor('PRB-02', language).official_base_card_numbers,
+      prb2.official_product_prefix_card_numbers,
       Array.from({ length: 18 }, (_, index) => 'PRB02-' + String(index + 1).padStart(3, '0')),
     )
   }
