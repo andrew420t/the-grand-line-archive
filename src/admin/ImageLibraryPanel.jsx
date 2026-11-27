@@ -4,7 +4,7 @@ import { deleteLibraryPhoto, listLibraryPhotos, uploadLibraryPhotos } from './pr
 import { getCatalogueCoverageReport, getCatalogueImageAuditInventory, getCatalogueImageGallery, saveDonCardSetOverride } from './cardCatalogue'
 import { loadAdminLibraryFileDraft, saveAdminLibraryFileDraft } from './adminDraftStorage'
 import { readPersistentDraft, savePersistentDraft } from './persistentDraftStorage'
-import { auditCatalogueImageRecord, buildImageAuditSummary, IMAGE_CHECK_STATUS, mapWithConcurrency } from './imageAuditUtils.js'
+import { auditCatalogueImageRecord, buildImageAuditSummary, IMAGE_CHECK_STATUS, runResumableCatalogueAudit } from './imageAuditUtils.js'
 
 const DON_SET_OPTIONS = [
   ...Array.from({ length: 18 }, (_, index) => 'OP-' + String(index + 1).padStart(2, '0')),
@@ -21,7 +21,8 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
   const deleteLock = useRef(false)
   const imageListRequestId = useRef(0)
   const referenceRequestId = useRef(0)
-  const matrixCheckLock = useRef(false)
+  const matrixCheckLock = useRef({ en: false, jp: false })
+  const auditPauseState = useRef({ en: false, jp: false })
   const donSetSaveLock = useRef(false)
   const [files, setFiles] = useState([])
   const [filesRestored, setFilesRestored] = useState(false)
@@ -57,6 +58,10 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
   const [loadedReferenceIds, setLoadedReferenceIds] = useState([])
   const [referenceImageIndexes, setReferenceImageIndexes] = useState({})
   const [matrixRunning, setMatrixRunning] = useState(false)
+  const [auditSessions, setAuditSessions] = useState(() => readPersistentDraft(user?.id, 'image-audit-sessions', {
+    en: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
+    jp: { status: 'idle', results: [], total: 0, completed: 0, retryCount: 0, history: [], lastRunAt: null },
+  }))
   const [coverageLoading, setCoverageLoading] = useState(false)
   const [matrixReport, setMatrixReport] = useState(() => savedLibraryDraft.matrixReport || null)
   const [matrixResults, setMatrixResults] = useState(() => savedLibraryDraft.matrixResults || [])
