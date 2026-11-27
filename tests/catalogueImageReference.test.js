@@ -115,3 +115,36 @@ test('exact official parallel artwork remains ahead of base fallback artwork', (
   const result = resolveCatalogueImage({ printing, index, printings: [printing, base], language: 'en', cardNumber: 'OP18-001' })
   assert.equal(result.imageUrl, '/_card-image/bandai/en/OP18-001_p1.png')
 })
+
+
+test('uses same-language Bandai base image only after exact and alternate printings are unavailable', () => {
+  const missing = { key: 'parallel-no-locator', card_key: 'card', site: 'en', image_url: '' }
+  const result = resolveCatalogueImage({
+    printing: missing,
+    index: { locatorsByPrinting: new Map() },
+    printings: [missing],
+    language: 'en',
+    cardNumber: 'OP18-049',
+  })
+
+  assert.equal(result.imageUrl, '/_card-image/bandai/en/OP18-049.png')
+  assert.equal(result.fallbackImageUrl, 'https://en.onepiece-cardgame.com/images/cardlist/card/OP18-049.png')
+  assert.equal(result.usesBaseImageFallback, true)
+  assert.equal(result.usesAlternateOfficialFallback, false)
+})
+
+test('does not invent a cross-language base fallback when printing and requested language differ', () => {
+  const missing = { key: 'english-no-locator', card_key: 'card', site: 'en', image_url: '' }
+  const result = resolveCatalogueImage({
+    printing: missing,
+    index: { locatorsByPrinting: new Map() },
+    printings: [missing],
+    language: 'jp',
+    cardNumber: 'OP18-049',
+  })
+
+  assert.equal(result.imageUrl, '')
+  assert.deepEqual(result.imageUrls, [])
+  assert.equal(result.usesBaseImageFallback, false)
+  assert.equal(result.usesAlternateOfficialFallback, false)
+})
