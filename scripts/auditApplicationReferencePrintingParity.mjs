@@ -64,30 +64,21 @@ async function readJson(path) {
 }
 
 async function verifyUpstreamSnapshot() {
-  const response = await fetch('https://api.github.com/repos/' + UPSTREAM_REPOSITORY + '/commits/' + UPSTREAM_COMMIT, {
-    headers: {
-      Accept: 'application/vnd.github+json',
-      'User-Agent': 'grand-line-archive-stage4b-1o-audit',
-    },
-    signal: AbortSignal.timeout(30000),
-  })
-  if (!response.ok) throw new Error('Could not verify upstream main commit: HTTP ' + response.status)
-  const commit = await response.json()
-  if (commit.sha !== UPSTREAM_COMMIT) {
-    throw new Error('Pinned application reference feed commit did not resolve: expected ' + UPSTREAM_COMMIT + ', found ' + commit.sha)
-  }
-
+  // The immutable commit is part of the raw URL. This avoids GitHub's
+  // unauthenticated REST API rate limit while still verifying the pinned feed
+  // contents and the manifest generated at the expected snapshot date.
   const manifestResponse = await fetch('https://raw.githubusercontent.com/' + UPSTREAM_REPOSITORY + '/' + UPSTREAM_COMMIT + '/manifest.json', {
+    headers: { 'User-Agent': 'grand-line-archive-stage4b-audit' },
     signal: AbortSignal.timeout(30000),
   })
-  if (!manifestResponse.ok) throw new Error('Could not read upstream manifest: HTTP ' + manifestResponse.status)
+  if (!manifestResponse.ok) throw new Error('Could not read pinned upstream manifest: HTTP ' + manifestResponse.status)
   const manifest = await manifestResponse.json()
   if (manifest.generated_at !== UPSTREAM_MANIFEST_DATE) {
     throw new Error('Upstream manifest date changed: expected ' + UPSTREAM_MANIFEST_DATE + ', found ' + manifest.generated_at)
   }
   return {
     repository: UPSTREAM_REPOSITORY,
-    commit: commit.sha,
+    commit: UPSTREAM_COMMIT,
     runtimeFeedPinned: true,
     manifestGeneratedAt: manifest.generated_at,
     manifestRows: {
