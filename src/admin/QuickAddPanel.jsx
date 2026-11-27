@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AlertCircle, Check, PackagePlus, RotateCcw, Save, Search } from 'lucide-react'
 import { CARD_FIELDS } from './cardParser'
 import {
@@ -106,6 +106,20 @@ export default function QuickAddPanel({
     scanFields?.catalogue_reference_image_url?.value || scanFields?.reference_image_url?.value ? 'sample' : 'own'
   ))
   const showOwnPhotoUpload = !hasCatalogueReferenceImage || imageChoice === 'own' || photos.length > 0
+  const [bulkCategoryReady, setBulkCategoryReady] = useState(false)
+  useEffect(() => {
+    let active = true
+    if (!supabase) return () => { active = false }
+    supabase.from('products').select('is_bulk').limit(0)
+      .then(({ error: schemaError }) => {
+        if (active) setBulkCategoryReady(!schemaError)
+      })
+      .catch(() => {
+        if (active) setBulkCategoryReady(false)
+      })
+    return () => { active = false }
+  }, [])
+
   const [busy, setBusy] = useState(false)
   const submitLock = useRef(false)
   const [error, setError] = useState('')
@@ -422,6 +436,7 @@ export default function QuickAddPanel({
           <h2>One card.<br /><em>One clean record.</em></h2>
           <p>Use scanner results or enter a card manually. Every value remains editable before saving.</p>
           {form.catalogue_match_id && <p className="admin-muted">Prefilled from the Card reference library. Check the language, card number, release set and printing before adding stock.</p>}
+          {!bulkCategoryReady && <p className="admin-muted">Bulk classification becomes available after the product-bulk-category database migration is applied to this project.</p>}
         </div>
         <div className="quick-add-heading-actions">
           <button
