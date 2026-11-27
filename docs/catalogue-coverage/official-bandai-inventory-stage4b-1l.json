@@ -17672,7 +17672,8 @@
         "redirects": 0,
         "language_host_mismatches": 0
       },
-      "alternate_image_fallback_status": "NOT_TESTED_APPLICATION_CATALOGUE_INCOMPLETE"
+      "alternate_image_fallback_status": "NOT_TESTED_APPLICATION_CATALOGUE_INCOMPLETE",
+      "official_release_product_group_label": "-THE AZURE SEA’S SEVEN- [OP14-EB04]"
     },
     {
       "set": "OP-14",
@@ -18546,7 +18547,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 196/196 result rows; 196 official image URLs; 196 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. All 196 row-associated official image URLs returned HTTP 200 in final audit run 46043216009. Application printing-identity parity remains unverified because the permitted Testing Supabase dataset is incomplete.",
+      "notes": "Full entry-level official Bandai extraction: 196/196 result rows; 196 official image URLs; 196 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. All 196 row-associated official image URLs returned HTTP 200 in final audit run 46043216009. Application printing-identity parity remains unverified because the permitted Testing Supabase dataset is incomplete. Cross-language discrepancy: OP13-037 (TR, Roronoa Zoro, image ID OP13-037_p1) appears as an English OP15-EB04 cross-prefix reprint but is absent from the Japanese EB-04 official page. Preserve as an English-only official source record; do not synthesize a Japanese counterpart.",
       "official_product_collection_page_url": "https://en.onepiece-cardgame.com/products/other/cardcollection_bestselection_vol6.php",
       "official_product_collection_evidence_file": "docs/catalogue-coverage/official-premium-card-collection-best-selection-vol6.json",
       "official_product_collection_printings": [
@@ -19294,7 +19295,25 @@
         },
         "redirects": 0,
         "language_host_mismatches": 0
-      }
+      },
+      "official_release_product_group_label": "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]",
+      "cross_language_product_number_discrepancies": [
+        {
+          "card_number": "OP13-037",
+          "rarity": "TR",
+          "type": "CHARACTER",
+          "name": "Roronoa Zoro",
+          "release_product_group": "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]",
+          "english_source": "https://en.onepiece-cardgame.com/cardlist/?series=569115",
+          "english_printing_identity_ids": [
+            "OP13-037_p1"
+          ],
+          "japanese_eb04_source": "https://www.onepiece-cardgame.com/cardlist/?series=550204",
+          "japanese_entry_present": false,
+          "classification": "ENGLISH_SOURCE_ONLY_CROSS_PREFIX_REPRINT",
+          "note": "This is an observed language-specific official source difference, not an image URL extraction failure. Preserve the English printing; do not synthesize a Japanese printing."
+        }
+      ]
     },
     {
       "set": "OP-15",
@@ -26825,7 +26844,11 @@
         "redirects": 0,
         "language_host_mismatches": 0
       },
-      "alternate_image_fallback_status": "NOT_TESTED_APPLICATION_CATALOGUE_INCOMPLETE"
+      "alternate_image_fallback_status": "NOT_TESTED_APPLICATION_CATALOGUE_INCOMPLETE",
+      "official_source_product_group_labels": [
+        "-THE AZURE SEA’S SEVEN- [OP14-EB04]",
+        "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]"
+      ]
     },
     {
       "set": "EB-04",
@@ -26953,7 +26976,7 @@
       "upstream_catalogue_snapshot_generated_at": "2026-10-22T04:46:19Z",
       "evidence_file": "docs/catalogue-coverage/official-bandai-card-inventory-stage4b-1m-00.json",
       "verification_status": "INCOMPLETE",
-      "notes": "Full entry-level official Bandai extraction: 85/85 result rows; 85 official image URLs; 85 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. All 85 row-associated official image URLs returned HTTP 200 in final audit run 46043216009. Application printing-identity parity remains unverified because the permitted Testing Supabase dataset is incomplete.",
+      "notes": "Full entry-level official Bandai extraction: 85/85 result rows; 85 official image URLs; 85 distinct image IDs; ENTRY_ORDER_MATCH; 0 missing source image entries. All 85 row-associated official image URLs returned HTTP 200 in final audit run 46043216009. Application printing-identity parity remains unverified because the permitted Testing Supabase dataset is incomplete. OP13-037 is not present on this Japanese official page; this is recorded as a language-specific source difference, not a failed image request.",
       "official_printing_identity_ids": [
         "EB04-001",
         "EB04-001_p1",
@@ -31098,7 +31121,7 @@
       "unparsed_result_rows": 0,
       "source_image_url_extraction_shortfall": 0,
       "entry_order_alignment": "All extraction artifacts report ENTRY_ORDER_MATCH.",
-      "note": "Earlier Stage 4B-1L shortfall counts are superseded by the Stage 4B-1M entry-level artifacts. Extraction completeness does not establish application catalogue completeness."
+      "note": "All 50 language/set matrix rows have matching parsed-entry and image-reference counts with zero unparsed rows and zero extraction shortfalls. The English OP14-EB04 and OP15-EB04 pages are combined release-group sources; the EB-04 English row is a prefix-specific supplemental view, not an additional independent page result list."
     },
     "image_http_verification": {
       "status": "ALL_LOADED",
@@ -31124,16 +31147,36 @@
       "OP-15 English and Japanese": "Earlier unparsed rows resolved; 196/196 and 152/152 parsed respectively. The separate OP15/EB04 page composition is retained; one historical non-base product-number difference is not promoted to a missing card without an authoritative card-by-card identity match.",
       "OP-16 English and Japanese": "Earlier image URL shortfalls resolved; 155/155 parsed and image references present for each language.",
       "OP-17 English and Japanese": "Earlier unparsed rows and image URL shortfalls resolved; 169/169 parsed and image references present for each language.",
-      "EB-04 Japanese": "Earlier unparsed rows resolved; 85/85 parsed and image references present."
+      "EB-04 Japanese": "Earlier unparsed rows resolved; 85/85 parsed and image references present.",
+      "OP-15 non-base product-number discrepancy": "Resolved as OP13-037 (TR CHARACTER Roronoa Zoro), one English-only cross-prefix reprint on the official OP15-EB04 page (image identity OP13-037_p1). The Japanese EB-04 official page has no OP13-037 entry. OP11-106 and PRB02-014 also appear as English cross-prefix entries but both are present on the Japanese EB-04 page, so they are not missing Japanese printings. Preserve the OP13-037 English record and do not invent a Japanese counterpart.",
+      "English OP14/EB04 and OP15/EB04 product labels": "The English official pages explicitly label their combined release groups OP14-EB04 and OP15-EB04. The 199-row and 196-row page inventories include OP14/OP15 and EB04 original-number cards plus reprints. The EB-04 English row is a supplementary prefix-specific view of 81 EB04-prefixed printings (61 distinct base numbers); do not add it to the OP14/OP15 page totals as a new set of independent source-page rows."
     },
     "application_printing_identity_reconciliation": {
       "status": "NOT_VERIFIABLE_TESTING_DATASET_INCOMPLETE",
       "testing_project_id": "ehzqsnfkmwphyllhaqhe",
       "evidence": "Read-only snapshot: 32 products, only 2 release sets linked, and zero catalogue_printing_key, catalogue_match_id or catalogue_reference_image_url values.",
-      "consequence": "Official printings are enumerated, but application-vs-official identity parity cannot be established for all 25 sets. All 50 rows remain INCOMPLETE; none is marked COMPLETE."
+      "consequence": "The official 50-row source inventory and source images are verified, but the application cannot be compared against complete English/Japanese printing identities from the 32-product Testing smoke dataset. No row is marked COMPLETE."
     },
     "alternate_image_fallback": "NOT_TESTED_APPLICATION_CATALOGUE_INCOMPLETE",
     "preview": "No Stage 4B-1N Preview deployment performed. Existing Stage 3 Preview evidence is not evidence for this audit commit.",
-    "safety": "No Production deployment or Production Supabase access; no merges; PR #37 and #38 left open."
+    "safety": "No Production deployment or Production Supabase access; no merges; PR #37 and #38 left open.",
+    "op15_non_base_discrepancy": {
+      "card_number": "OP13-037",
+      "rarity": "TR",
+      "type": "CHARACTER",
+      "name": "Roronoa Zoro",
+      "english_release_product_group": "OP15-EB04",
+      "english_printing_identity_id": "OP13-037_p1",
+      "english_source_url": "https://en.onepiece-cardgame.com/cardlist/?series=569115",
+      "japanese_eb04_source_url": "https://www.onepiece-cardgame.com/cardlist/?series=550204",
+      "japanese_entry_present": false,
+      "other_cross_prefix_numbers_checked": [
+        "OP11-106",
+        "PRB02-014"
+      ],
+      "other_cross_prefix_numbers_present_in_japanese_eb04": true,
+      "classification": "ENGLISH_SOURCE_ONLY_CROSS_PREFIX_REPRINT",
+      "image_status": "HTTP 200 in official image audit"
+    }
   }
 }
