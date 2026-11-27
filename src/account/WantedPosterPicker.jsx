@@ -9,7 +9,7 @@ export default function WantedPosterPicker({ value, onChange }) {
   const filtered = useMemo(() => {
     const needle = search.trim().toLowerCase()
     return WANTED_POSTER_AVATARS.filter((avatar) =>
-      (group === 'All posters' || avatar.group === group) &&
+      (group === 'All posters' || avatar.group === group || avatar.groups?.includes(group)) &&
       (!needle || avatar.name.toLowerCase().includes(needle) || avatar.group.toLowerCase().includes(needle)),
     )
   }, [group, search])
