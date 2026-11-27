@@ -14795,7 +14795,81 @@
       "official_printing_identity_source_alignment": "ENTRY_ORDER_MATCH",
       "missing_printings": null,
       "official_product_prefix_card_numbers": null,
-      "official_product_prefix_card_number_count": null
+      "official_product_prefix_card_number_count": null,
+      "language_specific_product_reconciliation": {
+        "compared_with": "OP-15 Japanese official Bandai page",
+        "english_only_eb04_card_numbers": [
+          "EB04-001",
+          "EB04-002",
+          "EB04-003",
+          "EB04-004",
+          "EB04-005",
+          "EB04-006",
+          "EB04-007",
+          "EB04-008",
+          "EB04-009",
+          "EB04-010",
+          "EB04-042",
+          "EB04-043",
+          "EB04-044",
+          "EB04-045",
+          "EB04-046",
+          "EB04-047",
+          "EB04-048",
+          "EB04-049",
+          "EB04-050",
+          "EB04-051",
+          "EB04-052",
+          "EB04-053",
+          "EB04-054",
+          "EB04-055",
+          "EB04-056",
+          "EB04-057",
+          "EB04-058",
+          "EB04-059",
+          "EB04-060",
+          "EB04-061"
+        ],
+        "english_only_non_eb04_card_numbers": [
+          "OP11-106",
+          "OP13-037",
+          "PRB02-014"
+        ],
+        "english_only_non_eb04_printings": [
+          {
+            "card_number": "OP13-037",
+            "rarity": "TR",
+            "type": "CHARACTER",
+            "name": "Roronoa Zoro",
+            "release_product": "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]",
+            "reprint": true,
+            "official_image_id": "OP13-037_p1",
+            "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/OP13-037_p1.png?261124"
+          },
+          {
+            "card_number": "OP11-106",
+            "rarity": "SP CARD",
+            "type": "CHARACTER",
+            "name": "Zeus",
+            "release_product": "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]",
+            "reprint": true,
+            "official_image_id": "OP11-106_p2",
+            "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/OP11-106_p2.png?261124"
+          },
+          {
+            "card_number": "PRB02-014",
+            "rarity": "SP CARD",
+            "type": "CHARACTER",
+            "name": "Sabo",
+            "release_product": "-ADVENTURE ON KAMI'S ISLAND- [OP15-EB04]",
+            "reprint": true,
+            "official_image_id": "PRB02-014_p2",
+            "official_image_url": "https://en.onepiece-cardgame.com/images/cardlist/card/PRB02-014_p2.png?261124"
+          }
+        ],
+        "japanese_only_reprint_card_numbers": [],
+        "classification": "Official product-release difference, not OP15 base-card discrepancy. English OP15 page combines OP15-EB04; Japanese EB04 is listed separately. The single PRB-prefixed inclusion is PRB02-014, retained as an SP CARD printing in OP15-EB04. OP11-106 and OP13-037 are also distinct official non-EB04 printings on the same combined page."
+      }
     },
     {
       "set": "OP-15",
