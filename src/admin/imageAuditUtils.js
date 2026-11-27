@@ -108,38 +108,46 @@ export function buildCatalogueImageCandidates(record) {
   const language = record?.languageCode || record?.language || ''
   if (!['en', 'jp'].includes(language)) return []
   const candidates = []
-  const add = (url, kind, source) => {
+  const add = (descriptor) => {
+    const url = typeof descriptor === 'string' ? descriptor : descriptor?.url
+    const kind = typeof descriptor === 'string' ? '' : descriptor?.kind
+    const candidateLanguage = typeof descriptor === 'string' ? '' : descriptor?.language
     if (typeof url !== 'string' || !url.trim()) return
-    if (candidates.some((item) => item.url === url)) return
-    candidates.push({ url, kind, source: source || record.source || 'catalogue reference' })
+    if (!['exact', 'alternative', 'base-fallback'].includes(kind)) return
+    if (candidateLanguage !== language) return
+    if (descriptor?.cardKey && record?.cardKey && descriptor.cardKey !== record.cardKey) return
+    if (descriptor?.cardNumber && record?.cardNumber && descriptor.cardNumber !== record.cardNumber) return
+    if (descriptor?.printingKey && kind === 'exact' && descriptor.printingKey !== record.printingKey) return
+    const identity = [url, kind, descriptor?.printingKey || ''].join(':')
+    if (candidates.some((item) => item.identity === identity)) return
+    candidates.push({
+      url,
+      kind,
+      language: candidateLanguage,
+      printingKey: descriptor?.printingKey || '',
+      cardKey: descriptor?.cardKey || record?.cardKey || '',
+      cardNumber: descriptor?.cardNumber || record?.cardNumber || '',
+      setCode: descriptor?.setCode || record?.setCode || '',
+      rarity: descriptor?.rarity || record?.rarity || '',
+      variant: descriptor?.variant || record?.variant || '',
+      originalImageUrl: descriptor?.originalImageUrl || '',
+      source: descriptor?.source || record?.source || 'catalogue reference',
+      identity,
+    })
   }
-  // Candidate provenance is taken from explicit catalogue flags/fields only.
-  // URL position alone is not enough to infer an alternative printing.
-  if (record.exactImageUrl) add(record.exactImageUrl, 'exact', record.exactImageSource)
-  else if (record.imageUrl && !record.usesBaseImageFallback && !record.usesAlternateOfficialFallback) add(record.imageUrl, 'exact', record.source)
-  const candidateLanguage = (candidate) => {
-    if (candidate?.language === 'en' || candidate?.language === 'jp') return candidate.language
-    const match = String(candidate?.url || '').match(/\/_card-image\/(?:bandai|external)\/(en|jp)\//i)
-    return match ? match[1].toLowerCase() : ''
+  for (const descriptor of record?.imageCandidates || []) add(descriptor)
+  // Explicit legacy fields remain supported for callers and tests, but their
+  // language and candidate type must be declared rather than inferred by order.
+  for (const candidate of record?.alternativeImageCandidates || []) add({ ...candidate, kind: 'alternative' })
+  for (const candidate of record?.baseFallbackCandidates || []) add({ ...candidate, kind: 'base-fallback' })
+  if (record?.exactImageUrl && !candidates.some((item) => item.kind === 'exact')) {
+    add({ url: record.exactImageUrl, kind: 'exact', language, printingKey: record.printingKey, cardKey: record.cardKey, cardNumber: record.cardNumber, source: record.exactImageSource })
   }
-  for (const candidate of record.alternativeImageCandidates || []) {
-    if (candidateLanguage(candidate) === language) add(candidate.url, 'alternative', candidate.source)
+  if (!candidates.length && record?.imageUrl && record?.languageCode === language &&
+      !record.usesBaseImageFallback && !record.usesAlternateOfficialFallback) {
+    add({ url: record.imageUrl, kind: 'exact', language, printingKey: record.printingKey, cardKey: record.cardKey, cardNumber: record.cardNumber, source: record.source })
   }
-  for (const candidate of record.baseFallbackCandidates || []) {
-    if (candidateLanguage(candidate) === language) add(candidate.url, 'base-fallback', candidate.source)
-  }
-  // Legacy callers already supply explicit candidate type descriptors.
-  // Accept them only when the language is explicitly declared or encoded in
-  // the same-origin image proxy path; never infer type from URL ordering.
-  for (const candidate of record.imageCandidates || []) {
-    if (candidateLanguage(candidate) !== language) continue
-    if (candidate?.kind === 'alternative' || candidate?.kind === 'base-fallback' || candidate?.kind === 'exact') {
-      add(candidate.url, candidate.kind, candidate.source)
-    }
-  }
-  if (record.usesAlternateOfficialFallback && record.imageUrl) add(record.imageUrl, 'alternative', record.source)
-  if (record.usesBaseImageFallback && record.imageUrl) add(record.imageUrl, 'base-fallback', record.source)
-  return candidates
+  return candidates.map(({ identity, ...candidate }) => candidate)
 }
 
 export async function auditCatalogueImageRecord(record, {
