@@ -428,6 +428,7 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
                     </label>)}
                   </div>
                   <button className="button button--outline" type="button" disabled={!(selectedAuditIds[language] || []).length} onClick={() => retryAuditRecords(language, (session.results || []).filter((item) => (selectedAuditIds[language] || []).includes(item.id)))}>Retry selected ({(selectedAuditIds[language] || []).length})</button>
+                  <button className="button button--outline" type="button" onClick={() => retryAuditRecords(language, (session.results || []).filter((item) => [IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT].includes(item.status)))}>Retry all temporary failures and timeouts</button>
                   <div className="catalogue-reference-actions">
                     <button className="button button--outline" type="button" disabled={matrixRunning} onClick={() => runReferenceMatrixCheck(language)}>{session.results?.length ? 'Restart ' + label : 'Start ' + label}</button>
                     {session.status === 'running' && <button className="button button--outline" type="button" onClick={() => pauseReferenceAudit(language)}>Pause</button>}
