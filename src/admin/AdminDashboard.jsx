@@ -9,6 +9,7 @@ import {
   ChevronDown,
   ClipboardList,
   FileSpreadsheet,
+  MessageCircle,
   Image,
   ImagePlus,
   Layers,
@@ -35,6 +36,7 @@ import QuickAddPanel from './QuickAddPanel'
 import StockPhotographyPanel from './StockPhotographyPanel'
 import ImageLibraryPanel from './ImageLibraryPanel'
 import BulkImportPanel from './BulkImportPanel'
+import SupportMessages from '../SupportMessages'
 import { findCatalogueMatches, catalogueMatchToForm } from './cardCatalogue'
 import CatalogueMatchCard from './CatalogueMatchCard'
 import CatalogueLanguageButtons from './CatalogueLanguageButtons'
@@ -59,6 +61,7 @@ const adminSections = [
   { id: 'image-library', label: 'Image Library', icon: ImagePlus },
   { id: 'collections', label: 'Collections and Sets', icon: Layers },
   { id: 'orders', label: 'Orders', icon: ClipboardList },
+  { id: 'messages', label: 'Messages', icon: MessageCircle },
   { id: 'customers', label: 'Customers', icon: Users },
   { id: 'customisation', label: 'Website Customisation', icon: Palette },
   { id: 'settings', label: 'Settings', icon: Settings },
@@ -85,6 +88,8 @@ export default function AdminDashboard({
   onSaveSiteSettings,
 }) {
   const [activeSection, setActiveSection] = useState('overview')
+  const [messageTarget, setMessageTarget] = useState({ customerId: null, orderId: null })
+  const [unreadSupportCount, setUnreadSupportCount] = useState(0)
   const [photos, setPhotos] = useState([])
   const photosRef = useRef(photos)
   photosRef.current = photos
@@ -107,6 +112,12 @@ export default function AdminDashboard({
     setRawText('')
     setScanVersion((current) => current + 1)
     setActiveSection('add-stock')
+  }
+
+  const openCustomerMessages = (customerId, orderId = null) => {
+    if (!customerId) return
+    setMessageTarget({ customerId: String(customerId), orderId: orderId ? String(orderId) : null })
+    setActiveSection('messages')
   }
 
   const customerSummary = useMemo(() => {
@@ -167,7 +178,7 @@ export default function AdminDashboard({
               onClick={() => setActiveSection(id)}
             >
               <Icon size={15} strokeWidth={1.7} />
-              <span>{label}</span>
+              <span>{label}{id === 'messages' && unreadSupportCount > 0 && <small className="admin-navigation__unread">{unreadSupportCount}</small>}</span>
             </button>
           ))}
         </nav>
@@ -282,6 +293,18 @@ export default function AdminDashboard({
           action={action}
           onReload={onReload}
           onUpdateStatus={onUpdateStatus}
+          onStartConversation={openCustomerMessages}
+        />
+      )}
+
+      {activeSection === 'messages' && (
+        <SupportMessages
+          key={messageTarget.orderId || messageTarget.customerId || 'admin-inbox'}
+          user={user}
+          isAdmin
+          initialCustomerId={messageTarget.customerId}
+          initialOrderId={messageTarget.orderId}
+          onUnreadCountChange={setUnreadSupportCount}
         />
       )}
 
@@ -1005,7 +1028,7 @@ function CollectionsSection({ categories, sets, onRefresh }) {
   )
 }
 
-function OrdersSection({ orders, orderItems, products, loading, error, action, onReload, onUpdateStatus }) {
+function OrdersSection({ orders, orderItems, products, loading, error, action, onReload, onUpdateStatus, onStartConversation }) {
   const pendingCount = orders.filter((order) => ['pending', 'processing'].includes(String(order.status).toLowerCase())).length
   return (
     <section className="admin-view">
@@ -1020,10 +1043,18 @@ function OrdersSection({ orders, orderItems, products, loading, error, action, o
         <div className="admin-order-list">
           {orders.map((order) => {
             const items = orderItems.filter((item) => String(item.order_id) === String(order.id))
+            const customerId = order.user_id || order.customer_id || order.profile_id
             return (
               <article className="admin-order" key={order.id}>
                 <div className="admin-order__top"><div><span className="eyebrow">ORDER #{String(order.id).slice(-8).toUpperCase()}</span><strong>{formatMoney(order.total_amount ?? order.total ?? order.amount)}</strong></div><label className="select-field status-select"><span className="sr-only">Update order status</span><select value={order.status || 'pending'} disabled={action === order.id} onChange={(event) => onUpdateStatus(order.id, event.target.value)}><option value="pending">Pending</option><option value="processing">Processing</option><option value="shipped">Ready for pickup</option><option value="completed">Completed</option><option value="cancelled">Cancelled</option></select><ChevronDown size={15} /></label></div>
-                <div className="admin-order__meta"><span>{order.created_at ? new Date(order.created_at).toLocaleString('en-GB') : 'Date not recorded'}</span><span>Customer: {order.user_id || order.customer_id || 'Not recorded'}</span><span>{items.length} line items</span></div>
+                <div className="admin-order__meta">
+                  <span>{order.created_at ? new Date(order.created_at).toLocaleString('en-GB') : 'Date not recorded'}</span>
+                  <span>Customer: {order.customer_name || (customerId ? String(customerId).slice(0, 8) : 'Not recorded')}</span>
+                  <span>{items.length} line items</span>
+                  <button className="button button--outline admin-order__message-button" type="button" disabled={!customerId} title={customerId ? 'Open the customer conversation' : 'This order has no linked customer account'} onClick={() => onStartConversation?.(customerId, order.id)}>
+                    <MessageCircle size={13} /> Message customer
+                  </button>
+                </div>
                 <div className="order-lines">{items.length ? items.map((item) => {
                   const product = products.find((entry) => String(entry.id) === String(item.product_id))
                   return <div className="order-line" key={item.id || `${item.order_id}-${item.product_id}`}><span>{product?.name || `Card ${item.product_id}`} <small>× {item.quantity}</small></span><strong>{formatMoney(Number(item.unit_price ?? item.price ?? 0) * Number(item.quantity || 0))}</strong></div>
