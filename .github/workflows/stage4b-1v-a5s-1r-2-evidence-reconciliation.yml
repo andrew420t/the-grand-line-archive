@@ -95,4 +95,4 @@ jobs:
           if-no-files-found: warn
           retention-days: 30
 
-# Re-run after defining the indexed assignment lookup.
+# Re-run after correcting relationship count assertions.
