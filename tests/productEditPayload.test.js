@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { buildProductEditPayload, parseInventoryStockUpdate, productUpdateFailure } from '../src/admin/productEditPayload.js'
+import { buildProductEditPayload, parseInventoryStockUpdate, productUpdateFailure, saveProductBulkCategory } from '../src/admin/productEditPayload.js'
 
 const fields = [
   { key: 'name', column: 'name', required: true },
@@ -125,4 +125,74 @@ test('inventory filter separates regular cards from bulk and supports all invent
   assert.deepEqual(filterInventoryProducts(products, '', 'all').map((product) => product.id), ['regular-1', 'bulk-1', 'legacy-1'])
   assert.deepEqual(filterInventoryProducts(products, 'op01-002', 'all').map((product) => product.id), ['bulk-1'])
   assert.deepEqual(filterInventoryProducts(products, 'zoro', 'regular').map((product) => product.id), ['legacy-1'])
+})
+
+test('bulk category persistence requests the selected value and verifies the returned database state', async () => {
+  const calls = []
+  const client = {
+    from(table) {
+      calls.push(['from', table])
+      return {
+        update(payload) {
+          calls.push(['update', payload])
+          return {
+            eq(column, value) {
+              calls.push(['eq', column, value])
+              return {
+                select(columns) {
+                  calls.push(['select', columns])
+                  return {
+                    async maybeSingle() {
+                      calls.push(['maybeSingle'])
+                      return { data: { id: 'product-1', is_bulk: payload.is_bulk }, error: null }
+                    },
+                  }
+                },
+              }
+            },
+          }
+        },
+      }
+    },
+  }
+
+  assert.deepEqual(await saveProductBulkCategory(client, 'product-1', true), {
+    id: 'product-1',
+    is_bulk: true,
+  })
+  assert.deepEqual(await saveProductBulkCategory(client, 'product-1', false), {
+    id: 'product-1',
+    is_bulk: false,
+  })
+  assert.deepEqual(calls.filter(([kind]) => kind === 'update').map(([, payload]) => payload.is_bulk), [true, false])
+  assert.deepEqual(calls.filter(([kind]) => kind === 'select').map(([, columns]) => columns), ['id,is_bulk', 'id,is_bulk'])
+})
+
+test('bulk category persistence rejects unconfirmed writes instead of showing success', async () => {
+  const client = {
+    from() {
+      return {
+        update() {
+          return {
+            eq() {
+              return {
+                select() {
+                  return {
+                    async maybeSingle() {
+                      return { data: { id: 'product-1', is_bulk: false }, error: null }
+                    },
+                  }
+                },
+              }
+            },
+          }
+        },
+      }
+    },
+  }
+
+  await assert.rejects(
+    () => saveProductBulkCategory(client, 'product-1', true),
+    /did not confirm the requested Bulk category/,
+  )
 })
