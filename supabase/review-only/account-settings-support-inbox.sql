@@ -337,30 +337,3 @@ GRANT EXECUTE ON FUNCTION public.submit_account_email_recovery(text, text, text)
 GRANT SELECT ON public.support_conversations, public.support_messages, public.account_recovery_requests TO authenticated;
 
 COMMIT;
- THEN
-    RAISE EXCEPTION 'Enter a valid contact email address.';
-  END IF;
-
-  SELECT count(*) INTO v_recent
-  FROM public.account_recovery_requests
-  WHERE lower(contact_email) = v_email
-    AND created_at > now() - interval '24 hours';
-
-  IF v_recent >= 3 THEN
-    RAISE EXCEPTION 'Too many requests have been sent for this contact address. Please try again later.';
-  END IF;
-
-  INSERT INTO public.account_recovery_requests (display_name, contact_email, details)
-  VALUES (v_name, v_email, nullif(v_details, ''))
-  RETURNING id INTO v_id;
-
-  RETURN v_id;
-END;
-$function$;
-
-REVOKE ALL ON FUNCTION public.submit_account_email_recovery(text, text, text) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION public.submit_account_email_recovery(text, text, text) TO anon, authenticated;
-
-GRANT SELECT ON public.support_conversations, public.support_messages, public.account_recovery_requests TO authenticated;
-
-COMMIT;
