@@ -47,16 +47,16 @@ OP/EB base counts are distinct card-number entries with the requested set prefix
 
 | Set | Language | Official source | Status |
 |---|---|---|---|
-| OP-01 | English | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-01 | Japanese | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-02 | English | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-02 | Japanese | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-03 | English | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-03 | Japanese | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-04 | English | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-04 | Japanese | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-05 | English | SOURCE UNVERIFIED | INCOMPLETE |
-| OP-05 | Japanese | SOURCE UNVERIFIED | INCOMPLETE |
+| OP-01 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569101) | INCOMPLETE |
+| OP-01 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550101) | INCOMPLETE |
+| OP-02 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569102) | INCOMPLETE |
+| OP-02 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550102) | INCOMPLETE |
+| OP-03 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569103) | INCOMPLETE |
+| OP-03 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550103) | INCOMPLETE |
+| OP-04 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569104) | INCOMPLETE |
+| OP-04 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550104) | INCOMPLETE |
+| OP-05 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569105) | INCOMPLETE |
+| OP-05 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550105) | INCOMPLETE |
 | OP-06 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569106) | INCOMPLETE |
 | OP-06 | Japanese | [Bandai card list](https://www.onepiece-cardgame.com/cardlist/?series=550106) | INCOMPLETE |
 | OP-07 | English | [Bandai card list](https://en.onepiece-cardgame.com/cardlist/?series=569107) | INCOMPLETE |
