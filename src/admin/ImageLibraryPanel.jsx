@@ -255,7 +255,7 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
 
   const retryAuditRecords = async (language, records) => {
     const retryable = records.filter((item) => [
-      IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT, IMAGE_CHECK_STATUS.INVALID_URL,
+      IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT, ...(item.referenceCorrected ? [IMAGE_CHECK_STATUS.INVALID_URL] : []),
     ].includes(item.status))
     for (const record of retryable) {
       const refreshed = await auditCatalogueImageRecord(record, { language, attempts: 2, timeoutMs: 10000, retryDelayMs: 400 })
@@ -394,7 +394,7 @@ export default function ImageLibraryPanel({ user, onAddCard }) {
                   <p className="muted-copy">{session.completed || 0}/{session.total || 0} completed · {Math.max(0, (session.total || 0) - (session.completed || 0))} remaining · {session.retryCount || 0} retries · last run {session.lastRunAt ? new Date(session.lastRunAt).toLocaleString() : 'never'}</p>
                   <p className="muted-copy">Exact {counts[IMAGE_CHECK_STATUS.EXACT_LOADED] || 0} · Alternative {counts[IMAGE_CHECK_STATUS.ALTERNATIVE_LOADED] || 0} · Base fallback {counts[IMAGE_CHECK_STATUS.BASE_FALLBACK_LOADED] || 0} · Missing {counts[IMAGE_CHECK_STATUS.MISSING] || 0} · Temporary {counts[IMAGE_CHECK_STATUS.TEMPORARY_FAILURE] || 0} · Timeouts {counts[IMAGE_CHECK_STATUS.TIMEOUT] || 0} · Invalid {counts[IMAGE_CHECK_STATUS.INVALID_URL] || 0} · No reference {counts[IMAGE_CHECK_STATUS.NO_REFERENCE] || 0}</p>
                   <div className="catalogue-health-table">
-                    {(session.results || []).filter((item) => [IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT, IMAGE_CHECK_STATUS.INVALID_URL].includes(item.status)).slice(0, 100).map((item) => <label className="catalogue-health-row" key={item.id}>
+                    {(session.results || []).filter((item) => ([IMAGE_CHECK_STATUS.TEMPORARY_FAILURE, IMAGE_CHECK_STATUS.TIMEOUT].includes(item.status) || (item.status === IMAGE_CHECK_STATUS.INVALID_URL && item.referenceCorrected))).slice(0, 100).map((item) => <label className="catalogue-health-row" key={item.id}>
                       <input type="checkbox" checked={(selectedAuditIds[language] || []).includes(item.id)} onChange={(event) => setSelectedAuditIds((current) => ({ ...current, [language]: event.target.checked ? [...(current[language] || []), item.id] : (current[language] || []).filter((id) => id !== item.id) }))} />
                       <strong>{item.setCode || 'Unassigned'} · {item.cardNumber || 'No card number'}</strong>
                       <span>{item.status}{item.httpStatus ? ' · HTTP ' + item.httpStatus : ''}{item.upstreamStatus ? ' · upstream ' + item.upstreamStatus : ''}</span>
