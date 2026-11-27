@@ -40,7 +40,7 @@ test('official URLs and application proxy paths are separate and cannot be alias
   assert.match(locatorMigration, /suffix_family text/)
   assert.match(locatorMigration, /suffix_n integer/)
   assert.match(locatorMigration, /source_image_url text/)
-  assert.match(locatorMigration, /suffix_family IN \\('p','r'\\)/)
+  assert.match(locatorMigration, /suffix_family IN \('p','r'\)/)
 })
 
 test('product and set relationship lifecycle metadata is preserved', () => {
