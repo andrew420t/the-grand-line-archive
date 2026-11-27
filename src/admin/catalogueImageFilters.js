@@ -1,8 +1,15 @@
+export function getCardNumberSetCode(cardNumber = '') {
+  const match = String(cardNumber || '').trim().toUpperCase().match(/^((?:OP|EB|ST|PRB)\\d{2}|P)-\\d{3}/)
+  if (!match) return ''
+  return match[1].replace(/^(OP|EB|ST|PRB)(\\d{2})$/, '$1-$2')
+}
+
 export function getCatalogueImageFilterOptions(entries = []) {
   const unique = (values) => [...new Set(values.filter(Boolean))].sort((a, b) => String(a).localeCompare(String(b)))
   return {
     languages: unique(entries.map((entry) => entry.languageCode)),
     sets: unique(entries.flatMap((entry) => [entry.setCode, ...(entry.setCodes || [])])),
+    cardNumberSets: unique(entries.map((entry) => entry.cardNumberSet || getCardNumberSetCode(entry.cardNumber))),
     rarities: unique(entries.map((entry) => entry.rarity)),
     cardTypes: unique(entries.map((entry) => entry.category)),
     colors: unique(entries.flatMap((entry) => entry.colorValues || [])),
@@ -17,6 +24,7 @@ export function filterCatalogueImageEntries(entries = [], filters = {}) {
     sortBy = 'card-number-asc',
     language = 'all',
     set = 'all',
+    cardNumberSet = 'all',
     rarity = 'all',
     cardType = 'all',
     color = 'all',
@@ -30,6 +38,7 @@ export function filterCatalogueImageEntries(entries = [], filters = {}) {
     if (normalizedCardNumber && !normalize(entry.cardNumber).includes(normalizedCardNumber)) return false
     if (language !== 'all' && entry.languageCode !== language) return false
     if (set !== 'all' && entry.setCode !== set && !(entry.setCodes || []).includes(set)) return false
+    if (cardNumberSet !== 'all' && (entry.cardNumberSet || getCardNumberSetCode(entry.cardNumber)) !== cardNumberSet) return false
     if (rarity !== 'all' && entry.rarity !== rarity) return false
     if (cardType !== 'all' && entry.category !== cardType) return false
     if (color !== 'all' && !(entry.colorValues || []).some((value) => String(value).toLowerCase() === String(color).toLowerCase())) return false
