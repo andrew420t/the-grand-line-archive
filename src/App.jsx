@@ -38,6 +38,9 @@ import OrderConfirmation from './OrderConfirmation'
 import OrderConversation from './OrderConversation'
 import { buildOrderConfirmation } from './orderConfirmation'
 import AdminAccess from './admin/AdminAccess'
+import AccountPage from './account/AccountPage'
+import WantedPosterAvatar from './account/WantedPosterAvatar'
+import { ForgotEmailPage, ForgotPasswordPage, ResetPasswordPage } from './account/AccountRecoveryPages'
 import { findPrimaryCatalogueMatch } from './admin/cardCatalogue'
 import { hasSupabaseConfig, isPreviewBuild, supabase } from './lib/supabase'
 import { isDedicatedPreviewSupabaseProject } from './lib/supabaseConfig.js'
@@ -610,7 +613,7 @@ function Storefront() {
   }, [user])
 
   useEffect(() => {
-    if (location.pathname === '/account/orders' && user) {
+    if (location.pathname.startsWith('/account') && user) {
       void Promise.resolve().then(() => loadOrders(false))
     }
     if (location.pathname === '/admin' && user && isAdmin) {
@@ -880,7 +883,7 @@ function Storefront() {
             aria-label={user ? 'View orders' : 'Sign in'}
             onClick={openAccount}
           >
-            <CircleUserRound size={19} />
+            {user ? <WantedPosterAvatar avatarKey={profile?.avatar_key || 'luffy'} size="small" /> : <CircleUserRound size={19} />}
             <span>{user ? 'Account' : 'Sign in'}</span>
           </button>
           <button
@@ -1084,9 +1087,85 @@ function Storefront() {
           element={<ProductDetailPage products={storefrontProducts} onAdd={addToCart} />}
         />
         <Route
+          path="/account"
+          element={
+            <AccountPage
+              user={user}
+              profile={profile}
+              orders={orders}
+              orderItems={orderItems}
+              products={products}
+              loading={ordersLoading}
+              error={ordersError}
+              onSignIn={() => setAuthOpen(true)}
+              onSignOut={signOut}
+              onReload={() => loadOrders(false)}
+              onProfileUpdated={setProfile}
+              onForgotPassword={() => navigate('/account/forgot-password')}
+            />
+          }
+        />
+        <Route
           path="/account/orders"
           element={
-            <OrdersPage
+            <AccountPage
+              user={user}
+              profile={profile}
+              orders={orders}
+              orderItems={orderItems}
+              products={products}
+              loading={ordersLoading}
+              error={ordersError}
+              onSignIn={() => setAuthOpen(true)}
+              onSignOut={signOut}
+              onReload={() => loadOrders(false)}
+              onProfileUpdated={setProfile}
+              onForgotPassword={() => navigate('/account/forgot-password')}
+            />
+          }
+        />
+        <Route
+          path="/account/messages"
+          element={
+            <AccountPage
+              user={user}
+              profile={profile}
+              orders={orders}
+              orderItems={orderItems}
+              products={products}
+              loading={ordersLoading}
+              error={ordersError}
+              onSignIn={() => setAuthOpen(true)}
+              onSignOut={signOut}
+              onReload={() => loadOrders(false)}
+              onProfileUpdated={setProfile}
+              onForgotPassword={() => navigate('/account/forgot-password')}
+            />
+          }
+        />
+        <Route
+          path="/account/settings"
+          element={
+            <AccountPage
+              user={user}
+              profile={profile}
+              orders={orders}
+              orderItems={orderItems}
+              products={products}
+              loading={ordersLoading}
+              error={ordersError}
+              onSignIn={() => setAuthOpen(true)}
+              onSignOut={signOut}
+              onReload={() => loadOrders(false)}
+              onProfileUpdated={setProfile}
+              onForgotPassword={() => navigate('/account/forgot-password')}
+            />
+          }
+        />
+        <Route path="/account/recover-email" element={<ForgotEmailPage />} />
+        <Route path="/account/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/account/reset-password" element={<ResetPasswordPage />} />
+
               user={user}
               orders={orders}
               orderItems={orderItems}
@@ -1185,6 +1264,8 @@ function Storefront() {
           onClose={() => { setAuthOpen(false); setAuthMessage('') }}
           message={authMessage}
           onMessage={setAuthMessage}
+          onForgotPassword={() => { setAuthOpen(false); navigate('/account/forgot-password') }}
+          onForgotEmail={() => { setAuthOpen(false); navigate('/account/recover-email') }}
         />
       )}
 
@@ -1203,7 +1284,7 @@ function EmptyCatalogue({ error }) {
   )
 }
 
-function AuthModal({ onClose, message, onMessage }) {
+function AuthModal({ onClose, message, onMessage, onForgotPassword, onForgotEmail }) {
   const [mode, setMode] = useState('signin')
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -1254,6 +1335,7 @@ function AuthModal({ onClose, message, onMessage }) {
           {error && <p className="form-error">{error}</p>}
           <button className="button button--gold button--wide" type="submit" disabled={busy}>{busy ? 'Please wait…' : mode === 'signin' ? 'Sign in' : 'Create account'} <ArrowRight size={16} /></button>
         </form>
+        {mode === 'signin' && <p className="auth-recovery-links"><button type="button" onClick={onForgotPassword}>Forgot password?</button><span>·</span><button type="button" onClick={onForgotEmail}>Forgot email?</button></p>}
         <p className="auth-switch">{mode === 'signin' ? 'New to the archive?' : 'Already have an account?'} <button type="button" onClick={() => { setMode(mode === 'signin' ? 'signup' : 'signin'); setError('') }}>{mode === 'signin' ? 'Create account' : 'Sign in'}</button></p>
       </section>
     </div>
