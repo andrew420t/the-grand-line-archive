@@ -34,7 +34,7 @@ import {
   useParams,
 } from 'react-router-dom'
 import AdminDashboard from './admin/AdminDashboard'
-import OrderConfirmation from './OrderConfirmation'
+import OrderConfirmation from './OrderConfirmation.jsx'
 import OrderConversation from './OrderConversation'
 import { buildOrderConfirmation } from './orderConfirmation'
 import AdminAccess from './admin/AdminAccess'

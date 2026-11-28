@@ -47,6 +47,14 @@ jobs:
           test "$(git hash-object manifest.json)" = "5b76b3f0ceb268d1bf43bff7c5dd54ab438076e7"
           test "$(find data -name '*.jsonl' -type f | wc -l | tr -d ' ')" = "27"
 
+      - name: Download the retained Stage 4B-1P assignment evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: stage4b-1p-premium-card-collection-persistence
+          run-id: 46053970318
+          github-token: ${{ github.token }}
+          path: historical-1p
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -56,15 +64,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run guarded offline catalogue dry-run
+      - name: Run complete pinned-source and historical-evidence dry-run
         shell: bash
         run: |
+          manifest="$(find historical-1p -maxdepth 2 -type f -name '*.json' -print -quit)"
+          test -n "$manifest"
           mkdir -p artifacts-stage4b1r3
           node scripts/catalogue-importer-stage4b1va.mjs \
             --dry-run \
             --source-dir .source/koala-kollect-data \
+            --historical-1p "$manifest" \
+            --source-commit 619965ec198047de519dc6eb098c7a56aed9bd58 \
+            --source-tree d0059fd77462cf377b9dfd65d87a6afabc76077f \
             --output artifacts-stage4b1r3/importer-dry-run.json
-          node -e "const r=require('./artifacts-stage4b1r3/importer-dry-run.json'); console.log(JSON.stringify({status:r.status,sourceCommit:r.sourceCommit,sourceFiles:Object.keys(r.sourceFiles||{}).length,sourceRows:r.sourceRows,plannedDestinationRows:r.plannedDestinationRows,unsupportedFiles:r.unsupportedFiles,writesPerformed:r.writesPerformed},null,2))"
+          node -e "const r=require('./artifacts-stage4b1r3/importer-dry-run.json'); console.log(JSON.stringify({status:r.status,source:r.source,reconciliation:r.reconciliation,writesPerformed:r.writesPerformed,liveImportCapability:r.liveImportCapability},null,2))"
+
+      - name: Run full-source importer integration assertions
+        shell: bash
+        run: |
+          manifest="$(find historical-1p -maxdepth 2 -type f -name '*.json' -print -quit)"
+          CATALOGUE_SOURCE_DIR=.source/koala-kollect-data CATALOGUE_HISTORICAL_1P="$manifest" \
+            node --test tests/catalogueImporterStage4b1va.test.js
 
       - name: Run full application test suite
         run: npm test

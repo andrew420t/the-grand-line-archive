@@ -80,7 +80,7 @@ export function collectUrls() {
   return [...urls.values()].sort((a, b) => a.url.localeCompare(b.url));
 }
 
-async function checkOne(item) {
+export async function checkImageReference(item) {
   const languageHosts = [...new Set(item.associations.map(x => expectedHostForLanguage(x.language)))];
   let parsed;
   try {
@@ -139,7 +139,7 @@ export async function runImageAudit() {
     while (true) {
       const index = cursor++;
       if (index >= inputs.length) return;
-      results[index] = await checkOne(inputs[index]);
+      results[index] = await checkImageReference(inputs[index]);
     }
   }
   await Promise.all(Array.from({ length: Math.min(CONCURRENCY, inputs.length) }, worker));

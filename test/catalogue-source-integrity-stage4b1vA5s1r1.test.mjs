@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import crypto from 'node:crypto';
-import { verifySource } from '../scripts/verifyPinnedCatalogueSourceStage4b1vA5s1r1.mjs';
+import { verifySource, writeSourceReports } from '../scripts/verifyPinnedCatalogueSourceStage4b1vA5s1r1.mjs';
 
 function fixture({ rows = ['{"id":1}\n'], declaredRows, declaredHash, extraFiles = [], manifest = true } = {}) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'catalogue-source-'));
@@ -98,4 +98,13 @@ test('12. rejects incorrect upstream commit or tree identity', () => {
   const tree = run(root, { actualTree: 'bad-tree' });
   assert.ok(commit.errors.some(x => x.includes('commit mismatch')));
   assert.ok(tree.errors.some(x => x.includes('tree mismatch')));
+});
+
+test('13. source verifier writes only the two source reports it can prove', () => {
+  const root = fixture();
+  const output = fs.mkdtempSync(path.join(os.tmpdir(), 'catalogue-source-report-'));
+  writeSourceReports(output, run(root));
+  const files = fs.readdirSync(output).sort();
+  assert.deepEqual(files, ['upstream-source-coverage.json', 'upstream-source-integrity.json']);
+  assert.ok(!files.some(name => /assignment|relationship|image-provenance/i.test(name)));
 });

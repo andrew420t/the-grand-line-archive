@@ -1,57 +1,178 @@
 #!/usr/bin/env node
-// Stage 4B-1V-A: pinned-source dry-run planner. No Supabase SDK, credentials, network or write path.
+// Offline source planner only. This module has no Supabase client, credential or write path.
 import fs from 'node:fs';
 import path from 'node:path';
-import crypto from 'node:crypto';
-export const SOURCE_COMMIT='619965ec198047de519dc6eb098c7a56aed9bd58';
-export const TESTING_PROJECT_REF='ehzqsnfkmwphyllhaqhe';
-export const DESTINATIONS={set:'catalogue_release_sets',product:'catalogue_release_products',card:'catalogue_cards',printing:'catalogue_printings',printing_locator:'catalogue_printing_images',product_set:'catalogue_product_sets',printing_product:'catalogue_product_printings',card_observation:'catalogue_card_observations'};
-export const PROTECTED=['public.products','public.cards','public.sets','public.product_images','public.orders','public.order_items','public.profiles','public.catalogue_inventory_links'];
-const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
-const jsonl=f=>fs.readFileSync(f,'utf8').split(/\r?\n/).filter(Boolean).map((s,i)=>{try{return JSON.parse(s)}catch{throw Error(`Invalid JSON at ${f}:${i+1}`)}}); 
-const langKey=(l,k)=>l+':'+k;
-export function plan(root,{projectRef=TESTING_PROJECT_REF,sourceCommit=SOURCE_COMMIT}={}){
- if(projectRef!==TESTING_PROJECT_REF)throw Error('Wrong project: Testing project reference required');
- if(sourceCommit!==SOURCE_COMMIT)throw Error('Wrong pinned source commit');
- const mb=fs.readFileSync(path.join(root,'manifest.json')),m=JSON.parse(mb);
- if(m.schema_version!==1||Object.keys(m.files||{}).length!==27)throw Error('Incomplete/unsupported manifest');
- const data={},fileReport={};
- for(const [p,v] of Object.entries(m.files)){
-  const b=fs.readFileSync(path.join(root,p)),rows=jsonl(path.join(root,p)),h=hash(b);
-  if(h!==v.sha256)throw Error('SHA256 mismatch: '+p);
-  if(rows.length!==v.rows)throw Error('Row count mismatch: '+p);
-  data[p]=rows;fileReport[p]={type:v.type,sourceRows:rows.length,sha256:h,destination:DESTINATIONS[v.type]||null,eligibleSourceRows:0,excludedSourceRows:rows.length};
- }
- const get=p=>data['data/'+p+'.jsonl']||[], group=(d,l)=>data[`data/${d}/${l}.jsonl`]||[];
- const wanted=/^(OP-(0[1-9]|1[0-8])|EB-0[1-5]|PRB-0[1-2])$/;
- const sets=get('sets').filter(x=>wanted.test(x.code||x.key)),setKeys=new Set(sets.map(x=>x.key));
- const allProducts=['en','jp'].flatMap(l=>group('products',l).map(x=>({...x,language:l})));
- const productsByKey=new Map(allProducts.map(x=>[x.key,x]));
- const productSets=get('product_sets').filter(x=>setKeys.has(x.set_key)&&productsByKey.has(x.product_key));
- const productKeys=new Set(productSets.map(x=>x.product_key));
- const products=allProducts.filter(x=>productKeys.has(x.key)&&x.kind!=='bucket');
- const pp=['en','jp'].flatMap(l=>group('printing_products',l).map(x=>({...x,language:l}))).filter(x=>productKeys.has(x.product_key));
- const ppKeys=new Set(pp.map(x=>langKey(x.language,x.printing_key)));
- const printings=['en','jp'].flatMap(l=>group('printings',l).map(x=>({...x,language:l}))).filter(x=>ppKeys.has(langKey(x.language,x.key))&&x.site===x.language);
- const printingKeys=new Set(printings.map(x=>langKey(x.language,x.key)));
- const cardKeys=new Set(printings.map(x=>langKey(x.language,x.card_key)));
- const cards=get('cards').flatMap(x=>['en','jp'].filter(l=>cardKeys.has(langKey(l,x.key))).map(l=>({...x,language:l})));
- const observations=['en','jp'].flatMap(l=>group('card_observations',l).map(x=>({...x,language:l}))).filter(x=>cardKeys.has(langKey(x.language,x.card_key)));
- const locators=['en','jp'].flatMap(l=>group('printing_locators',l).map(x=>({...x,language:l}))).filter(x=>printingKeys.has(langKey(x.language,x.printing_key)));
- const errors=[];
- for(const p of printings)if(!cardKeys.has(langKey(p.language,p.card_key)))errors.push('missing card '+p.key);
- for(const x of pp)if(!printingKeys.has(langKey(x.language,x.printing_key)))errors.push('missing printing '+x.key);
- const officialImages=locators.filter(l=>{const p=printings.find(x=>x.language===l.language&&x.key===l.printing_key);return p?.image_url&&/^https:\/\/(en|www)\.onepiece-cardgame\.com\//.test(p.image_url)});
- const derivedSetEdges=new Set();
- for(const x of pp)for(const ps of productSets)if(ps.product_key===x.product_key)derivedSetEdges.add([ps.set_key,x.language,x.printing_key].join('|'));
- const eligible={'data/sets.jsonl':sets.length,'data/cards.jsonl':new Set(cards.map(x=>x.key)).size,'data/product_sets.jsonl':productSets.length};
- for(const folder of ['products','printings','printing_products','printing_locators','card_observations'])for(const l of ['en','jp'])eligible[`data/${folder}/${l}.jsonl`]=({products,printings,printing_products:pp,printing_locators:locators,card_observations:observations})[folder].filter(x=>x.language===l).length;
- for(const [p,n] of Object.entries(eligible)){fileReport[p].eligibleSourceRows=n;fileReport[p].excludedSourceRows=fileReport[p].sourceRows-n}
- const totals={catalogue_release_sets:sets.length,catalogue_release_products:products.length,catalogue_cards:cards.length,catalogue_printings:printings.length,catalogue_printing_images:officialImages.length,catalogue_product_sets:productSets.length,catalogue_product_printings:pp.length,catalogue_set_printings:derivedSetEdges.size,catalogue_card_observations:observations.length,catalogue_inventory_links:0};
- const unsupported=Object.entries(m.files).filter(([,v])=>!DESTINATIONS[v.type]).map(([file,v])=>({file,rows:v.rows,type:v.type,reason:'No lossless destination in approved Stage 4B-1R/1T schema'}));
- const setCoverage=sets.map(s=>{const pkeys=new Set(productSets.filter(x=>x.set_key===s.key).map(x=>x.product_key));return {set:s.code||s.key,en:new Set(pp.filter(x=>x.language==='en'&&pkeys.has(x.product_key)).map(x=>x.printing_key)).size,jp:new Set(pp.filter(x=>x.language==='jp'&&pkeys.has(x.product_key)).map(x=>x.printing_key)).size}});
- return {stage:'4B-1V-A',mode:'DRY_RUN_ONLY',status:errors.length?'BLOCKED':'PLAN_WITH_EXPLICIT_EXCLUSIONS',sourceCommit,manifestGeneratedAt:m.generated_at,manifestSha256:hash(mb),sourceRows:Object.values(fileReport).reduce((n,x)=>n+x.sourceRows,0),sourceFiles:fileReport,plannedDestinationRows:totals,languageTotals:Object.fromEntries(['en','jp'].map(l=>[l,{cards:cards.filter(x=>x.language===l).length,printings:printings.filter(x=>x.language===l).length,products:products.filter(x=>x.language===l).length,observations:observations.filter(x=>x.language===l).length}])),setCoverage,unsupportedFiles:unsupported,relationshipErrors:errors,protectedTables:PROTECTED,writesPerformed:0,notes:['No database connection or write capability exists in this stage.','CN and TCGCSV are excluded from the English/Japanese catalogue.','OP-18 and EB-05 are absent from this feed and require separate local official supplements.','Design, distribution, DON-design and retired-printing source types have no lossless destination in the approved schema.','Reconcile derived set edges against the Stage 4B-1Q official manifest before any live import.']};
+import { pathToFileURL } from 'node:url';
+import { verifySource } from './verifyPinnedCatalogueSourceStage4b1vA5s1r1.mjs';
+import { buildReports, EXPECTED, PINNED_SOURCE_COMMIT } from './reconcileCatalogueEvidenceStage4b1vA5s1r2.mjs';
+
+export const SOURCE_COMMIT = PINNED_SOURCE_COMMIT;
+export const SOURCE_TREE = 'd0059fd77462cf377b9dfd65d87a6afabc76077f';
+export const TESTING_PROJECT_REF = 'ehzqsnfkmwphyllhaqhe';
+export const HISTORICAL_1P_COMMIT = 'd0c478adf17767d0fa441c4483ac42a18a4b089a';
+export const PROTECTED = Object.freeze([
+  'public.products',
+  'public.cards',
+  'public.sets',
+  'public.product_images',
+  'public.orders',
+  'public.order_items',
+  'public.profiles',
+  'public.catalogue_inventory_links'
+]);
+
+function verifyPinnedSource(sourceDir, actualCommit, actualTree) {
+  const result = verifySource({ sourceDir, actualCommit, actualTree });
+  if (!result.ok) throw new Error(`Pinned source verification failed: ${result.errors.join('; ')}`);
+  return result;
 }
-if(import.meta.url===`file://${process.argv[1]}`){
- try{const a=process.argv.slice(2),i=a.indexOf('--source-dir');if(!a.includes('--dry-run'))throw Error('Only --dry-run is supported');if(i<0)throw Error('--source-dir required');const r=plan(a[i+1]);const out=JSON.stringify(r,null,2)+'\n',o=a.indexOf('--output');if(o>=0)fs.writeFileSync(a[o+1],out);process.stdout.write(out);if(r.status==='BLOCKED')process.exitCode=2}catch(e){console.error(e.message);process.exitCode=1}
+
+export function plan(sourceDir, {
+  projectRef = TESTING_PROJECT_REF,
+  sourceCommit = SOURCE_COMMIT,
+  sourceTree = SOURCE_TREE,
+  historicalManifest
+} = {}) {
+  if (projectRef !== TESTING_PROJECT_REF) throw new Error('Only the verified Testing project reference is accepted');
+  if (sourceCommit !== SOURCE_COMMIT) throw new Error('Only the pinned upstream source commit is accepted');
+  if (sourceTree !== SOURCE_TREE) throw new Error('Only the pinned upstream source tree is accepted');
+  if (!historicalManifest) throw new Error('A retained Stage 4B-1P official assignment artifact is required');
+  if (historicalManifest.stage !== '4B-1P' || historicalManifest.verifiedCommit !== HISTORICAL_1P_COMMIT) {
+    throw new Error('The supplied official assignment evidence is not the retained Stage 4B-1P artifact');
+  }
+
+  const source = verifyPinnedSource(sourceDir, sourceCommit, sourceTree);
+  const reports = buildReports({ sourceDir, historicalManifest, sourceCommit });
+  if (reports.assignment.validationErrors.length || reports.relationship.validationErrors.length
+    || reports.provenance.validationErrors.length
+    || reports.assignment.status !== 'RECONCILED_7786_OFFICIAL_ASSIGNMENTS_AND_231_PREMIUM_ASSIGNMENTS'
+    || reports.relationship.status !== 'RECONCILED_395_COMBINED_PRODUCT_JOIN_EXPANSIONS'
+    || reports.provenance.status !== '360_LOCAL_SUPPLEMENT_IMAGE_EXCEPTIONS_CLASSIFIED'
+    || reports.coverage.status !== 'RECONCILED_25_SETS_50_LANGUAGE_SET_ROWS') {
+    throw new Error('Full catalogue reconciliation did not meet every pinned acceptance count');
+  }
+
+  const sourceFiles = source.integrity.files.map(file => ({
+    path: file.path,
+    type: source.coverage.countsByFile[file.path]?.type ?? null,
+    sourceRows: file.parsedRecords,
+    sha256: file.sha256,
+    hashMatchesManifest: file.hashMatchesManifest,
+    rowCountMatchesManifest: file.rowCountMatchesManifest
+  }));
+  const excludedTypes = new Set(['designs', 'distributions', 'don_sets', 'printing_designs', 'printing_distributions', 'retired_printings']);
+  const unsupportedFiles = sourceFiles.filter(file => excludedTypes.has(file.type)).map(file => ({
+    path: file.path,
+    rows: file.sourceRows,
+    type: file.type,
+    reason: 'Outside the approved English/Japanese release and Premium assignment scope; no lossless target is included in this dry-run.'
+  }));
+
+  return {
+    stage: '4B-1V-A5S-1R-9',
+    mode: 'OFFLINE_DRY_RUN_ONLY',
+    status: 'RECONCILED_DRY_RUN_READY_FOR_SEPARATE_REVIEW',
+    source: {
+      repository: 'hotavocado/koala-kollect-data',
+      commit: sourceCommit,
+      tree: sourceTree,
+      manifestBlob: source.integrity.manifest.gitBlobSha,
+      generatedAt: source.coverage.generatedAt,
+      files: source.integrity.actualManifestFileCount,
+      rows: source.integrity.actualTotalRows
+    },
+    historicalEvidence: {
+      stage: historicalManifest.stage,
+      commit: historicalManifest.verifiedCommit,
+      retrievedAt: historicalManifest.checkedAt,
+      workflowRun: 46053970318,
+      artifactId: 15225393084,
+      assignmentRecords: reports.assignment.reconstructedHistoricalAssignments
+    },
+    targetGuard: {
+      acceptedProjectRef: TESTING_PROJECT_REF,
+      projectRefWasConnected: false,
+      databaseConnectionUsed: false,
+      productionAccessed: false
+    },
+    reconciliation: {
+      releaseSets: EXPECTED.releaseSets,
+      languageSetRows: EXPECTED.languageSetRows,
+      officialSetPrintingAssignments: reports.assignment.reconstructedHistoricalAssignments,
+      languageScopedBaseCardNumbers: reports.assignment.assignmentCounts.languageScopedBaseCardNumbers,
+      officialAssignmentsByLanguage: reports.assignment.assignmentCounts.byLanguage,
+      sourceFeedAssignments: reports.assignment.assignmentCounts.feedBacked,
+      localOfficialSupplementAssignments: reports.assignment.assignmentCounts.localSupplement,
+      op18Supplement: reports.assignment.localSupplements.OP18,
+      eb05Supplement: reports.assignment.localSupplements.EB05,
+      premiumProducts: reports.assignment.premiumCollection.totalProducts,
+      premiumAssignments: reports.assignment.premiumCollection.totalAssignments,
+      combinedDistinctPrintingIdentities: reports.assignment.reconstructedHistoricalAssignments
+        + reports.assignment.premiumCollection.totalAssignments,
+      extraNaiveJoinRelationships: reports.relationship.counts.naiveJoinExpansion,
+      sourceRelationshipGroups: reports.relationship.expansionGroups,
+      imageExceptions: {
+        count: reports.provenance.counts.missingHistoricalOfficialImageUrl,
+        uniqueImageIds: reports.provenance.counts.uniqueImageIds,
+        uniqueBandaiUrlCandidates: reports.provenance.counts.uniqueOfficialUrlCandidates,
+        bySetAndLanguage: reports.provenance.counts.bySetAndLanguage,
+        classification: 'LOCAL_OFFICIAL_SUPPLEMENT_IDS_WITH_LANGUAGE_SCOPED_PROXY_PATHS; CANDIDATE URLS ARE NOT WRITTEN AS HISTORICAL VALUES'
+      }
+    },
+    validation: {
+      sourceFileHashes: 'PASS',
+      sourceManifestRows: 'PASS',
+      assignmentIdentities: reports.assignment.status,
+      setAndLanguageRows: reports.coverage.status,
+      productRelationshipExpansion: reports.relationship.status,
+      imageExceptionClassification: reports.provenance.status,
+      premiumAssignments: 'PASS_231_DISTINCT_LANGUAGE_SCOPED_LINKS'
+    },
+    sourceFiles,
+    unsupportedFiles,
+    protectedTables: PROTECTED,
+    writesPerformed: 0,
+    liveImportCapability: false,
+    notes: [
+      'This command reads local source and the retained 1P artifact only. It cannot connect to Supabase or write database rows.',
+      'The 510 local OP-18/EB-05 official assignments are included in the 7,786 official set assignment total.',
+      'The 395 relationship cases are excess edges from a naive combined-product join and are not additional assignments.',
+      'The 360 historical officialImageUrl gaps remain null; language-scoped Bandai URL candidates are reported separately.',
+      'This output is not an import authorization or a live import capability.'
+    ]
+  };
+}
+
+function readArgs(args) {
+  const get = name => {
+    const index = args.indexOf(name);
+    return index < 0 ? null : args[index + 1];
+  };
+  return { get, has: name => args.includes(name) };
+}
+
+if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  try {
+    const args = readArgs(process.argv.slice(2));
+    if (!args.has('--dry-run')) throw new Error('Only --dry-run is supported');
+    const sourceDir = args.get('--source-dir');
+    const historicalFile = args.get('--historical-1p');
+    if (!sourceDir || !historicalFile) throw new Error('--source-dir and --historical-1p are required');
+    const historicalManifest = JSON.parse(fs.readFileSync(historicalFile, 'utf8'));
+    const result = plan(sourceDir, {
+      sourceCommit: args.get('--source-commit') || SOURCE_COMMIT,
+      sourceTree: args.get('--source-tree') || SOURCE_TREE,
+      historicalManifest
+    });
+    const output = JSON.stringify(result, null, 2) + '\n';
+    const outputPath = args.get('--output');
+    if (outputPath) {
+      fs.mkdirSync(path.dirname(path.resolve(outputPath)), { recursive: true });
+      fs.writeFileSync(outputPath, output);
+    }
+    process.stdout.write(output);
+  } catch (error) {
+    console.error(error.stack || error.message);
+    process.exitCode = 1;
+  }
 }

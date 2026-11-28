@@ -130,6 +130,18 @@ export function verifySource({
   return { ok: errors.length === 0, errors, integrity, coverage };
 }
 
+export function writeSourceReports(outDir, result) {
+  fs.mkdirSync(outDir, { recursive: true });
+  fs.writeFileSync(
+    path.join(outDir, 'upstream-source-integrity.json'),
+    JSON.stringify(result.integrity ?? { ok: false, errors: result.errors }, null, 2) + '\n'
+  );
+  fs.writeFileSync(
+    path.join(outDir, 'upstream-source-coverage.json'),
+    JSON.stringify(result.coverage ?? { status: 'BLOCKED', errors: result.errors }, null, 2) + '\n'
+  );
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   try {
     const args = process.argv.slice(2);
@@ -140,14 +152,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const actualTree = get('--actual-tree') || PINNED.tree;
     const outDir = get('--output-dir') || 'artifacts';
     const result = verifySource({ sourceDir, actualCommit, actualTree });
-    fs.mkdirSync(outDir, { recursive: true });
-    fs.writeFileSync(path.join(outDir, 'upstream-source-integrity.json'), JSON.stringify(result.integrity ?? { ok: false, errors: result.errors }, null, 2) + '\n');
-    fs.writeFileSync(path.join(outDir, 'upstream-source-coverage.json'), JSON.stringify(result.coverage ?? { status: 'BLOCKED', errors: result.errors }, null, 2) + '\n');
-    for (const [name, report] of [
-      ['assignment-reconciliation.json', { status: 'UNRESOLVED', reason: 'Original Stage 4B-1Q assignment manifest has not been recovered; historical totals cannot be independently reconstructed from this verifier alone.' }],
-      ['relationship-reconciliation.json', { status: 'UNRESOLVED', reason: 'The Stage 4B-1Q approved relationship baseline and per-edge evidence are unavailable.' }],
-      ['image-provenance-reconciliation.json', { status: 'UNRESOLVED', reason: 'The 360 historical provenance gaps require the missing assignment-level provenance evidence; no proxy URL is treated as an official source URL.' }]
-    ]) fs.writeFileSync(path.join(outDir, name), JSON.stringify({ stage: '4B-1V-A5S-1R-1', ...report }, null, 2) + '\n');
+    writeSourceReports(outDir, result);
     process.stdout.write(JSON.stringify({ ok: result.ok, errors: result.errors, files: result.integrity?.files.length ?? 0, rows: result.integrity?.actualTotalRows ?? null }, null, 2) + '\n');
     if (!result.ok) process.exitCode = 1;
   } catch (error) { console.error(error.stack || error.message); process.exitCode = 2; }

@@ -64,7 +64,7 @@ jobs:
       - name: Run offline source-verifier tests
         run: node --test test/catalogue-source-integrity-stage4b1vA5s1r1.test.mjs
 
-      - name: Independently verify all pinned source files and emit five reports
+      - name: Independently verify all pinned source files and emit source-only reports
         run: |
           node scripts/verifyPinnedCatalogueSourceStage4b1vA5s1r1.mjs \
             --source-dir .source/koala-kollect-data \
@@ -81,7 +81,7 @@ jobs:
       - name: Build production application
         run: npm run build
 
-      - name: Upload source verification and reconciliation reports
+      - name: Upload pinned source integrity and coverage reports
         if: always()
         uses: actions/upload-artifact@v4
         with:

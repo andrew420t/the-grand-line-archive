@@ -13,7 +13,7 @@ permissions:
 jobs:
   reconcile-historical-catalogue-evidence:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 60
     steps:
       - name: Check out application repository
         uses: actions/checkout@v4
@@ -77,6 +77,33 @@ jobs:
             --source-commit 619965ec198047de519dc6eb098c7a56aed9bd58 \
             --output-dir artifacts-stage4b1r2
 
+      - name: Re-run the official Bandai image HTTP audit
+        run: node scripts/auditOfficialBandaiImages.mjs
+
+      - name: Reconcile all 360 historical image exceptions to HTTP results
+        run: |
+          node scripts/verifyCatalogueImageExceptionsStage4b1va5s1r9.mjs \
+            --provenance artifacts-stage4b1r2/image-provenance-reconciliation.json \
+            --image-audit artifacts/official-bandai-image-http-audit.json \
+            --output artifacts-stage4b1r2/image-exception-http-reconciliation.json
+
+      - name: Re-audit all 231 Premium image assignments
+        shell: bash
+        run: |
+          manifest="$(find historical-1p -maxdepth 2 -type f -name '*.json' -print -quit)"
+          test -n "$manifest"
+          node scripts/auditPremiumCollectionImagesStage4b1va5s1r9.mjs \
+            --historical-1p "$manifest" \
+            --output artifacts-stage4b1r2/premium-image-http-reconciliation.json
+
+      - name: Run the full offline zero-write importer integration
+        shell: bash
+        run: |
+          manifest="$(find historical-1p -maxdepth 2 -type f -name '*.json' -print -quit)"
+          test -n "$manifest"
+          CATALOGUE_SOURCE_DIR=.source/koala-kollect-data CATALOGUE_HISTORICAL_1P="$manifest" \
+            node --test tests/catalogueImporterStage4b1va.test.js
+
       - name: Run full application test suite
         run: npm test
 
@@ -91,7 +118,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: stage4b-1v-a5s-1r-2-evidence-reconciliation
-          path: artifacts-stage4b1r2/*.json
+          path: |
+            artifacts-stage4b1r2/*.json
+            artifacts/official-bandai-image-http-audit.json
           if-no-files-found: warn
           retention-days: 30
 
