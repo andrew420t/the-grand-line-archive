@@ -21,6 +21,72 @@ export const PROTECTED = Object.freeze([
   'public.catalogue_inventory_links'
 ]);
 
+export function getReconciliationAcceptanceIssues(reports) {
+  const requirements = [
+    ['assignment', 'RECONCILED_7786_OFFICIAL_ASSIGNMENTS_AND_231_PREMIUM_ASSIGNMENTS'],
+    ['relationship', 'RECONCILED_395_COMBINED_PRODUCT_JOIN_EXPANSIONS'],
+    ['provenance', '360_LOCAL_SUPPLEMENT_IMAGE_EXCEPTIONS_CLASSIFIED'],
+    ['coverage', 'RECONCILED_25_SETS_50_LANGUAGE_SET_ROWS']
+  ];
+  const issues = [];
+  for (const [key, expectedStatus] of requirements) {
+    const report = reports?.[key];
+    if (!report || report.status !== expectedStatus) {
+      issues.push(`${key} status: expected ${expectedStatus}, got ${report?.status ?? 'missing report'}`);
+    }
+    for (const detail of report?.validationErrors ?? []) issues.push(`${key} validation: ${detail}`);
+  }
+  return issues;
+}
+
+function reconciliationDiagnostics(reports) {
+  return {
+    assignment: {
+      status: reports?.assignment?.status ?? null,
+      validationErrors: reports?.assignment?.validationErrors ?? [],
+      officialAssignments: reports?.assignment?.reconstructedHistoricalAssignments ?? null,
+      premiumAssignments: reports?.assignment?.premiumCollection?.totalAssignments ?? null
+    },
+    relationship: {
+      status: reports?.relationship?.status ?? null,
+      validationErrors: reports?.relationship?.validationErrors ?? [],
+      expansionCount: reports?.relationship?.counts?.naiveJoinExpansion ?? null
+    },
+    provenance: {
+      status: reports?.provenance?.status ?? null,
+      validationErrors: reports?.provenance?.validationErrors ?? [],
+      counts: reports?.provenance?.counts ?? null
+    },
+    coverage: {
+      status: reports?.coverage?.status ?? null,
+      releaseSets: reports?.coverage?.expectedReleaseSets ?? null,
+      languageSetRows: reports?.coverage?.expectedLanguageSetRows ?? null
+    }
+  };
+}
+
+export function classifyUnsupportedSourceFiles(sourceFiles) {
+  const unsupportedTypes = new Set([
+    'design',
+    'distribution',
+    'don_set',
+    'printing_design',
+    'printing_distribution',
+    'retired_printing'
+  ]);
+  return sourceFiles.filter(file => {
+    const nonTargetLanguage = /(?:^|\/)(?:cn|tcgcsv)\.jsonl$/i.test(file.path);
+    return nonTargetLanguage || unsupportedTypes.has(file.type);
+  }).map(file => ({
+    path: file.path,
+    rows: file.sourceRows,
+    type: file.type,
+    reason: /(?:^|\/)(?:cn|tcgcsv)\.jsonl$/i.test(file.path)
+      ? 'Source language is outside the English/Japanese catalogue scope.'
+      : 'Source entity type has no lossless destination in the reviewed English/Japanese catalogue scope.'
+  }));
+}
+
 function verifyPinnedSource(sourceDir, actualCommit, actualTree) {
   const result = verifySource({ sourceDir, actualCommit, actualTree });
   if (!result.ok) throw new Error(`Pinned source verification failed: ${result.errors.join('; ')}`);
@@ -43,13 +109,11 @@ export function plan(sourceDir, {
 
   const source = verifyPinnedSource(sourceDir, sourceCommit, sourceTree);
   const reports = buildReports({ sourceDir, historicalManifest, sourceCommit });
-  if (reports.assignment.validationErrors.length || reports.relationship.validationErrors.length
-    || reports.provenance.validationErrors.length
-    || reports.assignment.status !== 'RECONCILED_7786_OFFICIAL_ASSIGNMENTS_AND_231_PREMIUM_ASSIGNMENTS'
-    || reports.relationship.status !== 'RECONCILED_395_COMBINED_PRODUCT_JOIN_EXPANSIONS'
-    || reports.provenance.status !== '360_LOCAL_SUPPLEMENT_IMAGE_EXCEPTIONS_CLASSIFIED'
-    || reports.coverage.status !== 'RECONCILED_25_SETS_50_LANGUAGE_SET_ROWS') {
-    throw new Error('Full catalogue reconciliation did not meet every pinned acceptance count');
+  const acceptanceIssues = getReconciliationAcceptanceIssues(reports);
+  if (acceptanceIssues.length) {
+    const error = new Error(`Full catalogue reconciliation did not meet every pinned acceptance count: ${acceptanceIssues.join('; ')}`);
+    error.diagnostics = reconciliationDiagnostics(reports);
+    throw error;
   }
 
   const sourceFiles = source.integrity.files.map(file => ({
@@ -60,13 +124,7 @@ export function plan(sourceDir, {
     hashMatchesManifest: file.hashMatchesManifest,
     rowCountMatchesManifest: file.rowCountMatchesManifest
   }));
-  const excludedTypes = new Set(['designs', 'distributions', 'don_sets', 'printing_designs', 'printing_distributions', 'retired_printings']);
-  const unsupportedFiles = sourceFiles.filter(file => excludedTypes.has(file.type)).map(file => ({
-    path: file.path,
-    rows: file.sourceRows,
-    type: file.type,
-    reason: 'Outside the approved English/Japanese release and Premium assignment scope; no lossless target is included in this dry-run.'
-  }));
+  const unsupportedFiles = classifyUnsupportedSourceFiles(sourceFiles);
 
   return {
     stage: '4B-1V-A5S-1R-9',
@@ -114,6 +172,7 @@ export function plan(sourceDir, {
       imageExceptions: {
         count: reports.provenance.counts.missingHistoricalOfficialImageUrl,
         uniqueImageIds: reports.provenance.counts.uniqueImageIds,
+        uniqueLanguageScopedImageIds: reports.provenance.counts.uniqueLanguageScopedImageIds,
         uniqueBandaiUrlCandidates: reports.provenance.counts.uniqueOfficialUrlCandidates,
         bySetAndLanguage: reports.provenance.counts.bySetAndLanguage,
         classification: 'LOCAL_OFFICIAL_SUPPLEMENT_IDS_WITH_LANGUAGE_SCOPED_PROXY_PATHS; CANDIDATE URLS ARE NOT WRITTEN AS HISTORICAL VALUES'
@@ -152,11 +211,13 @@ function readArgs(args) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.argv[1])).href) {
+  let requestedOutput = null;
   try {
     const args = readArgs(process.argv.slice(2));
     if (!args.has('--dry-run')) throw new Error('Only --dry-run is supported');
     const sourceDir = args.get('--source-dir');
     const historicalFile = args.get('--historical-1p');
+    requestedOutput = args.get('--output');
     if (!sourceDir || !historicalFile) throw new Error('--source-dir and --historical-1p are required');
     const historicalManifest = JSON.parse(fs.readFileSync(historicalFile, 'utf8'));
     const result = plan(sourceDir, {
@@ -165,13 +226,31 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
       historicalManifest
     });
     const output = JSON.stringify(result, null, 2) + '\n';
-    const outputPath = args.get('--output');
-    if (outputPath) {
-      fs.mkdirSync(path.dirname(path.resolve(outputPath)), { recursive: true });
-      fs.writeFileSync(outputPath, output);
+    if (requestedOutput) {
+      fs.mkdirSync(path.dirname(path.resolve(requestedOutput)), { recursive: true });
+      fs.writeFileSync(requestedOutput, output);
     }
     process.stdout.write(output);
   } catch (error) {
+    if (requestedOutput) {
+      try {
+        const failure = {
+          stage: '4B-1V-A5S-1R-10',
+          mode: 'OFFLINE_DRY_RUN_ONLY',
+          status: 'BLOCKED_DRY_RUN',
+          error: error.message,
+          reconciliationDiagnostics: error.diagnostics ?? null,
+          writesPerformed: 0,
+          liveImportCapability: false,
+          databaseConnectionUsed: false,
+          productionAccessed: false
+        };
+        fs.mkdirSync(path.dirname(path.resolve(requestedOutput)), { recursive: true });
+        fs.writeFileSync(requestedOutput, JSON.stringify(failure, null, 2) + '\n');
+      } catch (writeError) {
+        console.error(`Could not write dry-run diagnostic report: ${writeError.message}`);
+      }
+    }
     console.error(error.stack || error.message);
     process.exitCode = 1;
   }

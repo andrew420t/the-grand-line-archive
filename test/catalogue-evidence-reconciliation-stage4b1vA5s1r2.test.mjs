@@ -59,7 +59,7 @@ function buildFixture({ mutateManifest, mutateSource } = {}) {
     for (const [language, count] of [['en', EXPECTED.assignmentsBySet[code][0]], ['jp', EXPECTED.assignmentsBySet[code][1]]]) {
       for (let index = 0; index < count; index += 1) {
         const local = ['OP-18', 'EB-05'].includes(code);
-        const imageId = `${code.replace('-', '')}-${language}-${String(index).padStart(3, '0')}`;
+        const imageId = `${code.replace('-', '')}-${String(index).padStart(3, '0')}`;
         const cardNumber = `CARD-${language}-${cardNumberIndex[language]++ % (language === 'en' ? 2562 : 2561)}`;
         let productKey = null;
         if (!local) {
@@ -189,6 +189,8 @@ test('classifies all 360 image URL exceptions without promoting app proxy paths 
   const reports = buildReports({ sourceDir: fixture.root, historicalManifest: fixture.historicalManifest });
   assert.equal(reports.provenance.status, '360_LOCAL_SUPPLEMENT_IMAGE_EXCEPTIONS_CLASSIFIED');
   assert.equal(reports.provenance.counts.missingHistoricalOfficialImageUrl, 360);
+  assert.equal(reports.provenance.counts.uniqueImageIds, 180);
+  assert.equal(reports.provenance.counts.uniqueLanguageScopedImageIds, 360);
   assert.equal(reports.provenance.counts.uniqueOfficialUrlCandidates, 360);
   assert.deepEqual(reports.provenance.counts.bySetAndLanguage, {
     'OP-18|en': 119, 'OP-18|jp': 119, 'EB-05|en': 61, 'EB-05|jp': 61
@@ -196,6 +198,22 @@ test('classifies all 360 image URL exceptions without promoting app proxy paths 
   assert.equal(reports.provenance.affectedRecords.every(record => record.historicalOfficialImageUrl === null), true);
   assert.equal(reports.provenance.affectedRecords.every(record => record.constructedOfficialUrlCandidate.startsWith(`https://${record.language === 'en' ? 'en' : 'www'}.onepiece-cardgame.com/`)), true);
   assert.equal(reports.provenance.validationErrors.length, 0);
+});
+
+test('keeps same-valued Bandai image IDs distinct by language and rejects a duplicate within one language', () => {
+  const fixture = buildFixture();
+  const reports = buildReports({ sourceDir: fixture.root, historicalManifest: fixture.historicalManifest });
+  assert.equal(reports.provenance.status, '360_LOCAL_SUPPLEMENT_IMAGE_EXCEPTIONS_CLASSIFIED');
+  assert.equal(reports.provenance.counts.uniqueImageIds, 180);
+  assert.equal(reports.provenance.counts.uniqueLanguageScopedImageIds, 360);
+
+  const duplicateLanguageIdentity = buildFixture({ mutateManifest: manifest => {
+    const rows = manifest.importPlan.referencePrintingRecords.filter(record => !record.officialImageUrl && record.language === 'en');
+    rows[1].imageId = rows[0].imageId;
+  } });
+  const duplicateReports = buildReports({ sourceDir: duplicateLanguageIdentity.root, historicalManifest: duplicateLanguageIdentity.historicalManifest });
+  assert.equal(duplicateReports.provenance.status, 'IMAGE_EXCEPTIONS_NEED_REVIEW');
+  assert.ok(duplicateReports.provenance.validationErrors.some(error => error.includes('Language-scoped image ID identities')));
 });
 
 test('rejects a missing historical assignment row even if the source feed remains intact', () => {

@@ -433,9 +433,24 @@ function buildReports({ sourceDir, historicalManifest, sourceCommit = PINNED_SOU
     || !record.constructedOfficialUrlCandidate)) {
     imageErrors.push('One or more image exceptions lack a scoped Bandai image ID, official supplement identity or language-scoped proxy path');
   }
-  if (new Set(imageExceptions.map(record => record.imageId)).size !== EXPECTED.imageExceptions
-    || new Set(imageExceptions.map(record => record.constructedOfficialUrlCandidate)).size !== EXPECTED.imageExceptions) {
-    imageErrors.push('Image exception IDs and language-scoped Bandai URL candidates must be one-to-one');
+  const languageScopedImageIds = imageExceptions.map(record => `${record.language}|${record.imageId}`);
+  const candidatePairs = imageExceptions.map(record => `${record.language}|${record.imageId}|${record.constructedOfficialUrlCandidate}`);
+  const imageIdToCandidates = new Map();
+  const candidateToImageIds = new Map();
+  for (const record of imageExceptions) {
+    const identity = `${record.language}|${record.imageId}`;
+    if (!imageIdToCandidates.has(identity)) imageIdToCandidates.set(identity, new Set());
+    imageIdToCandidates.get(identity).add(record.constructedOfficialUrlCandidate);
+    if (!candidateToImageIds.has(record.constructedOfficialUrlCandidate)) candidateToImageIds.set(record.constructedOfficialUrlCandidate, new Set());
+    candidateToImageIds.get(record.constructedOfficialUrlCandidate).add(identity);
+  }
+  const hasOneToOneLanguageScopedImageMapping = new Set(languageScopedImageIds).size === EXPECTED.imageExceptions
+    && new Set(candidatePairs).size === EXPECTED.imageExceptions
+    && new Set(imageExceptions.map(record => record.constructedOfficialUrlCandidate)).size === EXPECTED.imageExceptions
+    && [...imageIdToCandidates.values()].every(candidates => candidates.size === 1)
+    && [...candidateToImageIds.values()].every(identities => identities.size === 1);
+  if (!hasOneToOneLanguageScopedImageMapping) {
+    imageErrors.push('Language-scoped image ID identities and Bandai URL candidates must be one-to-one');
   }
   const provenance = {
     stage: '4B-1V-A5S-1R-2',
@@ -445,6 +460,7 @@ function buildReports({ sourceDir, historicalManifest, sourceCommit = PINNED_SOU
       assignmentRecords: rows.length,
       missingHistoricalOfficialImageUrl: imageExceptions.length,
       uniqueImageIds: new Set(imageExceptions.map(record => record.imageId)).size,
+      uniqueLanguageScopedImageIds: new Set(languageScopedImageIds).size,
       uniqueOfficialUrlCandidates: new Set(imageExceptions.map(record => record.constructedOfficialUrlCandidate)).size,
       bySetAndLanguage: imageExceptionsBySetLanguage,
       exactReferenceImageUrlIsLanguageScopedApplicationPath: imageExceptions.filter(record => record.exactReferenceIsLanguageScopedApplicationPath).length,
