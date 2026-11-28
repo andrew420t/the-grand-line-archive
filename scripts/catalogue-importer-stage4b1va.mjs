@@ -214,10 +214,10 @@ if (process.argv[1] && import.meta.url === pathToFileURL(path.resolve(process.ar
   let requestedOutput = null;
   try {
     const args = readArgs(process.argv.slice(2));
+    requestedOutput = args.get('--output');
     if (!args.has('--dry-run')) throw new Error('Only --dry-run is supported');
     const sourceDir = args.get('--source-dir');
     const historicalFile = args.get('--historical-1p');
-    requestedOutput = args.get('--output');
     if (!sourceDir || !historicalFile) throw new Error('--source-dir and --historical-1p are required');
     const historicalManifest = JSON.parse(fs.readFileSync(historicalFile, 'utf8'));
     const result = plan(sourceDir, {

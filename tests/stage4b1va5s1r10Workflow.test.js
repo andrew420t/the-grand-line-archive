@@ -3,6 +3,10 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const workflow = name => fs.readFileSync(new URL(`../.github/workflows/${name}`, import.meta.url), 'utf8');
+const assertUniqueStepIds = text => {
+  const ids = [...text.matchAll(/^\s+id: ([\w-]+)\s*$/gm)].map(match => match[1]);
+  assert.equal(new Set(ids).size, ids.length, 'workflow step IDs must be unique');
+};
 
 test('historical reconciliation keeps independent audits and artifact upload after earlier failures', () => {
   const text = workflow('stage4b-1v-a5s-1r-2-evidence-reconciliation.yml');
@@ -12,6 +16,7 @@ test('historical reconciliation keeps independent audits and artifact upload aft
   const artifactStep = text.indexOf('name: Upload reconciliation evidence');
   const acceptanceStep = text.indexOf('id: final_acceptance');
 
+  assertUniqueStepIds(text);
   assert.ok(reportStep >= 0 && imageAuditStep > reportStep);
   assert.ok(premiumAuditStep > reportStep);
   assert.ok(artifactStep > premiumAuditStep);
@@ -19,9 +24,12 @@ test('historical reconciliation keeps independent audits and artifact upload aft
   assert.match(text.slice(imageAuditStep, premiumAuditStep), /if: \$\{\{ always\(\) && steps\.setup_node\.outcome == 'success' \}\}/);
   assert.match(text.slice(premiumAuditStep, artifactStep), /if: \$\{\{ always\(\) && steps\.setup_node\.outcome == 'success' \}\}/);
   assert.match(text.slice(artifactStep, acceptanceStep), /if: always\(\)/);
+  assert.match(text.slice(artifactStep, acceptanceStep), /path: artifacts-stage4b1r2\/\*\.json/);
   assert.match(text, /--run-http/);
   assert.match(text, /360-image-exception-reconciliation=\$IMAGE_EXCEPTIONS/);
   assert.match(text, /231-premium-image-audit=\$PREMIUM_IMAGES/);
+  assert.match(text, /ARTIFACT_UPLOAD: \$\{\{ steps\.upload_evidence\.outcome \}\}/);
+  assert.match(text, /artifact-upload=\$ARTIFACT_UPLOAD/);
 });
 
 test('Testing dry-run uploads diagnostics before its explicit final acceptance gate', () => {
@@ -31,11 +39,15 @@ test('Testing dry-run uploads diagnostics before its explicit final acceptance g
   const artifactStep = text.indexOf('name: Upload dry-run evidence');
   const acceptanceStep = text.indexOf('id: final_acceptance');
 
+  assertUniqueStepIds(text);
   assert.ok(snapshotStep >= 0 && dryRunStep > snapshotStep);
   assert.ok(artifactStep > dryRunStep);
   assert.ok(acceptanceStep > artifactStep);
   assert.match(text.slice(dryRunStep, artifactStep), /if: \$\{\{ always\(\) && steps\.setup_node\.outcome == 'success' \}\}/);
   assert.match(text.slice(artifactStep, acceptanceStep), /if: always\(\)/);
+  assert.match(text.slice(artifactStep, acceptanceStep), /path: artifacts-stage4b1r3\/\*\.json/);
   assert.match(text, /testing-read-only-snapshot-comparison=\$SNAPSHOT_COMPARISON/);
   assert.match(text, /offline-importer-dry-run=\$IMPORTER_DRY_RUN/);
+  assert.match(text, /ARTIFACT_UPLOAD: \$\{\{ steps\.upload_evidence\.outcome \}\}/);
+  assert.match(text, /artifact-upload=\$ARTIFACT_UPLOAD/);
 });

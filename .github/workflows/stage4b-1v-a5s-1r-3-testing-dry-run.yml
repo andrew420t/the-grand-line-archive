@@ -116,6 +116,7 @@ jobs:
         run: npm run build
 
       - name: Upload dry-run evidence
+        id: upload_evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -136,6 +137,7 @@ jobs:
           TESTS: ${{ steps.full_test_suite.outcome }}
           LINT: ${{ steps.lint.outcome }}
           BUILD: ${{ steps.production_build.outcome }}
+          ARTIFACT_UPLOAD: ${{ steps.upload_evidence.outcome }}
         run: |
           failed=0
           for check in \
@@ -145,7 +147,8 @@ jobs:
             "importer-integration=$IMPORTER_INTEGRATION" \
             "full-tests=$TESTS" \
             "lint=$LINT" \
-            "production-build=$BUILD"; do
+            "production-build=$BUILD" \
+            "artifact-upload=$ARTIFACT_UPLOAD"; do
             name="${check%%=*}"
             outcome="${check#*=}"
             echo "$name: $outcome"

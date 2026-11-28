@@ -94,6 +94,17 @@ test('writes a zero-write diagnostic artifact even when the offline dry-run cann
     assert.equal(report.writesPerformed, 0);
     assert.equal(report.liveImportCapability, false);
     assert.equal(report.databaseConnectionUsed, false);
+
+    const rejectedModeOutput = path.join(root, 'rejected-mode.json');
+    const rejectedMode = spawnSync(process.execPath, [
+      script, '--output', rejectedModeOutput
+    ], { encoding: 'utf8' });
+    assert.notEqual(rejectedMode.status, 0);
+    const rejectedModeReport = JSON.parse(fs.readFileSync(rejectedModeOutput, 'utf8'));
+    assert.equal(rejectedModeReport.status, 'BLOCKED_DRY_RUN');
+    assert.match(rejectedModeReport.error, /Only --dry-run is supported/);
+    assert.equal(rejectedModeReport.writesPerformed, 0);
+    assert.equal(rejectedModeReport.liveImportCapability, false);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }
