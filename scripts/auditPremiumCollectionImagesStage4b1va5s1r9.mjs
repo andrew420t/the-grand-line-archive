@@ -62,25 +62,27 @@ export function reconcilePremiumImageAudit(historicalManifest, results, { expect
     catch { requestedUrl = null; }
     try { finalUrl = result?.final_url ? new URL(result.final_url) : null; }
     catch { finalUrl = null; }
-    const redirected = Boolean(result?.final_url && result.final_url !== card.officialImageUrl);
-    const finalUrlIsOfficial = !redirected || (finalUrl?.protocol === 'https:' && finalUrl?.hostname === expectedHost);
+    const redirected = Boolean(requestedUrl && finalUrl && finalUrl.href !== requestedUrl.href);
+    const finalUrlIsOfficial = finalUrl?.protocol === 'https:' && finalUrl?.hostname === expectedHost;
     const loaded = result?.status === 'LOADED'
       && (result.status_code === 200 || result.status_code === 206)
       && /^image\//i.test(result.content_type || '')
       && requestedUrl?.protocol === 'https:'
       && requestedUrl?.hostname === expectedHost
       && finalUrlIsOfficial;
+    const verified = loaded && !redirected && matchingAssociation;
     const missing = result?.status === 'MISSING' || result?.status_code === 404 || result?.status_code === 410;
-    const ambiguous = candidates.length !== 1 || (result !== null && !matchingAssociation);
-    const failed = !loaded && !missing && !ambiguous;
+    const ambiguous = candidates.length > 1 || (result !== null && !matchingAssociation);
+    const failed = (!loaded && !missing && !ambiguous) || (redirected && !loaded);
     const outcome = ambiguous ? 'AMBIGUOUS'
-      : missing ? 'MISSING'
-        : redirected ? (loaded ? 'REDIRECTED_LOADED' : 'REDIRECTED_FAILED')
-          : loaded ? 'VERIFIED' : 'FAILED';
+      : redirected ? (loaded ? 'REDIRECTED_LOADED' : 'REDIRECTED_FAILED')
+        : missing ? 'MISSING'
+          : verified ? 'VERIFIED' : 'FAILED';
     const rowErrors = [];
     if (!languageName) rowErrors.push('invalid Premium language');
     if (candidates.length !== 1) rowErrors.push(`expected one HTTP audit result; found ${candidates.length}`);
     if (result && !matchingAssociation) rowErrors.push('HTTP result does not match the Premium product, language, printing and image identity');
+    if (redirected) rowErrors.push('official URL redirected; final URL is reported separately and is not treated as an exact URL verification');
     if (redirected && !finalUrlIsOfficial) rowErrors.push('redirect target is not an HTTPS URL on the same language-specific official host');
     if (!loaded) rowErrors.push(`Premium image did not load (status ${result?.status ?? 'not audited'})`);
     if (card.exactIdentityMatch !== true) rowErrors.push('source artifact does not mark this runtime identity exact');
@@ -98,6 +100,7 @@ export function reconcilePremiumImageAudit(historicalManifest, results, { expect
       finalUrl: result?.final_url ?? null,
       outcome,
       loaded,
+      verified,
       redirected,
       missing,
       failed,
@@ -109,12 +112,14 @@ export function reconcilePremiumImageAudit(historicalManifest, results, { expect
   const byLanguage = {};
   const byProduct = {};
   for (const row of rows) {
-    byLanguage[row.language] ??= { assignments: 0, loaded: 0 };
+    byLanguage[row.language] ??= { assignments: 0, loaded: 0, verified: 0 };
     byLanguage[row.language].assignments += 1;
     if (row.loaded) byLanguage[row.language].loaded += 1;
-    byProduct[row.productKey] ??= { productName: row.productName, assignments: 0, loaded: 0 };
+    if (row.verified) byLanguage[row.language].verified += 1;
+    byProduct[row.productKey] ??= { productName: row.productName, assignments: 0, loaded: 0, verified: 0 };
     byProduct[row.productKey].assignments += 1;
     if (row.loaded) byProduct[row.productKey].loaded += 1;
+    if (row.verified) byProduct[row.productKey].verified += 1;
   }
   const failedRows = rows.filter(row => row.errors.length);
   if (new Set(rows.map(row => row.officialImageUrl)).size !== expectedCount) errors.push('Premium official image URLs are not unique');
@@ -128,6 +133,8 @@ export function reconcilePremiumImageAudit(historicalManifest, results, { expect
       assignmentRows: cards.length,
       uniqueOfficialUrls: new Set(rows.map(row => row.officialImageUrl)).size,
       loaded: uniqueLoaded,
+      verified: rows.filter(row => row.verified).length,
+      unverified: rows.filter(row => !row.verified).length,
       failedOrUnmatched: failedRows.length,
       failed: rows.filter(row => row.failed).length,
       redirected: rows.filter(row => row.redirected).length,

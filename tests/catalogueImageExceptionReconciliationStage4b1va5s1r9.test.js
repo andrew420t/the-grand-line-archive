@@ -64,7 +64,12 @@ test('records redirects separately while rejecting redirects away from the langu
   const sameHost = verifyImageExceptionAudit({ ...input, expectedCount: 2 });
   assert.equal(sameHost.records[0].outcome, 'REDIRECTED_LOADED');
   assert.equal(sameHost.records[0].loaded, true);
+  assert.equal(sameHost.records[0].verified, false);
+  assert.equal(sameHost.records[0].candidateHttpVerified, false);
   assert.equal(sameHost.summary.redirected, 1);
+  assert.equal(sameHost.summary.loaded, 2);
+  assert.equal(sameHost.summary.verifiedLoaded, 1);
+  assert.equal(sameHost.status, 'BLOCKED_IMAGE_EXCEPTION_RECONCILIATION');
 
   const offHost = fixture();
   offHost.auditReport.results[0].final_url = 'https://example.com/OP18-001.png';
@@ -72,6 +77,15 @@ test('records redirects separately while rejecting redirects away from the langu
   assert.equal(blocked.records[0].outcome, 'REDIRECTED_FAILED');
   assert.equal(blocked.records[0].loaded, false);
   assert.ok(blocked.records[0].errors.some(error => error.includes('redirect target')));
+
+  const redirectedMissing = fixture();
+  redirectedMissing.auditReport.results[0].status = 'MISSING';
+  redirectedMissing.auditReport.results[0].status_code = 404;
+  redirectedMissing.auditReport.results[0].final_url = 'https://example.com/not-found.png';
+  const missingOffHost = verifyImageExceptionAudit({ ...redirectedMissing, expectedCount: 2 });
+  assert.equal(missingOffHost.records[0].outcome, 'REDIRECTED_FAILED');
+  assert.equal(missingOffHost.records[0].missing, true);
+  assert.equal(missingOffHost.records[0].failed, true);
 });
 
 test('runs fresh GET checks for each exception identity and returns their individual HTTP outcomes', async () => {
@@ -138,6 +152,22 @@ test('rejects failed responses and duplicate audit rows', () => {
   assert.equal(classifiedMissing.records[0].outcome, 'MISSING');
   assert.equal(classifiedMissing.summary.missing, 1);
   assert.equal(classifiedMissing.summary.failed, 0);
+
+  const noAuditRow = fixture();
+  noAuditRow.auditReport.results = noAuditRow.auditReport.results.slice(1);
+  const missingEvidence = verifyImageExceptionAudit({ ...noAuditRow, expectedCount: 2 });
+  assert.equal(missingEvidence.records[0].outcome, 'FAILED');
+  assert.equal(missingEvidence.summary.failed, 1);
+  assert.equal(missingEvidence.summary.ambiguous, 0);
+});
+
+test('requires a final response URL before an image candidate can be verified', () => {
+  const input = fixture();
+  delete input.auditReport.results[0].final_url;
+  const result = verifyImageExceptionAudit({ ...input, expectedCount: 2 });
+  assert.equal(result.records[0].outcome, 'FAILED');
+  assert.equal(result.records[0].verified, false);
+  assert.equal(result.records[0].candidateHttpVerified, false);
 });
 
 test('rejects an input that claims the exception had a historical official URL', () => {

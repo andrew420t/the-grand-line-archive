@@ -34,28 +34,30 @@ export function verifyImageExceptionAudit({ provenanceReport, auditReport, expec
       && association.image_id === record.imageId
       && association.set === record.releaseSet
     ) === true;
-    const redirected = Boolean(result?.final_url && result.final_url !== record.constructedOfficialUrlCandidate);
     let finalUrl;
     try { finalUrl = result?.final_url ? new URL(result.final_url) : null; }
     catch { finalUrl = null; }
-    const finalUrlIsOfficial = !redirected || (finalUrl?.protocol === 'https:' && finalUrl?.hostname === expectedHost);
+    const redirected = Boolean(candidate && finalUrl && finalUrl.href !== candidate.href);
+    const finalUrlIsOfficial = finalUrl?.protocol === 'https:' && finalUrl?.hostname === expectedHost;
     const loaded = result?.status === 'LOADED'
       && (result.status_code === 200 || result.status_code === 206)
       && /^image\//i.test(result.content_type || '')
       && candidate?.protocol === 'https:'
       && candidate?.hostname === expectedHost
       && finalUrlIsOfficial;
+    const verified = loaded && !redirected && matchingAssociation;
     const missing = result?.status === 'MISSING' || result?.status_code === 404 || result?.status_code === 410;
-    const ambiguous = candidates.length !== 1 || (result !== null && !matchingAssociation);
-    const failed = !loaded && !missing && !ambiguous;
+    const ambiguous = candidates.length > 1 || (result !== null && !matchingAssociation);
+    const failed = (!loaded && !missing && !ambiguous) || (redirected && !loaded);
     const outcome = ambiguous ? 'AMBIGUOUS'
-      : missing ? 'MISSING'
-        : redirected ? (loaded ? 'REDIRECTED_LOADED' : 'REDIRECTED_FAILED')
-          : loaded ? 'VERIFIED' : 'FAILED';
+      : redirected ? (loaded ? 'REDIRECTED_LOADED' : 'REDIRECTED_FAILED')
+        : missing ? 'MISSING'
+          : verified ? 'VERIFIED' : 'FAILED';
     const error = [];
     if (!expectedHost || !candidate || candidate.hostname !== expectedHost || candidate.protocol !== 'https:') error.push('candidate URL host or scheme does not match language');
     if (candidates.length !== 1) error.push(`expected one HTTP audit row for candidate; found ${candidates.length}`);
     if (result && !matchingAssociation) error.push('HTTP result does not carry the matching language, image ID and set association');
+    if (redirected) error.push('candidate URL redirected; final URL is reported separately and is not treated as an exact candidate verification');
     if (redirected && !finalUrlIsOfficial) error.push('redirect target is not an HTTPS URL on the same language-specific official host');
     if (!loaded) error.push(`image did not load as an image (status ${result?.status ?? 'not audited'})`);
     if (record.historicalOfficialImageUrl) error.push('historical exception record unexpectedly contains a saved official URL');
@@ -69,13 +71,14 @@ export function verifyImageExceptionAudit({ provenanceReport, auditReport, expec
       historicalOfficialImageUrl: null,
       applicationImagePath: record.historicalApplicationImageUrl,
       bandaiUrlCandidate: record.constructedOfficialUrlCandidate,
-      candidateHttpVerified: loaded,
+      candidateHttpVerified: verified,
       httpStatus: result?.status_code ?? null,
       httpClassification: result?.status ?? 'NOT_AUDITED',
       contentType: result?.content_type ?? null,
       finalUrl: result?.final_url ?? null,
       outcome,
       loaded,
+      verified,
       redirected,
       missing,
       failed,
@@ -91,6 +94,7 @@ export function verifyImageExceptionAudit({ provenanceReport, auditReport, expec
     countsBySetLanguage[key] ??= { rows: 0, loaded: 0 };
     countsBySetLanguage[key].rows += 1;
     if (record.loaded) countsBySetLanguage[key].loaded += 1;
+    if (record.verified) countsBySetLanguage[key].verified = (countsBySetLanguage[key].verified || 0) + 1;
   }
   const errorsByRecord = reconciled.filter(record => record.errors.length);
   if (new Set(reconciled.map(record => record.bandaiUrlCandidate)).size !== expectedCount) {
@@ -111,8 +115,9 @@ export function verifyImageExceptionAudit({ provenanceReport, auditReport, expec
     summary: {
       historicalImageExceptions: records.length,
       uniqueCandidates: new Set(reconciled.map(record => record.bandaiUrlCandidate)).size,
-      verifiedLoaded: reconciled.filter(record => record.loaded).length,
-      verifiedHttp200: reconciled.filter(record => record.loaded && record.httpStatus === 200).length,
+      loaded: reconciled.filter(record => record.loaded).length,
+      verifiedLoaded: reconciled.filter(record => record.verified).length,
+      verifiedHttp200: reconciled.filter(record => record.verified && record.httpStatus === 200).length,
       failed: reconciled.filter(record => record.failed).length,
       redirected: reconciled.filter(record => record.redirected).length,
       missing: reconciled.filter(record => record.missing).length,

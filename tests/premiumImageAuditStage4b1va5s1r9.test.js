@@ -27,7 +27,7 @@ function fixture() {
       product_key: card.productKey,
       printing_key: card.printingKey
     }],
-    status: 'LOADED', status_code: 200, content_type: 'image/png'
+    status: 'LOADED', status_code: 200, content_type: 'image/png', final_url: card.officialImageUrl
   }));
   return { manifest, results };
 }
@@ -69,8 +69,12 @@ test('records Premium image redirects, missing responses and ambiguous mappings 
   redirected.results[0].final_url = 'https://en.onepiece-cardgame.com/images/cardlist/card/P-001.webp';
   const redirectReport = reconcilePremiumImageAudit(redirected.manifest, redirected.results, { expectedCount: 2 });
   assert.equal(redirectReport.results[0].outcome, 'REDIRECTED_LOADED');
+  assert.equal(redirectReport.results[0].loaded, true);
+  assert.equal(redirectReport.results[0].verified, false);
   assert.equal(redirectReport.summary.redirected, 1);
   assert.equal(redirectReport.summary.loaded, 2);
+  assert.equal(redirectReport.summary.verified, 1);
+  assert.equal(redirectReport.status, 'BLOCKED_PREMIUM_IMAGE_RECONCILIATION');
 
   const missing = fixture();
   missing.results[0].status = 'MISSING';
@@ -87,10 +91,32 @@ test('records Premium image redirects, missing responses and ambiguous mappings 
   assert.equal(ambiguousReport.summary.ambiguous, 1);
   assert.equal(ambiguousReport.summary.failed, 0);
 
+  const noAuditRow = fixture();
+  noAuditRow.results = noAuditRow.results.slice(1);
+  const missingEvidence = reconcilePremiumImageAudit(noAuditRow.manifest, noAuditRow.results, { expectedCount: 2 });
+  assert.equal(missingEvidence.results[0].outcome, 'FAILED');
+  assert.equal(missingEvidence.summary.failed, 1);
+  assert.equal(missingEvidence.summary.ambiguous, 0);
+
+  const missingFinalUrl = fixture();
+  delete missingFinalUrl.results[0].final_url;
+  const incomplete = reconcilePremiumImageAudit(missingFinalUrl.manifest, missingFinalUrl.results, { expectedCount: 2 });
+  assert.equal(incomplete.results[0].outcome, 'FAILED');
+  assert.equal(incomplete.results[0].verified, false);
+
   const offHost = fixture();
   offHost.results[0].final_url = 'https://example.com/P-001.png';
   const blockedRedirect = reconcilePremiumImageAudit(offHost.manifest, offHost.results, { expectedCount: 2 });
   assert.equal(blockedRedirect.results[0].outcome, 'REDIRECTED_FAILED');
   assert.equal(blockedRedirect.results[0].loaded, false);
   assert.ok(blockedRedirect.results[0].errors.some(error => error.includes('redirect target')));
+
+  const redirectedMissing = fixture();
+  redirectedMissing.results[0].status = 'MISSING';
+  redirectedMissing.results[0].status_code = 404;
+  redirectedMissing.results[0].final_url = 'https://example.com/not-found.png';
+  const missingOffHost = reconcilePremiumImageAudit(redirectedMissing.manifest, redirectedMissing.results, { expectedCount: 2 });
+  assert.equal(missingOffHost.results[0].outcome, 'REDIRECTED_FAILED');
+  assert.equal(missingOffHost.results[0].missing, true);
+  assert.equal(missingOffHost.results[0].failed, true);
 });
