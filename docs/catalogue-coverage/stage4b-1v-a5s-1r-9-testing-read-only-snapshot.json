@@ -1,0 +1,64 @@
+{
+  "stage": "4B-1V-A5S-1R-9",
+  "retrieved_date": "2026-11-28",
+  "read_only": true,
+  "no_database_writes": true,
+  "query_file": "supabase/review-only/stage4b-1v-a5s-1r-9-testing-read-only-comparison.sql",
+  "project": {
+    "ref": "ehzqsnfkmwphyllhaqhe",
+    "name": "Grand Line Archive Testing",
+    "region": "eu-west-1",
+    "status": "ACTIVE_HEALTHY",
+    "database_major_version": 17
+  },
+  "snapshot": {
+    "sets": 25,
+    "products": 32,
+    "card_numbered_products": 31,
+    "products_without_card_number": 1,
+    "products_with_uploaded_image": 5,
+    "products_with_catalogue_match_id": 0,
+    "products_with_catalogue_printing_key": 0,
+    "products_with_catalogue_reference_image": 0,
+    "set_assigned_products": 2,
+    "products_without_set": 30,
+    "product_image_rows": 9,
+    "legacy_public_cards": 0,
+    "catalogue_counts": {
+      "catalogue_release_sets": 0,
+      "catalogue_release_products": 0,
+      "catalogue_cards": 0,
+      "catalogue_printings": 0,
+      "catalogue_card_observations": 0,
+      "catalogue_printing_images": 0,
+      "catalogue_product_sets": 0,
+      "catalogue_product_printings": 0,
+      "catalogue_set_printings": 0,
+      "catalogue_inventory_links": 0
+    },
+    "loki_records": [
+      {
+        "product_id": "6c3b242b-786d-45e1-a56e-1c1dfb666c2d",
+        "name": "Loki",
+        "language": "Japanese",
+        "card_number": "OP17-119",
+        "set_code": "OP-17",
+        "uploaded_image_present": true,
+        "catalogue_match_id_present": false,
+        "catalogue_printing_key_present": false,
+        "catalogue_reference_image_present": false
+      },
+      {
+        "product_id": "ced9b368-b6b5-444d-bef4-588a1e2b4b9d",
+        "name": "Loki",
+        "language": "Japanese",
+        "card_number": "OP17-119",
+        "set_code": null,
+        "uploaded_image_present": false,
+        "catalogue_match_id_present": false,
+        "catalogue_printing_key_present": false,
+        "catalogue_reference_image_present": false
+      }
+    ]
+  }
+}
