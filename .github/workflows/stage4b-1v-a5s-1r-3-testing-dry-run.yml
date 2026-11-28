@@ -56,15 +56,27 @@ jobs:
           path: historical-1p
 
       - name: Set up Node.js
+        id: setup_node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
       - name: Install dependencies
+        id: install_dependencies
         run: npm ci
 
+      - name: Re-run Testing-only read-only snapshot comparison
+        id: testing_snapshot_comparison
+        if: ${{ always() && steps.setup_node.outcome == 'success' }}
+        run: |
+          node scripts/compareTestingCatalogueSnapshotStage4b1va5s1r9.mjs \
+            --snapshot docs/catalogue-coverage/stage4b-1v-a5s-1r-9-testing-read-only-snapshot.json \
+            --output artifacts-stage4b1r3/testing-read-only-comparison.json
+
       - name: Run complete pinned-source and historical-evidence dry-run
+        id: importer_dry_run
+        if: ${{ always() && steps.setup_node.outcome == 'success' }}
         shell: bash
         run: |
           manifest="$(find historical-1p -maxdepth 2 -type f -name '*.json' -print -quit)"
@@ -80,6 +92,8 @@ jobs:
           node -e "const r=require('./artifacts-stage4b1r3/importer-dry-run.json'); console.log(JSON.stringify({status:r.status,source:r.source,reconciliation:r.reconciliation,writesPerformed:r.writesPerformed,liveImportCapability:r.liveImportCapability},null,2))"
 
       - name: Run full-source importer integration assertions
+        id: importer_integration
+        if: ${{ always() && steps.setup_node.outcome == 'success' }}
         shell: bash
         run: |
           manifest="$(find historical-1p -maxdepth 2 -type f -name '*.json' -print -quit)"
@@ -87,12 +101,18 @@ jobs:
             node --test tests/catalogueImporterStage4b1va.test.js
 
       - name: Run full application test suite
+        id: full_test_suite
+        if: ${{ always() && steps.install_dependencies.outcome == 'success' }}
         run: npm test
 
       - name: Run application lint
+        id: lint
+        if: ${{ always() && steps.install_dependencies.outcome == 'success' }}
         run: npm run lint
 
       - name: Build production application
+        id: production_build
+        if: ${{ always() && steps.install_dependencies.outcome == 'success' }}
         run: npm run build
 
       - name: Upload dry-run evidence
@@ -103,6 +123,35 @@ jobs:
           path: artifacts-stage4b1r3/*.json
           if-no-files-found: warn
           retention-days: 30
+
+      - name: Fail the run if any dry-run or validation failed
+        id: final_acceptance
+        if: always()
+        shell: bash
+        env:
+          DEPENDENCIES: ${{ steps.install_dependencies.outcome }}
+          SNAPSHOT_COMPARISON: ${{ steps.testing_snapshot_comparison.outcome }}
+          IMPORTER_DRY_RUN: ${{ steps.importer_dry_run.outcome }}
+          IMPORTER_INTEGRATION: ${{ steps.importer_integration.outcome }}
+          TESTS: ${{ steps.full_test_suite.outcome }}
+          LINT: ${{ steps.lint.outcome }}
+          BUILD: ${{ steps.production_build.outcome }}
+        run: |
+          failed=0
+          for check in \
+            "dependencies=$DEPENDENCIES" \
+            "testing-read-only-snapshot-comparison=$SNAPSHOT_COMPARISON" \
+            "offline-importer-dry-run=$IMPORTER_DRY_RUN" \
+            "importer-integration=$IMPORTER_INTEGRATION" \
+            "full-tests=$TESTS" \
+            "lint=$LINT" \
+            "production-build=$BUILD"; do
+            name="${check%%=*}"
+            outcome="${check#*=}"
+            echo "$name: $outcome"
+            if [ "$outcome" != "success" ]; then failed=1; fi
+          done
+          test "$failed" -eq 0
 
 # This workflow has no Supabase credentials or database connection. It cannot write to Testing or Production.
 # Schema and inventory inspection is performed separately through read-only queries against the verified Testing project.

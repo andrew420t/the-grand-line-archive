@@ -63,3 +63,34 @@ test('fails closed for missing, duplicate, cross-language or unsuccessful Premiu
   assert.equal(report.summary.loaded, 1);
   assert.equal(report.summary.failedOrUnmatched, 2);
 });
+
+test('records Premium image redirects, missing responses and ambiguous mappings separately', () => {
+  const redirected = fixture();
+  redirected.results[0].final_url = 'https://en.onepiece-cardgame.com/images/cardlist/card/P-001.webp';
+  const redirectReport = reconcilePremiumImageAudit(redirected.manifest, redirected.results, { expectedCount: 2 });
+  assert.equal(redirectReport.results[0].outcome, 'REDIRECTED_LOADED');
+  assert.equal(redirectReport.summary.redirected, 1);
+  assert.equal(redirectReport.summary.loaded, 2);
+
+  const missing = fixture();
+  missing.results[0].status = 'MISSING';
+  missing.results[0].status_code = 404;
+  const missingReport = reconcilePremiumImageAudit(missing.manifest, missing.results, { expectedCount: 2 });
+  assert.equal(missingReport.results[0].outcome, 'MISSING');
+  assert.equal(missingReport.summary.missing, 1);
+  assert.equal(missingReport.summary.failed, 0);
+
+  const ambiguous = fixture();
+  ambiguous.results[0].associations[0].product_key = 'another-product';
+  const ambiguousReport = reconcilePremiumImageAudit(ambiguous.manifest, ambiguous.results, { expectedCount: 2 });
+  assert.equal(ambiguousReport.results[0].outcome, 'AMBIGUOUS');
+  assert.equal(ambiguousReport.summary.ambiguous, 1);
+  assert.equal(ambiguousReport.summary.failed, 0);
+
+  const offHost = fixture();
+  offHost.results[0].final_url = 'https://example.com/P-001.png';
+  const blockedRedirect = reconcilePremiumImageAudit(offHost.manifest, offHost.results, { expectedCount: 2 });
+  assert.equal(blockedRedirect.results[0].outcome, 'REDIRECTED_FAILED');
+  assert.equal(blockedRedirect.results[0].loaded, false);
+  assert.ok(blockedRedirect.results[0].errors.some(error => error.includes('redirect target')));
+});

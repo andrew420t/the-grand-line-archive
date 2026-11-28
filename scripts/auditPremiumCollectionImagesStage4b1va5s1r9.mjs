@@ -47,6 +47,7 @@ export function reconcilePremiumImageAudit(historicalManifest, results, { expect
 
   const rows = cards.map(card => {
     const languageName = card.language === 'en' ? 'English' : card.language === 'jp' ? 'Japanese' : null;
+    const expectedHost = card.language === 'en' ? 'en.onepiece-cardgame.com' : card.language === 'jp' ? 'www.onepiece-cardgame.com' : null;
     const candidates = byUrl.get(card.officialImageUrl) || [];
     const result = candidates.length === 1 ? candidates[0] : null;
     const matchingAssociation = result?.associations?.some(association =>
@@ -55,13 +56,32 @@ export function reconcilePremiumImageAudit(historicalManifest, results, { expect
       && association.product_key === card.productKey
       && association.printing_key === card.printingKey
     ) === true;
+    let requestedUrl;
+    let finalUrl;
+    try { requestedUrl = card.officialImageUrl ? new URL(card.officialImageUrl) : null; }
+    catch { requestedUrl = null; }
+    try { finalUrl = result?.final_url ? new URL(result.final_url) : null; }
+    catch { finalUrl = null; }
+    const redirected = Boolean(result?.final_url && result.final_url !== card.officialImageUrl);
+    const finalUrlIsOfficial = !redirected || (finalUrl?.protocol === 'https:' && finalUrl?.hostname === expectedHost);
     const loaded = result?.status === 'LOADED'
       && (result.status_code === 200 || result.status_code === 206)
-      && /^image\//i.test(result.content_type || '');
+      && /^image\//i.test(result.content_type || '')
+      && requestedUrl?.protocol === 'https:'
+      && requestedUrl?.hostname === expectedHost
+      && finalUrlIsOfficial;
+    const missing = result?.status === 'MISSING' || result?.status_code === 404 || result?.status_code === 410;
+    const ambiguous = candidates.length !== 1 || (result !== null && !matchingAssociation);
+    const failed = !loaded && !missing && !ambiguous;
+    const outcome = ambiguous ? 'AMBIGUOUS'
+      : missing ? 'MISSING'
+        : redirected ? (loaded ? 'REDIRECTED_LOADED' : 'REDIRECTED_FAILED')
+          : loaded ? 'VERIFIED' : 'FAILED';
     const rowErrors = [];
     if (!languageName) rowErrors.push('invalid Premium language');
     if (candidates.length !== 1) rowErrors.push(`expected one HTTP audit result; found ${candidates.length}`);
     if (result && !matchingAssociation) rowErrors.push('HTTP result does not match the Premium product, language, printing and image identity');
+    if (redirected && !finalUrlIsOfficial) rowErrors.push('redirect target is not an HTTPS URL on the same language-specific official host');
     if (!loaded) rowErrors.push(`Premium image did not load (status ${result?.status ?? 'not audited'})`);
     if (card.exactIdentityMatch !== true) rowErrors.push('source artifact does not mark this runtime identity exact');
     return {
@@ -75,7 +95,13 @@ export function reconcilePremiumImageAudit(historicalManifest, results, { expect
       httpClassification: result?.status ?? 'NOT_AUDITED',
       httpStatus: result?.status_code ?? null,
       contentType: result?.content_type ?? null,
+      finalUrl: result?.final_url ?? null,
+      outcome,
       loaded,
+      redirected,
+      missing,
+      failed,
+      ambiguous,
       errors: rowErrors
     };
   });
@@ -103,6 +129,12 @@ export function reconcilePremiumImageAudit(historicalManifest, results, { expect
       uniqueOfficialUrls: new Set(rows.map(row => row.officialImageUrl)).size,
       loaded: uniqueLoaded,
       failedOrUnmatched: failedRows.length,
+      failed: rows.filter(row => row.failed).length,
+      redirected: rows.filter(row => row.redirected).length,
+      missing: rows.filter(row => row.missing).length,
+      ambiguous: rows.filter(row => row.ambiguous).length,
+      outcomes: Object.fromEntries(['VERIFIED', 'REDIRECTED_LOADED', 'REDIRECTED_FAILED', 'MISSING', 'FAILED', 'AMBIGUOUS']
+        .map(outcome => [outcome, rows.filter(row => row.outcome === outcome).length])),
       byLanguage,
       byProduct
     },

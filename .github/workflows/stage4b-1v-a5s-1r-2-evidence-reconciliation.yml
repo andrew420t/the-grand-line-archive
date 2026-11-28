@@ -55,18 +55,24 @@ jobs:
           path: historical-1p
 
       - name: Set up Node.js
+        id: setup_node
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
 
       - name: Install dependencies
+        id: install_dependencies
         run: npm ci
 
       - name: Run offline reconciliation tests
+        id: offline_reconciliation_tests
+        if: ${{ always() && steps.setup_node.outcome == 'success' }}
         run: node --test test/catalogue-evidence-reconciliation-stage4b1vA5s1r2.test.mjs
 
       - name: Generate assignment, relationship, coverage, image and 1Q recovery reports
+        id: reconciliation_reports
+        if: ${{ always() && steps.setup_node.outcome == 'success' }}
         shell: bash
         run: |
           manifest="$(find historical-1p -maxdepth 2 -type f -name '*.json' -print -quit)"
@@ -77,17 +83,18 @@ jobs:
             --source-commit 619965ec198047de519dc6eb098c7a56aed9bd58 \
             --output-dir artifacts-stage4b1r2
 
-      - name: Re-run the official Bandai image HTTP audit
-        run: node scripts/auditOfficialBandaiImages.mjs
-
-      - name: Reconcile all 360 historical image exceptions to HTTP results
+      - name: Run fresh official HTTP checks for all 360 image exceptions
+        id: image_exception_http_reconciliation
+        if: ${{ always() && steps.setup_node.outcome == 'success' }}
         run: |
           node scripts/verifyCatalogueImageExceptionsStage4b1va5s1r9.mjs \
             --provenance artifacts-stage4b1r2/image-provenance-reconciliation.json \
-            --image-audit artifacts/official-bandai-image-http-audit.json \
+            --run-http \
             --output artifacts-stage4b1r2/image-exception-http-reconciliation.json
 
       - name: Re-audit all 231 Premium image assignments
+        id: premium_image_http_audit
+        if: ${{ always() && steps.setup_node.outcome == 'success' }}
         shell: bash
         run: |
           manifest="$(find historical-1p -maxdepth 2 -type f -name '*.json' -print -quit)"
@@ -97,6 +104,8 @@ jobs:
             --output artifacts-stage4b1r2/premium-image-http-reconciliation.json
 
       - name: Run the full offline zero-write importer integration
+        id: importer_integration
+        if: ${{ always() && steps.setup_node.outcome == 'success' }}
         shell: bash
         run: |
           manifest="$(find historical-1p -maxdepth 2 -type f -name '*.json' -print -quit)"
@@ -105,12 +114,18 @@ jobs:
             node --test tests/catalogueImporterStage4b1va.test.js
 
       - name: Run full application test suite
+        id: full_test_suite
+        if: ${{ always() && steps.install_dependencies.outcome == 'success' }}
         run: npm test
 
       - name: Run application lint
+        id: lint
+        if: ${{ always() && steps.install_dependencies.outcome == 'success' }}
         run: npm run lint
 
       - name: Build production application
+        id: production_build
+        if: ${{ always() && steps.install_dependencies.outcome == 'success' }}
         run: npm run build
 
       - name: Upload reconciliation evidence
@@ -118,10 +133,41 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: stage4b-1v-a5s-1r-2-evidence-reconciliation
-          path: |
-            artifacts-stage4b1r2/*.json
-            artifacts/official-bandai-image-http-audit.json
+          path: artifacts-stage4b1r2/*.json
           if-no-files-found: warn
           retention-days: 30
 
-# Re-run after correcting relationship count assertions.
+      - name: Fail the run if any reconciliation or validation failed
+        id: final_acceptance
+        if: always()
+        shell: bash
+        env:
+          DEPENDENCIES: ${{ steps.install_dependencies.outcome }}
+          OFFLINE_TESTS: ${{ steps.offline_reconciliation_tests.outcome }}
+          RECONCILIATION: ${{ steps.reconciliation_reports.outcome }}
+          IMAGE_EXCEPTIONS: ${{ steps.image_exception_http_reconciliation.outcome }}
+          PREMIUM_IMAGES: ${{ steps.premium_image_http_audit.outcome }}
+          IMPORTER: ${{ steps.importer_integration.outcome }}
+          TESTS: ${{ steps.full_test_suite.outcome }}
+          LINT: ${{ steps.lint.outcome }}
+          BUILD: ${{ steps.production_build.outcome }}
+        run: |
+          failed=0
+          for check in \
+            "dependencies=$DEPENDENCIES" \
+            "offline-reconciliation-tests=$OFFLINE_TESTS" \
+            "catalogue-reconciliation=$RECONCILIATION" \
+            "360-image-exception-reconciliation=$IMAGE_EXCEPTIONS" \
+            "231-premium-image-audit=$PREMIUM_IMAGES" \
+            "offline-importer-integration=$IMPORTER" \
+            "full-tests=$TESTS" \
+            "lint=$LINT" \
+            "production-build=$BUILD"; do
+            name="${check%%=*}"
+            outcome="${check#*=}"
+            echo "$name: $outcome"
+            if [ "$outcome" != "success" ]; then failed=1; fi
+          done
+          test "$failed" -eq 0
+
+# Reconciliation and both image audits run independently so failed classifications still produce diagnostic artifacts.
